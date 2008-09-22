@@ -1,0 +1,639 @@
+
+R version 2.7.2 (2008-08-25)
+Copyright (C) 2008 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library( maxLik )
+> 
+> ### activePar
+> # a simple two-dimensional exponential hat
+> f <- function(a) exp(-a[1]^2 - a[2]^2)
+> #
+> # maximize wrt. both parameters 
+> free <- maxNR(f, start=1:2) 
+> summary(free)  # results should be close to (0,0)
+--------------------------------------------
+Newton-Raphson maximisation 
+Number of iterations: 4 
+Return code: 1 
+gradient close to zero. May be a solution 
+Function value: 1 
+Estimates:
+          estimate     gradient
+[1,] -8.834711e-10 1.776357e-09
+[2,] -5.628342e-11 1.110223e-10
+--------------------------------------------
+> activePar(free)
+[1] TRUE TRUE
+> # allow only the second parameter to vary
+> cons <- maxNR(f, start=1:2, activePar=c(FALSE,TRUE))
+> summary(cons) # result should be around (1,0)
+--------------------------------------------
+Newton-Raphson maximisation 
+Number of iterations: 5 
+Return code: 1 
+gradient close to zero. May be a solution 
+Function value: 0.3678794 
+Estimates:
+         estimate      gradient
+[1,] 1.000000e+00 -7.357589e-01
+[2,] 2.946969e-07 -2.167710e-07
+--------------------------------------------
+> activePar(cons)
+[1] FALSE  TRUE
+> 
+> 
+> ### compareDerivatives
+> set.seed( 2 )
+> ## A simple example with sin(x)' = cos(x)
+> f <- sin
+> compareDerivatives(f, cos, t0=1)
+-------- compare derivatives -------- 
+Note: analytic gradient is vector.  Transforming into a matrix form
+Function value: 0.841471 
+Dim of analytic gradient: 1 1 
+       numeric          : 1 1 
+      
+param  theta 0  analytic   numeric      rel.diff
+  [1,]       1 0.5403023 0.5403023 -5.129895e-11
+Max relative difference: 5.129895e-11 
+-------- END of compare derivatives -------- 
+> ##
+> ## Example of log-likelihood of normal density.  Two-parameter
+> ## function.
+> x <- rnorm(100, 1, 2) # generate rnorm x
+> l <- function(b) sum(log(dnorm((x-b[1])/b[2])/b[2]))
+>               # b[1] - mu, b[2] - sigma
+> gradl <- function(b) {
++    c(sum(x - b[1])/b[2]^2,
++    sum((x - b[1])^2/b[2]^3 - 1/b[2]))
++ }
+> compareDerivatives(l, gradl, t0=c(1,2))
+-------- compare derivatives -------- 
+Note: analytic gradient is vector.  Transforming into a matrix form
+Function value: -227.8846 
+Dim of analytic gradient: 1 2 
+       numeric          : 1 2 
+t0
+[1] 1 2
+analytic gradient
+          [,1]     [,2]
+[1,] -1.534908 16.67607
+numeric gradient
+          [,1]     [,2]
+[1,] -1.534908 16.67607
+(anal-num)/(0.5*(abs(anal)+abs(num)))
+             [,1]          [,2]
+[1,] -1.98858e-09 -2.089470e-10
+Max relative difference: 1.98858e-09 
+-------- END of compare derivatives -------- 
+> 
+> 
+> ### hessian
+> set.seed( 3 )
+> # log-likelihood for normal density
+> # a[1] - mean
+> # a[2] - standard deviation
+> ll <- function(a) sum(-log(a[2]) - (x - a[1])^2/(2*a[2]^2))
+> x <- rnorm(1000) # sample from standard normal
+> ml <- maxLik(ll, start=c(1,1))
+> # ignore eventual warnings "NaNs produced in: log(x)"
+> summary(ml) # result should be close to c(0,1)
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 7 iterations
+Return code 1: gradient close to zero. May be a solution
+Log-Likelihood: -497.5733 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+[1,] 0.0063965  0.0315468  0.2028  0.8393    
+[2,] 0.9975763  0.0223063 44.7216  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> hessian(ml) # How the Hessian looks like
+          [,1]      [,2]
+[1,] -1004.821     0.000
+[2,]     0.000 -2009.756
+> sqrt(-solve(hessian(ml))) # Note: standard deviations are on the diagonal
+           [,1]       [,2]
+[1,] 0.03154682 0.00000000
+[2,] 0.00000000 0.02230634
+> #
+> # Now run the same example while fixing a[2] = 1
+> mlf <- maxLik(ll, start=c(1,1), activePar=c(TRUE, FALSE))
+> summary(mlf) # first parameter close to 0, the second exactly 1.0
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 3 iterations
+Return code 1: gradient close to zero. May be a solution
+Log-Likelihood: -497.5792 
+1  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+[1,] 0.0063965  0.0316229  0.2023  0.8397    
+[2,] 1.0000000  0.0000000     Inf  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> hessian(mlf)
+          [,1]      [,2]
+[1,] -999.9894     0.000
+[2,]    0.0000 -1985.427
+> # Now look at the Hessian.  Note that the second component has is not
+> # related to the curvature of the object function:
+> sqrt(-solve(hessian(mlf))) # works in current case, although you may get
+           [,1]       [,2]
+[1,] 0.03162294 0.00000000
+[2,] 0.00000000 0.02244259
+>                            # warnings.  
+> # now invert only the free parameter part of the Hessian
+> sqrt(-solve(hessian(mlf)[activePar(mlf), activePar(mlf)]))
+           [,1]
+[1,] 0.03162294
+> # gives the standard deviation for the mean
+> 
+> 
+> ### logLik.maxLik
+> set.seed( 4 )
+> ## ML estimation of exponential duration model:
+> t <- rexp(100, 2)
+> loglik <- function(theta) log(theta) - theta*t
+> gradlik <- function(theta) 1/theta - t
+> hesslik <- function(theta) -100/theta^2
+> ## Estimate with analytic gradient and hessian
+> a <- maxLik(loglik, gradlik, hesslik, start=1)
+> ## print log likelihood value
+> logLik( a )
+[1] -25.05386
+> ## print log likelihood value of summary object
+> b <- summary( a )
+> logLik( b )
+[1] -25.05386
+> 
+> 
+> ### maxBFGS
+> set.seed( 5 )
+> # Maximum Likelihood estimation of the parameter of Poissonian distribution
+> n <- rpois(100, 3)
+> loglik <- function(l) n*log(l) - l - lfactorial(n)
+> # we use numeric gradient
+> summary(maxBFGS(loglik, start=1))
+--------------------------------------------
+BFGS maximisation 
+Number of iterations: 23 6 
+Return code: 0 
+successful convergence  
+Function value: -199.2063 
+Estimates:
+     estimate     gradient
+[1,] 3.189999 1.584377e-05
+--------------------------------------------
+> # you would probably prefer mean(n) instead of that ;-)
+> # Note also that maxLik is better suited for Maximum Likelihood
+> 
+> 
+> ### maxBHHH
+> set.seed( 6 )
+> ## ML estimation of exponential duration model:
+> t <- rexp(100, 2)
+> loglik <- function(theta) log(theta) - theta*t
+> gradlik <- function(theta) 1/theta - t
+> ## Estimate with numeric gradient and hessian
+> a <- maxBHHH(loglik, start=1, print.level=2)
+----- Initial parameters: -----
+fcn value: -45.49847 
+     parameter initial gradient free
+[1,]         1         54.50153    1
+Condition number of the hessian: 1 
+-----Iteration 1 -----
+-----Iteration 2 -----
+-----Iteration 3 -----
+-----Iteration 4 -----
+-----Iteration 5 -----
+-----Iteration 6 -----
+--------------
+successive function values within tolerance limit.
+May be a solution 
+6  iterations
+estimate: 2.197878 
+Function value: -21.25086 
+> summary(a)
+--------------------------------------------
+BHHH maximisation 
+Number of iterations: 6 
+Return code: 2 
+successive function values within tolerance limit.
+May be a solution 
+Function value: -21.25086 
+Estimates:
+     estimate      gradient
+[1,] 2.197878 -4.774259e-05
+--------------------------------------------
+> ## Estimate with analytic gradient
+> a <- maxBHHH(loglik, gradlik, start=1)
+> summary(a)
+--------------------------------------------
+BHHH maximisation 
+Number of iterations: 6 
+Return code: 2 
+successive function values within tolerance limit.
+May be a solution 
+Function value: -21.25086 
+Estimates:
+     estimate      gradient
+[1,] 2.197878 -4.774766e-05
+--------------------------------------------
+> 
+> 
+> ### maxLik
+> set.seed( 7 )
+> ## ML estimation of exponential duration model:
+> t <- rexp(100, 2)
+> loglik <- function(theta) log(theta) - theta*t
+> gradlik <- function(theta) 1/theta - t
+> hesslik <- function(theta) -100/theta^2
+> ## Estimate with numeric gradient and hessian
+> a <- maxLik(loglik, start=1, print.level=2)
+----- Initial parameters: -----
+fcn value: -47.72495 
+     parameter initial gradient free
+[1,]         1         52.27505    1
+Condition number of the hessian: 1 
+-----Iteration 1 -----
+-----Iteration 2 -----
+-----Iteration 3 -----
+-----Iteration 4 -----
+-----Iteration 5 -----
+--------------
+gradient close to zero. May be a solution 
+5  iterations
+estimate: 2.09534 
+Function value: -26.02842 
+> summary(a)
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 5 iterations
+Return code 1: gradient close to zero. May be a solution
+Log-Likelihood: -26.02842 
+1  free parameters
+Estimates:
+     Estimate Std. error t value   Pr(> t)    
+[1,]  2.09534    0.20946  10.004 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> ## Estimate with analytic gradient and hessian
+> a <- maxLik(loglik, gradlik, hesslik, start=1)
+> summary(a)
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 5 iterations
+Return code 1: gradient close to zero. May be a solution
+Log-Likelihood: -26.02842 
+1  free parameters
+Estimates:
+     Estimate Std. error t value   Pr(> t)    
+[1,]  2.09534    0.20953      10 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> 
+> 
+> ### maxNR
+> set.seed( 8 )
+> ## ML estimation of exponential duration model:
+> t <- rexp(100, 2)
+> loglik <- function(theta) sum(log(theta) - theta*t)
+> ## Note the log-likelihood and gradient are summed over observations
+> gradlik <- function(theta) sum(1/theta - t)
+> hesslik <- function(theta) -100/theta^2
+> ## Estimate with numeric gradient and Hessian
+> a <- maxNR(loglik, start=1, print.level=2)
+----- Initial parameters: -----
+fcn value: -46.48941 
+     parameter initial gradient free
+[1,]         1         53.51059    1
+Condition number of the hessian: 1 
+-----Iteration 1 -----
+-----Iteration 2 -----
+-----Iteration 3 -----
+-----Iteration 4 -----
+-----Iteration 5 -----
+--------------
+gradient close to zero. May be a solution 
+5  iterations
+estimate: 2.151027 
+Function value: -23.40544 
+> summary(a)
+--------------------------------------------
+Newton-Raphson maximisation 
+Number of iterations: 5 
+Return code: 1 
+gradient close to zero. May be a solution 
+Function value: -23.40544 
+Estimates:
+     estimate      gradient
+[1,] 2.151027 -8.348877e-07
+--------------------------------------------
+> ## You would probably prefer 1/mean(t) instead ;-)
+> ## Estimate with analytic gradient and Hessian
+> a <- maxNR(loglik, gradlik, hesslik, start=1)
+> summary(a)
+--------------------------------------------
+Newton-Raphson maximisation 
+Number of iterations: 5 
+Return code: 1 
+gradient close to zero. May be a solution 
+Function value: -23.40544 
+Estimates:
+     estimate     gradient
+[1,] 2.151027 9.493475e-08
+--------------------------------------------
+> 
+> 
+> ### maximType
+> ## maximise two-dimensional exponential hat.  Maximum is at c(2,1):
+> f <- function(a) exp(-(a[1] - 2)^2 - (a[2] - 1)^2)
+> m <- maxNR(f, start=c(0,0))
+> summary(m)
+--------------------------------------------
+Newton-Raphson maximisation 
+Number of iterations: 4 
+Return code: 1 
+gradient close to zero. May be a solution 
+Function value: 1 
+Estimates:
+     estimate     gradient
+[1,]        2 7.771561e-10
+[2,]        1 4.440892e-10
+--------------------------------------------
+> maximType(m)
+[1] "Newton-Raphson maximisation"
+> ## Now use BFGS maximisation.
+> m <- maxBFGS(f, start=c(0,0))
+> summary(m)
+--------------------------------------------
+BFGS maximisation 
+Number of iterations: 31 16 
+Return code: 0 
+successful convergence  
+Function value: 1 
+Estimates:
+     estimate     gradient
+[1,]        2 6.661338e-09
+[2,]        1 3.108624e-09
+--------------------------------------------
+> maximType(m)
+[1] "BFGS maximisation"
+> 
+> 
+> ### nObs
+> set.seed( 10 )
+> # Construct a simple OLS regression:
+> x1 <- runif(100)
+> x2 <- runif(100)
+> y <- 3 + 4*x1 + 5*x2 + rnorm(100)
+> m <- lm(y~x1+x2)  # estimate it
+> nObs(m)
+[1] 100
+> 
+> 
+> ### nParam
+> set.seed( 11 )
+> # Construct a simple OLS regression:
+> x1 <- runif(100)
+> x2 <- runif(100)
+> y <- 3 + 4*x1 + 5*x2 + rnorm(100)
+> m <- lm(y~x1+x2)  # estimate it
+> summary(m)
+
+Call:
+lm(formula = y ~ x1 + x2)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.34360 -0.53383 -0.02911  0.55009  2.69344 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   3.2421     0.2871   11.29   <2e-16 ***
+x1            3.9745     0.3953   10.05   <2e-16 ***
+x2            4.7827     0.3667   13.04   <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Residual standard error: 0.9897 on 97 degrees of freedom
+Multiple R-squared: 0.7019,	Adjusted R-squared: 0.6957 
+F-statistic: 114.2 on 2 and 97 DF,  p-value: < 2.2e-16 
+
+> nParam(m) # you get 3
+[1] 3
+> 
+> 
+> ### numericGradient
+> # A simple example with Gaussian bell
+> f0 <- function(t0) exp(-t0[1]^2 - t0[2]^2)
+> numericGradient(f0, c(1,2))
+            [,1]        [,2]
+[1,] -0.01347589 -0.02695179
+> numericHessian(f0, t0=c(1,2))
+           [,1]       [,2]
+[1,] 0.01348748 0.05390306
+[2,] 0.05390306 0.09432906
+> # An example with the analytic gradient
+> gradf0 <- function(t0) -2*t0*f0(t0)
+> numericHessian(f0, gradf0, t0=c(1,2))
+           [,1]       [,2]
+[1,] 0.01347589 0.05390358
+[2,] 0.05390358 0.09433126
+> # The results should be similar as in the previous case
+> # The central numeric derivatives have usually quite a high precision
+> compareDerivatives(f0, gradf0, t0=1:2)
+-------- compare derivatives -------- 
+Note: analytic gradient is vector.  Transforming into a matrix form
+Function value: 0.006737947 
+Dim of analytic gradient: 1 2 
+       numeric          : 1 2 
+t0
+[1] 1 2
+analytic gradient
+            [,1]        [,2]
+[1,] -0.01347589 -0.02695179
+numeric gradient
+            [,1]        [,2]
+[1,] -0.01347589 -0.02695179
+(anal-num)/(0.5*(abs(anal)+abs(num)))
+              [,1]       [,2]
+[1,] -2.763538e-10 -5.108e-11
+Max relative difference: 2.763538e-10 
+-------- END of compare derivatives -------- 
+> # The differenc is around 1e-10
+> 
+> 
+> ### returnCode
+> ## maximise the exponential bell
+> f1 <- function(x) exp(-x^2)
+> a <- maxNR(f1, start=2)
+> returnCode(a) # should be success (1 or 2)
+[1] 1
+> ## Now try to maximise log() function
+> f2 <- function(x) log(x)
+> a <- maxNR(f2, start=2)
+> returnCode(a) # should give a failure (4)
+[1] 4
+> 
+> 
+> ### returnMessage
+> ## maximise the exponential bell
+> f1 <- function(x) exp(-x^2)
+> a <- maxNR(f1, start=2)
+> returnMessage(a) # should be success (1 or 2)
+[1] "gradient close to zero. May be a solution"
+> ## Now try to maximise log() function
+> f2 <- function(x) log(x)
+> a <- maxNR(f2, start=2)
+> returnMessage(a) # should give a failure (4)
+[1] "Iteration limit exceeded."
+> 
+> 
+> ### summary.maxLik
+> set.seed( 15 )
+> ## ML estimation of exponential duration model:
+> t <- rexp(100, 2)
+> loglik <- function(theta) log(theta) - theta*t
+> gradlik <- function(theta) 1/theta - t
+> hesslik <- function(theta) -100/theta^2
+> ## Estimate with numeric gradient and hessian
+> a <- maxLik(loglik, start=1, print.level=2)
+----- Initial parameters: -----
+fcn value: -41.56087 
+     parameter initial gradient free
+[1,]         1         58.43913    1
+Condition number of the hessian: 1 
+-----Iteration 1 -----
+-----Iteration 2 -----
+-----Iteration 3 -----
+-----Iteration 4 -----
+-----Iteration 5 -----
+--------------
+gradient close to zero. May be a solution 
+5  iterations
+estimate: 2.406109 
+Function value: -12.19890 
+> summary(a)
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 5 iterations
+Return code 1: gradient close to zero. May be a solution
+Log-Likelihood: -12.19890 
+1  free parameters
+Estimates:
+     Estimate Std. error t value   Pr(> t)    
+[1,]  2.40611    0.24065  9.9983 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> ## Estimate with analytic gradient and hessian
+> a <- maxLik(loglik, gradlik, hesslik, start=1)
+> summary(a)
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 6 iterations
+Return code 1: gradient close to zero. May be a solution
+Log-Likelihood: -12.19890 
+1  free parameters
+Estimates:
+     Estimate Std. error t value   Pr(> t)    
+[1,]  2.40611    0.24061      10 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> 
+> 
+> ### summary.maxim
+> ## minimize a 2D quadratic function:
+> f <- function(b) {
++   x <- b[1]; y <- b[2];
++     val <- (x - 2)^2 + (y - 3)^2
++     attr(val, "gradient") <- c(2*x - 4, 2*y - 6)
++     attr(val, "hessian") <- matrix(c(2, 0, 0, 2), 2, 2)
++     val
++ }
+> ## Note that NR finds the minimum of a quadratic function with a single
+> ## iteration.  Use c(0,0) as initial value.  
+> result1 <- maxNR( f, start = c(0,0) ) 
+> summary( result1 )
+--------------------------------------------
+Newton-Raphson maximisation 
+Number of iterations: 3 
+Return code: 1 
+gradient close to zero. May be a solution 
+Function value: 2.495230e+27 
+Estimates:
+         estimate gradient
+[1,] 1.866669e+13        0
+[2,] 4.633340e+13        0
+--------------------------------------------
+> ## Now use c(1000000, -777777) as initial value and ask for hessian
+> result2 <- maxNR( f, start = c( 1000000, -777777)) 
+> summary( result2 )
+--------------------------------------------
+Newton-Raphson maximisation 
+Number of iterations: 1 
+Return code: 1 
+gradient close to zero. May be a solution 
+Function value: 7.133455e+23 
+Estimates:
+          estimate gradient
+[1,]  666667666667        0
+[2,] -518555465277        0
+--------------------------------------------
+> 
+> 
+> ### vcov.maxLik
+> set.seed( 17 )
+> ## ML estimation of exponential duration model:
+> t <- rexp(100, 2)
+> loglik <- function(theta) log(theta) - theta*t
+> gradlik <- function(theta) 1/theta - t
+> hesslik <- function(theta) -100/theta^2
+> ## Estimate with numeric gradient and hessian
+> a <- maxLik(loglik, start=1, print.level=2)
+----- Initial parameters: -----
+fcn value: -53.66641 
+     parameter initial gradient free
+[1,]         1         46.33359    1
+Condition number of the hessian: 1 
+-----Iteration 1 -----
+-----Iteration 2 -----
+-----Iteration 3 -----
+-----Iteration 4 -----
+-----Iteration 5 -----
+--------------
+gradient close to zero. May be a solution 
+5  iterations
+estimate: 1.863363 
+Function value: -37.76171 
+> vcov(a)
+           [,1]
+[1,] 0.03470728
+> ## Estimate with analytic gradient and hessian
+> a <- maxLik(loglik, gradlik, hesslik, start=1)
+> vcov(a)
+           [,1]
+[1,] 0.03472122
+> 
