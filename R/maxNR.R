@@ -119,8 +119,16 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
    if(print.level > 2) {
       cat("Initial function value:", f1, "\n")
    }
-   if(is.na( f1) | is.infinite(f1)) {
+   if(is.na( f1)) {
       result <- list(code=100, message=maxim.message("100"),
+                     iterations=0,
+                     type=maxim.type)
+      class(result) <- "maxim"
+      return(result)
+   }
+   if(is.infinite( f1) & (f1 > 0)) {
+                                        # we stop at +Inf but not at -Inf
+      result <- list(code=5, message=maxim.message("5"),
                      iterations=0,
                      type=maxim.type)
       class(result) <- "maxim"
@@ -131,10 +139,10 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
       cat("Initial gradient value:\n")
       print(G1)
    }
-   if(any(is.na(G1))) {
-      stop("Na in the initial gradient")
+   if(any(is.na(G1[activePar]))) {
+      stop("NA in the initial gradient")
    }
-   if(any(is.infinite(G1))) {
+   if(any(is.infinite(G1[activePar]))) {
       stop("Infinite initial gradient")
    }
    if(length(G1) != nParam) {
