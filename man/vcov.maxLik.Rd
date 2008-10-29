@@ -6,10 +6,19 @@
    Extract variance-covariance matrices of objects of class \code{\link{maxLik}}.
 }
 \usage{
-   \method{vcov}{maxLik}( object, ... )
+   \method{vcov}{maxLik}( object, eigentol=1e-12, ... )
 }
 \arguments{
    \item{object}{an object of class \code{probit} or \code{maxLik}.}
+   \item{eigentol}{
+     nonzero print limit on the range of the absolute values of the
+     hessian.  Specifically, define:
+
+     absEig <- eigen(hessian(object), symmetric=TRUE)[['values']]
+
+     Then compute and print t values, p values, etc. only if min(absEig)
+     > (eigentol * max(absEig)).  
+   }
    \item{\dots}{further arguments (currently ignored).}
 }
 \value{
