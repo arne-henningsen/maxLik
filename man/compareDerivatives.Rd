@@ -37,7 +37,7 @@ compareDerivatives(f, grad, hess=NULL, t0, eps=1e-6, print=TRUE, ...)
   }
   \item{print}{
     logical:  TRUE to print a summary, FALSE to return the comparison
-    only (invisibly).  
+    only (invisibly).
   }
   \item{\dots}{
     further arguments to \code{f}, \code{grad} and \code{hess}.
@@ -48,37 +48,35 @@ compareDerivatives(f, grad, hess=NULL, t0, eps=1e-6, print=TRUE, ...)
   numeric derivative and their relative difference
 
   rel.diff = (analytic - numeric)/(0.5*(analytic+numeric))
-  
+
   are printed;  if analytic = 0 = numeric, we define rel.diff = 0.  If
   analytic derivatives are correct and the function is sufficiently
-  smooth, expect the relative differences to be less than 1e-7.   
+  smooth, expect the relative differences to be less than 1e-7.
 }
 \value{
   A list with the following components:
 
-  \itemize{
-    \item{t0}{the input argument \code{t0}}
-    \item{f.t0}{f(t0)}
-    \item{compareGrad}{
-      a list with components \code{analytic} = grad(t0), \code{nmeric} =
-      numericGradient(f, t0), and their \code{rel.diff}. 
-    }
-    \item{maxRelDiffGrad}{max(abs(rel.diff))}
-
-    If \code{hess} is also provided, the following optional components
-    are also present:
-
-    \item{compareHessian}{
-      a list with components \code{analytic} = hess(t0), \code{numeric}
-      = numericGradient(grad, t0), and their \code{rel.diff}.  
-    }
-    \item{maxRelDiffHess}{max(abs(rel.diff)) for the Hessian}
+  \item{t0}{the input argument \code{t0}}
+  \item{f.t0}{f(t0)}
+  \item{compareGrad}{
+    a list with components \code{analytic} = grad(t0), \code{nmeric} =
+    numericGradient(f, t0), and their \code{rel.diff}.
   }
+  \item{maxRelDiffGrad}{max(abs(rel.diff))}
+
+  If \code{hess} is also provided, the following optional components
+  are also present:
+
+  \item{compareHessian}{
+    a list with components \code{analytic} = hess(t0), \code{numeric}
+    = numericGradient(grad, t0), and their \code{rel.diff}.
+  }
+  \item{maxRelDiffHess}{max(abs(rel.diff)) for the Hessian}
 }
 \author{Ott Toomet \email{otoomet@ut.ee} and Spencer Graves}
 \seealso{
   \code{\link{numericGradient}}
-  \code{\link{deriv}} 
+  \code{\link{deriv}}
 }
 
 \examples{
@@ -107,7 +105,7 @@ trig <- function(x)c(sin=sin(x), cos=cos(x))
 Dtrig <- function(x)c(sin=cos(x), cos=-sin(x))
 Dtrig. <- compareDerivatives(trig, Dtrig, t0=1)
 
-D2trig <- function(x)-trig(x) 
+D2trig <- function(x)-trig(x)
 D2trig. <- compareDerivatives(trig, Dtrig, D2trig, t0=1)
 
 
