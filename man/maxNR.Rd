@@ -70,12 +70,16 @@ One way is to put
 \code{constPar} to non-NULL.  Second possibility is to signal by
 \code{fn} which parameters are constant and change the values of the
 parameter vector.  The value of \code{fn} may have following attributes:
+\itemize{
 \item{constPar}{index vector.  Which parameters are redefined to
   constant}
 \item{constVal}{numeric vector.  Values for the constant parameters.}
 \item{newVal}{a list with following components:
+  \itemize{
   \item{index}{which parameters will have a new value}
   \item{val}{the new value of parameters}
+  }
+}
 }
 The difference between \code{constVal} and \code{newVal} is that the
 latter parameters are not set to constants.  If the attribute
@@ -92,6 +96,7 @@ the previous one.
   \item{hessian}{Hessian at the maximum (the last calculated value if
     not converged).}
   \item{code}{return code:
+    \itemize{
     \item{1}{gradient close to zero (normal convergence).}
     \item{2}{successive function values within tolerance limit (normal
       convergence).}
@@ -102,13 +107,16 @@ the previous one.
     \item{6}{Infinite gradient.}
     \item{7}{Infinite Hessian.}
     \item{100}{Initial value out of range.}
+    }
   }
   \item{message}{a short message, describing \code{code}.}
   \item{last.step}{list describing the last unsuccessful step if
     \code{code=3} with following components:
+    \itemize{
     \item{theta0}{previous parameter value}
     \item{f0}{\code{fn} value at \code{theta0}}
     \item{climb}{the movement vector to the maximum of the quadratic approximation}
+    }
   }
   \item{activePar}{logical vector, which parameters are not constants.}
   \item{iterations}{number of iterations.}

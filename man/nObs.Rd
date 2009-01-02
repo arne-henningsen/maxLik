@@ -5,7 +5,7 @@
 \title{Return number of observations for statistical models} 
 \description{
   Returns number of observations for statistical models.  The default
-  method assumes presence of a component \code{$param$nObs} in {x}.
+  method assumes presence of a component \code{param$nObs} in \code{x}.
 }
 \usage{
 nObs(x, \dots)
