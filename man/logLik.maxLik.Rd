@@ -20,7 +20,7 @@
   A single numeric, log likelihood of the estimated model
 }
 \author{
-   Arne Henningsen \email{ahenningsen@agric-econ.uni-kiel.de},
+   Arne Henningsen,
    Ott Toomet \email{otoomet@ut.ee}
 }
 \seealso{\code{\link{maxLik}}}
