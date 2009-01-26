@@ -2,6 +2,7 @@ activePar               free parameters under maximisation
 AIC.maxLik              Methods for the various standard functions
 compareDerivatives      function to compare analytic and numeric
                         derivatives
+condiNumber             Print matrix condition numbers column-by-column
 fnSubset                Call fnFull with variable and fixed parameters
 hessian                 Hessian matrix
 logLik.maxLik           Return the log likelihood value
