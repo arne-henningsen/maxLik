@@ -5,8 +5,8 @@ coef.maxLik <- function(object, ...)
 print.summary.maxLik <- function( x, ... ) {
    cat("--------------------------------------------\n")
    cat("Maximum Likelihood estimation\n")
-   cat(x$type, ", ", x$iterations, " iterations\n", sep="")
-   cat("Return code ", x$code, ": ", x$message, "\n", sep="")
+   cat(maximType(x), ", ", nIter(x), " iterations\n", sep="")
+   cat("Return code ", returnCode(x), ": ", returnMessage(x), "\n", sep="")
    if(!is.null(x$estimate)) {
       cat("Log-Likelihood:", x$loglik, "\n")
       cat(x$NActivePar, " free parameters\n")
@@ -63,10 +63,10 @@ summary.maxLik <- function(object, eigentol=1e-12,... ) {
      results <- NULL
      Hess <- NULL
    }
-   summary <- list(type=object$type,
+   summary <- list(maximType=object$type,
                    iterations=object$iterations,
-                   code=object$code,
-                   message=object$message,
+                   returnCode=object$code,
+                   returnMessage=object$message,
                    loglik=object$maximum,
                    estimate=results,
                    hessian=Hess,

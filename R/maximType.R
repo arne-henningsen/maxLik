@@ -6,6 +6,3 @@ maximType.default <- function(x)
 
 maximType.maxim <- function(x)
     x$type
-
-maximType.MLEstimate <- function(x)
-    maximType(x$maxLik)

@@ -55,7 +55,6 @@ compareDerivatives(f, grad, hess=NULL, t0, eps=1e-6, print=TRUE, ...)
 }
 \value{
   A list with the following components:
-
   \item{t0}{the input argument \code{t0}}
   \item{f.t0}{f(t0)}
   \item{compareGrad}{
