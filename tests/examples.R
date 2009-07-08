@@ -5,11 +5,13 @@ library( maxLik )
 f <- function(a) exp(-a[1]^2 - a[2]^2)
 #
 # maximize wrt. both parameters 
-free <- maxNR(f, start=1:2) 
+free <- maxNR(f, start=1:2)
+print( free )
 summary(free)  # results should be close to (0,0)
 activePar(free)
 # allow only the second parameter to vary
 cons <- maxNR(f, start=1:2, activePar=c(FALSE,TRUE))
+print( cons )
 summary(cons) # result should be around (1,0)
 activePar(cons)
 
@@ -41,12 +43,14 @@ ll <- function(a) sum(-log(a[2]) - (x - a[1])^2/(2*a[2]^2))
 x <- rnorm(1000) # sample from standard normal
 ml <- maxLik(ll, start=c(1,1))
 # ignore eventual warnings "NaNs produced in: log(x)"
+print( ml )
 summary(ml) # result should be close to c(0,1)
 hessian(ml) # How the Hessian looks like
 sqrt(-solve(hessian(ml))) # Note: standard deviations are on the diagonal
 #
 # Now run the same example while fixing a[2] = 1
 mlf <- maxLik(ll, start=c(1,1), activePar=c(TRUE, FALSE))
+print( mlf )
 summary(mlf) # first parameter close to 0, the second exactly 1.0
 hessian(mlf)
 # Now look at the Hessian.  Note that the second component has is not
@@ -67,6 +71,7 @@ gradlik <- function(theta) 1/theta - t
 hesslik <- function(theta) -100/theta^2
 ## Estimate with analytic gradient and hessian
 a <- maxLik(loglik, gradlik, hesslik, start=1)
+print( a )
 ## print log likelihood value
 logLik( a )
 ## print log likelihood value of summary object
@@ -80,7 +85,9 @@ set.seed( 5 )
 n <- rpois(100, 3)
 loglik <- function(l) n*log(l) - l - lfactorial(n)
 # we use numeric gradient
-summary(maxBFGS(loglik, start=1))
+a <- maxBFGS(loglik, start=1)
+print( a )
+summary( a )
 # you would probably prefer mean(n) instead of that ;-)
 # Note also that maxLik is better suited for Maximum Likelihood
 
@@ -93,9 +100,11 @@ loglik <- function(theta) log(theta) - theta*t
 gradlik <- function(theta) 1/theta - t
 ## Estimate with numeric gradient and hessian
 a <- maxBHHH(loglik, start=1, print.level=2)
+print( a )
 summary(a)
 ## Estimate with analytic gradient
 a <- maxBHHH(loglik, gradlik, start=1)
+print( a )
 summary(a)
 
 
@@ -108,9 +117,11 @@ gradlik <- function(theta) 1/theta - t
 hesslik <- function(theta) -100/theta^2
 ## Estimate with numeric gradient and hessian
 a <- maxLik(loglik, start=1, print.level=2)
+print( a )
 summary(a)
 ## Estimate with analytic gradient and hessian
 a <- maxLik(loglik, gradlik, hesslik, start=1)
+print( a )
 summary(a)
 
 
@@ -124,10 +135,12 @@ gradlik <- function(theta) sum(1/theta - t)
 hesslik <- function(theta) -100/theta^2
 ## Estimate with numeric gradient and Hessian
 a <- maxNR(loglik, start=1, print.level=2)
+print( a )
 summary(a)
 ## You would probably prefer 1/mean(t) instead ;-)
 ## Estimate with analytic gradient and Hessian
 a <- maxNR(loglik, gradlik, hesslik, start=1)
+print( a )
 summary(a)
 
 
@@ -135,10 +148,12 @@ summary(a)
 ## maximise two-dimensional exponential hat.  Maximum is at c(2,1):
 f <- function(a) exp(-(a[1] - 2)^2 - (a[2] - 1)^2)
 m <- maxNR(f, start=c(0,0))
+print( m )
 summary(m)
 maximType(m)
 ## Now use BFGS maximisation.
 m <- maxBFGS(f, start=c(0,0))
+print( m )
 summary(m)
 maximType(m)
 
@@ -182,10 +197,12 @@ compareDerivatives(f0, gradf0, t0=1:2)
 ## maximise the exponential bell
 f1 <- function(x) exp(-x^2)
 a <- maxNR(f1, start=2)
+print( a )
 returnCode(a) # should be success (1 or 2)
 ## Now try to maximise log() function
 f2 <- function(x) log(x)
 a <- maxNR(f2, start=2)
+print( a )
 returnCode(a) # should give a failure (4)
 
 
@@ -193,10 +210,12 @@ returnCode(a) # should give a failure (4)
 ## maximise the exponential bell
 f1 <- function(x) exp(-x^2)
 a <- maxNR(f1, start=2)
+print( a )
 returnMessage(a) # should be success (1 or 2)
 ## Now try to maximise log() function
 f2 <- function(x) log(x)
 a <- maxNR(f2, start=2)
+print( a )
 returnMessage(a) # should give a failure (4)
 
 
@@ -209,9 +228,11 @@ gradlik <- function(theta) 1/theta - t
 hesslik <- function(theta) -100/theta^2
 ## Estimate with numeric gradient and hessian
 a <- maxLik(loglik, start=1, print.level=2)
+print( a )
 summary(a)
 ## Estimate with analytic gradient and hessian
 a <- maxLik(loglik, gradlik, hesslik, start=1)
+print( a )
 summary(a)
 
 
@@ -226,10 +247,12 @@ f <- function(b) {
 }
 ## Note that NR finds the minimum of a quadratic function with a single
 ## iteration.  Use c(0,0) as initial value.  
-result1 <- maxNR( f, start = c(0,0) ) 
+result1 <- maxNR( f, start = c(0,0) )
+print( result1 )
 summary( result1 )
 ## Now use c(1000000, -777777) as initial value and ask for hessian
-result2 <- maxNR( f, start = c( 1000000, -777777)) 
+result2 <- maxNR( f, start = c( 1000000, -777777))
+print( result2 )
 summary( result2 )
 
 
@@ -242,7 +265,9 @@ gradlik <- function(theta) 1/theta - t
 hesslik <- function(theta) -100/theta^2
 ## Estimate with numeric gradient and hessian
 a <- maxLik(loglik, start=1, print.level=2)
+print( a )
 vcov(a)
 ## Estimate with analytic gradient and hessian
 a <- maxLik(loglik, gradlik, hesslik, start=1)
+print( a )
 vcov(a)
