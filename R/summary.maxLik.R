@@ -1,7 +1,3 @@
-
-coef.maxLik <- function(object, ...)
-    object$estimate
-
 print.summary.maxLik <- function( x, ... ) {
    cat("--------------------------------------------\n")
    cat("Maximum Likelihood estimation\n")
