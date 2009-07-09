@@ -9,4 +9,4 @@ returnMessage.maxim <- function(x, ...)
     x$message
 
 returnMessage.maxLik <- function(x, ...)
-    returnMessage(x$maxLik, ...)
+    x$message
