@@ -1,6 +1,7 @@
 \name{maxLik}
 \alias{maxLik}
 \alias{coef.maxLik}
+\alias{print.maxLik}
 
 \title{Maximum likelihood estimation}
 \description{
@@ -47,10 +48,12 @@ gradlik <- function(theta) 1/theta - t
 hesslik <- function(theta) -100/theta^2
 ## Estimate with numeric gradient and hessian
 a <- maxLik(loglik, start=1, print.level=2)
-summary(a)
+print( a )
+coef( a )
 ## Estimate with analytic gradient and hessian
 a <- maxLik(loglik, gradlik, hesslik, start=1)
-summary(a)
+print( a )
+coef( a )
 ##
 ##
 ## Next, we give an example with vector argument:  Estimate the mean and
@@ -65,6 +68,7 @@ loglik <- function(param) {
 x <- rnorm(1000, 1, 2) # use mean=1, stdd=2
 N <- length(x)
 res <- maxLik(loglik, start=c(0,1)) # use 'wrong' start values
-summary(res)
+print( res )
+coef( res )
 }
 \keyword{optimize}

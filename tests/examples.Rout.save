@@ -180,7 +180,7 @@ Max relative difference: 1.98858e-09
 > x <- rnorm(1000) # sample from standard normal
 > ml <- maxLik(ll, start=c(1,1))
 > # ignore eventual warnings "NaNs produced in: log(x)"
-> print( ml )
+> print.default( ml )
 $maximum
 [1] -497.5733
 
@@ -215,6 +215,12 @@ $type
 
 attr(,"class")
 [1] "maxLik" "maxim"  "list"  
+> print( ml )
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 7 iterations
+Return code 1: gradient close to zero. May be a solution
+Log-Likelihood: -497.5733 (2 free parameter(s))
+Estimate(s): 0.006396535 0.9975763 
 > summary(ml) # result should be close to c(0,1)
 --------------------------------------------
 Maximum Likelihood estimation
@@ -240,7 +246,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > #
 > # Now run the same example while fixing a[2] = 1
 > mlf <- maxLik(ll, start=c(1,1), activePar=c(TRUE, FALSE))
-> print( mlf )
+> print.default( mlf )
 $maximum
 [1] -497.5792
 
@@ -275,6 +281,12 @@ $type
 
 attr(,"class")
 [1] "maxLik" "maxim"  "list"  
+> print( mlf )
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 3 iterations
+Return code 1: gradient close to zero. May be a solution
+Log-Likelihood: -497.5792 (1 free parameter(s))
+Estimate(s): 0.006396535 1 
 > summary(mlf) # first parameter close to 0, the second exactly 1.0
 --------------------------------------------
 Maximum Likelihood estimation
@@ -316,7 +328,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > hesslik <- function(theta) -100/theta^2
 > ## Estimate with analytic gradient and hessian
 > a <- maxLik(loglik, gradlik, hesslik, start=1)
-> print( a )
+> print.default( a )
 $maximum
 [1] -25.05386
 
@@ -350,6 +362,12 @@ $type
 
 attr(,"class")
 [1] "maxLik" "maxim"  "list"  
+> print( a )
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 5 iterations
+Return code 1: gradient close to zero. May be a solution
+Log-Likelihood: -25.05386 (1 free parameter(s))
+Estimate(s): 2.11586 
 > ## print log likelihood value
 > logLik( a )
 [1] -25.05386
@@ -558,7 +576,7 @@ gradient close to zero. May be a solution
 5  iterations
 estimate: 2.09534 
 Function value: -26.02842 
-> print( a )
+> print.default( a )
 $maximum
 [1] -26.02842
 
@@ -592,6 +610,12 @@ $type
 
 attr(,"class")
 [1] "maxLik" "maxim"  "list"  
+> print( a )
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 5 iterations
+Return code 1: gradient close to zero. May be a solution
+Log-Likelihood: -26.02842 (1 free parameter(s))
+Estimate(s): 2.09534 
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
@@ -607,7 +631,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > ## Estimate with analytic gradient and hessian
 > a <- maxLik(loglik, gradlik, hesslik, start=1)
-> print( a )
+> print.default( a )
 $maximum
 [1] -26.02842
 
@@ -641,6 +665,12 @@ $type
 
 attr(,"class")
 [1] "maxLik" "maxim"  "list"  
+> print( a )
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 5 iterations
+Return code 1: gradient close to zero. May be a solution
+Log-Likelihood: -26.02842 (1 free parameter(s))
+Estimate(s): 2.09534 
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
@@ -1149,7 +1179,7 @@ gradient close to zero. May be a solution
 5  iterations
 estimate: 2.406109 
 Function value: -12.19890 
-> print( a )
+> print.default( a )
 $maximum
 [1] -12.19890
 
@@ -1183,6 +1213,12 @@ $type
 
 attr(,"class")
 [1] "maxLik" "maxim"  "list"  
+> print( a )
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 5 iterations
+Return code 1: gradient close to zero. May be a solution
+Log-Likelihood: -12.19890 (1 free parameter(s))
+Estimate(s): 2.406109 
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
@@ -1198,7 +1234,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > ## Estimate with analytic gradient and hessian
 > a <- maxLik(loglik, gradlik, hesslik, start=1)
-> print( a )
+> print.default( a )
 $maximum
 [1] -12.19890
 
@@ -1232,6 +1268,12 @@ $type
 
 attr(,"class")
 [1] "maxLik" "maxim"  "list"  
+> print( a )
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 6 iterations
+Return code 1: gradient close to zero. May be a solution
+Log-Likelihood: -12.19890 (1 free parameter(s))
+Estimate(s): 2.406109 
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
@@ -1393,7 +1435,7 @@ gradient close to zero. May be a solution
 5  iterations
 estimate: 1.863363 
 Function value: -37.76171 
-> print( a )
+> print.default( a )
 $maximum
 [1] -37.76171
 
@@ -1427,12 +1469,18 @@ $type
 
 attr(,"class")
 [1] "maxLik" "maxim"  "list"  
+> print( a )
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 5 iterations
+Return code 1: gradient close to zero. May be a solution
+Log-Likelihood: -37.76171 (1 free parameter(s))
+Estimate(s): 1.863363 
 > vcov(a)
            [,1]
 [1,] 0.03470728
 > ## Estimate with analytic gradient and hessian
 > a <- maxLik(loglik, gradlik, hesslik, start=1)
-> print( a )
+> print.default( a )
 $maximum
 [1] -37.76171
 
@@ -1466,6 +1514,12 @@ $type
 
 attr(,"class")
 [1] "maxLik" "maxim"  "list"  
+> print( a )
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 5 iterations
+Return code 1: gradient close to zero. May be a solution
+Log-Likelihood: -37.76171 (1 free parameter(s))
+Estimate(s): 1.863363 
 > vcov(a)
            [,1]
 [1,] 0.03472122

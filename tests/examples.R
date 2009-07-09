@@ -43,6 +43,7 @@ ll <- function(a) sum(-log(a[2]) - (x - a[1])^2/(2*a[2]^2))
 x <- rnorm(1000) # sample from standard normal
 ml <- maxLik(ll, start=c(1,1))
 # ignore eventual warnings "NaNs produced in: log(x)"
+print.default( ml )
 print( ml )
 summary(ml) # result should be close to c(0,1)
 hessian(ml) # How the Hessian looks like
@@ -50,6 +51,7 @@ sqrt(-solve(hessian(ml))) # Note: standard deviations are on the diagonal
 #
 # Now run the same example while fixing a[2] = 1
 mlf <- maxLik(ll, start=c(1,1), activePar=c(TRUE, FALSE))
+print.default( mlf )
 print( mlf )
 summary(mlf) # first parameter close to 0, the second exactly 1.0
 hessian(mlf)
@@ -71,6 +73,7 @@ gradlik <- function(theta) 1/theta - t
 hesslik <- function(theta) -100/theta^2
 ## Estimate with analytic gradient and hessian
 a <- maxLik(loglik, gradlik, hesslik, start=1)
+print.default( a )
 print( a )
 ## print log likelihood value
 logLik( a )
@@ -117,10 +120,12 @@ gradlik <- function(theta) 1/theta - t
 hesslik <- function(theta) -100/theta^2
 ## Estimate with numeric gradient and hessian
 a <- maxLik(loglik, start=1, print.level=2)
+print.default( a )
 print( a )
 summary(a)
 ## Estimate with analytic gradient and hessian
 a <- maxLik(loglik, gradlik, hesslik, start=1)
+print.default( a )
 print( a )
 summary(a)
 
@@ -228,10 +233,12 @@ gradlik <- function(theta) 1/theta - t
 hesslik <- function(theta) -100/theta^2
 ## Estimate with numeric gradient and hessian
 a <- maxLik(loglik, start=1, print.level=2)
+print.default( a )
 print( a )
 summary(a)
 ## Estimate with analytic gradient and hessian
 a <- maxLik(loglik, gradlik, hesslik, start=1)
+print.default( a )
 print( a )
 summary(a)
 
@@ -265,9 +272,11 @@ gradlik <- function(theta) 1/theta - t
 hesslik <- function(theta) -100/theta^2
 ## Estimate with numeric gradient and hessian
 a <- maxLik(loglik, start=1, print.level=2)
+print.default( a )
 print( a )
 vcov(a)
 ## Estimate with analytic gradient and hessian
 a <- maxLik(loglik, gradlik, hesslik, start=1)
+print.default( a )
 print( a )
 vcov(a)
