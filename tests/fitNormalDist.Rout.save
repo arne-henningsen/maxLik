@@ -76,9 +76,11 @@ Type 'q()' to quit R.
 +    return( llHess )
 + }
 > 
+> # start values
+> startVal <- c( 0, 1 )
 > 
 > ## NR method
-> ml <- maxLik( llf, start = c( 0, 1 ) )
+> ml <- maxLik( llf, start = startVal )
 > print( ml )
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
@@ -132,7 +134,7 @@ NULL
 [2,] 0.00000000 0.01651073
 > logLik( summary( ml ) )
 [1] -201.5839
-> mlInd <- maxLik( llfInd, start = c( 0, 1 ) )
+> mlInd <- maxLik( llfInd, start = startVal )
 > summary( ml )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -152,7 +154,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [2] "Component 4: Mean relative difference: 0.001383998"
 > 
 > # with analytical gradients
-> mlg <- maxLik( llf, gf, start = c( 0, 1 ) )
+> mlg <- maxLik( llf, gf, start = startVal )
 > summary( mlg )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -170,7 +172,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > all.equal( ml, mlg )
 [1] "Component 3: Mean relative difference: 0.9758937"  
 [2] "Component 4: Mean relative difference: 0.001241030"
-> mlgInd <- maxLik( llfInd, gfInd, start = c( 0, 1 ) )
+> mlgInd <- maxLik( llfInd, gfInd, start = startVal )
 > all.equal( mlInd, mlgInd )
 [1] "Component 3: Mean relative difference: 1.086037"    
 [2] "Component 4: Mean relative difference: 0.0001436362"
@@ -178,13 +180,13 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] TRUE
 > 
 > # with analytical gradients and Hessians
-> mlgh <- maxLik( llf, gf, hf, start = c( 0, 1 ) )
+> mlgh <- maxLik( llf, gf, hf, start = startVal )
 > all.equal( mlg, mlgh )
 [1] TRUE
 > 
 > 
 > ## BHHH method
-> mlBHHH <- maxLik( llfInd, start = c( 0, 1 ), method = "BHHH" )
+> mlBHHH <- maxLik( llfInd, start = startVal, method = "BHHH" )
 > print( mlBHHH )
 Maximum Likelihood estimation
 BHHH maximisation, 13 iterations
@@ -250,7 +252,7 @@ NULL
 [7] "Component 10: 1 string mismatch"                    
 > 
 > # with analytical gradients
-> mlgBHHH <- maxLik( llfInd, gfInd, start = c( 0, 1 ), method = "BHHH" )
+> mlgBHHH <- maxLik( llfInd, gfInd, start = startVal, method = "BHHH" )
 > summary( mlgBHHH )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -278,13 +280,13 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [7] "Component 10: 1 string mismatch"                    
 > 
 > # with unused Hessian
-> mlghBHHH <- maxLik( llfInd, gfInd, hf, start = c( 0, 1 ), method = "BHHH" )
+> mlghBHHH <- maxLik( llfInd, gfInd, hf, start = startVal, method = "BHHH" )
 > all.equal( mlgBHHH, mlghBHHH )
 [1] TRUE
 > 
 > 
 > ## BFGS method
-> mlBFGS <- maxLik( llf, start = c( 0, 1 ), method = "BFGS" )
+> mlBFGS <- maxLik( llf, start = startVal, method = "BFGS" )
 Warning messages:
 1: In log(sigma) : NaNs produced
 2: In log(sigma) : NaNs produced
@@ -352,7 +354,7 @@ NULL
 [7] "Component 9: names for current but not for target"                             
 [8] "Component 9: Numeric: lengths (1, 2) differ"                                   
 [9] "Component 10: 1 string mismatch"                                               
-> mlIndBFGS <- maxLik( llfInd, start = c( 0, 1 ), method = "BFGS" )
+> mlIndBFGS <- maxLik( llfInd, start = startVal, method = "BFGS" )
 Warning messages:
 1: In log(sigma) : NaNs produced
 2: In log(sigma) : NaNs produced
@@ -375,7 +377,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [2] "Component 4: Mean relative difference: 4.982078e-07"
 > 
 > # with analytical gradients
-> mlgBFGS <- maxLik( llf, gf, start = c( 0, 1 ), method = "BFGS" )
+> mlgBFGS <- maxLik( llf, gf, start = startVal, method = "BFGS" )
 Warning messages:
 1: In log(sigma) : NaNs produced
 2: In log(sigma) : NaNs produced
@@ -406,7 +408,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [7] "Component 9: names for current but not for target"                             
 [8] "Component 9: Numeric: lengths (1, 2) differ"                                   
 [9] "Component 10: 1 string mismatch"                                               
-> mlgIndBFGS <- maxLik( llfInd, gfInd, start = c( 0, 1 ), method = "BFGS" )
+> mlgIndBFGS <- maxLik( llfInd, gfInd, start = startVal, method = "BFGS" )
 Warning messages:
 1: In log(sigma) : NaNs produced
 2: In log(sigma) : NaNs produced
@@ -414,7 +416,7 @@ Warning messages:
 [1] TRUE
 > 
 > # with unused Hessian
-> mlghBFGS <- maxLik( llf, gf, hf, start = c( 0, 1 ), method = "BFGS" )
+> mlghBFGS <- maxLik( llf, gf, hf, start = startVal, method = "BFGS" )
 Warning messages:
 1: In log(sigma) : NaNs produced
 2: In log(sigma) : NaNs produced
@@ -423,7 +425,7 @@ Warning messages:
 > 
 > 
 > ## NM method
-> mlNM <- maxLik( llf, start = c( 0, 1 ), method = "NM" )
+> mlNM <- maxLik( llf, start = startVal, method = "NM" )
 > print( mlNM )
 Maximum Likelihood estimation
 Nelder-Mead maximisation, 63 iterations
@@ -490,7 +492,7 @@ NULL
 [9] "Component 10: 1 string mismatch"                                               
 > 
 > # with unused analytical gradients
-> mlgNM <- maxLik( llf, gf, start = c( 0, 1 ), method = "NM" )
+> mlgNM <- maxLik( llf, gf, start = startVal, method = "NM" )
 > summary( mlgNM )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -510,14 +512,14 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [2] "Component 4: Mean relative difference: 0.0006473064"
 > 
 > # with unused analytical gradients and Hessian
-> mlghNM <- maxLik( llf, gf, hf, start = c( 0, 1 ), method = "NM" )
+> mlghNM <- maxLik( llf, gf, hf, start = startVal, method = "NM" )
 > all.equal( mlgNM, mlghNM )
 [1] TRUE
 > 
 > 
 > ## SANN method
 > set.seed( 345 )
-> mlSANN <- maxLik( llf, start = c( 0, 1 ), method = "SANN" )
+> mlSANN <- maxLik( llf, start = startVal, method = "SANN" )
 > print( mlSANN )
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
@@ -586,7 +588,7 @@ NULL
 > 
 > # with unused analytical gradients
 > set.seed( 345 )
-> mlgSANN <- maxLik( llf, gf, start = c( 0, 1 ), method = "SANN" )
+> mlgSANN <- maxLik( llf, gf, start = startVal, method = "SANN" )
 > summary( mlgSANN )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -607,7 +609,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > 
 > # with unused analytical gradients and Hessian
 > set.seed( 345 )
-> mlghSANN <- maxLik( llf, gf, hf, start = c( 0, 1 ), method = "SANN" )
+> mlghSANN <- maxLik( llf, gf, hf, start = startVal, method = "SANN" )
 > all.equal( mlgSANN, mlghSANN )
 [1] TRUE
 > 

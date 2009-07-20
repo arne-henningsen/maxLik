@@ -59,9 +59,11 @@ hf <- function( param ) {
    return( llHess )
 }
 
+# start values
+startVal <- c( 0, 1 )
 
 ## NR method
-ml <- maxLik( llf, start = c( 0, 1 ) )
+ml <- maxLik( llf, start = startVal )
 print( ml )
 summary( ml )
 activePar( ml )
@@ -78,25 +80,25 @@ returnCode( ml )
 returnMessage( ml )
 vcov( ml )
 logLik( summary( ml ) )
-mlInd <- maxLik( llfInd, start = c( 0, 1 ) )
+mlInd <- maxLik( llfInd, start = startVal )
 summary( ml )
 all.equal( ml, mlInd )
 
 # with analytical gradients
-mlg <- maxLik( llf, gf, start = c( 0, 1 ) )
+mlg <- maxLik( llf, gf, start = startVal )
 summary( mlg )
 all.equal( ml, mlg )
-mlgInd <- maxLik( llfInd, gfInd, start = c( 0, 1 ) )
+mlgInd <- maxLik( llfInd, gfInd, start = startVal )
 all.equal( mlInd, mlgInd )
 all.equal( mlg, mlgInd )
 
 # with analytical gradients and Hessians
-mlgh <- maxLik( llf, gf, hf, start = c( 0, 1 ) )
+mlgh <- maxLik( llf, gf, hf, start = startVal )
 all.equal( mlg, mlgh )
 
 
 ## BHHH method
-mlBHHH <- maxLik( llfInd, start = c( 0, 1 ), method = "BHHH" )
+mlBHHH <- maxLik( llfInd, start = startVal, method = "BHHH" )
 print( mlBHHH )
 summary( mlBHHH )
 activePar( mlBHHH )
@@ -116,18 +118,18 @@ logLik( summary( mlBHHH ) )
 all.equal( ml, mlBHHH )
 
 # with analytical gradients
-mlgBHHH <- maxLik( llfInd, gfInd, start = c( 0, 1 ), method = "BHHH" )
+mlgBHHH <- maxLik( llfInd, gfInd, start = startVal, method = "BHHH" )
 summary( mlgBHHH )
 all.equal( mlBHHH, mlgBHHH )
 all.equal( mlg, mlgBHHH )
 
 # with unused Hessian
-mlghBHHH <- maxLik( llfInd, gfInd, hf, start = c( 0, 1 ), method = "BHHH" )
+mlghBHHH <- maxLik( llfInd, gfInd, hf, start = startVal, method = "BHHH" )
 all.equal( mlgBHHH, mlghBHHH )
 
 
 ## BFGS method
-mlBFGS <- maxLik( llf, start = c( 0, 1 ), method = "BFGS" )
+mlBFGS <- maxLik( llf, start = startVal, method = "BFGS" )
 print( mlBFGS )
 summary( mlBFGS )
 activePar( mlBFGS )
@@ -145,25 +147,25 @@ returnMessage( mlBFGS )
 vcov( mlBFGS )
 logLik( summary( mlBFGS ) )
 all.equal( ml, mlBFGS )
-mlIndBFGS <- maxLik( llfInd, start = c( 0, 1 ), method = "BFGS" )
+mlIndBFGS <- maxLik( llfInd, start = startVal, method = "BFGS" )
 summary( mlIndBFGS )
 all.equal( mlBFGS, mlIndBFGS )
 
 # with analytical gradients
-mlgBFGS <- maxLik( llf, gf, start = c( 0, 1 ), method = "BFGS" )
+mlgBFGS <- maxLik( llf, gf, start = startVal, method = "BFGS" )
 summary( mlgBFGS )
 all.equal( mlBFGS, mlgBFGS )
 all.equal( mlg, mlgBFGS )
-mlgIndBFGS <- maxLik( llfInd, gfInd, start = c( 0, 1 ), method = "BFGS" )
+mlgIndBFGS <- maxLik( llfInd, gfInd, start = startVal, method = "BFGS" )
 all.equal( mlgBFGS, mlgIndBFGS )
 
 # with unused Hessian
-mlghBFGS <- maxLik( llf, gf, hf, start = c( 0, 1 ), method = "BFGS" )
+mlghBFGS <- maxLik( llf, gf, hf, start = startVal, method = "BFGS" )
 all.equal( mlgBFGS, mlghBFGS )
 
 
 ## NM method
-mlNM <- maxLik( llf, start = c( 0, 1 ), method = "NM" )
+mlNM <- maxLik( llf, start = startVal, method = "NM" )
 print( mlNM )
 summary( mlNM )
 activePar( mlNM )
@@ -183,18 +185,18 @@ logLik( summary( mlNM ) )
 all.equal( ml, mlNM )
 
 # with unused analytical gradients
-mlgNM <- maxLik( llf, gf, start = c( 0, 1 ), method = "NM" )
+mlgNM <- maxLik( llf, gf, start = startVal, method = "NM" )
 summary( mlgNM )
 all.equal( mlNM, mlgNM )
 
 # with unused analytical gradients and Hessian
-mlghNM <- maxLik( llf, gf, hf, start = c( 0, 1 ), method = "NM" )
+mlghNM <- maxLik( llf, gf, hf, start = startVal, method = "NM" )
 all.equal( mlgNM, mlghNM )
 
 
 ## SANN method
 set.seed( 345 )
-mlSANN <- maxLik( llf, start = c( 0, 1 ), method = "SANN" )
+mlSANN <- maxLik( llf, start = startVal, method = "SANN" )
 print( mlSANN )
 summary( mlSANN )
 activePar( mlSANN )
@@ -215,12 +217,12 @@ all.equal( ml, mlSANN )
 
 # with unused analytical gradients
 set.seed( 345 )
-mlgSANN <- maxLik( llf, gf, start = c( 0, 1 ), method = "SANN" )
+mlgSANN <- maxLik( llf, gf, start = startVal, method = "SANN" )
 summary( mlgSANN )
 all.equal( mlSANN, mlgSANN )
 
 # with unused analytical gradients and Hessian
 set.seed( 345 )
-mlghSANN <- maxLik( llf, gf, hf, start = c( 0, 1 ), method = "SANN" )
+mlghSANN <- maxLik( llf, gf, hf, start = startVal, method = "SANN" )
 all.equal( mlgSANN, mlghSANN )
 
