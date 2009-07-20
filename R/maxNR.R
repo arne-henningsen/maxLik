@@ -305,7 +305,7 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
    }
    names(start1) <- nimed
    result <-list(
-                  maximum = drop( f1),
+                  maximum = unname( drop( f1 ) ),
                   estimate=start1,
                   gradient=G1,
                  hessian=H1,
