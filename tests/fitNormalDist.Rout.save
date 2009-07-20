@@ -77,7 +77,7 @@ Type 'q()' to quit R.
 + }
 > 
 > # start values
-> startVal <- c( 0, 1 )
+> startVal <- c( mu = 0, sigma = 1 )
 > 
 > ## NR method
 > ml <- maxLik( llf, start = startVal )
@@ -95,9 +95,9 @@ Return code 1: gradient close to zero. May be a solution
 Log-Likelihood: -201.5839 
 2  free parameters
 Estimates:
-     Estimate Std. error t value   Pr(> t)    
-[1,]  1.18081    0.18185  6.4935 8.388e-11 ***
-[2,]  1.81648    0.12849 14.1367 < 2.2e-16 ***
+      Estimate Std. error t value   Pr(> t)    
+mu     1.18081    0.18185  6.4935 8.388e-11 ***
+sigma  1.81648    0.12849 14.1367 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -106,14 +106,15 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > AIC( ml )
 [1] 407.1679
 > coef( ml )
-[1] 1.180812 1.816481
+      mu    sigma 
+1.180812 1.816481 
 > condiNumber( ml )
- 	 1 
- 	 1.668860 
+mu 	 1 
+sigma 	 1.668860 
 > hessian( ml )
-         [,1]      [,2]
-[1,] -30.2407   0.00000
-[2,]   0.0000 -60.56666
+            mu     sigma
+mu    -30.2407   0.00000
+sigma   0.0000 -60.56666
 > logLik( ml )
 [1] -201.5839
 > maximType( ml )
@@ -143,9 +144,9 @@ Return code 1: gradient close to zero. May be a solution
 Log-Likelihood: -201.5839 
 2  free parameters
 Estimates:
-     Estimate Std. error t value   Pr(> t)    
-[1,]  1.18081    0.18185  6.4935 8.388e-11 ***
-[2,]  1.81648    0.12849 14.1367 < 2.2e-16 ***
+      Estimate Std. error t value   Pr(> t)    
+mu     1.18081    0.18185  6.4935 8.388e-11 ***
+sigma  1.81648    0.12849 14.1367 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -163,9 +164,9 @@ Return code 1: gradient close to zero. May be a solution
 Log-Likelihood: -201.5839 
 2  free parameters
 Estimates:
-     Estimate Std. error t value   Pr(> t)    
-[1,]  1.18081    0.18165  6.5005 8.003e-11 ***
-[2,]  1.81648    0.12844 14.1421 < 2.2e-16 ***
+      Estimate Std. error t value   Pr(> t)    
+mu     1.18081    0.18165  6.5005 8.003e-11 ***
+sigma  1.81648    0.12844 14.1421 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -203,9 +204,9 @@ May be a solution
 Log-Likelihood: -201.5839 
 2  free parameters
 Estimates:
-     Estimate Std. error t value   Pr(> t)    
-[1,]  1.18081    0.18183  6.4941 8.354e-11 ***
-[2,]  1.81648    0.13408 13.5473 < 2.2e-16 ***
+      Estimate Std. error t value   Pr(> t)    
+mu     1.18081    0.18183  6.4941 8.354e-11 ***
+sigma  1.81648    0.13408 13.5473 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -214,14 +215,15 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > AIC( mlBHHH )
 [1] 407.1679
 > coef( mlBHHH )
-[1] 1.180812 1.816480
+      mu    sigma 
+1.180812 1.816480 
 > condiNumber( mlBHHH )
- 	 1 
- 	 1.719018 
+mu 	 1 
+sigma 	 1.719018 
 > hessian( mlBHHH )
-           [,1]       [,2]
-[1,] -30.306718  -1.833532
-[2,]  -1.833532 -55.732477
+              mu      sigma
+mu    -30.306718  -1.833532
+sigma  -1.833532 -55.732477
 > logLik( mlBHHH )
 [1] -201.5839
 > maximType( mlBHHH )
@@ -262,9 +264,9 @@ May be a solution
 Log-Likelihood: -201.5839 
 2  free parameters
 Estimates:
-     Estimate Std. error t value   Pr(> t)    
-[1,]  1.18081    0.18183  6.4941 8.354e-11 ***
-[2,]  1.81648    0.13408 13.5473 < 2.2e-16 ***
+      Estimate Std. error t value   Pr(> t)    
+mu     1.18081    0.18183  6.4941 8.354e-11 ***
+sigma  1.81648    0.13408 13.5473 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -304,9 +306,9 @@ Return code 0: successful convergence
 Log-Likelihood: -201.5839 
 2  free parameters
 Estimates:
-     Estimate Std. error t value   Pr(> t)    
-[1,]  1.18081    0.18165  6.5005 8.003e-11 ***
-[2,]  1.81648    0.12844 14.1421 < 2.2e-16 ***
+      Estimate Std. error t value   Pr(> t)    
+mu     1.18081    0.18165  6.5005 8.003e-11 ***
+sigma  1.81648    0.12844 14.1421 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -315,14 +317,15 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > AIC( mlBFGS )
 [1] 407.1679
 > coef( mlBFGS )
-[1] 1.180811 1.816481
+      mu    sigma 
+1.180811 1.816481 
 > condiNumber( mlBFGS )
- 	 1 
- 	 1.666670 
+mu 	 1 
+sigma 	 1.666670 
 > hessian( mlBFGS )
-              [,1]          [,2]
-[1,] -3.030668e+01 -3.552714e-05
-[2,] -3.552714e-05 -6.061335e+01
+                 mu         sigma
+mu    -3.030668e+01 -3.552714e-05
+sigma -3.552714e-05 -6.061335e+01
 > logLik( mlBFGS )
 [1] -201.5839
 > maximType( mlBFGS )
@@ -366,9 +369,9 @@ Return code 0: successful convergence
 Log-Likelihood: -201.5839 
 2  free parameters
 Estimates:
-     Estimate Std. error t value   Pr(> t)    
-[1,]  1.18081    0.18165  6.5005 8.003e-11 ***
-[2,]  1.81648    0.12844 14.1421 < 2.2e-16 ***
+      Estimate Std. error t value   Pr(> t)    
+mu     1.18081    0.18165  6.5005 8.003e-11 ***
+sigma  1.81648    0.12844 14.1421 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -389,9 +392,9 @@ Return code 0: successful convergence
 Log-Likelihood: -201.5839 
 2  free parameters
 Estimates:
-     Estimate Std. error t value   Pr(> t)    
-[1,]  1.18081    0.18165  6.5005 8.003e-11 ***
-[2,]  1.81648    0.12844 14.1421 < 2.2e-16 ***
+      Estimate Std. error t value   Pr(> t)    
+mu     1.18081    0.18165  6.5005 8.003e-11 ***
+sigma  1.81648    0.12844 14.1421 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -440,9 +443,9 @@ Return code 0: successful convergence
 Log-Likelihood: -201.5839 
 2  free parameters
 Estimates:
-     Estimate Std. error t value   Pr(> t)    
-[1,]  1.18061    0.18159  6.5015 7.953e-11 ***
-[2,]  1.81664    0.12849 14.1379 < 2.2e-16 ***
+      Estimate Std. error t value   Pr(> t)    
+mu     1.18061    0.18159  6.5015 7.953e-11 ***
+sigma  1.81664    0.12849 14.1379 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -451,14 +454,15 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > AIC( mlNM )
 [1] 407.1679
 > coef( mlNM )
-[1] 1.180608 1.816636
+      mu    sigma 
+1.180608 1.816636 
 > condiNumber( mlNM )
- 	 1 
- 	 1.664480 
+mu 	 1 
+sigma 	 1.664480 
 > hessian( mlNM )
-          [,1]      [,2]
-[1,] -30.32596   0.00000
-[2,]   0.00000 -60.56666
+             mu     sigma
+mu    -30.32596   0.00000
+sigma   0.00000 -60.56666
 > logLik( mlNM )
 [1] -201.5839
 > maximType( mlNM )
@@ -501,9 +505,9 @@ Return code 0: successful convergence
 Log-Likelihood: -201.5839 
 2  free parameters
 Estimates:
-     Estimate Std. error t value   Pr(> t)    
-[1,]  1.18061    0.18166  6.4989 8.093e-11 ***
-[2,]  1.81664    0.12847 14.1403 < 2.2e-16 ***
+      Estimate Std. error t value   Pr(> t)    
+mu     1.18061    0.18166  6.4989 8.093e-11 ***
+sigma  1.81664    0.12847 14.1403 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -534,9 +538,9 @@ Return code 0: successful convergence
 Log-Likelihood: -201.5841 
 2  free parameters
 Estimates:
-     Estimate Std. error t value   Pr(> t)    
-[1,]  1.18267    0.18185  6.5037 7.838e-11 ***
-[2,]  1.81780    0.12871 14.1237 < 2.2e-16 ***
+      Estimate Std. error t value   Pr(> t)    
+mu     1.18267    0.18185  6.5037 7.838e-11 ***
+sigma  1.81780    0.12871 14.1237 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -545,14 +549,15 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > AIC( mlSANN )
 [1] 407.1681
 > coef( mlSANN )
-[1] 1.182667 1.817799
+      mu    sigma 
+1.182667 1.817799 
 > condiNumber( mlSANN )
- 	 1 
- 	 1.666407 
+mu 	 1 
+sigma 	 1.666407 
 > hessian( mlSANN )
-             [,1]         [,2]
-[1,] -30.24069883   0.02842171
-[2,]   0.02842171 -60.36771083
+                mu        sigma
+mu    -30.24069883   0.02842171
+sigma   0.02842171 -60.36771083
 > logLik( mlSANN )
 [1] -201.5841
 > maximType( mlSANN )
@@ -597,9 +602,9 @@ Return code 0: successful convergence
 Log-Likelihood: -201.5841 
 2  free parameters
 Estimates:
-     Estimate Std. error t value   Pr(> t)    
-[1,]  1.18267    0.18178   6.506 7.716e-11 ***
-[2,]  1.81780    0.12868  14.127 < 2.2e-16 ***
+      Estimate Std. error t value   Pr(> t)    
+mu     1.18267    0.18178   6.506 7.716e-11 ***
+sigma  1.81780    0.12868  14.127 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------

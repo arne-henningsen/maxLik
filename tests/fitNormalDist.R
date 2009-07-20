@@ -60,7 +60,7 @@ hf <- function( param ) {
 }
 
 # start values
-startVal <- c( 0, 1 )
+startVal <- c( mu = 0, sigma = 1 )
 
 ## NR method
 ml <- maxLik( llf, start = startVal )
