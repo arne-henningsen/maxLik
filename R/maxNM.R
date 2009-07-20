@@ -26,11 +26,11 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
          g <- grad(theta, ...)
          if(!is.null(dim(g))) {
             if(ncol(g) > 1) {
-               return(colSums(g))
+               g <- colSums( g )
             }
-         } else {
-            return(g)
          }
+         names( g ) <- names( start )
+         return( g )
       }
       g <- numericGradient(fn, theta, ...)
       if(!is.null(dim(g))) {
@@ -42,9 +42,12 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
    hessian <- function(theta, ...) {
       ## just used for computing the final hessian, eventually using the supplied analytic information
       if(!is.null(hess)) {
-         return(as.matrix(hess(theta, ...)))
+         h <- as.matrix(hess(theta, ...))
+      } else {
+         h <- numericHessian(fn, gradient, theta, ...)
       }
-      return(numericHessian(fn, gradient, theta, ...))
+      rownames( h ) <- colnames( h ) <- names( start )
+      return( h )
    }
    type <- "Nelder-Mead maximisation"
    parscale <- rep(parscale, length.out=length(start))

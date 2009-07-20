@@ -19,11 +19,11 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
          g <- grad(theta, ...)
          if(!is.null(dim(g))) {
             if(ncol(g) > 1) {
-               return(colSums(g))
+               g <- colSums( g )
             }
-         } else {
-            return(g)
          }
+         names( g ) <- names( start )
+         return( g )
       }
       g <- numericGradient(fn, theta, ...)
       if(!is.null(dim(g))) {
