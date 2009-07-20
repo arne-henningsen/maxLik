@@ -64,6 +64,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
                    code=a$convergence,
                    message=paste(message(a$convergence), a$message),
                    last.step=NULL,
+                   activePar = rep( TRUE, length ( a$par ) ),
                    iterations=a$counts[1],
                    type=type)
    class(result) <- "maxim"

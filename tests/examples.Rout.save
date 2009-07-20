@@ -407,6 +407,9 @@ $message
 $last.step
 NULL
 
+$activePar
+[1] TRUE
+
 $iterations
 function gradient 
       23        6 
@@ -884,6 +887,9 @@ $message
 
 $last.step
 NULL
+
+$activePar
+[1] TRUE TRUE
 
 $iterations
 function gradient 
