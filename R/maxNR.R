@@ -304,6 +304,8 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
       cat( "Function value:", f1, "\n")
    }
    names(start1) <- nimed
+   names( G1 ) <- nimed
+   rownames( H1 ) <- colnames( H1 ) <- nimed
    result <-list(
                   maximum = unname( drop( f1 ) ),
                   estimate=start1,
