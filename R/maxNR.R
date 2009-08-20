@@ -83,7 +83,7 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
       if(!is.null(grad)) {  # use user-supplied if present
          gr <- grad(theta, ...)
       } else {
-         gr <- numericGradient(fn, theta, ...)
+         gr <- numericGradient(fn, theta, activePar=activePar, ...)
                                         # Note we need nObs rows x nParam cols
       }
       ## Now check if the gradient is vector or matrix...
@@ -97,13 +97,13 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
       }
       return(gr)
    }
-   hessian <- function(theta, ...) {
+   hessian <- function(theta, activePar=activePar, ...) {
       ## Note: a call to hessian must follow a call to gradient using /exactly the same/ parameter values.
       ## This ensures compatibility with maxBHHH
       if(!is.null(hess)) {
          return(as.matrix(hess(theta, ...)))
       }
-      return(numericHessian(fn, gradient, theta, ...))
+      return(numericHessian(fn, gradient, theta, activePar=activePar, ...))
    }
    ## -------------------------------------------------
    maxim.type <- "Newton-Raphson maximisation"
@@ -149,8 +149,8 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
       stop( "length of gradient (", length(G1),
          ") not equal to the no. of parameters (", nParam, ")" )
    }
-   H1 <- hessian(start, ...)
-   if(any(is.na(H1))) {
+   H1 <- hessian(start, activePar=activePar, ...)
+   if(any(is.na(H1[activePar, activePar]))) {
       stop("NA in the initial Hessian")
    }
    if(any(is.infinite(H1))) {
@@ -164,7 +164,8 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
       dimnames(a) <- list(nimed, c("parameter", "initial gradient",
                                           "free"))
       print(a)
-      cat( "Condition number of the hessian:", kappa( H1), "\n")
+      cat( "Condition number of the (active) hessian:",
+          kappa( H1[activePar, activePar]), "\n")
       if( print.level > 3) {
          print( H1)
       }
@@ -175,11 +176,11 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
       start0 <- start1
       f0 <- f1
       G0 <- G1
-      if(any(is.na(G0))) {
+      if(any(is.na(G0[activePar]))) {
          stop("NA in gradient (at the iteration start)")
       }
       H0 <- H1
-      if(any(is.na(H0))) {
+      if(any(is.na(H0[activePar, activePar]))) {
          stop("NA in Hessian (at the iteration start)")
       }
       step <- 1
@@ -248,16 +249,20 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
          start1[newVal$index] <- newVal$val
       }
       G1 <- gradient(start1, ...)
-      if(any(is.na(G1))) {
+      if(any(is.na(G1[activePar]))) {
          cat("Iteration", iter, "\n")
          cat("Parameter:\n")
          print(start1)
+         if(length(G1) < 30) {
+            cat("Gradient:\n")
+            print(G1)
+         }
          stop("NA in gradient")
       }
       if(any(is.infinite(G1))) {
          code <- 6; break;
       }
-      H1 <- hessian(start1, ...)
+      H1 <- hessian(start1, activePar=activePar, ...)
       if( print.level > 1) {
         cat( "-----Iteration", iter, "-----\n")
       }
@@ -269,7 +274,7 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
             formatC(as.vector(f1), digits=8, format="f"),  "\n")
          a <- cbind(amount, start1, G1, as.integer(activePar))
          dimnames(a) <- list(names(start0), c("amount", "new param",
-                                             "new gradient", "free"))
+                                             "new gradient", "active"))
          print(a)
          cat( "Condition number of the hessian:",
             kappa(H1[activePar,activePar,drop=FALSE]), "\n")

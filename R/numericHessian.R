@@ -1,22 +1,30 @@
-numericHessian <- function(f, grad=NULL, t0, eps=1e-6, ...) {
+numericHessian <- function(f, grad=NULL, t0, eps=1e-6, activePar,
+                           ...) {
    a <- f(t0, ...)
    if(is.null(grad)) {
-      numericNHessian(f, t0, eps, ...)
+      numericNHessian(f, t0, eps, activePar=activePar, ...)
                                         # gradient not provided -> everything numerically
    } else {
-      numericGradient(grad, t0, eps, ...)
+      numericGradient(grad, t0, eps, activePar=activePar, ...)
                                         # gradient is provided -> Hessian is grad grad
    }
 }
 
-numericNHessian <- function( f, t0, eps=1e-6, ...) {
-   ### Numeric Hessian without gradient
+numericNHessian <- function( f, t0, eps=1e-6, activePar, ...) {
+   ## Numeric Hessian without gradient
+   ## activePar   calculate the Hessian based on these parameters only
    f00 <- f( t0, ...)
    eps2 <- eps*eps
    N <- length( t0)
    H <- matrix(NA, N, N)
+   if(missing(activePar))
+       activePar <- rep(TRUE, length(t0))
    for( i in 1:N) {
+      if(!activePar[i])
+          next
       for( j in 1:N) {
+         if(!activePar[j])
+             next
          t01 <- t0
          t10 <- t0
          t11 <- t0

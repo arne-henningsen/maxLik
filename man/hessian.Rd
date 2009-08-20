@@ -41,10 +41,8 @@ sqrt(-solve(hessian(ml))) # Note: standard deviations are on the diagonal
 mlf <- maxLik(ll, start=c(1,1), activePar=c(TRUE, FALSE))
 summary(mlf) # first parameter close to 0, the second exactly 1.0
 hessian(mlf)
-# Now look at the Hessian.  Note that the second component has is not
-# related to the curvature of the object function:
-sqrt(-solve(hessian(mlf))) # works in current case, although you may get
-                           # warnings.  
+# Now look at the Hessian.  Note that NA-s are in place of passive
+# parameters.
 # now invert only the free parameter part of the Hessian
 sqrt(-solve(hessian(mlf)[activePar(mlf), activePar(mlf)]))
 # gives the standard deviation for the mean

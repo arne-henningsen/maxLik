@@ -9,9 +9,9 @@
   \code{numericGradient} accepts vector-valued functions.
 }
 \usage{
-numericGradient(f, t0, eps=1e-06, \dots)
-numericHessian(f, grad=NULL, t0, eps=1e-06, \dots)
-numericNHessian(f, t0, eps=1e-6, \dots)
+numericGradient(f, t0, eps=1e-06, activePar, \dots)
+numericHessian(f, grad=NULL, t0, eps=1e-06, activePar, \dots)
+numericNHessian(f, t0, eps=1e-6, activePar, \dots)
 
 }
 
@@ -21,6 +21,10 @@ numericNHessian(f, t0, eps=1e-6, \dots)
   \item{grad}{function, gradient of f}
   \item{t0}{vector, the value of parameters}
   \item{eps}{numeric, the step for numeric differentiation}
+  \item{activePar}{logical vector, length of which equal the length of
+    the parameter.  Derivative is calculated only along the parameters
+    for which it is \code{TRUE}, \code{NA} returned for the others.  If
+    missing, all parameters are treated as active.}
   \item{\dots}{furter arguments for \code{f}}
 }
 \details{
