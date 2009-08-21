@@ -9,7 +9,7 @@ maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
       tol = 1e-08, reltol=sqrt(.Machine$double.eps), gradtol = 1e-06,
       steptol = 1e-10, lambdatol = 1e-06, qrtol = 1e-10,
       iterlim = 150,
-      constPar = NULL, activePar=rep(TRUE, nParam), ...)
+      activePar=rep(TRUE, nParam), ...)
 }
 \arguments{
   \item{fn}{function to be maximized.  It must return either a single
@@ -54,10 +54,8 @@ maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
   \item{qrtol}{QR-decomposition tolerance}
   \item{iterlim}{stopping condition.  Stop if more than \code{iterlim}
     iterations, return \code{code=4}.}
-  \item{constPar}{index vector.  Which of the parameters must be treated
-    as constants.}
-  \item{activePar}{logical vector, which parameters are treated as free
-    (resp constant)}
+  \item{activePar}{index vector, which parameters are treated as free.
+    Other parameters are treated as fixed constants.}
   \item{\dots}{further arguments to \code{fn}, \code{grad} and
     \code{hess}.}
 }
@@ -67,13 +65,15 @@ parameter values.  Constant parameters are useful if a parameter value
 is converging toward the boundary of support, or for testing.  
 
 One way is to put
-\code{constPar} to non-NULL.  Second possibility is to signal by
-\code{fn} which parameters are constant and change the values of the
-parameter vector.  The value of \code{fn} may have following attributes:
+\code{activePar} to non-NULL, specifying which parameters we want to
+change.  However, parameters can also be fixed in runtime by by
+signaling with
+\code{fn}.  This may be useful if an estimation converges toward the
+edge of the parameter space possibly causing problems.  The value of
+\code{fn} may have following attributes:
 \itemize{
 \item{constPar}{index vector.  Which parameters are redefined to
   constant}
-\item{constVal}{numeric vector.  Values for the constant parameters.}
 \item{newVal}{a list with following components:
   \itemize{
   \item{index}{which parameters will have a new value}
@@ -81,10 +81,11 @@ parameter vector.  The value of \code{fn} may have following attributes:
   }
 }
 }
-The difference between \code{constVal} and \code{newVal} is that the
-latter parameters are not set to constants.  If the attribute
-\code{newVal} is present, the new function value is allowed to be below
-the previous one.
+Hence, \code{constVal} specifies which parameters are treated as
+constants.  \code{newVal} allows one to overwrite the existing parameter
+values, possibly the non-constant values as well.  If the attribute
+\code{newVal} is present, the new function value need not to exceed 
+the previous one (maximization is not performed in that step).
 }
 \value{
   list of class "maxim" with following components:

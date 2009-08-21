@@ -4,14 +4,13 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
                   lambdatol=1e-6,
                   qrtol=1e-10,
                   iterlim=150,
-                  constPar=NULL,
                   activePar=rep(TRUE, nParam),
                   ...) {
    ## Newton-Raphson maximisation
    ## Parameters:
    ## fn          - the function to be minimized.  Returns either scalar or
-   ##               vector value with possible attributes constPar and
-   ##               constVal
+   ##               vector value with possible attributes 
+   ##               constPar and newVal
    ## grad        - gradient function (numeric used if missing).  Must return either
    ##               * vector, length=nParam
    ##               * matrix, dim=c(nObs, 1).  Treated as vector
@@ -28,8 +27,9 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
    ## reltol      - maximum allowed reltive difference (stops if < reltol*(abs(fn) + reltol)
    ## gradtol     - maximum allowed norm of gradient vector
    ## iterlim     - maximum # of iterations
-   ## constPar    - NULL or an index vector -- which parameters are taken as
-   ##               constants
+   ## activePar   - an index vector -- which parameters are taken as
+   ##               variable (free).  Other paramters are treated as
+   ##               fixed constants
    ##
    ## RESULTS:
    ## a list of class "maxim":
@@ -109,10 +109,14 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
    maxim.type <- "Newton-Raphson maximisation"
    nimed <- names(start)
    nParam <- length(start)
+   if(is.numeric(activePar)) {
+      a <- rep(FALSE, nParam)
+      a[activePar] <- TRUE
+      activePar <- a
+   }
    samm <- NULL
-                                        # information about unsuccesful step (if any)
-   I <- diag(rep(1, nParam))     # I is unit matrix
-   activePar[constPar] <- FALSE
+   I <- diag(rep(1, nParam))
+                           # I is unit matrix
    start1 <- start
    iter <- 0
    f1 <- func(start1, ...)
@@ -199,7 +203,7 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
                                     G0[activePar], tol=qrtol)
       start1 <- start0 - step*amount
       f1 <- func(start1, ...)
-      ## Find out the constant parameters
+      ## Are we requested to fix some of the parameters?
       constPar <- attr(f1, "constPar")
       if(!is.null(constPar)) {
          if(any(is.na(constPar))) {
@@ -207,14 +211,10 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
          }
          activePar <- rep(TRUE, nParam)
          activePar[constPar] <- FALSE
-         if(!is.null(attr(f1, "constVal"))) {
-            start1[constPar] <- attr(f1, "constVal")
-               # put constants into start.  func() should
-               # already use them
-         }
       }
+      ## Are we asked to write in a new value for some of the parameters?
       if(is.null(newVal <- attr(f1, "newVal"))) {
-                                        # 'newVal' == NULL: none of the parameters are overwritten by the function
+         ## no ...
          while( is.na( f1) || ( ( f1 < f0) && ( step >= steptol))) {
                                         # We end up in a NA or a higher value.
                                         # try smaller step
@@ -232,8 +232,12 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
                   stop("NA in the list of constants")
                }
                activePar[constPar] <- FALSE
-               if(!is.null(attr(f1, "constVal"))) {
-                  start1[constPar] <- attr(f1, "constVal")
+               ## Any new values requested?
+               if(!is.null(newVal <- attr(f1, "newVal"))) {
+                  ## Yes.  Write them to parameters and go for
+                  ## next iteration
+                  start1[newVal$index] <- newVal$val
+                  break;
                }
             }
          }
@@ -244,9 +248,11 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
             samm <- list(theta0=start0, f0=f0, climb=amount)
          }
       } else {
-                                        # The function suggests the new parameter values.  These are overwritten.
-                                        # This may result in lower function value, hence we do not check f1 > f0
+         ## Yes, indeed.  New values given to some of the params.
+         ## Note, this may result in a lower function value,
+         ## hence we do not check f1 > f0
          start1[newVal$index] <- newVal$val
+         print(start1)
       }
       G1 <- gradient(start1, ...)
       if(any(is.na(G1[activePar]))) {
