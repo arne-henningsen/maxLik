@@ -1,6 +1,6 @@
 
-R version 2.8.0 (2008-10-20)
-Copyright (C) 2008 The R Foundation for Statistical Computing
+R version 2.9.1 (2009-06-26)
+Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -188,11 +188,11 @@ $estimate
 [1] 0.006396535 0.997576255
 
 $gradient
-[1] 5.684342e-08 0.000000e+00
+[1] 0 0
 
 $hessian
           [,1]      [,2]
-[1,] -1004.821     0.000
+[1,] -1004.878     0.000
 [2,]     0.000 -2009.756
 
 $code
@@ -230,18 +230,18 @@ Log-Likelihood: -497.5733
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-[1,] 0.0063965  0.0315468  0.2028  0.8393    
+[1,] 0.0063965  0.0315459  0.2028  0.8393    
 [2,] 0.9975763  0.0223063 44.7216  <2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > hessian(ml) # How the Hessian looks like
           [,1]      [,2]
-[1,] -1004.821     0.000
+[1,] -1004.878     0.000
 [2,]     0.000 -2009.756
 > sqrt(-solve(hessian(ml))) # Note: standard deviations are on the diagonal
            [,1]       [,2]
-[1,] 0.03154682 0.00000000
+[1,] 0.03154593 0.00000000
 [2,] 0.00000000 0.02230634
 > #
 > # Now run the same example while fixing a[2] = 1
@@ -299,7 +299,7 @@ Estimates:
 [1,] 0.0063965  0.0316229  0.2023  0.8397    
 [2,] 1.0000000  0.0000000     Inf  <2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > hessian(mlf)
           [,1] [,2]
@@ -460,7 +460,7 @@ $estimate
 [1] 2.197878
 
 $gradient
-[1] -4.774259e-05
+[1] -4.77513e-05
 
 $hessian
           [,1]
@@ -495,8 +495,8 @@ successive function values within tolerance limit.
 May be a solution 
 Function value: -21.25086 
 Estimates:
-     estimate      gradient
-[1,] 2.197878 -4.774259e-05
+     estimate     gradient
+[1,] 2.197878 -4.77513e-05
 --------------------------------------------
 > ## Estimate with analytic gradient
 > a <- maxBHHH(loglik, gradlik, start=1)
@@ -623,7 +623,7 @@ Estimates:
      Estimate Std. error t value   Pr(> t)    
 [1,]  2.09534    0.20946  10.004 < 2.2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > ## Estimate with analytic gradient and hessian
 > a <- maxLik(loglik, gradlik, hesslik, start=1)
@@ -678,7 +678,7 @@ Estimates:
      Estimate Std. error t value   Pr(> t)    
 [1,]  2.09534    0.20953      10 < 2.2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > 
 > 
@@ -942,7 +942,7 @@ Coefficients:
 x1            3.9745     0.3953   10.05   <2e-16 ***
 x2            4.7827     0.3667   13.04   <2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Residual standard error: 0.9897 on 97 degrees of freedom
 Multiple R-squared: 0.7019,	Adjusted R-squared: 0.6957 
@@ -1229,7 +1229,7 @@ Estimates:
      Estimate Std. error t value   Pr(> t)    
 [1,]  2.40611    0.24065  9.9983 < 2.2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > ## Estimate with analytic gradient and hessian
 > a <- maxLik(loglik, gradlik, hesslik, start=1)
@@ -1284,7 +1284,7 @@ Estimates:
      Estimate Std. error t value   Pr(> t)    
 [1,]  2.40611    0.24061      10 < 2.2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > 
 > 

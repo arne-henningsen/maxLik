@@ -1,6 +1,6 @@
 
-R version 2.8.0 (2008-10-20)
-Copyright (C) 2008 The R Foundation for Statistical Computing
+R version 2.9.1 (2009-06-26)
+Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -99,7 +99,7 @@ Estimates:
 mu     1.18081    0.18185  6.4935 8.388e-11 ***
 sigma  1.81648    0.12849 14.1367 < 2.2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > activePar( ml )
 [1] TRUE TRUE
@@ -148,7 +148,7 @@ Estimates:
 mu     1.18081    0.18185  6.4935 8.388e-11 ***
 sigma  1.81648    0.12849 14.1367 < 2.2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( ml, mlInd )
 [1] "Component 3: Mean relative difference: 1.280185"   
@@ -168,7 +168,7 @@ Estimates:
 mu     1.18081    0.18165  6.5005 8.003e-11 ***
 sigma  1.81648    0.12844 14.1421 < 2.2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( ml, mlg )
 [1] "Component 3: Mean relative difference: 0.9758937"  
@@ -176,7 +176,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 > mlgInd <- maxLik( llfInd, gfInd, start = startVal )
 > all.equal( mlInd, mlgInd )
 [1] "Component 3: Mean relative difference: 1.086037"    
-[2] "Component 4: Mean relative difference: 0.0001436361"
+[2] "Component 4: Mean relative difference: 0.0001436362"
 > all.equal( mlg, mlgInd )
 [1] TRUE
 > 
@@ -208,7 +208,7 @@ Estimates:
 mu     1.18081    0.18183  6.4941 8.354e-11 ***
 sigma  1.81648    0.13408 13.5473 < 2.2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > activePar( mlBHHH )
 [1] TRUE TRUE
@@ -245,8 +245,8 @@ NULL
 > logLik( summary( mlBHHH ) )
 [1] -201.5839
 > all.equal( ml, mlBHHH )
-[1] "Component 2: Mean relative difference: 2.510401e-07"
-[2] "Component 3: Mean relative difference: 59.37109"    
+[1] "Component 2: Mean relative difference: 2.510892e-07"
+[2] "Component 3: Mean relative difference: 59.40732"    
 [3] "Component 4: Mean relative difference: 0.09434553"  
 [4] "Component 5: Mean relative difference: 1"           
 [5] "Component 6: 1 string mismatch"                     
@@ -268,10 +268,10 @@ Estimates:
 mu     1.18081    0.18183  6.4941 8.354e-11 ***
 sigma  1.81648    0.13408 13.5473 < 2.2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlBHHH, mlgBHHH )
-[1] "Component 3: Mean relative difference: 0.0002034056"
+[1] "Component 3: Mean relative difference: 0.000897275"
 > all.equal( mlg, mlgBHHH )
 [1] "Component 2: Mean relative difference: 2.533978e-07"
 [2] "Component 3: Mean absolute difference: 1.880678e-05"
@@ -310,7 +310,7 @@ Estimates:
 mu     1.18081    0.18165  6.5005 8.003e-11 ***
 sigma  1.81648    0.12844 14.1421 < 2.2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > activePar( mlBFGS )
 [1] TRUE TRUE
@@ -373,7 +373,7 @@ Estimates:
 mu     1.18081    0.18165  6.5005 8.003e-11 ***
 sigma  1.81648    0.12844 14.1421 < 2.2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlBFGS, mlIndBFGS )
 [1] "Component 3: Mean relative difference: 0.0002868997"
@@ -396,7 +396,7 @@ Estimates:
 mu     1.18081    0.18165  6.5005 8.003e-11 ***
 sigma  1.81648    0.12844 14.1421 < 2.2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlBFGS, mlgBFGS )
 [1] "Component 3: Mean relative difference: 0.0004838186"
@@ -405,7 +405,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 [1] "Attributes: < Component 1: Lengths (3, 2) differ (string compare on first 2) >"
 [2] "Component 2: Mean relative difference: 6.483767e-07"                           
 [3] "Component 3: Mean absolute difference: 4.02496e-05"                            
-[4] "Component 4: Mean relative difference: 1.563667e-06"                           
+[4] "Component 4: Mean relative difference: 1.563757e-06"                           
 [5] "Component 5: Mean relative difference: 1"                                      
 [6] "Component 6: 1 string mismatch"                                                
 [7] "Component 9: names for current but not for target"                             
@@ -447,7 +447,7 @@ Estimates:
 mu     1.18061    0.18159  6.5015 7.953e-11 ***
 sigma  1.81664    0.12849 14.1379 < 2.2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > activePar( mlNM )
 [1] TRUE TRUE
@@ -509,7 +509,7 @@ Estimates:
 mu     1.18061    0.18166  6.4989 8.093e-11 ***
 sigma  1.81664    0.12847 14.1403 < 2.2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlNM, mlgNM )
 [1] "Component 3: Mean relative difference: 1.839327e-06"
@@ -542,7 +542,7 @@ Estimates:
 mu     1.18267    0.18185  6.5037 7.838e-11 ***
 sigma  1.81780    0.12871 14.1237 < 2.2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > activePar( mlSANN )
 [1] TRUE TRUE
@@ -606,7 +606,7 @@ Estimates:
 mu     1.18267    0.18178   6.506 7.716e-11 ***
 sigma  1.81780    0.12868  14.127 < 2.2e-16 ***
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlSANN, mlgSANN )
 [1] "Component 3: Mean relative difference: 3.697886e-07"
