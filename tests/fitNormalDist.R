@@ -98,6 +98,7 @@ all.equal( mlg, mlgh )
 
 
 ## BHHH method
+mlBHHH <- try( maxLik( llf, start = startVal, method = "BHHH" ) )
 mlBHHH <- maxLik( llfInd, start = startVal, method = "BHHH" )
 print( mlBHHH )
 summary( mlBHHH )
@@ -118,10 +119,14 @@ logLik( summary( mlBHHH ) )
 all.equal( ml, mlBHHH )
 
 # with analytical gradients
+mlgBHHH <- try( maxLik( llf, gf, start = startVal, method = "BHHH" ) )
+mlgBHHH <- try( maxLik( llfInd, gf, start = startVal, method = "BHHH" ) )
 mlgBHHH <- maxLik( llfInd, gfInd, start = startVal, method = "BHHH" )
 summary( mlgBHHH )
 all.equal( mlBHHH, mlgBHHH )
 all.equal( mlg, mlgBHHH )
+mlgBHHH2 <- maxLik( llf, gfInd, start = startVal, method = "BHHH" )
+all.equal( mlgBHHH, mlgBHHH2 )
 
 # with unused Hessian
 mlghBHHH <- maxLik( llfInd, gfInd, hf, start = startVal, method = "BHHH" )

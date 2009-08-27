@@ -187,6 +187,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > 
 > 
 > ## BHHH method
+> mlBHHH <- try( maxLik( llf, start = startVal, method = "BHHH" ) )
+Error in grad(theta, ...) : 
+  if the gradients (argument 'grad') are not provided by the user, the BHHH method requires that the log-likelihood function (argument 'fn') returns a numeric vector with at least as many elements as the number of parameters (2), where each element must be the log-likelihood value corresponding to an individual (independent) observation
 > mlBHHH <- maxLik( llfInd, start = startVal, method = "BHHH" )
 > print( mlBHHH )
 Maximum Likelihood estimation
@@ -254,6 +257,14 @@ NULL
 [7] "Component 10: 1 string mismatch"                    
 > 
 > # with analytical gradients
+> mlgBHHH <- try( maxLik( llf, gf, start = startVal, method = "BHHH" ) )
+Error in grad(theta, ...) : 
+  Gradient matrix must have at least as many rows and exactly as many columns as the number of parameters.
+ Currently 2 parameters but the gradient is 2 x 1
+> mlgBHHH <- try( maxLik( llfInd, gf, start = startVal, method = "BHHH" ) )
+Error in grad(theta, ...) : 
+  Gradient matrix must have at least as many rows and exactly as many columns as the number of parameters.
+ Currently 2 parameters but the gradient is 2 x 1
 > mlgBHHH <- maxLik( llfInd, gfInd, start = startVal, method = "BHHH" )
 > summary( mlgBHHH )
 --------------------------------------------
@@ -280,6 +291,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [5] "Component 6: 1 string mismatch"                     
 [6] "Component 9: Mean relative difference: 0.8571429"   
 [7] "Component 10: 1 string mismatch"                    
+> mlgBHHH2 <- maxLik( llf, gfInd, start = startVal, method = "BHHH" )
+> all.equal( mlgBHHH, mlgBHHH2 )
+[1] TRUE
 > 
 > # with unused Hessian
 > mlghBHHH <- maxLik( llfInd, gfInd, hf, start = startVal, method = "BHHH" )
