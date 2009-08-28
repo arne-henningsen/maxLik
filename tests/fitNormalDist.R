@@ -6,6 +6,7 @@ library(maxLik)
 set.seed( 123 )
 # generate a variable of exponentially distributed values
 x <- rnorm( 100, 1, 2 )
+xSaved <- x
 
 ## log likelihood function
 llf <- function( param ) {
@@ -99,6 +100,11 @@ all.equal( mlg, mlgh )
 
 ## BHHH method
 mlBHHH <- try( maxLik( llf, start = startVal, method = "BHHH" ) )
+x <- xSaved[1]
+try( maxLik( llfInd, start = startVal, method = "BHHH" ) )
+x <- xSaved[1:2]
+try( maxLik( llfInd, start = startVal, method = "BHHH" ) )
+x <- xSaved
 mlBHHH <- maxLik( llfInd, start = startVal, method = "BHHH" )
 print( mlBHHH )
 summary( mlBHHH )
@@ -121,6 +127,13 @@ all.equal( ml, mlBHHH )
 # with analytical gradients
 mlgBHHH <- try( maxLik( llf, gf, start = startVal, method = "BHHH" ) )
 mlgBHHH <- try( maxLik( llfInd, gf, start = startVal, method = "BHHH" ) )
+x <- xSaved[1]
+try( maxLik( llf, gfInd, start = startVal, method = "BHHH" ) )
+try( maxLik( llfInd, gfInd, start = startVal, method = "BHHH" ) )
+x <- xSaved[1:2]
+try( maxLik( llf, gfInd, start = startVal, method = "BHHH" ) )
+try( maxLik( llfInd, gfInd, start = startVal, method = "BHHH" ) )
+x <- xSaved
 mlgBHHH <- maxLik( llfInd, gfInd, start = startVal, method = "BHHH" )
 summary( mlgBHHH )
 all.equal( mlBHHH, mlgBHHH )

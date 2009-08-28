@@ -23,6 +23,7 @@ Type 'q()' to quit R.
 > set.seed( 123 )
 > # generate a variable of exponentially distributed values
 > x <- rnorm( 100, 1, 2 )
+> xSaved <- x
 > 
 > ## log likelihood function
 > llf <- function( param ) {
@@ -190,6 +191,16 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > mlBHHH <- try( maxLik( llf, start = startVal, method = "BHHH" ) )
 Error in grad(theta, ...) : 
   if the gradients (argument 'grad') are not provided by the user, the BHHH method requires that the log-likelihood function (argument 'fn') returns a numeric vector with at least as many elements as the number of parameters (2), where each element must be the log-likelihood value corresponding to an individual (independent) observation
+> x <- xSaved[1]
+> try( maxLik( llfInd, start = startVal, method = "BHHH" ) )
+Error in grad(theta, ...) : 
+  if the gradients (argument 'grad') are not provided by the user, the BHHH method requires that the log-likelihood function (argument 'fn') returns a numeric vector with at least as many elements as the number of parameters (2), where each element must be the log-likelihood value corresponding to an individual (independent) observation
+> x <- xSaved[1:2]
+> try( maxLik( llfInd, start = startVal, method = "BHHH" ) )
+Error in grad(theta, ...) : 
+  Gradient matrix must have at least as many rows and exactly as many columns as the number of parameters.
+ Currently 2 parameters but the gradient is 2 x 2
+> x <- xSaved
 > mlBHHH <- maxLik( llfInd, start = startVal, method = "BHHH" )
 > print( mlBHHH )
 Maximum Likelihood estimation
@@ -265,6 +276,25 @@ Error in grad(theta, ...) :
 Error in grad(theta, ...) : 
   Gradient matrix must have at least as many rows and exactly as many columns as the number of parameters.
  Currently 2 parameters but the gradient is 2 x 1
+> x <- xSaved[1]
+> try( maxLik( llf, gfInd, start = startVal, method = "BHHH" ) )
+Error in grad(theta, ...) : 
+  Gradient matrix must have at least as many rows and exactly as many columns as the number of parameters.
+ Currently 2 parameters but the gradient is 1 x 2
+> try( maxLik( llfInd, gfInd, start = startVal, method = "BHHH" ) )
+Error in grad(theta, ...) : 
+  Gradient matrix must have at least as many rows and exactly as many columns as the number of parameters.
+ Currently 2 parameters but the gradient is 1 x 2
+> x <- xSaved[1:2]
+> try( maxLik( llf, gfInd, start = startVal, method = "BHHH" ) )
+Error in grad(theta, ...) : 
+  Gradient matrix must have at least as many rows and exactly as many columns as the number of parameters.
+ Currently 2 parameters but the gradient is 2 x 2
+> try( maxLik( llfInd, gfInd, start = startVal, method = "BHHH" ) )
+Error in grad(theta, ...) : 
+  Gradient matrix must have at least as many rows and exactly as many columns as the number of parameters.
+ Currently 2 parameters but the gradient is 2 x 2
+> x <- xSaved
 > mlgBHHH <- maxLik( llfInd, gfInd, start = startVal, method = "BHHH" )
 > summary( mlgBHHH )
 --------------------------------------------
