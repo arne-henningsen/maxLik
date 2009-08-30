@@ -2,10 +2,12 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
                   start,
                   print.level=0,
                   iterlim=500,
+                  constraints,
                   tol=1e-8, reltol=tol,
                   parscale=rep(1, length=length(start)),
                   alpha=1, beta=0.5, gamma=2,
                   ...) {
+   ## contraints    constraints to be passed to 'constrOptim'
    ## ... : further arguments to fn()
    ##
    ## Note: grad and hess are for compatibility only, SANN uses only fn values
@@ -59,7 +61,14 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
                    parscale=parscale,
                    alpha=alpha, beta=beta, gamma=gamma
                    )
-   a <- optim(start, func, control=control, method="Nelder-Mead", hessian=FALSE, ...)
+   if(missing(constraints))
+       a <- optim(start, func, control=control, method="Nelder-Mead", hessian=FALSE, ...)
+   else {
+      ui <- constraints$ui
+      ci <- constraints$ci
+      a <- constrOptim(theta=start, f=func, ui=ui, ci=ci, control=control,
+                       method="Nelder-Mead", ...)
+   }
    result <- list(
                   maximum=a$value,
                   estimate=a$par,

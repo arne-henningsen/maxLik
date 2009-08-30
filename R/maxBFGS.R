@@ -2,9 +2,11 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
                     start,
                     print.level=0,
                     iterlim=200,
+                    constraints,
                     tol=1e-8, reltol=tol,
                     ...) {
-   ## ... : further arguments to fn() and grad()
+   ## contraints    constraints to be passed to 'constrOptim'
+   ## ...           further arguments to fn() and grad()
    message <- function(c) {
       switch(as.character(c),
                "0" = "successful convergence",
@@ -38,13 +40,24 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
                     fnscale=-1,
                    reltol=reltol,
                     maxit=iterlim)
-   a <- optim(start, func, gr=gradient, control=control, method="BFGS",
-      hessian=TRUE, ...)
+   if(missing(constraints))
+       a <- optim(start, func, gr=gradient, control=control, method="BFGS",
+                  ...)
+   else {
+      ui <- constraints$ui
+      ci <- constraints$ci
+      a <- constrOptim(theta=start, f=func, grad=gradient, ui=ui, ci=ci, control=control,
+                       method="BFGS", ...)
+   }
+   if(!is.null(hess))
+       hessian <- hess(a$par)
+   else
+       hessian <- numericHessian(func, grad, t0=a$par)
    result <- list(
                    maximum=a$value,
                    estimate=a$par,
                    gradient=gradient(a$par),
-                   hessian=a$hessian,
+                   hessian=hessian,
                    code=a$convergence,
                    message=paste(message(a$convergence), a$message),
                    last.step=NULL,

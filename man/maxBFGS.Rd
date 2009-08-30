@@ -9,12 +9,16 @@
   compatible with \code{\link{maxNR}}
 }
 \usage{
-maxBFGS(fn, grad = NULL, hess=NULL, start, print.level = 0, iterlim = 200,
+maxBFGS(fn, grad = NULL, hess=NULL, start, print.level = 0,
+iterlim = 200,
+constraints,
    tol = 1e-08, reltol=tol, ... )
 maxSANN(fn, grad = NULL, hess = NULL, start, print.level = 0, iterlim =
    10000, tol = 1e-08, reltol=tol, temp = 10, tmax = 10, parscale = rep(1, length = length(start)), ...)
 maxNM(fn, grad = NULL, hess = NULL, start, print.level = 0, iterlim =
-   500, tol = 1e-08, reltol=tol, parscale = rep(1, length = length(start)), alpha = 1, beta = 0.5, gamma = 2, ...)
+   500,
+constraints,
+tol = 1e-08, reltol=tol, parscale = rep(1, length = length(start)), alpha = 1, beta = 0.5, gamma = 2, ...)
 }
 
 \arguments{
@@ -34,6 +38,10 @@ maxNM(fn, grad = NULL, hess = NULL, start, print.level = 0, iterlim =
   \item{start}{initial values for the parameters.}
   \item{print.level}{a larger number prints more working information.}
   \item{iterlim}{maximum number of iterations.}
+  \item{constraints}{a list of two components, \code{ui} and \code{ci}.  If not
+    missing, constrained optimization is performed in the parameter
+    subspace \code{ui \%*\% parameter - ci >= 0} forwarding the problem to
+    \code{\link{constrOptim}}.}
   \item{tol, reltol}{the relative convergence tolerance (see
     \code{\link{optim}}).  \code{tol} is for compatibility with \code{\link{maxNR}}.}
   \item{temp}{controls the '"SANN"' method. It is the starting
