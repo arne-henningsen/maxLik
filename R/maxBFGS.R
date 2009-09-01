@@ -52,14 +52,14 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    if(!is.null(hess)) {
        hessian <- hess(a$par)
    } else {
-       hessian <- numericHessian(func, grad, t0=a$par)
+      if( is.null( grad ) ) {
+         grad2 <- NULL
+      } else {
+         grad2 <- gradient
+      }
+      hessian <- numericHessian(func, grad2, t0=a$par)
    }
-   colnames( hessian ) <- names( a$par )
-   if( nrow( hessian ) == length( a$par ) ) {
-      rownames( hessian ) <- names( a$par )
-   } else {
-      warning( "internal error: Hessian has an incorrect number of rows" )
-   }
+   rownames( hessian ) <- colnames( hessian ) <- names( a$par )
    result <- list(
                    maximum=a$value,
                    estimate=a$par,

@@ -459,13 +459,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 Warning messages:
 1: In log(sigma) : NaNs produced
 2: In log(sigma) : NaNs produced
-3: In maxRoutine(fn = logLik, grad = grad, hess = hess, start = start,  :
-  internal error: Hessian has an incorrect number of rows
 > all.equal( mlgBFGS, mlgIndBFGS )
-[1] "Component 4: Attributes: < Component 1: Mean relative difference: 99 >"                     
-[2] "Component 4: Attributes: < Component 2: Component 1: Modes: character, NULL >"              
-[3] "Component 4: Attributes: < Component 2: Component 1: target is character, current is NULL >"
-[4] "Component 4: Numeric: lengths (4, 400) differ"                                              
+[1] TRUE
 > 
 > # with unused Hessian
 > mlghBFGS <- maxLik( llf, gf, hf, start = startVal, method = "BFGS" )
