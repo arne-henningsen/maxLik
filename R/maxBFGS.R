@@ -49,10 +49,17 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
       a <- constrOptim(theta=start, f=func, grad=gradient, ui=ui, ci=ci, control=control,
                        method="BFGS", ...)
    }
-   if(!is.null(hess))
+   if(!is.null(hess)) {
        hessian <- hess(a$par)
-   else
+   } else {
        hessian <- numericHessian(func, grad, t0=a$par)
+   }
+   colnames( hessian ) <- names( a$par )
+   if( nrow( hessian ) == length( a$par ) ) {
+      rownames( hessian ) <- names( a$par )
+   } else {
+      warning( "internal error: Hessian has an incorrect number of rows" )
+   }
    result <- list(
                    maximum=a$value,
                    estimate=a$par,
