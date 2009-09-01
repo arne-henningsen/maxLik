@@ -197,9 +197,13 @@ Error in grad(theta, ...) :
   if the gradients (argument 'grad') are not provided by the user, the BHHH method requires that the log-likelihood function (argument 'fn') returns a numeric vector with at least as many elements as the number of parameters (2), where each element must be the log-likelihood value corresponding to an individual (independent) observation
 > x <- xSaved[1:2]
 > try( maxLik( llfInd, start = startVal, method = "BHHH" ) )
-Error in grad(theta, ...) : 
-  Gradient matrix must have at least as many rows and exactly as many columns as the number of parameters.
- Currently 2 parameters but the gradient is 2 x 2
+Maximum Likelihood estimation
+BHHH maximisation, 8 iterations
+Return code 2: successive function values within tolerance limit.
+May be a solution
+Log-Likelihood: -0.6227434 (2 free parameter(s))
+Estimate(s): 0.2158296 0.3302446 
+There were 25 warnings (use warnings() to see them)
 > x <- xSaved
 > mlBHHH <- maxLik( llfInd, start = startVal, method = "BHHH" )
 > print( mlBHHH )
@@ -287,13 +291,21 @@ Error in grad(theta, ...) :
  Currently 2 parameters but the gradient is 1 x 2
 > x <- xSaved[1:2]
 > try( maxLik( llf, gfInd, start = startVal, method = "BHHH" ) )
-Error in grad(theta, ...) : 
-  Gradient matrix must have at least as many rows and exactly as many columns as the number of parameters.
- Currently 2 parameters but the gradient is 2 x 2
+Maximum Likelihood estimation
+BHHH maximisation, 8 iterations
+Return code 2: successive function values within tolerance limit.
+May be a solution
+Log-Likelihood: -0.6227434 (2 free parameter(s))
+Estimate(s): 0.2158296 0.3302446 
+There were 25 warnings (use warnings() to see them)
 > try( maxLik( llfInd, gfInd, start = startVal, method = "BHHH" ) )
-Error in grad(theta, ...) : 
-  Gradient matrix must have at least as many rows and exactly as many columns as the number of parameters.
- Currently 2 parameters but the gradient is 2 x 2
+Maximum Likelihood estimation
+BHHH maximisation, 8 iterations
+Return code 2: successive function values within tolerance limit.
+May be a solution
+Log-Likelihood: -0.6227434 (2 free parameter(s))
+Estimate(s): 0.2158296 0.3302446 
+There were 25 warnings (use warnings() to see them)
 > x <- xSaved
 > mlgBHHH <- maxLik( llfInd, gfInd, start = startVal, method = "BHHH" )
 > summary( mlgBHHH )
