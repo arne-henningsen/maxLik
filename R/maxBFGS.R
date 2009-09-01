@@ -20,7 +20,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
       if(!is.null(grad)) {
          g <- grad(theta, ...)
          if(!is.null(dim(g))) {
-            if(ncol(g) > 1) {
+            if(nrow(g) > 1) {
                g <- colSums( g )
             }
          }
