@@ -12,15 +12,32 @@ maxBHHH <- function(fn, grad=NULL, hess=NULL,
       if(!is.null(grad)) {
          ## Gradient supplied by the user.
          g <- grad(theta, ...)
+         if( length( theta ) == 1 ) {
+            g <- matrix( g, ncol = 1 )
+         }
          ## Check whether the gradient has enough rows (about enough
          ## observations in data)
-         if( nrow( matrix(g) ) < length( theta ) ) {
+         if( !is.matrix( g ) ) {
             stop( "the BHHH method requires that the gradient function",
-                 " (argument 'grad') returns a numeric matrix with at least as many",
-                 " rows as the number of parameters (", length( start ), "),",
-                 " where each row must correspond to the gradients",
-                 " of the log-likelihood function of an individual",
-                 " independent observation" )
+               " (argument 'grad') returns a numeric matrix,",
+               " where each row must correspond to the gradient(s)",
+               " of the log-likelihood function at an individual (independent)",
+               " observation and each column must correspond to a parameter" )
+         } else if( nrow( g ) < length( theta ) ) {
+            stop( "the matrix returned by the gradient function",
+               " (argument 'grad') must have at least as many",
+               " rows as the number of parameters (", length( theta ), "),",
+               " where each row must correspond to the gradients",
+               " of the log-likelihood function of an individual",
+               " (independent) observation:\n",
+               " currently, there are (is) ", length( theta ), " parameter(s)",
+               " but the gradient matrix has only ", nrow( g ), " row(s)" )
+         } else if( ncol( g ) != length( theta ) ) {
+            stop( "the matrix returned by the gradient function",
+               " (argument 'grad') must have exactly as many columns",
+               " as the number of parameters:\n",
+               " currently, there are (is) ", length( theta ), " parameter(s)",
+               " but the gradient matrix has ", ncol( g ), " columns" )
          }
       } else {
          ## fall back to the numeric gradient
@@ -28,23 +45,24 @@ maxBHHH <- function(fn, grad=NULL, hess=NULL,
          ## Check whether the gradient has enough rows.  This is the case
          ## if and only if loglik has enough rows, hence the error message
          ## about loglik.
-         if( nrow( g ) < length( theta ) ) {
+         if( !is.matrix( g ) || nrow( g ) == 1 ) {
             stop( "if the gradients (argument 'grad') are not provided by the user,",
-                 " the BHHH method requires that the log-likelihood function",
-                 " (argument 'fn') returns a numeric vector with at least as many",
-                 " elements as the number of parameters (", length( start ), "),",
-                 " where each element must be the log-likelihood value corresponding",
-                 " to an individual (independent) observation" )
+               " the BHHH method requires that the log-likelihood function",
+               " (argument 'fn') returns a numeric vector,",
+               " where each element must be the log-likelihood value corresponding",
+               " to an individual (independent) observation" )
+         }
+         if( nrow( g ) < length( theta ) ) {
+            stop( "the vector returned by the log-likelihood function",
+               " (argument 'fn') must have at least as many elements",
+               " as the number of parameters,",
+               " where each element must be the log-likelihood value corresponding",
+               " to an individual (independent) observation:\n",
+               " currently, there are (is) ", length( theta ), " parameter(s)",
+               " but the log likelihood function return only ", nrow( g ),
+               " element(s)" )
          }
       }
-      ## Ensure g is suitable for information equality approximation
-      if(is.null(dim(g)))
-          g <- matrix(g)
-      if(!(dim(g)[1] >= length(theta) & dim(g)[2] == length(theta))) {
-         stop(paste("Gradient matrix must have at least as many rows and exactly as many columns as the number of parameters.\n",
-                    "Currently", length(theta), "parameters but the gradient is", dim(g)[1], "x", dim(g)[2]))
-      }
-      ##
       assign("gradVal", g, inherits=TRUE)
       return( g )
    }
