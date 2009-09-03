@@ -83,7 +83,7 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
       if(!is.null(grad)) {  # use user-supplied if present
          gr <- grad(theta, ...)
       } else {
-         gr <- numericGradient(fn, theta, activePar=activePar, ...)
+         gr <- numericGradient( f = fn, t0 = theta, activePar=activePar, ...)
                                         # Note we need nObs rows x nParam cols
       }
       ## Now check if the gradient is vector or matrix...
@@ -103,7 +103,7 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
       if(!is.null(hess)) {
          return(as.matrix(hess(theta, ...)))
       }
-      return(numericHessian(fn, gradient, theta, activePar=activePar, ...))
+      return(numericHessian( f = fn, grad = gradient, t0 = theta, activePar=activePar, ...))
    }
    ## -------------------------------------------------
    maxim.type <- "Newton-Raphson maximisation"
