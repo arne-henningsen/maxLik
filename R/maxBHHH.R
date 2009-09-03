@@ -5,6 +5,15 @@ maxBHHH <- function(fn, grad=NULL, hess=NULL,
                     ...) {
    ## hess:   Hessian, not used, for compatibility with the other methods
 
+   argNames <- c( "fn", "grad", "hess", "start", "print.level", "iterlim" )
+   checkFuncArgs( fn, argNames, "fn", "maxBHHH" )
+   if( !is.null( grad ) ) {
+      checkFuncArgs( grad, argNames, "grad", "maxBHHH" )
+   }
+   if( !is.null( hess ) ) {
+      checkFuncArgs( hess, argNames, "hess", "maxBHHH" )
+   }
+
    ## Save the value of gradient and use it later for hessian
    gradVal <- NULL
 

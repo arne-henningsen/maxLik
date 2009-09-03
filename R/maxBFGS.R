@@ -7,6 +7,17 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
                     ...) {
    ## contraints    constraints to be passed to 'constrOptim'
    ## ...           further arguments to fn() and grad()
+
+   argNames <- c( "fn", "grad", "hess", "start", "print.level", "iterlim",
+      "constraints", "tol", "reltol" )
+   checkFuncArgs( fn, argNames, "fn", "maxBFGS" )
+   if( !is.null( grad ) ) {
+      checkFuncArgs( grad, argNames, "grad", "maxBFGS" )
+   }
+   if( !is.null( hess ) ) {
+      checkFuncArgs( hess, argNames, "hess", "maxBFGS" )
+   }
+
    message <- function(c) {
       switch(as.character(c),
                "0" = "successful convergence",

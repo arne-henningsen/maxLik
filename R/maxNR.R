@@ -52,6 +52,18 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
    ## activePar   logical vector, which parameters were treated as free (resp fixed)
    ## iterations  number of iterations
    ## type        "Newton-Raphson maximisation"
+
+   argNames <- c( "fn", "grad", "hess", "start", "print.level",
+      "tol", "reltol", "gradtol", "steptol", "lambdatol", "qrtol",
+      "iterlim", "activePar" )
+   checkFuncArgs( fn, argNames, "fn", "maxNR" )
+   if( !is.null( grad ) ) {
+      checkFuncArgs( grad, argNames, "grad", "maxNR" )
+   }
+   if( !is.null( hess ) ) {
+      checkFuncArgs( hess, argNames, "hess", "maxNR" )
+   }
+
    maxim.message <- function(code) {
       message <- switch(code,
                         "1" = "gradient close to zero. May be a solution",

@@ -8,6 +8,17 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    ## ... : further arguments to fn()
    ##
    ## Note: grad and hess are for compatibility only, SANN uses only fn values
+
+   argNames <- c( "fn", "grad", "hess", "start", "print.level", "iterlim",
+      "tol", "reltol", "temp", "tmax", "parscale" )
+   checkFuncArgs( fn, argNames, "fn", "maxSANN" )
+   if( !is.null( grad ) ) {
+      checkFuncArgs( grad, argNames, "grad", "maxSANN" )
+   }
+   if( !is.null( hess ) ) {
+      checkFuncArgs( hess, argNames, "hess", "maxSANN" )
+   }
+
    message <- function(c) {
       switch(as.character(c),
              "0" = "successful convergence",

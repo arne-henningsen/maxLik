@@ -39,6 +39,16 @@ maxLik <- function(logLik, grad=NULL, hess=NULL, start,
    ## activePar   logical vector, which parameters were treated as free (resp fixed)
    ## iterations  number of iterations
    ## type        "Newton-Raphson maximisation"
+
+   argNames <-  c( "logLik", "grad", "hess", "start", "method" )
+   checkFuncArgs( logLik, argNames, "logLik", "maxLik" )
+   if( !is.null( grad ) ) {
+      checkFuncArgs( grad, argNames, "grad", "maxLik" )
+   }
+   if( !is.null( hess ) ) {
+      checkFuncArgs( hess, argNames, "hess", "maxLik" )
+   }
+
    maxRoutine <- switch(method,
                         "Newton-Raphson" =,
                         "newton-raphson" =,
