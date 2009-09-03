@@ -2,10 +2,10 @@ numericHessian <- function(f, grad=NULL, t0, eps=1e-6, activePar,
                            ...) {
    a <- f(t0, ...)
    if(is.null(grad)) {
-      numericNHessian(f, t0, eps, activePar=activePar, ...)
+      numericNHessian( f = f, t0 = t0, eps = eps, activePar=activePar, ...)
                                         # gradient not provided -> everything numerically
    } else {
-      numericGradient(grad, t0, eps, activePar=activePar, ...)
+      numericGradient( f = grad, t0 = t0, eps = eps, activePar=activePar, ...)
                                         # gradient is provided -> Hessian is grad grad
    }
 }

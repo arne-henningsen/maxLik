@@ -57,13 +57,13 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
       } else {
          grad2 <- gradient
       }
-      hessian <- numericHessian(func, grad2, t0=a$par)
+      hessian <- numericHessian( f = func, grad = grad2, t0=a$par, ... )
    }
    rownames( hessian ) <- colnames( hessian ) <- names( a$par )
    result <- list(
                    maximum=a$value,
                    estimate=a$par,
-                   gradient=gradient(a$par),
+                   gradient=gradient( theta = a$par, ... ),
                    hessian=hessian,
                    code=a$convergence,
                    message=paste(message(a$convergence), a$message),
