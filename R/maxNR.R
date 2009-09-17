@@ -294,10 +294,12 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
          dimnames(a) <- list(names(start0), c("amount", "new param",
                                              "new gradient", "active"))
          print(a)
-         cat( "Condition number of the hessian:",
-            kappa(H1[activePar,activePar,drop=FALSE]), "\n")
          if( print.level > 3) {
             print( H1)
+         }
+         if(!any(is.na(H1[activePar, activePar]))) {
+            cat( "Condition number of the hessian:",
+                kappa(H1[activePar,activePar,drop=FALSE]), "\n")
          }
       }
       if( step < steptol) {
