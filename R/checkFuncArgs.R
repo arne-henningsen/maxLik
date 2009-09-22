@@ -1,5 +1,5 @@
 checkFuncArgs <- function( func, checkArgs, argName, funcName ) {
-
+   ## is the 'func' a function?
    if( !is.function( func ) ) {
       stop( "argument '", argName, "' of function '", funcName,
          "' is not a function" )

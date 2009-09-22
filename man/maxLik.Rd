@@ -11,7 +11,9 @@
   inverse of negative hessian is the variance-covariance matrix.
 }
 \usage{
-maxLik(logLik, grad = NULL, hess = NULL, start, method = "Newton-Raphson", ...)
+maxLik(logLik, grad = NULL, hess = NULL, start, method =
+"Newton-Raphson",
+constraints, ...)
 }
 \arguments{
   \item{logLik}{log-likelihood function.  Must have the parameter vector
@@ -30,6 +32,13 @@ maxLik(logLik, grad = NULL, hess = NULL, start, method = "Newton-Raphson", ...)
   \item{method}{maximisation method, currently either "Newton-Raphson", "BFGS",
     "BHHH", "SANN" or "NM" (for Nelder-Mead).  Lower-case letters and
     shortcuts (as 'nr' for Newton-Raphson) allowed.}
+  \item{constraints}{list, information for constrained maximization.
+    Currently two components are supported: \code{eqA} and \code{eqB}
+    for linear equality constraints: \eqn{A \beta + B = 0}{A \%*\% beta
+      + B = 0}.  The user must ensure that the matrices \code{A} and
+    \code{B} are conformable.  If missing, unconstrained maximization
+    is performed.
+  }
   \item{\dots}{further arguments for the maximisation routine.}
 }
 \value{

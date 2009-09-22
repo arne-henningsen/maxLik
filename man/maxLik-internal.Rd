@@ -1,4 +1,6 @@
 \name{maxLik-internal}
+\alias{checkFuncArgs}
+\alias{coef.maxim}
 \alias{print.summary.maxim}
 \alias{print.summary.maxLik}
 \alias{returnCode.maxim}

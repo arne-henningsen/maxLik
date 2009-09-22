@@ -1,5 +1,6 @@
 maxLik <- function(logLik, grad=NULL, hess=NULL, start,
                    method="Newton-Raphson",
+                   constraints,
                    ...) {
    ## Maximum Likelihood estimation.
    ##
@@ -14,6 +15,7 @@ maxLik <- function(logLik, grad=NULL, hess=NULL, start,
    ## hess       Hessian function (numeric used if NULL)
    ## start      initial vector of parameters (eventually w/names)
    ## method     maximisation method (Newton-Raphson)
+   ## constraints  constrained optimization: a list (see below)
    ## ...        additional arguments for the maximisation routine
    ##
    ## RESULTS:
@@ -23,24 +25,16 @@ maxLik <- function(logLik, grad=NULL, hess=NULL, start,
    ## estimate    the parameter value at maximum
    ## gradient        gradient
    ## hessian         Hessian
-   ## code        integer code of success:
-   ##             1 - gradient close to zero
-   ##             2 - successive values within tolerance limit
-   ##             3 - could not find a higher point (step error)
-   ##             4 - iteration limit exceeded
-   ##             100 - initial value out of range
+   ## code        integer code of success, depends on the optimization
+   ##             method 
    ## message     character message describing the code
-   ## last.step   only present if code == 3 (step error).  A list with following components:
-   ##             teeta0 - parameetrid, millel viga tuli
-   ##             f0 - funktsiooni väärtus nende parameetritega (koos
-   ##                  gradiendi ja hessi maatriksiga)
-   ##             teeta1 - ruutpolünoomi järgi õige uus parameetri väärtus
-   ##             activePar - logical vector, which parameters are active (not constant)
-   ## activePar   logical vector, which parameters were treated as free (resp fixed)
-   ## iterations  number of iterations
-   ## type        "Newton-Raphson maximisation"
-
-   argNames <-  c( "logLik", "grad", "hess", "start", "method" )
+   ## type        character, type of optimization
+   ##
+   ##             there may be more components, depending on the choice of
+   ##             the algorith.
+   ##             
+   argNames <-  c( "logLik", "grad", "hess", "start", "method",
+                  "constraints" )
    checkFuncArgs( logLik, argNames, "logLik", "maxLik" )
    if( !is.null( grad ) ) {
       checkFuncArgs( grad, argNames, "grad", "maxLik" )
@@ -48,7 +42,6 @@ maxLik <- function(logLik, grad=NULL, hess=NULL, start,
    if( !is.null( hess ) ) {
       checkFuncArgs( hess, argNames, "hess", "maxLik" )
    }
-
    maxRoutine <- switch(method,
                         "Newton-Raphson" =,
                         "newton-raphson" =,
@@ -65,7 +58,29 @@ maxLik <- function(logLik, grad=NULL, hess=NULL, start,
                         "sann" = maxSANN,
                         stop( "Maxlik: unknown maximisation method ", method )
                         )
-   result <- maxRoutine(fn=logLik, grad=grad, hess=hess, start=start, ...)
+   ## Constrained optimization.  We can two possibilities:
+   ## * linear equality constraints
+   ## * linear inequality constraints
+   ##
+   if(!missing(constraints)) {
+      if(identical(names(constraints), c("eqA", "eqB"))) {
+                           # equality constraints: A %*% beta + B = 0
+         result <- sumt(fn=logLik, grad=grad, hess=hess,
+                        start=start,
+                        maxRoutine=maxRoutine,
+                        constraints=constraints, ...)
+      }
+      else if(identical(names(constraints), c("ineqA", "ineqB"))) {
+                           # inequality constraints A %*% beta + B > 0
+      }
+      else stop("'constraints' must be a list with two components:",
+                "either 'eqA' and 'eqB' or 'ineqA' and 'ineqB' for",
+                "equality and inequality constraints respectively")
+   }
+   else
+                           # unconstrained optimization
+       result <- maxRoutine(fn=logLik, grad=grad, hess=hess, start=start,
+                            ...)
    class(result) <- c("maxLik", class(result))
    result
 }
