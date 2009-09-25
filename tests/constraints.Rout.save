@@ -77,87 +77,55 @@ Test for inequality constraints
 +               0, -1, 0,
 +               0, 0, 1), 3, 3, byrow=TRUE)
 > B <- c(0.5, 1, 1)
-> start <- c(0.4, 0.9, 0.9)
+> start <- c(0.4, 0, 0.9)
 > ## analytic gradient
 > a <- maxLik(logLikMix, grad=gradLikMix, hess=hessLikMix,
 +             start=start,
 +             constraints=list(ineqA=A, ineqB=B),
 +             print.level=1)
-initial  value 4743.812134 
-iter   2 value 4168.292667
-iter   3 value 4149.445161
-iter   4 value 4076.012738
-iter   5 value 3998.294252
-iter   6 value 3997.798715
-iter   7 value 3996.076468
-iter   8 value 3995.581657
-iter   9 value 3993.888215
-iter  10 value 3993.394145
-iter  11 value 3991.756882
-iter  12 value 3991.752938
-iter  13 value 3655.399871
-iter  14 value 3633.676842
-iter  15 value 3601.040141
-iter  16 value 3582.384926
-iter  17 value 3581.895162
-iter  18 value 3581.419147
-iter  19 value 3581.179106
-iter  20 value 3581.121705
-iter  21 value 3568.765914
-iter  22 value 3562.709900
-iter  23 value 3558.882309
-iter  24 value 3556.430107
-iter  25 value 3554.855596
-iter  26 value 3553.910890
-iter  27 value 3553.404590
-iter  28 value 3553.398813
-iter  29 value 3553.354904
-iter  30 value 3553.239518
-iter  31 value 3552.704034
-iter  32 value 3552.692025
-iter  33 value 3552.635535
-iter  34 value 3552.627650
-iter  35 value 3552.620813
-iter  36 value 3552.552723
-iter  37 value 3552.540488
-iter  38 value 3552.528911
-iter  39 value 3552.517979
-iter  40 value 3552.516166
-iter  41 value 3552.512260
-iter  42 value 3552.512190
-iter  43 value 3552.501863
-iter  44 value 3552.494366
-iter  45 value 3552.484682
-iter  46 value 3552.447255
-iter  47 value 3552.445751
-iter  48 value 3552.426939
-iter  49 value 3552.426580
-iter  50 value 3552.407748
-iter  51 value 3552.225541
-iter  52 value 3552.217124
-iter  53 value 3552.200967
-iter  54 value 3552.200654
-iter  55 value 3552.198011
-iter  56 value 3552.195140
-iter  57 value 3552.193411
-iter  58 value 3552.190522
-iter  59 value 3552.190472
-iter  60 value 3552.189503
-iter  60 value 3552.189479
-final  value 3552.189479 
+initial  value 4001.919360 
+iter   2 value 3924.195249
+iter   3 value 3761.072160
+iter   4 value 3740.857495
+iter   5 value 3739.836050
+iter   6 value 3739.669310
+iter   7 value 3739.505188
+iter   8 value 3739.342555
+iter   9 value 3739.271535
+iter  10 value 3674.195730
+iter  11 value 3671.068533
+iter  12 value 3626.169748
+iter  13 value 3589.952708
+iter  14 value 3552.974360
+iter  15 value 3551.811747
+iter  16 value 3551.806169
+iter  17 value 3551.796640
+iter  18 value 3551.796393
+iter  19 value 3551.782451
+iter  20 value 3551.776235
+iter  21 value 3551.776079
+iter  22 value 3551.775692
+iter  23 value 3551.774739
+iter  24 value 3551.773814
+iter  25 value 3551.773649
+iter  26 value 3551.773567
+iter  27 value 3551.773467
+iter  27 value 3551.773450
+iter  27 value 3551.773444
+final  value 3551.773444 
 converged
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 34960 iterations
+BFGS maximisation, 13527 iterations
 Return code 0: successful convergence 
-Log-Likelihood: -3552.187 
+Log-Likelihood: -3551.773 
 3  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,]  0.494261   0.025431  19.435 < 2.2e-16 ***
-[2,]  0.999997   0.057609  17.358 < 2.2e-16 ***
-[3,] -0.999984   0.056711 -17.633 < 2.2e-16 ***
+[1,]  0.499998   0.025622  19.514 < 2.2e-16 ***
+[2,] -1.035820   0.058120 -17.822 < 2.2e-16 ***
+[3,]  1.011114   0.058412  17.310 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -167,119 +135,231 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 +             constraints=list(ineqA=A, ineqB=B),
 +             print.level=1)
   Nelder-Mead direct search function minimizer
-function value for initial parameters = 4743.812134
-  Scaled convergence tolerance is 4.74381e-05
+function value for initial parameters = 4001.919360
+  Scaled convergence tolerance is 4.00192e-05
 Stepsize computed as 0.090000
-BUILD              4 4841.500572 4743.812134
-EXTENSION          6 4807.136271 4626.916182
-HI-REDUCTION       8 4756.020200 4626.916182
-LO-REDUCTION      10 4743.812148 4626.916182
-EXTENSION         12 4743.812134 4481.463017
-HI-REDUCTION      14 4668.720608 4481.463017
-LO-REDUCTION      16 4658.343739 4481.463017
-HI-REDUCTION      18 4626.916182 4481.463017
-EXTENSION         20 4609.621463 4374.253368
-HI-REDUCTION      22 4537.643476 4374.253368
-LO-REDUCTION      24 4528.384872 4374.253368
-EXTENSION         26 4481.463017 4197.906298
-EXTENSION         28 4378.322760 4035.221736
-LO-REDUCTION      30 4374.253368 4035.221736
-HI-REDUCTION      32 4221.335266 4035.221736
-REFLECTION        34 4197.906298 3993.974871
-REFLECTION        36 4051.960588 3924.714951
-EXTENSION         38 4035.221736 3881.262249
-HI-REDUCTION      40 3993.974871 3881.262249
-EXTENSION         42 3967.039655 3832.683728
-LO-REDUCTION      44 3924.714951 3832.683728
-LO-REDUCTION      46 3881.262249 3832.683728
-LO-REDUCTION      48 3876.050057 3832.683728
-EXTENSION         50 3844.876804 3746.095063
-LO-REDUCTION      52 3832.811941 3746.095063
-EXTENSION         54 3832.683728 3698.693406
-EXTENSION         56 3760.278616 3580.969288
-LO-REDUCTION      58 3746.095063 3580.969288
-HI-REDUCTION      60 3698.693406 3580.969288
-HI-REDUCTION      62 3669.599387 3580.969288
-HI-REDUCTION      64 3645.552463 3580.969288
-HI-REDUCTION      66 3631.992565 3580.969288
-HI-REDUCTION      68 3619.396924 3580.969288
-HI-REDUCTION      70 3612.192771 3580.969288
-HI-REDUCTION      72 3605.435716 3580.969288
-HI-REDUCTION      74 3601.330774 3580.969288
-HI-REDUCTION      76 3597.589776 3580.969288
-HI-REDUCTION      78 3595.155519 3580.969288
-LO-REDUCTION      80 3593.015184 3580.969288
-HI-REDUCTION      82 3591.490686 3580.969288
-HI-REDUCTION      84 3588.579917 3580.969288
-HI-REDUCTION      86 3587.397772 3580.969288
-HI-REDUCTION      88 3585.866459 3580.969288
-HI-REDUCTION      90 3585.051339 3580.969288
-REFLECTION        92 3584.190545 3579.750310
-HI-REDUCTION      94 3582.477464 3579.750310
-HI-REDUCTION      96 3581.925490 3579.750310
-LO-REDUCTION      98 3581.647628 3579.750310
-REFLECTION       100 3580.969288 3578.888923
-HI-REDUCTION     102 3580.207473 3578.888923
-REFLECTION       104 3579.879337 3578.756380
-HI-REDUCTION     106 3579.750310 3578.756380
-EXTENSION        108 3579.483515 3578.384680
-REFLECTION       110 3578.888923 3577.866899
-EXTENSION        112 3578.756380 3577.679582
-LO-REDUCTION     114 3578.384680 3577.679582
-HI-REDUCTION     116 3578.059402 3577.679582
-HI-REDUCTION     118 3578.013657 3577.679582
-HI-REDUCTION     120 3577.910695 3577.679582
-HI-REDUCTION     122 3577.866899 3577.679582
-HI-REDUCTION     124 3577.859443 3577.679582
-REFLECTION       126 3577.826115 3577.640527
-HI-REDUCTION     128 3577.771582 3577.640527
-REFLECTION       130 3577.750945 3577.635953
-HI-REDUCTION     132 3577.689100 3577.635953
-REFLECTION       134 3577.679582 3577.587357
-HI-REDUCTION     136 3577.640527 3577.587357
-HI-REDUCTION     138 3577.639765 3577.587357
-HI-REDUCTION     140 3577.635953 3577.587357
-HI-REDUCTION     142 3577.623854 3577.587357
-REFLECTION       144 3577.619081 3577.584802
-HI-REDUCTION     146 3577.614530 3577.584802
-HI-REDUCTION     148 3577.605265 3577.584802
-HI-REDUCTION     150 3577.601118 3577.584802
-HI-REDUCTION     152 3577.597519 3577.584802
-HI-REDUCTION     154 3577.594668 3577.584802
-HI-REDUCTION     156 3577.592796 3577.584802
-HI-REDUCTION     158 3577.591013 3577.584802
-HI-REDUCTION     160 3577.589886 3577.584802
-HI-REDUCTION     162 3577.588802 3577.584802
-REFLECTION       164 3577.588090 3577.583828
-HI-REDUCTION     166 3577.587357 3577.583828
-LO-REDUCTION     168 3577.586320 3577.583828
-HI-REDUCTION     170 3577.585098 3577.583828
-REFLECTION       172 3577.584802 3577.583271
-HI-REDUCTION     174 3577.584494 3577.583271
-HI-REDUCTION     176 3577.584117 3577.583271
-HI-REDUCTION     178 3577.583924 3577.583271
-HI-REDUCTION     180 3577.583828 3577.583271
-HI-REDUCTION     182 3577.583744 3577.583271
-REFLECTION       184 3577.583633 3577.583172
-HI-REDUCTION     186 3577.583480 3577.583172
-LO-REDUCTION     188 3577.583416 3577.583172
-HI-REDUCTION     190 3577.583285 3577.583172
-REFLECTION       192 3577.583271 3577.583171
-LO-REDUCTION     194 3577.583232 3577.583149
+BUILD              4 4070.076454 3935.045207
+EXTENSION          6 4019.701042 3817.775267
+HI-REDUCTION       8 4001.919360 3817.775267
+HI-REDUCTION      10 3964.166832 3817.775267
+HI-REDUCTION      12 3951.510182 3817.775267
+HI-REDUCTION      14 3935.045207 3817.775267
+LO-REDUCTION      16 3930.566709 3817.775267
+EXTENSION         18 3921.548057 3738.446564
+REFLECTION        20 3849.017620 3697.331710
+HI-REDUCTION      22 3817.775267 3697.331710
+EXTENSION         24 3796.153961 3640.588444
+REFLECTION        26 3738.446564 3610.867457
+REFLECTION        28 3697.331710 3599.961281
+LO-REDUCTION      30 3640.588444 3598.894741
+REFLECTION        32 3610.867457 3582.230731
+LO-REDUCTION      34 3599.961281 3582.230731
+LO-REDUCTION      36 3598.894741 3582.230731
+LO-REDUCTION      38 3596.438042 3582.230731
+HI-REDUCTION      40 3591.172016 3582.230731
+REFLECTION        42 3589.835414 3581.931032
+HI-REDUCTION      44 3588.467346 3581.931032
+EXTENSION         46 3586.686573 3580.648373
+HI-REDUCTION      48 3583.294465 3580.648373
+HI-REDUCTION      50 3582.230731 3580.648373
+EXTENSION         52 3581.931032 3577.585887
+HI-REDUCTION      54 3581.845094 3577.585887
+HI-REDUCTION      56 3580.648373 3577.585887
+LO-REDUCTION      58 3580.218011 3577.585887
+REFLECTION        60 3580.057953 3577.484209
+HI-REDUCTION      62 3579.426065 3577.484209
+HI-REDUCTION      64 3578.981897 3577.484209
+HI-REDUCTION      66 3578.579262 3577.484209
+HI-REDUCTION      68 3578.345661 3577.484209
+REFLECTION        70 3578.107041 3576.925041
+HI-REDUCTION      72 3577.645941 3576.925041
+HI-REDUCTION      74 3577.585887 3576.925041
+LO-REDUCTION      76 3577.484209 3576.925041
+LO-REDUCTION      78 3577.429087 3576.925041
+HI-REDUCTION      80 3577.265061 3576.925041
+LO-REDUCTION      82 3577.219538 3576.925041
+HI-REDUCTION      84 3577.099728 3576.925041
+HI-REDUCTION      86 3577.094501 3576.925041
+LO-REDUCTION      88 3577.049601 3576.925041
+REFLECTION        90 3577.022785 3576.878692
+HI-REDUCTION      92 3576.964128 3576.878692
+HI-REDUCTION      94 3576.958912 3576.878692
+HI-REDUCTION      96 3576.939646 3576.878692
+LO-REDUCTION      98 3576.934165 3576.878692
+HI-REDUCTION     100 3576.925041 3576.878692
+REFLECTION       102 3576.914390 3576.868685
+HI-REDUCTION     104 3576.895203 3576.868685
+HI-REDUCTION     106 3576.885769 3576.868685
+HI-REDUCTION     108 3576.884633 3576.868685
+EXTENSION        110 3576.881093 3576.859943
+EXTENSION        112 3576.878692 3576.845912
+LO-REDUCTION     114 3576.868685 3576.845912
+EXTENSION        116 3576.859943 3576.826521
+LO-REDUCTION     118 3576.849995 3576.826521
+EXTENSION        120 3576.845912 3576.795330
+LO-REDUCTION     122 3576.830662 3576.795330
+EXTENSION        124 3576.826521 3576.770660
+EXTENSION        126 3576.813020 3576.731071
+EXTENSION        128 3576.795330 3576.670275
+EXTENSION        130 3576.770660 3576.579130
+EXTENSION        132 3576.731071 3576.442870
+EXTENSION        134 3576.670275 3576.223364
+EXTENSION        136 3576.579130 3575.955644
+EXTENSION        138 3576.442870 3575.458073
+EXTENSION        140 3576.223364 3574.737467
+EXTENSION        142 3575.955644 3574.113654
+EXTENSION        144 3575.458073 3572.466880
+EXTENSION        146 3574.737467 3571.094709
+LO-REDUCTION     148 3574.113654 3571.094709
+EXTENSION        150 3572.466880 3567.948568
+LO-REDUCTION     152 3571.223114 3567.948568
+EXTENSION        154 3571.094709 3566.372458
+LO-REDUCTION     156 3569.258169 3566.372458
+EXTENSION        158 3567.948568 3563.385192
+LO-REDUCTION     160 3567.462407 3563.385192
+EXTENSION        162 3566.372458 3560.575507
+LO-REDUCTION     164 3565.263653 3560.575507
+EXTENSION        166 3563.385192 3555.903789
+LO-REDUCTION     168 3560.581694 3555.903789
+EXTENSION        170 3560.575507 3553.680731
+LO-REDUCTION     172 3555.955914 3553.680731
+LO-REDUCTION     174 3555.903789 3553.680731
+LO-REDUCTION     176 3553.731647 3553.519969
+HI-REDUCTION     178 3553.718501 3553.519969
+REFLECTION       180 3553.680731 3553.510150
+HI-REDUCTION     182 3553.573002 3553.510150
+HI-REDUCTION     184 3553.529569 3553.501483
+HI-REDUCTION     186 3553.519969 3553.490503
+HI-REDUCTION     188 3553.510150 3553.489948
+HI-REDUCTION     190 3553.501483 3553.489749
+HI-REDUCTION     192 3553.490503 3553.488040
+HI-REDUCTION     194 3553.489948 3553.485470
+HI-REDUCTION     196 3553.489749 3553.485400
+LO-REDUCTION     198 3553.488040 3553.485400
+LO-REDUCTION     200 3553.485918 3553.484736
+HI-REDUCTION     202 3553.485470 3553.484665
+HI-REDUCTION     204 3553.485400 3553.484665
+HI-REDUCTION     206 3553.484736 3553.484560
+HI-REDUCTION     208 3553.484683 3553.484512
+EXTENSION        210 3553.484665 3553.484220
+HI-REDUCTION     212 3553.484560 3553.484220
+LO-REDUCTION     214 3553.484512 3553.484220
+EXTENSION        216 3553.484324 3553.483588
+LO-REDUCTION     218 3553.484267 3553.483588
+LO-REDUCTION     220 3553.484220 3553.483588
+EXTENSION        222 3553.483927 3553.482745
+EXTENSION        224 3553.483737 3553.482058
+LO-REDUCTION     226 3553.483588 3553.482058
+EXTENSION        228 3553.482745 3553.479736
+LO-REDUCTION     230 3553.482159 3553.479736
+EXTENSION        232 3553.482058 3553.477735
+EXTENSION        234 3553.479813 3553.473219
+LO-REDUCTION     236 3553.479736 3553.473219
+EXTENSION        238 3553.477735 3553.466921
+EXTENSION        240 3553.474260 3553.460407
+EXTENSION        242 3553.473219 3553.452338
+EXTENSION        244 3553.466921 3553.445248
+EXTENSION        246 3553.460407 3553.439273
+REFLECTION       248 3553.452338 3553.437117
+HI-REDUCTION     250 3553.445248 3553.437117
+REFLECTION       252 3553.442085 3553.436427
+HI-REDUCTION     254 3553.439273 3553.436427
+EXTENSION        256 3553.437623 3553.430059
+LO-REDUCTION     258 3553.437117 3553.430059
+LO-REDUCTION     260 3553.436427 3553.430059
+EXTENSION        262 3553.433845 3553.423063
+EXTENSION        264 3553.430236 3553.414532
+LO-REDUCTION     266 3553.430059 3553.414532
+EXTENSION        268 3553.423063 3553.400750
+LO-REDUCTION     270 3553.420677 3553.400750
+EXTENSION        272 3553.414532 3553.373635
+LO-REDUCTION     274 3553.401635 3553.373635
+EXTENSION        276 3553.400750 3553.350121
+EXTENSION        278 3553.375099 3553.304141
+EXTENSION        280 3553.373635 3553.268697
+EXTENSION        282 3553.350121 3553.228954
+EXTENSION        284 3553.304141 3553.137195
+EXTENSION        286 3553.268697 3553.072284
+LO-REDUCTION     288 3553.228954 3553.072284
+REFLECTION       290 3553.137195 3553.047838
+LO-REDUCTION     292 3553.130945 3553.047838
+EXTENSION        294 3553.077446 3552.946352
+LO-REDUCTION     296 3553.072284 3552.946352
+REFLECTION       298 3553.047838 3552.945490
+EXTENSION        300 3552.952477 3552.765586
+LO-REDUCTION     302 3552.946352 3552.765586
+LO-REDUCTION     304 3552.945490 3552.765586
+EXTENSION        306 3552.873530 3552.652131
+EXTENSION        308 3552.820374 3552.547437
+EXTENSION        310 3552.765586 3552.363319
+LO-REDUCTION     312 3552.652131 3552.363319
+REFLECTION       314 3552.547437 3552.342417
+REFLECTION       316 3552.487896 3552.333888
+REFLECTION       318 3552.363319 3552.209942
+HI-REDUCTION     320 3552.342417 3552.209942
+LO-REDUCTION     322 3552.333888 3552.209942
+EXTENSION        324 3552.310166 3552.151455
+HI-REDUCTION     326 3552.253127 3552.151455
+LO-REDUCTION     328 3552.243351 3552.151455
+EXTENSION        330 3552.209942 3552.038121
+LO-REDUCTION     332 3552.164303 3552.038121
+LO-REDUCTION     334 3552.151455 3552.038121
+EXTENSION        336 3552.108458 3552.000873
+EXTENSION        338 3552.065555 3551.917788
+EXTENSION        340 3552.038121 3551.884841
+HI-REDUCTION     342 3552.000873 3551.884841
+REFLECTION       344 3551.942648 3551.818977
+LO-REDUCTION     346 3551.917788 3551.818977
+LO-REDUCTION     348 3551.884841 3551.818977
+REFLECTION       350 3551.854083 3551.806424
+REFLECTION       352 3551.838070 3551.785276
+HI-REDUCTION     354 3551.818977 3551.785276
+LO-REDUCTION     356 3551.811745 3551.785276
+HI-REDUCTION     358 3551.806424 3551.785276
+LO-REDUCTION     360 3551.798951 3551.785276
+HI-REDUCTION     362 3551.791099 3551.785276
+REFLECTION       364 3551.788770 3551.778726
+LO-REDUCTION     366 3551.785556 3551.778726
+LO-REDUCTION     368 3551.785276 3551.778726
+EXTENSION        370 3551.783206 3551.775138
+HI-REDUCTION     372 3551.780826 3551.775138
+LO-REDUCTION     374 3551.779709 3551.775138
+HI-REDUCTION     376 3551.778726 3551.775138
+LO-REDUCTION     378 3551.777730 3551.775138
+HI-REDUCTION     380 3551.777198 3551.775138
+EXTENSION        382 3551.776665 3551.774511
+HI-REDUCTION     384 3551.776059 3551.774511
+REFLECTION       386 3551.775748 3551.774016
+HI-REDUCTION     388 3551.775138 3551.774016
+LO-REDUCTION     390 3551.775021 3551.774016
+LO-REDUCTION     392 3551.774511 3551.774016
+EXTENSION        394 3551.774424 3551.773463
+HI-REDUCTION     396 3551.774055 3551.773463
+HI-REDUCTION     398 3551.774043 3551.773463
+HI-REDUCTION     400 3551.774016 3551.773463
+LO-REDUCTION     402 3551.773876 3551.773463
+REFLECTION       404 3551.773812 3551.773411
+HI-REDUCTION     406 3551.773647 3551.773411
+HI-REDUCTION     408 3551.773620 3551.773411
+HI-REDUCTION     410 3551.773548 3551.773411
+HI-REDUCTION     412 3551.773523 3551.773411
+HI-REDUCTION     414 3551.773487 3551.773411
+HI-REDUCTION     416 3551.773470 3551.773411
+HI-REDUCTION     418 3551.773463 3551.773411
 Exiting from Nelder Mead minimizer
-    196 function evaluations used
+    420 function evaluations used
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 196 iterations
+Nelder-Mead maximisation, 420 iterations
 Return code 0: successful convergence 
-Log-Likelihood: -3577.581 
+Log-Likelihood: -3551.773 
 3  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,]  0.416832   0.024267  17.177 < 2.2e-16 ***
-[2,]  0.893346   0.051311  17.410 < 2.2e-16 ***
-[3,] -0.999999   0.058592 -17.067 < 2.2e-16 ***
+[1,]  0.499997   0.025638  19.502 < 2.2e-16 ***
+[2,] -1.036016   0.058180 -17.807 < 2.2e-16 ***
+[3,]  1.010560   0.058425  17.297 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -289,79 +369,48 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 +             method="bfgs",
 +             constraints=list(ineqA=A, ineqB=B),
 +             print.level=1)
-initial  value 4743.812134 
-iter   2 value 4168.292668
-iter   3 value 4149.445162
-iter   4 value 4076.012739
-iter   5 value 3998.294252
-iter   6 value 3997.798715
-iter   7 value 3996.076470
-iter   8 value 3995.581659
-iter   9 value 3993.888216
-iter  10 value 3993.394146
-iter  11 value 3991.756880
-iter  12 value 3991.752936
-iter  13 value 3655.397977
-iter  14 value 3633.674848
-iter  15 value 3601.038847
-iter  16 value 3582.384068
-iter  17 value 3581.894316
-iter  18 value 3581.418359
-iter  19 value 3581.178328
-iter  20 value 3581.120937
-iter  21 value 3568.759859
-iter  22 value 3562.705471
-iter  23 value 3558.879277
-iter  24 value 3556.428037
-iter  25 value 3554.854183
-iter  26 value 3553.909364
-iter  27 value 3553.403754
-iter  28 value 3553.397975
-iter  29 value 3553.354504
-iter  30 value 3553.239171
-iter  31 value 3552.717555
-iter  32 value 3552.655215
-iter  33 value 3552.600743
-iter  34 value 3552.599287
-iter  35 value 3552.573945
-iter  36 value 3552.563521
-iter  37 value 3552.507011
-iter  38 value 3552.497159
-iter  39 value 3552.494917
-iter  40 value 3552.486232
-iter  41 value 3552.484796
-iter  42 value 3552.483833
-iter  43 value 3552.458795
-iter  44 value 3552.457183
-iter  45 value 3552.456351
-iter  46 value 3552.418132
-iter  47 value 3552.416747
-iter  48 value 3552.416008
-iter  49 value 3552.398234
-iter  50 value 3552.192732
-iter  51 value 3552.191149
-iter  52 value 3552.190535
-iter  53 value 3552.190057
-iter  54 value 3552.189142
-iter  55 value 3552.189089
-iter  55 value 3552.189078
-iter  56 value 3552.188946
-iter  56 value 3552.188928
-iter  56 value 3552.188926
-final  value 3552.188926 
+initial  value 4001.919360 
+iter   2 value 3924.195249
+iter   3 value 3761.072160
+iter   4 value 3740.857495
+iter   5 value 3739.836050
+iter   6 value 3739.669310
+iter   7 value 3739.505188
+iter   8 value 3739.342555
+iter   9 value 3739.271535
+iter  10 value 3674.196024
+iter  11 value 3671.068785
+iter  12 value 3626.165158
+iter  13 value 3589.950284
+iter  14 value 3552.974227
+iter  15 value 3551.811736
+iter  16 value 3551.806160
+iter  17 value 3551.796633
+iter  18 value 3551.796386
+iter  19 value 3551.782447
+iter  20 value 3551.776233
+iter  21 value 3551.776077
+iter  22 value 3551.775692
+iter  23 value 3551.774627
+iter  24 value 3551.773671
+iter  25 value 3551.773533
+iter  26 value 3551.773478
+iter  26 value 3551.773453
+iter  26 value 3551.773443
+final  value 3551.773443 
 converged
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 36156 iterations
+BFGS maximisation, 13226 iterations
 Return code 0: successful convergence 
-Log-Likelihood: -3552.187 
+Log-Likelihood: -3551.773 
 3  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,]  0.493680   0.025401  19.436 < 2.2e-16 ***
-[2,]  0.999999   0.057485  17.396 < 2.2e-16 ***
-[3,] -0.999984   0.056644 -17.654 < 2.2e-16 ***
+[1,]  0.499995   0.025608  19.525 < 2.2e-16 ***
+[2,] -1.035868   0.058098 -17.830 < 2.2e-16 ***
+[3,]  1.011101   0.058382  17.319 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -375,23 +424,53 @@ Test for equality constraints
 +             start=start,
 +             constraints=list(eqA=A, eqB=B),
 +             print.level=1)
-SUMT initial: rho =  0 , function =  -4013.758 , penalty =  133.1048 
-Estimate:[1]  5.107684e-11 -1.086032e+01 -3.383917e-01
-SUMT iteration 1: rho = 1.371742e-05, function = -4013.758, penalty = 133.1048
-Estimate:[1]  5.107684e-11 -1.086032e+01 -3.383917e-01
+SUMT initial: rho =  0 , function =  -3551.765 , penalty =  1.003726 
+Estimate:[1]  0.5032979 -1.0306790  1.0162701
+SUMT iteration 1: rho = 3.08642e-05, function = -3551.765, penalty = 1.003723
+Estimate:[1]  0.5032977 -1.0306795  1.0162696
+SUMT iteration 2: rho = 0.000308642, function = -3551.765, penalty = 1.003695
+Estimate:[1]  0.5032959 -1.0306836  1.0162646
+SUMT iteration 3: rho = 0.00308642, function = -3551.765, penalty = 1.003413
+Estimate:[1]  0.5032777 -1.0307253  1.0162150
+SUMT iteration 4: rho = 0.0308642, function = -3551.765, penalty = 1.000599
+Estimate:[1]  0.5030961 -1.0311412  1.0157202
+SUMT iteration 5: rho = 0.308642, function = -3551.77, penalty = 0.9731375
+Estimate:[1]  0.5013089 -1.0352384  1.0108579
+SUMT iteration 6: rho = 3.08642, function = -3552.123, penalty = 0.753223
+Estimate:[1]  0.4858952 -1.0709656  0.9694249
+SUMT iteration 7: rho = 30.8642, function = -3559.122, penalty = 0.1604146
+Estimate:[1]  0.4240635 -1.2225001  0.8115090
+SUMT iteration 8: rho = 308.642, function = -3569.861, penalty = 0.003967026
+Estimate:[1]  0.3788904 -1.3438654  0.7034249
+SUMT iteration 9: rho = 3086.42, function = -3572.116, penalty = 4.45768e-05
+Estimate:[1]  0.3713616 -1.3651918  0.6859342
+SUMT iteration 10: rho = 30864.2, function = -3572.364, penalty = 4.511515e-07
+Estimate:[1]  0.3705592 -1.3674852  0.6840785
+SUMT iteration 11: rho = 308642, function = -3572.389, penalty = 4.51695e-09
+Estimate:[1]  0.3704785 -1.3677163  0.6838918
+SUMT iteration 12: rho = 3086420, function = -3572.391, penalty = 4.517494e-11
+Estimate:[1]  0.3704704 -1.3677394  0.6838731
+SUMT iteration 13: rho = 30864198, function = -3572.392, penalty = 4.517548e-13
+Estimate:[1]  0.3704696 -1.3677417  0.6838712
+SUMT iteration 14: rho = 308641975, function = -3572.392, penalty = 4.517554e-15
+Estimate:[1]  0.3704695 -1.3677420  0.6838710
+SUMT iteration 15: rho = 3086419753, function = -3572.392, penalty = 4.517554e-17
+Estimate:[1]  0.3704695 -1.3677420  0.6838710
+SUMT iteration 16: rho = 30864197531, function = -3572.392, penalty = 4.517553e-19
+Estimate:[1]  0.3704695 -1.3677420  0.6838710
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-Newton-Raphson maximisation, 1 iterations
-Return code 3: Last step could not find a value above the current.
-Consider switching to a more robust optimisation method temporarily.
-Log-Likelihood: -4013.759 
+Newton-Raphson maximisation, 2 iterations
+Return code 2: successive function values within tolerance limit.
+May be a solution
+Log-Likelihood: -3572.392 
 3  free parameters
 Estimates:
-        Estimate  Std. error   t value Pr(> t)    
-[1,]  5.1077e-11  2.2361e-02 2.284e-09  1.0000    
-[2,] -1.0860e+01  1.9092e+02   -0.0569  0.9546    
-[3,] -3.3839e-01  2.2361e-02  -15.1333  <2e-16 ***
+      Estimate Std. error t value   Pr(> t)    
+[1,]  0.370470   0.014705  25.193 < 2.2e-16 ***
+[2,] -1.367742   0.036274 -37.705 < 2.2e-16 ***
+[3,]  0.683871   0.018137  37.705 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -400,162 +479,154 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 +             start=start, method="bfgs",
 +             constraints=list(eqA=A, eqB=B),
 +             print.level=2, SUMTRho0=1)
-initial  value 4743.812250 
-iter   2 value 4168.292379
-iter   3 value 4065.826987
-iter   4 value 3800.181137
-iter   5 value 3620.224116
-iter   6 value 3606.363246
-iter   7 value 3566.879848
-iter   8 value 3555.715988
-iter   9 value 3551.846926
-iter  10 value 3551.767683
-iter  11 value 3551.766212
-iter  12 value 3551.765878
-iter  13 value 3551.765325
-iter  14 value 3551.765013
-iter  14 value 3551.765013
-iter  14 value 3551.765013
+initial  value 4001.919409 
+iter   2 value 3737.424099
+iter   3 value 3556.377912
+iter   4 value 3555.675398
+iter   5 value 3552.497318
+iter   6 value 3551.824089
+iter   7 value 3551.765109
+iter   8 value 3551.765013
+iter   8 value 3551.765013
 final  value 3551.765013 
 converged
-SUMT initial: rho =  0 , function =  -3551.765 , penalty =  1.092209 
-Estimate:[1]  0.4967021  1.0162701 -1.0306790
-initial  value 3552.857222 
-iter   2 value 3552.838368
-iter   3 value 3552.817135
-iter   4 value 3552.808965
-iter   5 value 3552.805105
-iter   5 value 3552.805105
-iter   5 value 3552.805105
-final  value 3552.805105 
+SUMT initial: rho =  0 , function =  -3551.765 , penalty =  1.003712 
+Estimate:[1]  0.5032993 -1.0306805  1.0162673
+initial  value 3552.768725 
+iter   2 value 3552.751128
+iter   3 value 3552.731274
+iter   4 value 3552.724118
+iter   5 value 3552.720532
+iter   5 value 3552.720532
+iter   5 value 3552.720532
+final  value 3552.720532 
 converged
-SUMT iteration 1: rho = 1, function = -3551.815, penalty = 0.9905916
-Estimate:[1]  0.4902298  1.0313125 -1.0132986
-initial  value 3561.720429 
-iter   2 value 3560.545268
-iter   3 value 3559.521601
-iter   4 value 3559.169095
-iter   5 value 3559.075840
-iter   6 value 3559.075797
-iter   6 value 3559.075797
-iter   6 value 3559.075797
-final  value 3559.075797 
+SUMT iteration 1: rho = 1, function = -3551.811, penalty = 0.9097513
+Estimate:[1]  0.497077 -1.044977  0.999393
+initial  value 3560.908293 
+iter   2 value 3559.816245
+iter   3 value 3558.860891
+iter   4 value 3558.554985
+iter   5 value 3558.470121
+iter   5 value 3558.470095
+iter   5 value 3558.470095
+final  value 3558.470095 
 converged
-SUMT iteration 2: rho = 10, function = -3554.159, penalty = 0.4916601
-Estimate:[1]  0.4515728  1.1240183 -0.9126015
-initial  value 3603.325208 
-iter   2 value 3584.440538
-iter   3 value 3577.824104
-iter   4 value 3576.293460
-iter   5 value 3570.399646
-iter   6 value 3570.388829
-iter   6 value 3570.388819
-iter   6 value 3570.388819
-final  value 3570.388819 
+SUMT iteration 2: rho = 10, function = -3553.968, penalty = 0.4501832
+Estimate:[1]  0.4600214 -1.1326423  0.9017996
+initial  value 3598.986584 
+iter   2 value 3581.662691
+iter   3 value 3575.592026
+iter   4 value 3574.296760
+iter   5 value 3568.837187
+iter   6 value 3568.828225
+iter   6 value 3568.828218
+iter   6 value 3568.828218
+final  value 3568.828218 
 converged
-SUMT iteration 3: rho = 100, function = -3567.175, penalty = 0.03213976
-Estimate:[1]  0.3819149  1.3067747 -0.7430252
-initial  value 3599.314604 
-iter   2 value 3577.387185
-iter   3 value 3576.625960
-iter   4 value 3576.378122
-iter   5 value 3573.809592
-iter   6 value 3573.808204
-iter   6 value 3573.808204
-iter   6 value 3573.808204
-final  value 3573.808204 
+SUMT iteration 3: rho = 100, function = -3565.88, penalty = 0.02948372
+Estimate:[1]  0.3934445 -1.3035813  0.7376448
+initial  value 3595.363566 
+iter   2 value 3575.235881
+iter   3 value 3574.538052
+iter   4 value 3574.332600
+iter   5 value 3571.971345
+iter   6 value 3571.969966
+iter   6 value 3571.969966
+iter   6 value 3571.969966
+final  value 3571.969966 
 converged
-SUMT iteration 4: rho = 1000, function = -3573.359, penalty = 0.000448781
-Estimate:[1]  0.3608162  1.3673629 -0.6942737
-initial  value 3577.847233 
-iter   2 value 3574.539105
-iter   3 value 3574.527783
-iter   4 value 3574.522695
-iter   5 value 3574.224151
-iter   6 value 3574.219505
-iter   6 value 3574.219505
-iter   6 value 3574.219505
-final  value 3574.219505 
+SUMT iteration 4: rho = 1000, function = -3571.557, penalty = 0.0004130861
+Estimate:[1]  0.3731857 -1.3599930  0.6901587
+initial  value 3575.687741 
+iter   2 value 3572.641972
+iter   3 value 3572.631516
+iter   4 value 3572.627232
+iter   5 value 3572.353862
+iter   6 value 3572.348648
+iter   6 value 3572.348648
+iter   6 value 3572.348648
+final  value 3572.348648 
 converged
-SUMT iteration 5: rho = 10000, function = -3574.173, penalty = 4.653661e-06
-Estimate:[1]  0.3582838  1.3748336 -0.6884954
-initial  value 3574.638334 
-iter   2 value 3574.351225
-iter   3 value 3574.351053
-iter   4 value 3574.350274
-iter   5 value 3574.262636
-iter   6 value 3574.261464
-iter   6 value 3574.261464
-iter   6 value 3574.261464
-final  value 3574.261464 
+SUMT iteration 5: rho = 10000, function = -3572.306, penalty = 4.285694e-06
+Estimate:[1]  0.3707461 -1.3669508  0.6845105
+initial  value 3572.734360 
+iter   2 value 3572.469952
+iter   3 value 3572.469793
+iter   4 value 3572.469005
+iter   5 value 3572.387435
+iter   6 value 3572.387291
+iter   6 value 3572.387291
+iter   6 value 3572.387291
+final  value 3572.387291 
 converged
-SUMT iteration 6: rho = 1e+05, function = -3574.257, penalty = 4.670715e-08
-Estimate:[1]  0.3580256  1.3755980 -0.6879070
-initial  value 3574.303501 
-iter   2 value 3574.265693
-iter   2 value 3574.265691
-iter   2 value 3574.265670
-final  value 3574.265670 
+SUMT iteration 6: rho = 1e+05, function = -3572.383, penalty = 4.301614e-08
+Estimate:[1]  0.3704972 -1.3676627  0.6839351
+initial  value 3572.426005 
+iter   2 value 3572.391185
+iter   2 value 3572.391184
+iter   2 value 3572.391164
+final  value 3572.391164 
 converged
-SUMT iteration 7: rho = 1e+06, function = -3574.265, penalty = 4.721376e-10
-Estimate:[1]  0.3579890  1.3756426 -0.6878322
-initial  value 3574.269919 
-iter   2 value 3574.267425
-iter   2 value 3574.267423
-iter   3 value 3574.266554
-iter   3 value 3574.266553
-iter   4 value 3574.266252
-iter   4 value 3574.266238
-iter   5 value 3574.266153
-iter   6 value 3574.266097
-iter   6 value 3574.266097
-iter   6 value 3574.266094
-final  value 3574.266094 
+SUMT iteration 7: rho = 1e+06, function = -3572.391, penalty = 4.348272e-10
+Estimate:[1]  0.3704624 -1.3677051  0.6838630
+initial  value 3572.395077 
+iter   2 value 3572.392780
+iter   2 value 3572.392779
+iter   3 value 3572.391979
+iter   3 value 3572.391977
+iter   4 value 3572.391700
+iter   4 value 3572.391689
+iter   5 value 3572.391607
+iter   6 value 3572.391559
+iter   6 value 3572.391559
+iter   6 value 3572.391555
+final  value 3572.391555 
 converged
-SUMT iteration 8: rho = 1e+07, function = -3574.266, penalty = 6.373378e-12
-Estimate:[1]  0.3580370  1.3756829 -0.6878427
-initial  value 3574.266668 
-iter   2 value 3574.266153
-iter   2 value 3574.266150
-iter   2 value 3574.266133
-final  value 3574.266133 
+SUMT iteration 8: rho = 1e+07, function = -3572.391, penalty = 6.508066e-12
+Estimate:[1]  0.3705022 -1.3677416  0.6838721
+initial  value 3572.392141 
+iter   2 value 3572.391610
+iter   2 value 3572.391608
+iter   2 value 3572.391590
+final  value 3572.391590 
 converged
-SUMT iteration 9: rho = 1e+08, function = -3574.266, penalty = 8.492677e-14
-Estimate:[1]  0.3579757  1.3756808 -0.6878406
-initial  value 3574.266209 
-iter   2 value 3574.266166
-iter   2 value 3574.266166
-iter   2 value 3574.266148
-final  value 3574.266148 
+SUMT iteration 9: rho = 1e+08, function = -3572.392, penalty = 8.058277e-14
+Estimate:[1]  0.370453 -1.367740  0.683870
+initial  value 3572.391663 
+iter   2 value 3572.391622
+iter   2 value 3572.391621
+iter   2 value 3572.391605
+final  value 3572.391605 
 converged
-SUMT iteration 10: rho = 1e+09, function = -3574.266, penalty = 1.732852e-14
-Estimate:[1]  0.3580082  1.3756826 -0.6878414
-initial  value 3574.266304 
-iter   2 value 3574.266156
-iter   2 value 3574.266156
-iter   2 value 3574.266138
-final  value 3574.266138 
+SUMT iteration 10: rho = 1e+09, function = -3572.392, penalty = 1.639456e-14
+Estimate:[1]  0.3704781 -1.3677414  0.6838708
+initial  value 3572.391752 
+iter   2 value 3572.391612
+iter   2 value 3572.391612
+iter   2 value 3572.391596
+final  value 3572.391596 
 converged
-SUMT iteration 11: rho = 1e+10, function = -3574.266, penalty = 3.071573e-16
-Estimate:[1]  0.3579909  1.3756820 -0.6878410
-initial  value 3574.266166 
-iter   1 value 3574.266139
-final  value 3574.266139 
+SUMT iteration 11: rho = 1e+10, function = -3572.392, penalty = 2.897603e-16
+Estimate:[1]  0.3704652 -1.3677410  0.6838705
+initial  value 3572.391622 
+iter   1 value 3572.391596
+final  value 3572.391596 
 converged
-SUMT iteration 12: rho = 1e+11, function = -3574.266, penalty = 2.664978e-17
-Estimate:[1]  0.3579909  1.3756820 -0.6878410
+SUMT iteration 12: rho = 1e+11, function = -3572.392, penalty = 2.517325e-17
+Estimate:[1]  0.3704652 -1.3677410  0.6838705
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
 BFGS maximisation, 191 iterations
 Return code 0: successful convergence 
-Log-Likelihood: -3574.266 
+Log-Likelihood: -3572.392 
 3  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,]  0.357991   0.014590  24.537 < 2.2e-16 ***
-[2,]  1.375682   0.036459  37.733 < 2.2e-16 ***
-[3,] -0.687841   0.018229 -37.733 < 2.2e-16 ***
+[1,]  0.370465   0.014705  25.193 < 2.2e-16 ***
+[2,] -1.367741   0.036273 -37.707 < 2.2e-16 ***
+[3,]  0.683870   0.018136  37.707 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -567,11 +638,11 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------
 successive function values within tolerance limit.
 May be a solution 
-14  iterations
-estimate: 0.5032977 -1.030679 1.016270 
+10  iterations
+estimate: 0.5032979 -1.030679 1.016270 
 Function value: -3551.765 
-SUMT initial: rho =  0 , function =  -3551.765 , penalty =  1.003724 
-Estimate:[1]  0.5032977 -1.0306794  1.0162698
+SUMT initial: rho =  0 , function =  -3551.765 , penalty =  1.003727 
+Estimate:[1]  0.5032979 -1.0306788  1.0162703
 --------------
 successive function values within tolerance limit.
 May be a solution 

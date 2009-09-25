@@ -59,7 +59,7 @@ A <- matrix(c(-1, 0, 0,
               0, -1, 0,
               0, 0, 1), 3, 3, byrow=TRUE)
 B <- c(0.5, 1, 1)
-start <- c(0.4, 0.9, 0.9)
+start <- c(0.4, 0, 0.9)
 ## analytic gradient
 a <- maxLik(logLikMix, grad=gradLikMix, hess=hessLikMix,
             start=start,
