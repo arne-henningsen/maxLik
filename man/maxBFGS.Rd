@@ -14,7 +14,9 @@ iterlim = 200,
 constraints,
    tol = 1e-08, reltol=tol, ... )
 maxSANN(fn, grad = NULL, hess = NULL, start, print.level = 0, iterlim =
-   10000, tol = 1e-08, reltol=tol, temp = 10, tmax = 10, parscale = rep(1, length = length(start)), ...)
+   10000,
+   constraints,
+   tol = 1e-08, reltol=tol, temp = 10, tmax = 10, parscale = rep(1, length = length(start)), ...)
 maxNM(fn, grad = NULL, hess = NULL, start, print.level = 0, iterlim =
    500,
 constraints,
@@ -38,10 +40,15 @@ tol = 1e-08, reltol=tol, parscale = rep(1, length = length(start)), alpha = 1, b
   \item{start}{initial values for the parameters.}
   \item{print.level}{a larger number prints more working information.}
   \item{iterlim}{maximum number of iterations.}
-  \item{constraints}{a list of two components, \code{ui} and \code{ci}.  If not
-    missing, constrained optimization is performed in the parameter
-    subspace \code{ui \%*\% parameter - ci >= 0} forwarding the problem to
-    \code{\link{constrOptim}}.}
+  \item{constraints}{either \code{NULL} for unconstrained optimization
+    or a list with two components.  The components may be either
+    \code{eqA} and \code{eqB} for equality-constrained optimization
+    \eqn{A \theta + B = 0}{A \%*\% theta + B = 0}; or \code{ineqA} and
+    \code{ineqB} for inequality constraints \eqn{A \theta + B \ge 0}{A
+      \%*\% theta + B >= 0}.  The equality-constrained problem is forwarded
+    to \code{\link{sumt}}, the inequality-constrained case to
+    \code{\link{constrOptim}}.
+  }
   \item{tol, reltol}{the relative convergence tolerance (see
     \code{\link{optim}}).  \code{tol} is for compatibility with \code{\link{maxNR}}.}
   \item{temp}{controls the '"SANN"' method. It is the starting

@@ -9,7 +9,8 @@ maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
       tol = 1e-08, reltol=sqrt(.Machine$double.eps), gradtol = 1e-06,
       steptol = 1e-10, lambdatol = 1e-06, qrtol = 1e-10,
       iterlim = 150,
-      activePar=rep(TRUE, nParam), ...)
+      constraints=NULL,
+      activePar=rep(TRUE, length(start)), ...)
 }
 \arguments{
   \item{fn}{function to be maximized.  It must return either a single
@@ -54,6 +55,13 @@ maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
   \item{qrtol}{QR-decomposition tolerance}
   \item{iterlim}{stopping condition.  Stop if more than \code{iterlim}
     iterations, return \code{code=4}.}
+  \item{constraints}{either \code{NULL} for unconstrained optimization
+    or a list with two components
+    \code{eqA} and \code{eqB} for equality-constrained optimization
+    \eqn{A \theta + B = 0}{A \%*\% theta + B = 0}.  The constrained
+    problem is forwarded
+    to \code{\link{sumt}}.
+  }
   \item{activePar}{index vector, which parameters are treated as free.
     Other parameters are treated as fixed constants.}
   \item{\dots}{further arguments to \code{fn}, \code{grad} and

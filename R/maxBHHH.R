@@ -27,11 +27,13 @@ maxBHHH <- function(fn, grad=NULL, hess=NULL,
          ## Check whether the gradient has enough rows (about enough
          ## observations in data)
          if( !is.matrix( g ) ) {
-            stop( "the BHHH method requires that the gradient function",
-               " (argument 'grad') returns a numeric matrix,",
-               " where each row must correspond to the gradient(s)",
-               " of the log-likelihood function at an individual (independent)",
-               " observation and each column must correspond to a parameter" )
+            stop("Gradient is not a matrix.\n",
+                 "the BHHH method requires that the gradient function\n",
+                 "(argument 'grad') returns a numeric matrix,\n",
+                 "where each row must correspond to the gradient(s)\n",
+                 "of the log-likelihood function at an individual\n",
+                 "(independent) observation and each column must\n",
+                 "correspond to a parameter" )
          } else if( nrow( g ) < length( theta ) ) {
             stop( "the matrix returned by the gradient function",
                " (argument 'grad') must have at least as many",

@@ -13,7 +13,7 @@ sumt(fn, grad=NULL, hess=NULL,
 start,
 maxRoutine, constraints, SUMTTol = sqrt(.Machine$double.eps),
 SUMTQ = 10,
-SUMTRho0 = max(fn(start), 1e-4)/max(penalty(start), 1e-4),
+SUMTRho0 = NULL,
 print.level = 0, SUMTMaxIter = 100, ...)
 }
 \arguments{
@@ -48,7 +48,9 @@ print.level = 0, SUMTMaxIter = 100, ...)
     as described in Details. Defaults to 10.
   }
   \item{SUMTRho0}{
-    Initial value for \code{rho}.  See Details.
+    Initial value for \code{rho}.  If not specified, a (possibly)
+    suitable value is
+    selected.  See Details.
     }
   \item{print.level}{
     Integer, debugging information.  Larger number print more details.

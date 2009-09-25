@@ -6,7 +6,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
                  maxRoutine, constraints, 
                  SUMTTol = sqrt(.Machine$double.eps),
                  SUMTQ = 10,
-                 SUMTRho0 = max(fn(start), 1e-4)/max(penalty(start), 1e-4),
+                 SUMTRho0 = NULL,
                  print.level=0,
                  SUMTMaxIter=100,
                  ...) {
@@ -29,17 +29,39 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    hessPenalty <- function(theta) {
       2*t(A) %*% A
    }
-   Phi <- function(theta)
-       fn(theta) - rho * penalty(theta)
+   funcS <- function(theta, ...) {
+      ## this wrapper makes a) single-valued function (in case of BHHH
+      ## vector-valued); and b) strips the 'maxRoutine' extra arguments
+      f <- match.call()
+      f[names(formals(maxRoutine))] <- NULL
+      f[[1]] <- as.name("fn")
+      names(f)[2] <- ""
+      f1 <- eval(f, sys.frame(sys.parent()))
+      sum(f1)
+   }
+   Phi <- function(theta, ...) {
+      f <- match.call()
+      f[names(formals(maxRoutine))] <- NULL
+      f[[1]] <- as.name("fn")
+      names(f)[2] <- ""
+      f <- eval(f)
+      if(length(f) > 1)
+          f <- sum(f)
+      f - rho * penalty(theta)
+    }
    if(!is.null(grad)) {
-      gradPhi<- function(theta) 
-         grad(theta) - rho*gPenalty(theta)
+      gradPhi<- function(theta, ...) {
+         g <- grad(theta, ...)
+         if(is.matrix(g))
+             g <- colSums(g)
+         g - rho*gPenalty(theta)
+      }
    }
    else
        gradPhi <- NULL
    if(!is.null(hess)) {
-      hessPhi <- function(theta) 
-         hess(theta) - rho*hessPenalty(theta)
+      hessPhi <- function(theta, ...) 
+         hess(theta, ...) - rho*hessPenalty(theta)
    }
    else
        hessPhi <- NULL
@@ -65,20 +87,24 @@ sumt <- function(fn, grad=NULL, hess=NULL,
     ## </NOTE>
    ##
    rho <- 0
-   a <- maxRoutine(fn=Phi, grad=gradPhi, hess=hessPhi,
+   result <- maxRoutine(fn=Phi, grad=gradPhi, hess=hessPhi,
                    start=start,
-                   print.level=print.level - 1,
+                   print.level=max(print.level - 1, 0),
                    ...)
-   theta <- coef(a)
+   theta <- coef(result)
    if(print.level > 0) {
-      cat("Initial: rho = ", rho, ", function = ", fn(theta),
+      cat("SUMT initial: rho = ", rho,
+          ", function = ", funcS(theta, ...),
           ", penalty = ", penalty(theta), "\n")
       cat("Estimate:")
       print(theta)
    }
    ## <TODO>
    ## Better upper/lower bounds for rho?
-   rho <- SUMTRho0
+   if(is.null(SUMTRho0))
+       rho <- max(funcS(start, ...), 1e-4)/max(penalty(start), 1e-4)
+   else
+       rho <- SUMTRho0
    ## </TODO>
    iter <- 1L
    repeat {
@@ -86,14 +112,14 @@ sumt <- function(fn, grad=NULL, hess=NULL,
       ## Shouldnt't we also have maxiter, just in case ...?
       ## </TODO>
       thetaOld <- theta
-      a <- maxRoutine(fn=Phi, grad=gradPhi, hess=hessPhi,
-                      start=start,
-                      print.level=print.level - 1,
+      result <- maxRoutine(fn=Phi, grad=gradPhi, hess=hessPhi,
+                      start=thetaOld,
+                      print.level=max(print.level - 1, 0),
                       ...)
-      theta <- coef(a)
+      theta <- coef(result)
       if(print.level > 0) {
          cat("SUMT iteration ", iter,
-             ": rho = ", rho, ", function = ", fn(theta),
+             ": rho = ", rho, ", function = ", funcS(theta, ...),
              ", penalty = ", penalty(theta), "\n", sep="")
          cat("Estimate:")
          print(theta)
@@ -105,5 +131,5 @@ sumt <- function(fn, grad=NULL, hess=NULL,
       iter <- iter + 1L
       rho <- SUMTQ * rho
    }
-   return(a)
+   return(result)
 }

@@ -11,9 +11,8 @@
   inverse of negative hessian is the variance-covariance matrix.
 }
 \usage{
-maxLik(logLik, grad = NULL, hess = NULL, start, method =
-"Newton-Raphson",
-constraints, ...)
+maxLik(logLik, grad = NULL, hess = NULL, start, method,
+constraints=NULL, ...)
 }
 \arguments{
   \item{logLik}{log-likelihood function.  Must have the parameter vector
@@ -31,13 +30,10 @@ constraints, ...)
   \item{start}{numeric vector, initial value of parameters.}
   \item{method}{maximisation method, currently either "Newton-Raphson", "BFGS",
     "BHHH", "SANN" or "NM" (for Nelder-Mead).  Lower-case letters and
-    shortcuts (as 'nr' for Newton-Raphson) allowed.}
-  \item{constraints}{list, information for constrained maximization.
-    Currently two components are supported: \code{eqA} and \code{eqB}
-    for linear equality constraints: \eqn{A \beta + B = 0}{A \%*\% beta
-      + B = 0}.  The user must ensure that the matrices \code{A} and
-    \code{B} are conformable.  If missing, unconstrained maximization
-    is performed.
+    shortcuts (as 'nr' for Newton-Raphson) allowed.  If missing, a
+    suitable method is selected automathically.}
+  \item{constraints}{either \code{NULL} for unconstrained maximization
+    or a list, specifying the constraints.  See \code{\link{maxBFGS}}.
   }
   \item{\dots}{further arguments for the maximisation routine.}
 }
@@ -46,6 +42,10 @@ constraints, ...)
   Components are identical to those of class 'maxim',
   see \code{\link{maxNR}}.
 }
+\section{Warning}{The constrained maximum likelihood estimation should
+  be considered as experimental.  In particular, the variance-covariance
+  matrix is not corrected for constrained parameter space.
+  }
 \author{Ott Toomet \email{otoomet@ut.ee}}
 \seealso{\code{\link{maxNR}}, \code{\link{nlm}} and \code{\link{optim}}
   for different non-linear optimisation routines.}

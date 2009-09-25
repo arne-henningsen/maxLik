@@ -243,4 +243,3 @@ all.equal( mlSANN, mlgSANN )
 set.seed( 345 )
 mlghSANN <- maxLik( llf, gf, hf, start = startVal, method = "SANN" )
 all.equal( mlgSANN, mlghSANN )
-

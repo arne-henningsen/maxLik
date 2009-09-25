@@ -1,6 +1,6 @@
 maxLik <- function(logLik, grad=NULL, hess=NULL, start,
-                   method="Newton-Raphson",
-                   constraints,
+                   method,
+                   constraints=NULL,
                    ...) {
    ## Maximum Likelihood estimation.
    ##
@@ -42,45 +42,36 @@ maxLik <- function(logLik, grad=NULL, hess=NULL, start,
    if( !is.null( hess ) ) {
       checkFuncArgs( hess, argNames, "hess", "maxLik" )
    }
-   maxRoutine <- switch(method,
-                        "Newton-Raphson" =,
-                        "newton-raphson" =,
-                        "NR" =,
-                        "nr" = maxNR,
-                        "BFGS" =,
-                        "bfgs" = maxBFGS,
-                        "BHHH" =,
-                        "bhhh" = maxBHHH,
-                        "Nelder-Mead" =,
-                        "NM" =,
-                        "nm" = maxNM,
-                        "SANN" =,
-                        "sann" = maxSANN,
-                        stop( "Maxlik: unknown maximisation method ", method )
-                        )
    ## Constrained optimization.  We can two possibilities:
    ## * linear equality constraints
    ## * linear inequality constraints
    ##
-   if(!missing(constraints)) {
-      if(identical(names(constraints), c("eqA", "eqB"))) {
-                           # equality constraints: A %*% beta + B = 0
-         result <- sumt(fn=logLik, grad=grad, hess=hess,
-                        start=start,
-                        maxRoutine=maxRoutine,
-                        constraints=constraints, ...)
+   if(missing(method)) {
+      if(is.null(constraints)) {
+         method <- "nr"
       }
       else if(identical(names(constraints), c("ineqA", "ineqB"))) {
-                           # inequality constraints A %*% beta + B > 0
+         if(is.null(grad))
+             method <- "Nelder-Mead"
+         else
+             method <- "BFGS"
       }
-      else stop("'constraints' must be a list with two components:",
-                "either 'eqA' and 'eqB' or 'ineqA' and 'ineqB' for",
-                "equality and inequality constraints respectively")
+      else
+          method <- "nr"
    }
-   else
-                           # unconstrained optimization
-       result <- maxRoutine(fn=logLik, grad=grad, hess=hess, start=start,
-                            ...)
+   maxRoutine <- switch(tolower(method),
+                        "newton-raphson" =,
+                        "nr" = maxNR,
+                        "bfgs" = maxBFGS,
+                        "bhhh" = maxBHHH,
+                        "nelder-mead" =,
+                        "nm" = maxNM,
+                        "sann" = maxSANN,
+                        stop( "Maxlik: unknown maximisation method ", method )
+                        )
+   result <- maxRoutine(fn=logLik, grad=grad, hess=hess, start=start,
+                        constraints=constraints,
+                        ...)
    class(result) <- c("maxLik", class(result))
    result
 }
