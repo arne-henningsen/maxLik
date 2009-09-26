@@ -27,9 +27,13 @@
   \item{maximum}{function value at maximum}
   \item{estimate}{matrix with following columns:
     \itemize{
-      \item{results:}{coefficient estimates at maximum}
-      \item{gradient:}{estimated gradient at maximum}
+      \item{results}{coefficient estimates at maximum}
+      \item{gradient}{estimated gradient at maximum}
     }
+  }
+  \item{constraints}{information about the constrained optimization.
+    Passed directly further from \code{maxim}-object.  \code{NULL} if
+    unconstrained maximization.
   }
   \item{hessian}{estimated hessian at maximum, only if requested}
 }

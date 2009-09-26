@@ -9,6 +9,15 @@ print.summary.maxLik <- function( x, ... ) {
       cat("Estimates:\n")
       printCoefmat(x$estimate)
    }
+   if(!is.null(x$constraints)) {
+      cat("\nWarning: constrained likelihood estimation.",
+          "Inference is probably wrong\n")
+      cat("Constrained optimization based on", x$constraints$type,
+          "\n")
+      cat(x$constraints$outer.iterations,
+          " outer iterations, barrier value",
+          x$constraints$barrier.value, "\n")
+   }
    cat("--------------------------------------------\n")
 }
 
@@ -67,7 +76,8 @@ summary.maxLik <- function(object, eigentol=1e-12,... ) {
                    estimate=results,
                    hessian=Hess,
                    activePar=object$activePar,
-                   NActivePar=sum(object$activePar))
+                   NActivePar=sum(object$activePar),
+                   constraints=object$constraints)
    class(summary) <- "summary.maxLik"
    summary
 }

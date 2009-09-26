@@ -19,6 +19,13 @@ print.summary.maxim <- function( x, ... ) {
          print(summary$hessian)
       }
    }
+   if(!is.null(summary$constraints)) {
+      cat("\nConstrained optimization based on", summary$constraints$type,
+          "\n")
+      cat(summary$constraints$outer.iterations,
+          " outer iterations, barrier value",
+          summary$constraints$barrier.value, "\n")
+   }
    cat("--------------------------------------------\n")
 }
 
@@ -63,7 +70,8 @@ summary.maxim <- function(object, hessian=FALSE, unsucc.step=FALSE,
                   message=object$message,
                    unsucc.step=unsucc.step,
                   estimate=estimate,
-                   hessian=H)
+                   hessian=H,
+                   constraints=object$constraints)
    class(summary) <- c("summary.maxim", class(summary))
    summary
 }

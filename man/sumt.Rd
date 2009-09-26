@@ -7,6 +7,9 @@
 \description{
   Sequentially Unconstrained Maximization Technique (SUMT) based
   optimization for linear equality constraints.
+
+  This implementation is mostly intended to be called from other
+  maximization routines, such as \code{\link{maxNR}}.
 }
 \usage{
 sumt(fn, grad=NULL, hess=NULL,
@@ -90,7 +93,15 @@ print.level = 0, SUMTMaxIter = 100, ...)
      provided, numeric ones otherwise.
 }
 \value{
-  Object of class 'maxim'.
+  Object of class 'maxim'.  In addition, a component
+  \item{constraints}{A list, describing the constrained optimization.
+    Includes the following components:
+    \itemize{
+      \item{type}{type of constrained optimization}
+      \item{outer.iterations}{number of iterations in the SUMT step}
+      \item{barrier.value}{value of the penalty function at maximum}
+    }
+  }
 }
 \section{Note}{
   It may be a lot more efficient to embrace the actual function to be

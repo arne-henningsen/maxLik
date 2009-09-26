@@ -128,6 +128,10 @@ Estimates:
 [3,]  1.011114   0.058412  17.310 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -8.064254e-05 
 --------------------------------------------
 > ## No analytic gradient
 > a <- maxLik(logLikMix, 
@@ -362,6 +366,10 @@ Estimates:
 [3,]  1.010560   0.058425  17.297 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -7.879367e-05 
 --------------------------------------------
 > ## No analytic gradient, BFGS
 > a <- maxLik(logLikMix, 
@@ -413,6 +421,10 @@ Estimates:
 [3,]  1.011101   0.058382  17.319 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -7.259354e-05 
 --------------------------------------------
 > ## ----
 > cat("Test for equality constraints\n")
@@ -426,37 +438,35 @@ Test for equality constraints
 +             print.level=1)
 SUMT initial: rho =  0 , function =  -3551.765 , penalty =  1.003726 
 Estimate:[1]  0.5032979 -1.0306790  1.0162701
-SUMT iteration 1: rho = 3.08642e-05, function = -3551.765, penalty = 1.003723
-Estimate:[1]  0.5032977 -1.0306795  1.0162696
-SUMT iteration 2: rho = 0.000308642, function = -3551.765, penalty = 1.003695
+SUMT iteration 1: rho = 0.000308642, function = -3551.765, penalty = 1.003695
 Estimate:[1]  0.5032959 -1.0306836  1.0162646
-SUMT iteration 3: rho = 0.00308642, function = -3551.765, penalty = 1.003413
+SUMT iteration 2: rho = 0.00308642, function = -3551.765, penalty = 1.003413
 Estimate:[1]  0.5032777 -1.0307253  1.0162150
-SUMT iteration 4: rho = 0.0308642, function = -3551.765, penalty = 1.000599
+SUMT iteration 3: rho = 0.0308642, function = -3551.765, penalty = 1.000599
 Estimate:[1]  0.5030961 -1.0311412  1.0157202
-SUMT iteration 5: rho = 0.308642, function = -3551.77, penalty = 0.9731375
+SUMT iteration 4: rho = 0.308642, function = -3551.77, penalty = 0.9731375
 Estimate:[1]  0.5013089 -1.0352384  1.0108579
-SUMT iteration 6: rho = 3.08642, function = -3552.123, penalty = 0.753223
+SUMT iteration 5: rho = 3.08642, function = -3552.123, penalty = 0.753223
 Estimate:[1]  0.4858952 -1.0709656  0.9694249
-SUMT iteration 7: rho = 30.8642, function = -3559.122, penalty = 0.1604146
+SUMT iteration 6: rho = 30.8642, function = -3559.122, penalty = 0.1604146
 Estimate:[1]  0.4240635 -1.2225001  0.8115090
-SUMT iteration 8: rho = 308.642, function = -3569.861, penalty = 0.003967026
+SUMT iteration 7: rho = 308.642, function = -3569.861, penalty = 0.003967026
 Estimate:[1]  0.3788904 -1.3438654  0.7034249
-SUMT iteration 9: rho = 3086.42, function = -3572.116, penalty = 4.45768e-05
+SUMT iteration 8: rho = 3086.42, function = -3572.116, penalty = 4.45768e-05
 Estimate:[1]  0.3713616 -1.3651918  0.6859342
-SUMT iteration 10: rho = 30864.2, function = -3572.364, penalty = 4.511515e-07
+SUMT iteration 9: rho = 30864.2, function = -3572.364, penalty = 4.511515e-07
 Estimate:[1]  0.3705592 -1.3674852  0.6840785
-SUMT iteration 11: rho = 308642, function = -3572.389, penalty = 4.51695e-09
+SUMT iteration 10: rho = 308642, function = -3572.389, penalty = 4.51695e-09
 Estimate:[1]  0.3704785 -1.3677163  0.6838918
-SUMT iteration 12: rho = 3086420, function = -3572.391, penalty = 4.517494e-11
+SUMT iteration 11: rho = 3086420, function = -3572.391, penalty = 4.517494e-11
 Estimate:[1]  0.3704704 -1.3677394  0.6838731
-SUMT iteration 13: rho = 30864198, function = -3572.392, penalty = 4.517548e-13
+SUMT iteration 12: rho = 30864198, function = -3572.392, penalty = 4.517548e-13
 Estimate:[1]  0.3704696 -1.3677417  0.6838712
-SUMT iteration 14: rho = 308641975, function = -3572.392, penalty = 4.517554e-15
+SUMT iteration 13: rho = 308641975, function = -3572.392, penalty = 4.517554e-15
 Estimate:[1]  0.3704695 -1.3677420  0.6838710
-SUMT iteration 15: rho = 3086419753, function = -3572.392, penalty = 4.517554e-17
+SUMT iteration 14: rho = 3086419753, function = -3572.392, penalty = 4.517554e-17
 Estimate:[1]  0.3704695 -1.3677420  0.6838710
-SUMT iteration 16: rho = 30864197531, function = -3572.392, penalty = 4.517553e-19
+SUMT iteration 15: rho = 30864197531, function = -3572.392, penalty = 4.517553e-19
 Estimate:[1]  0.3704695 -1.3677420  0.6838710
 > summary(a)
 --------------------------------------------
@@ -468,11 +478,15 @@ Log-Likelihood: -3572.392
 3  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,]  0.370470   0.014705  25.193 < 2.2e-16 ***
-[2,] -1.367742   0.036274 -37.705 < 2.2e-16 ***
-[3,]  0.683871   0.018137  37.705 < 2.2e-16 ***
+[1,]  0.370470   0.025464  14.549 < 2.2e-16 ***
+[2,] -1.367742   0.069675 -19.630 < 2.2e-16 ***
+[3,]  0.683871   0.051365  13.314 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+15  outer iterations, barrier value 4.517553e-19 
 --------------------------------------------
 > ## BFGS, numeric gradient
 > a <- maxLik(logLikMix, 
@@ -624,11 +638,15 @@ Log-Likelihood: -3572.392
 3  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,]  0.370465   0.014705  25.193 < 2.2e-16 ***
-[2,] -1.367741   0.036273 -37.707 < 2.2e-16 ***
-[3,]  0.683870   0.018136  37.707 < 2.2e-16 ***
+[1,]  0.370465   0.025469  14.546 < 2.2e-16 ***
+[2,] -1.367741   0.069675 -19.630 < 2.2e-16 ***
+[3,]  0.683870   0.051386  13.308 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+12  outer iterations, barrier value 2.517325e-17 
 --------------------------------------------
 > ## BHHH, analytic gradient (numeric does not converge?)
 > a <- maxLik(logLikMix, gradLikMix,
@@ -739,11 +757,15 @@ Log-Likelihood: -3572.392
 3  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,]  0.370470   0.014585  25.401 < 2.2e-16 ***
-[2,] -1.367742   0.036527 -37.445 < 2.2e-16 ***
-[3,]  0.683871   0.018263  37.445 < 2.2e-16 ***
+[1,]  0.370470   0.023898  15.502 < 2.2e-16 ***
+[2,] -1.367742   0.072830 -18.780 < 2.2e-16 ***
+[3,]  0.683871   0.043079  15.875 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+11  outer iterations, barrier value 4.303416e-18 
 --------------------------------------------
 > 
 > 
@@ -830,10 +852,14 @@ Log-Likelihood: -3608.806
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303386   0.036193 -36.012 < 2.2e-16 ***
-[2,]  0.651693   0.018096  36.012 < 2.2e-16 ***
+[1,] -1.303386   0.045812 -28.451 < 2.2e-16 ***
+[2,]  0.651693   0.035389  18.415 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+12  outer iterations, barrier value 3.498733e-19 
 --------------------------------------------
 > ## nr, numeric hessian
 > a <- maxLik(logLikMix2, gradLikMix2, 
@@ -876,10 +902,14 @@ Log-Likelihood: -3608.806
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303386   0.036168 -36.037 < 2.2e-16 ***
-[2,]  0.651693   0.018084  36.037 < 2.2e-16 ***
+[1,] -1.303386   0.045807 -28.454 < 2.2e-16 ***
+[2,]  0.651693   0.035382  18.419 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+12  outer iterations, barrier value 3.498733e-19 
 --------------------------------------------
 > ## nr, analytic hessian
 > a <- maxLik(logLikMix2, gradLikMix2, hessLikMix2,
@@ -922,10 +952,14 @@ Log-Likelihood: -3608.806
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303386   0.036168 -36.037 < 2.2e-16 ***
-[2,]  0.651693   0.018084  36.037 < 2.2e-16 ***
+[1,] -1.303386   0.045807 -28.454 < 2.2e-16 ***
+[2,]  0.651693   0.035382  18.419 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+12  outer iterations, barrier value 3.498733e-19 
 --------------------------------------------
 > ## BHHH
 > a <- maxLik(logLikMix2, gradLikMix2, 
@@ -968,10 +1002,14 @@ Log-Likelihood: -3608.806
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303386   0.035253 -36.972 < 2.2e-16 ***
-[2,]  0.651693   0.017627  36.972 < 2.2e-16 ***
+[1,] -1.303386   0.046264 -28.173 < 2.2e-16 ***
+[2,]  0.651693   0.031580  20.636 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+12  outer iterations, barrier value 3.498733e-19 
 --------------------------------------------
 > ## BHHH, analytic
 > a <- maxLik(logLikMix2, gradLikMix2, 
@@ -1014,10 +1052,14 @@ Log-Likelihood: -3608.806
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303386   0.035253 -36.972 < 2.2e-16 ***
-[2,]  0.651693   0.017627  36.972 < 2.2e-16 ***
+[1,] -1.303386   0.046264 -28.173 < 2.2e-16 ***
+[2,]  0.651693   0.031580  20.636 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+12  outer iterations, barrier value 3.498733e-19 
 --------------------------------------------
 > ## bfgs, no analytic gradient
 > a <- maxLik(logLikMix2, 
@@ -1162,10 +1204,14 @@ Log-Likelihood: -3608.806
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303387   0.036163 -36.042 < 2.2e-16 ***
-[2,]  0.651694   0.018082  36.042 < 2.2e-16 ***
+[1,] -1.303387   0.045794 -28.462 < 2.2e-16 ***
+[2,]  0.651694   0.035372  18.424 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+12  outer iterations, barrier value 5.361752e-18 
 --------------------------------------------
 > ## bfgs, analytic gradient
 > a <- maxLik(logLikMix2, 
@@ -1310,10 +1356,14 @@ Log-Likelihood: -3608.806
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303387   0.036163 -36.042 < 2.2e-16 ***
-[2,]  0.651694   0.018082  36.042 < 2.2e-16 ***
+[1,] -1.303387   0.045794 -28.462 < 2.2e-16 ***
+[2,]  0.651694   0.035372  18.424 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+12  outer iterations, barrier value 5.361752e-18 
 --------------------------------------------
 > ## SANN, analytic gradient
 > a <- maxLik(logLikMix2, gradLikMix2,
@@ -1347,10 +1397,14 @@ Log-Likelihood: -3608.847
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.308910   0.036118 -36.239 < 2.2e-16 ***
-[2,]  0.654485   0.018059  36.241 < 2.2e-16 ***
+[1,] -1.308910   0.045850 -28.548 < 2.2e-16 ***
+[2,]  0.654485   0.035381  18.498 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+8  outer iterations, barrier value 3.638229e-09 
 --------------------------------------------
 > ## NM, numeric
 > a <- maxLik(logLikMix2, 
@@ -1397,11 +1451,15 @@ Return code 0: successful convergence
 Log-Likelihood: -3608.806 
 2  free parameters
 Estimates:
-     Estimate Std. error t value   Pr(> t)    
-[1,]  -1.3034     0.0000       0 < 2.2e-16 ***
-[2,]   0.6517     0.0000       0 < 2.2e-16 ***
+      Estimate Std. error t value   Pr(> t)    
+[1,] -1.303408   0.045790 -28.465 < 2.2e-16 ***
+[2,]  0.651704   0.035369  18.426 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+15  outer iterations, barrier value 6.644046e-20 
 --------------------------------------------
 > ## ----------- inequality -------------
 > A <- matrix(c(-1, 0,
@@ -1440,6 +1498,10 @@ Estimates:
 [2,]  1.010784   0.039954  25.299 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -5.775006e-05 
 --------------------------------------------
 > ##
 > a <- maxLik(logLikMix2, 
@@ -1473,6 +1535,10 @@ Estimates:
 [2,]  1.010784   0.039961  25.294 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -5.775006e-05 
 --------------------------------------------
 > ##
 > a <- maxLik(logLikMix2, gradLikMix2,
@@ -1523,5 +1589,9 @@ Estimates:
 [2,]  1.010351   0.039949  25.291 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -5.775265e-05 
 --------------------------------------------
 > 

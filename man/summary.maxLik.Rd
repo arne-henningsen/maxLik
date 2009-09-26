@@ -37,6 +37,10 @@
     corresponding probabilities.}
   \item{activePar}{logical vector, which parameters are treated as free.}
   \item{NActivePar}{number of free parameters.}
+  \item{constraints}{information about the constrained optimization.
+    Passed directly further from \code{maxim}-object.  \code{NULL} if
+    unconstrained maximization.
+  }
 }
 \author{Ott Toomet \email{otoomet@ut.ee}}
 \seealso{\code{\link{maxLik}}}

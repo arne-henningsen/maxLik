@@ -37,6 +37,14 @@ constraints=NULL, ...)
   }
   \item{\dots}{further arguments for the maximisation routine.}
 }
+\details{
+  \code{maxLik} "support" constrained optimization in the sense that
+  constraints are passed further to the underlying optimization
+  routines, and suitable default method is selected.  However, no
+  attempt is made to correct the resulting variance-covariance matrix.
+  Hence, the inference may be wrong.  A corresponding warning is issued
+  by the summary method.
+}
 \value{
   object of class 'maxLik' which inherits from class 'maxim'.
   Components are identical to those of class 'maxim',

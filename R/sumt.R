@@ -29,6 +29,9 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    hessPenalty <- function(theta) {
       2*t(A) %*% A
    }
+   func <- function(theta, ...) {
+      sum(fn(theta, ...))
+   }
    funcS <- function(theta, ...) {
       ## this wrapper makes a) single-valued function (in case of BHHH
       ## vector-valued); and b) strips the 'maxRoutine' extra arguments
@@ -39,16 +42,72 @@ sumt <- function(fn, grad=NULL, hess=NULL,
       f1 <- eval(f, sys.frame(sys.parent()))
       sum(f1)
    }
+   gradient <- function(theta, ...) {
+      if(!is.null(grad)) {
+         g <- grad(theta, ...)
+         if(!is.null(dim(g))) {
+            if(nrow(g) > 1) {
+               g <- colSums( g )
+            }
+         }
+         names( g ) <- names( start )
+         return( g )
+      }
+      g <- numericGradient(func, theta, ...)
+      if(!is.null(dim(g))) {
+         return(colSums(g))
+      } else {
+         return(g)
+      }
+   }
+   gradientS <- function(theta, ...) {
+      g <- match.call()
+      g[names(formals(maxRoutine))] <- NULL
+      if(!is.null(grad)) {
+         g[[1]] <- as.name("grad")
+         names(g)[2] <- ""
+         g <- eval(g, sys.frame(sys.parent()))
+         if(!is.null(dim(g))) {
+            if(nrow(g) > 1) {
+               g <- colSums( g )
+            }
+         }
+         names( g ) <- names( start )
+         return( g )
+      }
+      g[[1]] <- as.name("numericGradient")
+      names(g)[2] <- "t0"
+      g$f <- func
+      g <- eval(g, sys.frame(sys.parent()))
+      if(!is.null(dim(g))) {
+         return(colSums(g))
+      } else {
+         return(g)
+      }
+   }
+   hessianS <- function(theta, ...) {
+      ## just used for computing the final hessian, eventually using the
+      ## supplied analytic information
+      h <- match.call()
+      h[names(formals(maxRoutine))] <- NULL
+      if(!is.null(hess)) {
+         h[[1]] <- as.name("hess")
+         names(h)[2] <- ""
+         h <- eval(h, sys.frame(sys.parent()))
+      } else {
+         h[[1]] <- as.name("numericHessian")
+         names(h)[2] <- "t0"
+         h$f <- func
+         h$grad <- gradient
+         h <- eval(h, sys.frame(sys.parent()))
+      }
+      rownames( h ) <- colnames( h ) <- names( start )
+      return( h )
+   }
+   ## the penalized objective function
    Phi <- function(theta, ...) {
-      f <- match.call()
-      f[names(formals(maxRoutine))] <- NULL
-      f[[1]] <- as.name("fn")
-      names(f)[2] <- ""
-      f <- eval(f)
-      if(length(f) > 1)
-          f <- sum(f)
-      f - rho * penalty(theta)
-    }
+      funcS(theta, ...) - rho * penalty(theta)
+   }
    if(!is.null(grad)) {
       gradPhi<- function(theta, ...) {
          g <- grad(theta, ...)
@@ -102,7 +161,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    ## <TODO>
    ## Better upper/lower bounds for rho?
    if(is.null(SUMTRho0))
-       rho <- max(funcS(start, ...), 1e-4)/max(penalty(start), 1e-4)
+       rho <- max(funcS(start, ...), 1e-3)/max(penalty(start), 1e-3)
    else
        rho <- SUMTRho0
    ## </TODO>
@@ -131,5 +190,13 @@ sumt <- function(fn, grad=NULL, hess=NULL,
       iter <- iter + 1L
       rho <- SUMTQ * rho
    }
+   ## Now we replace the resulting gradient and Hessian with those,
+   ## calculated on the original function
+   result$gradient <- gradientS(theta, ...)
+   result$hessian <- hessianS(theta, ...)
+   result$constraints <- list(type="SUMT",
+                             barrier.value=penalty(theta),
+                             outer.iterations=iter
+                             )
    return(result)
 }

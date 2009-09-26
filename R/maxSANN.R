@@ -104,6 +104,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    if(is.null(constraints)) {
       result <- optim(start, func, control=control, method="SANN",
                       hessian=FALSE, ...)
+      resultConstraints <- NULL
    }
    else {
       if(identical(names(constraints), c("ineqA", "ineqB"))) {
@@ -112,6 +113,10 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
          result <- constrOptim(theta=start, f=func, grad=gradient,
                           ui=ui, ci=ci, control=control,
                           method="SANN", ...)
+         resultConstraints <- list(type="constrOptim",
+                                   barrier.value=result$barrier.value,
+                                   outer.iterations=result$outer.iterations
+                                   )
       }
       else if(identical(names(constraints), c("eqA", "eqB"))) {
                            # equality constraints: A %*% beta + B = 0
@@ -141,7 +146,9 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
                    last.step=NULL,
                    activePar = rep( TRUE, length ( result$par ) ),
                    iterations=result$counts[1],
-                   type=maximType)
+                   type=maximType,
+                  constraints=resultConstraints
+                  )
    class(result) <- "maxim"
    invisible(result)
 }

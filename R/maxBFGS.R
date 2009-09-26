@@ -128,6 +128,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
        result <- optim(start, func, gr=gradient, control=control,
                        method="BFGS",
                        ...)
+       resultConstraints <- NULL
     }
    else {
       ## linear equality and inequality constraints
@@ -138,6 +139,10 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
          result <- constrOptim(theta=start, f=func, grad=gradient,
                           ui=ui, ci=ci, control=control,
                           method="BFGS", ...)
+         resultConstraints <- list(type="constrOptim",
+                                   barrier.value=result$barrier.value,
+                                   outer.iterations=result$outer.iterations
+                                   )
       }
       else if(identical(names(constraints), c("eqA", "eqB"))) {
                            # equality constraints: A %*% beta + B = 0
@@ -179,7 +184,9 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
                    last.step=NULL,
                    activePar = rep( TRUE, length ( result$par ) ),
                    iterations=result$counts,
-                   type=maximType)
+                   type=maximType,
+                  constraints=resultConstraints
+                  )
    class(result) <- "maxim"
    invisible(result)
 }

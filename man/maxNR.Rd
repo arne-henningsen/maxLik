@@ -130,10 +130,18 @@ the previous one (maximization is not performed in that step).
   \item{activePar}{logical vector, which parameters are not constants.}
   \item{iterations}{number of iterations.}
   \item{type}{character string, type of maximization.}
+  \item{constraints}{A list, describing the constrained optimization
+    (\code{NULL} if unconstrained).  Includes the following components:
+    \itemize{
+      \item{type}{type of constrained optimization}
+      \item{outer.iterations}{number of iterations in the constraints step}
+      \item{barrier.value}{value of the barrier function}
+    }
+  }
 }
 \references{Greene,  W., 2002, \emph{Advanced Econometrics}
-
-  Goldfeld, S. M. and Quandt, R. E., 1972, \emph{Nonlinear Methods in Econometrics}.  Amsterdam: North-Holland}
+  Goldfeld, S. M. and Quandt, R. E., 1972,
+  \emph{Nonlinear Methods in Econometrics}.  Amsterdam: North-Holland}
 \author{Ott Toomet \email{otoomet@ut.ee}}
 \seealso{\code{\link{nlm}} for Newton-Raphson optimization,
   \code{\link{optim}} for different gradient-based optimization
@@ -167,5 +175,20 @@ x <- rnorm(1000, 1, 2) # use mean=1, stdd=2
 N <- length(x)
 res <- maxNR(loglik, start=c(0,1)) # use 'wrong' start values
 summary(res)
+###
+### Now an example of constrained optimization
+###
+## We maximize exp(-x^2 - y^2) where x+y = 1
+f <- function(theta) {
+  x <- theta[1]
+  y <- theta[2]
+  exp(-(x^2 + y^2))
+  ## Note: you may want to use exp(- theta \%*\% theta) instead ;-)
+}
+## use constraints: x + y = 1
+A <- matrix(c(1, 1), 1, 2)
+B <- -1
+res <- maxNR(f, start=c(0,0), constraints=list(eqA=A, eqB=B), print.level=1)
+print(summary(res))
 }
 \keyword{optimize}

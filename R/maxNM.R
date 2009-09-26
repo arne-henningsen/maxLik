@@ -125,9 +125,11 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
    ## We can the return from 'optim' in a object of class 'maxim'.
    ## However, as 'sumt' already returns such an object, we return the
    ## result of 'sumt' directly, without the canning
-   if(is.null(constraints))
-       result <- optim(start, func, control=control,
-                       method="Nelder-Mead", hessian=FALSE, ...)
+   if(is.null(constraints)) {
+      result <- optim(start, func, control=control,
+                      method="Nelder-Mead", hessian=FALSE, ...)
+      resultConstraints <- NULL
+   }
    else {
       if(identical(names(constraints), c("ineqA", "ineqB"))) {
          ui <- constraints$ineqA
@@ -135,6 +137,10 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
          result <- constrOptim(theta=start, f=func, grad=gradient,
                           ui=ui, ci=ci, control=control,
                           method="Nelder-Mead", ...)
+         resultConstraints <- list(type="constrOptim",
+                                   barrier.value=result$barrier.value,
+                                   outer.iterations=result$outer.iterations
+                                   )
       }
       else if(identical(names(constraints), c("eqA", "eqB"))) {
                            # equality constraints: A %*% beta + B = 0
@@ -164,7 +170,9 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
                   last.step=NULL,
                   activePar = rep( TRUE, length ( result$par ) ),
                   iterations=result$counts[1],
-                  type=maximType)
+                  type=maximType,
+                  constraints=resultConstraints
+                  )
    class(result) <- "maxim"
    invisible(result)
 }

@@ -86,6 +86,14 @@ tol = 1e-08, reltol=tol, parscale = rep(1, length = length(start)), alpha = 1, b
     compute the Hessian, if requested, and any calls to \code{fn} to compute a
     finite-difference approximation to the gradient.}
   \item{type}{character string "BFGS maximisation".}
+  \item{constraints}{A list, describing the constrained optimization
+    (\code{NULL} if unconstrained).  Includes the following components:
+    \itemize{
+      \item{type}{type of constrained optimization}
+      \item{outer.iterations}{number of iterations in the constraints step}
+      \item{barrier.value}{value of the barrier function}
+    }
+  }
 }
 \author{Ott Toomet \email{otoomet@ut.ee}}
 
@@ -99,5 +107,20 @@ loglik <- function(l) n*log(l) - l - lfactorial(n)
 summary(maxBFGS(loglik, start=1))
 # you would probably prefer mean(n) instead of that ;-)
 # Note also that maxLik is better suited for Maximum Likelihood
+###
+### Now an example of constrained optimization
+###
+f <- function(theta) {
+  x <- theta[1]
+  y <- theta[2]
+  exp(-(x^2 + y^2))
+  ## Note: you may want to use exp(- theta \%*\% theta) instead ;-)
+}
+## use constraints: x + y >= 1
+A <- matrix(c(1, 1), 1, 2)
+B <- -1
+res <- maxNM(f, start=c(1,1), constraints=list(ineqA=A, ineqB=B),
+print.level=1)
+print(summary(res))
 }
 \keyword{optimize}
