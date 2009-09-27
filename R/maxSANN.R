@@ -110,7 +110,8 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
       if(identical(names(constraints), c("ineqA", "ineqB"))) {
          ui <- constraints$ineqA
          ci <- -constraints$ineqB
-         result <- constrOptim(theta=start, f=func, grad=gradient,
+         result <- constrOptim(theta=start, f=func,
+                               # Note that gradient has different meaning for SANN!
                           ui=ui, ci=ci, control=control,
                           method="SANN", ...)
          resultConstraints <- list(type="constrOptim",
