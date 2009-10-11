@@ -283,6 +283,7 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
                                              "new gradient", "active"))
          print(a)
          if( print.level > 3) {
+            cat("Hessian\n")
             print( H1)
          }
          if(!any(is.na(H1[activePar, activePar]))) {
