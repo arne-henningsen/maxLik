@@ -48,6 +48,8 @@ print( ml )
 summary(ml) # result should be close to c(0,1)
 hessian(ml) # How the Hessian looks like
 sqrt(-solve(hessian(ml))) # Note: standard deviations are on the diagonal
+print(std(ml))
+                           # test vector of std-s
 #
 # Now run the same example while fixing a[2] = 1
 mlf <- maxLik(ll, start=c(1,1), activePar=c(TRUE, FALSE))
@@ -58,6 +60,8 @@ hessian(mlf)
 # now invert only the free parameter part of the Hessian
 sqrt(-solve(hessian(mlf)[activePar(mlf), activePar(mlf)]))
 # gives the standard deviation for the mean
+print(std(mlf))
+                           # test standard errors with fixed par
 
 
 ### logLik.maxLik
@@ -258,7 +262,6 @@ result2 <- maxNR( f, start = c( 1000000, -777777))
 print( result2 )
 summary( result2 )
 
-
 ### vcov.maxLik
 set.seed( 17 )
 ## ML estimation of exponential duration model:
@@ -276,3 +279,5 @@ a <- maxLik(loglik, gradlik, hesslik, start=1)
 print.default( a )
 print( a )
 vcov(a)
+print(std(a))
+                           # test single std

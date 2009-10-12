@@ -1,5 +1,5 @@
 
-R version 2.9.1 (2009-06-26)
+R version 2.9.2 (2009-08-24)
 Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
@@ -188,11 +188,11 @@ $estimate
 [1] 0.006396535 0.997576255
 
 $gradient
-[1] 0 0
+[1] 5.684342e-08 0.000000e+00
 
 $hessian
           [,1]      [,2]
-[1,] -1004.878     0.000
+[1,] -1004.821     0.000
 [2,]     0.000 -2009.756
 
 $code
@@ -230,19 +230,22 @@ Log-Likelihood: -497.5733
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-[1,] 0.0063965  0.0315459  0.2028  0.8393    
+[1,] 0.0063965  0.0315468  0.2028  0.8393    
 [2,] 0.9975763  0.0223063 44.7216  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > hessian(ml) # How the Hessian looks like
           [,1]      [,2]
-[1,] -1004.878     0.000
+[1,] -1004.821     0.000
 [2,]     0.000 -2009.756
 > sqrt(-solve(hessian(ml))) # Note: standard deviations are on the diagonal
            [,1]       [,2]
-[1,] 0.03154593 0.00000000
+[1,] 0.03154682 0.00000000
 [2,] 0.00000000 0.02230634
+> print(std(ml))
+[1] 0.03154682 0.02230634
+>                            # test vector of std-s
 > #
 > # Now run the same example while fixing a[2] = 1
 > mlf <- maxLik(ll, start=c(1,1), activePar=c(TRUE, FALSE))
@@ -310,6 +313,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
            [,1]
 [1,] 0.03162294
 > # gives the standard deviation for the mean
+> print(std(mlf))
+[1] 0.03162294 0.00000000
+>                            # test standard errors with fixed par
 > 
 > 
 > ### logLik.maxLik
@@ -385,11 +391,11 @@ $estimate
 [1] 3.189999
 
 $gradient
-[1] 1.584377e-05
+[1] 1.585931e-05
 
 $hessian
-         [,1]
-[1,] -31.2923
+          [,1]
+[1,] -31.37757
 
 $code
 [1] 0
@@ -405,23 +411,26 @@ $activePar
 
 $iterations
 function gradient 
-      23        6 
+      29        6 
 
 $type
 [1] "BFGS maximisation"
+
+$constraints
+NULL
 
 attr(,"class")
 [1] "maxim"
 > summary( a )
 --------------------------------------------
 BFGS maximisation 
-Number of iterations: 23 6 
+Number of iterations: 29 6 
 Return code: 0 
 successful convergence  
 Function value: -199.2063 
 Estimates:
      estimate     gradient
-[1,] 3.189999 1.584377e-05
+[1,] 3.189999 1.585931e-05
 --------------------------------------------
 > # you would probably prefer mean(n) instead of that ;-)
 > # Note also that maxLik is better suited for Maximum Likelihood
@@ -460,7 +469,7 @@ $estimate
 [1] 2.197878
 
 $gradient
-[1] -4.77513e-05
+[1] -4.774259e-05
 
 $hessian
           [,1]
@@ -495,8 +504,8 @@ successive function values within tolerance limit.
 May be a solution 
 Function value: -21.25086 
 Estimates:
-     estimate     gradient
-[1,] 2.197878 -4.77513e-05
+     estimate      gradient
+[1,] 2.197878 -4.774259e-05
 --------------------------------------------
 > ## Estimate with analytic gradient
 > a <- maxBHHH(loglik, gradlik, start=1)
@@ -580,11 +589,11 @@ $estimate
 [1] 2.09534
 
 $gradient
-[1] -3.859135e-07
+[1] 1.527667e-07
 
 $hessian
           [,1]
-[1,] -22.79255
+[1,] -22.77289
 
 $code
 [1] 1
@@ -621,7 +630,7 @@ Log-Likelihood: -26.02842
 1  free parameters
 Estimates:
      Estimate Std. error t value   Pr(> t)    
-[1,]  2.09534    0.20946  10.004 < 2.2e-16 ***
+[1,]  2.09534    0.20955  9.9992 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -890,6 +899,9 @@ function gradient
 
 $type
 [1] "BFGS maximisation"
+
+$constraints
+NULL
 
 attr(,"class")
 [1] "maxim"
@@ -1186,11 +1198,11 @@ $estimate
 [1] 2.406109
 
 $gradient
-[1] 6.000755e-08
+[1] -4.192202e-07
 
 $hessian
           [,1]
-[1,] -17.26719
+[1,] -17.27685
 
 $code
 [1] 1
@@ -1227,7 +1239,7 @@ Log-Likelihood: -12.19890
 1  free parameters
 Estimates:
      Estimate Std. error t value   Pr(> t)    
-[1,]  2.40611    0.24065  9.9983 < 2.2e-16 ***
+[1,]  2.40611    0.24058  10.001 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -1409,7 +1421,6 @@ Estimates:
 [2,] -518555465277        0
 --------------------------------------------
 > 
-> 
 > ### vcov.maxLik
 > set.seed( 17 )
 > ## ML estimation of exponential duration model:
@@ -1442,11 +1453,11 @@ $estimate
 [1] 1.863363
 
 $gradient
-[1] -2.364775e-08
+[1] 2.842171e-08
 
 $hessian
-          [,1]
-[1,] -28.81240
+         [,1]
+[1,] -28.8054
 
 $code
 [1] 1
@@ -1476,7 +1487,7 @@ Log-Likelihood: -37.76171 (1 free parameter(s))
 Estimate(s): 1.863363 
 > vcov(a)
            [,1]
-[1,] 0.03470728
+[1,] 0.03471571
 > ## Estimate with analytic gradient and hessian
 > a <- maxLik(loglik, gradlik, hesslik, start=1)
 > print.default( a )
@@ -1522,4 +1533,7 @@ Estimate(s): 1.863363
 > vcov(a)
            [,1]
 [1,] 0.03472122
+> print(std(a))
+[1] 0.1863363
+>                            # test single std
 > 
