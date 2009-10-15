@@ -188,11 +188,11 @@ $estimate
 [1] 0.006396535 0.997576255
 
 $gradient
-[1] 5.684342e-08 0.000000e+00
+[1] 0 0
 
 $hessian
           [,1]      [,2]
-[1,] -1004.821     0.000
+[1,] -1004.878     0.000
 [2,]     0.000 -2009.756
 
 $code
@@ -230,21 +230,21 @@ Log-Likelihood: -497.5733
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-[1,] 0.0063965  0.0315468  0.2028  0.8393    
+[1,] 0.0063965  0.0315459  0.2028  0.8393    
 [2,] 0.9975763  0.0223063 44.7216  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > hessian(ml) # How the Hessian looks like
           [,1]      [,2]
-[1,] -1004.821     0.000
+[1,] -1004.878     0.000
 [2,]     0.000 -2009.756
 > sqrt(-solve(hessian(ml))) # Note: standard deviations are on the diagonal
            [,1]       [,2]
-[1,] 0.03154682 0.00000000
+[1,] 0.03154593 0.00000000
 [2,] 0.00000000 0.02230634
 > print(std(ml))
-[1] 0.03154682 0.02230634
+[1] 0.03154593 0.02230634
 >                            # test vector of std-s
 > #
 > # Now run the same example while fixing a[2] = 1
@@ -469,7 +469,7 @@ $estimate
 [1] 2.197878
 
 $gradient
-[1] -4.774259e-05
+[1] -4.77513e-05
 
 $hessian
           [,1]
@@ -504,8 +504,8 @@ successive function values within tolerance limit.
 May be a solution 
 Function value: -21.25086 
 Estimates:
-     estimate      gradient
-[1,] 2.197878 -4.774259e-05
+     estimate     gradient
+[1,] 2.197878 -4.77513e-05
 --------------------------------------------
 > ## Estimate with analytic gradient
 > a <- maxBHHH(loglik, gradlik, start=1)
