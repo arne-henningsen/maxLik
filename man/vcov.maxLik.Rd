@@ -22,7 +22,10 @@
    \item{\dots}{further arguments (currently ignored).}
 }
 \value{
-   the estimated variance covariance matrix of the coefficients.
+   the estimated variance covariance matrix of the coefficients.  In
+   case of the estimated Hessian is singular, it's values are
+     \code{Inf}.  The values corresponding to fixed parameters are
+     \code{NA}. 
 }
 \author{
    Arne Henningsen,

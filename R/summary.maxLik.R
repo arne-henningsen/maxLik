@@ -42,31 +42,13 @@ summary.maxLik <- function(object, eigentol=1e-12,... ) {
       activePar <- rep(TRUE, nParam)
    }
    if(object$code < 100) {
-     hess <- hessian(object)[activePar, activePar] 
-     hessev <- abs(eigen(hess, symmetric=TRUE, only.values=TRUE)$values)
-     if(min(hessev) > (eigentol*max(hessev))){      
-#    if(min(abs(eigen(hessian(object)[activePar,activePar],
-#             symmetric=TRUE, only.values=TRUE)$values)) > eigentol) {
-       varcovar <- matrix(0, nParam, nParam)
-       varcovar[activePar,activePar] <-
-         solve(-hessian(object)[activePar,activePar])
-       hdiag <- diag(varcovar)
-       if(any(hdiag < 0)) {
-         warning("Diagonal of variance-covariance matrix not positive!\n")
-       }
-       stdd <- sqrt(hdiag)
-       t <- coef/stdd
+       t <- coef(object)/stdEr(object)
        p <- 2*pnorm( -abs( t))
-     } else {
-       stdd <- 0
-       t <- 0
-       p <- 0
-     }
-     results <- cbind("Estimate"=coef, "Std. error"=stdd, "t value"=t, "Pr(> t)"=p)
-     Hess <- NULL
+       results <- cbind("Estimate"=coef(object),
+                        "Std. error"=stdEr(object),
+                        "t value"=t, "Pr(> t)"=p)
    } else {
      results <- NULL
-     Hess <- NULL
    }
    summary <- list(maximType=object$type,
                    iterations=object$iterations,
@@ -74,7 +56,6 @@ summary.maxLik <- function(object, eigentol=1e-12,... ) {
                    returnMessage=object$message,
                    loglik=object$maximum,
                    estimate=results,
-                   hessian=Hess,
                    activePar=object$activePar,
                    NActivePar=sum(object$activePar),
                    constraints=object$constraints)

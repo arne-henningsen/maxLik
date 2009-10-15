@@ -82,7 +82,7 @@ returnMessage( ml )
 vcov( ml )
 logLik( summary( ml ) )
 mlInd <- maxLik( llfInd, start = startVal )
-summary( ml )
+summary( mlInd )
 all.equal( ml, mlInd )
 
 # with analytical gradients
