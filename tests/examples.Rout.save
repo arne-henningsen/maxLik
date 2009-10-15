@@ -300,7 +300,7 @@ Log-Likelihood: -497.5792
 Estimates:
       Estimate Std. error t value Pr(> t)
 [1,] 0.0063965  0.0316229  0.2023  0.8397
-[2,] 1.0000000         NA      NA      NA
+[2,] 1.0000000  0.0000000      NA      NA
 --------------------------------------------
 > hessian(mlf)
           [,1] [,2]
@@ -312,7 +312,7 @@ Estimates:
 [1,] 0.03162294
 > # gives the standard deviation for the mean
 > print(stdEr(mlf))
-[1] 0.03162294         NA
+[1] 0.03162294 0.00000000
 >                            # test standard errors with fixed par
 > 
 > 
