@@ -243,9 +243,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
            [,1]       [,2]
 [1,] 0.03154593 0.00000000
 [2,] 0.00000000 0.02230634
-> print(std(ml))
+> print(stdEr(ml))
 [1] 0.03154593 0.02230634
->                            # test vector of std-s
+>                            # test vector of stdEr-s
 > #
 > # Now run the same example while fixing a[2] = 1
 > mlf <- maxLik(ll, start=c(1,1), activePar=c(TRUE, FALSE))
@@ -313,7 +313,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
            [,1]
 [1,] 0.03162294
 > # gives the standard deviation for the mean
-> print(std(mlf))
+> print(stdEr(mlf))
 [1] 0.03162294 0.00000000
 >                            # test standard errors with fixed par
 > 
@@ -1533,7 +1533,7 @@ Estimate(s): 1.863363
 > vcov(a)
            [,1]
 [1,] 0.03472122
-> print(std(a))
+> print(stdEr(a))
 [1] 0.1863363
->                            # test single std
+>                            # test single stdEr
 > 

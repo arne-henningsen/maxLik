@@ -48,8 +48,8 @@ print( ml )
 summary(ml) # result should be close to c(0,1)
 hessian(ml) # How the Hessian looks like
 sqrt(-solve(hessian(ml))) # Note: standard deviations are on the diagonal
-print(std(ml))
-                           # test vector of std-s
+print(stdEr(ml))
+                           # test vector of stdEr-s
 #
 # Now run the same example while fixing a[2] = 1
 mlf <- maxLik(ll, start=c(1,1), activePar=c(TRUE, FALSE))
@@ -60,7 +60,7 @@ hessian(mlf)
 # now invert only the free parameter part of the Hessian
 sqrt(-solve(hessian(mlf)[activePar(mlf), activePar(mlf)]))
 # gives the standard deviation for the mean
-print(std(mlf))
+print(stdEr(mlf))
                            # test standard errors with fixed par
 
 
@@ -279,5 +279,5 @@ a <- maxLik(loglik, gradlik, hesslik, start=1)
 print.default( a )
 print( a )
 vcov(a)
-print(std(a))
-                           # test single std
+print(stdEr(a))
+                           # test single stdEr

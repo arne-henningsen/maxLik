@@ -24,7 +24,7 @@ Type 'q()' to quit R.
 > m <- lm(y ~ x)
 > print(nObs(m))
 [1] 100
-> print(std(m))
+> print(stdEr(m))
 (Intercept)           x 
   0.1942235   0.3314218 
 > 

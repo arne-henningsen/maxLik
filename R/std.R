@@ -1,10 +1,10 @@
 ### methods for extracting standard errors from the models
 
-std <- function(x, ...)
+stdEr <- function(x, ...)
     ## Extract standard deviations from models (as coefficients)
-    UseMethod("std")
+    UseMethod("stdEr")
 
-std.default <- function(x, ...) {
+stdEr.default <- function(x, ...) {
    if(!is.null(x$std))
        return(x$std)
    s <- sqrt(diag(vcov(x)))
@@ -12,6 +12,6 @@ std.default <- function(x, ...) {
    s
 }
 
-std.lm <- function(x, ...)
+stdEr.lm <- function(x, ...)
     sqrt(diag(vcov(x)))
 
