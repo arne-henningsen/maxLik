@@ -1,5 +1,6 @@
 \name{summary.maxLik}
 \alias{summary.maxLik}
+\alias{coef.summary.maxLik}
 \title{summary the Maximum-Likelihood estimation}
 \description{
   Summary the Maximum-Likelihood estimation including standard errors
@@ -7,11 +8,13 @@
 }
 \usage{
 \method{summary}{maxLik}(object, eigentol=1e-12, ... )
+\method{coef}{summary.maxLik}(object, \ldots)
 }
 
 \arguments{
   \item{object}{
-    object of class 'maxLik', most probably a result from
+    object of class 'maxLik', or 'summary.maxLik',
+    usually a result from
     Maximum-Likelihood estimation.
   }
   \item{eigentol}{
@@ -26,6 +29,7 @@
   \item{\ldots}{currently not used.}
 }
 \value{
+  \code{summary.maxLik} returns an
   object of class 'summary.maxLik' with following components:
   \item{type}{type of maximisation.}
   \item{iterations}{number of iterations.}
@@ -41,6 +45,8 @@
     Passed directly further from \code{maxim}-object.  \code{NULL} if
     unconstrained maximization.
   }
+  \code{coef.summary.maxLik} returns the matrix of estimated values,
+    standard errors, and \eqn{$t$}{t}- and \eqn{$p$}{p}-values.
 }
 \author{Ott Toomet \email{otoomet@ut.ee}}
 \seealso{\code{\link{maxLik}}}
