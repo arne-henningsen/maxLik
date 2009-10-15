@@ -44,6 +44,8 @@ summary.maxLik <- function(object, eigentol=1e-12,... ) {
    if(object$code < 100) {
        t <- coef(object)/stdEr(object)
        p <- 2*pnorm( -abs( t))
+       t[!activePar(object)] <- NA
+       p[!activePar(object)] <- NA
        results <- cbind("Estimate"=coef(object),
                         "Std. error"=stdEr(object),
                         "t value"=t, "Pr(> t)"=p)
