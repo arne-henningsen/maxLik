@@ -31,7 +31,7 @@
    Ott Toomet \email{otoomet@ut.ee}
 }
 
-\seealso{\code{\link[stat]{vcov}}, \code{\link{maxLik}}.}
+\seealso{\code{\link[stats]{vcov}}, \code{\link{maxLik}}.}
 
 \examples{
 ## ML estimation of exponential duration model:

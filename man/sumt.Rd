@@ -113,6 +113,6 @@ print.level = 0, SUMTMaxIter = 100, ...)
   Ott Toomet \email{otoomet@ut.ee}
 }
 \seealso{
-  \code{\link[pkg:clue]{sumt}}
+  \code{\link[clue]{sumt}}
 }
 \keyword{optimize}
