@@ -9,7 +9,8 @@ on R-Forge.
 
 * maxLik() can perform maximum likelihood estimations under linear equality
   and inequality constraints on the parameters now (see documentation of the
-  new argument "constraints")
+  new argument "constraints"). Please note that estimations under constraints
+  are experimental and have not been thoroughly tested yet.
 
 * a new method "stdEr" to extract standard errors of the estimates has been
   introduced
