@@ -19,6 +19,8 @@ nParam                  Number of model parameters
 numericGradient         Functions to Calculate Numeric Derivatives
 returnCode              Return code for optimisation and other objects
 returnMessage           Information about the optimisation process
+stdEr                   Standard deviations
 summary.maxim           Summary method for maximisation/minimisation
 summary.maxLik          summary the Maximum-Likelihood estimation
+sumt                    Equality-constrained optimization
 vcov.maxLik             Variance Covariance Matrix of maxLik objects
