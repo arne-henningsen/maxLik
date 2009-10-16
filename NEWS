@@ -1,0 +1,27 @@
+THIS IS THE CHANGELOG OF THE "maxLik" PACKAGE
+
+Please note that only the most significant changes are reported here.
+A full ChangeLog is available in the log messages of the SVN repository
+on R-Forge.
+
+
+            CHANGES IN VERSION 0.6-0
+
+* maxLik() can perform maximum likelihood estimations under linear equality
+  and inequality constraints on the parameters now (see documentation of the
+  new argument "constraints")
+
+* a new method "stdEr" to extract standard errors of the estimates has been
+  introduced
+
+* added a "coef" method for objects of class "summary.maxLik" that extracts
+  the matrix of the estimates, standard errors, t-values, and P-values
+
+* some minor bugs have been fixed
+
+* we did some general polishing of the returned object and under the hood
+
+
+            CHANGES IN VERSION 0.5-12 AND BEFORE
+
+* please take a look at the log messages of the SVN repository on R-Forge
