@@ -115,6 +115,4 @@ print.level = 0, SUMTMaxIter = 100, ...)
 \seealso{
   \code{\link[pkg:clue]{sumt}}
 }
-\examples{
-}
 \keyword{optimize}
