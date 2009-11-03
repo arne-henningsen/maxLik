@@ -1,5 +1,5 @@
 
-R version 2.9.2 (2009-08-24)
+R version 2.10.0 (2009-10-26)
 Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
@@ -147,13 +147,13 @@ Log-Likelihood: -201.5839
 Estimates:
       Estimate Std. error t value   Pr(> t)    
 mu     1.18081    0.18168  6.4996 8.055e-11 ***
-sigma  1.81648    0.12846 14.1400 < 2.2e-16 ***
+sigma  1.81648    0.12843 14.1433 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( ml, mlInd )
-[1] "Component 3: Mean relative difference: 1.363636"    
-[2] "Component 4: Mean relative difference: 0.0009389671"
+[1] "Component 3: Mean relative difference: 1.909091"   
+[2] "Component 4: Mean relative difference: 0.001251956"
 > 
 > # with analytical gradients
 > mlg <- maxLik( llf, gf, start = startVal )
@@ -176,8 +176,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [2] "Component 4: Mean relative difference: 0.001241030"
 > mlgInd <- maxLik( llfInd, gfInd, start = startVal )
 > all.equal( mlInd, mlgInd )
-[1] "Component 3: Mean relative difference: 1.066292"    
-[2] "Component 4: Mean relative difference: 0.0003017794"
+[1] "Component 3: Mean relative difference: 1.020209"    
+[2] "Component 4: Mean relative difference: 0.0002120359"
 > all.equal( mlg, mlgInd )
 [1] TRUE
 > 
@@ -263,8 +263,8 @@ sigma -0.001087693  0.017978643
 > logLik( summary( mlBHHH ) )
 [1] -201.5839
 > all.equal( ml, mlBHHH )
-[1] "Component 2: Mean relative difference: 2.510401e-07"
-[2] "Component 3: Mean relative difference: 59.37109"    
+[1] "Component 2: Mean relative difference: 2.510892e-07"
+[2] "Component 3: Mean relative difference: 59.40732"    
 [3] "Component 4: Mean relative difference: 0.09434553"  
 [4] "Component 5: Mean relative difference: 1"           
 [5] "Component 6: 1 string mismatch"                     
@@ -332,7 +332,7 @@ sigma  1.81648    0.13408 13.5473 < 2.2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlBHHH, mlgBHHH )
-[1] "Component 3: Mean relative difference: 0.0002034056"
+[1] "Component 3: Mean relative difference: 0.000897275"
 > all.equal( mlg, mlgBHHH )
 [1] "Component 2: Mean relative difference: 2.533978e-07"
 [2] "Component 3: Mean absolute difference: 1.880678e-05"
@@ -469,7 +469,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] "Length mismatch: comparison on first 10 components" 
 [2] "Component 2: Mean relative difference: 6.483767e-07"
 [3] "Component 3: Mean absolute difference: 4.02496e-05" 
-[4] "Component 4: Mean relative difference: 2.472789e-06"
+[4] "Component 4: Mean relative difference: 2.472879e-06"
 [5] "Component 5: Mean relative difference: 1"           
 [6] "Component 6: 1 string mismatch"                     
 [7] "Component 9: names for current but not for target"  
