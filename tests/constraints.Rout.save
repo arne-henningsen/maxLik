@@ -384,47 +384,45 @@ iter   4 value 3740.857495
 iter   5 value 3739.836050
 iter   6 value 3739.669310
 iter   7 value 3739.505188
-iter   8 value 3739.342555
+iter   8 value 3739.342554
 iter   9 value 3739.271535
-iter  10 value 3674.196024
-iter  11 value 3671.068785
-iter  12 value 3626.165158
-iter  13 value 3589.950284
-iter  14 value 3552.974227
-iter  15 value 3551.811736
-iter  16 value 3551.806160
-iter  17 value 3551.796633
-iter  18 value 3551.796386
-iter  19 value 3551.782447
-iter  20 value 3551.776233
-iter  21 value 3551.776077
-iter  22 value 3551.775692
-iter  23 value 3551.774627
-iter  24 value 3551.773671
-iter  25 value 3551.773533
-iter  26 value 3551.773478
-iter  26 value 3551.773453
-iter  26 value 3551.773443
-final  value 3551.773443 
+iter  10 value 3674.195391
+iter  11 value 3671.068131
+iter  12 value 3626.157704
+iter  13 value 3589.946385
+iter  14 value 3552.974009
+iter  15 value 3551.811720
+iter  16 value 3551.806145
+iter  17 value 3551.796622
+iter  18 value 3551.796375
+iter  19 value 3551.782439
+iter  20 value 3551.776228
+iter  21 value 3551.776073
+iter  22 value 3551.775690
+iter  23 value 3551.774437
+iter  24 value 3551.773439
+iter  24 value 3551.773426
+iter  24 value 3551.773425
+final  value 3551.773425 
 converged
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 13226 iterations
+BFGS maximisation, 12624 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -3551.773 
 3  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,]  0.499995   0.025608  19.525 < 2.2e-16 ***
-[2,] -1.035868   0.058098 -17.830 < 2.2e-16 ***
-[3,]  1.011101   0.058382  17.319 < 2.2e-16 ***
+[1,]  0.499998   0.025610  19.524 < 2.2e-16 ***
+[2,] -1.036024   0.058110 -17.829 < 2.2e-16 ***
+[3,]  1.011119   0.058354  17.327 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on constrOptim 
-1  outer iterations, barrier value -7.259354e-05 
+1  outer iterations, barrier value -8.08173e-05 
 --------------------------------------------
 > ## ----
 > cat("Test for equality constraints\n")
@@ -1452,7 +1450,7 @@ Log-Likelihood: -3608.806
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303408   0.045790 -28.465 < 2.2e-16 ***
+[1,] -1.303408   0.045768 -28.479 < 2.2e-16 ***
 [2,]  0.651704   0.035369  18.426 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
