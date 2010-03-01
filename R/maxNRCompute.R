@@ -6,6 +6,7 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
                   qrtol=1e-10,
                   iterlim=150,
                   activePar=rep(TRUE, nParam),
+                         fixedPar=NULL,
                   ...) {
    ## Newton-Raphson maximisation
    ## Parameters:
@@ -31,6 +32,7 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
    ## activePar   - an index vector -- which parameters are taken as
    ##               variable (free).  Other paramters are treated as
    ##               fixed constants
+   ## fixedPar      index vector, which parameters to keep fixed
    ##
    ## RESULTS:
    ## a list of class "maxim":
@@ -56,7 +58,7 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
 
    argNames <- c( "fn", "grad", "hess", "start", "print.level",
       "tol", "reltol", "gradtol", "steptol", "lambdatol", "qrtol",
-      "iterlim", "activePar" )
+      "iterlim", "activePar", "fixedPar" )
    checkFuncArgs( fn, argNames, "fn", "maxNR" )
    if( !is.null( grad ) ) {
       checkFuncArgs( grad, argNames, "grad", "maxNR" )
@@ -109,7 +111,18 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
    maxim.type <- "Newton-Raphson maximisation"
    nimed <- names(start)
    nParam <- length(start)
-   if(is.numeric(activePar)) {
+   ## establish the active parameters.  Internally, we just use 'activePar'
+   if(!is.null(fixedPar)) {
+      if(!is.null(activePar)) {
+         if(!all(activePar)) {
+            warning("Both 'activePar' and 'fixedPar' specified.  'activePar' ignored")
+         }
+      }
+      activePar <- rep(TRUE, length(start))
+      names(activePar) <- names(start)
+      activePar[fixedPar] <- FALSE
+   }
+   else if(is.numeric(activePar)) {
       a <- rep(FALSE, nParam)
       a[activePar] <- TRUE
       activePar <- a

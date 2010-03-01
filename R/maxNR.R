@@ -6,6 +6,7 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
                   iterlim=150,
                   constraints=NULL,
                   activePar=rep(TRUE, length(start)),
+                  fixedPar=NULL,
                   ...) {
    ## Newton-Raphson maximisation
    ## Parameters:
@@ -31,6 +32,7 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
    ## activePar   - an index vector -- which parameters are taken as
    ##               variable (free).  Other paramters are treated as
    ##               fixed constants
+   ## fixedPar      index vector, which parameters to keep fixed
    ##
    ## RESULTS:
    ## a list of class "maxim":
@@ -56,7 +58,7 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
 
    argNames <- c( "fn", "grad", "hess", "start", "print.level",
       "tol", "reltol", "gradtol", "steptol", "lambdatol", "qrtol",
-      "iterlim", "activePar" )
+      "iterlim", "activePar", "fixedPar" )
    checkFuncArgs( fn, argNames, "fn", "maxNR" )
    if( !is.null( grad ) ) {
       checkFuncArgs( grad, argNames, "grad", "maxNR" )
@@ -75,6 +77,7 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
                               qrtol=qrtol,
                               iterlim=iterlim,
                               activePar=activePar,
+                              fixedPar=fixedPar,
                               ...)
     }
    else {
@@ -94,6 +97,7 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
                         qrtol=qrtol,
                         iterlim=iterlim,
                         activePar=activePar,
+                        fixedPar=fixedPar,
                         ...) 
       }
       else {

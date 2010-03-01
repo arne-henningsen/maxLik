@@ -10,7 +10,8 @@ maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
       steptol = 1e-10, lambdatol = 1e-06, qrtol = 1e-10,
       iterlim = 150,
       constraints=NULL,
-      activePar=rep(TRUE, length(start)), ...)
+      activePar=rep(TRUE, length(start)),
+      fixedPar=NULL, ...)
 }
 \arguments{
   \item{fn}{function to be maximized.  It must return either a single
@@ -64,6 +65,7 @@ maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
   }
   \item{activePar}{index vector, which parameters are treated as free.
     Other parameters are treated as fixed constants.}
+  \item{fixedPar}{index vector, which parameters to keep fixed}
   \item{\dots}{further arguments to \code{fn}, \code{grad} and
     \code{hess}.}
 }
