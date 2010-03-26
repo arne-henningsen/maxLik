@@ -1,5 +1,5 @@
 
-R version 2.10.0 (2009-10-26)
+R version 2.10.1 (2009-12-14)
 Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
@@ -85,20 +85,20 @@ Type 'q()' to quit R.
 > print( ml )
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
-Return code 1: gradient close to zero. May be a solution
+Return code 1: gradient close to zero
 Log-Likelihood: -201.5839 (2 free parameter(s))
 Estimate(s): 1.180812 1.816481 
 > summary( ml )
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
-Return code 1: gradient close to zero. May be a solution
+Return code 1: gradient close to zero
 Log-Likelihood: -201.5839 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     1.18081    0.18185  6.4935 8.388e-11 ***
-sigma  1.81648    0.12849 14.1367 < 2.2e-16 ***
+mu     1.18081    0.18176  6.4965  8.22e-11 ***
+sigma  1.81648    0.12846 14.1400 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -111,11 +111,11 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 1.180812 1.816481 
 > condiNumber( ml )
 mu 	 1 
-sigma 	 1.668860 
+sigma 	 1.668128 
 > hessian( ml )
-            mu     sigma
-mu    -30.2407   0.00000
-sigma   0.0000 -60.56666
+             mu     sigma
+mu    -30.26912   0.00000
+sigma   0.00000 -60.59508
 > logLik( ml )
 [1] -201.5839
 > maximType( ml )
@@ -129,11 +129,11 @@ NULL
 > returnCode( ml )
 [1] 1
 > returnMessage( ml )
-[1] "gradient close to zero. May be a solution"
+[1] "gradient close to zero"
 > vcov( ml )
               mu      sigma
-mu    0.03306802 0.00000000
-sigma 0.00000000 0.01651073
+mu    0.03303697 0.00000000
+sigma 0.00000000 0.01650299
 > logLik( summary( ml ) )
 [1] -201.5839
 > mlInd <- maxLik( llfInd, start = startVal )
@@ -141,19 +141,19 @@ sigma 0.00000000 0.01651073
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
-Return code 1: gradient close to zero. May be a solution
+Return code 1: gradient close to zero
 Log-Likelihood: -201.5839 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
 mu     1.18081    0.18168  6.4996 8.055e-11 ***
-sigma  1.81648    0.12843 14.1433 < 2.2e-16 ***
+sigma  1.81648    0.12840 14.1466 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( ml, mlInd )
-[1] "Component 3: Mean relative difference: 1.909091"   
-[2] "Component 4: Mean relative difference: 0.001251956"
+[1] "Component 3: Mean relative difference: 0.3571429"  
+[2] "Component 4: Mean relative difference: 0.001563966"
 > 
 > # with analytical gradients
 > mlg <- maxLik( llf, gf, start = startVal )
@@ -161,7 +161,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
-Return code 1: gradient close to zero. May be a solution
+Return code 1: gradient close to zero
 Log-Likelihood: -201.5839 
 2  free parameters
 Estimates:
@@ -172,12 +172,12 @@ sigma  1.81648    0.12844 14.1421 < 2.2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( ml, mlg )
-[1] "Component 3: Mean relative difference: 0.9758935"  
-[2] "Component 4: Mean relative difference: 0.001241030"
+[1] "Component 3: Mean relative difference: 1.037881"    
+[2] "Component 4: Mean relative difference: 0.0006146669"
 > mlgInd <- maxLik( llfInd, gfInd, start = startVal )
 > all.equal( mlInd, mlgInd )
-[1] "Component 3: Mean relative difference: 1.020209"    
-[2] "Component 4: Mean relative difference: 0.0002120359"
+[1] "Component 3: Mean relative difference: 1.058926"   
+[2] "Component 4: Mean relative difference: 0.001148752"
 > all.equal( mlg, mlgInd )
 [1] TRUE
 > 
@@ -199,8 +199,7 @@ Error in grad(theta, ...) :
 > try( maxLik( llfInd, start = startVal, method = "BHHH" ) )
 Maximum Likelihood estimation
 BHHH maximisation, 8 iterations
-Return code 2: successive function values within tolerance limit.
-May be a solution
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -0.6227434 (2 free parameter(s))
 Estimate(s): 0.2158296 0.3302446 
 There were 25 warnings (use warnings() to see them)
@@ -209,16 +208,14 @@ There were 25 warnings (use warnings() to see them)
 > print( mlBHHH )
 Maximum Likelihood estimation
 BHHH maximisation, 13 iterations
-Return code 2: successive function values within tolerance limit.
-May be a solution
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.5839 (2 free parameter(s))
 Estimate(s): 1.180812 1.816480 
 > summary( mlBHHH )
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 13 iterations
-Return code 2: successive function values within tolerance limit.
-May be a solution
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.5839 
 2  free parameters
 Estimates:
@@ -255,7 +252,7 @@ NULL
 > returnCode( mlBHHH )
 [1] 2
 > returnMessage( mlBHHH )
-[1] "successive function values within tolerance limit.\nMay be a solution"
+[1] "successive function values within tolerance limit"
 > vcov( mlBHHH )
                 mu        sigma
 mu     0.033061790 -0.001087693
@@ -263,9 +260,9 @@ sigma -0.001087693  0.017978643
 > logLik( summary( mlBHHH ) )
 [1] -201.5839
 > all.equal( ml, mlBHHH )
-[1] "Component 2: Mean relative difference: 2.511331e-07"
-[2] "Component 3: Mean relative difference: 59.37784"    
-[3] "Component 4: Mean relative difference: 0.09434553"  
+[1] "Component 2: Mean relative difference: 2.538011e-07"
+[2] "Component 3: Mean relative difference: 95.02288"    
+[3] "Component 4: Mean relative difference: 0.0942865"   
 [4] "Component 5: Mean relative difference: 1"           
 [5] "Component 6: 1 string mismatch"                     
 [6] "Component 9: Mean relative difference: 0.8571429"   
@@ -301,16 +298,14 @@ Error in grad(theta, ...) :
 > try( maxLik( llf, gfInd, start = startVal, method = "BHHH" ) )
 Maximum Likelihood estimation
 BHHH maximisation, 8 iterations
-Return code 2: successive function values within tolerance limit.
-May be a solution
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -0.6227434 (2 free parameter(s))
 Estimate(s): 0.2158296 0.3302446 
 There were 25 warnings (use warnings() to see them)
 > try( maxLik( llfInd, gfInd, start = startVal, method = "BHHH" ) )
 Maximum Likelihood estimation
 BHHH maximisation, 8 iterations
-Return code 2: successive function values within tolerance limit.
-May be a solution
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -0.6227434 (2 free parameter(s))
 Estimate(s): 0.2158296 0.3302446 
 There were 25 warnings (use warnings() to see them)
@@ -320,8 +315,7 @@ There were 25 warnings (use warnings() to see them)
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 13 iterations
-Return code 2: successive function values within tolerance limit.
-May be a solution
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.5839 
 2  free parameters
 Estimates:
@@ -332,7 +326,7 @@ sigma  1.81648    0.13408 13.5473 < 2.2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlBHHH, mlgBHHH )
-[1] "Component 3: Mean relative difference: 0.0003154692"
+[1] "Component 3: Mean relative difference: 0.0003213666"
 > all.equal( mlg, mlgBHHH )
 [1] "Component 2: Mean relative difference: 2.533978e-07"
 [2] "Component 3: Mean absolute difference: 1.880678e-05"
@@ -413,9 +407,9 @@ sigma -1.543776e-05  1.648753e-02
 [1] -201.5839
 > all.equal( ml, mlBFGS )
 [1] "Length mismatch: comparison on first 10 components" 
-[2] "Component 2: Mean relative difference: 6.508353e-07"
-[3] "Component 3: Mean relative difference: 129.5455"    
-[4] "Component 4: Mean relative difference: 0.002816901" 
+[2] "Component 2: Mean relative difference: 6.480966e-07"
+[3] "Component 3: Mean relative difference: 201.8571"    
+[4] "Component 4: Mean relative difference: 0.002189553" 
 [5] "Component 5: Mean relative difference: 1"           
 [6] "Component 6: 1 string mismatch"                     
 [7] "Component 9: names for current but not for target"  
@@ -469,7 +463,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] "Length mismatch: comparison on first 10 components" 
 [2] "Component 2: Mean relative difference: 6.483767e-07"
 [3] "Component 3: Mean absolute difference: 4.02496e-05" 
-[4] "Component 4: Mean relative difference: 2.472786e-06"
+[4] "Component 4: Mean relative difference: 2.472881e-06"
 [5] "Component 5: Mean relative difference: 1"           
 [6] "Component 6: 1 string mismatch"                     
 [7] "Component 9: names for current but not for target"  
@@ -550,9 +544,9 @@ sigma 0.00000000 0.01651073
 [1] -201.5839
 > all.equal( ml, mlNM )
 [1] "Length mismatch: comparison on first 10 components" 
-[2] "Component 2: Mean relative difference: 0.0001198408"
-[3] "Component 3: Mean relative difference: 24939.59"    
-[4] "Component 4: Mean relative difference: 0.002819549" 
+[2] "Component 2: Mean relative difference: 0.0001198380"
+[3] "Component 3: Mean relative difference: 39189.07"    
+[4] "Component 4: Mean relative difference: 0.0009383797"
 [5] "Component 5: Mean relative difference: 1"           
 [6] "Component 6: 1 string mismatch"                     
 [7] "Component 9: names for current but not for target"  
@@ -646,9 +640,9 @@ sigma 4.657494e-05 1.654963e-02
 > all.equal( ml, mlSANN )
  [1] "Length mismatch: comparison on first 10 components" 
  [2] "Component 1: Mean relative difference: 5.194937e-07"
- [3] "Component 2: Mean relative difference: 0.001058985" 
- [4] "Component 3: Mean relative difference: 217296.8"    
- [5] "Component 4: Mean relative difference: 0.004068858" 
+ [3] "Component 2: Mean relative difference: 0.001058979" 
+ [4] "Component 3: Mean relative difference: 341463.9"    
+ [5] "Component 4: Mean relative difference: 0.004066312" 
  [6] "Component 5: Mean relative difference: 1"           
  [7] "Component 6: 1 string mismatch"                     
  [8] "Component 9: names for current but not for target"  

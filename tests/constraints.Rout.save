@@ -1,5 +1,5 @@
 
-R version 2.10.0 (2009-10-26)
+R version 2.10.1 (2009-12-14)
 Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
@@ -470,8 +470,7 @@ Estimate:[1]  0.3704695 -1.3677420  0.6838710
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 2 iterations
-Return code 2: successive function values within tolerance limit.
-May be a solution
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -3572.392 
 3  free parameters
 Estimates:
@@ -652,95 +651,84 @@ Constrained optimization based on SUMT
 +             constraints=list(eqA=A, eqB=B),
 +             print.level=2, SUMTRho0=1)
 --------------
-successive function values within tolerance limit.
-May be a solution 
+successive function values within tolerance limit 
 10  iterations
 estimate: 0.5032979 -1.030679 1.016270 
 Function value: -3551.765 
 SUMT initial: rho =  0 , function =  -3551.765 , penalty =  1.003727 
 Estimate:[1]  0.5032979 -1.0306788  1.0162703
 --------------
-successive function values within tolerance limit.
-May be a solution 
+successive function values within tolerance limit 
 5  iterations
 estimate: 0.4970771 -1.044977 0.9993931 
 Function value: -3552.721 
 SUMT iteration 1: rho = 1, function = -3551.811, penalty = 0.909752
 Estimate:[1]  0.4970771 -1.0449771  0.9993931
 --------------
-successive function values within tolerance limit.
-May be a solution 
+successive function values within tolerance limit 
 5  iterations
 estimate: 0.4600218 -1.132643 0.9018076 
 Function value: -3558.47 
 SUMT iteration 2: rho = 10, function = -3553.968, penalty = 0.4502039
 Estimate:[1]  0.4600218 -1.1326428  0.9018076
 --------------
-successive function values within tolerance limit.
-May be a solution 
+successive function values within tolerance limit 
 6  iterations
 estimate: 0.3934442 -1.303587 0.7376448 
 Function value: -3568.828 
 SUMT iteration 3: rho = 100, function = -3565.88, penalty = 0.02948186
 Estimate:[1]  0.3934442 -1.3035869  0.7376448
 --------------
-successive function values within tolerance limit.
-May be a solution 
+successive function values within tolerance limit 
 6  iterations
 estimate: 0.3731856 -1.359993 0.6901587 
 Function value: -3571.97 
 SUMT iteration 4: rho = 1000, function = -3571.557, penalty = 0.0004130851
 Estimate:[1]  0.3731856 -1.3599929  0.6901587
 --------------
-successive function values within tolerance limit.
-May be a solution 
+successive function values within tolerance limit 
 5  iterations
 estimate: 0.3707461 -1.366951 0.6845105 
 Function value: -3572.349 
 SUMT iteration 5: rho = 10000, function = -3572.306, penalty = 4.285689e-06
 Estimate:[1]  0.3707461 -1.3669509  0.6845105
 --------------
-successive function values within tolerance limit.
-May be a solution 
+successive function values within tolerance limit 
 4  iterations
 estimate: 0.3704972 -1.367663 0.683935 
 Function value: -3572.387 
 SUMT iteration 6: rho = 1e+05, function = -3572.383, penalty = 4.301651e-08
 Estimate:[1]  0.3704972 -1.3676627  0.6839350
 --------------
-successive function values within tolerance limit.
-May be a solution 
+successive function values within tolerance limit 
 3  iterations
 estimate: 0.3704723 -1.367734 0.6838775 
 Function value: -3572.391 
 SUMT iteration 7: rho = 1e+06, function = -3572.391, penalty = 4.303234e-10
 Estimate:[1]  0.3704723 -1.3677342  0.6838775
 --------------
-successive function values within tolerance limit.
-May be a solution 
+successive function values within tolerance limit 
 2  iterations
 estimate: 0.3704697 -1.367741 0.6838716 
 Function value: -3572.392 
 SUMT iteration 8: rho = 1e+07, function = -3572.392, penalty = 4.303411e-12
 Estimate:[1]  0.3704697 -1.3677412  0.6838716
 --------------
-successive function values within tolerance limit.
-May be a solution 
+successive function values within tolerance limit 
 2  iterations
 estimate: 0.3704695 -1.367742 0.683871 
 Function value: -3572.392 
 SUMT iteration 9: rho = 1e+08, function = -3572.392, penalty = 4.303416e-14
 Estimate:[1]  0.3704695 -1.3677419  0.6838711
 --------------
-successive function values within tolerance limit.
-May be a solution 
+successive function values within tolerance limit 
 2  iterations
 estimate: 0.3704695 -1.367742 0.683871 
 Function value: -3572.392 
 SUMT iteration 10: rho = 1e+09, function = -3572.392, penalty = 4.303416e-16
 Estimate:[1]  0.3704695 -1.3677420  0.6838710
 --------------
-gradient close to zero. May be a solution 
+gradient close to zero 
 2  iterations
 estimate: 0.3704695 -1.367742 0.683871 
 Function value: -3572.392 
@@ -750,7 +738,7 @@ Estimate:[1]  0.3704695 -1.3677420  0.6838710
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 2 iterations
-Return code 1: gradient close to zero. May be a solution
+Return code 1: gradient close to zero
 Log-Likelihood: -3572.392 
 3  free parameters
 Estimates:
@@ -844,13 +832,12 @@ Estimate:[1] -1.303386  0.651693
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 2 iterations
-Return code 2: successive function values within tolerance limit.
-May be a solution
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -3608.806 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303386   0.045816 -28.448 < 2.2e-16 ***
+[1,] -1.303386   0.045838 -28.435 < 2.2e-16 ***
 [2,]  0.651693   0.035393  18.413 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
@@ -894,8 +881,7 @@ Estimate:[1] -1.303386  0.651693
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 2 iterations
-Return code 2: successive function values within tolerance limit.
-May be a solution
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -3608.806 
 2  free parameters
 Estimates:
@@ -944,8 +930,7 @@ Estimate:[1] -1.303386  0.651693
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 2 iterations
-Return code 2: successive function values within tolerance limit.
-May be a solution
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -3608.806 
 2  free parameters
 Estimates:
@@ -994,8 +979,7 @@ Estimate:[1] -1.303386  0.651693
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 2 iterations
-Return code 2: successive function values within tolerance limit.
-May be a solution
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -3608.806 
 2  free parameters
 Estimates:
@@ -1044,8 +1028,7 @@ Estimate:[1] -1.303386  0.651693
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 2 iterations
-Return code 2: successive function values within tolerance limit.
-May be a solution
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -3608.806 
 2  free parameters
 Estimates:
