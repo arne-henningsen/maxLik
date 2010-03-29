@@ -48,7 +48,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
          names( g ) <- names( start )
          return( g )
       }
-      g <- numericGradient(fn, theta, ...)
+      g <- numericGradient(logLikFunc, theta, ...)
       if(!is.null(dim(g))) {
          return(colSums(g))
       } else {

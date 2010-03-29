@@ -718,14 +718,13 @@ Log-Likelihood: -201.5840
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     1.18178    0.18166  6.5055 7.745e-11 ***
-sigma  1.81652    0.12848 14.1381 < 2.2e-16 ***
+mu     1.18178    0.18176  6.5018 7.935e-11 ***
+sigma  1.81652    0.12849 14.1370 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlSANN, mlIndSANN )
-[1] "Component 3: Mean relative difference: 7.033365e-07"
-[2] "Component 4: Mean relative difference: 0.0009173954"
+[1] "Component 4: Mean relative difference: 0.001874414"
 > 
 > # with unused analytical gradients
 > set.seed( 345 )
