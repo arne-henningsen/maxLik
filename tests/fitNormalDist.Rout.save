@@ -771,3 +771,157 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > all.equal( mlgSANN, mlghSANN )
 [1] TRUE
 > 
+> 
+> ############### with fixed parameters ###############
+> # start values
+> startValFix <- c( mu = 1, sigma = 1 )
+> 
+> # fix mu (the mean ) at its start value
+> isFixed <- c( TRUE, FALSE )
+> 
+> ## NR method
+> mlFix <- maxLik( llf, start = startValFix, activePar = !isFixed )
+> print( mlFix )
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 7 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -202.0769 (1 free parameter(s))
+Estimate(s): 1 1.825457 
+> summary( mlFix )
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 7 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -202.0769 
+1  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     1.00000    0.00000      NA        NA    
+sigma  1.82546    0.12907  14.143 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> activePar( mlFix )
+[1] FALSE  TRUE
+> AIC( mlFix )
+[1] 406.1538
+> coef( mlFix )
+      mu    sigma 
+1.000000 1.825457 
+> condiNumber( mlFix )
+sigma 	 1 
+> hessian( mlFix )
+      mu     sigma
+mu    NA        NA
+sigma NA -60.02665
+> logLik( mlFix )
+[1] -202.0769
+> maximType( mlFix )
+[1] "Newton-Raphson maximisation"
+> nIter( mlFix )
+[1] 7
+> nObs( mlFix )
+NULL
+> nParam( mlFix )
+[1] 2
+> returnCode( mlFix )
+[1] 1
+> returnMessage( mlFix )
+[1] "gradient close to zero"
+> vcov( mlFix )
+      mu      sigma
+mu     0 0.00000000
+sigma  0 0.01665927
+> logLik( summary( mlFix ) )
+[1] -202.0769
+> mlIndFix <- maxLik( llfInd, start = startValFix, activePar = !isFixed )
+> summary( mlIndFix )
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 7 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -202.0769 
+1  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     1.00000    0.00000      NA        NA    
+sigma  1.82546    0.12907  14.143 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> all.equal( mlFix, mlIndFix )
+[1] "Component 3: Mean relative difference: 1"
+> mlFix[[3]]
+          mu        sigma 
+          NA 2.842171e-08 
+> mlIndFix[[3]]
+   mu sigma 
+   NA     0 
+> 
+> # with analytical gradients
+> mlgFix <- maxLik( llf, gf, start = startValFix, activePar = !isFixed )
+> summary( mlgFix )
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 7 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -202.0769 
+1  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     1.00000    0.00000      NA        NA    
+sigma  1.82546    0.12908  14.142 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> all.equal( mlFix, mlgFix )
+[1] "Component 3: 'is.NA' value mismatch: 0 in current 1 in target"
+[2] "Component 4: 'is.NA' value mismatch: 2 in current 3 in target"
+> mlFix[[3]]
+          mu        sigma 
+          NA 2.842171e-08 
+> mlgFix[[3]]
+          mu        sigma 
+5.426045e+00 5.542233e-13 
+> mlFix[[4]]
+      mu     sigma
+mu    NA        NA
+sigma NA -60.02665
+> mlgFix[[4]]
+      mu     sigma
+mu    NA  -5.94486
+sigma NA -60.01870
+> mlgIndFix <- maxLik( llfInd, gfInd, start = startValFix, activePar = !isFixed )
+> all.equal( mlIndFix, mlgIndFix )
+[1] "Component 3: 'is.NA' value mismatch: 0 in current 1 in target"
+[2] "Component 4: 'is.NA' value mismatch: 2 in current 3 in target"
+> mlIndFix[[3]]
+   mu sigma 
+   NA     0 
+> mlgIndFix[[3]]
+          mu        sigma 
+5.426045e+00 5.539458e-13 
+> mlIndFix[[4]]
+      mu     sigma
+mu    NA        NA
+sigma NA -60.02665
+> mlgIndFix[[4]]
+      mu     sigma
+mu    NA  -5.94486
+sigma NA -60.01870
+> all.equal( mlgFix, mlgIndFix )
+[1] TRUE
+> 
+> # with analytical gradients and Hessians
+> mlghFix <- maxLik( llf, gf, hf, start = startValFix, activePar = !isFixed )
+> all.equal( mlgFix, mlghFix )
+[1] "Component 4: 'is.NA' value mismatch: 0 in current 2 in target"
+> mlgFix[[4]]
+      mu     sigma
+mu    NA  -5.94486
+sigma NA -60.01870
+> mlghFix[[4]]
+             mu     sigma
+mu    -30.00935  -5.94486
+sigma  -5.94486 -60.01870
+> 

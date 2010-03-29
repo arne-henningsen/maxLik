@@ -263,3 +263,57 @@ all.equal( mlgSANN, mlgIndSANN )
 set.seed( 345 )
 mlghSANN <- maxLik( llf, gf, hf, start = startVal, method = "SANN" )
 all.equal( mlgSANN, mlghSANN )
+
+
+############### with fixed parameters ###############
+# start values
+startValFix <- c( mu = 1, sigma = 1 )
+
+# fix mu (the mean ) at its start value
+isFixed <- c( TRUE, FALSE )
+
+## NR method
+mlFix <- maxLik( llf, start = startValFix, activePar = !isFixed )
+print( mlFix )
+summary( mlFix )
+activePar( mlFix )
+AIC( mlFix )
+coef( mlFix )
+condiNumber( mlFix )
+hessian( mlFix )
+logLik( mlFix )
+maximType( mlFix )
+nIter( mlFix )
+nObs( mlFix )
+nParam( mlFix )
+returnCode( mlFix )
+returnMessage( mlFix )
+vcov( mlFix )
+logLik( summary( mlFix ) )
+mlIndFix <- maxLik( llfInd, start = startValFix, activePar = !isFixed )
+summary( mlIndFix )
+all.equal( mlFix, mlIndFix )
+mlFix[[3]]
+mlIndFix[[3]]
+
+# with analytical gradients
+mlgFix <- maxLik( llf, gf, start = startValFix, activePar = !isFixed )
+summary( mlgFix )
+all.equal( mlFix, mlgFix )
+mlFix[[3]]
+mlgFix[[3]]
+mlFix[[4]]
+mlgFix[[4]]
+mlgIndFix <- maxLik( llfInd, gfInd, start = startValFix, activePar = !isFixed )
+all.equal( mlIndFix, mlgIndFix )
+mlIndFix[[3]]
+mlgIndFix[[3]]
+mlIndFix[[4]]
+mlgIndFix[[4]]
+all.equal( mlgFix, mlgIndFix )
+
+# with analytical gradients and Hessians
+mlghFix <- maxLik( llf, gf, hf, start = startValFix, activePar = !isFixed )
+all.equal( mlgFix, mlghFix )
+mlgFix[[4]]
+mlghFix[[4]]
