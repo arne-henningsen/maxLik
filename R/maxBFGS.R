@@ -32,51 +32,8 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    ## The latter is necessary for passing '...' to the function
    environment( logLikFunc ) <- environment()
    environment( logLikFuncSumt ) <- environment()
-   gradient <- function(theta, ...) {
-      if(!is.null(grad)) {
-         g <- grad(theta, ...)
-         if(!is.null(dim(g))) {
-            if(nrow(g) > 1) {
-               g <- colSums( g )
-            }
-         }
-         names( g ) <- names( start )
-         return( g )
-      }
-      g <- numericGradient(logLikFunc, theta, ...)
-      if(!is.null(dim(g))) {
-         return(colSums(g))
-      } else {
-         return(g)
-      }
-   }
-   gradientS <- function(theta, ...) {
-      if(!is.null(grad)) {
-         g <- match.call()
-         g[names(formals(sumt))] <- NULL
-         g[[1]] <- as.name("grad")
-         names(g)[2] <- ""
-         g <- eval(g, sys.frame(sys.parent()))
-         if(!is.null(dim(g))) {
-            if(nrow(g) > 1) {
-               g <- colSums( g )
-            }
-         }
-         names( g ) <- names( start )
-         return( g )
-      }
-      g <- match.call()
-      g[names(formals(sumt))] <- NULL
-      g[[1]] <- as.name("numericGradient")
-      names(g)[2] <- "t0"
-      g$f <- logLikFunc
-      g <- eval(g, sys.frame(sys.parent()))
-      if(!is.null(dim(g))) {
-         return(colSums(g))
-      } else {
-         return(g)
-      }
-   }
+   environment( logLikGrad ) <- environment()
+   environment( logLikGradSumt ) <- environment()
    maximType <- "BFGS maximisation"
    control <- list(trace=print.level,
                     REPORT=1,
@@ -94,7 +51,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    if(print.level > 2) {
       cat("Initial function value:", f1, "\n")
    }
-   G1 <- gradientS(start, ...)
+   G1 <- logLikGradSumt(start, ...)
    if(print.level > 2) {
       cat("Initial gradient value:\n")
       print(G1)
@@ -114,7 +71,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    ## However, as 'sumt' already returns such an object, we return the
    ## result of 'sumt' directly, without the canning
    if(is.null(constraints)) {
-       result <- optim(start, logLikFunc, gr=gradient, control=control,
+       result <- optim(start, logLikFunc, gr=logLikGrad, control=control,
                        method="BFGS",
                        ...)
        resultConstraints <- NULL
@@ -125,7 +82,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
       if(identical(names(constraints), c("ineqA", "ineqB"))) {
          ui <- constraints$ineqA
          ci <- -constraints$ineqB
-         result <- constrOptim(theta=start, f=logLikFunc, grad=gradient,
+         result <- constrOptim(theta=start, f=logLikFunc, grad=logLikGrad,
                           ui=ui, ci=ci, control=control,
                           method="BFGS", ...)
          resultConstraints <- list(type="constrOptim",
@@ -158,7 +115,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
       if( is.null( grad ) ) {
          grad2 <- NULL
       } else {
-         grad2 <- gradient
+         grad2 <- logLikGrad
       }
       hessian <- numericHessian( f = logLikFunc, grad = grad2, t0=result$par, ... )
    }
@@ -166,7 +123,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    result <- list(
                    maximum=result$value,
                    estimate=result$par,
-                   gradient=gradient( theta = result$par, ... ),
+                   gradient=logLikGrad( theta = result$par, ... ),
                    hessian=hessian,
                    code=result$convergence,
                    message=paste(message(result$convergence), result$message),

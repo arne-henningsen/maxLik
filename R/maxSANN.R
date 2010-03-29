@@ -36,31 +36,13 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    ## The latter is necessary for passing '...' to the function
    environment( logLikFunc ) <- environment()
    environment( logLikFuncSumt ) <- environment()
-   ## Needed for constrained optimization
-   gradient <- function(theta, ...) {
-      if(!is.null(grad)) {
-         g <- grad(theta, ...)
-         if(!is.null(dim(g))) {
-            if(nrow(g) > 1) {
-               g <- colSums( g )
-            }
-         }
-         names( g ) <- names( start )
-         return( g )
-      }
-      g <- numericGradient(logLikFunc, theta, ...)
-      if(!is.null(dim(g))) {
-         return(colSums(g))
-      } else {
-         return(g)
-      }
-   }
+   environment( logLikGrad ) <- environment()
    hessian <- function(theta, ...) {
       ## just used for computing the final hessian, eventually using the supplied analytic information
       if(!is.null(hess)) {
          h <- as.matrix(hess(theta, ...))
       } else {
-         h <- numericHessian(logLikFunc, gradient, theta, ...)
+         h <- numericHessian(logLikFunc, logLikGrad, theta, ...)
       }
       rownames( h ) <- colnames( h ) <- names( start )
       return( h )
@@ -146,7 +128,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    result <- list(
                    maximum=result$value,
                    estimate=result$par,
-                   gradient=gradient(result$par, ...),
+                   gradient=logLikGrad(result$par, ...),
                    hessian=hessian(result$par, ...),
                    code=result$convergence,
                    message=paste(message(result$convergence), result$message),

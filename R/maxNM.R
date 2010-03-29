@@ -38,58 +38,15 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
    ## The latter is necessary for passing '...' to the function
    environment( logLikFunc ) <- environment()
    environment( logLikFuncSumt ) <- environment()
-   gradient <- function(theta, ...) {
-      if(!is.null(grad)) {
-         g <- grad(theta, ...)
-         if(!is.null(dim(g))) {
-            if(nrow(g) > 1) {
-               g <- colSums( g )
-            }
-         }
-         names( g ) <- names( start )
-         return( g )
-      }
-      g <- numericGradient(logLikFunc, theta, ...)
-      if(!is.null(dim(g))) {
-         return(colSums(g))
-      } else {
-         return(g)
-      }
-   }
-   gradientS <- function(theta, ...) {
-      if(!is.null(grad)) {
-         g <- match.call()
-         g[names(formals(sumt))] <- NULL
-         g[[1]] <- as.name("grad")
-         names(g)[2] <- ""
-         g <- eval(g, sys.frame(sys.parent()))
-         if(!is.null(dim(g))) {
-            if(nrow(g) > 1) {
-               g <- colSums( g )
-            }
-         }
-         names( g ) <- names( start )
-         return( g )
-      }
-      g <- match.call()
-      g[names(formals(sumt))] <- NULL
-      g[[1]] <- as.name("numericGradient")
-      names(g)[2] <- "t0"
-      g$f <- logLikFunc
-      g <- eval(g, sys.frame(sys.parent()))
-      if(!is.null(dim(g))) {
-         return(colSums(g))
-      } else {
-         return(g)
-      }
-   }
+   environment( logLikGrad ) <- environment()
+   environment( logLikGradSumt ) <- environment()
    hessian <- function(theta, ...) {
       ## just used for computing the final hessian, eventually using the
       ## supplied analytic information
       if(!is.null(hess)) {
          h <- as.matrix(hess(theta, ...))
       } else {
-         h <- numericHessian(logLikFunc, gradient, theta, ...)
+         h <- numericHessian(logLikFunc, logLikGrad, theta, ...)
       }
       rownames( h ) <- colnames( h ) <- names( start )
       return( h )
@@ -128,7 +85,7 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
       if(identical(names(constraints), c("ineqA", "ineqB"))) {
          ui <- constraints$ineqA
          ci <- -constraints$ineqB
-         result <- constrOptim(theta=start, f=logLikFunc, grad=gradient,
+         result <- constrOptim(theta=start, f=logLikFunc, grad=logLikGrad,
                           ui=ui, ci=ci, control=control,
                           method="Nelder-Mead", ...)
          resultConstraints <- list(type="constrOptim",
@@ -157,7 +114,7 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
    result <- list(
                   maximum=result$value,
                   estimate=result$par,
-                  gradient=gradientS(result$par, ...),
+                  gradient=logLikGradSumt(result$par, ...),
                   hessian=hessian(result$par, ...),
                   code=result$convergence,
                   message=paste(message(result$convergence), result$message),
