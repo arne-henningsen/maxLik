@@ -4,7 +4,7 @@ library(maxLik)
 ## data to fit a normal distribution
 # set seed for pseudo random numbers
 set.seed( 123 )
-# generate a variable of exponentially distributed values
+# generate a variable from normally distributed random numbers
 x <- rnorm( 100, 1, 2 )
 xSaved <- x
 
