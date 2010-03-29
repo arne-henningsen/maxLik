@@ -168,6 +168,10 @@ all.equal( ml, mlBFGS )
 mlIndBFGS <- maxLik( llfInd, start = startVal, method = "BFGS" )
 summary( mlIndBFGS )
 all.equal( mlBFGS, mlIndBFGS )
+# with individual log likelihood values
+mlIndBFGS <- maxLik( llfInd, start = startVal, method = "BFGS" )
+summary( mlIndBFGS )
+all.equal( mlBFGS, mlIndBFGS )
 
 # with analytical gradients
 mlgBFGS <- maxLik( llf, gf, start = startVal, method = "BFGS" )
@@ -201,11 +205,19 @@ returnMessage( mlNM )
 vcov( mlNM )
 logLik( summary( mlNM ) )
 all.equal( ml, mlNM )
+# with individual log likelihood values
+mlIndNM <- maxLik( llfInd, start = startVal, method = "NM" )
+summary( mlIndNM )
+all.equal( mlNM, mlIndNM )
 
 # with unused analytical gradients
 mlgNM <- maxLik( llf, gf, start = startVal, method = "NM" )
 summary( mlgNM )
 all.equal( mlNM, mlgNM )
+# with individual log likelihood values and gradients
+mlgIndNM <- maxLik( llfInd, gfInd, start = startVal, method = "NM" )
+summary( mlgIndNM )
+all.equal( mlgNM, mlgIndNM )
 
 # with unused analytical gradients and Hessian
 mlghNM <- maxLik( llf, gf, hf, start = startVal, method = "NM" )
@@ -232,12 +244,20 @@ returnMessage( mlSANN )
 vcov( mlSANN )
 logLik( summary( mlSANN ) )
 all.equal( ml, mlSANN )
+# with individual log likelihood values
+mlIndSANN <- maxLik( llfInd, start = startVal, method = "SANN" )
+summary( mlIndSANN )
+all.equal( mlSANN, mlIndSANN )
 
 # with unused analytical gradients
 set.seed( 345 )
 mlgSANN <- maxLik( llf, gf, start = startVal, method = "SANN" )
 summary( mlgSANN )
 all.equal( mlSANN, mlgSANN )
+# with individual log likelihood values and gradients
+mlgIndSANN <- maxLik( llfInd, gfInd, start = startVal, method = "SANN" )
+summary( mlgIndSANN )
+all.equal( mlgSANN, mlgIndSANN )
 
 # with unused analytical gradients and Hessian
 set.seed( 345 )
