@@ -1351,41 +1351,39 @@ Constrained optimization based on SUMT
 +             start=start, method="SANN",
 +             constraints=list(eqA=A, eqB=B),
 +             print.level=1, SUMTRho0=1, rho=0.5)
-SUMT initial: rho =  0 , function =  -3551.776 , penalty =  0.9814697 
-Estimate:[1] -1.033119  1.011905
-SUMT iteration 1: rho = 1, function = -3551.790, penalty = 0.9368044
-Estimate:[1] -1.040312  1.004099
-SUMT iteration 2: rho = 10, function = -3552.925, penalty = 0.7093408
-Estimate:[1] -1.0715767  0.9569002
-SUMT iteration 3: rho = 100, function = -3574, penalty = 0.1330147
-Estimate:[1] -1.1939293  0.7793205
-SUMT iteration 4: rho = 1000, function = -3602.652, penalty = 0.002879373
-Estimate:[1] -1.2921933  0.6729266
-SUMT iteration 5: rho = 10000, function = -3608.122, penalty = 3.397627e-05
-Estimate:[1] -1.2983778  0.6521033
-SUMT iteration 6: rho = 1e+05, function = -3608.831, penalty = 4.423519e-08
-Estimate:[1] -1.3042925  0.6520411
-SUMT iteration 7: rho = 1e+06, function = -3608.81, penalty = 3.638229e-09
-Estimate:[1] -1.3089104  0.6544853
-SUMT iteration 8: rho = 1e+07, function = -3608.81, penalty = 3.638229e-09
-Estimate:[1] -1.3089104  0.6544853
+SUMT initial: rho =  0 , function =  -3551.775 , penalty =  0.9631635 
+Estimate:[1] -1.038210  1.009809
+SUMT iteration 1: rho = 1, function = -3551.784, penalty = 0.9454066
+Estimate:[1] -1.037487  1.004904
+SUMT iteration 2: rho = 10, function = -3552.954, penalty = 0.706233
+Estimate:[1] -1.0703344  0.9553555
+SUMT iteration 3: rho = 100, function = -3574.346, penalty = 0.1295895
+Estimate:[1] -1.1944770  0.7772313
+SUMT iteration 4: rho = 1000, function = -3602.528, penalty = 0.002987980
+Estimate:[1] -1.2863170  0.6704897
+SUMT iteration 5: rho = 10000, function = -3608.275, penalty = 2.065172e-05
+Estimate:[1] -1.3057074  0.6551259
+SUMT iteration 6: rho = 1e+05, function = -3608.789, penalty = 4.692789e-08
+Estimate:[1] -1.2985086  0.6493626
+SUMT iteration 7: rho = 1e+06, function = -3608.789, penalty = 4.692789e-08
+Estimate:[1] -1.2985086  0.6493626
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
 Return code 0: successful convergence 
-Log-Likelihood: -3608.847 
+Log-Likelihood: -3608.836 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.308910   0.045850 -28.548 < 2.2e-16 ***
-[2,]  0.654485   0.035381  18.498 < 2.2e-16 ***
+[1,] -1.298509   0.045769 -28.371 < 2.2e-16 ***
+[2,]  0.649363   0.035385  18.351 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
-8  outer iterations, barrier value 3.638229e-09 
+7  outer iterations, barrier value 4.692789e-08 
 --------------------------------------------
 > ## NM, numeric
 > a <- maxLik(logLikMix2, 

@@ -5,7 +5,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
                     constraints = NULL,
                     tol=1e-8, reltol=tol,
                     temp=10, tmax=10, parscale=rep(1, length=length(start)),
-                    ...) {
+                    random.seed = 123, ... ) {
    ## ... : further arguments to fn()
    ##
    ## Note: grad and hess are for compatibility only, SANN uses only fn values
@@ -65,6 +65,23 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
       rownames( h ) <- colnames( h ) <- names( start )
       return( h )
    }
+
+   # save seed of the random number generator
+   if( exists( ".Random.seed" ) ) {
+      savedSeed <- .Random.seed
+   }
+
+   # set seed for the random number generator (used by 'optim( method="SANN" )')
+   set.seed( random.seed )
+
+   # restore seed of the random number generator on exit
+   # (end of function or error)
+   if( exists( "savedSeed" ) ) {
+      on.exit( assign( ".Random.seed", savedSeed, envir = sys.frame() ) )
+   } else {
+      on.exit( rm( .Random.seed, envir = sys.frame() ) )
+   }
+
    maximType <- "SANN maximisation"
    parscale <- rep(parscale, length.out=length(start))
    control <- list(trace=print.level,
@@ -74,7 +91,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
                     maxit=iterlim,
                    parscale=parscale,
                    temp=temp,
-                   tmax=tmax)
+                   tmax=tmax )
    f1 <- logLikFuncSumt(start, ...)
    if(is.na( f1)) {
       result <- list(code=100, message=maximMessage("100"),

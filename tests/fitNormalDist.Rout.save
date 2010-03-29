@@ -645,38 +645,38 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
 Return code 0: successful convergence 
-Log-Likelihood: -201.5841 (2 free parameter(s))
-Estimate(s): 1.182667 1.817799 
+Log-Likelihood: -201.5840 (2 free parameter(s))
+Estimate(s): 1.181777 1.816519 
 > summary( mlSANN )
 --------------------------------------------
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
 Return code 0: successful convergence 
-Log-Likelihood: -201.5841 
+Log-Likelihood: -201.5840 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     1.18267    0.18168  6.5098 7.527e-11 ***
-sigma  1.81780    0.12865 14.1303 < 2.2e-16 ***
+mu     1.18178    0.18159  6.5079  7.62e-11 ***
+sigma  1.81652    0.12849 14.1370 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > activePar( mlSANN )
 [1] TRUE TRUE
 > AIC( mlSANN )
-[1] 407.1681
+[1] 407.1679
 > coef( mlSANN )
       mu    sigma 
-1.182667 1.817799 
+1.181777 1.816519 
 > condiNumber( mlSANN )
 mu 	 1 
-sigma 	 1.670272 
+sigma 	 1.669794 
 > hessian( mlSANN )
                 mu        sigma
-mu    -30.29754225   0.08526513
-sigma   0.08526513 -60.42455425
+mu    -30.32596396   0.05684342
+sigma   0.05684342 -60.56666280
 > logLik( mlSANN )
-[1] -201.5841
+[1] -201.5840
 > maximType( mlSANN )
 [1] "SANN maximisation"
 > nIter( mlSANN )
@@ -692,16 +692,16 @@ NULL
 [1] "successful convergence "
 > vcov( mlSANN )
                 mu        sigma
-mu    3.300611e-02 4.657494e-05
-sigma 4.657494e-05 1.654963e-02
+mu    3.297510e-02 3.094801e-05
+sigma 3.094801e-05 1.651076e-02
 > logLik( summary( mlSANN ) )
-[1] -201.5841
+[1] -201.5840
 > all.equal( ml, mlSANN )
  [1] "Length mismatch: comparison on first 10 components" 
- [2] "Component 1: Mean relative difference: 5.194937e-07"
- [3] "Component 2: Mean relative difference: 0.001058979" 
- [4] "Component 3: Mean relative difference: 341463.9"    
- [5] "Component 4: Mean relative difference: 0.004066312" 
+ [2] "Component 1: Mean relative difference: 7.028622e-08"
+ [3] "Component 2: Mean relative difference: 0.0003349168"
+ [4] "Component 3: Mean relative difference: 79340.21"    
+ [5] "Component 4: Mean relative difference: 0.002189553" 
  [6] "Component 5: Mean relative difference: 1"           
  [7] "Component 6: 1 string mismatch"                     
  [8] "Component 9: names for current but not for target"  
@@ -709,27 +709,23 @@ sigma 4.657494e-05 1.654963e-02
 [10] "Component 10: 1 string mismatch"                    
 > # with individual log likelihood values
 > mlIndSANN <- maxLik( llfInd, start = startVal, method = "SANN" )
-Warning message:
-In log(sigma) : NaNs produced
 > summary( mlIndSANN )
 --------------------------------------------
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
 Return code 0: successful convergence 
-Log-Likelihood: -201.5841 
+Log-Likelihood: -201.5840 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     1.18343    0.18150  6.5202 7.023e-11 ***
-sigma  1.81504    0.12821 14.1564 < 2.2e-16 ***
+mu     1.18178    0.18166  6.5055 7.745e-11 ***
+sigma  1.81652    0.12848 14.1381 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlSANN, mlIndSANN )
-[1] "Component 1: Mean relative difference: 3.073037e-07"
-[2] "Component 2: Mean relative difference: 0.001172362" 
-[3] "Component 3: Mean relative difference: 1.401299"    
-[4] "Component 4: Mean relative difference: 0.005169246" 
+[1] "Component 3: Mean relative difference: 7.033365e-07"
+[2] "Component 4: Mean relative difference: 0.0009173954"
 > 
 > # with unused analytical gradients
 > set.seed( 345 )
@@ -739,41 +735,36 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
 Return code 0: successful convergence 
-Log-Likelihood: -201.5841 
+Log-Likelihood: -201.5840 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     1.18267    0.18178   6.506 7.716e-11 ***
-sigma  1.81780    0.12868  14.127 < 2.2e-16 ***
+mu     1.18178    0.18165  6.5057 7.732e-11 ***
+sigma  1.81652    0.12845 14.1417 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlSANN, mlgSANN )
-[1] "Component 3: Mean relative difference: 1.506695e-07"
-[2] "Component 4: Mean relative difference: 0.001236613" 
+[1] "Component 3: Mean relative difference: 7.284589e-07"
+[2] "Component 4: Mean relative difference: 0.001210320" 
 > # with individual log likelihood values and gradients
 > mlgIndSANN <- maxLik( llfInd, gfInd, start = startVal, method = "SANN" )
-Warning message:
-In log(sigma) : NaNs produced
 > summary( mlgIndSANN )
 --------------------------------------------
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
 Return code 0: successful convergence 
-Log-Likelihood: -201.5841 
+Log-Likelihood: -201.5840 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     1.18343    0.18150  6.5201 7.026e-11 ***
-sigma  1.81504    0.12819 14.1589 < 2.2e-16 ***
+mu     1.18178    0.18165  6.5057 7.732e-11 ***
+sigma  1.81652    0.12845 14.1417 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlgSANN, mlgIndSANN )
-[1] "Component 1: Mean relative difference: 3.073037e-07"
-[2] "Component 2: Mean relative difference: 0.001172362" 
-[3] "Component 3: Mean relative difference: 1.401299"    
-[4] "Component 4: Mean relative difference: 0.006646257" 
+[1] TRUE
 > 
 > # with unused analytical gradients and Hessian
 > set.seed( 345 )
