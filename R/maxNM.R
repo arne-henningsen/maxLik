@@ -36,19 +36,8 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
    ## 2) strip possible SUMT parameters and sum thereafter
    ## The former is for passing to the optimizer from withing sumt
    ## The latter is necessary for passing '...' to the function
-   func <- function(theta, ...) {
-      sum(fn(theta, ...))
-   }
-   funcS <- function(theta, ...) {
-      ## this wrapper makes a) single-valued function (in case of BHHH
-      ## vector-valued); and b) strips the SUMT extra arguments
-      f <- match.call()
-      f[names(formals(sumt))] <- NULL
-      f[[1]] <- as.name("fn")
-      names(f)[2] <- ""
-      f1 <- eval(f, sys.frame(sys.parent()))
-      sum(f1)
-   }
+   environment( logLikFunc ) <- environment()
+   environment( logLikFuncSumt ) <- environment()
    gradient <- function(theta, ...) {
       if(!is.null(grad)) {
          g <- grad(theta, ...)
@@ -60,7 +49,7 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
          names( g ) <- names( start )
          return( g )
       }
-      g <- numericGradient(func, theta, ...)
+      g <- numericGradient(logLikFunc, theta, ...)
       if(!is.null(dim(g))) {
          return(colSums(g))
       } else {
@@ -82,7 +71,7 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
          names( g ) <- names( start )
          return( g )
       }
-      g <- numericGradient(func, theta, ...)
+      g <- numericGradient(logLikFunc, theta, ...)
       if(!is.null(dim(g))) {
          return(colSums(g))
       } else {
@@ -95,7 +84,7 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
       if(!is.null(hess)) {
          h <- as.matrix(hess(theta, ...))
       } else {
-         h <- numericHessian(func, gradient, theta, ...)
+         h <- numericHessian(logLikFunc, gradient, theta, ...)
       }
       rownames( h ) <- colnames( h ) <- names( start )
       return( h )
@@ -110,7 +99,7 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
                    parscale=parscale,
                    alpha=alpha, beta=beta, gamma=gamma
                    )
-   f1 <- funcS(start, ...)
+   f1 <- logLikFuncSumt(start, ...)
    if(is.na( f1)) {
       result <- list(code=100, message=maximMessage("100"),
                      iterations=0,
@@ -126,7 +115,7 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
    ## However, as 'sumt' already returns such an object, we return the
    ## result of 'sumt' directly, without the canning
    if(is.null(constraints)) {
-      result <- optim(start, func, control=control,
+      result <- optim(start, logLikFunc, control=control,
                       method="Nelder-Mead", hessian=FALSE, ...)
       resultConstraints <- NULL
    }
@@ -134,7 +123,7 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
       if(identical(names(constraints), c("ineqA", "ineqB"))) {
          ui <- constraints$ineqA
          ci <- -constraints$ineqB
-         result <- constrOptim(theta=start, f=func, grad=gradient,
+         result <- constrOptim(theta=start, f=logLikFunc, grad=gradient,
                           ui=ui, ci=ci, control=control,
                           method="Nelder-Mead", ...)
          resultConstraints <- list(type="constrOptim",
