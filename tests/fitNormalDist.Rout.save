@@ -925,3 +925,108 @@ sigma NA -60.01870
 mu    -30.00935  -5.94486
 sigma  -5.94486 -60.01870
 > 
+> ## BHHH method
+> mlFixBHHH <- maxLik( llfInd, start = startValFix, activePar = !isFixed,
++    method = "BHHH" )
+> print( mlFixBHHH )
+Maximum Likelihood estimation
+BHHH maximisation, 10 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -202.0769 (1 free parameter(s))
+Estimate(s): 1 1.825458 
+> summary( mlFixBHHH )
+--------------------------------------------
+Maximum Likelihood estimation
+BHHH maximisation, 10 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -202.0769 
+1  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     1.00000    0.00000      NA        NA    
+sigma  1.82546    0.13365  13.658 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> activePar( mlFixBHHH )
+[1] FALSE  TRUE
+> AIC( mlFixBHHH )
+[1] 406.1538
+> coef( mlFixBHHH )
+      mu    sigma 
+1.000000 1.825458 
+> condiNumber( mlFixBHHH )
+sigma 	 1 
+> hessian( mlFixBHHH )
+             mu     sigma
+mu    -30.00934  -7.67543
+sigma  -7.67543 -55.98293
+> logLik( mlFixBHHH )
+[1] -202.0769
+> maximType( mlFixBHHH )
+[1] "BHHH maximisation"
+> nIter( mlFixBHHH )
+[1] 10
+> nObs( mlFixBHHH )
+NULL
+> nParam( mlFixBHHH )
+[1] 2
+> returnCode( mlFixBHHH )
+[1] 2
+> returnMessage( mlFixBHHH )
+[1] "successive function values within tolerance limit"
+> vcov( mlFixBHHH )
+      mu      sigma
+mu     0 0.00000000
+sigma  0 0.01786259
+> logLik( summary( mlFixBHHH ) )
+[1] -202.0769
+> all.equal( mlFix[ -c( 5, 6, 9, 10 ) ], mlFixBHHH[ -c( 5, 6, 9, 10 ) ] )
+[1] "Component 2: Mean relative difference: 7.729473e-08"          
+[2] "Component 3: 'is.NA' value mismatch: 0 in current 1 in target"
+[3] "Component 4: 'is.NA' value mismatch: 0 in current 3 in target"
+> mlFix[[ 3 ]]
+          mu        sigma 
+          NA 2.842171e-08 
+> mlFixBHHH[[ 3 ]]
+           mu         sigma 
+ 5.426044e+00 -8.473666e-06 
+> mlFix[[ 4 ]]
+      mu     sigma
+mu    NA        NA
+sigma NA -60.02665
+> mlFixBHHH[[ 4 ]]
+             mu     sigma
+mu    -30.00934  -7.67543
+sigma  -7.67543 -55.98293
+> 
+> # with analytical gradients
+> mlgFixBHHH <- maxLik( llfInd, gfInd, start = startValFix, activePar = !isFixed,
++    method = "BHHH" )
+> summary( mlgFixBHHH )
+--------------------------------------------
+Maximum Likelihood estimation
+BHHH maximisation, 10 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -202.0769 
+1  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     1.00000    0.00000      NA        NA    
+sigma  1.82546    0.13365  13.658 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> all.equal( mlFixBHHH, mlgFixBHHH )
+[1] TRUE
+> mlgFixBHHH2 <- maxLik( llf, gfInd, start = startValFix, activePar = !isFixed,
++    method = "BHHH")
+> all.equal( mlgFixBHHH, mlgFixBHHH2 )
+[1] TRUE
+> 
+> # with unused Hessians
+> mlghFixBHHH <- maxLik( llfInd, gfInd, hf, start = startValFix, activePar = !isFixed,
++    method = "BHHH" )
+> all.equal( mlgFixBHHH, mlghFixBHHH )
+[1] TRUE
+> 

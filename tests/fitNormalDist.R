@@ -317,3 +317,42 @@ mlghFix <- maxLik( llf, gf, hf, start = startValFix, activePar = !isFixed )
 all.equal( mlgFix, mlghFix )
 mlgFix[[4]]
 mlghFix[[4]]
+
+## BHHH method
+mlFixBHHH <- maxLik( llfInd, start = startValFix, activePar = !isFixed,
+   method = "BHHH" )
+print( mlFixBHHH )
+summary( mlFixBHHH )
+activePar( mlFixBHHH )
+AIC( mlFixBHHH )
+coef( mlFixBHHH )
+condiNumber( mlFixBHHH )
+hessian( mlFixBHHH )
+logLik( mlFixBHHH )
+maximType( mlFixBHHH )
+nIter( mlFixBHHH )
+nObs( mlFixBHHH )
+nParam( mlFixBHHH )
+returnCode( mlFixBHHH )
+returnMessage( mlFixBHHH )
+vcov( mlFixBHHH )
+logLik( summary( mlFixBHHH ) )
+all.equal( mlFix[ -c( 5, 6, 9, 10 ) ], mlFixBHHH[ -c( 5, 6, 9, 10 ) ] )
+mlFix[[ 3 ]]
+mlFixBHHH[[ 3 ]]
+mlFix[[ 4 ]]
+mlFixBHHH[[ 4 ]]
+
+# with analytical gradients
+mlgFixBHHH <- maxLik( llfInd, gfInd, start = startValFix, activePar = !isFixed,
+   method = "BHHH" )
+summary( mlgFixBHHH )
+all.equal( mlFixBHHH, mlgFixBHHH )
+mlgFixBHHH2 <- maxLik( llf, gfInd, start = startValFix, activePar = !isFixed,
+   method = "BHHH")
+all.equal( mlgFixBHHH, mlgFixBHHH2 )
+
+# with unused Hessians
+mlghFixBHHH <- maxLik( llfInd, gfInd, hf, start = startValFix, activePar = !isFixed,
+   method = "BHHH" )
+all.equal( mlgFixBHHH, mlghFixBHHH )
