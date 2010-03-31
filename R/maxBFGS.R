@@ -21,7 +21,9 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    message <- function(c) {
       switch(as.character(c),
                "0" = "successful convergence",
-               "10" = "degeneracy in Nelder-Mead simplex"
+               "10" = "degeneracy in Nelder-Mead simplex",
+               "51" = "warning from the 'L-BFGS-B' method; see the corresponding component 'message' for details",
+               "52" = "error from the 'L-BFGS-B' method; see the corresponding component 'message' for details"
                )
    }
    ##
