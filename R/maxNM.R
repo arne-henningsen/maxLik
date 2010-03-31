@@ -12,6 +12,8 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
    ##
    ## Note: grad and hess are for compatibility only, SANN uses only fn values
 
+   method <- "Nelder-Mead"
+
    argNames <- c( "fn", "grad", "hess", "start", "print.level", "iterlim",
       "constraints", "tol", "reltol", "parscale", "alpha", "beta", "gamma",
       "temp", "tmax" )
@@ -37,7 +39,7 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
    environment( logLikGrad ) <- environment()
    ## strip possible SUMT parameters and call the function thereafter
    environment( callWithoutSumt ) <- environment()
-   maximType <- "Nelder-Mead maximisation"
+   maximType <- paste( method, "maximisation" )
    parscale <- rep(parscale, length.out=length(start))
    control <- list(trace=max(print.level, 0),
                    REPORT=1,
@@ -64,7 +66,7 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
    ## result of 'sumt' directly, without the canning
    if(is.null(constraints)) {
       result <- optim(start, logLikFunc, control=control,
-                      method="Nelder-Mead", hessian=FALSE, ...)
+                      method = method, hessian=FALSE, ...)
       resultConstraints <- NULL
    }
    else {
@@ -73,7 +75,7 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
          ci <- -constraints$ineqB
          result <- constrOptim(theta=start, f=logLikFunc, grad=logLikGrad,
                           ui=ui, ci=ci, control=control,
-                          method="Nelder-Mead", ...)
+                          method = method, ...)
          resultConstraints <- list(type="constrOptim",
                                    barrier.value=result$barrier.value,
                                    outer.iterations=result$outer.iterations

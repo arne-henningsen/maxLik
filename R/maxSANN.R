@@ -10,6 +10,8 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    ##
    ## Note: grad and hess are for compatibility only, SANN uses only fn values
 
+   method <- "SANN"
+
    argNames <- c( "fn", "grad", "hess", "start", "print.level", "iterlim",
       "constraints", "tol", "reltol", "parscale", "alpha", "beta", "gamma",
       "temp", "tmax" )
@@ -52,7 +54,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
       on.exit( rm( .Random.seed, envir = sys.frame() ) )
    }
 
-   maximType <- "SANN maximisation"
+   maximType <- paste( method, "maximisation" )
    parscale <- rep(parscale, length.out=length(start))
    control <- list(trace=print.level,
                     REPORT=1,
@@ -78,7 +80,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    ## However, as 'sumt' already returns such an object, we return the
    ## result of 'sumt' directly, without the canning
    if(is.null(constraints)) {
-      result <- optim(start, logLikFunc, control=control, method="SANN",
+      result <- optim(start, logLikFunc, control=control, method = method,
                       hessian=FALSE, ...)
       resultConstraints <- NULL
    }
@@ -89,7 +91,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
          result <- constrOptim(theta=start, f=logLikFunc,
                                # Note that gradient has different meaning for SANN!
                           ui=ui, ci=ci, control=control,
-                          method="SANN", ...)
+                          method = method, ...)
          resultConstraints <- list(type="constrOptim",
                                    barrier.value=result$barrier.value,
                                    outer.iterations=result$outer.iterations

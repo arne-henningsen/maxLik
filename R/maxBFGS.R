@@ -9,6 +9,9 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
                     ...) {
    ## contraints    constraints to be passed to 'constrOptim'
    ## ...           further arguments to fn() and grad()
+
+   method <- "BFGS"
+
    argNames <- c( "fn", "grad", "hess", "start", "print.level", "iterlim",
       "constraints", "tol", "reltol", "parscale", "alpha", "beta", "gamma",
       "temp", "tmax" )
@@ -34,7 +37,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    environment( logLikGrad ) <- environment()
    ## strip possible SUMT parameters and call the function thereafter
    environment( callWithoutSumt ) <- environment()
-   maximType <- "BFGS maximisation"
+   maximType <- paste( method, "maximisation" )
    parscale <- rep(parscale, length.out=length(start))
    control <- list(trace=print.level,
                     REPORT=1,
@@ -74,7 +77,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    ## result of 'sumt' directly, without the canning
    if(is.null(constraints)) {
        result <- optim(start, logLikFunc, gr=logLikGrad, control=control,
-                       method="BFGS",
+                       method = method,
                        ...)
        resultConstraints <- NULL
     }
@@ -86,7 +89,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
          ci <- -constraints$ineqB
          result <- constrOptim(theta=start, f=logLikFunc, grad=logLikGrad,
                           ui=ui, ci=ci, control=control,
-                          method="BFGS", ...)
+                          method = method, ...)
          resultConstraints <- list(type="constrOptim",
                                    barrier.value=result$barrier.value,
                                    outer.iterations=result$outer.iterations
