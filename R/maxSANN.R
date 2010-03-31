@@ -34,21 +34,6 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    environment( logLikGrad ) <- environment()
    ## strip possible SUMT parameters and call the function thereafter
    environment( callWithoutSumt ) <- environment()
-   hessian <- function(theta, ...) {
-      ## just used for computing the final hessian, eventually using the supplied analytic information
-      if(!is.null(hess)) {
-         h <- as.matrix(hess(theta, ...))
-      } else {
-         if( is.null( grad ) ) {
-            grad2 <- NULL
-         } else {
-            grad2 <- logLikGrad
-         }
-         h <- numericHessian( f = logLikFunc, grad = grad2, t0 = theta, ... )
-      }
-      rownames( h ) <- colnames( h ) <- names( start )
-      return( h )
-   }
 
    # save seed of the random number generator
    if( exists( ".Random.seed" ) ) {
@@ -127,11 +112,25 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
               paste(names(constraints), collapse=" "))
       }
    }
+
+   # calculate (final) Hessian
+   if(!is.null(hess)) {
+       hessian <- hess(result$par)
+   } else {
+      if( is.null( grad ) ) {
+         grad2 <- NULL
+      } else {
+         grad2 <- logLikGrad
+      }
+      hessian <- numericHessian( f = logLikFunc, grad = grad2, t0=result$par, ... )
+   }
+   rownames( hessian ) <- colnames( hessian ) <- names( result$par )
+
    result <- list(
                    maximum=result$value,
                    estimate=result$par,
                    gradient=logLikGrad(result$par, ...),
-                   hessian=hessian(result$par, ...),
+                   hessian=hessian,
                    code=result$convergence,
                    message=paste(message(result$convergence), result$message),
                    last.step=NULL,
