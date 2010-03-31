@@ -11,16 +11,17 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    ## ...           further arguments to fn() and grad()
 
    method <- "BFGS"
+   maxMethod <- paste( "max", method, sep = "" )
 
    argNames <- c( "fn", "grad", "hess", "start", "print.level", "iterlim",
       "constraints", "tol", "reltol", "parscale", "alpha", "beta", "gamma",
       "temp", "tmax" )
-   checkFuncArgs( fn, argNames, "fn", "maxBFGS" )
+   checkFuncArgs( fn, argNames, "fn", maxMethod )
    if( !is.null( grad ) ) {
-      checkFuncArgs( grad, argNames, "grad", "maxBFGS" )
+      checkFuncArgs( grad, argNames, "grad", maxMethod )
    }
    if( !is.null( hess ) ) {
-      checkFuncArgs( hess, argNames, "hess", "maxBFGS" )
+      checkFuncArgs( hess, argNames, "hess", maxMethod )
    }
 
    message <- function(c) {
@@ -99,7 +100,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
                            # equality constraints: A %*% beta + B = 0
          result <- sumt(fn=fn, grad=grad, hess=hess,
                         start=start,
-                        maxRoutine=maxBFGS,
+                        maxRoutine = get( maxMethod ),
                         constraints=constraints,
                         print.level=print.level,
                         ...)
@@ -107,7 +108,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
                            # this is already maxim object
       }
       else {
-         stop("maxBFGS only supports the following constraints:\n",
+         stop( maxMethod, " only supports the following constraints:\n",
               "constraints=list(ineqA, ineqB)\n",
               "\tfor A %*% beta + B >= 0 linear inequality constraints\n",
               "current constraints:",

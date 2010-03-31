@@ -13,16 +13,17 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
    ## Note: grad and hess are for compatibility only, SANN uses only fn values
 
    method <- "Nelder-Mead"
+   maxMethod <- "maxNM"
 
    argNames <- c( "fn", "grad", "hess", "start", "print.level", "iterlim",
       "constraints", "tol", "reltol", "parscale", "alpha", "beta", "gamma",
       "temp", "tmax" )
-   checkFuncArgs( fn, argNames, "fn", "maxNM" )
+   checkFuncArgs( fn, argNames, "fn", maxMethod )
    if( !is.null( grad ) ) {
-      checkFuncArgs( grad, argNames, "grad", "maxNM" )
+      checkFuncArgs( grad, argNames, "grad", maxMethod )
    }
    if( !is.null( hess ) ) {
-      checkFuncArgs( hess, argNames, "hess", "maxNM" )
+      checkFuncArgs( hess, argNames, "hess", maxMethod )
    }
 
    message <- function(c) {
@@ -85,14 +86,14 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
                            # equality constraints: A %*% beta + B = 0
          result <- sumt(fn=fn, grad=grad, hess=hess,
                         start=start,
-                        maxRoutine=maxNM,
+                        maxRoutine = get( maxMethod ),
                         constraints=constraints,
                         print.level=print.level,
                         ...)
          return(result)
       }
       else {
-         stop("maxNM only supports the following constraints:\n",
+         stop( maxMethod, " only supports the following constraints:\n",
               "constraints=list(ineqA, ineqB)\n",
               "\tfor A %*% beta + B >= 0 linear inequality constraints\n",
               "current constraints:",

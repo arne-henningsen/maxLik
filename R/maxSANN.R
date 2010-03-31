@@ -11,16 +11,17 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    ## Note: grad and hess are for compatibility only, SANN uses only fn values
 
    method <- "SANN"
+   maxMethod <- paste( "max", method, sep = "" )
 
    argNames <- c( "fn", "grad", "hess", "start", "print.level", "iterlim",
       "constraints", "tol", "reltol", "parscale", "alpha", "beta", "gamma",
       "temp", "tmax" )
-   checkFuncArgs( fn, argNames, "fn", "maxSANN" )
+   checkFuncArgs( fn, argNames, "fn", maxMethod )
    if( !is.null( grad ) ) {
-      checkFuncArgs( grad, argNames, "grad", "maxSANN" )
+      checkFuncArgs( grad, argNames, "grad", maxMethod )
    }
    if( !is.null( hess ) ) {
-      checkFuncArgs( hess, argNames, "hess", "maxSANN" )
+      checkFuncArgs( hess, argNames, "hess", maxMethod )
    }
 
    message <- function(c) {
@@ -101,14 +102,14 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
                            # equality constraints: A %*% beta + B = 0
          result <- sumt(fn=fn, grad=grad, hess=hess,
                         start=start,
-                        maxRoutine=maxSANN,
+                        maxRoutine=get( maxMethod ),
                         constraints=constraints,
                         print.level=print.level,
                         ...)
          return(result)
       }
       else {
-         stop("maxSANN only supports the following constraints:\n",
+         stop( maxMethod, " only supports the following constraints:\n",
               "constraints=list(ineqA, ineqB)\n",
               "\tfor A %*% beta + B >= 0 linear inequality constraints\n",
               "current constraints:",
