@@ -41,7 +41,8 @@ summary.maxLik <- function(object, eigentol=1e-12,... ) {
    } else {
       activePar <- rep(TRUE, nParam)
    }
-   if(object$code < 100) {
+   if((object$code < 100) & !is.null(coef(object))) {
+                           # in case of infinity at initial values, the coefs are not provided
        t <- coef(object)/stdEr(object)
        p <- 2*pnorm( -abs( t))
        t[!activePar(object)] <- NA
