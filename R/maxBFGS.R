@@ -105,6 +105,8 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
               paste(names(constraints), collapse=" "))
       }
    }
+
+   # calculate (final) Hessian
    if(!is.null(hess)) {
        hessian <- hess(result$par)
    } else {
@@ -116,6 +118,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
       hessian <- numericHessian( f = logLikFunc, grad = grad2, t0=result$par, ... )
    }
    rownames( hessian ) <- colnames( hessian ) <- names( result$par )
+
    result <- list(
                    maximum=result$value,
                    estimate=result$par,
