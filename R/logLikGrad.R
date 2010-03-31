@@ -18,18 +18,8 @@ logLikGrad <- function(theta, ...) {
 logLikGradSumt <- function(theta, ...) {
    g <- match.call()
    g[names(formals(sumt))] <- NULL
-   if( is.null( grad ) ) {
-      g[[1]] <- as.name("numericGradient")
-      names(g)[2] <- "t0"
-      g$f <- logLikFunc
-   } else {
-      g[[1]] <- as.name("grad")
-      names(g)[2] <- ""
-   }
+   g[[1]] <- as.name("logLikGrad")
+   names(g)[2] <- ""
    g <- eval(g, sys.frame(sys.parent()))
-   if( !is.null( dim(g) ) ) {
-      g <- colSums( g )
-   }
-   names( g ) <- names( start )
    return( g )
 }
