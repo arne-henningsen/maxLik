@@ -524,8 +524,8 @@ Log-Likelihood: -201.5839
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     1.18061    0.18159  6.5015 7.953e-11 ***
-sigma  1.81664    0.12849 14.1379 < 2.2e-16 ***
+mu     1.18061    0.18168  6.4984 8.116e-11 ***
+sigma  1.81664    0.12852 14.1346 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -538,11 +538,11 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 1.180608 1.816636 
 > condiNumber( mlNM )
 mu 	 1 
-sigma 	 1.664480 
+sigma 	 1.667866 
 > hessian( mlNM )
-             mu     sigma
-mu    -30.32596   0.00000
-sigma   0.00000 -60.56666
+                mu        sigma
+mu    -30.29754225   0.02842171
+sigma   0.02842171 -60.53824109
 > logLik( mlNM )
 [1] -201.5839
 > maximType( mlNM )
@@ -559,16 +559,16 @@ NULL
 > returnMessage( mlNM )
 [1] "successful convergence "
 > vcov( mlNM )
-              mu      sigma
-mu    0.03297504 0.00000000
-sigma 0.00000000 0.01651073
+                mu        sigma
+mu    3.300599e-02 1.549577e-05
+sigma 1.549577e-05 1.651849e-02
 > logLik( summary( mlNM ) )
 [1] -201.5839
 > all.equal( ml, mlNM )
 [1] "Length mismatch: comparison on first 10 components" 
 [2] "Component 2: Mean relative difference: 0.0001198380"
 [3] "Component 3: Mean relative difference: 39189.07"    
-[4] "Component 4: Mean relative difference: 0.0009383797"
+[4] "Component 4: Mean relative difference: 0.001563966" 
 [5] "Component 5: Mean relative difference: 1"           
 [6] "Component 6: 1 string mismatch"                     
 [7] "Component 9: names for current but not for target"  
@@ -585,14 +585,14 @@ Log-Likelihood: -201.5839
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     1.18061    0.18168  6.4984 8.116e-11 ***
+mu     1.18061    0.18159  6.5015 7.953e-11 ***
 sigma  1.81664    0.12843 14.1445 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlNM, mlIndNM )
 [1] "Component 3: Mean relative difference: 4.60403e-06"
-[2] "Component 4: Mean relative difference: 0.001563477"
+[2] "Component 4: Mean relative difference: 0.002501563"
 > 
 > # with unused analytical gradients
 > mlgNM <- maxLik( llf, gf, start = startVal, method = "NM" )
@@ -612,7 +612,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlNM, mlgNM )
 [1] "Component 3: Mean relative difference: 1.839327e-06"
-[2] "Component 4: Mean relative difference: 0.0006473064"
+[2] "Component 4: Mean relative difference: 0.001359750" 
 > # with individual log likelihood values and gradients
 > mlgIndNM <- maxLik( llfInd, gfInd, start = startVal, method = "NM" )
 > summary( mlgIndNM )

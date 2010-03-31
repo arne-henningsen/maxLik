@@ -42,7 +42,12 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
       if(!is.null(hess)) {
          h <- as.matrix(hess(theta, ...))
       } else {
-         h <- numericHessian(logLikFunc, logLikGrad, theta, ...)
+         if( is.null( grad ) ) {
+            grad2 <- NULL
+         } else {
+            grad2 <- logLikGrad
+         }
+         h <- numericHessian( f = logLikFunc, grad = grad2, t0 = theta, ... )
       }
       rownames( h ) <- colnames( h ) <- names( start )
       return( h )
