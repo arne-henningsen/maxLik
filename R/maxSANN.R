@@ -29,14 +29,11 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
              )
    }
    ##
-   ## We wrap the function in two versions:
-   ## 1) sum over possible individual likelihoods
-   ## 2) strip possible SUMT parameters and sum thereafter
-   ## The former is for passing to the optimizer from withing sumt
-   ## The latter is necessary for passing '...' to the function
+   ## sum over possible individual likelihoods or gradients
    environment( logLikFunc ) <- environment()
-   environment( logLikFuncSumt ) <- environment()
    environment( logLikGrad ) <- environment()
+   ## strip possible SUMT parameters and call the function thereafter
+   environment( callWithoutSumt ) <- environment()
    hessian <- function(theta, ...) {
       ## just used for computing the final hessian, eventually using the supplied analytic information
       if(!is.null(hess)) {
@@ -74,7 +71,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
                    parscale=parscale,
                    temp=temp,
                    tmax=tmax )
-   f1 <- logLikFuncSumt(start, ...)
+   f1 <- callWithoutSumt( start, "logLikFunc", ... )
    if(is.na( f1)) {
       result <- list(code=100, message=maximMessage("100"),
                      iterations=0,

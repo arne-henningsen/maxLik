@@ -25,22 +25,18 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
                )
    }
    ##
-   ## We wrap the function in two versions:
-   ## 1) sum over possible individual likelihoods
-   ## 2) strip possible SUMT parameters and sum thereafter
-   ## The former is for passing to the optimizer from withing sumt
-   ## The latter is necessary for passing '...' to the function
+   ## sum over possible individual likelihoods or gradients
    environment( logLikFunc ) <- environment()
-   environment( logLikFuncSumt ) <- environment()
    environment( logLikGrad ) <- environment()
-   environment( logLikGradSumt ) <- environment()
+   ## strip possible SUMT parameters and call the function thereafter
+   environment( callWithoutSumt ) <- environment()
    maximType <- "BFGS maximisation"
    control <- list(trace=print.level,
                     REPORT=1,
                     fnscale=-1,
                    reltol=reltol,
                     maxit=iterlim)
-   f1 <- logLikFuncSumt(start, ...)
+   f1 <- callWithoutSumt( start, "logLikFunc", ...)
    if(is.na( f1)) {
       result <- list(code=100, message=maximMessage("100"),
                      iterations=0,
@@ -51,7 +47,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    if(print.level > 2) {
       cat("Initial function value:", f1, "\n")
    }
-   G1 <- logLikGradSumt(start, ...)
+   G1 <- callWithoutSumt( start, "logLikGrad", ...)
    if(print.level > 2) {
       cat("Initial gradient value:\n")
       print(G1)
