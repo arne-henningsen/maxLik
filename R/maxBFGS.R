@@ -77,9 +77,8 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    ## However, as 'sumt' already returns such an object, we return the
    ## result of 'sumt' directly, without the canning
    if(is.null(constraints)) {
-       result <- optim(start, logLikFunc, gr=logLikGrad, control=control,
-                       method = method,
-                       ...)
+       result <- optim( par = start, fn = logLikFunc, control = control,
+                      method = method, gr = logLikGrad, ... )
        resultConstraints <- NULL
     }
    else {
