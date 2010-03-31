@@ -11,8 +11,8 @@ logLikFuncSumt <- function(theta, ...) {
    ## vector-valued); and b) strips the SUMT extra arguments
    f <- match.call()
    f[names(formals(sumt))] <- NULL
-   f[[1]] <- as.name("fn")
+   f[[1]] <- as.name("logLikFunc")
    names(f)[2] <- ""
    f1 <- eval(f, sys.frame(sys.parent()))
-   sum(f1)
+   return( f1 )
 }
