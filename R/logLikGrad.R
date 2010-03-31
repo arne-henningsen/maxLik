@@ -4,22 +4,16 @@
 ## The former is for passing to the optimizer from withing sumt
 ## The latter is necessary for passing '...' to the function
 logLikGrad <- function(theta, ...) {
-   if(!is.null(grad)) {
-      g <- grad(theta, ...)
-      if(!is.null(dim(g))) {
-         if(nrow(g) > 1) {
-            g <- colSums( g )
-         }
-      }
-      names( g ) <- names( start )
-      return( g )
-   }
-   g <- numericGradient(logLikFunc, theta, ...)
-   if(!is.null(dim(g))) {
-      return(colSums(g))
+   if(is.null(grad)) {
+      g <- numericGradient(logLikFunc, theta, ...)
    } else {
-      return(g)
+      g <- grad(theta, ...)
    }
+   if(!is.null(dim(g))) {
+      g <- colSums(g)
+   }
+   names( g ) <- names( start )
+   return( g )
 }
 logLikGradSumt <- function(theta, ...) {
    if(!is.null(grad)) {
