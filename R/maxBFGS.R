@@ -40,7 +40,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    environment( callWithoutSumt ) <- environment()
    maximType <- paste( method, "maximisation" )
    parscale <- rep(parscale, length.out=length(start))
-   control <- list(trace=print.level,
+   control <- list(trace=max(print.level, 0),
                     REPORT=1,
                     fnscale=-1,
                    reltol=reltol,
