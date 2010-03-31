@@ -12,7 +12,7 @@
 maxBFGS(fn, grad = NULL, hess=NULL, start, print.level = 0,
 iterlim = 200,
 constraints,
-   tol = 1e-08, reltol=tol, ... )
+   tol = 1e-08, reltol=tol, parscale=rep(1, length=length(start)), ... )
 maxSANN(fn, grad = NULL, hess = NULL, start, print.level = 0, iterlim =
    10000,
    constraints,
