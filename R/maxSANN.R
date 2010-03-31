@@ -10,6 +10,10 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    ##
    ## Note: grad and hess are for compatibility only, SANN uses only fn values
 
+   alpha <- NULL
+   beta <- NULL
+   gamma <- NULL
+
    method <- "SANN"
    maxMethod <- paste( "max", method, sep = "" )
 
@@ -63,8 +67,8 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
                    reltol=reltol,
                     maxit=iterlim,
                    parscale=parscale,
-                   temp=temp,
-                   tmax=tmax )
+                   alpha=alpha, beta=beta, gamma=gamma,
+                   temp=temp, tmax=tmax )
    f1 <- callWithoutSumt( start, "logLikFunc", ... )
    if(is.na( f1)) {
       result <- list(code=100, message=maximMessage("100"),

@@ -12,6 +12,9 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
    ##
    ## Note: grad and hess are for compatibility only, SANN uses only fn values
 
+   temp <- NULL
+   tmax <- NULL
+
    method <- "Nelder-Mead"
    maxMethod <- "maxNM"
 
@@ -48,8 +51,8 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
                    reltol=reltol,
                    maxit=iterlim,
                    parscale=parscale,
-                   alpha=alpha, beta=beta, gamma=gamma
-                   )
+                   alpha=alpha, beta=beta, gamma=gamma,
+                   temp=temp, tmax=tmax )
    f1 <- callWithoutSumt( start, "logLikFunc", ... )
    if(is.na( f1)) {
       result <- list(code=100, message=maximMessage("100"),

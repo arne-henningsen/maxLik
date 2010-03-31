@@ -10,6 +10,12 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    ## contraints    constraints to be passed to 'constrOptim'
    ## ...           further arguments to fn() and grad()
 
+   alpha <- NULL
+   beta <- NULL
+   gamma <- NULL
+   temp <- NULL
+   tmax <- NULL
+
    method <- "BFGS"
    maxMethod <- paste( "max", method, sep = "" )
 
@@ -45,7 +51,9 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
                     fnscale=-1,
                    reltol=reltol,
                     maxit=iterlim,
-                    parscale=parscale )
+                    parscale=parscale,
+                    alpha=alpha, beta=beta, gamma=gamma,
+                    temp=temp, tmax=tmax )
    f1 <- callWithoutSumt( start, "logLikFunc", ...)
    if(is.na( f1)) {
       result <- list(code=100, message=maximMessage("100"),
