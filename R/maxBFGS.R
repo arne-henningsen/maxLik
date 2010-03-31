@@ -4,6 +4,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
                     iterlim=200,
                     constraints=NULL,
                     tol=1e-8, reltol=tol,
+                    parscale=rep(1, length=length(start)),
                     ## sumt parameters
                     ...) {
    ## contraints    constraints to be passed to 'constrOptim'
@@ -34,11 +35,13 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    ## strip possible SUMT parameters and call the function thereafter
    environment( callWithoutSumt ) <- environment()
    maximType <- "BFGS maximisation"
+   parscale <- rep(parscale, length.out=length(start))
    control <- list(trace=print.level,
                     REPORT=1,
                     fnscale=-1,
                    reltol=reltol,
-                    maxit=iterlim)
+                    maxit=iterlim,
+                    parscale=parscale )
    f1 <- callWithoutSumt( start, "logLikFunc", ...)
    if(is.na( f1)) {
       result <- list(code=100, message=maximMessage("100"),
