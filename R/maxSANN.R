@@ -86,6 +86,8 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
       resultConstraints <- NULL
    }
    else {
+      ## linear equality and inequality constraints
+                           # equality constraints: A %*% beta + B >= 0
       if(identical(names(constraints), c("ineqA", "ineqB"))) {
          ui <- constraints$ineqA
          ci <- -constraints$ineqB
@@ -107,6 +109,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
                         print.level=print.level,
                         ...)
          return(result)
+                           # this is already maxim object
       }
       else {
          stop( maxMethod, " only supports the following constraints:\n",
