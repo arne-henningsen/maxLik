@@ -656,7 +656,7 @@ Log-Likelihood: -201.5840
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     1.18178    0.18159  6.5079  7.62e-11 ***
+mu     1.18178    0.18176  6.5018 7.935e-11 ***
 sigma  1.81652    0.12849 14.1370 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
@@ -670,10 +670,10 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 1.181777 1.816519 
 > condiNumber( mlSANN )
 mu 	 1 
-sigma 	 1.669794 
+sigma 	 1.672721 
 > hessian( mlSANN )
                 mu        sigma
-mu    -30.32596396   0.05684342
+mu    -30.26912054   0.05684342
 sigma   0.05684342 -60.56666280
 > logLik( mlSANN )
 [1] -201.5840
@@ -692,8 +692,8 @@ NULL
 [1] "successful convergence "
 > vcov( mlSANN )
                 mu        sigma
-mu    3.297510e-02 3.094801e-05
-sigma 3.094801e-05 1.651076e-02
+mu    3.303703e-02 3.100613e-05
+sigma 3.100613e-05 1.651076e-02
 > logLik( summary( mlSANN ) )
 [1] -201.5840
 > all.equal( ml, mlSANN )
@@ -701,7 +701,7 @@ sigma 3.094801e-05 1.651076e-02
  [2] "Component 1: Mean relative difference: 7.028622e-08"
  [3] "Component 2: Mean relative difference: 0.0003349168"
  [4] "Component 3: Mean relative difference: 79340.21"    
- [5] "Component 4: Mean relative difference: 0.002189553" 
+ [5] "Component 4: Mean relative difference: 0.002345216" 
  [6] "Component 5: Mean relative difference: 1"           
  [7] "Component 6: 1 string mismatch"                     
  [8] "Component 9: names for current but not for target"  
@@ -718,13 +718,13 @@ Log-Likelihood: -201.5840
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     1.18178    0.18176  6.5018 7.935e-11 ***
-sigma  1.81652    0.12849 14.1370 < 2.2e-16 ***
+mu     1.18178    0.18159  6.5079  7.62e-11 ***
+sigma  1.81652    0.12843 14.1436 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlSANN, mlIndSANN )
-[1] "Component 4: Mean relative difference: 0.001874414"
+[1] "Component 4: Mean relative difference: 0.001875"
 > 
 > # with unused analytical gradients
 > set.seed( 345 )
@@ -745,7 +745,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlSANN, mlgSANN )
 [1] "Component 3: Mean relative difference: 7.284589e-07"
-[2] "Component 4: Mean relative difference: 0.001210320" 
+[2] "Component 4: Mean relative difference: 0.001383963" 
 > # with individual log likelihood values and gradients
 > mlgIndSANN <- maxLik( llfInd, gfInd, start = startVal, method = "SANN" )
 > summary( mlgIndSANN )
