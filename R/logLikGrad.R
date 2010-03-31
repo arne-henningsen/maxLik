@@ -16,29 +16,20 @@ logLikGrad <- function(theta, ...) {
    return( g )
 }
 logLikGradSumt <- function(theta, ...) {
-   if(!is.null(grad)) {
-      g <- match.call()
-      g[names(formals(sumt))] <- NULL
-      g[[1]] <- as.name("grad")
-      names(g)[2] <- ""
-      g <- eval(g, sys.frame(sys.parent()))
-      if(!is.null(dim(g))) {
-         if(nrow(g) > 1) {
-            g <- colSums( g )
-         }
-      }
-      names( g ) <- names( start )
-      return( g )
-   }
    g <- match.call()
    g[names(formals(sumt))] <- NULL
-   g[[1]] <- as.name("numericGradient")
-   names(g)[2] <- "t0"
-   g$f <- logLikFunc
-   g <- eval(g, sys.frame(sys.parent()))
-   if(!is.null(dim(g))) {
-      return(colSums(g))
+   if( is.null( grad ) ) {
+      g[[1]] <- as.name("numericGradient")
+      names(g)[2] <- "t0"
+      g$f <- logLikFunc
    } else {
-      return(g)
+      g[[1]] <- as.name("grad")
+      names(g)[2] <- ""
    }
+   g <- eval(g, sys.frame(sys.parent()))
+   if( !is.null( dim(g) ) ) {
+      g <- colSums( g )
+   }
+   names( g ) <- names( start )
+   return( g )
 }
