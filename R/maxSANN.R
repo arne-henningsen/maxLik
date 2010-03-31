@@ -11,7 +11,8 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    ## Note: grad and hess are for compatibility only, SANN uses only fn values
 
    argNames <- c( "fn", "grad", "hess", "start", "print.level", "iterlim",
-      "tol", "reltol", "temp", "tmax", "parscale" )
+      "constraints", "tol", "reltol", "parscale", "alpha", "beta", "gamma",
+      "temp", "tmax" )
    checkFuncArgs( fn, argNames, "fn", "maxSANN" )
    if( !is.null( grad ) ) {
       checkFuncArgs( grad, argNames, "grad", "maxSANN" )
