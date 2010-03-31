@@ -36,22 +36,6 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
    environment( logLikGrad ) <- environment()
    ## strip possible SUMT parameters and call the function thereafter
    environment( callWithoutSumt ) <- environment()
-   hessian <- function(theta, ...) {
-      ## just used for computing the final hessian, eventually using the
-      ## supplied analytic information
-      if(!is.null(hess)) {
-         h <- as.matrix(hess(theta, ...))
-      } else {
-         if( is.null( grad ) ) {
-            grad2 <- NULL
-         } else {
-            grad2 <- logLikGrad
-         }
-         h <- numericHessian( f = logLikFunc, grad = grad2, t0 = theta, ... )
-      }
-      rownames( h ) <- colnames( h ) <- names( start )
-      return( h )
-   }
    maximType <- "Nelder-Mead maximisation"
    parscale <- rep(parscale, length.out=length(start))
    control <- list(trace=max(print.level, 0),
@@ -112,11 +96,25 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
               paste(names(constraints), collapse=" "))
       }
    }
+
+   # calculate (final) Hessian
+   if(!is.null(hess)) {
+       hessian <- hess(result$par)
+   } else {
+      if( is.null( grad ) ) {
+         grad2 <- NULL
+      } else {
+         grad2 <- logLikGrad
+      }
+      hessian <- numericHessian( f = logLikFunc, grad = grad2, t0=result$par, ... )
+   }
+   rownames( hessian ) <- colnames( hessian ) <- names( result$par )
+
    result <- list(
                   maximum=result$value,
                   estimate=result$par,
                   gradient=callWithoutSumt( result$par, "logLikGrad", ... ),
-                  hessian=hessian(result$par, ...),
+                  hessian=hessian,
                   code=result$convergence,
                   message=paste(message(result$convergence), result$message),
                   last.step=NULL,
