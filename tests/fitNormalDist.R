@@ -356,3 +356,91 @@ all.equal( mlgFixBHHH, mlgFixBHHH2 )
 mlghFixBHHH <- maxLik( llfInd, gfInd, hf, start = startValFix, activePar = !isFixed,
    method = "BHHH" )
 all.equal( mlgFixBHHH, mlghFixBHHH )
+
+
+############### with parameter constraints ###############
+A <- matrix( -1, nrow = 1, ncol = 2 )
+inEq <- list( ineqA = A, ineqB = 2.5 )
+
+## NR method with inequality constraints
+try( maxLik( llf, start = startVal, constraints = inEq, method = "NR" ) )
+
+## BHHH method with inequality constraints
+try( maxLik( llf, start = startVal, constraints = inEq, method = "BHHH" ) )
+
+## BFGS method with inequality constraints
+mlBfgsInEq <- maxLik( llf, start = startVal, constraints = inEq,
+   method = "BFGS" )
+print( mlBfgsInEq )
+summary( mlBfgsInEq )
+activePar( mlBfgsInEq )
+AIC( mlBfgsInEq )
+coef( mlBfgsInEq )
+condiNumber( mlBfgsInEq )
+hessian( mlBfgsInEq )
+logLik( mlBfgsInEq )
+maximType( mlBfgsInEq )
+nIter( mlBfgsInEq )
+nObs( mlBfgsInEq )
+nParam( mlBfgsInEq )
+returnCode( mlBfgsInEq )
+returnMessage( mlBfgsInEq )
+vcov( mlBfgsInEq )
+logLik( summary( mlBfgsInEq ) )
+mlBfgsInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
+   method = "BFGS" )
+summary( mlBfgsInEqInd )
+all.equal( mlBfgsInEq, mlBfgsInEqInd )
+
+# with analytical gradients
+mlgBfgsInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
+   method = "BFGS" )
+all.equal( mlBfgsInEq, mlgBfgsInEq )
+mlgBfgsInEqInd <- maxLik( llfInd, gfInd, start = startVal, constraints = inEq,
+   method = "BFGS" )
+all.equal( mlgBfgsInEqInd, mlgBfgsInEq )
+mlgBfgsInEqInd2 <- maxLik( llf, gfInd, start = startVal, constraints = inEq,
+   method = "BFGS" )
+all.equal( mlgBfgsInEqInd, mlgBfgsInEqInd2 )
+
+# with unused Hessian
+mlghBfgsInEq <- maxLik( llf, gf, hf, start = startVal, constraints = inEq,
+   method = "BFGS" )
+all.equal( mlgBfgsInEq, mlghBfgsInEq )
+
+## NM method with inequality constraints
+mlNmInEq <- maxLik( llf, start = startVal, constraints = inEq, method = "NM" )
+print( mlNmInEq )
+summary( mlNmInEq )
+activePar( mlNmInEq )
+AIC( mlNmInEq )
+coef( mlNmInEq )
+condiNumber( mlNmInEq )
+hessian( mlNmInEq )
+logLik( mlNmInEq )
+maximType( mlNmInEq )
+nIter( mlNmInEq )
+nObs( mlNmInEq )
+nParam( mlNmInEq )
+returnCode( mlNmInEq )
+returnMessage( mlNmInEq )
+vcov( mlNmInEq )
+logLik( summary( mlNmInEq ) )
+all.equal( mlBfgsInEq, mlNmInEq )
+mlNmInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
+   method = "NM" )
+summary( mlNmInEqInd )
+all.equal( mlNmInEq, mlNmInEqInd )
+
+# with unused analytical gradients
+mlgNmInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
+   method = "NM" )
+all.equal( mlNmInEq, mlgNmInEq )
+
+# with unused analytical gradients and Hessians
+mlghNmInEq <- maxLik( llf, gf, hf, start = startVal, constraints = inEq,
+   method = "NM" )
+all.equal( mlgNmInEq, mlghNmInEq )
+
+## SANN method with inequality constraints
+try( maxLik( llf, start = startVal, constraints = inEq, method = "SANN" ) )

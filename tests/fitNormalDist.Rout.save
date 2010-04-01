@@ -1030,3 +1030,237 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > all.equal( mlgFixBHHH, mlghFixBHHH )
 [1] TRUE
 > 
+> 
+> ############### with parameter constraints ###############
+> A <- matrix( -1, nrow = 1, ncol = 2 )
+> inEq <- list( ineqA = A, ineqB = 2.5 )
+> 
+> ## NR method with inequality constraints
+> try( maxLik( llf, start = startVal, constraints = inEq, method = "NR" ) )
+Error in maxRoutine(fn = logLik, grad = grad, hess = hess, start = start,  : 
+  Inequality constraints not implemented for maxNR
+> 
+> ## BHHH method with inequality constraints
+> try( maxLik( llf, start = startVal, constraints = inEq, method = "BHHH" ) )
+Error in maxNR(fn, grad = gradient, hess = hess, start = start, iterlim = iterlim,  : 
+  Inequality constraints not implemented for maxNR
+> 
+> ## BFGS method with inequality constraints
+> mlBfgsInEq <- maxLik( llf, start = startVal, constraints = inEq,
++    method = "BFGS" )
+> print( mlBfgsInEq )
+Maximum Likelihood estimation
+BFGS maximisation, 13031 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5335 (2 free parameter(s))
+Estimate(s): 0.8197184 1.680270 
+> summary( mlBfgsInEq )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS maximisation, 13031 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5335 
+2  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     0.81972    0.17423  4.7049  2.54e-06 ***
+sigma  1.68027    0.10715 15.6808 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -0.001450498 
+--------------------------------------------
+> activePar( mlBfgsInEq )
+[1] TRUE TRUE
+> AIC( mlBfgsInEq )
+[1] 413.067
+> coef( mlBfgsInEq )
+       mu     sigma 
+0.8197184 1.6802697 
+> condiNumber( mlBfgsInEq )
+mu 	 1 
+sigma 	 3.608559 
+> hessian( mlBfgsInEq )
+             mu     sigma
+mu    -35.41345 -15.20561
+sigma -15.20561 -93.62111
+> logLik( mlBfgsInEq )
+[1] -204.5335
+> maximType( mlBfgsInEq )
+[1] "BFGS maximisation"
+> nIter( mlBfgsInEq )
+function gradient 
+     130       31 
+> nObs( mlBfgsInEq )
+NULL
+> nParam( mlBfgsInEq )
+[1] 2
+> returnCode( mlBfgsInEq )
+[1] 0
+> returnMessage( mlBfgsInEq )
+[1] "successful convergence "
+> vcov( mlBfgsInEq )
+                mu        sigma
+mu     0.030354719 -0.004930108
+sigma -0.004930108  0.011482082
+> logLik( summary( mlBfgsInEq ) )
+[1] -204.5335
+> mlBfgsInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
++    method = "BFGS" )
+> summary( mlBfgsInEqInd )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS maximisation, 13031 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5335 
+2  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     0.81972    0.17430   4.703 2.564e-06 ***
+sigma  1.68027    0.10712  15.685 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -0.001450499 
+--------------------------------------------
+> all.equal( mlBfgsInEq, mlBfgsInEqInd )
+[1] "Component 3: Mean relative difference: 2.111204e-08"              
+[2] "Component 4: Mean relative difference: 0.000660793"               
+[3] "Component 11: Component 2: Mean relative difference: 7.994338e-07"
+> 
+> # with analytical gradients
+> mlgBfgsInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
++    method = "BFGS" )
+> all.equal( mlBfgsInEq, mlgBfgsInEq )
+[1] "Component 2: Mean relative difference: 2.642639e-08"              
+[2] "Component 3: Mean relative difference: 1.283066e-07"              
+[3] "Component 4: Mean relative difference: 0.0005816419"              
+[4] "Component 11: Component 2: Mean relative difference: 4.753044e-06"
+> mlgBfgsInEqInd <- maxLik( llfInd, gfInd, start = startVal, constraints = inEq,
++    method = "BFGS" )
+> all.equal( mlgBfgsInEqInd, mlgBfgsInEq )
+[1] TRUE
+> mlgBfgsInEqInd2 <- maxLik( llf, gfInd, start = startVal, constraints = inEq,
++    method = "BFGS" )
+> all.equal( mlgBfgsInEqInd, mlgBfgsInEqInd2 )
+[1] TRUE
+> 
+> # with unused Hessian
+> mlghBfgsInEq <- maxLik( llf, gf, hf, start = startVal, constraints = inEq,
++    method = "BFGS" )
+> all.equal( mlgBfgsInEq, mlghBfgsInEq )
+[1] TRUE
+> 
+> ## NM method with inequality constraints
+> mlNmInEq <- maxLik( llf, start = startVal, constraints = inEq, method = "NM" )
+> print( mlNmInEq )
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 103 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5335 (2 free parameter(s))
+Estimate(s): 0.8197124 1.680277 
+> summary( mlNmInEq )
+--------------------------------------------
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 103 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5335 
+2  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     0.81971    0.17430   4.703 2.564e-06 ***
+sigma  1.68028    0.10712  15.685 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -0.001467752 
+--------------------------------------------
+> activePar( mlNmInEq )
+[1] TRUE TRUE
+> AIC( mlNmInEq )
+[1] 413.067
+> coef( mlNmInEq )
+       mu     sigma 
+0.8197124 1.6802770 
+> condiNumber( mlNmInEq )
+mu 	 1 
+sigma 	 3.612777 
+> hessian( mlNmInEq )
+             mu     sigma
+mu    -35.38503 -15.20561
+sigma -15.20561 -93.67795
+> logLik( mlNmInEq )
+[1] -204.5335
+> maximType( mlNmInEq )
+[1] "Nelder-Mead maximisation"
+> nIter( mlNmInEq )
+function 
+     103 
+> nObs( mlNmInEq )
+NULL
+> nParam( mlNmInEq )
+[1] 2
+> returnCode( mlNmInEq )
+[1] 0
+> returnMessage( mlNmInEq )
+[1] "successful convergence "
+> vcov( mlNmInEq )
+                mu        sigma
+mu     0.030379546 -0.004931146
+sigma -0.004931146  0.011475284
+> logLik( summary( mlNmInEq ) )
+[1] -204.5335
+> all.equal( mlBfgsInEq, mlNmInEq )
+[1] "Component 1: Mean relative difference: 8.099035e-08"            
+[2] "Component 2: Mean relative difference: 5.284706e-06"            
+[3] "Component 3: Mean relative difference: 2.695118e-05"            
+[4] "Component 4: Mean relative difference: 0.000660793"             
+[5] "Component 9: Numeric: lengths (2, 1) differ"                    
+[6] "Component 10: 1 string mismatch"                                
+[7] "Component 11: Component 2: Mean relative difference: 0.01189469"
+> mlNmInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
++    method = "NM" )
+> summary( mlNmInEqInd )
+--------------------------------------------
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 103 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5335 
+2  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     0.81971    0.17417  4.7064 2.522e-06 ***
+sigma  1.68028    0.10713 15.6843 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -0.001467752 
+--------------------------------------------
+> all.equal( mlNmInEq, mlNmInEqInd )
+[1] "Component 4: Mean relative difference: 0.001727862"
+> 
+> # with unused analytical gradients
+> mlgNmInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
++    method = "NM" )
+> all.equal( mlNmInEq, mlgNmInEq )
+[1] "Component 4: Mean relative difference: 0.0004853686"
+> 
+> # with unused analytical gradients and Hessians
+> mlghNmInEq <- maxLik( llf, gf, hf, start = startVal, constraints = inEq,
++    method = "NM" )
+> all.equal( mlgNmInEq, mlghNmInEq )
+[1] TRUE
+> 
+> ## SANN method with inequality constraints
+> try( maxLik( llf, start = startVal, constraints = inEq, method = "SANN" ) )
+Error in dR(theta, theta.old, ...) : 
+  argument "grad" is missing, with no default
+> 
