@@ -32,6 +32,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
 
    ## sum over possible individual likelihoods or gradients
    environment( logLikFunc ) <- environment()
+   environment( logLikGrad ) <- environment()
 
    funcS <- function(theta, ...) {
       ## this wrapper makes a) single-valued function (in case of BHHH
@@ -42,24 +43,6 @@ sumt <- function(fn, grad=NULL, hess=NULL,
       names(f)[2] <- ""
       f1 <- eval(f, sys.frame(sys.parent()))
       sum(f1)
-   }
-   gradient <- function(theta, ...) {
-      if(!is.null(grad)) {
-         g <- grad(theta, ...)
-         if(!is.null(dim(g))) {
-            if(nrow(g) > 1) {
-               g <- colSums( g )
-            }
-         }
-         names( g ) <- names( start )
-         return( g )
-      }
-      g <- numericGradient(logLikFunc, theta, ...)
-      if(!is.null(dim(g))) {
-         return(colSums(g))
-      } else {
-         return(g)
-      }
    }
    gradientS <- function(theta, ...) {
       g <- match.call()
@@ -99,7 +82,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
          h[[1]] <- as.name("numericHessian")
          names(h)[2] <- "t0"
          h$f <- logLikFunc
-         h$grad <- gradient
+         h$grad <- logLikGrad
          h <- eval(h, sys.frame(sys.parent()))
       }
       rownames( h ) <- colnames( h ) <- names( start )
