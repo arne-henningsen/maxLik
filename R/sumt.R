@@ -198,5 +198,11 @@ sumt <- function(fn, grad=NULL, hess=NULL,
                              barrier.value=penalty(theta),
                              outer.iterations=iter
                              )
+   if( result$constraints$barrier.value > 0.001 ) {
+      warning( "problem in imposing equality constraints: the constraints",
+         " are not satisfied (barrier value = ",
+         result$constraints$barrier.value, ")" )
+   }
+
    return(result)
 }
