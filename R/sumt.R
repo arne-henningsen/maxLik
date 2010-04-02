@@ -29,9 +29,10 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    hessPenalty <- function(theta) {
       2*t(A) %*% A
    }
-   func <- function(theta, ...) {
-      sum(fn(theta, ...))
-   }
+
+   ## sum over possible individual likelihoods or gradients
+   environment( logLikFunc ) <- environment()
+
    funcS <- function(theta, ...) {
       ## this wrapper makes a) single-valued function (in case of BHHH
       ## vector-valued); and b) strips the 'maxRoutine' extra arguments
@@ -53,7 +54,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
          names( g ) <- names( start )
          return( g )
       }
-      g <- numericGradient(func, theta, ...)
+      g <- numericGradient(logLikFunc, theta, ...)
       if(!is.null(dim(g))) {
          return(colSums(g))
       } else {
@@ -77,7 +78,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
       }
       g[[1]] <- as.name("numericGradient")
       names(g)[2] <- "t0"
-      g$f <- func
+      g$f <- logLikFunc
       g <- eval(g, sys.frame(sys.parent()))
       if(!is.null(dim(g))) {
          return(colSums(g))
@@ -97,7 +98,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
       } else {
          h[[1]] <- as.name("numericHessian")
          names(h)[2] <- "t0"
-         h$f <- func
+         h$f <- logLikFunc
          h$grad <- gradient
          h <- eval(h, sys.frame(sys.parent()))
       }
