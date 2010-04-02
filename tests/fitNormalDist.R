@@ -360,6 +360,9 @@ all.equal( mlgFixBHHH, mlghFixBHHH )
 
 ############### with parameter constraints ###############
 A <- matrix( -1, nrow = 1, ncol = 2 )
+
+
+############### inequality constraints ###############
 inEq <- list( ineqA = A, ineqB = 2.5 )
 
 ## NR method with inequality constraints
@@ -444,3 +447,180 @@ all.equal( mlgNmInEq, mlghNmInEq )
 
 ## SANN method with inequality constraints
 try( maxLik( llf, start = startVal, constraints = inEq, method = "SANN" ) )
+
+
+############### equality constraints ###############
+eqCon <- list( eqA = A, eqB = 2.5 )
+
+## NR method with equality constraints
+mlCon <- maxLik( llf, start = startVal, constraints = eqCon )
+print( mlCon )
+summary( mlCon )
+activePar( mlCon )
+AIC( mlCon )
+coef( mlCon )
+condiNumber( mlCon )
+hessian( mlCon )
+logLik( mlCon )
+maximType( mlCon )
+nIter( mlCon )
+nObs( mlCon )
+nParam( mlCon )
+returnCode( mlCon )
+returnMessage( mlCon )
+vcov( mlCon )
+logLik( summary( mlCon ) )
+# mlConInd <- maxLik( llfInd, start = startVal, constraints = eqCon )
+   ##### this optimization seems to end up in an infinite loop
+# summary( mlConInd )
+# all.equal( mlCon, mlConInd )
+
+# with analytical gradients
+mlgCon <- maxLik( llf, gf, start = startVal, constraints = eqCon )
+summary( mlgCon )
+all.equal( mlCon[ -c( 5, 6, 7, 9 ) ], mlgCon[ -c( 5, 6, 7, 9 ) ] )
+mlgConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon )
+# all.equal( mlConInd, mlgConInd )
+all.equal( mlgCon, mlgConInd )
+
+# with analytical gradients and Hessians
+mlghCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon )
+all.equal( mlgCon, mlghCon )
+
+## BHHH method with equality constraints
+mlBhhhCon <- maxLik( llfInd, start = startVal, constraints = eqCon,
+   method = "BHHH" )
+print( mlBhhhCon )
+summary( mlBhhhCon )
+activePar( mlBhhhCon )
+AIC( mlBhhhCon )
+coef( mlBhhhCon )
+condiNumber( mlBhhhCon )
+hessian( mlBhhhCon )
+logLik( mlBhhhCon )
+maximType( mlBhhhCon )
+nIter( mlBhhhCon )
+nObs( mlBhhhCon )
+nParam( mlBhhhCon )
+returnCode( mlBhhhCon )
+returnMessage( mlBhhhCon )
+vcov( mlBhhhCon )
+logLik( summary( mlBhhhCon ) )
+all.equal( mlCon[ -c( 5, 6, 7, 9, 10 ) ], mlBhhhCon[ -c( 5, 6, 7, 9, 10 ) ] )
+
+# with analytical gradients
+mlgBhhhCon <- maxLik( llf, gfInd, start = startVal, constraints = eqCon,
+   method = "BHHH" )
+summary( mlgBhhhCon )
+all.equal( mlBhhhCon, mlgBhhhCon )
+mlgBhhhConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon,
+   method = "BHHH" )
+all.equal( mlgBhhhCon, mlgBhhhConInd )
+
+# with analytical gradients and unused Hessians
+mlghBhhhCon <- maxLik( llf, gfInd, hf, start = startVal, constraints = eqCon,
+   method = "BHHH" )
+all.equal( mlgBhhhCon, mlghBhhhCon )
+
+## BFGS method with equality constraints
+mlBfgsCon <- maxLik( llf, start = startVal, constraints = eqCon,
+   method = "BFGS" )
+print( mlBfgsCon )
+summary( mlBfgsCon )
+activePar( mlBfgsCon )
+AIC( mlBfgsCon )
+coef( mlBfgsCon )
+condiNumber( mlBfgsCon )
+hessian( mlBfgsCon )
+logLik( mlBfgsCon )
+maximType( mlBfgsCon )
+nIter( mlBfgsCon )
+nObs( mlBfgsCon )
+nParam( mlBfgsCon )
+returnCode( mlBfgsCon )
+returnMessage( mlBfgsCon )
+vcov( mlBfgsCon )
+logLik( summary( mlBfgsCon ) )
+all.equal( mlBfgsCon[ -c( 5, 6, 9, 10 ) ], mlCon[ -c( 5, 6, 9, 10 ) ] )
+mlBfgsConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
+   method = "BFGS" )
+summary( mlBfgsConInd )
+all.equal( mlBfgsCon, mlBfgsConInd )
+
+# with analytical gradients
+mlgBfgsCon <- maxLik( llf, gf, start = startVal, constraints = eqCon,
+   method = "BFGS" )
+summary( mlgBfgsCon )
+all.equal( mlBfgsCon, mlgBfgsCon )
+mlgBfgsConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon,
+   method = "BFGS" )
+all.equal( mlgBfgsCon, mlgBfgsConInd )
+
+# with analytical gradients and unused Hessians
+mlghBfgsCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon,
+   method = "BFGS" )
+all.equal( mlgBfgsCon, mlghBfgsCon )
+
+## NM method with equality constraints
+mlNmCon <- maxLik( llf, start = startVal, constraints = eqCon, method = "NM" )
+print( mlNmCon )
+summary( mlNmCon )
+activePar( mlNmCon )
+AIC( mlNmCon )
+coef( mlNmCon )
+condiNumber( mlNmCon )
+hessian( mlNmCon )
+logLik( mlNmCon )
+maximType( mlNmCon )
+nIter( mlNmCon )
+nObs( mlNmCon )
+nParam( mlNmCon )
+returnCode( mlNmCon )
+returnMessage( mlNmCon )
+vcov( mlNmCon )
+logLik( summary( mlNmCon ) )
+all.equal( mlNmCon[ -c( 5, 6, 9, 10 ) ], mlCon[ -c( 5, 6, 9, 10 ) ] )
+mlNmConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
+   method = "NM" )
+summary( mlNmConInd )
+all.equal( mlNmCon, mlNmConInd )
+
+# with unused analytical gradients
+mlgNmCon <- maxLik( llf, gf, start = startVal, constraints = eqCon,
+   method = "NM" )
+all.equal( mlNmCon, mlgNmCon )
+mlgNmConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon,
+   method = "NM" )
+all.equal( mlgNmCon, mlgNmConInd )
+
+# with unused analytical gradients and Hessians
+mlghNmCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon,
+   method = "NM" )
+all.equal( mlgNmCon, mlghNmCon )
+
+## SANN method with equality constraints
+mlSannCon <- maxLik( llf, start = startVal, constraints = eqCon,
+   method = "SANN" )
+print( mlSannCon )
+summary( mlSannCon )
+activePar( mlSannCon )
+AIC( mlSannCon )
+coef( mlSannCon )
+condiNumber( mlSannCon )
+hessian( mlSannCon )
+logLik( mlSannCon )
+maximType( mlSannCon )
+nIter( mlSannCon )
+nObs( mlSannCon )
+nParam( mlSannCon )
+returnCode( mlSannCon )
+returnMessage( mlSannCon )
+vcov( mlSannCon )
+logLik( summary( mlSannCon ) )
+all.equal( mlSannCon[ -c( 5, 6, 9, 10 ) ], mlBfgsCon[ -c( 5, 6, 9, 10 ) ] )
+
+# with unused analytical gradients
+mlgSannCon <- maxLik( llf, gf, start = startVal, constraints = eqCon,
+   method = "SANN" )
+all.equal( mlSannCon, mlgSannCon )
+
