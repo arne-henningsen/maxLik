@@ -1,10 +1,5 @@
 ## strip possible SUMT parameters and call the function thereafter
 callWithoutSumt <- function(theta, fName, ...) {
-   f <- match.call()
-   f[names(formals(sumt))] <- NULL
-   f[[1]] <- as.name(fName)
-   names(f)[2] <- ""
-   f[["fName"]] <- NULL
-   f1 <- eval(f, sys.frame(sys.parent()))
-   return( f1 )
+   return( callWithoutArgs( theta, fName = fName, 
+      args = names(formals(sumt)), ... ) )
 }
