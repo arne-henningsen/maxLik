@@ -39,23 +39,24 @@ sumt <- function(fn, grad=NULL, hess=NULL,
          args = names(formals(maxRoutine)), ... ) )
    }
 
-   hessianS <- function(theta, ...) {
-      ## just used for computing the final hessian, eventually using the
-      ## supplied analytic information
-      h <- match.call()
-      h[names(formals(maxRoutine))] <- NULL
-      if(!is.null(hess)) {
-         h[[1]] <- as.name("hess")
-         names(h)[2] <- ""
-         h <- eval(h, sys.frame(sys.parent()))
+   ## just used for computing the final hessian, eventually using the
+   ## supplied analytic information
+   hessian <- function( theta, ... ) {
+      if(is.null(hess)) {
+         h <- numericHessian( f = logLikFunc, grad = logLikGrad, t0=theta, ... )
       } else {
-         h[[1]] <- as.name("numericHessian")
-         names(h)[2] <- "t0"
-         h$f <- logLikFunc
-         h$grad <- logLikGrad
-         h <- eval(h, sys.frame(sys.parent()))
+         h <- hess( theta, ... )
       }
       rownames( h ) <- colnames( h ) <- names( start )
+      return( h )
+   }
+
+   hessianS <- function(theta, ...) {
+      h <- match.call()
+      h[names(formals(maxRoutine))] <- NULL
+      h[[1]] <- as.name("hessian")
+      names(h)[2] <- ""
+      h <- eval(h, sys.frame(sys.parent()))
       return( h )
    }
    ## the penalized objective function
