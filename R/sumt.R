@@ -33,17 +33,12 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    ## sum over possible individual likelihoods or gradients
    environment( logLikFunc ) <- environment()
    environment( logLikGrad ) <- environment()
-
-   funcS <- function(theta, ...) {
-      ## this wrapper makes a) single-valued function (in case of BHHH
-      ## vector-valued); and b) strips the 'maxRoutine' extra arguments
-      f <- match.call()
-      f[names(formals(maxRoutine))] <- NULL
-      f[[1]] <- as.name("fn")
-      names(f)[2] <- ""
-      f1 <- eval(f, sys.frame(sys.parent()))
-      sum(f1)
+   ## strip possible arguments of maxRoutine and call the function thereafter
+   callWithoutMaxArgs <- function(theta, fName, ...) {
+      return( callWithoutArgs( theta, fName = fName,
+         args = names(formals(maxRoutine)), ... ) )
    }
+
    gradientS <- function(theta, ...) {
       g <- match.call()
       g[names(formals(maxRoutine))] <- NULL
@@ -90,7 +85,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    }
    ## the penalized objective function
    Phi <- function(theta, ...) {
-      funcS(theta, ...) - rho * penalty(theta)
+      callWithoutMaxArgs( theta, "logLikFunc", ... ) - rho * penalty(theta)
    }
    if(!is.null(grad)) {
       gradPhi<- function(theta, ...) {
@@ -137,7 +132,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    theta <- coef(result)
    if(print.level > 0) {
       cat("SUMT initial: rho = ", rho,
-          ", function = ", funcS(theta, ...),
+          ", function = ", callWithoutMaxArgs( theta, "logLikFunc", ... ),
           ", penalty = ", penalty(theta), "\n")
       cat("Estimate:")
       print(theta)
@@ -145,7 +140,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    ## <TODO>
    ## Better upper/lower bounds for rho?
    if(is.null(SUMTRho0))
-       rho <- max(funcS(start, ...), 1e-3)/max(penalty(start), 1e-3)
+       rho <- max( callWithoutMaxArgs( theta, "logLikFunc", ... ), 1e-3)/max(penalty(start), 1e-3)
    else
        rho <- SUMTRho0
    ## </TODO>
@@ -162,7 +157,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
       theta <- coef(result)
       if(print.level > 0) {
          cat("SUMT iteration ", iter,
-             ": rho = ", rho, ", function = ", funcS(theta, ...),
+             ": rho = ", rho, ", function = ", callWithoutMaxArgs( theta, "logLikFunc", ... ),
              ", penalty = ", penalty(theta), "\n", sep="")
          cat("Estimate:")
          print(theta)
