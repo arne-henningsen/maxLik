@@ -39,31 +39,6 @@ sumt <- function(fn, grad=NULL, hess=NULL,
          args = names(formals(maxRoutine)), ... ) )
    }
 
-   gradientS <- function(theta, ...) {
-      g <- match.call()
-      g[names(formals(maxRoutine))] <- NULL
-      if(!is.null(grad)) {
-         g[[1]] <- as.name("grad")
-         names(g)[2] <- ""
-         g <- eval(g, sys.frame(sys.parent()))
-         if(!is.null(dim(g))) {
-            if(nrow(g) > 1) {
-               g <- colSums( g )
-            }
-         }
-         names( g ) <- names( start )
-         return( g )
-      }
-      g[[1]] <- as.name("numericGradient")
-      names(g)[2] <- "t0"
-      g$f <- logLikFunc
-      g <- eval(g, sys.frame(sys.parent()))
-      if(!is.null(dim(g))) {
-         return(colSums(g))
-      } else {
-         return(g)
-      }
-   }
    hessianS <- function(theta, ...) {
       ## just used for computing the final hessian, eventually using the
       ## supplied analytic information
@@ -171,7 +146,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    }
    ## Now we replace the resulting gradient and Hessian with those,
    ## calculated on the original function
-   result$gradient <- gradientS(theta, ...)
+   result$gradient <- callWithoutMaxArgs( theta, "logLikGrad", ... )
    result$hessian <- hessianS(theta, ...)
    result$constraints <- list(type="SUMT",
                              barrier.value=penalty(theta),
