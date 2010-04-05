@@ -40,6 +40,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    ## sum over possible individual likelihoods or gradients
    environment( logLikFunc ) <- environment()
    environment( logLikGrad ) <- environment()
+   environment( logLikHess ) <- environment()
    ## strip possible SUMT parameters and call the function thereafter
    environment( callWithoutSumt ) <- environment()
 
@@ -125,17 +126,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    }
 
    # calculate (final) Hessian
-   if(!is.null(hess)) {
-       hessian <- hess(result$par)
-   } else {
-      if( is.null( grad ) ) {
-         grad2 <- NULL
-      } else {
-         grad2 <- logLikGrad
-      }
-      hessian <- numericHessian( f = logLikFunc, grad = grad2, t0=result$par, ... )
-   }
-   rownames( hessian ) <- colnames( hessian ) <- names( result$par )
+   hessian <- logLikHess( result$par, ... )
 
    result <- list(
                    maximum=result$value,
