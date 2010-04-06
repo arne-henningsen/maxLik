@@ -639,7 +639,6 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > 
 > 
 > ## SANN method
-> set.seed( 345 )
 > mlSANN <- maxLik( llf, start = startVal, method = "SANN" )
 > print( mlSANN )
 Maximum Likelihood estimation
@@ -727,7 +726,6 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] "Component 4: Mean relative difference: 0.001875"
 > 
 > # with unused analytical gradients
-> set.seed( 345 )
 > mlgSANN <- maxLik( llf, gf, start = startVal, method = "SANN" )
 > summary( mlgSANN )
 --------------------------------------------
@@ -766,7 +764,6 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] TRUE
 > 
 > # with unused analytical gradients and Hessian
-> set.seed( 345 )
 > mlghSANN <- maxLik( llf, gf, hf, start = startVal, method = "SANN" )
 > all.equal( mlgSANN, mlghSANN )
 [1] TRUE

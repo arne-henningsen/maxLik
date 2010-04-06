@@ -225,7 +225,6 @@ all.equal( mlgNM, mlghNM )
 
 
 ## SANN method
-set.seed( 345 )
 mlSANN <- maxLik( llf, start = startVal, method = "SANN" )
 print( mlSANN )
 summary( mlSANN )
@@ -250,7 +249,6 @@ summary( mlIndSANN )
 all.equal( mlSANN, mlIndSANN )
 
 # with unused analytical gradients
-set.seed( 345 )
 mlgSANN <- maxLik( llf, gf, start = startVal, method = "SANN" )
 summary( mlgSANN )
 all.equal( mlSANN, mlgSANN )
@@ -260,7 +258,6 @@ summary( mlgIndSANN )
 all.equal( mlgSANN, mlgIndSANN )
 
 # with unused analytical gradients and Hessian
-set.seed( 345 )
 mlghSANN <- maxLik( llf, gf, hf, start = startVal, method = "SANN" )
 all.equal( mlgSANN, mlghSANN )
 
