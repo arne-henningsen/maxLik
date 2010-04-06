@@ -3,7 +3,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
                     print.level=0,
                     iterlim=10000,
                     constraints = NULL,
-                    tol=1e-8, reltol=tol,
+                    tol=1e-8, reltol=tol, cand = NULL,
                     temp=10, tmax=10, parscale=rep(1, length=length(start)),
                     random.seed = 123, ... ) {
    ## ... : further arguments to fn()
@@ -87,7 +87,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    ## result of 'sumt' directly, without the canning
    if(is.null(constraints)) {
       result <- optim( par = start, fn = logLikFunc, control = control,
-                      method = method, ... )
+                      method = method, gr = cand, ... )
       resultConstraints <- NULL
    }
    else {
@@ -112,6 +112,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
                         maxRoutine=get( maxMethod ),
                         constraints=constraints,
                         print.level=print.level,
+                        cand = cand,
                         iterlim = iterlim,
                         tol = tol, reltol = reltol,
                         temp = temp, tmax = tmax, parscale = parscale,

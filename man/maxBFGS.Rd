@@ -16,7 +16,7 @@ constraints,
 maxSANN(fn, grad = NULL, hess = NULL, start, print.level = 0, iterlim =
    10000,
    constraints,
-   tol = 1e-08, reltol=tol, temp = 10, tmax = 10,
+   tol = 1e-08, reltol=tol, cand = NULL, temp = 10, tmax = 10,
    parscale = rep(1, length = length(start)),
    random.seed = 123, ... )
 maxNM(fn, grad = NULL, hess = NULL, start, print.level = 0, iterlim =
@@ -53,6 +53,10 @@ tol = 1e-08, reltol=tol, parscale = rep(1, length = length(start)), alpha = 1, b
   }
   \item{tol, reltol}{the relative convergence tolerance (see
     \code{\link{optim}}).  \code{tol} is for compatibility with \code{\link{maxNR}}.}
+  \item{cand}{a function used in the \code{"SANN"} algorithm
+    to generate a new candidate point;
+    if it is \code{NULL}, a default Gaussian Markov kernel is used
+    (see argument \code{gr} of \code{\link{optim}}).}
   \item{temp}{controls the '"SANN"' method. It is the starting
           temperature for the cooling schedule. Defaults to '10'.}
   \item{tmax}{is the number of function evaluations at each temperature

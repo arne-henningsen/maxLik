@@ -264,6 +264,11 @@ set.seed( 345 )
 mlghSANN <- maxLik( llf, gf, hf, start = startVal, method = "SANN" )
 all.equal( mlgSANN, mlghSANN )
 
+# with a user-specified function to generate a new candidate point
+mlSANNCand <- maxLik( llf, start = startVal, method = "SANN",
+   cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
+summary( mlSANNCand )
+all.equal( mlSANNCand, mlSANN )
 
 ############### with fixed parameters ###############
 # start values
@@ -623,4 +628,10 @@ all.equal( mlSannCon[ -c( 5, 6, 9, 10 ) ], mlBfgsCon[ -c( 5, 6, 9, 10 ) ] )
 mlgSannCon <- maxLik( llf, gf, start = startVal, constraints = eqCon,
    method = "SANN" )
 all.equal( mlSannCon, mlgSannCon )
+
+# with a user-specified function to generate a new candidate point
+mlSannConCand <- maxLik( llf, start = startVal, constraints = eqCon,
+   method = "SANN", cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
+summary( mlSannConCand )
+all.equal( mlSannConCand, mlSannCon )
 

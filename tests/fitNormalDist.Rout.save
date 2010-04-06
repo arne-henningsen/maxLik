@@ -771,6 +771,29 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > all.equal( mlgSANN, mlghSANN )
 [1] TRUE
 > 
+> # with a user-specified function to generate a new candidate point
+> mlSANNCand <- maxLik( llf, start = startVal, method = "SANN",
++    cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
+There were 50 or more warnings (use warnings() to see the first 50)
+> summary( mlSANNCand )
+--------------------------------------------
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.5902 
+2  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     1.20031    0.18127  6.6217 3.551e-11 ***
+sigma  1.81253    0.12773 14.1903 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> all.equal( mlSANNCand, mlSANN )
+[1] "Component 1: Mean relative difference: 3.099239e-05"
+[2] "Component 2: Mean relative difference: 0.007475283" 
+[3] "Component 3: Mean relative difference: 0.9679423"   
+[4] "Component 4: Mean relative difference: 0.02200489"  
 > 
 > ############### with fixed parameters ###############
 > # start values
@@ -1825,5 +1848,34 @@ In sumt(fn = fn, grad = grad, hess = hess, start = start, maxRoutine = get(maxMe
 > all.equal( mlSannCon, mlgSannCon )
 [1] "Component 3: Mean relative difference: 7.706088e-07"
 [2] "Component 4: Mean relative difference: 0.0009192663"
+> 
+> # with a user-specified function to generate a new candidate point
+> mlSannConCand <- maxLik( llf, start = startVal, constraints = eqCon,
++    method = "SANN", cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
+There were 50 or more warnings (use warnings() to see the first 50)
+> summary( mlSannConCand )
+--------------------------------------------
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.5859 
+2  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     1.18320    0.18210  6.4974 8.172e-11 ***
+sigma  1.82156    0.12929 14.0895 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+2  outer iterations, barrier value 0.2547804 
+--------------------------------------------
+> all.equal( mlSannConCand, mlSannCon )
+[1] "Component 1: Mean relative difference: 4.436627e-06"            
+[2] "Component 2: Mean relative difference: 0.002629342"             
+[3] "Component 3: Mean relative difference: 1.068397"                
+[4] "Component 4: Mean relative difference: 0.01167192"              
+[5] "Component 11: Component 2: Mean relative difference: 0.03105928"
 > 
 > 
