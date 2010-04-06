@@ -1,6 +1,6 @@
 logLikHess <- function( theta, ... ) {
    if(!is.null(hess)) {
-       hessian <- hess( theta )
+       hessian <- hess( theta, ... )
    } else {
       if( is.null( grad ) ) {
          grad2 <- NULL
