@@ -17,6 +17,14 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    method <- "SANN"
    maxMethod <- paste( "max", method, sep = "" )
 
+   if( is.null( cand ) ) {
+      candWrapper <- NULL
+   } else {
+      candWrapper <- function( theta, fnOrig, gradOrig, hessOrig, ... ) {
+         return( cand( theta, ... ) )
+      }
+   }
+
    argNames <- c( "fn", "grad", "hess", "start", "print.level", "iterlim",
       "constraints", "tol", "reltol", "parscale", "alpha", "beta", "gamma",
       "temp", "tmax" )
@@ -84,7 +92,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    ## result of 'sumt' directly, without the canning
    if(is.null(constraints)) {
       result <- optim( par = start, fn = logLikFunc, control = control,
-                      method = method, gr = cand, fnOrig = fn,
+                      method = method, gr = candWrapper, fnOrig = fn,
                       gradOrig = grad, hessOrig = hess, ... )
       resultConstraints <- NULL
    }

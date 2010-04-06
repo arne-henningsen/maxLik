@@ -770,7 +770,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > 
 > # with a user-specified function to generate a new candidate point
 > mlSANNCand <- maxLik( llf, start = startVal, method = "SANN",
-+    cand = function(x,fnOrig=NULL,gradOrig=NULL,hessOrig = hess)c(rnorm(1,x[1]),rnorm(1,x[2])) )
++    cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
 There were 50 or more warnings (use warnings() to see the first 50)
 > summary( mlSANNCand )
 --------------------------------------------
@@ -1848,7 +1848,7 @@ In sumt(fn = fn, grad = grad, hess = hess, start = start, maxRoutine = get(maxMe
 > 
 > # with a user-specified function to generate a new candidate point
 > mlSannConCand <- maxLik( llf, start = startVal, constraints = eqCon,
-+    method = "SANN", cand = function(x,fnOrig=NULL,gradOrig=NULL,hessOrig=NULL)c(rnorm(1,x[1]),rnorm(1,x[2])) )
++    method = "SANN", cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
 There were 50 or more warnings (use warnings() to see the first 50)
 > summary( mlSannConCand )
 --------------------------------------------
