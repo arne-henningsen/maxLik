@@ -38,9 +38,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
                "52" = "error from the 'L-BFGS-B' method; see the corresponding component 'message' for details"
                )
    }
-   ##
-   ## sum over possible individual likelihoods or gradients
-   environment( logLikHess ) <- environment()
+
    ## strip possible SUMT parameters and call the function thereafter
    environment( callWithoutSumt ) <- environment()
    maximType <- paste( method, "maximisation" )
@@ -53,7 +51,8 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
                     parscale=parscale,
                     alpha=alpha, beta=beta, gamma=gamma,
                     temp=temp, tmax=tmax )
-   f1 <- callWithoutSumt( start, "logLikFunc", fnOrig = fn, gradOrig = grad, ...)
+   f1 <- callWithoutSumt( start, "logLikFunc", fnOrig = fn, gradOrig = grad,
+      hessOrig = hess, ...)
    if(is.na( f1)) {
       result <- list(code=100, message=maximMessage("100"),
                      iterations=0,
@@ -64,7 +63,8 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    if(print.level > 2) {
       cat("Initial function value:", f1, "\n")
    }
-   G1 <- callWithoutSumt( start, "logLikGrad", fnOrig = fn, gradOrig = grad, ...)
+   G1 <- callWithoutSumt( start, "logLikGrad", fnOrig = fn, gradOrig = grad,
+      hessOrig = hess, ...)
    if(print.level > 2) {
       cat("Initial gradient value:\n")
       print(G1)
@@ -86,7 +86,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    if(is.null(constraints)) {
        result <- optim( par = start, fn = logLikFunc, control = control,
                       method = method, gr = logLikGrad, fnOrig = fn,
-                      gradOrig = grad, ... )
+                      gradOrig = grad, hessOrig = hess, ... )
        resultConstraints <- NULL
     }
    else {
@@ -97,7 +97,8 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
          ci <- -constraints$ineqB
          result <- constrOptim(theta=start, f=logLikFunc, grad=logLikGrad,
                           ui=ui, ci=ci, control=control,
-                          method = method, fnOrig = fn, gradOrig = grad, ...)
+                          method = method, fnOrig = fn, gradOrig = grad,
+                          hessOrig = hess, ...)
          resultConstraints <- list(type="constrOptim",
                                    barrier.value=result$barrier.value,
                                    outer.iterations=result$outer.iterations
@@ -127,13 +128,14 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    }
 
    # calculate (final) Hessian
-   hessian <- logLikHess( result$par, fnOrig = fn, gradOrig = grad, ... )
+   hessian <- logLikHess( result$par, fnOrig = fn, gradOrig = grad,
+      hessOrig = hess, ... )
 
    result <- list(
                    maximum=result$value,
                    estimate=result$par,
                    gradient=logLikGrad( theta = result$par, fnOrig = fn,
-                     gradOrig = grad, ... ),
+                     gradOrig = grad, hessOrig = hess, ... ),
                    hessian=hessian,
                    code=result$convergence,
                    message=paste(message(result$convergence), result$message),
