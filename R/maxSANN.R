@@ -112,6 +112,10 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
                         maxRoutine=get( maxMethod ),
                         constraints=constraints,
                         print.level=print.level,
+                        iterlim = iterlim,
+                        tol = tol, reltol = reltol,
+                        temp = temp, tmax = tmax, parscale = parscale,
+                        random.seed = random.seed,
                         ...)
          return(result)
                            # this is already maxim object
