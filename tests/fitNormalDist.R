@@ -263,7 +263,7 @@ all.equal( mlgSANN, mlghSANN )
 
 # with a user-specified function to generate a new candidate point
 mlSANNCand <- maxLik( llf, start = startVal, method = "SANN",
-   cand = function(x,func=NULL)c(rnorm(1,x[1]),rnorm(1,x[2])) )
+   cand = function(x,fnOrig=NULL)c(rnorm(1,x[1]),rnorm(1,x[2])) )
 summary( mlSANNCand )
 all.equal( mlSANNCand, mlSANN )
 
@@ -628,7 +628,7 @@ all.equal( mlSannCon, mlgSannCon )
 
 # with a user-specified function to generate a new candidate point
 mlSannConCand <- maxLik( llf, start = startVal, constraints = eqCon,
-   method = "SANN", cand = function(x,func=NULL)c(rnorm(1,x[1]),rnorm(1,x[2])) )
+   method = "SANN", cand = function(x,fnOrig=NULL)c(rnorm(1,x[1]),rnorm(1,x[2])) )
 summary( mlSannConCand )
 all.equal( mlSannConCand, mlSannCon )
 

@@ -1,4 +1,4 @@
-logLikHess <- function( theta, func, ... ) {
+logLikHess <- function( theta, fnOrig, ... ) {
    if(!is.null(hess)) {
        hessian <- hess( theta, ... )
    } else {
@@ -8,7 +8,7 @@ logLikHess <- function( theta, func, ... ) {
          grad2 <- logLikGrad
       }
       hessian <- numericHessian( f = logLikFunc, grad = grad2, t0 = theta, 
-         func = func, ... )
+         fnOrig = fnOrig, ... )
    }
    rownames( hessian ) <- colnames( hessian ) <- names( theta )
    return( hessian )
