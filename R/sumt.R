@@ -33,6 +33,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    ## sum over possible individual likelihoods or gradients
    environment( logLikFunc ) <- environment()
    environment( logLikGrad ) <- environment()
+   environment( logLikHess ) <- environment()
    ## strip possible arguments of maxRoutine and call the function thereafter
    callWithoutMaxArgs <- function(theta, fName, ...) {
       return( callWithoutArgs( theta, fName = fName,
@@ -41,25 +42,10 @@ sumt <- function(fn, grad=NULL, hess=NULL,
 
    ## just used for computing the final hessian, eventually using the
    ## supplied analytic information
-   hessian <- function( theta, ... ) {
-      if(is.null(hess)) {
-         if( is.null( grad ) ) {
-            grad2 <- NULL
-         } else {
-            grad2 <- logLikGrad
-         }
-         h <- numericHessian( f = logLikFunc, grad = grad2, t0=theta, ... )
-      } else {
-         h <- hess( theta, ... )
-      }
-      rownames( h ) <- colnames( h ) <- names( start )
-      return( h )
-   }
-
    hessianS <- function(theta, ...) {
       h <- match.call()
       h[names(formals(maxRoutine))] <- NULL
-      h[[1]] <- as.name("hessian")
+      h[[1]] <- as.name("logLikHess")
       names(h)[2] <- ""
       h <- eval(h, sys.frame(sys.parent()))
       return( h )
