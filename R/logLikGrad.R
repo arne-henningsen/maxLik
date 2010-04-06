@@ -9,6 +9,6 @@ logLikGrad <- function(theta, fnOrig, ...) {
    if(!is.null(dim(g))) {
       g <- colSums(g)
    }
-   names( g ) <- names( start )
+   names( g ) <- names( theta )
    return( g )
 }
