@@ -111,6 +111,9 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
                         maxRoutine = get( maxMethod ),
                         constraints=constraints,
                         print.level=print.level,
+                        iterlim = iterlim,
+                        tol = tol, reltol = reltol, 
+                        parscale = parscale,
                         ...)
          return(result)
                            # this is already maxim object
