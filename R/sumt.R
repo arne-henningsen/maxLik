@@ -40,16 +40,6 @@ sumt <- function(fn, grad=NULL, hess=NULL,
          args = names(formals(maxRoutine)), ... ) )
    }
 
-   ## just used for computing the final hessian, eventually using the
-   ## supplied analytic information
-   hessianS <- function(theta, ...) {
-      h <- match.call()
-      h[names(formals(maxRoutine))] <- NULL
-      h[[1]] <- as.name("logLikHess")
-      names(h)[2] <- ""
-      h <- eval(h, sys.frame(sys.parent()))
-      return( h )
-   }
    ## the penalized objective function
    Phi <- function(theta, ...) {
       callWithoutMaxArgs( theta, "logLikFunc", ... ) - rho * penalty(theta)
@@ -139,7 +129,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    ## Now we replace the resulting gradient and Hessian with those,
    ## calculated on the original function
    result$gradient <- callWithoutMaxArgs( theta, "logLikGrad", ... )
-   result$hessian <- hessianS(theta, ...)
+   result$hessian <- callWithoutMaxArgs( theta, "logLikHess", ... )
    result$constraints <- list(type="SUMT",
                              barrier.value=penalty(theta),
                              outer.iterations=iter
