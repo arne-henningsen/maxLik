@@ -31,7 +31,6 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    }
 
    ## sum over possible individual likelihoods or gradients
-   environment( logLikGrad ) <- environment()
    environment( logLikHess ) <- environment()
    ## strip possible arguments of maxRoutine and call the function thereafter
    callWithoutMaxArgs <- function(theta, fName, ...) {
@@ -41,7 +40,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
 
    ## the penalized objective function
    Phi <- function(theta, ...) {
-      callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn, ... ) - rho * penalty(theta)
+      callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn, gradOrig = grad, ... ) - rho * penalty(theta)
    }
    if(!is.null(grad)) {
       gradPhi<- function(theta, ...) {
@@ -88,7 +87,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    theta <- coef(result)
    if(print.level > 0) {
       cat("SUMT initial: rho = ", rho,
-          ", function = ", callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn, ... ),
+          ", function = ", callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn, gradOrig = grad, ... ),
           ", penalty = ", penalty(theta), "\n")
       cat("Estimate:")
       print(theta)
@@ -96,7 +95,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    ## <TODO>
    ## Better upper/lower bounds for rho?
    if(is.null(SUMTRho0))
-       rho <- max( callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn, ... ), 1e-3)/max(penalty(start), 1e-3)
+       rho <- max( callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn, gradOrig = grad, ... ), 1e-3)/max(penalty(start), 1e-3)
    else
        rho <- SUMTRho0
    ## </TODO>
@@ -113,7 +112,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
       theta <- coef(result)
       if(print.level > 0) {
          cat("SUMT iteration ", iter,
-             ": rho = ", rho, ", function = ", callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn, ... ),
+             ": rho = ", rho, ", function = ", callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn, gradOrig = grad, ... ),
              ", penalty = ", penalty(theta), "\n", sep="")
          cat("Estimate:")
          print(theta)
@@ -127,8 +126,8 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    }
    ## Now we replace the resulting gradient and Hessian with those,
    ## calculated on the original function
-   result$gradient <- callWithoutMaxArgs( theta, "logLikGrad", fnOrig = fn, ... )
-   result$hessian <- callWithoutMaxArgs( theta, "logLikHess", fnOrig = fn, ... )
+   result$gradient <- callWithoutMaxArgs( theta, "logLikGrad", fnOrig = fn, gradOrig = grad, ... )
+   result$hessian <- callWithoutMaxArgs( theta, "logLikHess", fnOrig = fn, gradOrig = grad, ... )
    result$constraints <- list(type="SUMT",
                              barrier.value=penalty(theta),
                              outer.iterations=iter

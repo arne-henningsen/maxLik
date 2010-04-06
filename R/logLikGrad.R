@@ -1,10 +1,10 @@
 ## gradient function:
 ## sum over possible individual gradients
-logLikGrad <- function(theta, fnOrig, ...) {
-   if(is.null(grad)) {
+logLikGrad <- function(theta, fnOrig, gradOrig, ...) {
+   if(is.null(gradOrig)) {
       g <- numericGradient(logLikFunc, theta, fnOrig = fnOrig, ...)
    } else {
-      g <- grad(theta, ...)
+      g <- gradOrig(theta, ...)
    }
    if(!is.null(dim(g))) {
       g <- colSums(g)
