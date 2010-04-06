@@ -39,7 +39,6 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
    }
    ##
    ## sum over possible individual likelihoods or gradients
-   environment( logLikFunc ) <- environment()
    environment( logLikGrad ) <- environment()
    environment( logLikHess ) <- environment()
    ## strip possible SUMT parameters and call the function thereafter
@@ -54,7 +53,7 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
                    parscale=parscale,
                    alpha=alpha, beta=beta, gamma=gamma,
                    temp=temp, tmax=tmax )
-   f1 <- callWithoutSumt( start, "logLikFunc", ... )
+   f1 <- callWithoutSumt( start, "logLikFunc", func = fn, ... )
    if(is.na( f1)) {
       result <- list(code=100, message=maximMessage("100"),
                      iterations=0,
@@ -71,7 +70,7 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
    ## result of 'sumt' directly, without the canning
    if(is.null(constraints)) {
       result <- optim( par = start, fn = logLikFunc, control = control,
-                      method = method, ... )
+                      method = method, func = fn, ... )
       resultConstraints <- NULL
    }
    else {
@@ -82,7 +81,7 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
          ci <- -constraints$ineqB
          result <- constrOptim(theta=start, f=logLikFunc, grad=logLikGrad,
                           ui=ui, ci=ci, control=control,
-                          method = method, ...)
+                          method = method, func = fn, ...)
          resultConstraints <- list(type="constrOptim",
                                    barrier.value=result$barrier.value,
                                    outer.iterations=result$outer.iterations
@@ -113,12 +112,12 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
    }
 
    # calculate (final) Hessian
-   hessian <- logLikHess( result$par, ... )
+   hessian <- logLikHess( result$par, func = fn, ... )
 
    result <- list(
                   maximum=result$value,
                   estimate=result$par,
-                  gradient=callWithoutSumt( result$par, "logLikGrad", ... ),
+                  gradient=callWithoutSumt( result$par, "logLikGrad", func = fn, ... ),
                   hessian=hessian,
                   code=result$convergence,
                   message=paste(message(result$convergence), result$message),

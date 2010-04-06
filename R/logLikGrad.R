@@ -1,8 +1,8 @@
 ## gradient function:
 ## sum over possible individual gradients
-logLikGrad <- function(theta, ...) {
+logLikGrad <- function(theta, func, ...) {
    if(is.null(grad)) {
-      g <- numericGradient(logLikFunc, theta, ...)
+      g <- numericGradient(logLikFunc, theta, func = func, ...)
    } else {
       g <- grad(theta, ...)
    }
