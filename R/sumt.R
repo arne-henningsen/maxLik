@@ -43,7 +43,12 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    ## supplied analytic information
    hessian <- function( theta, ... ) {
       if(is.null(hess)) {
-         h <- numericHessian( f = logLikFunc, grad = logLikGrad, t0=theta, ... )
+         if( is.null( grad ) ) {
+            grad2 <- NULL
+         } else {
+            grad2 <- logLikGrad
+         }
+         h <- numericHessian( f = logLikFunc, grad = grad2, t0=theta, ... )
       } else {
          h <- hess( theta, ... )
       }
