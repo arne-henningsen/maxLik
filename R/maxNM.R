@@ -14,6 +14,8 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
 
    temp <- NULL
    tmax <- NULL
+   random.seed <- NULL
+   cand <- NULL
 
    method <- "Nelder-Mead"
    maxMethod <- "maxNM"
@@ -98,7 +100,10 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
                         iterlim = iterlim,
                         tol = tol, reltol = reltol, parscale = parscale,
                         alpha = alpha, beta= beta, gamma = gamma,
+                        temp = temp, tmax = tmax, random.seed = random.seed,
+                        cand = cand,
                         ...)
+         argList <- argList[ !sapply( argList, is.null ) ]
          result <- do.call( sumt, argList )
          return(result)
                            # this is already maxim object

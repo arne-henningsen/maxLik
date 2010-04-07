@@ -121,9 +121,11 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
                         print.level=print.level,
                         iterlim = iterlim,
                         tol = tol, reltol = reltol, parscale = parscale,
+                        alpha = alpha, beta= beta, gamma = gamma,
                         temp = temp, tmax = tmax, random.seed = random.seed,
                         cand = cand,
                         ...)
+         argList <- argList[ !sapply( argList, is.null ) ]
          result <- do.call( sumt, argList )
          return(result)
                            # this is already maxim object
