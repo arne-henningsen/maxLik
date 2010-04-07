@@ -1283,10 +1283,110 @@ Constrained optimization based on constrOptim
 [1] TRUE
 > 
 > ## SANN method with inequality constraints
-> try( maxLik( llf, start = startVal, constraints = inEq, method = "SANN" ) )
-Error in dR(theta, theta.old, ...) : 
-  argument "grad" is missing, with no default
+> mlSannInEq <- maxLik( llf, start = startVal, constraints = inEq,
++    method = "SANN" )
+> print( mlSannInEq )
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5407 (2 free parameter(s))
+Estimate(s): 0.8296539 1.670165 
+> summary( mlSannInEq )
+--------------------------------------------
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5407 
+2  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     0.82965    0.17283  4.8005 1.583e-06 ***
+sigma  1.67017    0.10553 15.8262 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -0.001042870 
+--------------------------------------------
+> activePar( mlSannInEq )
+[1] TRUE TRUE
+> AIC( mlSannInEq )
+[1] 413.0814
+> coef( mlSannInEq )
+       mu     sigma 
+0.8296539 1.6701655 
+> condiNumber( mlSannInEq )
+mu 	 1 
+sigma 	 3.601167 
+> hessian( mlSannInEq )
+             mu     sigma
+mu    -35.83978 -15.06351
+sigma -15.06351 -96.12222
+> logLik( mlSannInEq )
+[1] -204.5407
+> maximType( mlSannInEq )
+[1] "SANN maximisation"
+> nIter( mlSannInEq )
+function 
+   10000 
+> nObs( mlSannInEq )
+NULL
+> nParam( mlSannInEq )
+[1] 2
+> returnCode( mlSannInEq )
+[1] 0
+> returnMessage( mlSannInEq )
+[1] "successful convergence "
+> vcov( mlSannInEq )
+                mu        sigma
+mu     0.029869343 -0.004680885
+sigma -0.004680885  0.011136972
+> logLik( summary( mlSannInEq ) )
+[1] -204.5407
+> all.equal( mlBfgsInEq, mlSannInEq )
+[1] "Component 1: Mean relative difference: 3.521184e-05"           
+[2] "Component 2: Mean relative difference: 0.008015937"            
+[3] "Component 3: Mean relative difference: 0.03945641"             
+[4] "Component 4: Mean relative difference: 0.02014260"             
+[5] "Component 9: Numeric: lengths (2, 1) differ"                   
+[6] "Component 10: 1 string mismatch"                               
+[7] "Component 11: Component 2: Mean relative difference: 0.2810262"
 > 
+> # with unused analytical gradients
+> mlgSannInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
++    method = "SANN" )
+> all.equal( mlSannInEq, mlgSannInEq )
+[1] "Component 4: Mean relative difference: 0.0002013720"
+> 
+> # with a user-specified function to generate a new candidate point
+> mlSannInEqCand <- maxLik( llf, start = startVal, constraints = inEq,
++    method = "SANN", cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
+There were 50 or more warnings (use warnings() to see the first 50)
+> summary( mlSannInEqCand )
+--------------------------------------------
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.6121 
+2  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     0.81154    0.17482  4.6421 3.449e-06 ***
+sigma  1.68239    0.10751 15.6485 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -0.0005162605 
+--------------------------------------------
+> all.equal( mlSannInEqCand, mlSannInEq )
+[1] "Component 1: Mean relative difference: 0.0003490148"          
+[2] "Component 2: Mean relative difference: 0.01216476"            
+[3] "Component 3: Mean relative difference: 0.05195576"            
+[4] "Component 4: Mean relative difference: 0.02652189"            
+[5] "Component 11: Component 2: Mean relative difference: 1.020046"
 > 
 > ############### equality constraints ###############
 > eqCon <- list( eqA = A, eqB = 2.5 )

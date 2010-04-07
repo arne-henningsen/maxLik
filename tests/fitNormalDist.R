@@ -448,8 +448,36 @@ mlghNmInEq <- maxLik( llf, gf, hf, start = startVal, constraints = inEq,
 all.equal( mlgNmInEq, mlghNmInEq )
 
 ## SANN method with inequality constraints
-try( maxLik( llf, start = startVal, constraints = inEq, method = "SANN" ) )
+mlSannInEq <- maxLik( llf, start = startVal, constraints = inEq,
+   method = "SANN" )
+print( mlSannInEq )
+summary( mlSannInEq )
+activePar( mlSannInEq )
+AIC( mlSannInEq )
+coef( mlSannInEq )
+condiNumber( mlSannInEq )
+hessian( mlSannInEq )
+logLik( mlSannInEq )
+maximType( mlSannInEq )
+nIter( mlSannInEq )
+nObs( mlSannInEq )
+nParam( mlSannInEq )
+returnCode( mlSannInEq )
+returnMessage( mlSannInEq )
+vcov( mlSannInEq )
+logLik( summary( mlSannInEq ) )
+all.equal( mlBfgsInEq, mlSannInEq )
 
+# with unused analytical gradients
+mlgSannInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
+   method = "SANN" )
+all.equal( mlSannInEq, mlgSannInEq )
+
+# with a user-specified function to generate a new candidate point
+mlSannInEqCand <- maxLik( llf, start = startVal, constraints = inEq,
+   method = "SANN", cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
+summary( mlSannInEqCand )
+all.equal( mlSannInEqCand, mlSannInEq )
 
 ############### equality constraints ###############
 eqCon <- list( eqA = A, eqB = 2.5 )
