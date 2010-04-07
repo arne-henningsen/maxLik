@@ -117,7 +117,7 @@ converged
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 13527 iterations
+BFGS maximisation, 135 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -3551.773 
 3  free parameters
@@ -408,7 +408,7 @@ converged
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 12624 iterations
+BFGS maximisation, 126 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -3551.773 
 3  free parameters
@@ -629,7 +629,7 @@ Estimate:[1]  0.3704652 -1.3677410  0.6838705
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 191 iterations
+BFGS maximisation, 19 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -3572.392 
 3  free parameters
@@ -1179,7 +1179,7 @@ Estimate:[1] -1.3033871  0.6516936
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 191 iterations
+BFGS maximisation, 19 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -3608.806 
 2  free parameters
@@ -1331,7 +1331,7 @@ Estimate:[1] -1.3033871  0.6516936
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 191 iterations
+BFGS maximisation, 19 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -3608.806 
 2  free parameters
@@ -1467,7 +1467,7 @@ converged
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 4010 iterations
+BFGS maximisation, 40 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -3551.773 
 2  free parameters
@@ -1504,7 +1504,7 @@ converged
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 4010 iterations
+BFGS maximisation, 40 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -3551.773 
 2  free parameters

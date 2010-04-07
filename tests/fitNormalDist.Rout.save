@@ -352,14 +352,14 @@ Warning messages:
 2: In log(sigma) : NaNs produced
 > print( mlBFGS )
 Maximum Likelihood estimation
-BFGS maximisation, 3615 iterations
+BFGS maximisation, 36 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.5839 (2 free parameter(s))
 Estimate(s): 1.180811 1.816481 
 > summary( mlBFGS )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 3615 iterations
+BFGS maximisation, 36 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.5839 
 2  free parameters
@@ -389,8 +389,8 @@ sigma  -0.02842171 -60.65192792
 > maximType( mlBFGS )
 [1] "BFGS maximisation"
 > nIter( mlBFGS )
-function gradient 
-      36       15 
+function 
+      36 
 > nObs( mlBFGS )
 NULL
 > nParam( mlBFGS )
@@ -413,7 +413,7 @@ sigma -1.543776e-05  1.648753e-02
 [5] "Component 5: Mean relative difference: 1"           
 [6] "Component 6: 1 string mismatch"                     
 [7] "Component 9: names for current but not for target"  
-[8] "Component 9: Numeric: lengths (1, 2) differ"        
+[8] "Component 9: Mean relative difference: 4.142857"    
 [9] "Component 10: 1 string mismatch"                    
 > mlIndBFGS <- maxLik( llfInd, start = startVal, method = "BFGS" )
 Warning messages:
@@ -422,7 +422,7 @@ Warning messages:
 > summary( mlIndBFGS )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 3615 iterations
+BFGS maximisation, 36 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.5839 
 2  free parameters
@@ -444,7 +444,7 @@ Warning messages:
 > summary( mlIndBFGS )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 3615 iterations
+BFGS maximisation, 36 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.5839 
 2  free parameters
@@ -467,7 +467,7 @@ Warning messages:
 > summary( mlgBFGS )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 3615 iterations
+BFGS maximisation, 36 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.5839 
 2  free parameters
@@ -489,7 +489,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [5] "Component 5: Mean relative difference: 1"           
 [6] "Component 6: 1 string mismatch"                     
 [7] "Component 9: names for current but not for target"  
-[8] "Component 9: Numeric: lengths (1, 2) differ"        
+[8] "Component 9: Mean relative difference: 4.142857"    
 [9] "Component 10: 1 string mismatch"                    
 > mlgIndBFGS <- maxLik( llfInd, gfInd, start = startVal, method = "BFGS" )
 Warning messages:
@@ -1073,14 +1073,14 @@ Error in maxNR(fn, grad = gradient, hess = hess, start = start, iterlim = iterli
 +    method = "BFGS" )
 > print( mlBfgsInEq )
 Maximum Likelihood estimation
-BFGS maximisation, 13031 iterations
+BFGS maximisation, 130 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5335 (2 free parameter(s))
 Estimate(s): 0.8197184 1.680270 
 > summary( mlBfgsInEq )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 13031 iterations
+BFGS maximisation, 130 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5335 
 2  free parameters
@@ -1114,8 +1114,8 @@ sigma -15.20561 -93.62111
 > maximType( mlBfgsInEq )
 [1] "BFGS maximisation"
 > nIter( mlBfgsInEq )
-function gradient 
-     130       31 
+function 
+     130 
 > nObs( mlBfgsInEq )
 NULL
 > nParam( mlBfgsInEq )
@@ -1135,7 +1135,7 @@ sigma -0.004930108  0.011482082
 > summary( mlBfgsInEqInd )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 13031 iterations
+BFGS maximisation, 130 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5335 
 2  free parameters
@@ -1244,7 +1244,7 @@ sigma -0.004931146  0.011475284
 [2] "Component 2: Mean relative difference: 5.284706e-06"            
 [3] "Component 3: Mean relative difference: 2.695118e-05"            
 [4] "Component 4: Mean relative difference: 0.000660793"             
-[5] "Component 9: Numeric: lengths (2, 1) differ"                    
+[5] "Component 9: Mean relative difference: 0.2076923"               
 [6] "Component 10: 1 string mismatch"                                
 [7] "Component 11: Component 2: Mean relative difference: 0.01189469"
 > mlNmInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
@@ -1349,7 +1349,7 @@ sigma -0.004680885  0.011136972
 [2] "Component 2: Mean relative difference: 0.008015937"            
 [3] "Component 3: Mean relative difference: 0.03945641"             
 [4] "Component 4: Mean relative difference: 0.02014260"             
-[5] "Component 9: Numeric: lengths (2, 1) differ"                   
+[5] "Component 9: Mean relative difference: 75.92308"               
 [6] "Component 10: 1 string mismatch"                               
 [7] "Component 11: Component 2: Mean relative difference: 0.2810262"
 > 
@@ -1610,14 +1610,14 @@ Constrained optimization based on SUMT
 There were 29 warnings (use warnings() to see them)
 > print( mlBfgsCon )
 Maximum Likelihood estimation
-BFGS maximisation, 171 iterations
+BFGS maximisation, 17 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5333 (2 free parameter(s))
 Estimate(s): 0.8196756 1.680324 
 > summary( mlBfgsCon )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 171 iterations
+BFGS maximisation, 17 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5333 
 2  free parameters
@@ -1651,8 +1651,8 @@ sigma -15.23404 -93.67795
 > maximType( mlBfgsCon )
 [1] "BFGS maximisation"
 > nIter( mlBfgsCon )
-function gradient 
-      17        1 
+function 
+      17 
 > nObs( mlBfgsCon )
 NULL
 > nParam( mlBfgsCon )
@@ -1677,7 +1677,7 @@ There were 29 warnings (use warnings() to see them)
 > summary( mlBfgsConInd )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 171 iterations
+BFGS maximisation, 17 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5333 
 2  free parameters
@@ -1703,7 +1703,7 @@ There were 22 warnings (use warnings() to see them)
 > summary( mlgBfgsCon )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 301 iterations
+BFGS maximisation, 30 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.8512 
 2  free parameters

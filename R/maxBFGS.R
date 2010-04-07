@@ -147,7 +147,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
                    message=paste(message(result$convergence), result$message),
                    last.step=NULL,
                    activePar = rep( TRUE, length ( result$par ) ),
-                   iterations=result$counts,
+                   iterations=result$counts[1],
                    type=maximType,
                   constraints=resultConstraints
                   )

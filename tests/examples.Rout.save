@@ -447,8 +447,8 @@ $activePar
 [1] TRUE
 
 $iterations
-function gradient 
-      29        6 
+function 
+      29 
 
 $type
 [1] "BFGS maximisation"
@@ -461,7 +461,7 @@ attr(,"class")
 > summary( a )
 --------------------------------------------
 BFGS maximisation 
-Number of iterations: 29 6 
+Number of iterations: 29 
 Return code: 0 
 successful convergence  
 Function value: -199.2063 
@@ -928,8 +928,8 @@ $activePar
 [1] TRUE TRUE
 
 $iterations
-function gradient 
-      31       16 
+function 
+      31 
 
 $type
 [1] "BFGS maximisation"
@@ -942,7 +942,7 @@ attr(,"class")
 > summary(m)
 --------------------------------------------
 BFGS maximisation 
-Number of iterations: 31 16 
+Number of iterations: 31 
 Return code: 0 
 successful convergence  
 Function value: 1 
