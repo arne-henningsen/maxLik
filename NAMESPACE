@@ -1,6 +1,7 @@
 export( "activePar" )
 export( "compareDerivatives" )
 export( "condiNumber" )
+export( "constrOptim2" )
 export( "fnSubset" )
 export( "hessian" )
 export( "maxBFGS" )
