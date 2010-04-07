@@ -85,9 +85,10 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    ## We can the return from 'optim' in a object of class 'maxim'.
    ## However, as 'sumt' already returns such an object, we return the
    ## result of 'sumt' directly, without the canning
+   gradOptim <- logLikGrad
    if(is.null(constraints)) {
        result <- optim( par = start, fn = logLikFunc, control = control,
-                      method = method, gr = logLikGrad, fnOrig = fn,
+                      method = method, gr = gradOptim, fnOrig = fn,
                       gradOrig = grad, hessOrig = hess, ... )
        resultConstraints <- NULL
     }
@@ -97,7 +98,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
       if(identical(names(constraints), c("ineqA", "ineqB"))) {
          ui <- constraints$ineqA
          ci <- -constraints$ineqB
-         result <- constrOptim2(theta=start, f=logLikFunc, grad=logLikGrad,
+         result <- constrOptim2(theta=start, f=logLikFunc, grad=gradOptim,
                           ui=ui, ci=ci, control=control,
                           method = method, fnOrig = fn, gradOrig = grad,
                           hessOrig = hess, ...)
