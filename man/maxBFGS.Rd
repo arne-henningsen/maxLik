@@ -49,7 +49,7 @@ tol = 1e-08, reltol=tol, parscale = rep(1, length = length(start)), alpha = 1, b
     \code{ineqB} for inequality constraints \eqn{A \theta + B \ge 0}{A
       \%*\% theta + B >= 0}.  The equality-constrained problem is forwarded
     to \code{\link{sumt}}, the inequality-constrained case to
-    \code{\link{constrOptim}}.
+    \code{\link{constrOptim2}}.
   }
   \item{tol, reltol}{the relative convergence tolerance (see
     \code{\link{optim}}).  \code{tol} is for compatibility with \code{\link{maxNR}}.}
