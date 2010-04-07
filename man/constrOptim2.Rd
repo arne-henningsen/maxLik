@@ -16,14 +16,14 @@ adaptive barrier algorithm.
    but it has been modified thereafter.   
 }
 \usage{
-constrOptim2(theta, f, grad, ui, ci, mu = 1e-04, control = list(),
+constrOptim2(theta, f, grad = NULL, ui, ci, mu = 1e-04, control = list(),
             method = if(is.null(grad)) "Nelder-Mead" else "BFGS",
             outer.iterations = 100, outer.eps = 1e-05, \dots)
 }
 \arguments{
   \item{theta}{Starting value: must be in the feasible region.}
   \item{f}{Function to minimise (see below).}
-  \item{grad}{Gradient of \code{f}, or \code{NULL} (see below).}
+  \item{grad}{Gradient of \code{f} (see below).}
   \item{ui}{Constraints (see below).}
   \item{ci}{Constraints (see below).}
   \item{mu}{(Small) tuning parameter.}
@@ -64,10 +64,13 @@ constrOptim2(theta, f, grad, ui, ci, mu = 1e-04, control = list(),
   maximisation can be performed by setting \code{control$fnscale} to a
   negative value.
   
-  The gradient function \code{grad} must be supplied except with
-  \code{method="Nelder-Mead"}.  It should take arguments matching
-  those of \code{f} and return a vector containing the gradient.
-  
+  The gradient function \code{grad} must be supplied for
+  \code{method="BFGS"} and \code{method="CG"}.
+  It should take arguments matching those of \code{f}
+  and return a vector containing the gradient.
+  For \code{method="SANN"}, argument \code{grad} can be used to specify
+  a function to generate a new candidate point.
+  If it is \code{NULL}, a default Gaussian Markov kernel is used.
 }
 \value{
   As for \code{\link{optim}}, but with two extra components:
@@ -76,7 +79,7 @@ constrOptim2(theta, f, grad, ui, ci, mu = 1e-04, control = list(),
   number of outer iterations (calls to \code{optim})
 }
 
-\author{R Development Core Team}
+\author{R Development Core Team, modifications by Arne Henningsen}
 
 \references{
   K. Lange \emph{Numerical Analysis for Statisticians.} Springer

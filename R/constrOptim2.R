@@ -15,7 +15,7 @@
 #  http://www.r-project.org/Licenses/
 
 
-constrOptim2<-function(theta,f,grad,ui,ci,mu=0.0001,control=list(),
+constrOptim2<-function(theta,f,grad=NULL,ui,ci,mu=0.0001,control=list(),
                   method=if(is.null(grad)) "Nelder-Mead" else "BFGS",
                   outer.iterations=100,outer.eps=0.00001,...){
 
@@ -50,8 +50,18 @@ constrOptim2<-function(theta,f,grad,ui,ci,mu=0.0001,control=list(),
         theta.old<-theta
         fun<-function(theta,...){ R(theta,theta.old,...)}
         
-        gradient<-function(theta,...) { dR(theta,theta.old,...)}
-        a<-optim(theta.old, fun, gradient, control=control,method=method,...)
+        if( method == "SANN" ) {
+          if( is.null( grad ) ) {
+            gradient <- NULL
+          } else {
+            gradient <- grad
+          }
+        } else {
+          gradient <- function(theta, ...) {
+            dR(theta, theta.old, ...)
+          }
+        }
+        a<-optim(par=theta.old,fn=fun,gr=gradient,control=control,method=method,...)
         r<-a$value
         if (is.finite(r) && is.finite(r.old) && abs(r-r.old)/(outer.eps+abs(r-r.old))<outer.eps)
             break
