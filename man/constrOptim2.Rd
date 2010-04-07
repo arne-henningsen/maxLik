@@ -10,6 +10,11 @@
 Minimise a function subject to linear inequality constraints using an
 adaptive barrier algorithm.  
 }
+\section{Note}{
+   Initially, \code{constrOptim2} started as a copy of 
+   \code{\link[stats]{constrOptim}} from the \pkg{stats} package
+   but it has been modified thereafter.   
+}
 \usage{
 constrOptim2(theta, f, grad, ui, ci, mu = 1e-04, control = list(),
             method = if(is.null(grad)) "Nelder-Mead" else "BFGS",
