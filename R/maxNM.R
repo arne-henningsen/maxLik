@@ -103,8 +103,7 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
                         temp = temp, tmax = tmax, random.seed = random.seed,
                         cand = cand,
                         ...)
-         argList <- argList[ !sapply( argList, is.null ) ]
-         result <- do.call( sumt, argList )
+         result <- do.call( sumt, argList[ !sapply( argList, is.null ) ] )
          return(result)
                            # this is already maxim object
       }
