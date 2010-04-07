@@ -152,5 +152,5 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
                   constraints=resultConstraints
                   )
    class(result) <- "maxim"
-   invisible(result)
+   return(result)
 }
