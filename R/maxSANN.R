@@ -91,9 +91,10 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    ## However, as 'sumt' already returns such an object, we return the
    ## result of 'sumt' directly, without the canning
    if(is.null(constraints)) {
-      result <- optim( par = start, fn = logLikFunc, control = control,
-                      method = method, gr = candWrapper, fnOrig = fn,
-                      gradOrig = grad, hessOrig = hess, ... )
+      argList <- list( par = start, fn = logLikFunc, control = control,
+         method = method, fnOrig = fn, gradOrig = grad, hessOrig = hess,
+         gr = candWrapper, ... )
+      result <- do.call( optim, argList )
       resultConstraints <- NULL
    }
    else {
