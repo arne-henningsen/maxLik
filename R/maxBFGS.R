@@ -107,15 +107,15 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
       }
       else if(identical(names(constraints), c("eqA", "eqB"))) {
                            # equality constraints: A %*% beta + B = 0
-         result <- sumt(fn=fn, grad=grad, hess=hess,
+         argList <- list(fn=fn, grad=grad, hess=hess,
                         start=start,
                         maxRoutine = get( maxMethod ),
                         constraints=constraints,
                         print.level=print.level,
                         iterlim = iterlim,
-                        tol = tol, reltol = reltol, 
-                        parscale = parscale,
+                        tol = tol, reltol = reltol, parscale = parscale,
                         ...)
+         result <- do.call( sumt, argList )
          return(result)
                            # this is already maxim object
       }

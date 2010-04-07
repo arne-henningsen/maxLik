@@ -1742,7 +1742,7 @@ There were 22 warnings (use warnings() to see them)
 > ## NM method with equality constraints
 > mlNmCon <- maxLik( llf, start = startVal, constraints = eqCon, method = "NM" )
 Warning message:
-In sumt(fn = fn, grad = grad, hess = hess, start = start, maxRoutine = get(maxMethod),  :
+In function (fn, grad = NULL, hess = NULL, start, maxRoutine, constraints,  :
   problem in imposing equality constraints: the constraints are not satisfied (barrier value = 0.246970620518863)
 > print( mlNmCon )
 Maximum Likelihood estimation
@@ -1813,7 +1813,7 @@ sigma 0.00000000 0.01649525
 > mlNmConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
 +    method = "NM" )
 Warning message:
-In sumt(fn = fn, grad = grad, hess = hess, start = start, maxRoutine = get(maxMethod),  :
+In function (fn, grad = NULL, hess = NULL, start, maxRoutine, constraints,  :
   problem in imposing equality constraints: the constraints are not satisfied (barrier value = 0.246970620518863)
 > summary( mlNmConInd )
 --------------------------------------------
@@ -1841,7 +1841,7 @@ Constrained optimization based on SUMT
 > mlgNmCon <- maxLik( llf, gf, start = startVal, constraints = eqCon,
 +    method = "NM" )
 Warning message:
-In sumt(fn = fn, grad = grad, hess = hess, start = start, maxRoutine = get(maxMethod),  :
+In function (fn, grad = NULL, hess = NULL, start, maxRoutine, constraints,  :
   problem in imposing equality constraints: the constraints are not satisfied (barrier value = 0.246970620518863)
 > all.equal( mlNmCon, mlgNmCon )
 [1] "Component 3: Mean relative difference: 1.499498e-06"
@@ -1849,7 +1849,7 @@ In sumt(fn = fn, grad = grad, hess = hess, start = start, maxRoutine = get(maxMe
 > mlgNmConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon,
 +    method = "NM" )
 Warning message:
-In sumt(fn = fn, grad = grad, hess = hess, start = start, maxRoutine = get(maxMethod),  :
+In function (fn, grad = NULL, hess = NULL, start, maxRoutine, constraints,  :
   problem in imposing equality constraints: the constraints are not satisfied (barrier value = 0.246970620518863)
 > all.equal( mlgNmCon, mlgNmConInd )
 [1] TRUE
@@ -1858,7 +1858,7 @@ In sumt(fn = fn, grad = grad, hess = hess, start = start, maxRoutine = get(maxMe
 > mlghNmCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon,
 +    method = "NM" )
 Warning message:
-In sumt(fn = fn, grad = grad, hess = hess, start = start, maxRoutine = get(maxMethod),  :
+In function (fn, grad = NULL, hess = NULL, start, maxRoutine, constraints,  :
   problem in imposing equality constraints: the constraints are not satisfied (barrier value = 0.246970620518863)
 > all.equal( mlgNmCon, mlghNmCon )
 [1] TRUE
@@ -1867,7 +1867,7 @@ In sumt(fn = fn, grad = grad, hess = hess, start = start, maxRoutine = get(maxMe
 > mlSannCon <- maxLik( llf, start = startVal, constraints = eqCon,
 +    method = "SANN" )
 Warning message:
-In sumt(fn = fn, grad = grad, hess = hess, start = start, maxRoutine = get(maxMethod),  :
+In function (fn, grad = NULL, hess = NULL, start, maxRoutine, constraints,  :
   problem in imposing equality constraints: the constraints are not satisfied (barrier value = 0.246867072551006)
 > print( mlSannCon )
 Maximum Likelihood estimation
@@ -1940,7 +1940,7 @@ sigma 1.545948e-05 1.647981e-02
 > mlgSannCon <- maxLik( llf, gf, start = startVal, constraints = eqCon,
 +    method = "SANN" )
 Warning message:
-In sumt(fn = fn, grad = grad, hess = hess, start = start, maxRoutine = get(maxMethod),  :
+In function (fn, grad = NULL, hess = NULL, start, maxRoutine, constraints,  :
   problem in imposing equality constraints: the constraints are not satisfied (barrier value = 0.246867072551006)
 > all.equal( mlSannCon, mlgSannCon )
 [1] "Component 3: Mean relative difference: 7.706088e-07"

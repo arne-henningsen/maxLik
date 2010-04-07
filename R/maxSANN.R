@@ -114,17 +114,17 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
       }
       else if(identical(names(constraints), c("eqA", "eqB"))) {
                            # equality constraints: A %*% beta + B = 0
-         result <- sumt(fn=fn, grad=grad, hess=hess,
+         argList <- list(fn=fn, grad=grad, hess=hess,
                         start=start,
                         maxRoutine=get( maxMethod ),
                         constraints=constraints,
                         print.level=print.level,
-                        cand = cand,
                         iterlim = iterlim,
-                        tol = tol, reltol = reltol,
-                        temp = temp, tmax = tmax, parscale = parscale,
-                        random.seed = random.seed,
+                        tol = tol, reltol = reltol, parscale = parscale,
+                        temp = temp, tmax = tmax, random.seed = random.seed,
+                        cand = cand,
                         ...)
+         result <- do.call( sumt, argList )
          return(result)
                            # this is already maxim object
       }
