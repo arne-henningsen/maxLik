@@ -81,7 +81,7 @@ maxNM <- function(fn, grad=NULL, hess=NULL,
       if(identical(names(constraints), c("ineqA", "ineqB"))) {
          ui <- constraints$ineqA
          ci <- -constraints$ineqB
-         result <- constrOptim2(theta=start, f=logLikFunc, grad=logLikGrad,
+         result <- constrOptim2(theta=start, f=logLikFunc,
                           ui=ui, ci=ci, control=control,
                           method = method, fnOrig = fn, gradOrig = grad,
                           hessOrig = hess, ... )
