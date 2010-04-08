@@ -79,12 +79,10 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
                               activePar=activePar,
                               fixed=fixed,
                               ...)
-    }
-   else {
+   } else {
       if(identical(names(constraints), c("ineqA", "ineqB"))) {
          stop("Inequality constraints not implemented for maxNR")
-      }
-      else if(identical(names(constraints), c("eqA", "eqB"))) {
+      } else if(identical(names(constraints), c("eqA", "eqB"))) {
                            # equality constraints: A %*% beta + B = 0
          result <- sumt(fn=fn, grad=grad, hess=hess,
                         start=start,
@@ -99,8 +97,7 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
                         activePar=activePar,
                         fixed=fixed,
                         ...) 
-      }
-      else {
+      } else {
          stop("maxBFGS only supports the following constraints:\n",
               "constraints=list(ineqA, ineqB)\n",
               "\tfor A %*% beta + B >= 0 linear inequality constraints\n",
@@ -108,4 +105,5 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
               paste(names(constraints), collapse=" "))
       }
    }
+   return( result )
 }
