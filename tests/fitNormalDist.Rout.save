@@ -801,6 +801,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > 
 > ## NR method with fixed parameters
 > mlFix <- maxLik( llf, start = startValFix, activePar = !isFixed )
+> mlFix1 <- maxLik( llf, start = startValFix, activePar = 2 )
+> all.equal( mlFix, mlFix1 )
+[1] TRUE
 > mlFix2 <- maxLik( llf, start = startValFix, fixed = isFixed )
 > all.equal( mlFix, mlFix2 )
 [1] "Component 8: names for current but not for target"
@@ -858,6 +861,9 @@ sigma  0 0.01665927
 > logLik( summary( mlFix ) )
 [1] -202.0769
 > mlIndFix <- maxLik( llfInd, start = startValFix, activePar = !isFixed )
+> mlIndFix1 <- maxLik( llfInd, start = startValFix, activePar = 2 )
+> all.equal( mlIndFix, mlIndFix1 )
+[1] TRUE
 > mlIndFix2 <- maxLik( llfInd, start = startValFix, fixed = isFixed )
 > all.equal( mlIndFix, mlIndFix2 )
 [1] "Component 8: names for current but not for target"
@@ -886,6 +892,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > 
 > # with analytical gradients
 > mlgFix <- maxLik( llf, gf, start = startValFix, activePar = !isFixed )
+> mlgFix1 <- maxLik( llf, gf, start = startValFix, activePar = 2 )
+> all.equal( mlgFix, mlgFix1 )
+[1] TRUE
 > mlgFix2 <- maxLik( llf, gf, start = startValFix, fixed = isFixed )
 > all.equal( mlgFix, mlgFix2 )
 [1] "Component 8: names for current but not for target"
@@ -957,6 +966,10 @@ sigma  -5.94486 -60.01870
 > ## BHHH method with fixed parameters
 > mlFixBHHH <- maxLik( llfInd, start = startValFix, activePar = !isFixed,
 +    method = "BHHH" )
+> mlFixBHHH1 <- maxLik( llfInd, start = startValFix, activePar = 2,
++    method = "BHHH" )
+> all.equal( mlFixBHHH, mlFixBHHH1 )
+[1] TRUE
 > mlFixBHHH2 <- maxLik( llfInd, start = startValFix, fixed = isFixed,
 +    method = "BHHH" )
 > all.equal( mlFixBHHH, mlFixBHHH2 )
@@ -1036,6 +1049,10 @@ sigma  -7.67543 -55.98293
 > # with analytical gradients
 > mlgFixBHHH <- maxLik( llfInd, gfInd, start = startValFix, activePar = !isFixed,
 +    method = "BHHH" )
+> mlgFixBHHH1 <- maxLik( llfInd, gfInd, start = startValFix, activePar = 2,
++    method = "BHHH" )
+> all.equal( mlgFixBHHH, mlgFixBHHH1 )
+[1] TRUE
 > mlgFixBHHH2 <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
 +    method = "BHHH" )
 > all.equal( mlgFixBHHH, mlgFixBHHH2 )
