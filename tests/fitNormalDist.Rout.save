@@ -799,7 +799,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > # fix mu (the mean ) at its start value
 > isFixed <- c( TRUE, FALSE )
 > 
-> ## NR method
+> ## NR method with fixed parameters
 > mlFix <- maxLik( llf, start = startValFix, activePar = !isFixed )
 > print( mlFix )
 Maximum Likelihood estimation
@@ -945,7 +945,7 @@ sigma NA -60.01870
 mu    -30.00935  -5.94486
 sigma  -5.94486 -60.01870
 > 
-> ## BHHH method
+> ## BHHH method with fixed parameters
 > mlFixBHHH <- maxLik( llfInd, start = startValFix, activePar = !isFixed,
 +    method = "BHHH" )
 > print( mlFixBHHH )
@@ -1048,6 +1048,320 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > mlghFixBHHH <- maxLik( llfInd, gfInd, hf, start = startValFix, activePar = !isFixed,
 +    method = "BHHH" )
 > all.equal( mlgFixBHHH, mlghFixBHHH )
+[1] TRUE
+> 
+> ## BFGS method with fixed parameters
+> mlFixBfgs <- maxLik( llf, start = startValFix, fixed = isFixed,
++    method = "BFGS" )
+Warning message:
+In log(sigma) : NaNs produced
+> print( mlFixBfgs )
+Maximum Likelihood estimation
+BFGS maximisation, 27 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -202.0769 (1 free parameter(s))
+Estimate(s): 1 1.825457 
+> summary( mlFixBfgs )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS maximisation, 27 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -202.0769 
+1  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     1.00000    0.00000      NA        NA    
+sigma  1.82546    0.12907  14.143 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> activePar( mlFixBfgs )
+[1] FALSE  TRUE
+> AIC( mlFixBfgs )
+[1] 406.1538
+> coef( mlFixBfgs )
+      mu    sigma 
+1.000000 1.825457 
+> condiNumber( mlFixBfgs )
+sigma 	 1 
+> hessian( mlFixBfgs )
+              mu      sigma
+mu    -29.984903  -5.940137
+sigma  -5.940137 -60.026650
+> logLik( mlFixBfgs )
+[1] -202.0769
+> maximType( mlFixBfgs )
+[1] "BFGS maximisation"
+> nIter( mlFixBfgs )
+function 
+      27 
+> nObs( mlFixBfgs )
+NULL
+> nParam( mlFixBfgs )
+[1] 2
+> returnCode( mlFixBfgs )
+[1] 0
+> returnMessage( mlFixBfgs )
+[1] "successful convergence "
+> vcov( mlFixBfgs )
+      mu      sigma
+mu     0 0.00000000
+sigma  0 0.01665927
+> logLik( summary( mlFixBfgs ) )
+[1] -202.0769
+> all.equal( mlghFix[ -c( 5, 6, 9, 10 ) ], mlFixBfgs[ -c( 5, 6, 9, 10, 11 ) ] )
+[1] "Component 3: Mean relative difference: 6.455651e-08"
+[2] "Component 4: Mean relative difference: 0.000410571" 
+> mlIndFixBfgs <- maxLik( llfInd, start = startValFix, fixed = isFixed,
++    method = "BFGS" )
+Warning message:
+In log(sigma) : NaNs produced
+> all.equal( mlFixBfgs[ -9 ], mlIndFixBfgs[ -9 ] )
+[1] "Component 3: Mean relative difference: 9.428428e-08"
+[2] "Component 4: Mean relative difference: 0.001115760" 
+> 
+> # with analytical gradients
+> mlgFixBfgs <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
++    method = "BFGS" )
+Warning message:
+In log(sigma) : NaNs produced
+> summary( mlgFixBfgs )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS maximisation, 29 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -202.0769 
+1  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     1.00000    0.00000      NA        NA    
+sigma  1.82546    0.12908  14.142 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> all.equal( mlFixBfgs[ -9 ], mlgFixBfgs[ -9 ] )
+[1] "Component 3: Mean relative difference: 9.37899e-08" 
+[2] "Component 4: Mean relative difference: 0.0004106729"
+> mlgFixBfgs2 <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
++    method = "BFGS")
+Warning message:
+In log(sigma) : NaNs produced
+> all.equal( mlgFixBfgs, mlgFixBfgs2 )
+[1] "Component 3: Mean relative difference: 1.653872e-08"
+> 
+> # with unused Hessians
+> mlghFixBfgs <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
++    method = "BFGS" )
+Warning message:
+In log(sigma) : NaNs produced
+> all.equal( mlgFixBfgs, mlghFixBfgs )
+[1] TRUE
+> 
+> ## NM method with fixed parameters
+> mlFixNm <- maxLik( llf, start = startValFix, fixed = isFixed,
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-diml optimization by Nelder-Mead is unreliable: use optimize
+> print( mlFixNm )
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 28 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -202.0769 (1 free parameter(s))
+Estimate(s): 1 1.825391 
+> summary( mlFixNm )
+--------------------------------------------
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 28 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -202.0769 
+1  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     1.00000    0.00000      NA        NA    
+sigma  1.82539    0.12904  14.146 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> activePar( mlFixNm )
+[1] FALSE  TRUE
+> AIC( mlFixNm )
+[1] 406.1538
+> coef( mlFixNm )
+      mu    sigma 
+1.000000 1.825391 
+> condiNumber( mlFixNm )
+sigma 	 1 
+> hessian( mlFixNm )
+              mu      sigma
+mu    -30.041747  -5.968559
+sigma  -5.968559 -60.055072
+> logLik( mlFixNm )
+[1] -202.0769
+> maximType( mlFixNm )
+[1] "Nelder-Mead maximisation"
+> nIter( mlFixNm )
+function 
+      28 
+> nObs( mlFixNm )
+NULL
+> nParam( mlFixNm )
+[1] 2
+> returnCode( mlFixNm )
+[1] 0
+> returnMessage( mlFixNm )
+[1] "successful convergence "
+> vcov( mlFixNm )
+      mu      sigma
+mu     0 0.00000000
+sigma  0 0.01665138
+> logLik( summary( mlFixNm ) )
+[1] -202.0769
+> all.equal( mlFixBfgs[ -c( 9, 10 ) ], mlFixNm[ -c( 9, 10 ) ] )
+[1] "Component 2: Mean relative difference: 3.661309e-05"
+[2] "Component 3: Mean relative difference: 0.0008125891"
+[3] "Component 4: Mean relative difference: 0.0013947"   
+> mlIndFixNm <- maxLik( llfInd, start = startValFix, fixed = isFixed,
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-diml optimization by Nelder-Mead is unreliable: use optimize
+> all.equal( mlFixNm, mlIndFixNm )
+[1] "Component 3: Mean relative difference: 1.417023e-05"
+> 
+> # with analytical gradients
+> mlgFixNm <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-diml optimization by Nelder-Mead is unreliable: use optimize
+> summary( mlgFixNm )
+--------------------------------------------
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 28 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -202.0769 
+1  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     1.00000    0.00000      NA        NA    
+sigma  1.82539    0.12907  14.143 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> all.equal( mlFixNm, mlgFixNm )
+[1] "Component 4: Mean relative difference: 0.0009965241"
+> mlgFixNm2 <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
++    method = "NM")
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-diml optimization by Nelder-Mead is unreliable: use optimize
+> all.equal( mlgFixNm, mlgFixNm2 )
+[1] TRUE
+> 
+> # with unused Hessians
+> mlghFixNm <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-diml optimization by Nelder-Mead is unreliable: use optimize
+> all.equal( mlgFixNm, mlghFixNm )
+[1] TRUE
+> 
+> ## SANN method with fixed parameters
+> mlFixSann <- maxLik( llf, start = startValFix, fixed = isFixed,
++    method = "SANN" )
+> print( mlFixSann )
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -202.0769 (1 free parameter(s))
+Estimate(s): 1 1.825441 
+> summary( mlFixSann )
+--------------------------------------------
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -202.0769 
+1  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu      1.0000     0.0000      NA        NA    
+sigma   1.8254     0.1291  14.140 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> activePar( mlFixSann )
+[1] FALSE  TRUE
+> AIC( mlFixSann )
+[1] 406.1538
+> coef( mlFixSann )
+      mu    sigma 
+1.000000 1.825441 
+> condiNumber( mlFixSann )
+sigma 	 1 
+> hessian( mlFixSann )
+              mu      sigma
+mu    -29.984903  -5.940137
+sigma  -5.940137 -59.998229
+> logLik( mlFixSann )
+[1] -202.0769
+> maximType( mlFixSann )
+[1] "SANN maximisation"
+> nIter( mlFixSann )
+function 
+   10000 
+> nObs( mlFixSann )
+NULL
+> nParam( mlFixSann )
+[1] 2
+> returnCode( mlFixSann )
+[1] 0
+> returnMessage( mlFixSann )
+[1] "successful convergence "
+> vcov( mlFixSann )
+      mu      sigma
+mu     0 0.00000000
+sigma  0 0.01666716
+> logLik( summary( mlFixSann ) )
+[1] -202.0769
+> all.equal( mlFixBfgs[ -c( 9, 10 ) ], mlFixSann[ -c( 9, 10 ) ] )
+[1] "Component 2: Mean relative difference: 8.939868e-06"
+[2] "Component 3: Mean relative difference: 0.0001983898"
+[3] "Component 4: Mean relative difference: 0.0004734848"
+> mlIndFixSann <- maxLik( llfInd, start = startValFix, fixed = isFixed,
++    method = "SANN" )
+> all.equal( mlFixSann, mlIndFixSann )
+[1] "Component 4: Mean relative difference: 0.000947568"
+> 
+> # with analytical gradients
+> mlgFixSann <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
++    method = "SANN" )
+> summary( mlgFixSann )
+--------------------------------------------
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -202.0769 
+1  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     1.00000    0.00000      NA        NA    
+sigma  1.82544    0.12908  14.142 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> all.equal( mlFixSann, mlgFixSann )
+[1] "Component 4: Mean relative difference: 0.0005683808"
+> mlgFixSann2 <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
++    method = "SANN")
+> all.equal( mlgFixSann, mlgFixSann2 )
+[1] TRUE
+> 
+> # with unused Hessians
+> mlghFixSann <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
++    method = "SANN" )
+> all.equal( mlgFixSann, mlghFixSann )
 [1] TRUE
 > 
 > 

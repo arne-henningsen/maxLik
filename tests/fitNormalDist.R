@@ -274,7 +274,7 @@ startValFix <- c( mu = 1, sigma = 1 )
 # fix mu (the mean ) at its start value
 isFixed <- c( TRUE, FALSE )
 
-## NR method
+## NR method with fixed parameters
 mlFix <- maxLik( llf, start = startValFix, activePar = !isFixed )
 print( mlFix )
 summary( mlFix )
@@ -320,7 +320,7 @@ all.equal( mlgFix, mlghFix )
 mlgFix[[4]]
 mlghFix[[4]]
 
-## BHHH method
+## BHHH method with fixed parameters
 mlFixBHHH <- maxLik( llfInd, start = startValFix, activePar = !isFixed,
    method = "BHHH" )
 print( mlFixBHHH )
@@ -358,6 +358,120 @@ all.equal( mlgFixBHHH, mlgFixBHHH2 )
 mlghFixBHHH <- maxLik( llfInd, gfInd, hf, start = startValFix, activePar = !isFixed,
    method = "BHHH" )
 all.equal( mlgFixBHHH, mlghFixBHHH )
+
+## BFGS method with fixed parameters
+mlFixBfgs <- maxLik( llf, start = startValFix, fixed = isFixed,
+   method = "BFGS" )
+print( mlFixBfgs )
+summary( mlFixBfgs )
+activePar( mlFixBfgs )
+AIC( mlFixBfgs )
+coef( mlFixBfgs )
+condiNumber( mlFixBfgs )
+hessian( mlFixBfgs )
+logLik( mlFixBfgs )
+maximType( mlFixBfgs )
+nIter( mlFixBfgs )
+nObs( mlFixBfgs )
+nParam( mlFixBfgs )
+returnCode( mlFixBfgs )
+returnMessage( mlFixBfgs )
+vcov( mlFixBfgs )
+logLik( summary( mlFixBfgs ) )
+all.equal( mlghFix[ -c( 5, 6, 9, 10 ) ], mlFixBfgs[ -c( 5, 6, 9, 10, 11 ) ] )
+mlIndFixBfgs <- maxLik( llfInd, start = startValFix, fixed = isFixed,
+   method = "BFGS" )
+all.equal( mlFixBfgs[ -9 ], mlIndFixBfgs[ -9 ] )
+
+# with analytical gradients
+mlgFixBfgs <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
+   method = "BFGS" )
+summary( mlgFixBfgs )
+all.equal( mlFixBfgs[ -9 ], mlgFixBfgs[ -9 ] )
+mlgFixBfgs2 <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
+   method = "BFGS")
+all.equal( mlgFixBfgs, mlgFixBfgs2 )
+
+# with unused Hessians
+mlghFixBfgs <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
+   method = "BFGS" )
+all.equal( mlgFixBfgs, mlghFixBfgs )
+
+## NM method with fixed parameters
+mlFixNm <- maxLik( llf, start = startValFix, fixed = isFixed,
+   method = "NM" )
+print( mlFixNm )
+summary( mlFixNm )
+activePar( mlFixNm )
+AIC( mlFixNm )
+coef( mlFixNm )
+condiNumber( mlFixNm )
+hessian( mlFixNm )
+logLik( mlFixNm )
+maximType( mlFixNm )
+nIter( mlFixNm )
+nObs( mlFixNm )
+nParam( mlFixNm )
+returnCode( mlFixNm )
+returnMessage( mlFixNm )
+vcov( mlFixNm )
+logLik( summary( mlFixNm ) )
+all.equal( mlFixBfgs[ -c( 9, 10 ) ], mlFixNm[ -c( 9, 10 ) ] )
+mlIndFixNm <- maxLik( llfInd, start = startValFix, fixed = isFixed,
+   method = "NM" )
+all.equal( mlFixNm, mlIndFixNm )
+
+# with analytical gradients
+mlgFixNm <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
+   method = "NM" )
+summary( mlgFixNm )
+all.equal( mlFixNm, mlgFixNm )
+mlgFixNm2 <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
+   method = "NM")
+all.equal( mlgFixNm, mlgFixNm2 )
+
+# with unused Hessians
+mlghFixNm <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
+   method = "NM" )
+all.equal( mlgFixNm, mlghFixNm )
+
+## SANN method with fixed parameters
+mlFixSann <- maxLik( llf, start = startValFix, fixed = isFixed,
+   method = "SANN" )
+print( mlFixSann )
+summary( mlFixSann )
+activePar( mlFixSann )
+AIC( mlFixSann )
+coef( mlFixSann )
+condiNumber( mlFixSann )
+hessian( mlFixSann )
+logLik( mlFixSann )
+maximType( mlFixSann )
+nIter( mlFixSann )
+nObs( mlFixSann )
+nParam( mlFixSann )
+returnCode( mlFixSann )
+returnMessage( mlFixSann )
+vcov( mlFixSann )
+logLik( summary( mlFixSann ) )
+all.equal( mlFixBfgs[ -c( 9, 10 ) ], mlFixSann[ -c( 9, 10 ) ] )
+mlIndFixSann <- maxLik( llfInd, start = startValFix, fixed = isFixed,
+   method = "SANN" )
+all.equal( mlFixSann, mlIndFixSann )
+
+# with analytical gradients
+mlgFixSann <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
+   method = "SANN" )
+summary( mlgFixSann )
+all.equal( mlFixSann, mlgFixSann )
+mlgFixSann2 <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
+   method = "SANN")
+all.equal( mlgFixSann, mlgFixSann2 )
+
+# with unused Hessians
+mlghFixSann <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
+   method = "SANN" )
+all.equal( mlgFixSann, mlghFixSann )
 
 
 ############### with parameter constraints ###############
