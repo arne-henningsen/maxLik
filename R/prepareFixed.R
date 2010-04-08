@@ -10,11 +10,11 @@ prepareFixed <- function( start, activePar, fixed ) {
       activePar <- rep(TRUE, length(start))
       names(activePar) <- names(start)
       activePar[fixed] <- FALSE
-   }
-   else if(is.numeric(activePar)) {
+   } else if(is.numeric(activePar)) {
       a <- rep(FALSE, nParam)
       a[activePar] <- TRUE
       activePar <- a
    }
+   names(activePar) <- names(start)
    return( !activePar )
 }
