@@ -37,6 +37,7 @@ maxOptim <- function(fn, grad, hess,
    } else {
       fixed <- rep( FALSE, length( start ) )
    }
+   names( fixed ) <- names( start )
 
    message <- function(c) {
       switch(as.character(c),

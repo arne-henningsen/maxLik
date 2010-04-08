@@ -373,7 +373,8 @@ sigma  1.81648    0.12840 14.1466 < 2.2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > activePar( mlBFGS )
-[1] TRUE TRUE
+   mu sigma 
+ TRUE  TRUE 
 > AIC( mlBFGS )
 [1] 407.1679
 > coef( mlBFGS )
@@ -408,16 +409,15 @@ sigma -1.543776e-05  1.648753e-02
 > logLik( summary( mlBFGS ) )
 [1] -201.5839
 > all.equal( ml, mlBFGS )
- [1] "Length mismatch: comparison on first 10 components" 
- [2] "Component 2: Mean relative difference: 6.480966e-07"
- [3] "Component 3: Mean relative difference: 201.8571"    
- [4] "Component 4: Mean relative difference: 0.002189553" 
- [5] "Component 5: Mean relative difference: 1"           
- [6] "Component 6: 1 string mismatch"                     
- [7] "Component 8: names for target but not for current"  
- [8] "Component 9: names for current but not for target"  
- [9] "Component 9: Mean relative difference: 4.142857"    
-[10] "Component 10: 1 string mismatch"                    
+[1] "Length mismatch: comparison on first 10 components" 
+[2] "Component 2: Mean relative difference: 6.480966e-07"
+[3] "Component 3: Mean relative difference: 201.8571"    
+[4] "Component 4: Mean relative difference: 0.002189553" 
+[5] "Component 5: Mean relative difference: 1"           
+[6] "Component 6: 1 string mismatch"                     
+[7] "Component 9: names for current but not for target"  
+[8] "Component 9: Mean relative difference: 4.142857"    
+[9] "Component 10: 1 string mismatch"                    
 > mlIndBFGS <- maxLik( llfInd, start = startVal, method = "BFGS" )
 Warning messages:
 1: In log(sigma) : NaNs produced
@@ -485,16 +485,15 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] "Component 3: Mean relative difference: 0.0004838186"
 [2] "Component 4: Mean relative difference: 0.001572110" 
 > all.equal( mlg, mlgBFGS )
- [1] "Length mismatch: comparison on first 10 components" 
- [2] "Component 2: Mean relative difference: 6.483767e-07"
- [3] "Component 3: Mean absolute difference: 4.02496e-05" 
- [4] "Component 4: Mean relative difference: 2.472881e-06"
- [5] "Component 5: Mean relative difference: 1"           
- [6] "Component 6: 1 string mismatch"                     
- [7] "Component 8: names for target but not for current"  
- [8] "Component 9: names for current but not for target"  
- [9] "Component 9: Mean relative difference: 4.142857"    
-[10] "Component 10: 1 string mismatch"                    
+[1] "Length mismatch: comparison on first 10 components" 
+[2] "Component 2: Mean relative difference: 6.483767e-07"
+[3] "Component 3: Mean absolute difference: 4.02496e-05" 
+[4] "Component 4: Mean relative difference: 2.472881e-06"
+[5] "Component 5: Mean relative difference: 1"           
+[6] "Component 6: 1 string mismatch"                     
+[7] "Component 9: names for current but not for target"  
+[8] "Component 9: Mean relative difference: 4.142857"    
+[9] "Component 10: 1 string mismatch"                    
 > mlgIndBFGS <- maxLik( llfInd, gfInd, start = startVal, method = "BFGS" )
 Warning messages:
 1: In log(sigma) : NaNs produced
@@ -534,7 +533,8 @@ sigma  1.81664    0.12852 14.1346 < 2.2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > activePar( mlNM )
-[1] TRUE TRUE
+   mu sigma 
+ TRUE  TRUE 
 > AIC( mlNM )
 [1] 407.1679
 > coef( mlNM )
@@ -569,16 +569,15 @@ sigma 1.549577e-05 1.651849e-02
 > logLik( summary( mlNM ) )
 [1] -201.5839
 > all.equal( ml, mlNM )
- [1] "Length mismatch: comparison on first 10 components" 
- [2] "Component 2: Mean relative difference: 0.0001198380"
- [3] "Component 3: Mean relative difference: 39189.07"    
- [4] "Component 4: Mean relative difference: 0.001563966" 
- [5] "Component 5: Mean relative difference: 1"           
- [6] "Component 6: 1 string mismatch"                     
- [7] "Component 8: names for target but not for current"  
- [8] "Component 9: names for current but not for target"  
- [9] "Component 9: Mean relative difference: 8"           
-[10] "Component 10: 1 string mismatch"                    
+[1] "Length mismatch: comparison on first 10 components" 
+[2] "Component 2: Mean relative difference: 0.0001198380"
+[3] "Component 3: Mean relative difference: 39189.07"    
+[4] "Component 4: Mean relative difference: 0.001563966" 
+[5] "Component 5: Mean relative difference: 1"           
+[6] "Component 6: 1 string mismatch"                     
+[7] "Component 9: names for current but not for target"  
+[8] "Component 9: Mean relative difference: 8"           
+[9] "Component 10: 1 string mismatch"                    
 > # with individual log likelihood values
 > mlIndNM <- maxLik( llfInd, start = startVal, method = "NM" )
 > summary( mlIndNM )
@@ -666,7 +665,8 @@ sigma  1.81652    0.12849 14.1370 < 2.2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > activePar( mlSANN )
-[1] TRUE TRUE
+   mu sigma 
+ TRUE  TRUE 
 > AIC( mlSANN )
 [1] 407.1679
 > coef( mlSANN )
@@ -708,10 +708,9 @@ sigma 3.100613e-05 1.651076e-02
  [5] "Component 4: Mean relative difference: 0.002345216" 
  [6] "Component 5: Mean relative difference: 1"           
  [7] "Component 6: 1 string mismatch"                     
- [8] "Component 8: names for target but not for current"  
- [9] "Component 9: names for current but not for target"  
-[10] "Component 9: Mean relative difference: 1427.571"    
-[11] "Component 10: 1 string mismatch"                    
+ [8] "Component 9: names for current but not for target"  
+ [9] "Component 9: Mean relative difference: 1427.571"    
+[10] "Component 10: 1 string mismatch"                    
 > # with individual log likelihood values
 > mlIndSANN <- maxLik( llfInd, start = startVal, method = "SANN" )
 > summary( mlIndSANN )
@@ -1118,7 +1117,8 @@ sigma  1.82546    0.12907  14.143 < 2.2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > activePar( mlFixBfgs )
-[1] FALSE  TRUE
+   mu sigma 
+FALSE  TRUE 
 > AIC( mlFixBfgs )
 [1] 406.1538
 > coef( mlFixBfgs )
@@ -1154,7 +1154,6 @@ sigma  0 0.01665927
 > all.equal( mlghFix[ -c( 5, 6, 9, 10 ) ], mlFixBfgs[ -c( 5, 6, 9, 10, 11 ) ] )
 [1] "Component 3: Mean relative difference: 6.455651e-08"
 [2] "Component 4: Mean relative difference: 0.000410571" 
-[3] "Component 6: names for target but not for current"  
 > mlIndFixBfgs <- maxLik( llfInd, start = startValFix, fixed = isFixed,
 +    method = "BFGS" )
 Warning message:
@@ -1227,7 +1226,8 @@ sigma  1.82539    0.12904  14.146 < 2.2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > activePar( mlFixNm )
-[1] FALSE  TRUE
+   mu sigma 
+FALSE  TRUE 
 > AIC( mlFixNm )
 [1] 406.1538
 > coef( mlFixNm )
@@ -1335,7 +1335,8 @@ sigma   1.8254     0.1291  14.140 < 2.2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > activePar( mlFixSann )
-[1] FALSE  TRUE
+   mu sigma 
+FALSE  TRUE 
 > AIC( mlFixSann )
 [1] 406.1538
 > coef( mlFixSann )
@@ -1453,7 +1454,8 @@ Constrained optimization based on constrOptim
 1  outer iterations, barrier value -0.001450498 
 --------------------------------------------
 > activePar( mlBfgsInEq )
-[1] TRUE TRUE
+   mu sigma 
+ TRUE  TRUE 
 > AIC( mlBfgsInEq )
 [1] 413.067
 > coef( mlBfgsInEq )
@@ -1562,7 +1564,8 @@ Constrained optimization based on constrOptim
 1  outer iterations, barrier value -0.001467752 
 --------------------------------------------
 > activePar( mlNmInEq )
-[1] TRUE TRUE
+   mu sigma 
+ TRUE  TRUE 
 > AIC( mlNmInEq )
 [1] 413.067
 > coef( mlNmInEq )
@@ -1667,7 +1670,8 @@ Constrained optimization based on constrOptim
 1  outer iterations, barrier value -0.001042870 
 --------------------------------------------
 > activePar( mlSannInEq )
-[1] TRUE TRUE
+   mu sigma 
+ TRUE  TRUE 
 > AIC( mlSannInEq )
 [1] 413.0814
 > coef( mlSannInEq )
@@ -1992,7 +1996,8 @@ Constrained optimization based on SUMT
 14  outer iterations, barrier value 3.001124e-17 
 --------------------------------------------
 > activePar( mlBfgsCon )
-[1] TRUE TRUE
+   mu sigma 
+ TRUE  TRUE 
 > AIC( mlBfgsCon )
 [1] 413.0667
 > coef( mlBfgsCon )
@@ -2030,7 +2035,6 @@ sigma -0.004937485  0.011477811
 [1] "Component 2: Mean relative difference: 5.035888e-05"
 [2] "Component 3: Mean relative difference: 0.0002427766"
 [3] "Component 4: Mean relative difference: 0.000915751" 
-[4] "Component 6: names for current but not for target"  
 > mlBfgsConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
 +    method = "BFGS" )
 There were 29 warnings (use warnings() to see them)
@@ -2129,7 +2133,8 @@ Constrained optimization based on SUMT
 2  outer iterations, barrier value 0.2469706 
 --------------------------------------------
 > activePar( mlNmCon )
-[1] TRUE TRUE
+   mu sigma 
+ TRUE  TRUE 
 > AIC( mlNmCon )
 [1] 407.1701
 > coef( mlNmCon )
@@ -2168,9 +2173,8 @@ sigma 0.00000000 0.01649525
 [2] "Component 2: Mean relative difference: 0.1658218"     
 [3] "Component 3: Mean relative difference: 1695.996"      
 [4] "Component 4: Mean relative difference: 0.753827"      
-[5] "Component 6: names for current but not for target"    
-[6] "Component 7: Component 2: Mean relative difference: 1"
-[7] "Component 7: Component 3: Mean relative difference: 6"
+[5] "Component 7: Component 2: Mean relative difference: 1"
+[6] "Component 7: Component 3: Mean relative difference: 6"
 > mlNmConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
 +    method = "NM" )
 Warning message:
@@ -2255,7 +2259,8 @@ Constrained optimization based on SUMT
 2  outer iterations, barrier value 0.2468671 
 --------------------------------------------
 > activePar( mlSannCon )
-[1] TRUE TRUE
+   mu sigma 
+ TRUE  TRUE 
 > AIC( mlSannCon )
 [1] 407.1701
 > coef( mlSannCon )
