@@ -801,6 +801,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > 
 > ## NR method with fixed parameters
 > mlFix <- maxLik( llf, start = startValFix, activePar = !isFixed )
+> mlFix2 <- maxLik( llf, start = startValFix, fixed = isFixed )
+> all.equal( mlFix, mlFix2 )
+[1] "Component 8: names for current but not for target"
 > print( mlFix )
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
@@ -855,6 +858,9 @@ sigma  0 0.01665927
 > logLik( summary( mlFix ) )
 [1] -202.0769
 > mlIndFix <- maxLik( llfInd, start = startValFix, activePar = !isFixed )
+> mlIndFix2 <- maxLik( llfInd, start = startValFix, fixed = isFixed )
+> all.equal( mlIndFix, mlIndFix2 )
+[1] "Component 8: names for current but not for target"
 > summary( mlIndFix )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -880,6 +886,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > 
 > # with analytical gradients
 > mlgFix <- maxLik( llf, gf, start = startValFix, activePar = !isFixed )
+> mlgFix2 <- maxLik( llf, gf, start = startValFix, fixed = isFixed )
+> all.equal( mlgFix, mlgFix2 )
+[1] "Component 8: names for current but not for target"
 > summary( mlgFix )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -948,6 +957,10 @@ sigma  -5.94486 -60.01870
 > ## BHHH method with fixed parameters
 > mlFixBHHH <- maxLik( llfInd, start = startValFix, activePar = !isFixed,
 +    method = "BHHH" )
+> mlFixBHHH2 <- maxLik( llfInd, start = startValFix, fixed = isFixed,
++    method = "BHHH" )
+> all.equal( mlFixBHHH, mlFixBHHH2 )
+[1] "Component 8: names for current but not for target"
 > print( mlFixBHHH )
 Maximum Likelihood estimation
 BHHH maximisation, 10 iterations
@@ -1023,6 +1036,10 @@ sigma  -7.67543 -55.98293
 > # with analytical gradients
 > mlgFixBHHH <- maxLik( llfInd, gfInd, start = startValFix, activePar = !isFixed,
 +    method = "BHHH" )
+> mlgFixBHHH2 <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
++    method = "BHHH" )
+> all.equal( mlgFixBHHH, mlgFixBHHH2 )
+[1] "Component 8: names for current but not for target"
 > summary( mlgFixBHHH )
 --------------------------------------------
 Maximum Likelihood estimation

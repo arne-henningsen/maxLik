@@ -276,6 +276,8 @@ isFixed <- c( TRUE, FALSE )
 
 ## NR method with fixed parameters
 mlFix <- maxLik( llf, start = startValFix, activePar = !isFixed )
+mlFix2 <- maxLik( llf, start = startValFix, fixed = isFixed )
+all.equal( mlFix, mlFix2 )
 print( mlFix )
 summary( mlFix )
 activePar( mlFix )
@@ -293,6 +295,8 @@ returnMessage( mlFix )
 vcov( mlFix )
 logLik( summary( mlFix ) )
 mlIndFix <- maxLik( llfInd, start = startValFix, activePar = !isFixed )
+mlIndFix2 <- maxLik( llfInd, start = startValFix, fixed = isFixed )
+all.equal( mlIndFix, mlIndFix2 )
 summary( mlIndFix )
 all.equal( mlFix, mlIndFix )
 mlFix[[3]]
@@ -300,6 +304,8 @@ mlIndFix[[3]]
 
 # with analytical gradients
 mlgFix <- maxLik( llf, gf, start = startValFix, activePar = !isFixed )
+mlgFix2 <- maxLik( llf, gf, start = startValFix, fixed = isFixed )
+all.equal( mlgFix, mlgFix2 )
 summary( mlgFix )
 all.equal( mlFix, mlgFix )
 mlFix[[3]]
@@ -323,6 +329,9 @@ mlghFix[[4]]
 ## BHHH method with fixed parameters
 mlFixBHHH <- maxLik( llfInd, start = startValFix, activePar = !isFixed,
    method = "BHHH" )
+mlFixBHHH2 <- maxLik( llfInd, start = startValFix, fixed = isFixed,
+   method = "BHHH" )
+all.equal( mlFixBHHH, mlFixBHHH2 )
 print( mlFixBHHH )
 summary( mlFixBHHH )
 activePar( mlFixBHHH )
@@ -348,6 +357,9 @@ mlFixBHHH[[ 4 ]]
 # with analytical gradients
 mlgFixBHHH <- maxLik( llfInd, gfInd, start = startValFix, activePar = !isFixed,
    method = "BHHH" )
+mlgFixBHHH2 <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
+   method = "BHHH" )
+all.equal( mlgFixBHHH, mlgFixBHHH2 )
 summary( mlgFixBHHH )
 all.equal( mlFixBHHH, mlgFixBHHH )
 mlgFixBHHH2 <- maxLik( llf, gfInd, start = startValFix, activePar = !isFixed,
