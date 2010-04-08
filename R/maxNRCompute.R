@@ -112,21 +112,9 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
    nimed <- names(start)
    nParam <- length(start)
    ## establish the active parameters.  Internally, we just use 'activePar'
-   if(!is.null(fixed)) {
-      if(!is.null(activePar)) {
-         if(!all(activePar)) {
-            warning("Both 'activePar' and 'fixed' specified.  'activePar' ignored")
-         }
-      }
-      activePar <- rep(TRUE, length(start))
-      names(activePar) <- names(start)
-      activePar[fixed] <- FALSE
-   }
-   else if(is.numeric(activePar)) {
-      a <- rep(FALSE, nParam)
-      a[activePar] <- TRUE
-      activePar <- a
-   }
+   activePar <- !prepareFixed( start = start, activePar = activePar,
+      fixed = fixed )
+
    samm <- NULL
    I <- diag(rep(1, nParam))
                            # I is unit matrix
