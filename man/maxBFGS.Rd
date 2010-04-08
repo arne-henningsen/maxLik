@@ -9,20 +9,20 @@
   compatible with \code{\link{maxNR}}
 }
 \usage{
-maxBFGS(fn, grad = NULL, hess=NULL, start, print.level = 0,
-iterlim = 200,
-constraints,
+maxBFGS(fn, grad = NULL, hess=NULL, start, fixed = NULL,
+   print.level = 0, iterlim = 200, constraints = NULL,
    tol = 1e-08, reltol=tol, parscale=rep(1, length=length(start)), ... )
-maxSANN(fn, grad = NULL, hess = NULL, start, print.level = 0, iterlim =
-   10000,
-   constraints,
+
+maxSANN(fn, grad = NULL, hess = NULL, start, fixed = NULL,
+   print.level = 0, iterlim = 10000, constraints = NULL,
    tol = 1e-08, reltol=tol, cand = NULL, temp = 10, tmax = 10,
    parscale = rep(1, length = length(start)),
    random.seed = 123, ... )
-maxNM(fn, grad = NULL, hess = NULL, start, print.level = 0, iterlim =
-   500,
-constraints,
-tol = 1e-08, reltol=tol, parscale = rep(1, length = length(start)), alpha = 1, beta = 0.5, gamma = 2, ...)
+
+maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
+   print.level = 0, iterlim = 500, constraints = NULL,
+   tol = 1e-08, reltol=tol, parscale = rep(1, length = length(start)),
+   alpha = 1, beta = 0.5, gamma = 2, ...)
 }
 
 \arguments{
@@ -40,6 +40,7 @@ tol = 1e-08, reltol=tol, parscale = rep(1, length = length(start)), alpha = 1, b
   \item{hess}{Hessian of the function.  Not used by any of these methods, for
     compatibility with \code{\link{maxNR}}.}
   \item{start}{initial values for the parameters.}
+  \item{fixed}{logical vector indicating which parameters should be fixed.}
   \item{print.level}{a larger number prints more working information.}
   \item{iterlim}{maximum number of iterations.}
   \item{constraints}{either \code{NULL} for unconstrained optimization

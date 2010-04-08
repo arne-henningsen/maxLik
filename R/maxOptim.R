@@ -1,5 +1,5 @@
 maxOptim <- function(fn, grad, hess,
-                    start, method,
+                    start, method, fixed,
                     print.level,
                     iterlim,
                     constraints,
@@ -26,6 +26,18 @@ maxOptim <- function(fn, grad, hess,
       checkFuncArgs( hess, argNames, "hess", maxMethod )
    }
 
+   ## check argument 'fixed'
+   if( !is.null( fixed ) ) {
+      if( !is.logical( fixed ) ) {
+         stop( "argument 'fixed' must be a logical vector" )
+      } else if( length( fixed ) != length( start ) ) {
+         stop( "argument 'fixed' must have the same length as argument",
+            " 'start'" )
+      }
+   } else {
+      fixed <- rep( FALSE, length( start ) )
+   }
+
    message <- function(c) {
       switch(as.character(c),
                "0" = "successful convergence",
@@ -44,7 +56,7 @@ maxOptim <- function(fn, grad, hess,
                     fnscale=-1,
                    reltol=reltol,
                     maxit=iterlim,
-                    parscale=parscale,
+                    parscale=parscale[ !fixed ],
                     alpha=alpha, beta=beta, gamma=gamma,
                     temp=temp, tmax=tmax )
    f1 <- callWithoutSumt( start, "logLikFunc", fnOrig = fn, gradOrig = grad,
@@ -85,7 +97,8 @@ maxOptim <- function(fn, grad, hess,
       if( is.null( cand ) ) {
          gradOptim <- NULL
       } else {
-         gradOptim <- function( theta, fnOrig, gradOrig, hessOrig, ... ) {
+         gradOptim <- function( theta, fnOrig, gradOrig, hessOrig,
+               start, fixed, ... ) {
             return( cand( theta, ... ) )
          }
       }
@@ -100,9 +113,10 @@ maxOptim <- function(fn, grad, hess,
    ## However, as 'sumt' already returns such an object, we return the
    ## result of 'sumt' directly, without the canning
    if(is.null(constraints)) {
-       result <- optim( par = start, fn = logLikFunc, control = control,
+       result <- optim( par = start[ !fixed ], fn = logLikFunc, control = control,
                       method = method, gr = gradOptim, fnOrig = fn,
-                      gradOrig = grad, hessOrig = hess, ... )
+                      gradOrig = grad, hessOrig = hess,
+                      start = start, fixed = fixed, ... )
        resultConstraints <- NULL
     }
    else {
@@ -111,10 +125,11 @@ maxOptim <- function(fn, grad, hess,
       if(identical(names(constraints), c("ineqA", "ineqB"))) {
          ui <- constraints$ineqA
          ci <- -constraints$ineqB
-         result <- constrOptim2(theta=start, f=logLikFunc, grad=gradOptim,
+         result <- constrOptim2( theta = start[ !fixed ],
+                          f = logLikFunc, grad = gradOptim,
                           ui=ui, ci=ci, control=control,
                           method = method, fnOrig = fn, gradOrig = grad,
-                          hessOrig = hess, ...)
+                          hessOrig = hess, start = start, fixed = fixed, ...)
          resultConstraints <- list(type="constrOptim",
                                    barrier.value=result$barrier.value,
                                    outer.iterations=result$outer.iterations
@@ -123,7 +138,7 @@ maxOptim <- function(fn, grad, hess,
       else if(identical(names(constraints), c("eqA", "eqB"))) {
                            # equality constraints: A %*% beta + B = 0
          argList <- list(fn=fn, grad=grad, hess=hess,
-                        start=start,
+                        start=start, fixed = fixed,
                         maxRoutine = get( maxMethod ),
                         constraints=constraints,
                         print.level=print.level,
@@ -146,20 +161,24 @@ maxOptim <- function(fn, grad, hess,
       }
    }
 
+   # estimates (including fixed parameters)
+   estimate <- start
+   estimate[ !fixed ] <- result$par
+
    # calculate (final) Hessian
-   hessian <- logLikHess( result$par, fnOrig = fn, gradOrig = grad,
+   hessian <- logLikHess( estimate, fnOrig = fn,  gradOrig = grad,
       hessOrig = hess, ... )
 
    result <- list(
                    maximum=result$value,
-                   estimate=result$par,
-                   gradient=callWithoutSumt( result$par, "logLikGrad",
+                   estimate=estimate,
+                   gradient=callWithoutSumt( estimate, "logLikGrad",
                      fnOrig = fn, gradOrig = grad, hessOrig = hess, ... ),
                    hessian=hessian,
                    code=result$convergence,
                    message=paste(message(result$convergence), result$message),
                    last.step=NULL,
-                   activePar = rep( TRUE, length ( result$par ) ),
+                   activePar = !fixed,
                    iterations=result$counts[1],
                    type=maximType,
                   constraints=resultConstraints

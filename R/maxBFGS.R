@@ -1,5 +1,5 @@
 maxBFGS <- function(fn, grad=NULL, hess=NULL,
-                    start,
+                    start, fixed = NULL,
                     print.level=0,
                     iterlim=200,
                     constraints=NULL,
@@ -11,8 +11,8 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    ## ...           further arguments to fn() and grad()
 
    result <- maxOptim( fn = fn, grad = grad, hess = hess,
-      start = start, method = "BFGS", print.level = print.level,
-      iterlim = iterlim, constraints = constraints,
+      start = start, method = "BFGS", fixed = fixed,
+      print.level = print.level, iterlim = iterlim, constraints = constraints,
       tol = tol, reltol = reltol, parscale = parscale,
       ... )
 

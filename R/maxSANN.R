@@ -1,5 +1,5 @@
 maxSANN <- function(fn, grad=NULL, hess=NULL,
-                    start,
+                    start, fixed = NULL,
                     print.level=0,
                     iterlim=10000,
                     constraints = NULL,
@@ -27,8 +27,8 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    }
 
    result <- maxOptim( fn = fn, grad = grad, hess = hess,
-      start = start, method = "SANN", print.level = print.level,
-      iterlim = iterlim, constraints = constraints,
+      start = start, method = "SANN", fixed = fixed,
+      print.level = print.level, iterlim = iterlim, constraints = constraints,
       tol = tol, reltol = reltol, parscale = parscale,
       temp = temp, tmax = tmax, random.seed = random.seed, cand = cand,
       ... )

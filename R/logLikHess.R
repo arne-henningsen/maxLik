@@ -1,4 +1,8 @@
-logLikHess <- function( theta, fnOrig, gradOrig, hessOrig, ... ) {
+logLikHess <- function( theta, fnOrig, gradOrig, hessOrig,
+      start = NULL, fixed = NULL, ... ) {
+
+   theta <- addFixedPar( theta = theta, start = start, fixed = fixed, ...)
+
    if(!is.null(hessOrig)) {
        hessian <- hessOrig( theta, ... )
    } else {
@@ -11,5 +15,10 @@ logLikHess <- function( theta, fnOrig, gradOrig, hessOrig, ... ) {
          fnOrig = fnOrig, gradOrig = gradOrig, ... )
    }
    rownames( hessian ) <- colnames( hessian ) <- names( theta )
+
+   if( !is.null( fixed ) ) {
+      hessian <- hessian[ !fixed, !fixed, drop = FALSE ]
+   }
+
    return( hessian )
 }
