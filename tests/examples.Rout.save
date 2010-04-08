@@ -124,7 +124,7 @@ Estimates:
 > activePar(cons)
 [1] FALSE  TRUE
 > # specify fixed par in different ways
-> cons <- maxNR(f, start=1:2, fixedPar=1)
+> cons <- maxNR(f, start=1:2, fixed=1)
 > print(summary(cons))
 --------------------------------------------
 Newton-Raphson maximisation 
@@ -137,7 +137,7 @@ Estimates:
 [1,] 1.000000e+00            NA
 [2,] 2.946969e-07 -2.167710e-07
 --------------------------------------------
-> cons <- maxNR(f, start=1:2, fixedPar=c(TRUE,FALSE))
+> cons <- maxNR(f, start=1:2, fixed=c(TRUE,FALSE))
 > print(summary(cons))
 --------------------------------------------
 Newton-Raphson maximisation 
@@ -150,7 +150,7 @@ Estimates:
 [1,] 1.000000e+00            NA
 [2,] 2.946969e-07 -2.167710e-07
 --------------------------------------------
-> cons <- maxNR(f, start=c(a=1, b=2), fixedPar="a")
+> cons <- maxNR(f, start=c(a=1, b=2), fixed="a")
 > print(summary(cons))
 --------------------------------------------
 Newton-Raphson maximisation 
