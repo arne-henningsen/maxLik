@@ -66,7 +66,11 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
    if( !is.null( hess ) ) {
       checkFuncArgs( hess, argNames, "hess", "maxNR" )
    }
-   ##
+
+   ## establish the active parameters.  Internally, we just use 'activePar'
+   fixed <- prepareFixed( start = start, activePar = activePar,
+      fixed = fixed )
+
    if(is.null(constraints)) {
        result <- maxNRCompute(fn=fn, grad=grad, hess=hess,
                               start=start,
@@ -76,7 +80,6 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
                               lambdatol=lambdatol,
                               qrtol=qrtol,
                               iterlim=iterlim,
-                              activePar=activePar,
                               fixed=fixed,
                               ...)
    } else {
@@ -94,7 +97,6 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
                         lambdatol=lambdatol,
                         qrtol=qrtol,
                         iterlim=iterlim,
-                        activePar=activePar,
                         fixed=fixed,
                         ...) 
       } else {

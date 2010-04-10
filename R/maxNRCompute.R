@@ -5,8 +5,7 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
                   lambdatol=1e-6,
                   qrtol=1e-10,
                   iterlim=150,
-                  activePar=rep(TRUE, nParam),
-                         fixed=NULL,
+                  fixed=NULL,
                   ...) {
    ## Newton-Raphson maximisation
    ## Parameters:
@@ -29,10 +28,8 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
    ## reltol      - maximum allowed reltive difference (stops if < reltol*(abs(fn) + reltol)
    ## gradtol     - maximum allowed norm of gradient vector
    ## iterlim     - maximum # of iterations
-   ## activePar   - an index vector -- which parameters are taken as
-   ##               variable (free).  Other paramters are treated as
-   ##               fixed constants
-   ## fixed         index vector, which parameters to keep fixed
+   ## fixed       - a logical vector -- which parameters are taken as fixed.
+   ##               Other paramters are treated as variable (free).
    ##
    ## RESULTS:
    ## a list of class "maxim":
@@ -112,8 +109,8 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
    nimed <- names(start)
    nParam <- length(start)
    ## establish the active parameters.  Internally, we just use 'activePar'
-   activePar <- !prepareFixed( start = start, activePar = activePar,
-      fixed = fixed )
+   activePar <- !fixed
+   rm( fixed )
 
    samm <- NULL
    I <- diag(rep(1, nParam))
