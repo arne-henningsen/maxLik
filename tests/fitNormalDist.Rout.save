@@ -815,6 +815,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > mlFix3 <- maxLik( llf, start = startValFix, fixed = "mu" )
 > all.equal( mlFix, mlFix3 )
 [1] TRUE
+> mlFix4 <- maxLik( llf, start = startValFix, fixed = 1 )
+> all.equal( mlFix, mlFix4 )
+[1] TRUE
 > print( mlFix )
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
@@ -878,6 +881,9 @@ sigma  0 0.01665927
 [1] TRUE
 > mlIndFix3 <- maxLik( llfInd, start = startValFix, fixed = "mu" )
 > all.equal( mlIndFix, mlIndFix3 )
+[1] TRUE
+> mlIndFix4 <- maxLik( llfInd, start = startValFix, fixed = 1 )
+> all.equal( mlIndFix, mlIndFix4 )
 [1] TRUE
 > summary( mlIndFix )
 --------------------------------------------
@@ -990,6 +996,10 @@ sigma  -5.94486 -60.01870
 +    method = "BHHH" )
 > all.equal( mlFixBHHH, mlFixBHHH3 )
 [1] TRUE
+> mlFixBHHH4 <- maxLik( llfInd, start = startValFix, fixed = 1,
++    method = "BHHH" )
+> all.equal( mlFixBHHH, mlFixBHHH4 )
+[1] TRUE
 > print( mlFixBHHH )
 Maximum Likelihood estimation
 BHHH maximisation, 10 iterations
@@ -1077,6 +1087,10 @@ sigma  -7.67543 -55.98293
 > mlgFixBHHH3 <- maxLik( llfInd, gfInd, start = startValFix, fixed = "mu",
 +    method = "BHHH" )
 > all.equal( mlgFixBHHH, mlgFixBHHH3 )
+[1] TRUE
+> mlgFixBHHH4 <- maxLik( llfInd, gfInd, start = startValFix, fixed = 1,
++    method = "BHHH" )
+> all.equal( mlgFixBHHH, mlgFixBHHH4 )
 [1] TRUE
 > summary( mlgFixBHHH )
 --------------------------------------------
