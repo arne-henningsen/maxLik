@@ -1124,6 +1124,18 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 +    method = "BFGS" )
 Warning message:
 In log(sigma) : NaNs produced
+> mlFixBfgs3 <- maxLik( llf, start = startValFix, fixed = "mu",
++    method = "BFGS" )
+Warning message:
+In log(sigma) : NaNs produced
+> all.equal( mlFixBfgs, mlFixBfgs3 )
+[1] TRUE
+> mlFixBfgs4 <- maxLik( llf, start = startValFix, fixed = 1,
++    method = "BFGS" )
+Warning message:
+In log(sigma) : NaNs produced
+> all.equal( mlFixBfgs, mlFixBfgs4 )
+[1] TRUE
 > print( mlFixBfgs )
 Maximum Likelihood estimation
 BFGS maximisation, 27 iterations
@@ -1189,12 +1201,36 @@ In log(sigma) : NaNs produced
 > all.equal( mlFixBfgs[ -9 ], mlIndFixBfgs[ -9 ] )
 [1] "Component 3: Mean relative difference: 9.428428e-08"
 [2] "Component 4: Mean relative difference: 0.001115760" 
+> mlIndFixBfgs3 <- maxLik( llfInd, start = startValFix, fixed = "mu",
++    method = "BFGS" )
+Warning message:
+In log(sigma) : NaNs produced
+> all.equal( mlIndFixBfgs, mlIndFixBfgs3 )
+[1] TRUE
+> mlIndFixBfgs4 <- maxLik( llfInd, start = startValFix, fixed = 1,
++    method = "BFGS" )
+Warning message:
+In log(sigma) : NaNs produced
+> all.equal( mlIndFixBfgs, mlIndFixBfgs4 )
+[1] TRUE
 > 
 > # with analytical gradients
 > mlgFixBfgs <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
 +    method = "BFGS" )
 Warning message:
 In log(sigma) : NaNs produced
+> mlgFixBfgs3 <- maxLik( llf, gf, start = startValFix, fixed = "mu",
++    method = "BFGS" )
+Warning message:
+In log(sigma) : NaNs produced
+> all.equal( mlgFixBfgs, mlgFixBfgs3 )
+[1] TRUE
+> mlgFixBfgs4 <- maxLik( llf, gf, start = startValFix, fixed = 1,
++    method = "BFGS" )
+Warning message:
+In log(sigma) : NaNs produced
+> all.equal( mlgFixBfgs, mlgFixBfgs4 )
+[1] TRUE
 > summary( mlgFixBfgs )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -1212,12 +1248,24 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > all.equal( mlFixBfgs[ -9 ], mlgFixBfgs[ -9 ] )
 [1] "Component 3: Mean relative difference: 9.37899e-08" 
 [2] "Component 4: Mean relative difference: 0.0004106729"
-> mlgFixBfgs2 <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
+> mlgIndFixBfgs <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
 +    method = "BFGS")
 Warning message:
 In log(sigma) : NaNs produced
-> all.equal( mlgFixBfgs, mlgFixBfgs2 )
+> all.equal( mlgFixBfgs, mlgIndFixBfgs )
 [1] "Component 3: Mean relative difference: 1.653872e-08"
+> mlgIndFixBfgs3 <- maxLik( llfInd, gfInd, start = startValFix, fixed = "mu",
++    method = "BFGS" )
+Warning message:
+In log(sigma) : NaNs produced
+> all.equal( mlgIndFixBfgs, mlgIndFixBfgs3 )
+[1] TRUE
+> mlgIndFixBfgs4 <- maxLik( llfInd, gfInd, start = startValFix, fixed = 1,
++    method = "BFGS" )
+Warning message:
+In log(sigma) : NaNs produced
+> all.equal( mlgIndFixBfgs, mlgIndFixBfgs4 )
+[1] TRUE
 > 
 > # with unused Hessians
 > mlghFixBfgs <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
@@ -1226,6 +1274,18 @@ Warning message:
 In log(sigma) : NaNs produced
 > all.equal( mlgFixBfgs, mlghFixBfgs )
 [1] TRUE
+> mlghFixBfgs3 <- maxLik( llf, gf, hf, start = startValFix, fixed = "mu",
++    method = "BFGS" )
+Warning message:
+In log(sigma) : NaNs produced
+> all.equal( mlghFixBfgs, mlghFixBfgs3 )
+[1] TRUE
+> mlghFixBfgs4 <- maxLik( llf, gf, hf, start = startValFix, fixed = 1,
++    method = "BFGS" )
+Warning message:
+In log(sigma) : NaNs produced
+> all.equal( mlghFixBfgs, mlghFixBfgs4 )
+[1] TRUE
 > 
 > ## NM method with fixed parameters
 > mlFixNm <- maxLik( llf, start = startValFix, fixed = isFixed,
@@ -1233,6 +1293,20 @@ In log(sigma) : NaNs produced
 Warning message:
 In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
   one-diml optimization by Nelder-Mead is unreliable: use optimize
+> mlFixNm3 <- maxLik( llf, start = startValFix, fixed = "mu",
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-diml optimization by Nelder-Mead is unreliable: use optimize
+> all.equal( mlFixNm, mlFixNm3 )
+[1] TRUE
+> mlFixNm4 <- maxLik( llf, start = startValFix, fixed = 1,
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-diml optimization by Nelder-Mead is unreliable: use optimize
+> all.equal( mlFixNm, mlFixNm4 )
+[1] TRUE
 > print( mlFixNm )
 Maximum Likelihood estimation
 Nelder-Mead maximisation, 28 iterations
@@ -1299,6 +1373,20 @@ In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
   one-diml optimization by Nelder-Mead is unreliable: use optimize
 > all.equal( mlFixNm, mlIndFixNm )
 [1] "Component 3: Mean relative difference: 1.417023e-05"
+> mlIndFixNm3 <- maxLik( llfInd, start = startValFix, fixed = "mu",
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-diml optimization by Nelder-Mead is unreliable: use optimize
+> all.equal( mlIndFixNm, mlIndFixNm3 )
+[1] TRUE
+> mlIndFixNm4 <- maxLik( llfInd, start = startValFix, fixed = 1,
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-diml optimization by Nelder-Mead is unreliable: use optimize
+> all.equal( mlIndFixNm, mlIndFixNm4 )
+[1] TRUE
 > 
 > # with analytical gradients
 > mlgFixNm <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
@@ -1306,6 +1394,20 @@ In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
 Warning message:
 In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
   one-diml optimization by Nelder-Mead is unreliable: use optimize
+> mlgFixNm3 <- maxLik( llf, gf, start = startValFix, fixed = "mu",
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-diml optimization by Nelder-Mead is unreliable: use optimize
+> all.equal( mlgFixNm, mlgFixNm3 )
+[1] TRUE
+> mlgFixNm4 <- maxLik( llf, gf, start = startValFix, fixed = 1,
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-diml optimization by Nelder-Mead is unreliable: use optimize
+> all.equal( mlgFixNm, mlgFixNm4 )
+[1] TRUE
 > summary( mlgFixNm )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -1338,10 +1440,32 @@ In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
   one-diml optimization by Nelder-Mead is unreliable: use optimize
 > all.equal( mlgFixNm, mlghFixNm )
 [1] TRUE
+> mlghFixNm3 <- maxLik( llf, gf, hf, start = startValFix, fixed = "mu",
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-diml optimization by Nelder-Mead is unreliable: use optimize
+> all.equal( mlghFixNm, mlghFixNm3 )
+[1] TRUE
+> mlghFixNm4 <- maxLik( llf, gf, hf, start = startValFix, fixed = 1,
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-diml optimization by Nelder-Mead is unreliable: use optimize
+> all.equal( mlghFixNm, mlghFixNm4 )
+[1] TRUE
 > 
 > ## SANN method with fixed parameters
 > mlFixSann <- maxLik( llf, start = startValFix, fixed = isFixed,
 +    method = "SANN" )
+> mlFixSann3 <- maxLik( llf, start = startValFix, fixed = "mu",
++    method = "SANN" )
+> all.equal( mlFixSann, mlFixSann3 )
+[1] TRUE
+> mlFixSann4 <- maxLik( llf, start = startValFix, fixed = 1,
++    method = "SANN" )
+> all.equal( mlFixSann, mlFixSann4 )
+[1] TRUE
 > print( mlFixSann )
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations

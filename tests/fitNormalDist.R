@@ -406,6 +406,12 @@ all.equal( mlgFixBHHH, mlghFixBHHH )
 ## BFGS method with fixed parameters
 mlFixBfgs <- maxLik( llf, start = startValFix, fixed = isFixed,
    method = "BFGS" )
+mlFixBfgs3 <- maxLik( llf, start = startValFix, fixed = "mu",
+   method = "BFGS" )
+all.equal( mlFixBfgs, mlFixBfgs3 )
+mlFixBfgs4 <- maxLik( llf, start = startValFix, fixed = 1,
+   method = "BFGS" )
+all.equal( mlFixBfgs, mlFixBfgs4 )
 print( mlFixBfgs )
 summary( mlFixBfgs )
 activePar( mlFixBfgs )
@@ -426,24 +432,54 @@ all.equal( mlghFix[ -c( 5, 6, 9, 10 ) ], mlFixBfgs[ -c( 5, 6, 9, 10, 11 ) ] )
 mlIndFixBfgs <- maxLik( llfInd, start = startValFix, fixed = isFixed,
    method = "BFGS" )
 all.equal( mlFixBfgs[ -9 ], mlIndFixBfgs[ -9 ] )
+mlIndFixBfgs3 <- maxLik( llfInd, start = startValFix, fixed = "mu",
+   method = "BFGS" )
+all.equal( mlIndFixBfgs, mlIndFixBfgs3 )
+mlIndFixBfgs4 <- maxLik( llfInd, start = startValFix, fixed = 1,
+   method = "BFGS" )
+all.equal( mlIndFixBfgs, mlIndFixBfgs4 )
 
 # with analytical gradients
 mlgFixBfgs <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
    method = "BFGS" )
+mlgFixBfgs3 <- maxLik( llf, gf, start = startValFix, fixed = "mu",
+   method = "BFGS" )
+all.equal( mlgFixBfgs, mlgFixBfgs3 )
+mlgFixBfgs4 <- maxLik( llf, gf, start = startValFix, fixed = 1,
+   method = "BFGS" )
+all.equal( mlgFixBfgs, mlgFixBfgs4 )
 summary( mlgFixBfgs )
 all.equal( mlFixBfgs[ -9 ], mlgFixBfgs[ -9 ] )
-mlgFixBfgs2 <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
+mlgIndFixBfgs <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
    method = "BFGS")
-all.equal( mlgFixBfgs, mlgFixBfgs2 )
+all.equal( mlgFixBfgs, mlgIndFixBfgs )
+mlgIndFixBfgs3 <- maxLik( llfInd, gfInd, start = startValFix, fixed = "mu",
+   method = "BFGS" )
+all.equal( mlgIndFixBfgs, mlgIndFixBfgs3 )
+mlgIndFixBfgs4 <- maxLik( llfInd, gfInd, start = startValFix, fixed = 1,
+   method = "BFGS" )
+all.equal( mlgIndFixBfgs, mlgIndFixBfgs4 )
 
 # with unused Hessians
 mlghFixBfgs <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
    method = "BFGS" )
 all.equal( mlgFixBfgs, mlghFixBfgs )
+mlghFixBfgs3 <- maxLik( llf, gf, hf, start = startValFix, fixed = "mu",
+   method = "BFGS" )
+all.equal( mlghFixBfgs, mlghFixBfgs3 )
+mlghFixBfgs4 <- maxLik( llf, gf, hf, start = startValFix, fixed = 1,
+   method = "BFGS" )
+all.equal( mlghFixBfgs, mlghFixBfgs4 )
 
 ## NM method with fixed parameters
 mlFixNm <- maxLik( llf, start = startValFix, fixed = isFixed,
    method = "NM" )
+mlFixNm3 <- maxLik( llf, start = startValFix, fixed = "mu",
+   method = "NM" )
+all.equal( mlFixNm, mlFixNm3 )
+mlFixNm4 <- maxLik( llf, start = startValFix, fixed = 1,
+   method = "NM" )
+all.equal( mlFixNm, mlFixNm4 )
 print( mlFixNm )
 summary( mlFixNm )
 activePar( mlFixNm )
@@ -464,10 +500,22 @@ all.equal( mlFixBfgs[ -c( 9, 10 ) ], mlFixNm[ -c( 9, 10 ) ] )
 mlIndFixNm <- maxLik( llfInd, start = startValFix, fixed = isFixed,
    method = "NM" )
 all.equal( mlFixNm, mlIndFixNm )
+mlIndFixNm3 <- maxLik( llfInd, start = startValFix, fixed = "mu",
+   method = "NM" )
+all.equal( mlIndFixNm, mlIndFixNm3 )
+mlIndFixNm4 <- maxLik( llfInd, start = startValFix, fixed = 1,
+   method = "NM" )
+all.equal( mlIndFixNm, mlIndFixNm4 )
 
 # with analytical gradients
 mlgFixNm <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
    method = "NM" )
+mlgFixNm3 <- maxLik( llf, gf, start = startValFix, fixed = "mu",
+   method = "NM" )
+all.equal( mlgFixNm, mlgFixNm3 )
+mlgFixNm4 <- maxLik( llf, gf, start = startValFix, fixed = 1,
+   method = "NM" )
+all.equal( mlgFixNm, mlgFixNm4 )
 summary( mlgFixNm )
 all.equal( mlFixNm, mlgFixNm )
 mlgFixNm2 <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
@@ -478,10 +526,22 @@ all.equal( mlgFixNm, mlgFixNm2 )
 mlghFixNm <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
    method = "NM" )
 all.equal( mlgFixNm, mlghFixNm )
+mlghFixNm3 <- maxLik( llf, gf, hf, start = startValFix, fixed = "mu",
+   method = "NM" )
+all.equal( mlghFixNm, mlghFixNm3 )
+mlghFixNm4 <- maxLik( llf, gf, hf, start = startValFix, fixed = 1,
+   method = "NM" )
+all.equal( mlghFixNm, mlghFixNm4 )
 
 ## SANN method with fixed parameters
 mlFixSann <- maxLik( llf, start = startValFix, fixed = isFixed,
    method = "SANN" )
+mlFixSann3 <- maxLik( llf, start = startValFix, fixed = "mu",
+   method = "SANN" )
+all.equal( mlFixSann, mlFixSann3 )
+mlFixSann4 <- maxLik( llf, start = startValFix, fixed = 1,
+   method = "SANN" )
+all.equal( mlFixSann, mlFixSann4 )
 print( mlFixSann )
 summary( mlFixSann )
 activePar( mlFixSann )
