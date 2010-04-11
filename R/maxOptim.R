@@ -27,17 +27,7 @@ maxOptim <- function(fn, grad, hess,
    }
 
    ## check argument 'fixed'
-   if( !is.null( fixed ) ) {
-      if( !is.logical( fixed ) ) {
-         stop( "argument 'fixed' must be a logical vector" )
-      } else if( length( fixed ) != length( start ) ) {
-         stop( "argument 'fixed' must have the same length as argument",
-            " 'start'" )
-      }
-   } else {
-      fixed <- rep( FALSE, length( start ) )
-   }
-   names( fixed ) <- names( start )
+   fixed <- prepareFixed( start = start, activePar = NULL, fixed = fixed )
 
    message <- function(c) {
       switch(as.character(c),

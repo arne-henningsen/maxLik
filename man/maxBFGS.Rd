@@ -40,7 +40,11 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
   \item{hess}{Hessian of the function.  Not used by any of these methods, for
     compatibility with \code{\link{maxNR}}.}
   \item{start}{initial values for the parameters.}
-  \item{fixed}{logical vector indicating which parameters should be fixed.}
+  \item{fixed}{parameters that should be fixed at their starting values:
+      either a logical vector of the same length as argument \code{start},
+      a numeric (index) vector indicating the positions of the fixed parameters,
+      or a vector of character strings indicating the names of the fixed
+      parameters (parameter names are taken from argument \code{start}).}
   \item{print.level}{a larger number prints more working information.}
   \item{iterlim}{maximum number of iterations.}
   \item{constraints}{either \code{NULL} for unconstrained optimization
