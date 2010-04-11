@@ -47,10 +47,14 @@ prepareFixed <- function( start, activePar, fixed ) {
          stop( "argument 'fixed' must be either a logical vector,",
             " a numeric vector, or a vector of character strings" )
       }
-   } else if(is.numeric(activePar)) {
-      a <- rep(FALSE, nParam)
-      a[activePar] <- TRUE
-      activePar <- a
+   } else {
+      if( is.null( activePar ) ) {
+         activePar <- rep( TRUE, length( start ) )
+      } else if(is.numeric(activePar)) {
+         a <- rep(FALSE, nParam)
+         a[activePar] <- TRUE
+         activePar <- a
+      }
    }
    names( activePar ) <- names( start )
    if( all( !activePar ) ){
