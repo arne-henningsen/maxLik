@@ -65,7 +65,11 @@ maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
   }
   \item{activePar}{index vector, which parameters are treated as free.
     Other parameters are treated as fixed constants.}
-  \item{fixed}{index vector, which parameters to keep fixed}
+  \item{fixed}{parameters that should be fixed at their starting values:
+      either a logical vector of the same length as argument \code{start},
+      a numeric (index) vector indicating the positions of the fixed parameters,
+      or a vector of character strings indicating the names of the fixed
+      parameters (parameter names are taken from argument \code{start}).}
   \item{\dots}{further arguments to \code{fn}, \code{grad} and
     \code{hess}.}
 }
