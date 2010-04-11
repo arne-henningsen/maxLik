@@ -10,8 +10,7 @@ maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
       steptol = 1e-10, lambdatol = 1e-06, qrtol = 1e-10,
       iterlim = 150,
       constraints=NULL,
-      activePar=NULL,
-      fixed=NULL, ...)
+      fixed=NULL, activePar=NULL, ... )
 }
 \arguments{
   \item{fn}{function to be maximized.  It must return either a single
@@ -63,13 +62,13 @@ maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
     problem is forwarded
     to \code{\link{sumt}}.
   }
-  \item{activePar}{index vector, which parameters are treated as free.
-    Other parameters are treated as fixed constants.}
   \item{fixed}{parameters that should be fixed at their starting values:
       either a logical vector of the same length as argument \code{start},
       a numeric (index) vector indicating the positions of the fixed parameters,
       or a vector of character strings indicating the names of the fixed
       parameters (parameter names are taken from argument \code{start}).}
+  \item{activePar}{this argument is retained for backward compatibility only;
+      please use argument \code{fixed} instead.}
   \item{\dots}{further arguments to \code{fn}, \code{grad} and
     \code{hess}.}
 }

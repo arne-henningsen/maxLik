@@ -5,8 +5,8 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
                   qrtol=1e-10,
                   iterlim=150,
                   constraints=NULL,
-                  activePar=NULL,
                   fixed=NULL,
+                  activePar=NULL,
                   ...) {
    ## Newton-Raphson maximisation
    ## Parameters:
