@@ -10,7 +10,7 @@ maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
       steptol = 1e-10, lambdatol = 1e-06, qrtol = 1e-10,
       iterlim = 150,
       constraints=NULL,
-      activePar=rep(TRUE, length(start)),
+      activePar=NULL,
       fixed=NULL, ...)
 }
 \arguments{
