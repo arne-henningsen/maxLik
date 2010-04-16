@@ -3,6 +3,7 @@ AIC.maxLik              Methods for the various standard functions
 compareDerivatives      function to compare analytic and numeric
                         derivatives
 condiNumber             Print matrix condition numbers column-by-column
+constrOptim2            Linearly constrained optimisation
 fnSubset                Call fnFull with variable and fixed parameters
 hessian                 Hessian matrix
 logLik.maxLik           Return the log likelihood value
