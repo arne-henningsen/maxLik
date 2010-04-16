@@ -5,6 +5,31 @@ A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
 
+            CHANGES IN VERSION 0.7-0
+
+* Holding parameters fixed in maxNR() (and hence, also in maxBHHH()) should
+  now be done by the new (optional) argument "fixed", because it is convenient
+  to use than the "old" argument "activePar" in many situations. However, the
+  "old" argument "activePar" is kept for backward-compatibility.
+
+* added (optional) argument "fixed" to functions maxBFGS(), maxNM(), and maxSANN(),
+  which can be used for holding parameters fixed at their starting values
+
+* added function constrOptim2(), which is a modified copy of constrOptim()
+  from the "stats" package, but which includes a bug fix
+
+* added optional argument "cand" to function maxSANN(), which can be used to
+  specify a function for generating a new candidate point (passed to argument
+  "gr" of optim())
+
+* added argument "random.seed" to maxSANN() to ensure replicability
+
+* several mainly smaller improvements in ML estimations with linear equality
+  and inequality constraints (via sumt() and constrOptim2(), respectively)
+
+* several internal changes that make the code easier to maintain
+
+
             CHANGES IN VERSION 0.6-0
 
 * maxLik() can perform maximum likelihood estimations under linear equality
