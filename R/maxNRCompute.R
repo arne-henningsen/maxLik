@@ -192,7 +192,9 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
          (qRank <- qr(H[activePar,activePar], tol=qrtol)$rank) < sum(activePar)) {
                                         # maximum eigenvalue -> negative definite
                                         # qr()$rank -> singularity
-         lambda <- abs(me) + lambdatol
+         lambda <- abs(me) + lambdatol + min(abs(diag(H)[activePar]))/1e7
+                           # The third term corrects numeric singularity.  If diag(H) only contains large values,
+                           # (H - (a small number)*I) == H because of finite precision
          H <- H - lambda*I
                                         # how to make it better?
       }
