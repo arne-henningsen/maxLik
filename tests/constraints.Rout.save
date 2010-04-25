@@ -1,6 +1,6 @@
 
-R version 2.10.1 (2009-12-14)
-Copyright (C) 2009 The R Foundation for Statistical Computing
+R version 2.11.0 (2010-04-22)
+Copyright (C) 2010 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -361,9 +361,9 @@ Log-Likelihood: -3551.773
 3  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,]  0.499997   0.025624  19.513 < 2.2e-16 ***
-[2,] -1.036016   0.058131 -17.822 < 2.2e-16 ***
-[3,]  1.010560   0.058404  17.303 < 2.2e-16 ***
+[1,]  0.499997   0.025668  19.480 < 2.2e-16 ***
+[2,] -1.036016   0.058231 -17.791 < 2.2e-16 ***
+[3,]  1.010560   0.058476  17.282 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -381,48 +381,51 @@ initial  value 4001.919360
 iter   2 value 3924.195249
 iter   3 value 3761.072160
 iter   4 value 3740.857495
-iter   5 value 3739.836050
-iter   6 value 3739.669310
+iter   5 value 3739.836051
+iter   6 value 3739.669311
 iter   7 value 3739.505188
-iter   8 value 3739.342554
-iter   9 value 3739.271535
-iter  10 value 3674.195391
-iter  11 value 3671.068131
-iter  12 value 3626.157704
-iter  13 value 3589.946385
-iter  14 value 3552.974009
-iter  15 value 3551.811720
-iter  16 value 3551.806145
-iter  17 value 3551.796622
-iter  18 value 3551.796375
-iter  19 value 3551.782439
-iter  20 value 3551.776228
-iter  21 value 3551.776073
-iter  22 value 3551.775690
-iter  23 value 3551.774437
-iter  24 value 3551.773439
-iter  24 value 3551.773426
-iter  24 value 3551.773425
-final  value 3551.773425 
+iter   8 value 3739.342555
+iter   9 value 3739.271536
+iter  10 value 3674.195892
+iter  11 value 3671.068754
+iter  12 value 3626.179862
+iter  13 value 3589.958026
+iter  14 value 3552.974654
+iter  15 value 3551.811769
+iter  16 value 3551.806189
+iter  17 value 3551.796655
+iter  18 value 3551.796407
+iter  19 value 3551.782460
+iter  20 value 3551.776241
+iter  21 value 3551.776085
+iter  22 value 3551.775694
+iter  23 value 3551.775004
+iter  24 value 3551.774150
+iter  25 value 3551.773955
+iter  26 value 3551.773847
+iter  27 value 3551.773493
+iter  27 value 3551.773487
+iter  27 value 3551.773479
+final  value 3551.773479 
 converged
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 126 iterations
+BFGS maximisation, 136 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -3551.773 
 3  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,]  0.499998   0.025610  19.524 < 2.2e-16 ***
-[2,] -1.036024   0.058110 -17.829 < 2.2e-16 ***
-[3,]  1.011119   0.058354  17.327 < 2.2e-16 ***
+[1,]  0.499997   0.025601  19.530 < 2.2e-16 ***
+[2,] -1.035720   0.058058 -17.840 < 2.2e-16 ***
+[3,]  1.011178   0.058370  17.324 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on constrOptim 
-1  outer iterations, barrier value -8.08173e-05 
+1  outer iterations, barrier value -7.679782e-05 
 --------------------------------------------
 > ## ----
 > cat("Test for equality constraints\n")
@@ -456,34 +459,24 @@ SUMT iteration 9: rho = 30864.2, function = -3572.364, penalty = 4.511515e-07
 Estimate:[1]  0.3705592 -1.3674852  0.6840785
 SUMT iteration 10: rho = 308642, function = -3572.389, penalty = 4.51695e-09
 Estimate:[1]  0.3704785 -1.3677163  0.6838918
-SUMT iteration 11: rho = 3086420, function = -3572.391, penalty = 4.517494e-11
-Estimate:[1]  0.3704704 -1.3677394  0.6838731
-SUMT iteration 12: rho = 30864198, function = -3572.392, penalty = 4.517548e-13
-Estimate:[1]  0.3704696 -1.3677417  0.6838712
-SUMT iteration 13: rho = 308641975, function = -3572.392, penalty = 4.517554e-15
-Estimate:[1]  0.3704695 -1.3677420  0.6838710
-SUMT iteration 14: rho = 3086419753, function = -3572.392, penalty = 4.517554e-17
-Estimate:[1]  0.3704695 -1.3677420  0.6838710
-SUMT iteration 15: rho = 30864197531, function = -3572.392, penalty = 4.517553e-19
-Estimate:[1]  0.3704695 -1.3677420  0.6838710
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 2 iterations
-Return code 2: successive function values within tolerance limit
-Log-Likelihood: -3572.392 
+Return code 1: gradient close to zero
+Log-Likelihood: -3572.39 
 3  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,]  0.370470   0.025464  14.549 < 2.2e-16 ***
-[2,] -1.367742   0.069675 -19.630 < 2.2e-16 ***
-[3,]  0.683871   0.051365  13.314 < 2.2e-16 ***
+[1,]  0.370478   0.025464  14.549 < 2.2e-16 ***
+[2,] -1.367716   0.069674 -19.630 < 2.2e-16 ***
+[3,]  0.683892   0.051366  13.314 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
-15  outer iterations, barrier value 4.517553e-19 
+10  outer iterations, barrier value 4.51695e-09 
 --------------------------------------------
 > ## BFGS, numeric gradient
 > a <- maxLik(logLikMix, 
@@ -525,7 +518,7 @@ final  value 3558.470095
 converged
 SUMT iteration 2: rho = 10, function = -3553.968, penalty = 0.4501832
 Estimate:[1]  0.4600214 -1.1326423  0.9017996
-initial  value 3598.986584 
+initial  value 3598.986585 
 iter   2 value 3581.662691
 iter   3 value 3575.592026
 iter   4 value 3574.296760
@@ -537,7 +530,7 @@ final  value 3568.828218
 converged
 SUMT iteration 3: rho = 100, function = -3565.88, penalty = 0.02948372
 Estimate:[1]  0.3934445 -1.3035813  0.7376448
-initial  value 3595.363566 
+initial  value 3595.363567 
 iter   2 value 3575.235881
 iter   3 value 3574.538052
 iter   4 value 3574.332600
@@ -547,7 +540,7 @@ iter   6 value 3571.969966
 iter   6 value 3571.969966
 final  value 3571.969966 
 converged
-SUMT iteration 4: rho = 1000, function = -3571.557, penalty = 0.0004130861
+SUMT iteration 4: rho = 1000, function = -3571.557, penalty = 0.0004130862
 Estimate:[1]  0.3731857 -1.3599930  0.6901587
 initial  value 3575.687741 
 iter   2 value 3572.641972
@@ -559,11 +552,11 @@ iter   6 value 3572.348648
 iter   6 value 3572.348648
 final  value 3572.348648 
 converged
-SUMT iteration 5: rho = 10000, function = -3572.306, penalty = 4.285694e-06
+SUMT iteration 5: rho = 10000, function = -3572.306, penalty = 4.285691e-06
 Estimate:[1]  0.3707461 -1.3669508  0.6845105
 initial  value 3572.734360 
 iter   2 value 3572.469952
-iter   3 value 3572.469793
+iter   3 value 3572.469792
 iter   4 value 3572.469005
 iter   5 value 3572.387435
 iter   6 value 3572.387291
@@ -571,7 +564,7 @@ iter   6 value 3572.387291
 iter   6 value 3572.387291
 final  value 3572.387291 
 converged
-SUMT iteration 6: rho = 1e+05, function = -3572.383, penalty = 4.301614e-08
+SUMT iteration 6: rho = 1e+05, function = -3572.383, penalty = 4.301615e-08
 Estimate:[1]  0.3704972 -1.3676627  0.6839351
 initial  value 3572.426005 
 iter   2 value 3572.391185
@@ -581,69 +574,24 @@ final  value 3572.391164
 converged
 SUMT iteration 7: rho = 1e+06, function = -3572.391, penalty = 4.348272e-10
 Estimate:[1]  0.3704624 -1.3677051  0.6838630
-initial  value 3572.395077 
-iter   2 value 3572.392780
-iter   2 value 3572.392779
-iter   3 value 3572.391979
-iter   3 value 3572.391977
-iter   4 value 3572.391700
-iter   4 value 3572.391689
-iter   5 value 3572.391607
-iter   6 value 3572.391559
-iter   6 value 3572.391559
-iter   6 value 3572.391555
-final  value 3572.391555 
-converged
-SUMT iteration 8: rho = 1e+07, function = -3572.391, penalty = 6.508066e-12
-Estimate:[1]  0.3705022 -1.3677416  0.6838721
-initial  value 3572.392141 
-iter   2 value 3572.391610
-iter   2 value 3572.391608
-iter   2 value 3572.391590
-final  value 3572.391590 
-converged
-SUMT iteration 9: rho = 1e+08, function = -3572.392, penalty = 8.058277e-14
-Estimate:[1]  0.370453 -1.367740  0.683870
-initial  value 3572.391663 
-iter   2 value 3572.391622
-iter   2 value 3572.391621
-iter   2 value 3572.391605
-final  value 3572.391605 
-converged
-SUMT iteration 10: rho = 1e+09, function = -3572.392, penalty = 1.639456e-14
-Estimate:[1]  0.3704781 -1.3677414  0.6838708
-initial  value 3572.391752 
-iter   2 value 3572.391612
-iter   2 value 3572.391612
-iter   2 value 3572.391596
-final  value 3572.391596 
-converged
-SUMT iteration 11: rho = 1e+10, function = -3572.392, penalty = 2.897603e-16
-Estimate:[1]  0.3704652 -1.3677410  0.6838705
-initial  value 3572.391622 
-iter   1 value 3572.391596
-final  value 3572.391596 
-converged
-SUMT iteration 12: rho = 1e+11, function = -3572.392, penalty = 2.517325e-17
-Estimate:[1]  0.3704652 -1.3677410  0.6838705
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 19 iterations
+BFGS maximisation, 29 iterations
 Return code 0: successful convergence 
-Log-Likelihood: -3572.392 
+Log-Likelihood: -3572.391 
 3  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,]  0.370465   0.025457  14.553 < 2.2e-16 ***
-[2,] -1.367741   0.069653 -19.636 < 2.2e-16 ***
-[3,]  0.683870   0.051351  13.318 < 2.2e-16 ***
+[1,]  0.370462   0.025499  14.528 < 2.2e-16 ***
+[2,] -1.367705   0.069823 -19.588 < 2.2e-16 ***
+[3,]  0.683863   0.051421  13.299 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
-12  outer iterations, barrier value 2.517325e-17 
+7  outer iterations, barrier value 4.348272e-10 
 --------------------------------------------
 > ## BHHH, analytic gradient (numeric does not converge?)
 > a <- maxLik(logLikMix, gradLikMix,
@@ -706,52 +654,24 @@ estimate: 0.3704723 -1.367734 0.6838775
 Function value: -3572.391 
 SUMT iteration 7: rho = 1e+06, function = -3572.391, penalty = 4.303234e-10
 Estimate:[1]  0.3704723 -1.3677342  0.6838775
---------------
-successive function values within tolerance limit 
-2  iterations
-estimate: 0.3704697 -1.367741 0.6838716 
-Function value: -3572.392 
-SUMT iteration 8: rho = 1e+07, function = -3572.392, penalty = 4.303411e-12
-Estimate:[1]  0.3704697 -1.3677412  0.6838716
---------------
-successive function values within tolerance limit 
-2  iterations
-estimate: 0.3704695 -1.367742 0.683871 
-Function value: -3572.392 
-SUMT iteration 9: rho = 1e+08, function = -3572.392, penalty = 4.303416e-14
-Estimate:[1]  0.3704695 -1.3677419  0.6838711
---------------
-successive function values within tolerance limit 
-2  iterations
-estimate: 0.3704695 -1.367742 0.683871 
-Function value: -3572.392 
-SUMT iteration 10: rho = 1e+09, function = -3572.392, penalty = 4.303416e-16
-Estimate:[1]  0.3704695 -1.3677420  0.6838710
---------------
-gradient close to zero 
-2  iterations
-estimate: 0.3704695 -1.367742 0.683871 
-Function value: -3572.392 
-SUMT iteration 11: rho = 1e+10, function = -3572.392, penalty = 4.303416e-18
-Estimate:[1]  0.3704695 -1.3677420  0.6838710
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BHHH maximisation, 2 iterations
-Return code 1: gradient close to zero
-Log-Likelihood: -3572.392 
+BHHH maximisation, 3 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -3572.391 
 3  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,]  0.370470   0.023898  15.502 < 2.2e-16 ***
-[2,] -1.367742   0.072830 -18.780 < 2.2e-16 ***
-[3,]  0.683871   0.043079  15.875 < 2.2e-16 ***
+[1,]  0.370472   0.023898  15.502 < 2.2e-16 ***
+[2,] -1.367734   0.072830 -18.780 < 2.2e-16 ***
+[3,]  0.683877   0.043080  15.875 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
-11  outer iterations, barrier value 4.303416e-18 
+7  outer iterations, barrier value 4.303234e-10 
 --------------------------------------------
 > 
 > 
@@ -818,33 +738,23 @@ SUMT iteration 6: rho = 1e+05, function = -3608.736, penalty = 3.494313e-07
 Estimate:[1] -1.3031992  0.6518952
 SUMT iteration 7: rho = 1e+06, function = -3608.799, penalty = 3.49829e-09
 Estimate:[1] -1.3033673  0.6517132
-SUMT iteration 8: rho = 1e+07, function = -3608.805, penalty = 3.498688e-11
-Estimate:[1] -1.303384  0.651695
-SUMT iteration 9: rho = 1e+08, function = -3608.806, penalty = 3.498728e-13
-Estimate:[1] -1.3033858  0.6516932
-SUMT iteration 10: rho = 1e+09, function = -3608.806, penalty = 3.498732e-15
-Estimate:[1] -1.303386  0.651693
-SUMT iteration 11: rho = 1e+10, function = -3608.806, penalty = 3.498732e-17
-Estimate:[1] -1.303386  0.651693
-SUMT iteration 12: rho = 1e+11, function = -3608.806, penalty = 3.49873e-19
-Estimate:[1] -1.303386  0.651693
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 2 iterations
-Return code 2: successive function values within tolerance limit
-Log-Likelihood: -3608.806 
+Return code 1: gradient close to zero
+Log-Likelihood: -3608.802 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303386   0.045790 -28.465 < 2.2e-16 ***
-[2,]  0.651693   0.035369  18.426 < 2.2e-16 ***
+[1,] -1.303367   0.045790 -28.464 < 2.2e-16 ***
+[2,]  0.651713   0.035379  18.421 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
-12  outer iterations, barrier value 3.49873e-19 
+7  outer iterations, barrier value 3.49829e-09 
 --------------------------------------------
 > ## nr, numeric hessian
 > a <- maxLik(logLikMix2, gradLikMix2, 
@@ -867,33 +777,23 @@ SUMT iteration 6: rho = 1e+05, function = -3608.736, penalty = 3.494313e-07
 Estimate:[1] -1.3031992  0.6518952
 SUMT iteration 7: rho = 1e+06, function = -3608.799, penalty = 3.49829e-09
 Estimate:[1] -1.3033673  0.6517132
-SUMT iteration 8: rho = 1e+07, function = -3608.805, penalty = 3.498688e-11
-Estimate:[1] -1.303384  0.651695
-SUMT iteration 9: rho = 1e+08, function = -3608.806, penalty = 3.498728e-13
-Estimate:[1] -1.3033858  0.6516932
-SUMT iteration 10: rho = 1e+09, function = -3608.806, penalty = 3.498732e-15
-Estimate:[1] -1.303386  0.651693
-SUMT iteration 11: rho = 1e+10, function = -3608.806, penalty = 3.498732e-17
-Estimate:[1] -1.303386  0.651693
-SUMT iteration 12: rho = 1e+11, function = -3608.806, penalty = 3.498733e-19
-Estimate:[1] -1.303386  0.651693
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 2 iterations
-Return code 2: successive function values within tolerance limit
-Log-Likelihood: -3608.806 
+Return code 1: gradient close to zero
+Log-Likelihood: -3608.802 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303386   0.045807 -28.454 < 2.2e-16 ***
-[2,]  0.651693   0.035382  18.419 < 2.2e-16 ***
+[1,] -1.303367   0.045806 -28.454 < 2.2e-16 ***
+[2,]  0.651713   0.035383  18.419 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
-12  outer iterations, barrier value 3.498733e-19 
+7  outer iterations, barrier value 3.49829e-09 
 --------------------------------------------
 > ## nr, analytic hessian
 > a <- maxLik(logLikMix2, gradLikMix2, hessLikMix2,
@@ -916,33 +816,23 @@ SUMT iteration 6: rho = 1e+05, function = -3608.736, penalty = 3.494313e-07
 Estimate:[1] -1.3031992  0.6518952
 SUMT iteration 7: rho = 1e+06, function = -3608.799, penalty = 3.49829e-09
 Estimate:[1] -1.3033673  0.6517132
-SUMT iteration 8: rho = 1e+07, function = -3608.805, penalty = 3.498688e-11
-Estimate:[1] -1.303384  0.651695
-SUMT iteration 9: rho = 1e+08, function = -3608.806, penalty = 3.498728e-13
-Estimate:[1] -1.3033858  0.6516932
-SUMT iteration 10: rho = 1e+09, function = -3608.806, penalty = 3.498732e-15
-Estimate:[1] -1.303386  0.651693
-SUMT iteration 11: rho = 1e+10, function = -3608.806, penalty = 3.498732e-17
-Estimate:[1] -1.303386  0.651693
-SUMT iteration 12: rho = 1e+11, function = -3608.806, penalty = 3.498733e-19
-Estimate:[1] -1.303386  0.651693
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 2 iterations
-Return code 2: successive function values within tolerance limit
-Log-Likelihood: -3608.806 
+Return code 1: gradient close to zero
+Log-Likelihood: -3608.802 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303386   0.045807 -28.454 < 2.2e-16 ***
-[2,]  0.651693   0.035382  18.419 < 2.2e-16 ***
+[1,] -1.303367   0.045806 -28.454 < 2.2e-16 ***
+[2,]  0.651713   0.035383  18.419 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
-12  outer iterations, barrier value 3.498733e-19 
+7  outer iterations, barrier value 3.49829e-09 
 --------------------------------------------
 > ## BHHH
 > a <- maxLik(logLikMix2, gradLikMix2, 
@@ -965,33 +855,23 @@ SUMT iteration 6: rho = 1e+05, function = -3608.736, penalty = 3.494314e-07
 Estimate:[1] -1.3031992  0.6518952
 SUMT iteration 7: rho = 1e+06, function = -3608.799, penalty = 3.498292e-09
 Estimate:[1] -1.3033674  0.6517133
-SUMT iteration 8: rho = 1e+07, function = -3608.805, penalty = 3.498693e-11
-Estimate:[1] -1.3033843  0.6516951
-SUMT iteration 9: rho = 1e+08, function = -3608.806, penalty = 3.498728e-13
-Estimate:[1] -1.3033858  0.6516932
-SUMT iteration 10: rho = 1e+09, function = -3608.806, penalty = 3.498732e-15
-Estimate:[1] -1.303386  0.651693
-SUMT iteration 11: rho = 1e+10, function = -3608.806, penalty = 3.498732e-17
-Estimate:[1] -1.303386  0.651693
-SUMT iteration 12: rho = 1e+11, function = -3608.806, penalty = 3.498733e-19
-Estimate:[1] -1.303386  0.651693
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BHHH maximisation, 2 iterations
+BHHH maximisation, 3 iterations
 Return code 2: successive function values within tolerance limit
-Log-Likelihood: -3608.806 
+Log-Likelihood: -3608.802 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303386   0.046264 -28.173 < 2.2e-16 ***
-[2,]  0.651693   0.031580  20.636 < 2.2e-16 ***
+[1,] -1.303367   0.046264 -28.173 < 2.2e-16 ***
+[2,]  0.651713   0.031581  20.637 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
-12  outer iterations, barrier value 3.498733e-19 
+7  outer iterations, barrier value 3.498292e-09 
 --------------------------------------------
 > ## BHHH, analytic
 > a <- maxLik(logLikMix2, gradLikMix2, 
@@ -1014,33 +894,23 @@ SUMT iteration 6: rho = 1e+05, function = -3608.736, penalty = 3.494314e-07
 Estimate:[1] -1.3031992  0.6518952
 SUMT iteration 7: rho = 1e+06, function = -3608.799, penalty = 3.498292e-09
 Estimate:[1] -1.3033674  0.6517133
-SUMT iteration 8: rho = 1e+07, function = -3608.805, penalty = 3.498693e-11
-Estimate:[1] -1.3033843  0.6516951
-SUMT iteration 9: rho = 1e+08, function = -3608.806, penalty = 3.498728e-13
-Estimate:[1] -1.3033858  0.6516932
-SUMT iteration 10: rho = 1e+09, function = -3608.806, penalty = 3.498732e-15
-Estimate:[1] -1.303386  0.651693
-SUMT iteration 11: rho = 1e+10, function = -3608.806, penalty = 3.498732e-17
-Estimate:[1] -1.303386  0.651693
-SUMT iteration 12: rho = 1e+11, function = -3608.806, penalty = 3.498733e-19
-Estimate:[1] -1.303386  0.651693
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BHHH maximisation, 2 iterations
+BHHH maximisation, 3 iterations
 Return code 2: successive function values within tolerance limit
-Log-Likelihood: -3608.806 
+Log-Likelihood: -3608.802 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303386   0.046264 -28.173 < 2.2e-16 ***
-[2,]  0.651693   0.031580  20.636 < 2.2e-16 ***
+[1,] -1.303367   0.046264 -28.173 < 2.2e-16 ***
+[2,]  0.651713   0.031581  20.637 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
-12  outer iterations, barrier value 3.498733e-19 
+7  outer iterations, barrier value 3.498292e-09 
 --------------------------------------------
 > ## bfgs, no analytic gradient
 > a <- maxLik(logLikMix2, 
@@ -1100,29 +970,29 @@ final  value 3605.514797
 converged
 SUMT iteration 4: rho = 1000, function = -3602.419, penalty = 0.003095606
 Estimate:[1] -1.285964  0.670801
-initial  value 3633.375253 
-iter   2 value 3610.546095
-iter   3 value 3610.527291
-iter   4 value 3608.619658
+initial  value 3633.375248 
+iter   2 value 3610.546094
+iter   3 value 3610.527290
+iter   4 value 3608.619657
 iter   5 value 3608.458020
 iter   5 value 3608.458020
 iter   5 value 3608.458020
 final  value 3608.458020 
 converged
-SUMT iteration 5: rho = 10000, function = -3608.113, penalty = 3.454918e-05
+SUMT iteration 5: rho = 10000, function = -3608.113, penalty = 3.454916e-05
 Estimate:[1] -1.3015300  0.6537039
-initial  value 3611.567446 
+initial  value 3611.567445 
 iter   2 value 3609.435906
 iter   3 value 3609.427333
-iter   4 value 3609.093792
+iter   4 value 3609.093790
 iter   5 value 3608.770731
 iter   5 value 3608.770731
 iter   5 value 3608.770731
 final  value 3608.770731 
 converged
-SUMT iteration 6: rho = 1e+05, function = -3608.736, penalty = 3.494314e-07
+SUMT iteration 6: rho = 1e+05, function = -3608.736, penalty = 3.494299e-07
 Estimate:[1] -1.3031992  0.6518951
-initial  value 3609.085219 
+initial  value 3609.085218 
 iter   2 value 3608.802363
 iter   2 value 3608.802361
 iter   3 value 3608.802198
@@ -1132,67 +1002,23 @@ final  value 3608.802197
 converged
 SUMT iteration 7: rho = 1e+06, function = -3608.799, penalty = 3.496707e-09
 Estimate:[1] -1.303369  0.651714
-initial  value 3608.833668 
-iter   2 value 3608.815218
-iter   3 value 3608.808534
-iter   4 value 3608.806287
-iter   5 value 3608.805346
-iter   5 value 3608.805346
-iter   5 value 3608.805346
-final  value 3608.805346 
-converged
-SUMT iteration 8: rho = 1e+07, function = -3608.805, penalty = 3.498684e-11
-Estimate:[1] -1.303384  0.651695
-initial  value 3608.808495 
-iter   2 value 3608.805754
-iter   3 value 3608.805715
-iter   3 value 3608.805686
-iter   3 value 3608.805668
-final  value 3608.805668 
-converged
-SUMT iteration 9: rho = 1e+08, function = -3608.806, penalty = 3.541394e-13
-Estimate:[1] -1.303247  0.651624
-initial  value 3608.805987 
-iter   2 value 3608.805817
-iter   2 value 3608.805809
-iter   3 value 3608.805740
-iter   3 value 3608.805739
-iter   3 value 3608.805715
-final  value 3608.805715 
-converged
-SUMT iteration 10: rho = 1e+09, function = -3608.806, penalty = 7.403837e-15
-Estimate:[1] -1.3034377  0.6517188
-initial  value 3608.805781 
-iter   2 value 3608.805707
-iter   2 value 3608.805706
-iter   2 value 3608.805697
-final  value 3608.805697 
-converged
-SUMT iteration 11: rho = 1e+10, function = -3608.806, penalty = 2.457234e-17
-Estimate:[1] -1.3033871  0.6516936
-initial  value 3608.805699 
-iter   1 value 3608.805696
-final  value 3608.805696 
-converged
-SUMT iteration 12: rho = 1e+11, function = -3608.806, penalty = 5.361752e-18
-Estimate:[1] -1.3033871  0.6516936
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 19 iterations
+BFGS maximisation, 44 iterations
 Return code 0: successful convergence 
-Log-Likelihood: -3608.806 
+Log-Likelihood: -3608.802 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303387   0.045794 -28.462 < 2.2e-16 ***
-[2,]  0.651694   0.035392  18.413 < 2.2e-16 ***
+[1,] -1.303369   0.045816 -28.448 < 2.2e-16 ***
+[2,]  0.651714   0.035393  18.414 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
-12  outer iterations, barrier value 5.361752e-18 
+7  outer iterations, barrier value 3.496707e-09 
 --------------------------------------------
 > ## bfgs, analytic gradient
 > a <- maxLik(logLikMix2, 
@@ -1252,29 +1078,29 @@ final  value 3605.514797
 converged
 SUMT iteration 4: rho = 1000, function = -3602.419, penalty = 0.003095606
 Estimate:[1] -1.285964  0.670801
-initial  value 3633.375253 
-iter   2 value 3610.546095
-iter   3 value 3610.527291
-iter   4 value 3608.619658
+initial  value 3633.375248 
+iter   2 value 3610.546094
+iter   3 value 3610.527290
+iter   4 value 3608.619657
 iter   5 value 3608.458020
 iter   5 value 3608.458020
 iter   5 value 3608.458020
 final  value 3608.458020 
 converged
-SUMT iteration 5: rho = 10000, function = -3608.113, penalty = 3.454918e-05
+SUMT iteration 5: rho = 10000, function = -3608.113, penalty = 3.454916e-05
 Estimate:[1] -1.3015300  0.6537039
-initial  value 3611.567446 
+initial  value 3611.567445 
 iter   2 value 3609.435906
 iter   3 value 3609.427333
-iter   4 value 3609.093792
+iter   4 value 3609.093790
 iter   5 value 3608.770731
 iter   5 value 3608.770731
 iter   5 value 3608.770731
 final  value 3608.770731 
 converged
-SUMT iteration 6: rho = 1e+05, function = -3608.736, penalty = 3.494314e-07
+SUMT iteration 6: rho = 1e+05, function = -3608.736, penalty = 3.494299e-07
 Estimate:[1] -1.3031992  0.6518951
-initial  value 3609.085219 
+initial  value 3609.085218 
 iter   2 value 3608.802363
 iter   2 value 3608.802361
 iter   3 value 3608.802198
@@ -1284,67 +1110,23 @@ final  value 3608.802197
 converged
 SUMT iteration 7: rho = 1e+06, function = -3608.799, penalty = 3.496707e-09
 Estimate:[1] -1.303369  0.651714
-initial  value 3608.833668 
-iter   2 value 3608.815218
-iter   3 value 3608.808534
-iter   4 value 3608.806287
-iter   5 value 3608.805346
-iter   5 value 3608.805346
-iter   5 value 3608.805346
-final  value 3608.805346 
-converged
-SUMT iteration 8: rho = 1e+07, function = -3608.805, penalty = 3.498684e-11
-Estimate:[1] -1.303384  0.651695
-initial  value 3608.808495 
-iter   2 value 3608.805754
-iter   3 value 3608.805715
-iter   3 value 3608.805686
-iter   3 value 3608.805668
-final  value 3608.805668 
-converged
-SUMT iteration 9: rho = 1e+08, function = -3608.806, penalty = 3.541394e-13
-Estimate:[1] -1.303247  0.651624
-initial  value 3608.805987 
-iter   2 value 3608.805817
-iter   2 value 3608.805809
-iter   3 value 3608.805740
-iter   3 value 3608.805739
-iter   3 value 3608.805715
-final  value 3608.805715 
-converged
-SUMT iteration 10: rho = 1e+09, function = -3608.806, penalty = 7.403837e-15
-Estimate:[1] -1.3034377  0.6517188
-initial  value 3608.805781 
-iter   2 value 3608.805707
-iter   2 value 3608.805706
-iter   2 value 3608.805697
-final  value 3608.805697 
-converged
-SUMT iteration 11: rho = 1e+10, function = -3608.806, penalty = 2.457234e-17
-Estimate:[1] -1.3033871  0.6516936
-initial  value 3608.805699 
-iter   1 value 3608.805696
-final  value 3608.805696 
-converged
-SUMT iteration 12: rho = 1e+11, function = -3608.806, penalty = 5.361752e-18
-Estimate:[1] -1.3033871  0.6516936
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 19 iterations
+BFGS maximisation, 44 iterations
 Return code 0: successful convergence 
-Log-Likelihood: -3608.806 
+Log-Likelihood: -3608.802 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303387   0.045794 -28.462 < 2.2e-16 ***
-[2,]  0.651694   0.035392  18.413 < 2.2e-16 ***
+[1,] -1.303369   0.045816 -28.448 < 2.2e-16 ***
+[2,]  0.651714   0.035393  18.414 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
-12  outer iterations, barrier value 5.361752e-18 
+7  outer iterations, barrier value 3.496707e-09 
 --------------------------------------------
 > ## SANN, analytic gradient
 > a <- maxLik(logLikMix2, gradLikMix2,
@@ -1367,23 +1149,25 @@ SUMT iteration 6: rho = 1e+05, function = -3608.789, penalty = 4.692789e-08
 Estimate:[1] -1.2985086  0.6493626
 SUMT iteration 7: rho = 1e+06, function = -3608.789, penalty = 4.692789e-08
 Estimate:[1] -1.2985086  0.6493626
+SUMT iteration 8: rho = 1e+07, function = -3608.99, penalty = 1.336879e-08
+Estimate:[1] -1.3245254  0.6622049
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
 Return code 0: successful convergence 
-Log-Likelihood: -3608.836 
+Log-Likelihood: -3609.124 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.298509   0.045769 -28.371 < 2.2e-16 ***
-[2,]  0.649363   0.035385  18.351 < 2.2e-16 ***
+[1,] -1.324525   0.045978 -28.808 < 2.2e-16 ***
+[2,]  0.662205   0.035380  18.717 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
-7  outer iterations, barrier value 4.692789e-08 
+8  outer iterations, barrier value 1.336879e-08 
 --------------------------------------------
 > ## NM, numeric
 > a <- maxLik(logLikMix2, 
@@ -1406,39 +1190,23 @@ SUMT iteration 6: rho = 1e+05, function = -3608.735, penalty = 3.613656e-07
 Estimate:[1] -1.3032044  0.6519028
 SUMT iteration 7: rho = 1e+06, function = -3608.799, penalty = 3.252945e-09
 Estimate:[1] -1.3032568  0.6516569
-SUMT iteration 8: rho = 1e+07, function = -3608.805, penalty = 2.757146e-11
-Estimate:[1] -1.3035064  0.6517558
-SUMT iteration 9: rho = 1e+08, function = -3608.806, penalty = 5.38325e-13
-Estimate:[1] -1.3033230  0.6516618
-SUMT iteration 10: rho = 1e+09, function = -3608.806, penalty = 1.670679e-14
-Estimate:[1] -1.3033987  0.6516994
-SUMT iteration 11: rho = 1e+10, function = -3608.806, penalty = 1.999005e-15
-Estimate:[1] -1.3034033  0.6517016
-SUMT iteration 12: rho = 1e+11, function = -3608.806, penalty = 1.255626e-17
-Estimate:[1] -1.3035307  0.6517654
-SUMT iteration 13: rho = 1e+12, function = -3608.806, penalty = 2.582110e-21
-Estimate:[1] -1.3032494  0.6516247
-SUMT iteration 14: rho = 1e+13, function = -3608.806, penalty = 6.644046e-20
-Estimate:[1] -1.303408  0.651704
-SUMT iteration 15: rho = 1e+14, function = -3608.806, penalty = 6.644046e-20
-Estimate:[1] -1.303408  0.651704
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 77 iterations
+Nelder-Mead maximisation, 51 iterations
 Return code 0: successful convergence 
-Log-Likelihood: -3608.806 
+Log-Likelihood: -3608.802 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303408   0.045816 -28.449 < 2.2e-16 ***
-[2,]  0.651704   0.035393  18.414 < 2.2e-16 ***
+[1,] -1.303257   0.045811 -28.448 < 2.2e-16 ***
+[2,]  0.651657   0.035369  18.424 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
-15  outer iterations, barrier value 6.644046e-20 
+7  outer iterations, barrier value 3.252945e-09 
 --------------------------------------------
 > ## ----------- inequality -------------
 > A <- matrix(c(-1, 0,
@@ -1467,7 +1235,7 @@ converged
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 40 iterations
+BFGS maximisation, 38 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -3551.773 
 2  free parameters
@@ -1504,7 +1272,7 @@ converged
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 40 iterations
+BFGS maximisation, 38 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -3551.773 
 2  free parameters

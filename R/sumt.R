@@ -121,7 +121,8 @@ sumt <- function(fn, grad=NULL, hess=NULL,
          cat("Estimate:")
          print(theta)
       }
-      if(max(abs(thetaOld - theta)) < SUMTTol)
+#      if(max(abs(thetaOld - theta)) < SUMTTol)
+      if(penalty(theta) < SUMTTol)
           break
       if(iter >= SUMTMaxIter)
           break
@@ -143,6 +144,5 @@ sumt <- function(fn, grad=NULL, hess=NULL,
          " are not satisfied (barrier value = ",
          result$constraints$barrier.value, ")" )
    }
-
    return(result)
 }
