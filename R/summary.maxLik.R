@@ -14,6 +14,12 @@ print.summary.maxLik <- function( x, ... ) {
           "Inference is probably wrong\n")
       cat("Constrained optimization based on", x$constraints$type,
           "\n")
+      if(!is.null(x$constraints$code))
+         cat("Return code:", x$constraints$code, "\n")
+                           # note: this is missing for 'constrOptim'
+      if(!is.null(x$constraints$message))
+         cat(x$constraints$message, "\n")
+                           # note: this is missing for 'constrOptim'
       cat(x$constraints$outer.iterations,
           " outer iterations, barrier value",
           x$constraints$barrier.value, "\n")

@@ -22,6 +22,12 @@ print.summary.maxim <- function( x, ... ) {
    if(!is.null(summary$constraints)) {
       cat("\nConstrained optimization based on", summary$constraints$type,
           "\n")
+      if(!is.null(summary$constraints$code))
+         cat("Return code:", summary$constraints$code, "\n")
+                           # note: this is missing for 'constrOptim'
+      if(!is.null(summary$constraints$message))
+         cat(summary$constraints$message, "\n")
+                           # note: this is missing for 'constrOptim'
       cat(summary$constraints$outer.iterations,
           " outer iterations, barrier value",
           summary$constraints$barrier.value, "\n")

@@ -809,7 +809,7 @@ mlghBfgsCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon,
 all.equal( mlgBfgsCon, mlghBfgsCon )
 
 ## NM method with equality constraints
-mlNmCon <- maxLik( llf, start = startVal, constraints = eqCon, method = "NM" )
+mlNmCon <- maxLik( llf, start = startVal, constraints = eqCon, method = "NM", SUMTTol=0)
 print( mlNmCon )
 summary( mlNmCon )
 activePar( mlNmCon )
@@ -828,26 +828,26 @@ vcov( mlNmCon )
 logLik( summary( mlNmCon ) )
 all.equal( mlNmCon[ -c( 5, 6, 9, 10 ) ], mlCon[ -c( 5, 6, 9, 10 ) ] )
 mlNmConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
-   method = "NM" )
+   method = "NM", SUMTTol=0)
 summary( mlNmConInd )
 all.equal( mlNmCon, mlNmConInd )
 
 # with unused analytical gradients
 mlgNmCon <- maxLik( llf, gf, start = startVal, constraints = eqCon,
-   method = "NM" )
+   method = "NM", SUMTTol=0)
 all.equal( mlNmCon, mlgNmCon )
 mlgNmConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon,
-   method = "NM" )
+   method = "NM", SUMTTol=0)
 all.equal( mlgNmCon, mlgNmConInd )
 
 # with unused analytical gradients and Hessians
 mlghNmCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon,
-   method = "NM" )
+   method = "NM", SUMTTol=0)
 all.equal( mlgNmCon, mlghNmCon )
 
 ## SANN method with equality constraints
 mlSannCon <- maxLik( llf, start = startVal, constraints = eqCon,
-   method = "SANN" )
+   method = "SANN", SUMTTol=0)
 print( mlSannCon )
 summary( mlSannCon )
 activePar( mlSannCon )
@@ -868,7 +868,7 @@ all.equal( mlSannCon[ -c( 5, 6, 9, 10 ) ], mlBfgsCon[ -c( 5, 6, 9, 10 ) ] )
 
 # with unused analytical gradients
 mlgSannCon <- maxLik( llf, gf, start = startVal, constraints = eqCon,
-   method = "SANN" )
+   method = "SANN", SUMTTol=0)
 all.equal( mlSannCon, mlgSannCon )
 
 # with a user-specified function to generate a new candidate point

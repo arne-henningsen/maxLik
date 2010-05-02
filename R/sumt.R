@@ -5,6 +5,9 @@ sumt <- function(fn, grad=NULL, hess=NULL,
                  start,
                  maxRoutine, constraints, 
                  SUMTTol = sqrt(.Machine$double.eps),
+                           # difference between estimates for successive outer iterations
+                 SUMTPenaltyTol = sqrt(.Machine$double.eps),
+                           # maximum allowed penalty
                  SUMTQ = 10,
                  SUMTRho0 = NULL,
                  print.level=0,
@@ -41,6 +44,15 @@ sumt <- function(fn, grad=NULL, hess=NULL,
       callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn, gradOrig = grad,
          hessOrig = hess, ... ) - rho * penalty(theta)
    }
+   SUMTMessage <- function(code) {
+      message <- switch(code,
+                        "1" = "penalty close to zero",
+                        "2" = "successive function values within tolerance limit",
+                        "4" = "Outer iteration limit exceeded (increase SUMTMaxIter ?).",
+                        paste("Code", code))
+      return(message)
+   }
+   ## --------------------
    if(!is.null(grad)) {
       gradPhi<- function(theta, ...) {
          g <- grad(theta, ...)
@@ -104,9 +116,6 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    ## </TODO>
    iter <- 1L
    repeat {
-      ## <TODO>
-      ## Shouldnt't we also have maxiter, just in case ...?
-      ## </TODO>
       thetaOld <- theta
       result <- maxRoutine(fn=Phi, grad=gradPhi, hess=hessPhi,
                       start=thetaOld,
@@ -117,15 +126,22 @@ sumt <- function(fn, grad=NULL, hess=NULL,
          cat("SUMT iteration ", iter,
              ": rho = ", rho, ", function = ", callWithoutMaxArgs( theta,
              "logLikFunc", fnOrig = fn, gradOrig = grad, hessOrig = hess, ... ),
-             ", penalty = ", penalty(theta), "\n", sep="")
+             ", barrier value = ", penalty(theta), "\n", sep="")
          cat("Estimate:")
          print(theta)
       }
-#      if(max(abs(thetaOld - theta)) < SUMTTol)
-      if(penalty(theta) < SUMTTol)
-          break
-      if(iter >= SUMTMaxIter)
-          break
+      if(max(abs(thetaOld - theta)) < SUMTTol) {
+         SUMTCode <- 2
+         break
+      }
+      if(penalty(theta) < SUMTPenaltyTol) {
+         SUMTCode <- 1
+         break
+      }
+      if(iter >= SUMTMaxIter) {
+         SUMTCode <- 4
+         break
+      }
       iter <- iter + 1L
       rho <- SUMTQ * rho
    }
@@ -137,12 +153,14 @@ sumt <- function(fn, grad=NULL, hess=NULL,
       gradOrig = grad, hessOrig = hess, ... )
    result$constraints <- list(type="SUMT",
                              barrier.value=penalty(theta),
+                              code=SUMTCode,
+                              message=SUMTMessage(SUMTCode),
                              outer.iterations=iter
                              )
    if( result$constraints$barrier.value > 0.001 ) {
       warning( "problem in imposing equality constraints: the constraints",
          " are not satisfied (barrier value = ",
-         result$constraints$barrier.value, ")" )
+         result$constraints$barrier.value, "). Try setting 'SUMTTol' to 0" )
    }
    return(result)
 }
