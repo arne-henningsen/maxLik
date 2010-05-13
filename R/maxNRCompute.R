@@ -100,10 +100,12 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
       ## /exactly the same/ parameter values.
       ## This ensures compatibility with maxBHHH
       if(!is.null(hess)) {
-         return(as.matrix(hess(theta, ...)))
+         h <- as.matrix(hess(theta, ...))
+      } else {
+         h <- numericHessian( f = func, grad = gradient, t0 = theta,
+                            activePar=activePar, ...)
       }
-      return(numericHessian( f = func, grad = gradient, t0 = theta,
-                            activePar=activePar, ...))
+      return( h )
    }
    ## -------------------------------------------------
    maxim.type <- "Newton-Raphson maximisation"
