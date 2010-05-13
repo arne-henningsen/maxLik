@@ -160,11 +160,25 @@ maxOptim <- function(fn, grad, hess,
    hessian <- logLikHess( estimate, fnOrig = fn,  gradOrig = grad,
       hessOrig = hess, ... )
 
+   gradient <- callWithoutSumt( estimate, "logLikGrad",
+      fnOrig = fn, gradOrig = grad, hessOrig = hess, sumObs = FALSE, ... )
+
+   if( is.null( dim( gradient ) ) ) {
+      gradientObs <- NULL
+   } else {
+      if( nrow( gradient ) > 1 ) {
+         gradientObs <- gradient
+      } else {
+         gradientObs <- NULL
+      }
+      gradient <- colSums( gradient )
+   }
+
    result <- list(
                    maximum=result$value,
                    estimate=estimate,
-                   gradient=callWithoutSumt( estimate, "logLikGrad",
-                     fnOrig = fn, gradOrig = grad, hessOrig = hess, ... ),
+                   gradient=gradient,
+#                    gradientObs=gradientObs,
                    hessian=hessian,
                    code=result$convergence,
                    message=paste(message(result$convergence), result$message),
@@ -174,6 +188,10 @@ maxOptim <- function(fn, grad, hess,
                    type=maximType,
                   constraints=resultConstraints
                   )
+   if( !is.null( gradientObs ) ) {
+      result$gradientObs <- gradientObs
+   }
+
    class(result) <- "maxim"
    return(result)
 }

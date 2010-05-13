@@ -97,6 +97,9 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
   \item{maximum}{value of \code{fn} at maximum.}
   \item{estimate}{best set of parameters found.}
   \item{gradient}{gradient at parameter value \code{estimate}.}
+  \item{gradient}{matrix of gradients at parameter value \code{estimate}
+      evaluated at each observation (only if \code{grad} returns a matrix
+      or \code{grad} is not specified and \code{fn} returns a vector).}
   \item{hessian}{value of Hessian at optimum.}
   \item{code}{integer. Success code, 0 is success (see
     \code{\link{optim}}).}

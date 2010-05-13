@@ -168,7 +168,8 @@ all.equal( ml, mlBFGS )
 # with individual log likelihood values
 mlIndBFGS <- maxLik( llfInd, start = startVal, method = "BFGS" )
 summary( mlIndBFGS )
-all.equal( mlBFGS, mlIndBFGS )
+all.equal( mlBFGS[], mlIndBFGS[-12] )
+mlIndBFGS[12]
 
 # with analytical gradients
 mlgBFGS <- maxLik( llf, gf, start = startVal, method = "BFGS" )
@@ -176,7 +177,8 @@ summary( mlgBFGS )
 all.equal( mlBFGS, mlgBFGS )
 all.equal( mlg, mlgBFGS )
 mlgIndBFGS <- maxLik( llfInd, gfInd, start = startVal, method = "BFGS" )
-all.equal( mlgBFGS, mlgIndBFGS )
+all.equal( mlgBFGS[], mlgIndBFGS[-12] )
+mlgIndBFGS[12]
 
 # with unused Hessian
 mlghBFGS <- maxLik( llf, gf, hf, start = startVal, method = "BFGS" )
@@ -205,7 +207,8 @@ all.equal( ml, mlNM )
 # with individual log likelihood values
 mlIndNM <- maxLik( llfInd, start = startVal, method = "NM" )
 summary( mlIndNM )
-all.equal( mlNM, mlIndNM )
+all.equal( mlNM[], mlIndNM[-12] )
+mlIndNM[12]
 
 # with unused analytical gradients
 mlgNM <- maxLik( llf, gf, start = startVal, method = "NM" )
@@ -214,7 +217,8 @@ all.equal( mlNM, mlgNM )
 # with individual log likelihood values and gradients
 mlgIndNM <- maxLik( llfInd, gfInd, start = startVal, method = "NM" )
 summary( mlgIndNM )
-all.equal( mlgNM, mlgIndNM )
+all.equal( mlgNM[], mlgIndNM[-12] )
+mlgIndNM[12]
 
 # with unused analytical gradients and Hessian
 mlghNM <- maxLik( llf, gf, hf, start = startVal, method = "NM" )
@@ -243,7 +247,8 @@ all.equal( ml, mlSANN )
 # with individual log likelihood values
 mlIndSANN <- maxLik( llfInd, start = startVal, method = "SANN" )
 summary( mlIndSANN )
-all.equal( mlSANN, mlIndSANN )
+all.equal( mlSANN[], mlIndSANN[-12] )
+mlIndSANN[12]
 
 # with unused analytical gradients
 mlgSANN <- maxLik( llf, gf, start = startVal, method = "SANN" )
@@ -252,7 +257,8 @@ all.equal( mlSANN, mlgSANN )
 # with individual log likelihood values and gradients
 mlgIndSANN <- maxLik( llfInd, gfInd, start = startVal, method = "SANN" )
 summary( mlgIndSANN )
-all.equal( mlgSANN, mlgIndSANN )
+all.equal( mlgSANN[], mlgIndSANN[-12] )
+mlgIndSANN[12]
 
 # with unused analytical gradients and Hessian
 mlghSANN <- maxLik( llf, gf, hf, start = startVal, method = "SANN" )
@@ -428,7 +434,8 @@ logLik( summary( mlFixBfgs ) )
 all.equal( mlghFix[ -c( 5, 6, 9, 10 ) ], mlFixBfgs[ -c( 5, 6, 9, 10, 11 ) ] )
 mlIndFixBfgs <- maxLik( llfInd, start = startValFix, fixed = isFixed,
    method = "BFGS" )
-all.equal( mlFixBfgs[ -9 ], mlIndFixBfgs[ -9 ] )
+all.equal( mlFixBfgs[ -9 ], mlIndFixBfgs[ -c(9,12) ] )
+mlIndFixBfgs[ 12 ]
 mlIndFixBfgs3 <- maxLik( llfInd, start = startValFix, fixed = "mu",
    method = "BFGS" )
 all.equal( mlIndFixBfgs, mlIndFixBfgs3 )
@@ -449,7 +456,8 @@ summary( mlgFixBfgs )
 all.equal( mlFixBfgs[ -9 ], mlgFixBfgs[ -9 ] )
 mlgIndFixBfgs <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
    method = "BFGS")
-all.equal( mlgFixBfgs, mlgIndFixBfgs )
+all.equal( mlgFixBfgs[ ], mlgIndFixBfgs[ -12 ] )
+mlgIndFixBfgs[ 12 ]
 mlgIndFixBfgs3 <- maxLik( llfInd, gfInd, start = startValFix, fixed = "mu",
    method = "BFGS" )
 all.equal( mlgIndFixBfgs, mlgIndFixBfgs3 )
@@ -496,7 +504,8 @@ logLik( summary( mlFixNm ) )
 all.equal( mlFixBfgs[ -c( 9, 10 ) ], mlFixNm[ -c( 9, 10 ) ] )
 mlIndFixNm <- maxLik( llfInd, start = startValFix, fixed = isFixed,
    method = "NM" )
-all.equal( mlFixNm, mlIndFixNm )
+all.equal( mlFixNm[ ], mlIndFixNm[ -12 ] )
+mlIndFixNm[ 12 ]
 mlIndFixNm3 <- maxLik( llfInd, start = startValFix, fixed = "mu",
    method = "NM" )
 all.equal( mlIndFixNm, mlIndFixNm3 )
@@ -515,9 +524,10 @@ mlgFixNm4 <- maxLik( llf, gf, start = startValFix, fixed = 1,
 all.equal( mlgFixNm, mlgFixNm4 )
 summary( mlgFixNm )
 all.equal( mlFixNm, mlgFixNm )
-mlgFixNm2 <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
+mlgIndFixNm <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
    method = "NM")
-all.equal( mlgFixNm, mlgFixNm2 )
+all.equal( mlgFixNm[ ], mlgIndFixNm[ -12 ] )
+mlgIndFixNm[ 12 ]
 
 # with unused Hessians
 mlghFixNm <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
@@ -558,16 +568,18 @@ logLik( summary( mlFixSann ) )
 all.equal( mlFixBfgs[ -c( 9, 10 ) ], mlFixSann[ -c( 9, 10 ) ] )
 mlIndFixSann <- maxLik( llfInd, start = startValFix, fixed = isFixed,
    method = "SANN" )
-all.equal( mlFixSann, mlIndFixSann )
+all.equal( mlFixSann[ ], mlIndFixSann[ -12 ] )
+mlIndFixSann[ 12 ]
 
 # with analytical gradients
 mlgFixSann <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
    method = "SANN" )
 summary( mlgFixSann )
 all.equal( mlFixSann, mlgFixSann )
-mlgFixSann2 <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
+mlgIndFixSann <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
    method = "SANN")
-all.equal( mlgFixSann, mlgFixSann2 )
+all.equal( mlgFixSann[ ], mlgIndFixSann[ -12 ] )
+mlgIndFixSann[ 12 ]
 
 # with unused Hessians
 mlghFixSann <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
@@ -610,7 +622,8 @@ logLik( summary( mlBfgsInEq ) )
 mlBfgsInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
    method = "BFGS" )
 summary( mlBfgsInEqInd )
-all.equal( mlBfgsInEq, mlBfgsInEqInd )
+all.equal( mlBfgsInEq[ ], mlBfgsInEqInd[ -12 ] )
+mlBfgsInEqInd[ 12 ]
 
 # with analytical gradients
 mlgBfgsInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
@@ -618,7 +631,8 @@ mlgBfgsInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
 all.equal( mlBfgsInEq, mlgBfgsInEq )
 mlgBfgsInEqInd <- maxLik( llfInd, gfInd, start = startVal, constraints = inEq,
    method = "BFGS" )
-all.equal( mlgBfgsInEqInd, mlgBfgsInEq )
+all.equal( mlgBfgsInEqInd[ -12 ], mlgBfgsInEq[ ] )
+mlgBfgsInEqInd[ 12 ]
 mlgBfgsInEqInd2 <- maxLik( llf, gfInd, start = startVal, constraints = inEq,
    method = "BFGS" )
 all.equal( mlgBfgsInEqInd, mlgBfgsInEqInd2 )
@@ -650,7 +664,8 @@ all.equal( mlBfgsInEq, mlNmInEq )
 mlNmInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
    method = "NM" )
 summary( mlNmInEqInd )
-all.equal( mlNmInEq, mlNmInEqInd )
+all.equal( mlNmInEq[ ], mlNmInEqInd[ -12 ] )
+mlNmInEqInd[ 12 ]
 
 # with unused analytical gradients
 mlgNmInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
