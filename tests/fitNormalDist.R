@@ -83,7 +83,8 @@ vcov( ml )
 logLik( summary( ml ) )
 mlInd <- maxLik( llfInd, start = startVal )
 summary( mlInd )
-all.equal( ml, mlInd )
+all.equal( ml[ ], mlInd[ -11 ] )
+mlInd[ 11 ]
 
 # with analytical gradients
 mlg <- maxLik( llf, gf, start = startVal )
@@ -91,7 +92,8 @@ summary( mlg )
 all.equal( ml, mlg )
 mlgInd <- maxLik( llfInd, gfInd, start = startVal )
 all.equal( mlInd, mlgInd )
-all.equal( mlg, mlgInd )
+all.equal( mlg[ ], mlgInd[ -11 ] )
+mlgInd[ 11 ]
 
 # with analytical gradients and Hessians
 mlgh <- maxLik( llf, gf, hf, start = startVal )
@@ -122,7 +124,8 @@ returnCode( mlBHHH )
 returnMessage( mlBHHH )
 vcov( mlBHHH )
 logLik( summary( mlBHHH ) )
-all.equal( ml, mlBHHH )
+all.equal( ml[ ], mlBHHH[ -11 ] )
+mlBHHH[ 11 ]
 
 # with analytical gradients
 mlgBHHH <- try( maxLik( llf, gf, start = startVal, method = "BHHH" ) )
@@ -137,7 +140,8 @@ x <- xSaved
 mlgBHHH <- maxLik( llfInd, gfInd, start = startVal, method = "BHHH" )
 summary( mlgBHHH )
 all.equal( mlBHHH, mlgBHHH )
-all.equal( mlg, mlgBHHH )
+all.equal( mlg[ ], mlgBHHH[ -11 ] )
+mlgBHHH[ 11 ]
 mlgBHHH2 <- maxLik( llf, gfInd, start = startVal, method = "BHHH" )
 all.equal( mlgBHHH, mlgBHHH2 )
 
@@ -313,9 +317,10 @@ all.equal( mlIndFix, mlIndFix3 )
 mlIndFix4 <- maxLik( llfInd, start = startValFix, fixed = 1 )
 all.equal( mlIndFix, mlIndFix4 )
 summary( mlIndFix )
-all.equal( mlFix, mlIndFix )
+all.equal( mlFix[ ], mlIndFix[ -11 ] )
 mlFix[[3]]
 mlIndFix[[3]]
+mlIndFix[ 11 ]
 
 # with analytical gradients
 mlgFix <- maxLik( llf, gf, start = startValFix, activePar = !isFixed )
@@ -335,7 +340,8 @@ mlIndFix[[3]]
 mlgIndFix[[3]]
 mlIndFix[[4]]
 mlgIndFix[[4]]
-all.equal( mlgFix, mlgIndFix )
+all.equal( mlgFix[ ], mlgIndFix[ -11 ] )
+mlgIndFix[ 11 ]
 
 # with analytical gradients and Hessians
 mlghFix <- maxLik( llf, gf, hf, start = startValFix, activePar = !isFixed )
@@ -374,11 +380,12 @@ returnCode( mlFixBHHH )
 returnMessage( mlFixBHHH )
 vcov( mlFixBHHH )
 logLik( summary( mlFixBHHH ) )
-all.equal( mlFix[ -c( 5, 6, 9, 10 ) ], mlFixBHHH[ -c( 5, 6, 9, 10 ) ] )
+all.equal( mlFix[ -c( 5, 6, 9, 10 ) ], mlFixBHHH[ -c( 5, 6, 9, 10, 11 ) ] )
 mlFix[[ 3 ]]
 mlFixBHHH[[ 3 ]]
 mlFix[[ 4 ]]
 mlFixBHHH[[ 4 ]]
+mlFixBHHH[ 11 ]
 
 # with analytical gradients
 mlgFixBHHH <- maxLik( llfInd, gfInd, start = startValFix, activePar = !isFixed,

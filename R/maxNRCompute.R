@@ -69,30 +69,37 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
       val[1]
       ## L - eigenvalues in decreasing order, [1] - biggest in abs value
    }
-   func <- function(theta, ...) {
+   func <- function(theta, sumObs = TRUE, ...) {
       f <- fn(theta, ...)
-      sf <- sum(f)
-      mostattributes(sf) <- attributes(f)
-      sf
+      if( sumObs ) {
+         fAttr <- attributes(f)
+         f <- sum(f)
+         mostattributes(f) <- fAttr
+      }
+      return( f )
    }
-   gradient <- function(theta, ...) {
+   gradient <- function(theta, sumObs = TRUE, ...) {
       if(!is.null(grad)) {  # use user-supplied if present
          gr <- grad(theta, ...)
       } else {
          gr <- numericGradient(f = func, t0 = theta,
-                               activePar=activePar, ...)
+                               activePar=activePar, sumObs = sumObs, ...)
                                         # Note we need nObs rows x nParam cols
       }
       ## Now check if the gradient is vector or matrix...
-      if(!is.null(dim(gr))) {
+      if( !is.null(dim(gr)) && sumObs ) {
          gr <- colSums(gr)
       } else {
          ## ... or vector if only one parameter
-         if(length(gr) > nParam) {
+         if(length(gr) > nParam && sumObs ) {
             gr <- sum(gr)
          }
       }
-      gr[ !activePar ] <- NA
+      if( is.null( dim( gr ) ) ) {
+         gr[ !activePar ] <- NA
+      } else {
+         gr[ , !activePar ] <- NA
+      }
       return(gr)
    }
    hessian <- function(theta, activePar=activePar, ...) {
@@ -323,6 +330,20 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
       cat( "Function value:", f1, "\n")
    }
    names(start1) <- nimed
+
+   G1 <- gradient( start1, sumObs = FALSE, ... )
+   if( !is.null( dim( G1 ) ) ) {
+      if( nrow( G1 ) > 1 ) {
+         gradientObs <- G1
+         colnames( gradientObs ) <- nimed 
+      }
+      G1 <- colSums( G1 )
+   } else if( length( start1 ) == 1 && length( G1 ) > 1 ) {
+      gradientObs <- matrix( G1, ncol = 1 )
+      colnames( gradientObs ) <- nimed
+      G1 <- sum( G1 )
+   }
+
    names( G1 ) <- nimed
    rownames( H1 ) <- colnames( H1 ) <- nimed
    result <-list(
@@ -338,6 +359,10 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
                   activePar=activePar,
                   iterations=iter,
                   type=maxim.type)
+   if( exists( "gradientObs" ) ) {
+      result$gradientObs <- gradientObs
+   }
+
    class(result) <- c("maxim", class(result))
    invisible(result)
 }

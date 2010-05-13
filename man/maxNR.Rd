@@ -107,6 +107,9 @@ the previous one (maximization is not performed in that step).
   \item{estimate}{estimated parameter value.}
   \item{gradient}{last gradient value which was calculated.  Should be
     close to 0 if normal convergence.}
+  \item{gradientObs}{matrix of gradients at parameter value \code{estimate}
+      evaluated at each observation (only if \code{grad} returns a matrix
+      or \code{grad} is not specified and \code{fn} returns a vector).}
   \item{hessian}{Hessian at the maximum (the last calculated value if
     not converged).}
   \item{code}{return code:
