@@ -85,11 +85,11 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
       }
       ## Now check if the gradient is vector or matrix...
       if(!is.null(dim(gr))) {
-         return(colSums(gr))
+         gr <- colSums(gr)
       } else {
          ## ... or vector if only one parameter
          if(length(gr) > nParam) {
-            return(sum(gr))
+            gr <- sum(gr)
          }
       }
       return(gr)
