@@ -1535,51 +1535,50 @@ sigma  1.82546    0.12908  14.142 < 2.2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlFix, mlgFix )
-[1] "Component 3: 'is.NA' value mismatch: 0 in current 1 in target"
-[2] "Component 4: 'is.NA' value mismatch: 2 in current 3 in target"
+[1] "Component 3: Mean relative difference: 0.9999805"   
+[2] "Component 4: Mean relative difference: 0.0001324921"
 > mlFix[[3]]
           mu        sigma 
           NA 2.842171e-08 
 > mlgFix[[3]]
           mu        sigma 
-5.426045e+00 5.542233e-13 
+          NA 5.542233e-13 
 > mlFix[[4]]
       mu     sigma
 mu    NA        NA
 sigma NA -60.02665
 > mlgFix[[4]]
-      mu     sigma
-mu    NA  -5.94486
-sigma NA -60.01870
+      mu    sigma
+mu    NA       NA
+sigma NA -60.0187
 > mlgIndFix <- maxLik( llfInd, gfInd, start = startValFix, activePar = !isFixed )
 > all.equal( mlIndFix, mlgIndFix )
-[1] "Component 3: 'is.NA' value mismatch: 0 in current 1 in target"
-[2] "Component 4: 'is.NA' value mismatch: 2 in current 3 in target"
+[1] "Component 4: Mean relative difference: 0.0001324922"
 > mlIndFix[[3]]
    mu sigma 
    NA     0 
 > mlgIndFix[[3]]
           mu        sigma 
-5.426045e+00 5.539458e-13 
+          NA 5.539458e-13 
 > mlIndFix[[4]]
       mu     sigma
 mu    NA        NA
 sigma NA -60.02665
 > mlgIndFix[[4]]
-      mu     sigma
-mu    NA  -5.94486
-sigma NA -60.01870
+      mu    sigma
+mu    NA       NA
+sigma NA -60.0187
 > all.equal( mlgFix, mlgIndFix )
 [1] TRUE
 > 
 > # with analytical gradients and Hessians
 > mlghFix <- maxLik( llf, gf, hf, start = startValFix, activePar = !isFixed )
 > all.equal( mlgFix, mlghFix )
-[1] "Component 4: 'is.NA' value mismatch: 0 in current 2 in target"
+[1] "Component 4: 'is.NA' value mismatch: 0 in current 3 in target"
 > mlgFix[[4]]
-      mu     sigma
-mu    NA  -5.94486
-sigma NA -60.01870
+      mu    sigma
+mu    NA       NA
+sigma NA -60.0187
 > mlghFix[[4]]
              mu     sigma
 mu    -30.00935  -5.94486
@@ -1660,14 +1659,14 @@ sigma  0 0.01786259
 [1] -202.0769
 > all.equal( mlFix[ -c( 5, 6, 9, 10 ) ], mlFixBHHH[ -c( 5, 6, 9, 10 ) ] )
 [1] "Component 2: Mean relative difference: 7.729473e-08"          
-[2] "Component 3: 'is.NA' value mismatch: 0 in current 1 in target"
+[2] "Component 3: Mean relative difference: 299.1406"              
 [3] "Component 4: 'is.NA' value mismatch: 0 in current 3 in target"
 > mlFix[[ 3 ]]
           mu        sigma 
           NA 2.842171e-08 
 > mlFixBHHH[[ 3 ]]
            mu         sigma 
- 5.426044e+00 -8.473666e-06 
+           NA -8.473666e-06 
 > mlFix[[ 4 ]]
       mu     sigma
 mu    NA        NA
@@ -1711,7 +1710,7 @@ sigma  1.82546    0.13365  13.658 < 2.2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlFixBHHH, mlgFixBHHH )
-[1] TRUE
+[1] "Component 3: Mean relative difference: 0.003201211"
 > mlgFixBHHH2 <- maxLik( llf, gfInd, start = startValFix, activePar = !isFixed,
 +    method = "BHHH")
 > all.equal( mlgFixBHHH, mlgFixBHHH2 )
@@ -1796,8 +1795,8 @@ sigma  0 0.01665927
 > logLik( summary( mlFixBfgs ) )
 [1] -202.0769
 > all.equal( mlghFix[ -c( 5, 6, 9, 10 ) ], mlFixBfgs[ -c( 5, 6, 9, 10, 11 ) ] )
-[1] "Component 3: Mean relative difference: 6.455651e-08"
-[2] "Component 4: Mean relative difference: 0.000410571" 
+[1] "Component 3: 'is.NA' value mismatch: 0 in current 1 in target"
+[2] "Component 4: Mean relative difference: 0.000410571"           
 > mlIndFixBfgs <- maxLik( llfInd, start = startValFix, fixed = isFixed,
 +    method = "BFGS" )
 Warning message:

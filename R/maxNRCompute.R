@@ -92,6 +92,7 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
             gr <- sum(gr)
          }
       }
+      gr[ !activePar ] <- NA
       return(gr)
    }
    hessian <- function(theta, activePar=activePar, ...) {
