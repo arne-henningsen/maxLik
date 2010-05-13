@@ -418,27 +418,6 @@ sigma -1.543776e-05  1.648753e-02
 [7] "Component 9: names for current but not for target"  
 [8] "Component 9: Mean relative difference: 4.142857"    
 [9] "Component 10: 1 string mismatch"                    
-> mlIndBFGS <- maxLik( llfInd, start = startVal, method = "BFGS" )
-Warning messages:
-1: In log(sigma) : NaNs produced
-2: In log(sigma) : NaNs produced
-> summary( mlIndBFGS )
---------------------------------------------
-Maximum Likelihood estimation
-BFGS maximisation, 36 iterations
-Return code 0: successful convergence 
-Log-Likelihood: -201.5839 
-2  free parameters
-Estimates:
-      Estimate Std. error t value   Pr(> t)    
-mu     1.18081    0.18176  6.4965  8.22e-11 ***
-sigma  1.81648    0.12840 14.1466 < 2.2e-16 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
---------------------------------------------
-> all.equal( mlBFGS, mlIndBFGS )
-[1] "Component 3: Mean relative difference: 0.0006583278"
-[2] "Component 4: Mean relative difference: 0.004672897" 
 > # with individual log likelihood values
 > mlIndBFGS <- maxLik( llfInd, start = startVal, method = "BFGS" )
 Warning messages:
