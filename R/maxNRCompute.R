@@ -105,6 +105,8 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
          h <- numericHessian( f = func, grad = gradient, t0 = theta,
                             activePar=activePar, ...)
       }
+      h[ !activePar, ] <- NA
+      h[ , !activePar ] <- NA 
       return( h )
    }
    ## -------------------------------------------------
