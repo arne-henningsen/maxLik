@@ -896,3 +896,32 @@ mlSannConCand <- maxLik( llf, start = startVal, constraints = eqCon,
 summary( mlSannConCand )
 all.equal( mlSannConCand, mlSannCon )
 
+
+## test for method "estfun"
+library( sandwich )
+try( estfun( ml ) )
+estfun( mlInd )[ 1:5, ]
+estfun( mlgInd )[ 1:5, ]
+estfun( mlBHHH )[ 1:5, ]
+estfun( mlgBHHH )[ 1:5, ]
+estfun( mlIndBFGS )[ 1:5, ]
+estfun( mlgIndBFGS )[ 1:5, ]
+estfun( mlIndNM )[ 1:5, ]
+estfun( mlgIndNM )[ 1:5, ]
+estfun( mlIndSANN )[ 1:5, ]
+estfun( mlgIndSANN )[ 1:5, ]
+estfun( mlIndFixBfgs )[ 1:5, ]
+estfun( mlgIndFixBfgs )[ 1:5, ]
+estfun( mlIndFixNm )[ 1:5, ]
+estfun( mlgIndFixNm )[ 1:5, ]
+estfun( mlIndFixSann )[ 1:5, ]
+estfun( mlgIndFixSann )[ 1:5, ]
+estfun( mlBfgsInEqInd )[ 1:5, ]
+estfun( mlgBfgsInEqInd )[ 1:5, ]
+estfun( mlNmInEqInd )[ 1:5, ]
+estfun( mlIndFix )[ 1:5, ]
+estfun( mlgIndFix )[ 1:5, ]
+estfun( mlFixBHHH )[ 1:5, ]
+estfun( mlgFixBHHH )[ 1:5, ]
+
+
