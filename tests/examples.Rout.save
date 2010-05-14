@@ -124,34 +124,14 @@ Estimates:
 > activePar(cons)
 [1] FALSE  TRUE
 > # specify fixed par in different ways
-> cons <- maxNR(f, start=1:2, fixed=1)
-> print(summary(cons))
---------------------------------------------
-Newton-Raphson maximisation 
-Number of iterations: 4 
-Return code: 1 
-gradient close to zero 
-Function value: 0.3678794 
-Estimates:
-         estimate      gradient
-[1,] 1.000000e+00            NA
-[2,] 3.514294e-07 -2.586265e-07
---------------------------------------------
-> cons <- maxNR(f, start=1:2, fixed=c(TRUE,FALSE))
-> print(summary(cons))
---------------------------------------------
-Newton-Raphson maximisation 
-Number of iterations: 4 
-Return code: 1 
-gradient close to zero 
-Function value: 0.3678794 
-Estimates:
-         estimate      gradient
-[1,] 1.000000e+00            NA
-[2,] 3.514294e-07 -2.586265e-07
---------------------------------------------
-> cons <- maxNR(f, start=c(a=1, b=2), fixed="a")
-> print(summary(cons))
+> cons2 <- maxNR(f, start=1:2, fixed=1)
+> all.equal( cons, cons2 )
+[1] TRUE
+> cons3 <- maxNR(f, start=1:2, fixed=c(TRUE,FALSE))
+> all.equal( cons, cons3 )
+[1] TRUE
+> cons4 <- maxNR(f, start=c(a=1, b=2), fixed="a")
+> print(summary(cons4))
 --------------------------------------------
 Newton-Raphson maximisation 
 Number of iterations: 4 
@@ -163,6 +143,11 @@ Estimates:
 a 1.000000e+00            NA
 b 3.514294e-07 -2.586265e-07
 --------------------------------------------
+> all.equal( cons, cons4 )
+[1] "Component 2: names for current but not for target"                             
+[2] "Component 3: names for current but not for target"                             
+[3] "Component 4: Attributes: < Length mismatch: comparison on first 1 components >"
+[4] "Component 8: names for current but not for target"                             
 > 
 > ### compareDerivatives
 > set.seed( 2 )
@@ -355,167 +340,6 @@ Estimates:
 >                            # test standard errors with fixed par
 > 
 > 
-> ### logLik.maxLik
-> set.seed( 4 )
-> ## ML estimation of exponential duration model:
-> t <- rexp(100, 2)
-> loglik <- function(theta) log(theta) - theta*t
-> gradlik <- function(theta) 1/theta - t
-> hesslik <- function(theta) -100/theta^2
-> ## Estimate with analytic gradient and hessian
-> a <- maxLik(loglik, gradlik, hesslik, start=1)
-> print.default( a )
-$maximum
-[1] -25.05386
-
-$estimate
-[1] 2.11586
-
-$gradient
-[1] 6.059581e-08
-
-$hessian
-          [,1]
-[1,] -22.33706
-
-$code
-[1] 1
-
-$message
-[1] "gradient close to zero"
-
-$last.step
-NULL
-
-$activePar
-[1] TRUE
-
-$iterations
-[1] 5
-
-$type
-[1] "Newton-Raphson maximisation"
-
-$gradientObs
-               [,1]
-  [1,]  0.386820737
-  [2,] -1.679351425
-  [3,]  0.038568228
-  [4,]  0.071297536
-  [5,]  0.159046827
-  [6,]  0.105191909
-  [7,]  0.248215149
-  [8,]  0.447271101
-  [9,]  0.217946015
- [10,]  0.054046210
- [11,] -0.867527901
- [12,]  0.328582591
- [13,]  0.270226231
- [14,]  0.258112507
- [15,]  0.302819655
- [16,] -0.051988003
- [17,]  0.442843506
- [18,]  0.405508829
- [19,] -0.447366184
- [20,] -0.033385380
- [21,]  0.350564555
- [22,] -0.150788618
- [23,] -2.297263120
- [24,]  0.388690937
- [25,] -0.444122551
- [26,]  0.443407902
- [27,]  0.276872851
- [28,] -0.151172545
- [29,]  0.226692191
- [30,]  0.192216408
- [31,] -0.216352485
- [32,] -0.427312132
- [33,] -0.415672374
- [34,]  0.278198843
- [35,] -0.636970370
- [36,]  0.394516801
- [37,]  0.344060909
- [38,] -0.620259677
- [39,]  0.457767065
- [40,]  0.167203754
- [41,]  0.353775674
- [42,] -0.065340669
- [43,]  0.147748189
- [44,]  0.282720513
- [45,] -0.015242578
- [46,]  0.079882301
- [47,]  0.274371829
- [48,]  0.452304209
- [49,] -1.144888506
- [50,]  0.405280562
- [51,] -0.227729885
- [52,]  0.433252231
- [53,]  0.081373333
- [54,] -0.081125847
- [55,] -0.739938583
- [56,]  0.207183333
- [57,]  0.113523151
- [58,]  0.119192735
- [59,]  0.342989799
- [60,]  0.093240222
- [61,]  0.440175142
- [62,] -0.073023342
- [63,] -0.501036832
- [64,]  0.075378939
- [65,] -0.172199931
- [66,]  0.045446563
- [67,] -0.025803404
- [68,]  0.181706954
- [69,]  0.447988621
- [70,] -0.160098113
- [71,]  0.439821886
- [72,]  0.248287379
- [73,]  0.403098278
- [74,] -0.190732563
- [75,] -0.472651004
- [76,] -0.065057866
- [77,] -0.455150229
- [78,]  0.159506496
- [79,]  0.376818619
- [80,]  0.121605791
- [81,]  0.301920775
- [82,] -0.001157197
- [83,]  0.414118368
- [84,]  0.400994285
- [85,]  0.349288513
- [86,] -0.996985138
- [87,]  0.378740648
- [88,]  0.385031346
- [89,] -0.316835766
- [90,]  0.192621244
- [91,]  0.328718428
- [92,] -0.042173028
- [93,]  0.060583993
- [94,] -0.644872464
- [95,] -0.632559541
- [96,] -0.356326814
- [97,] -0.323978775
- [98,]  0.220528784
- [99,] -0.832596225
-[100,]  0.361128744
-
-attr(,"class")
-[1] "maxLik" "maxim"  "list"  
-> print( a )
-Maximum Likelihood estimation
-Newton-Raphson maximisation, 5 iterations
-Return code 1: gradient close to zero
-Log-Likelihood: -25.05386 (1 free parameter(s))
-Estimate(s): 2.11586 
-> ## print log likelihood value
-> logLik( a )
-[1] -25.05386
-> ## print log likelihood value of summary object
-> b <- summary( a )
-> logLik( b )
-[1] -25.05386
-> 
-> 
 > ### maxBFGS
 > set.seed( 5 )
 > # Maximum Likelihood estimation of the parameter of Poissonian distribution
@@ -679,12 +503,170 @@ Estimates:
 > # Note also that maxLik is better suited for Maximum Likelihood
 > 
 > 
-> ### maxBHHH
-> set.seed( 6 )
+> ### logLik.maxLik
+> set.seed( 4 )
 > ## ML estimation of exponential duration model:
 > t <- rexp(100, 2)
 > loglik <- function(theta) log(theta) - theta*t
 > gradlik <- function(theta) 1/theta - t
+> hesslik <- function(theta) -100/theta^2
+> ## Estimate with analytic gradient and hessian
+> a <- maxLik(loglik, gradlik, hesslik, start=1)
+> print.default( a )
+$maximum
+[1] -25.05386
+
+$estimate
+[1] 2.11586
+
+$gradient
+[1] 6.059581e-08
+
+$hessian
+          [,1]
+[1,] -22.33706
+
+$code
+[1] 1
+
+$message
+[1] "gradient close to zero"
+
+$last.step
+NULL
+
+$activePar
+[1] TRUE
+
+$iterations
+[1] 5
+
+$type
+[1] "Newton-Raphson maximisation"
+
+$gradientObs
+               [,1]
+  [1,]  0.386820737
+  [2,] -1.679351425
+  [3,]  0.038568228
+  [4,]  0.071297536
+  [5,]  0.159046827
+  [6,]  0.105191909
+  [7,]  0.248215149
+  [8,]  0.447271101
+  [9,]  0.217946015
+ [10,]  0.054046210
+ [11,] -0.867527901
+ [12,]  0.328582591
+ [13,]  0.270226231
+ [14,]  0.258112507
+ [15,]  0.302819655
+ [16,] -0.051988003
+ [17,]  0.442843506
+ [18,]  0.405508829
+ [19,] -0.447366184
+ [20,] -0.033385380
+ [21,]  0.350564555
+ [22,] -0.150788618
+ [23,] -2.297263120
+ [24,]  0.388690937
+ [25,] -0.444122551
+ [26,]  0.443407902
+ [27,]  0.276872851
+ [28,] -0.151172545
+ [29,]  0.226692191
+ [30,]  0.192216408
+ [31,] -0.216352485
+ [32,] -0.427312132
+ [33,] -0.415672374
+ [34,]  0.278198843
+ [35,] -0.636970370
+ [36,]  0.394516801
+ [37,]  0.344060909
+ [38,] -0.620259677
+ [39,]  0.457767065
+ [40,]  0.167203754
+ [41,]  0.353775674
+ [42,] -0.065340669
+ [43,]  0.147748189
+ [44,]  0.282720513
+ [45,] -0.015242578
+ [46,]  0.079882301
+ [47,]  0.274371829
+ [48,]  0.452304209
+ [49,] -1.144888506
+ [50,]  0.405280562
+ [51,] -0.227729885
+ [52,]  0.433252231
+ [53,]  0.081373333
+ [54,] -0.081125847
+ [55,] -0.739938583
+ [56,]  0.207183333
+ [57,]  0.113523151
+ [58,]  0.119192735
+ [59,]  0.342989799
+ [60,]  0.093240222
+ [61,]  0.440175142
+ [62,] -0.073023342
+ [63,] -0.501036832
+ [64,]  0.075378939
+ [65,] -0.172199931
+ [66,]  0.045446563
+ [67,] -0.025803404
+ [68,]  0.181706954
+ [69,]  0.447988621
+ [70,] -0.160098113
+ [71,]  0.439821886
+ [72,]  0.248287379
+ [73,]  0.403098278
+ [74,] -0.190732563
+ [75,] -0.472651004
+ [76,] -0.065057866
+ [77,] -0.455150229
+ [78,]  0.159506496
+ [79,]  0.376818619
+ [80,]  0.121605791
+ [81,]  0.301920775
+ [82,] -0.001157197
+ [83,]  0.414118368
+ [84,]  0.400994285
+ [85,]  0.349288513
+ [86,] -0.996985138
+ [87,]  0.378740648
+ [88,]  0.385031346
+ [89,] -0.316835766
+ [90,]  0.192621244
+ [91,]  0.328718428
+ [92,] -0.042173028
+ [93,]  0.060583993
+ [94,] -0.644872464
+ [95,] -0.632559541
+ [96,] -0.356326814
+ [97,] -0.323978775
+ [98,]  0.220528784
+ [99,] -0.832596225
+[100,]  0.361128744
+
+attr(,"class")
+[1] "maxLik" "maxim"  "list"  
+> print( a )
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 5 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -25.05386 (1 free parameter(s))
+Estimate(s): 2.11586 
+> ## print log likelihood value
+> logLik( a )
+[1] -25.05386
+> ## compare with log likelihood value of summary object
+> all.equal( logLik( a ), logLik( summary( a ) ) )
+[1] TRUE
+> 
+> 
+> ### maxBHHH
+> set.seed( 6 )
+> ## ML estimation of exponential duration model:
+> t <- rexp(100, 2)
 > ## Estimate with numeric gradient and hessian
 > a <- maxBHHH(loglik, start=1, print.level=2)
 ----- Initial parameters: -----
@@ -1007,9 +989,6 @@ Estimates:
 > set.seed( 7 )
 > ## ML estimation of exponential duration model:
 > t <- rexp(100, 2)
-> loglik <- function(theta) log(theta) - theta*t
-> gradlik <- function(theta) 1/theta - t
-> hesslik <- function(theta) -100/theta^2
 > ## Estimate with numeric gradient and hessian
 > a <- maxLik(loglik, start=1, print.level=2)
 ----- Initial parameters: -----
@@ -1347,12 +1326,11 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > set.seed( 8 )
 > ## ML estimation of exponential duration model:
 > t <- rexp(100, 2)
-> loglik <- function(theta) sum(log(theta) - theta*t)
+> loglikSum <- function(theta) sum(log(theta) - theta*t)
 > ## Note the log-likelihood and gradient are summed over observations
-> gradlik <- function(theta) sum(1/theta - t)
-> hesslik <- function(theta) -100/theta^2
+> gradlikSum <- function(theta) sum(1/theta - t)
 > ## Estimate with numeric gradient and Hessian
-> a <- maxNR(loglik, start=1, print.level=2)
+> a <- maxNR(loglikSum, start=1, print.level=2)
 ----- Initial parameters: -----
 fcn value: -46.48941 
      parameter initial gradient free
@@ -1415,7 +1393,7 @@ Estimates:
 --------------------------------------------
 > ## You would probably prefer 1/mean(t) instead ;-)
 > ## Estimate with analytic gradient and Hessian
-> a <- maxNR(loglik, gradlik, hesslik, start=1)
+> a <- maxNR(loglikSum, gradlikSum, hesslik, start=1)
 > print( a )
 $maximum
 [1] -23.40544
@@ -2283,9 +2261,6 @@ Estimates:
 > set.seed( 17 )
 > ## ML estimation of exponential duration model:
 > t <- rexp(100, 2)
-> loglik <- function(theta) log(theta) - theta*t
-> gradlik <- function(theta) 1/theta - t
-> hesslik <- function(theta) -100/theta^2
 > ## Estimate with numeric gradient and hessian
 > a <- maxLik(loglik, start=1, print.level=2)
 ----- Initial parameters: -----
