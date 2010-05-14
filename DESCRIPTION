@@ -7,7 +7,7 @@ Author: Ott Toomet <otoomet@ut.ee>,
    with contributions from Spencer Graves
 Maintainer: Arne Henningsen <arne.henningsen@googlemail.com>
 Depends: R (>= 2.4.0)
-Suggests:
+Imports: sandwich
 Description: Tools for Maximum Likelihood Estimation
 License: GPL (>= 2)
 URL: http://CRAN.R-project.org, http://www.maxLik.org
