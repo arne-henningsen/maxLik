@@ -11,8 +11,12 @@ logLikGrad <- function(theta, fnOrig, gradOrig, hessOrig,
    } else {
       g <- gradOrig(theta, ...)
    }
-   if(!is.null(dim(g)) && sumObs ) {
-      g <- colSums(g)
+   if( sumObs ) {
+      if(!is.null(dim(g)) ) {
+         g <- colSums(g)
+      } else if( length( theta ) == 1 && length( g ) > 1 ) {
+         g <- sum( g )
+      }
    }
    if(is.null(dim(g))) {
       names( g ) <- names( theta )

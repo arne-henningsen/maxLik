@@ -168,13 +168,16 @@ maxOptim <- function(fn, grad, hess,
          gradientObs <- gradient
       }
       gradient <- colSums( gradient )
+   } else if( length( start ) == 1 && length( gradient ) > 1 ) {
+      gradientObs <- matrix( gradient, ncol = 1 )
+      gradient <- sum( gradient )
    }
 
    result <- list(
                    maximum=result$value,
                    estimate=estimate,
                    gradient=gradient,
-                   hessian=hessian,
+                   hessian=as.matrix(hessian),
                    code=result$convergence,
                    message=paste(message(result$convergence), result$message),
                    last.step=NULL,
