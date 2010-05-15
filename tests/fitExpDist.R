@@ -21,6 +21,7 @@ hesslik <- function(theta) -100/theta^2
 ml <- maxLik( loglik, start = 1 )
 print( ml )
 summary( ml )
+nObs( ml )
 print.default( ml )
 # log-likelihood value summed over all observations
 mlSum <- maxLik( loglikSum, start = 1 )
@@ -28,6 +29,7 @@ all.equal( mlSum[], ml[-11] )
 
 # Estimate with analytic gradient
 mlg <- maxLik( loglik, gradlik, start = 1 )
+nObs( mlg )
 all.equal( mlg, ml )
 # gradient summed over all observations
 mlgSum <- maxLik( loglikSum, gradlikSum, start = 1 )
@@ -43,10 +45,12 @@ all.equal( mlgh, mlg )
 mlBhhh <- maxLik( loglik, start = 1, method = "BHHH" )
 print( mlBhhh )
 summary( mlBhhh )
+nObs( mlBhhh )
 all.equal( mlBhhh[ -c( 5, 6, 10 ) ], ml[ -c( 5, 6, 10 ) ] )
 
 # Estimate with analytic gradient
 mlgBhhh <- maxLik( loglik, gradlik, start = 1, method = "BHHH" )
+nObs( mlgBhhh )
 all.equal( mlgBhhh, mlBhhh )
 
 # Estimate with analytic gradient and Hessian (unused during estimation)
@@ -58,6 +62,7 @@ all.equal( mlghBhhh, mlgBhhh )
 mlBfgs <- maxLik( loglik, start = 1, method = "BFGS" )
 print( mlBfgs )
 summary( mlBfgs )
+nObs( mlBfgs )
 all.equal( mlBfgs[ -c( 5, 6, 9, 10, 11 ) ], ml[ -c( 5, 6, 9, 10 ) ] )
 # log-likelihood value summed over all observations
 mlSumBfgs <- maxLik( loglikSum, start = 1, method = "BFGS" )
@@ -65,6 +70,7 @@ all.equal( mlSumBfgs[], mlBfgs[-12] )
 
 # Estimate with analytic gradient
 mlgBfgs <- maxLik( loglik, gradlik, start = 1, method = "BFGS" )
+nObs( mlgBfgs )
 all.equal( mlgBfgs, mlBfgs )
 # gradient summed over all observations
 mlgSumBfgs <- maxLik( loglikSum, gradlikSum, start = 1, method = "BFGS" )
@@ -79,10 +85,12 @@ all.equal( mlghBfgs, mlgBfgs )
 mlNm <- maxLik( loglik, start = 1, method = "NM" )
 print( mlNm )
 summary( mlNm )
+nObs( mlNm )
 all.equal( mlNm[ -c( 5, 6, 9, 10, 11 ) ], ml[ -c( 5, 6, 9, 10 ) ] )
 
 # Estimate with analytic gradient (unused during estimation)
 mlgNm <- maxLik( loglik, gradlik, start = 1, method = "NM" )
+nObs( mlgNm )
 all.equal( mlgNm, mlNm )
 
 # Estimate with analytic gradient and Hessian (both unused during estimation)
@@ -94,10 +102,12 @@ all.equal( mlghNm, mlgNm )
 mlSann <- maxLik( loglik, start = 1, method = "SANN" )
 print( mlSann )
 summary( mlSann )
+nObs( mlSann )
 all.equal( mlSann[ -c( 5, 6, 9, 10, 11 ) ], ml[ -c( 5, 6, 9, 10 ) ] )
 
 # Estimate with analytic gradient (unused during estimation)
 mlgSann <- maxLik( loglik, gradlik, start = 1, method = "SANN" )
+nObs( mlgSann )
 all.equal( mlgSann, mlSann )
 
 # Estimate with analytic gradient and Hessian (both unused during estimation)
