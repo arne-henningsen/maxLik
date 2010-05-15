@@ -123,8 +123,9 @@ sigma   0.00000 -60.59508
 [1] "Newton-Raphson maximisation"
 > nIter( ml )
 [1] 7
-> nObs( ml )
-NULL
+> try( nObs( ml ) )
+Error in nObs.maxLik(ml) : 
+  cannot return the number of observations: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
 > nParam( ml )
 [1] 2
 > returnCode( ml )
@@ -259,6 +260,8 @@ $gradientObs
  [99,] -0.19766400 -0.479543260
 [100,] -0.67694637  0.281898795
 
+> nObs( mlInd )
+[1] 100
 > 
 > # with analytical gradients
 > mlg <- maxLik( llf, gf, start = startVal )
@@ -455,8 +458,6 @@ sigma  -1.833532 -55.732477
 [1] "BHHH maximisation"
 > nIter( mlBHHH )
 [1] 13
-> nObs( mlBHHH )
-NULL
 > nParam( mlBHHH )
 [1] 2
 > returnCode( mlBHHH )
@@ -581,6 +582,8 @@ $gradientObs
  [99,] -0.19766419 -0.479543290
 [100,] -0.67694682  0.281899524
 
+> nObs( mlBHHH )
+[1] 100
 > 
 > # with analytical gradients
 > mlgBHHH <- try( maxLik( llf, gf, start = startVal, method = "BHHH" ) )
@@ -810,8 +813,6 @@ sigma  -0.02842171 -60.65192792
 > nIter( mlBFGS )
 function 
       36 
-> nObs( mlBFGS )
-NULL
 > nParam( mlBFGS )
 [1] 2
 > returnCode( mlBFGS )
@@ -960,6 +961,8 @@ $gradientObs
  [99,] -0.19766347 -0.479543396
 [100,] -0.67694547  0.281897119
 
+> nObs( mlIndBFGS )
+[1] 100
 > 
 > # with analytical gradients
 > mlgBFGS <- maxLik( llf, gf, start = startVal, method = "BFGS" )
@@ -1157,8 +1160,6 @@ sigma   0.02842171 -60.53824109
 > nIter( mlNM )
 function 
       63 
-> nObs( mlNM )
-NULL
 > nParam( mlNM )
 [1] 2
 > returnCode( mlNM )
@@ -1304,6 +1305,8 @@ $gradientObs
  [99,] -0.19756844 -0.479558687
 [100,] -0.67676879  0.281580422
 
+> nObs( mlIndNM )
+[1] 100
 > 
 > # with unused analytical gradients
 > mlgNM <- maxLik( llf, gf, start = startVal, method = "NM" )
@@ -1497,8 +1500,6 @@ sigma   0.05684342 -60.56666280
 > nIter( mlSANN )
 function 
    10000 
-> nObs( mlSANN )
-NULL
 > nParam( mlSANN )
 [1] 2
 > returnCode( mlSANN )
@@ -1645,6 +1646,8 @@ $gradientObs
  [99,] -0.19794823 -0.479325866
 [100,] -0.67721034  0.282577352
 
+> nObs( mlIndSANN )
+[1] 100
 > 
 > # with unused analytical gradients
 > mlgSANN <- maxLik( llf, gf, start = startVal, method = "SANN" )
@@ -1878,8 +1881,6 @@ sigma NA -60.02665
 [1] "Newton-Raphson maximisation"
 > nIter( mlFix )
 [1] 7
-> nObs( mlFix )
-NULL
 > nParam( mlFix )
 [1] 2
 > returnCode( mlFix )
@@ -2031,6 +2032,8 @@ $gradientObs
  [99,] NA -0.51127657
 [100,] NA  0.14497287
 
+> nObs( mlIndFix )
+[1] 100
 > 
 > # with analytical gradients
 > mlgFix <- maxLik( llf, gf, start = startValFix, activePar = !isFixed )
@@ -2268,8 +2271,6 @@ sigma NA -55.98293
 [1] "BHHH maximisation"
 > nIter( mlFixBHHH )
 [1] 10
-> nObs( mlFixBHHH )
-NULL
 > nParam( mlFixBHHH )
 [1] 2
 > returnCode( mlFixBHHH )
@@ -2404,6 +2405,8 @@ $gradientObs
  [99,] NA -0.51127654
 [100,] NA  0.14497275
 
+> nObs( mlFixBHHH )
+[1] 100
 > 
 > # with analytical gradients
 > mlgFixBHHH <- maxLik( llfInd, gfInd, start = startValFix, activePar = !isFixed,
@@ -2509,8 +2512,6 @@ sigma  -5.940137 -60.026650
 > nIter( mlFixBfgs )
 function 
       27 
-> nObs( mlFixBfgs )
-NULL
 > nParam( mlFixBfgs )
 [1] 2
 > returnCode( mlFixBfgs )
@@ -2649,6 +2650,8 @@ Warning message:
 In log(sigma) : NaNs produced
 > all.equal( mlIndFixBfgs, mlIndFixBfgs4 )
 [1] TRUE
+> nObs( mlIndFixBfgs )
+[1] 100
 > 
 > # with analytical gradients
 > mlgFixBfgs <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
@@ -2888,8 +2891,6 @@ sigma  -5.968559 -60.055072
 > nIter( mlFixNm )
 function 
       28 
-> nObs( mlFixNm )
-NULL
 > nParam( mlFixNm )
 [1] 2
 > returnCode( mlFixNm )
@@ -3031,6 +3032,8 @@ In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
   one-diml optimization by Nelder-Mead is unreliable: use optimize
 > all.equal( mlIndFixNm, mlIndFixNm4 )
 [1] TRUE
+> nObs( mlIndFixNm )
+[1] 100
 > 
 > # with analytical gradients
 > mlgFixNm <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
@@ -3255,8 +3258,6 @@ sigma  -5.940137 -59.998229
 > nIter( mlFixSann )
 function 
    10000 
-> nObs( mlFixSann )
-NULL
 > nParam( mlFixSann )
 [1] 2
 > returnCode( mlFixSann )
@@ -3381,6 +3382,8 @@ $gradientObs
  [99,] -0.141466813 -0.51128049
 [100,] -0.616055464  0.14498655
 
+> nObs( mlIndFixSann )
+[1] 100
 > 
 > # with analytical gradients
 > mlgFixSann <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
@@ -3583,8 +3586,6 @@ sigma -15.20561 -93.62111
 > nIter( mlBfgsInEq )
 function 
      130 
-> nObs( mlBfgsInEq )
-NULL
 > nParam( mlBfgsInEq )
 [1] 2
 > returnCode( mlBfgsInEq )
@@ -3725,6 +3726,8 @@ $gradientObs
  [99,] -0.103112815 -0.57727749
 [100,] -0.663250782  0.14401080
 
+> nObs( mlBfgsInEqInd )
+[1] 100
 > 
 > # with analytical gradients
 > mlgBfgsInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
@@ -3901,8 +3904,6 @@ sigma -15.20561 -93.67795
 > nIter( mlNmInEq )
 function 
      103 
-> nObs( mlNmInEq )
-NULL
 > nParam( mlNmInEq )
 [1] 2
 > returnCode( mlNmInEq )
@@ -4049,6 +4050,8 @@ $gradientObs
  [99,] -0.10310982 -0.57727589
 [100,] -0.66324295  0.14399910
 
+> nObs( mlNmInEqInd )
+[1] 100
 > 
 > # with unused analytical gradients
 > mlgNmInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
@@ -4111,8 +4114,6 @@ sigma -15.06351 -96.12222
 > nIter( mlSannInEq )
 function 
    10000 
-> nObs( mlSannInEq )
-NULL
 > nParam( mlSannInEq )
 [1] 2
 > returnCode( mlSannInEq )
@@ -4221,8 +4222,6 @@ sigma -15.20561 -93.64953
 [1] "Newton-Raphson maximisation"
 > nIter( mlCon )
 [1] 2
-> nObs( mlCon )
-NULL
 > nParam( mlCon )
 [1] 2
 > returnCode( mlCon )
@@ -4368,8 +4367,6 @@ sigma -22.97396 -107.86518
 [1] "BHHH maximisation"
 > nIter( mlBhhhCon )
 [1] 1
-> nObs( mlBhhhCon )
-NULL
 > nParam( mlBhhhCon )
 [1] 2
 > returnCode( mlBhhhCon )
@@ -4482,8 +4479,6 @@ sigma -15.20561 -93.67795
 > nIter( mlBfgsCon )
 function 
       33 
-> nObs( mlBfgsCon )
-NULL
 > nParam( mlBfgsCon )
 [1] 2
 > returnCode( mlBfgsCon )
@@ -4621,8 +4616,6 @@ sigma -15.20561 -93.64953
 > nIter( mlNmCon )
 function 
       57 
-> nObs( mlNmCon )
-NULL
 > nParam( mlNmCon )
 [1] 2
 > returnCode( mlNmCon )
@@ -4734,8 +4727,6 @@ sigma -15.29088 -92.79688
 > nIter( mlSannCon )
 function 
    10000 
-> nObs( mlSannCon )
-NULL
 > nParam( mlSannCon )
 [1] 2
 > returnCode( mlSannCon )

@@ -75,7 +75,7 @@ hessian( ml )
 logLik( ml )
 maximType( ml )
 nIter( ml )
-nObs( ml )
+try( nObs( ml ) )
 nParam( ml )
 returnCode( ml )
 returnMessage( ml )
@@ -85,6 +85,7 @@ mlInd <- maxLik( llfInd, start = startVal )
 summary( mlInd )
 all.equal( ml[ ], mlInd[ -11 ] )
 mlInd[ 11 ]
+nObs( mlInd )
 
 # with analytical gradients
 mlg <- maxLik( llf, gf, start = startVal )
@@ -118,7 +119,6 @@ hessian( mlBHHH )
 logLik( mlBHHH )
 maximType( mlBHHH )
 nIter( mlBHHH )
-nObs( mlBHHH )
 nParam( mlBHHH )
 returnCode( mlBHHH )
 returnMessage( mlBHHH )
@@ -126,6 +126,7 @@ vcov( mlBHHH )
 logLik( summary( mlBHHH ) )
 all.equal( ml[ ], mlBHHH[ -11 ] )
 mlBHHH[ 11 ]
+nObs( mlBHHH )
 
 # with analytical gradients
 mlgBHHH <- try( maxLik( llf, gf, start = startVal, method = "BHHH" ) )
@@ -162,7 +163,6 @@ hessian( mlBFGS )
 logLik( mlBFGS )
 maximType( mlBFGS )
 nIter( mlBFGS )
-nObs( mlBFGS )
 nParam( mlBFGS )
 returnCode( mlBFGS )
 returnMessage( mlBFGS )
@@ -174,6 +174,7 @@ mlIndBFGS <- maxLik( llfInd, start = startVal, method = "BFGS" )
 summary( mlIndBFGS )
 all.equal( mlBFGS[], mlIndBFGS[-12] )
 mlIndBFGS[12]
+nObs( mlIndBFGS )
 
 # with analytical gradients
 mlgBFGS <- maxLik( llf, gf, start = startVal, method = "BFGS" )
@@ -201,7 +202,6 @@ hessian( mlNM )
 logLik( mlNM )
 maximType( mlNM )
 nIter( mlNM )
-nObs( mlNM )
 nParam( mlNM )
 returnCode( mlNM )
 returnMessage( mlNM )
@@ -213,6 +213,7 @@ mlIndNM <- maxLik( llfInd, start = startVal, method = "NM" )
 summary( mlIndNM )
 all.equal( mlNM[], mlIndNM[-12] )
 mlIndNM[12]
+nObs( mlIndNM )
 
 # with unused analytical gradients
 mlgNM <- maxLik( llf, gf, start = startVal, method = "NM" )
@@ -241,7 +242,6 @@ hessian( mlSANN )
 logLik( mlSANN )
 maximType( mlSANN )
 nIter( mlSANN )
-nObs( mlSANN )
 nParam( mlSANN )
 returnCode( mlSANN )
 returnMessage( mlSANN )
@@ -253,6 +253,7 @@ mlIndSANN <- maxLik( llfInd, start = startVal, method = "SANN" )
 summary( mlIndSANN )
 all.equal( mlSANN[], mlIndSANN[-12] )
 mlIndSANN[12]
+nObs( mlIndSANN )
 
 # with unused analytical gradients
 mlgSANN <- maxLik( llf, gf, start = startVal, method = "SANN" )
@@ -301,7 +302,6 @@ hessian( mlFix )
 logLik( mlFix )
 maximType( mlFix )
 nIter( mlFix )
-nObs( mlFix )
 nParam( mlFix )
 returnCode( mlFix )
 returnMessage( mlFix )
@@ -321,6 +321,7 @@ all.equal( mlFix[ ], mlIndFix[ -11 ] )
 mlFix[[3]]
 mlIndFix[[3]]
 mlIndFix[ 11 ]
+nObs( mlIndFix )
 
 # with analytical gradients
 mlgFix <- maxLik( llf, gf, start = startValFix, activePar = !isFixed )
@@ -374,7 +375,6 @@ hessian( mlFixBHHH )
 logLik( mlFixBHHH )
 maximType( mlFixBHHH )
 nIter( mlFixBHHH )
-nObs( mlFixBHHH )
 nParam( mlFixBHHH )
 returnCode( mlFixBHHH )
 returnMessage( mlFixBHHH )
@@ -386,6 +386,7 @@ mlFixBHHH[[ 3 ]]
 mlFix[[ 4 ]]
 mlFixBHHH[[ 4 ]]
 mlFixBHHH[ 11 ]
+nObs( mlFixBHHH )
 
 # with analytical gradients
 mlgFixBHHH <- maxLik( llfInd, gfInd, start = startValFix, activePar = !isFixed,
@@ -432,7 +433,6 @@ hessian( mlFixBfgs )
 logLik( mlFixBfgs )
 maximType( mlFixBfgs )
 nIter( mlFixBfgs )
-nObs( mlFixBfgs )
 nParam( mlFixBfgs )
 returnCode( mlFixBfgs )
 returnMessage( mlFixBfgs )
@@ -449,6 +449,7 @@ all.equal( mlIndFixBfgs, mlIndFixBfgs3 )
 mlIndFixBfgs4 <- maxLik( llfInd, start = startValFix, fixed = 1,
    method = "BFGS" )
 all.equal( mlIndFixBfgs, mlIndFixBfgs4 )
+nObs( mlIndFixBfgs )
 
 # with analytical gradients
 mlgFixBfgs <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
@@ -502,7 +503,6 @@ hessian( mlFixNm )
 logLik( mlFixNm )
 maximType( mlFixNm )
 nIter( mlFixNm )
-nObs( mlFixNm )
 nParam( mlFixNm )
 returnCode( mlFixNm )
 returnMessage( mlFixNm )
@@ -519,6 +519,7 @@ all.equal( mlIndFixNm, mlIndFixNm3 )
 mlIndFixNm4 <- maxLik( llfInd, start = startValFix, fixed = 1,
    method = "NM" )
 all.equal( mlIndFixNm, mlIndFixNm4 )
+nObs( mlIndFixNm )
 
 # with analytical gradients
 mlgFixNm <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
@@ -566,7 +567,6 @@ hessian( mlFixSann )
 logLik( mlFixSann )
 maximType( mlFixSann )
 nIter( mlFixSann )
-nObs( mlFixSann )
 nParam( mlFixSann )
 returnCode( mlFixSann )
 returnMessage( mlFixSann )
@@ -577,6 +577,7 @@ mlIndFixSann <- maxLik( llfInd, start = startValFix, fixed = isFixed,
    method = "SANN" )
 all.equal( mlFixSann[ ], mlIndFixSann[ -12 ] )
 mlIndFixSann[ 12 ]
+nObs( mlIndFixSann )
 
 # with analytical gradients
 mlgFixSann <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
@@ -620,7 +621,6 @@ hessian( mlBfgsInEq )
 logLik( mlBfgsInEq )
 maximType( mlBfgsInEq )
 nIter( mlBfgsInEq )
-nObs( mlBfgsInEq )
 nParam( mlBfgsInEq )
 returnCode( mlBfgsInEq )
 returnMessage( mlBfgsInEq )
@@ -631,6 +631,7 @@ mlBfgsInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
 summary( mlBfgsInEqInd )
 all.equal( mlBfgsInEq[ ], mlBfgsInEqInd[ -12 ] )
 mlBfgsInEqInd[ 12 ]
+nObs( mlBfgsInEqInd )
 
 # with analytical gradients
 mlgBfgsInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
@@ -661,7 +662,6 @@ hessian( mlNmInEq )
 logLik( mlNmInEq )
 maximType( mlNmInEq )
 nIter( mlNmInEq )
-nObs( mlNmInEq )
 nParam( mlNmInEq )
 returnCode( mlNmInEq )
 returnMessage( mlNmInEq )
@@ -673,6 +673,7 @@ mlNmInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
 summary( mlNmInEqInd )
 all.equal( mlNmInEq[ ], mlNmInEqInd[ -12 ] )
 mlNmInEqInd[ 12 ]
+nObs( mlNmInEqInd )
 
 # with unused analytical gradients
 mlgNmInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
@@ -697,7 +698,6 @@ hessian( mlSannInEq )
 logLik( mlSannInEq )
 maximType( mlSannInEq )
 nIter( mlSannInEq )
-nObs( mlSannInEq )
 nParam( mlSannInEq )
 returnCode( mlSannInEq )
 returnMessage( mlSannInEq )
@@ -731,7 +731,6 @@ hessian( mlCon )
 logLik( mlCon )
 maximType( mlCon )
 nIter( mlCon )
-nObs( mlCon )
 nParam( mlCon )
 returnCode( mlCon )
 returnMessage( mlCon )
@@ -766,7 +765,6 @@ hessian( mlBhhhCon )
 logLik( mlBhhhCon )
 maximType( mlBhhhCon )
 nIter( mlBhhhCon )
-nObs( mlBhhhCon )
 nParam( mlBhhhCon )
 returnCode( mlBhhhCon )
 returnMessage( mlBhhhCon )
@@ -801,7 +799,6 @@ hessian( mlBfgsCon )
 logLik( mlBfgsCon )
 maximType( mlBfgsCon )
 nIter( mlBfgsCon )
-nObs( mlBfgsCon )
 nParam( mlBfgsCon )
 returnCode( mlBfgsCon )
 returnMessage( mlBfgsCon )
@@ -839,7 +836,6 @@ hessian( mlNmCon )
 logLik( mlNmCon )
 maximType( mlNmCon )
 nIter( mlNmCon )
-nObs( mlNmCon )
 nParam( mlNmCon )
 returnCode( mlNmCon )
 returnMessage( mlNmCon )
@@ -877,7 +873,6 @@ hessian( mlSannCon )
 logLik( mlSannCon )
 maximType( mlSannCon )
 nIter( mlSannCon )
-nObs( mlSannCon )
 nParam( mlSannCon )
 returnCode( mlSannCon )
 returnMessage( mlSannCon )
