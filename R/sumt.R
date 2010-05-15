@@ -147,8 +147,19 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    }
    ## Now we replace the resulting gradient and Hessian with those,
    ## calculated on the original function
-   result$gradient <- callWithoutMaxArgs( theta, "logLikGrad", fnOrig = fn,
-      gradOrig = grad, hessOrig = hess, ... )
+   gradient <- callWithoutMaxArgs( theta, "logLikGrad", fnOrig = fn,
+      gradOrig = grad, hessOrig = hess, sumObs = FALSE, ... )
+   if( !is.null( dim( gradient ) ) ) {
+      if( nrow( gradient ) > 1 ) {
+         gradientObs <- gradient
+      }
+      gradient <- colSums( gradient )
+   } else if( length( start ) == 1 && length( gradient ) > 1 ) {
+      gradientObs <- matrix( gradient, ncol = 1 )
+      gradient <- sum( gradient )
+   }
+   result$gradient <- gradient
+
    result$hessian <- callWithoutMaxArgs( theta, "logLikHess", fnOrig = fn,
       gradOrig = grad, hessOrig = hess, ... )
    result$constraints <- list(type="SUMT",
@@ -157,6 +168,10 @@ sumt <- function(fn, grad=NULL, hess=NULL,
                               message=SUMTMessage(SUMTCode),
                              outer.iterations=iter
                              )
+   if( exists( "gradientObs" ) ) {
+      result$gradientObs <- gradientObs
+   }
+
    if( result$constraints$barrier.value > 0.001 ) {
       warning( "problem in imposing equality constraints: the constraints",
          " are not satisfied (barrier value = ",
