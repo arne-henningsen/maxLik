@@ -404,4 +404,80 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] TRUE
 > 
 > 
+> ## test for method "estfun"
+> library( sandwich )
+Loading required package: zoo
+> try( estfun( mlSum ) )
+Error in estfun.maxLik(mlSum) : 
+  cannot return the gradients of the log-likelihood function evaluated at each observation: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
+> estfun( ml )[ 1:5, , drop = FALSE ]
+            [,1]
+[1,]  0.38682074
+[2,] -1.67935142
+[3,]  0.03856823
+[4,]  0.07129754
+[5,]  0.15904683
+> estfun( mlg )[ 1:5, , drop = FALSE ]
+            [,1]
+[1,]  0.38682074
+[2,] -1.67935142
+[3,]  0.03856823
+[4,]  0.07129754
+[5,]  0.15904683
+> estfun( mlBhhh )[ 1:5, , drop = FALSE ]
+            [,1]
+[1,]  0.38682075
+[2,] -1.67935141
+[3,]  0.03856824
+[4,]  0.07129755
+[5,]  0.15904684
+> estfun( mlgBhhh )[ 1:5, , drop = FALSE ]
+            [,1]
+[1,]  0.38682075
+[2,] -1.67935141
+[3,]  0.03856824
+[4,]  0.07129755
+[5,]  0.15904684
+> estfun( mlBfgs )[ 1:5, , drop = FALSE ]
+            [,1]
+[1,]  0.38682075
+[2,] -1.67935142
+[3,]  0.03856824
+[4,]  0.07129754
+[5,]  0.15904684
+> estfun( mlgBfgs )[ 1:5, , drop = FALSE ]
+            [,1]
+[1,]  0.38682075
+[2,] -1.67935142
+[3,]  0.03856824
+[4,]  0.07129754
+[5,]  0.15904684
+> estfun( mlNm )[ 1:5, , drop = FALSE ]
+            [,1]
+[1,]  0.38678600
+[2,] -1.67938616
+[3,]  0.03853349
+[4,]  0.07126280
+[5,]  0.15901209
+> estfun( mlgNm )[ 1:5, , drop = FALSE ]
+            [,1]
+[1,]  0.38678600
+[2,] -1.67938616
+[3,]  0.03853349
+[4,]  0.07126280
+[5,]  0.15901209
+> estfun( mlSann )[ 1:5, , drop = FALSE ]
+            [,1]
+[1,]  0.38681595
+[2,] -1.67935621
+[3,]  0.03856344
+[4,]  0.07129275
+[5,]  0.15904204
+> estfun( mlgSann )[ 1:5, , drop = FALSE ]
+            [,1]
+[1,]  0.38681595
+[2,] -1.67935621
+[3,]  0.03856344
+[4,]  0.07129275
+[5,]  0.15904204
 > 

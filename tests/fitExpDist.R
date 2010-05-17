@@ -115,3 +115,16 @@ mlghSann <- maxLik( loglik, gradlik, hesslik, start = 1, method = "SANN" )
 all.equal( mlghSann, mlgSann )
 
 
+## test for method "estfun"
+library( sandwich )
+try( estfun( mlSum ) )
+estfun( ml )[ 1:5, , drop = FALSE ]
+estfun( mlg )[ 1:5, , drop = FALSE ]
+estfun( mlBhhh )[ 1:5, , drop = FALSE ]
+estfun( mlgBhhh )[ 1:5, , drop = FALSE ]
+estfun( mlBfgs )[ 1:5, , drop = FALSE ]
+estfun( mlgBfgs )[ 1:5, , drop = FALSE ]
+estfun( mlNm )[ 1:5, , drop = FALSE ]
+estfun( mlgNm )[ 1:5, , drop = FALSE ]
+estfun( mlSann )[ 1:5, , drop = FALSE ]
+estfun( mlgSann )[ 1:5, , drop = FALSE ]
