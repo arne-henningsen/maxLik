@@ -21,10 +21,12 @@ export( "returnCode" )
 export( "returnMessage" )
 export( "stdEr" )
 
+importFrom( "sandwich", "bread" )
 importFrom( "sandwich", "estfun" )
 
 S3method( "activePar", "default" )
 S3method( "AIC", "maxLik" )
+S3method( "bread", "maxLik" )
 S3method( "coef", "maxLik" )
 S3method( "coef", "summary.maxLik" )
 S3method( "condiNumber", "default" )
