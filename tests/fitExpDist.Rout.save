@@ -481,3 +481,89 @@ Error in estfun.maxLik(mlSum) :
 [4,]  0.07129275
 [5,]  0.15904204
 > 
+> 
+> ## test for method "bread"
+> try( bread( mlSum ) )
+Error in nObs.maxLik(x) : 
+  cannot return the number of observations: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
+> bread( ml )
+        [,1]
+[1,] 4.47852
+> bread( mlg )
+         [,1]
+[1,] 4.476864
+> bread( mlBhhh )
+         [,1]
+[1,] 4.602185
+> bread( mlgBhhh )
+         [,1]
+[1,] 4.602185
+> bread( mlBfgs )
+        [,1]
+[1,] 4.47496
+> bread( mlgBfgs )
+         [,1]
+[1,] 4.476864
+> bread( mlNm )
+        [,1]
+[1,] 4.47496
+> bread( mlgNm )
+         [,1]
+[1,] 4.477522
+> bread( mlSann )
+        [,1]
+[1,] 4.47496
+> bread( mlgSann )
+         [,1]
+[1,] 4.476955
+> 
+> 
+> ## test for method "sandwich"
+> try( sandwich( mlSum ) )
+Error in nObs.maxLik(x) : 
+  cannot return the number of observations: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
+> printSandwich <- function( x ) {
++    print( sandwich( x ) )
++    print( all.equal( sandwich( x ), vcov( x ) ) )
++ }
+> printSandwich( ml )
+           [,1]
+[1,] 0.04358178
+[1] "Mean relative difference: 0.02761294"
+> printSandwich( mlg )
+           [,1]
+[1,] 0.04354955
+[1] "Mean relative difference: 0.02799305"
+> printSandwich( mlBhhh )
+           [,1]
+[1,] 0.04602185
+[1] TRUE
+> printSandwich( mlgBhhh )
+           [,1]
+[1,] 0.04602185
+[1] TRUE
+> printSandwich( mlBfgs )
+           [,1]
+[1,] 0.04351252
+[1] "Mean relative difference: 0.02843045"
+> printSandwich( mlgBfgs )
+           [,1]
+[1,] 0.04354955
+[1] "Mean relative difference: 0.02799309"
+> printSandwich( mlNm )
+           [,1]
+[1,] 0.04351252
+[1] "Mean relative difference: 0.02843044"
+> printSandwich( mlgNm )
+           [,1]
+[1,] 0.04356236
+[1] "Mean relative difference: 0.02784193"
+> printSandwich( mlSann )
+           [,1]
+[1,] 0.04351252
+[1] "Mean relative difference: 0.02843045"
+> printSandwich( mlgSann )
+           [,1]
+[1,] 0.04355132
+[1] "Mean relative difference: 0.02797222"
+> 

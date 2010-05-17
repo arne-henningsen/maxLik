@@ -128,3 +128,35 @@ estfun( mlNm )[ 1:5, , drop = FALSE ]
 estfun( mlgNm )[ 1:5, , drop = FALSE ]
 estfun( mlSann )[ 1:5, , drop = FALSE ]
 estfun( mlgSann )[ 1:5, , drop = FALSE ]
+
+
+## test for method "bread"
+try( bread( mlSum ) )
+bread( ml )
+bread( mlg )
+bread( mlBhhh )
+bread( mlgBhhh )
+bread( mlBfgs )
+bread( mlgBfgs )
+bread( mlNm )
+bread( mlgNm )
+bread( mlSann )
+bread( mlgSann )
+
+
+## test for method "sandwich"
+try( sandwich( mlSum ) )
+printSandwich <- function( x ) {
+   print( sandwich( x ) )
+   print( all.equal( sandwich( x ), vcov( x ) ) )
+}
+printSandwich( ml )
+printSandwich( mlg )
+printSandwich( mlBhhh )
+printSandwich( mlgBhhh )
+printSandwich( mlBfgs )
+printSandwich( mlgBfgs )
+printSandwich( mlNm )
+printSandwich( mlgNm )
+printSandwich( mlSann )
+printSandwich( mlgSann )

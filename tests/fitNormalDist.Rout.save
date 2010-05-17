@@ -5753,3 +5753,297 @@ Error in estfun.maxLik(ml) :
 [5,]  0.15543940 -0.5545263
 > 
 > 
+> ## test for method "bread"
+> try( bread( ml ) )
+Error in nObs.maxLik(x) : 
+  cannot return the number of observations: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
+> bread( mlInd )
+               mu       sigma
+mu    3.300599208 0.001546673
+sigma 0.001546673 1.648752931
+> bread( mlgInd )
+                 mu         sigma
+mu     3.299602e+00 -5.580985e-11
+sigma -9.972115e-11  1.649801e+00
+> bread( mlBHHH )
+              mu      sigma
+mu     3.3061790 -0.1087693
+sigma -0.1087693  1.7978643
+> bread( mlgBHHH )
+              mu      sigma
+mu     3.3061790 -0.1087693
+sigma -0.1087693  1.7978643
+> bread( mlIndBFGS )
+            mu    sigma
+mu    3.303697 0.000000
+sigma 0.000000 1.648752
+> bread( mlgIndBFGS )
+                 mu         sigma
+mu     3.299605e+00 -2.235369e-06
+sigma -2.235368e-06  1.649804e+00
+> bread( mlIndNM )
+                mu        sigma
+mu     3.297505862 -0.001545947
+sigma -0.001545947  1.649525905
+> bread( mlgIndNM )
+                 mu         sigma
+mu     3.3001669064 -0.0003701932
+sigma -0.0003701932  1.6505071431
+> bread( mlIndSANN )
+               mu       sigma
+mu    3.297505862 0.001545947
+sigma 0.001545947 1.649525905
+> bread( mlgIndSANN )
+               mu       sigma
+mu    3.299743367 0.001753879
+sigma 0.001753879 1.649975613
+> bread( mlIndFix )
+      mu    sigma
+mu     0 0.000000
+sigma  0 1.665927
+> bread( mlgIndFix )
+      mu    sigma
+mu     0 0.000000
+sigma  0 1.666147
+> bread( mlFixBHHH )
+      mu    sigma
+mu     0 0.000000
+sigma  0 1.786259
+> bread( mlgFixBHHH )
+      mu    sigma
+mu     0 0.000000
+sigma  0 1.786259
+> bread( mlIndFixBfgs )
+      mu    sigma
+mu     0 0.000000
+sigma  0 1.665138
+> bread( mlgIndFixBfgs )
+      mu    sigma
+mu     0 0.000000
+sigma  0 1.666147
+> bread( mlIndFixNm )
+      mu    sigma
+mu     0 0.000000
+sigma  0 1.665138
+> bread( mlgIndFixNm )
+      mu    sigma
+mu     0 0.000000
+sigma  0 1.665842
+> bread( mlIndFixSann )
+      mu    sigma
+mu     0 0.000000
+sigma  0 1.665927
+> bread( mlgIndFixSann )
+      mu    sigma
+mu     0 0.000000
+sigma  0 1.666073
+> bread( mlBfgsInEqInd )
+              mu      sigma
+mu     3.0379546 -0.4931146
+sigma -0.4931146  1.1475284
+> bread( mlgBfgsInEqInd )
+              mu      sigma
+mu     3.0353268 -0.4932957
+sigma -0.4932957  1.1477221
+> bread( mlNmInEqInd )
+              mu      sigma
+mu     3.0335672 -0.4933228
+sigma -0.4933228  1.1477118
+> bread( mlConInd )
+              mu      sigma
+mu     3.0354719 -0.4930108
+sigma -0.4930108  1.1482082
+> bread( mlgConInd )
+              mu      sigma
+mu     2.9714928 -0.4514259
+sigma -0.4514259  1.1111867
+> bread( mlBhhhCon )
+              mu      sigma
+mu     2.4903342 -0.5304105
+sigma -0.5304105  1.0400542
+> bread( mlgBhhhCon )
+              mu      sigma
+mu     2.4903342 -0.5304105
+sigma -0.5304105  1.0400542
+> bread( mlBfgsConInd )
+              mu      sigma
+mu     3.0361157 -0.4935875
+sigma -0.4935875  1.1474068
+> bread( mlgBfgsConInd )
+              mu      sigma
+mu     3.0053215 -0.4902798
+sigma -0.4902798  1.1160758
+> bread( mlNmConInd )
+              mu      sigma
+mu     3.0354028 -0.4928499
+sigma -0.4928499  1.1478337
+> bread( mlgNmConInd )
+              mu      sigma
+mu     3.0355346 -0.4933811
+sigma -0.4933811  1.1478858
+> 
+> 
+> ## test for method "sandwich"
+> try( sandwich( ml ) )
+Error in nObs.maxLik(x) : 
+  cannot return the number of observations: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
+> printSandwich <- function( x ) {
++    print( sandwich( x ) )
++    print( all.equal( sandwich( x ), vcov( x ) ) )
++ }
+> printSandwich( mlInd )
+               mu       sigma
+mu    0.033017852 0.001027472
+sigma 0.001027472 0.015151158
+[1] "Mean relative difference: 0.06714411"
+> printSandwich( mlgInd )
+               mu       sigma
+mu    0.032996020 0.000998121
+sigma 0.000998121 0.015169483
+[1] "Mean relative difference: 0.06628096"
+> printSandwich( mlBHHH )
+                mu        sigma
+mu     0.033061790 -0.001087693
+sigma -0.001087693  0.017978643
+[1] TRUE
+> printSandwich( mlgBHHH )
+                mu        sigma
+mu     0.033061790 -0.001087693
+sigma -0.001087693  0.017978643
+[1] TRUE
+> printSandwich( mlIndBFGS )
+                mu        sigma
+mu    0.0330779170 0.0009987448
+sigma 0.0009987448 0.0151501683
+[1] "Mean relative difference: 0.0672126"
+> printSandwich( mlgIndBFGS )
+                mu        sigma
+mu    0.0329960174 0.0009981012
+sigma 0.0009981012 0.0151695071
+[1] "Mean relative difference: 0.06628183"
+> printSandwich( mlIndNM )
+                mu        sigma
+mu    0.0329409696 0.0009709407
+sigma 0.0009709407 0.0151559335
+[1] "Mean relative difference: 0.06687242"
+> printSandwich( mlgIndNM )
+               mu       sigma
+mu    0.032995573 0.000994888
+sigma 0.000994888 0.015174678
+[1] "Mean relative difference: 0.06646067"
+> printSandwich( mlIndSANN )
+               mu       sigma
+mu    0.032953183 0.001009352
+sigma 0.001009352 0.015162376
+[1] "Mean relative difference: 0.06667184"
+> printSandwich( mlgIndSANN )
+               mu       sigma
+mu    0.032998169 0.001014290
+sigma 0.001014290 0.015170770
+[1] "Mean relative difference: 0.06620293"
+> printSandwich( mlIndFix )
+      mu sigma
+mu    NA    NA
+sigma NA    NA
+[1] "'is.NA' value mismatch: 0 in current 4 in target"
+> printSandwich( mlgIndFix )
+      mu sigma
+mu    NA    NA
+sigma NA    NA
+[1] "'is.NA' value mismatch: 0 in current 4 in target"
+> printSandwich( mlFixBHHH )
+      mu sigma
+mu    NA    NA
+sigma NA    NA
+[1] "'is.NA' value mismatch: 0 in current 4 in target"
+> printSandwich( mlgFixBHHH )
+      mu sigma
+mu    NA    NA
+sigma NA    NA
+[1] "'is.NA' value mismatch: 0 in current 4 in target"
+> printSandwich( mlIndFixBfgs )
+      mu      sigma
+mu     0 0.00000000
+sigma  0 0.01552231
+[1] "Mean relative difference: 0.07273847"
+> printSandwich( mlgIndFixBfgs )
+      mu      sigma
+mu     0 0.00000000
+sigma  0 0.01554113
+[1] "Mean relative difference: 0.07208873"
+> printSandwich( mlIndFixNm )
+      mu      sigma
+mu     0 0.00000000
+sigma  0 0.01552572
+[1] "Mean relative difference: 0.07250286"
+> printSandwich( mlgIndFixNm )
+      mu      sigma
+mu     0 0.00000000
+sigma  0 0.01553886
+[1] "Mean relative difference: 0.07204948"
+> printSandwich( mlIndFixSann )
+      mu      sigma
+mu     0 0.00000000
+sigma  0 0.01553785
+[1] "Mean relative difference: 0.0721733"
+> printSandwich( mlgIndFixSann )
+      mu      sigma
+mu     0 0.00000000
+sigma  0 0.01554058
+[1] "Mean relative difference: 0.07207915"
+> printSandwich( mlBfgsInEqInd )
+                mu        sigma
+mu     0.035527400 -0.003882692
+sigma -0.003882692  0.011785172
+[1] "Mean relative difference: 0.1371629"
+> printSandwich( mlgBfgsInEqInd )
+                mu        sigma
+mu     0.035463828 -0.003887511
+sigma -0.003887511  0.011789072
+[1] "Mean relative difference: 0.1365362"
+> printSandwich( mlNmInEqInd )
+                mu        sigma
+mu     0.035420991 -0.003888709
+sigma -0.003888709  0.011788521
+[1] "Mean relative difference: 0.1361371"
+> printSandwich( mlConInd )
+                mu        sigma
+mu     0.035468959 -0.003880773
+sigma -0.003880773  0.011799680
+[1] "Mean relative difference: 0.1368432"
+> printSandwich( mlgConInd )
+               mu       sigma
+mu     0.03507970 -0.00348376
+sigma -0.00348376  0.01149578
+[1] "Mean relative difference: 0.1458582"
+> printSandwich( mlBhhhCon )
+                mu        sigma
+mu     0.024903342 -0.005304105
+sigma -0.005304105  0.010400542
+[1] TRUE
+> printSandwich( mlgBhhhCon )
+                mu        sigma
+mu     0.024903342 -0.005304105
+sigma -0.005304105  0.010400542
+[1] TRUE
+> printSandwich( mlBfgsConInd )
+                mu        sigma
+mu     0.035482345 -0.003894845
+sigma -0.003894845  0.011782444
+[1] "Mean relative difference: 0.1364398"
+> printSandwich( mlgBfgsConInd )
+                mu        sigma
+mu     0.035521149 -0.003882229
+sigma -0.003882229  0.011564650
+[1] "Mean relative difference: 0.1442648"
+> printSandwich( mlNmConInd )
+                mu        sigma
+mu     0.035463091 -0.003876506
+sigma -0.003876506  0.011789654
+[1] "Mean relative difference: 0.1367924"
+> printSandwich( mlgNmConInd )
+                mu        sigma
+mu     0.035464375 -0.003888267
+sigma -0.003888267  0.011790298
+[1] "Mean relative difference: 0.1364963"
+> 
