@@ -1,28 +1,19 @@
-\name{nObs}
-\alias{nObs}
-\alias{nObs.default}
-\alias{nObs.lm}
+\name{nObs.maxLik}
 \alias{nObs.maxLik}
-\title{Return number of observations for statistical models} 
+\title{Number of Observations}
 \description{
-  Returns number of observations for statistical models.  The default
-  method assumes presence of a component \code{param$nObs} in \code{x}.
+  Returns the number of observations for statistical models
+   estimated by Maximum Likelihood using \code{\link{maxLik}}.
 }
 \usage{
-nObs(x, \dots)
-\method{nObs}{default}(x, \dots)
-\method{nObs}{lm}(x, \dots)
 \method{nObs}{maxLik}(x, \dots)
 }
 \arguments{
-  \item{x}{a statistical model, such as created by \code{\link{lm}}}
-  \item{\dots}{further arguments for methods}
+  \item{x}{a statistical model estimated by Maximum Likelihood
+      using \code{\link{maxLik}}.}
+  \item{\dots}{further arguments (currently ignored).}
 }
 \details{
-  This is a generic function.  The default method returns the component
-  \code{x$param$nObs}.  The \code{lm}-method is based on
-  qr-decomposition, in the same way as the does \code{\link{summary.lm}}.
-
    The \code{nObs} method for objects of class \code{"maxLik"}
    can return the number of observations only
    if \code{\link{maxLik}} was called
@@ -32,19 +23,17 @@ nObs(x, \dots)
    that return the gradients or log-likelihood values, respectively,
    for each observation.
 }
+
 \value{
   numeric, number of observations
 }
-\author{Ott Toomet, \email{otoomet@econ.au.dk}}
-\seealso{\code{\link{nParam}}}
-\examples{
-# Construct a simple OLS regression:
-x1 <- runif(100)
-x2 <- runif(100)
-y <- 3 + 4*x1 + 5*x2 + rnorm(100)
-m <- lm(y~x1+x2)  # estimate it
-nObs(m)
 
+\author{Arne Henningsen, Ott Toomet}
+
+\seealso{\code{\link[miscTools]{nObs}}, \code{\link{maxLik}},
+   \code{\link{nParam}}.}
+
+\examples{
 ## fit a normal distribution by ML
 # generate a variable from normally distributed random numbers
 x <- rnorm( 100, 1, 2 )
