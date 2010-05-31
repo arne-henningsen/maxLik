@@ -16,9 +16,8 @@ maxLik                  Maximum likelihood estimation
 maxNR                   Newton-Raphson Maximization
 nIter                   Return number of iterations for iterative
                         models
-nObs                    Return number of observations for statistical
-                        models
-nParam                  Number of model parameters
+nObs.maxLik             Number of Observations
+nParam.maxim            Number of model parameters
 numericGradient         Functions to Calculate Numeric Derivatives
 returnCode              Return code for optimisation and other objects
 returnMessage           Information about the optimisation process
