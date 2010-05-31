@@ -1,22 +1,16 @@
-\name{nParam}
-\alias{nParam}
-\alias{nParam.default}
-\alias{nParam.lm}
+\name{nParam.maxim}
 \alias{nParam.maxim}
 \title{Number of model parameters}
 \description{
-  This function returns the number of model parameters.  The default
-  method returns the component \code{x$param$nParam}.
+  This function returns the number of model parameters.
 }
 \usage{
-nParam(x, free=FALSE, \dots)
-\method{nParam}{default}(x, \dots)
-\method{nParam}{lm}(x, \dots)
 \method{nParam}{maxim}(x, free=FALSE, \dots)
 }
 
 \arguments{
-  \item{x}{a statistical model}
+  \item{x}{a model returned by a maximisation method from the \pkg{maxLik}
+      package.}
   \item{free}{logical, whether to report only the free parameters or the
     total number of parameters (default)}
   \item{\dots}{other arguments for methods}
@@ -34,12 +28,16 @@ nParam(x, free=FALSE, \dots)
 \author{Ott Toomet, \email{otoomet@econ.au.dk}}
 \seealso{\code{\link{nObs}} for number of observations}
 \examples{
-# Construct a simple OLS regression:
-x1 <- runif(100)
-x2 <- runif(100)
-y <- 3 + 4*x1 + 5*x2 + rnorm(100)
-m <- lm(y~x1+x2)  # estimate it
-summary(m)
-nParam(m) # you get 3
+## fit a normal distribution by ML
+# generate a variable from normally distributed random numbers
+x <- rnorm( 100, 1, 2 )
+# log likelihood function (for individual observations)
+llf <- function( param ) {
+   return( dnorm( x, mean = param[ 1 ], sd = param[ 2 ], log = TRUE ) )
+}
+## ML method
+ml <- maxLik( llf, start = c( mu = 0, sigma = 1 ) )
+# return number of parameters
+nParam( ml )
 }
 \keyword{methods}
