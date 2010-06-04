@@ -162,6 +162,11 @@ print( m )
 summary(m)
 maximType(m)
 
+### Test maxNR with 0 iterations.  Should perform no iterations
+### Request by Yves Croissant
+f <- function(a) exp(-(a[1] - 2)^2 - (a[2] - 1)^2)
+m0 <- maxNR(f, start=c(1.1, 2.1), iterlim=0)
+summary(m0)
 
 ### nObs
 set.seed( 10 )

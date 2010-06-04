@@ -185,6 +185,9 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
       }
    }
    repeat {
+      if( iter >= iterlim) {
+         code <- 4; break
+      }
       iter <- iter + 1
       lambda <- 0
       start0 <- start1
@@ -305,9 +308,6 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
       }
       if( step < steptol) {
          code <- 3; break
-      }
-      if( iter > iterlim) {
-         code <- 4; break
       }
       if( sqrt( t(G1[activePar])%*%G1[activePar]) < gradtol) {
          code <-1; break

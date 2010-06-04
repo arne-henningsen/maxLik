@@ -1,5 +1,5 @@
 
-R version 2.11.0 (2010-04-22)
+R version 2.11.1 (2010-05-31)
 Copyright (C) 2010 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
@@ -16,6 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library( maxLik )
+Loading required package: miscTools
 > 
 > ### activePar
 > # a simple two-dimensional exponential hat
@@ -28,15 +29,15 @@ $maximum
 [1] 1
 
 $estimate
-[1] -1.444903e-10 -1.017430e-10
+[1] -9.433045e-12 -2.541877e-11
 
 $gradient
-[1] 3.330669e-10 2.220446e-10
+[1] 0 0
 
 $hessian
           [,1]      [,2]
-[1,] -2.000067  0.000000
-[2,]  0.000000 -1.999956
+[1,] -1.999956  0.000000
+[2,]  0.000000 -2.000067
 
 $code
 [1] 1
@@ -66,9 +67,9 @@ Return code: 1
 gradient close to zero 
 Function value: 1 
 Estimates:
-          estimate     gradient
-[1,] -1.444903e-10 3.330669e-10
-[2,] -1.017430e-10 2.220446e-10
+          estimate gradient
+[1,] -9.433045e-12        0
+[2,] -2.541877e-11        0
 --------------------------------------------
 > activePar(free)
 [1] TRUE TRUE
@@ -189,9 +190,9 @@ numeric gradient
           [,1]     [,2]
 [1,] -1.534908 16.67607
 (anal-num)/(0.5*(abs(anal)+abs(num)))
-             [,1]          [,2]
-[1,] -1.98858e-09 -2.089468e-10
-Max relative difference: 1.98858e-09 
+              [,1]          [,2]
+[1,] -1.988580e-09 -2.089472e-10
+Max relative difference: 1.988580e-09 
 -------- END of compare derivatives -------- 
 > 
 > 
@@ -209,21 +210,21 @@ $maximum
 [1] -497.5733
 
 $estimate
-[1] 0.006396535 0.997576252
+[1] 0.006396535 0.997576255
 
 $gradient
-[1] 3.979039e-07 6.480150e-06
+[1] -5.684342e-08  0.000000e+00
 
 $hessian
           [,1]      [,2]
-[1,] -1004.935     0.000
+[1,] -1004.821     0.000
 [2,]     0.000 -2009.756
 
 $code
-[1] 2
+[1] 1
 
 $message
-[1] "successive function values within tolerance limit"
+[1] "gradient close to zero"
 
 $last.step
 NULL
@@ -242,33 +243,33 @@ attr(,"class")
 > print( ml )
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
-Return code 2: successive function values within tolerance limit
+Return code 1: gradient close to zero
 Log-Likelihood: -497.5733 (2 free parameter(s))
 Estimate(s): 0.006396535 0.9975763 
 > summary(ml) # result should be close to c(0,1)
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
-Return code 2: successive function values within tolerance limit
+Return code 1: gradient close to zero
 Log-Likelihood: -497.5733 
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-[1,] 0.0063965  0.0315450  0.2028  0.8393    
+[1,] 0.0063965  0.0315468  0.2028  0.8393    
 [2,] 0.9975763  0.0223063 44.7216  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > hessian(ml) # How the Hessian looks like
           [,1]      [,2]
-[1,] -1004.935     0.000
+[1,] -1004.821     0.000
 [2,]     0.000 -2009.756
 > sqrt(-solve(hessian(ml))) # Note: standard deviations are on the diagonal
            [,1]       [,2]
-[1,] 0.03154504 0.00000000
+[1,] 0.03154682 0.00000000
 [2,] 0.00000000 0.02230634
 > print(stdEr(ml))
-[1] 0.03154504 0.02230634
+[1] 0.03154682 0.02230634
 >                            # test vector of stdEr-s
 > #
 > # Now run the same example while fixing a[2] = 1
@@ -355,11 +356,11 @@ $estimate
 [1] 3.189999
 
 $gradient
-[1] 1.585043e-05
+[1] 1.5834e-05
 
 $hessian
-          [,1]
-[1,] -31.37757
+         [,1]
+[1,] -31.2923
 
 $code
 [1] 0
@@ -496,8 +497,8 @@ Return code: 0
 successful convergence  
 Function value: -199.2063 
 Estimates:
-     estimate     gradient
-[1,] 3.189999 1.585043e-05
+     estimate   gradient
+[1,] 3.189999 1.5834e-05
 --------------------------------------------
 > # you would probably prefer mean(n) instead of that ;-)
 > # Note also that maxLik is better suited for Maximum Likelihood
@@ -693,7 +694,7 @@ $estimate
 [1] 2.197878
 
 $gradient
-[1] -4.774259e-05
+[1] -4.775313e-05
 
 $hessian
           [,1]
@@ -735,10 +736,10 @@ $gradientObs
  [14,]  0.41364538
  [15,] -0.34761003
  [16,] -0.10404020
- [17,]  0.35988394
+ [17,]  0.35988393
  [18,]  0.43321077
  [19,] -0.24283947
- [20,]  0.40753983
+ [20,]  0.40753982
  [21,]  0.43445912
  [22,]  0.21306477
  [23,] -0.72491920
@@ -768,7 +769,7 @@ $gradientObs
  [47,] -0.27989636
  [48,] -0.04166768
  [49,]  0.44930602
- [50,]  0.28867922
+ [50,]  0.28867921
  [51,]  0.38040583
  [52,] -0.29423163
  [53,] -0.12650387
@@ -831,7 +832,7 @@ successive function values within tolerance limit
 Function value: -21.25086 
 Estimates:
      estimate      gradient
-[1,] 2.197878 -4.774259e-05
+[1,] 2.197878 -4.775313e-05
 --------------------------------------------
 > ## Estimate with analytic gradient
 > a <- maxBHHH(loglik, gradlik, start=1)
@@ -1014,7 +1015,7 @@ $estimate
 [1] 2.09534
 
 $gradient
-[1] 1.539879e-07
+[1] 1.640910e-07
 
 $hessian
           [,1]
@@ -1042,7 +1043,7 @@ $gradientObs
                [,1]
   [1,]  0.453076484
   [2,] -0.333754278
-  [3,] -0.379319585
+  [3,] -0.379319586
   [4,]  0.071152596
   [5,]  0.204437588
   [6,] -0.832883571
@@ -1052,8 +1053,8 @@ $gradientObs
  [10,]  0.454498454
  [11,]  0.005139764
  [12,]  0.103236083
- [13,] -0.458754693
- [14,] -0.456470534
+ [13,] -0.458754692
+ [14,] -0.456470533
  [15,] -0.127917550
  [16,]  0.304629500
  [17,]  0.138785662
@@ -1068,7 +1069,7 @@ $gradientObs
  [26,]  0.349488733
  [27,]  0.254260192
  [28,] -0.142986615
- [29,] -0.367060759
+ [29,] -0.367060758
  [30,] -0.464810781
  [31,] -0.151823005
  [32,]  0.082873524
@@ -1086,7 +1087,7 @@ $gradientObs
  [44,]  0.409527104
  [45,] -0.021114771
  [46,]  0.172770577
- [47,] -0.243260235
+ [47,] -0.243260234
  [48,] -0.821155638
  [49,]  0.215106802
  [50,] -0.065112108
@@ -1099,8 +1100,8 @@ $gradientObs
  [57,] -0.079218888
  [58,]  0.153157695
  [59,] -0.460444692
- [60,] -0.162073227
- [61,] -0.003462045
+ [60,] -0.162073228
+ [61,] -0.003462044
  [62,] -0.056984550
  [63,]  0.462446772
  [64,] -0.530977818
@@ -1122,7 +1123,7 @@ $gradientObs
  [80,] -0.832331891
  [81,]  0.198150423
  [82,]  0.472163849
- [83,]  0.249348853
+ [83,]  0.249348854
  [84,]  0.167729764
  [85,]  0.219018541
  [86,]  0.171749323
@@ -1172,7 +1173,7 @@ $estimate
 [1] 2.09534
 
 $gradient
-[1] 4.614954e-08
+[1] 4.614952e-08
 
 $hessian
           [,1]
@@ -1354,11 +1355,11 @@ $estimate
 [1] 2.151027
 
 $gradient
-[1] 4.831691e-07
+[1] -8.348877e-07
 
 $hessian
           [,1]
-[1,] -21.61826
+[1,] -21.63247
 
 $code
 [1] 1
@@ -1388,8 +1389,8 @@ Return code: 1
 gradient close to zero 
 Function value: -23.40544 
 Estimates:
-     estimate     gradient
-[1,] 2.151027 4.831691e-07
+     estimate      gradient
+[1,] 2.151027 -8.348877e-07
 --------------------------------------------
 > ## You would probably prefer 1/mean(t) instead ;-)
 > ## Estimate with analytic gradient and Hessian
@@ -1453,7 +1454,7 @@ $estimate
 [1] 2 1
 
 $gradient
-[1] 0 0
+[1] -1.110223e-10 -2.220446e-10
 
 $hessian
           [,1]      [,2]
@@ -1488,9 +1489,9 @@ Return code: 1
 gradient close to zero 
 Function value: 1 
 Estimates:
-     estimate gradient
-[1,]        2        0
-[2,]        1        0
+     estimate      gradient
+[1,]        2 -1.110223e-10
+[2,]        1 -2.220446e-10
 --------------------------------------------
 > maximType(m)
 [1] "Newton-Raphson maximisation"
@@ -1504,12 +1505,12 @@ $estimate
 [1] 2 1
 
 $gradient
-[1] 6.661338e-09 3.108624e-09
+[1] 1.088019e-08 5.329071e-09
 
 $hessian
           [,1]      [,2]
 [1,] -1.999956  0.000000
-[2,]  0.000000 -2.000178
+[2,]  0.000000 -1.999956
 
 $code
 [1] 0
@@ -1525,7 +1526,7 @@ $activePar
 
 $iterations
 function 
-      31 
+      26 
 
 $type
 [1] "BFGS maximisation"
@@ -1538,18 +1539,34 @@ attr(,"class")
 > summary(m)
 --------------------------------------------
 BFGS maximisation 
-Number of iterations: 31 
+Number of iterations: 26 
 Return code: 0 
 successful convergence  
 Function value: 1 
 Estimates:
      estimate     gradient
-[1,]        2 6.661338e-09
-[2,]        1 3.108624e-09
+[1,]        2 1.088019e-08
+[2,]        1 5.329071e-09
 --------------------------------------------
 > maximType(m)
 [1] "BFGS maximisation"
 > 
+> ### Test maxNR with 0 iterations.  Should perform no iterations
+> ### Request by Yves Croissant
+> f <- function(a) exp(-(a[1] - 2)^2 - (a[2] - 1)^2)
+> m0 <- maxNR(f, start=c(1.1, 2.1), iterlim=0)
+> summary(m0)
+--------------------------------------------
+Newton-Raphson maximisation 
+Number of iterations: 0 
+Return code: 4 
+Iteration limit exceeded. 
+Function value: 0.1326555 
+Estimates:
+     estimate   gradient
+[1,]      1.1  0.2387798
+[2,]      2.1 -0.2918420
+--------------------------------------------
 > 
 > ### nObs
 > set.seed( 10 )
@@ -1679,17 +1696,17 @@ attr(,"class")
 > a <- maxNR(f2, start=2)
 > print( a )
 $maximum
-[1] 9.356365
+[1] 9.353867
 
 $estimate
-[1] 11572.25
+[1] 11543.37
 
 $gradient
-[1] 8.641443e-05
+[1] 8.662937e-05
 
 $hessian
-             [,1]
-[1,] -0.001776357
+     [,1]
+[1,]    0
 
 $code
 [1] 4
@@ -1704,7 +1721,7 @@ $activePar
 [1] TRUE
 
 $iterations
-[1] 151
+[1] 150
 
 $type
 [1] "Newton-Raphson maximisation"
@@ -1760,17 +1777,17 @@ attr(,"class")
 > a <- maxNR(f2, start=2)
 > print( a )
 $maximum
-[1] 9.356365
+[1] 9.353867
 
 $estimate
-[1] 11572.25
+[1] 11543.37
 
 $gradient
-[1] 8.641443e-05
+[1] 8.662937e-05
 
 $hessian
-             [,1]
-[1,] -0.001776357
+     [,1]
+[1,]    0
 
 $code
 [1] 4
@@ -1785,7 +1802,7 @@ $activePar
 [1] TRUE
 
 $iterations
-[1] 151
+[1] 150
 
 $type
 [1] "Newton-Raphson maximisation"
@@ -1815,9 +1832,10 @@ Condition number of the (active) hessian: 1
 -----Iteration 3 -----
 -----Iteration 4 -----
 -----Iteration 5 -----
+-----Iteration 6 -----
 --------------
 gradient close to zero 
-5  iterations
+6  iterations
 estimate: 2.406109 
 Function value: -12.19890 
 > print.default( a )
@@ -1828,11 +1846,11 @@ $estimate
 [1] 2.406109
 
 $gradient
-[1] -4.193867e-07
+[1] 1.665335e-10
 
 $hessian
           [,1]
-[1,] -17.27685
+[1,] -17.26441
 
 $code
 [1] 1
@@ -1847,45 +1865,45 @@ $activePar
 [1] TRUE
 
 $iterations
-[1] 5
+[1] 6
 
 $type
 [1] "Newton-Raphson maximisation"
 
 $gradientObs
               [,1]
-  [1,]  0.31349469
+  [1,]  0.31349470
   [2,] -0.55771415
-  [3,]  0.28839131
+  [3,]  0.28839132
   [4,]  0.32759001
   [5,]  0.08417972
-  [6,] -0.96146695
+  [6,] -0.96146694
   [7,]  0.26945783
   [8,]  0.40651835
-  [9,]  0.20898017
- [10,]  0.26053656
+  [9,]  0.20898018
+ [10,]  0.26053657
  [11,]  0.36667703
  [12,]  0.11188134
  [13,]  0.12226279
- [14,] -0.14609109
+ [14,] -0.14609108
  [15,] -1.16675829
- [16,] -0.67553796
- [17,] -0.01994509
- [18,]  0.02832110
+ [16,] -0.67553795
+ [17,] -0.01994508
+ [18,]  0.02832111
  [19,] -0.72866673
  [20,]  0.25707536
- [21,]  0.05079754
- [22,] -0.11852100
- [23,] -0.04543071
- [24,]  0.07171066
- [25,] -1.85966637
+ [21,]  0.05079755
+ [22,] -0.11852099
+ [23,] -0.04543070
+ [24,]  0.07171067
+ [25,] -1.85966636
  [26,]  0.24890867
- [27,]  0.20148879
- [28,]  0.14710494
- [29,]  0.32964510
+ [27,]  0.20148880
+ [28,]  0.14710495
+ [29,]  0.32964511
  [30,]  0.28774665
  [31,]  0.13947842
- [32,]  0.09780430
+ [32,]  0.09780431
  [33,]  0.02198454
  [34,] -0.07455749
  [35,]  0.24167211
@@ -1899,80 +1917,80 @@ $gradientObs
  [43,] -0.31013347
  [44,]  0.27431879
  [45,]  0.15061831
- [46,]  0.35935744
+ [46,]  0.35935745
  [47,] -0.16595145
  [48,]  0.11667232
- [49,]  0.41140163
- [50,] -0.85562290
- [51,]  0.36920972
- [52,]  0.01178106
- [53,]  0.09068438
- [54,] -0.41852213
- [55,]  0.16272514
+ [49,]  0.41140164
+ [50,] -0.85562289
+ [51,]  0.36920973
+ [52,]  0.01178107
+ [53,]  0.09068439
+ [54,] -0.41852212
+ [55,]  0.16272515
  [56,]  0.38103066
- [57,] -0.24092056
- [58,]  0.39321671
- [59,]  0.18728635
- [60,] -0.06962235
- [61,] -0.52603690
- [62,]  0.36746124
+ [57,] -0.24092055
+ [58,]  0.39321672
+ [59,]  0.18728636
+ [60,] -0.06962234
+ [61,] -0.52603689
+ [62,]  0.36746125
  [63,]  0.21708343
- [64,]  0.21913251
- [65,]  0.25758624
+ [64,]  0.21913252
+ [65,]  0.25758625
  [66,]  0.39796764
  [67,]  0.29823077
- [68,] -0.03089787
+ [68,] -0.03089786
  [69,] -0.09985511
- [70,] -0.65673215
- [71,]  0.05177161
+ [70,] -0.65673214
+ [71,]  0.05177162
  [72,] -0.67133518
  [73,]  0.32399269
  [74,] -0.75222129
- [75,]  0.20941895
+ [75,]  0.20941896
  [76,] -1.05024846
  [77,]  0.39356564
- [78,] -0.13051166
+ [78,] -0.13051165
  [79,] -1.34923502
- [80,] -0.05024057
+ [80,] -0.05024056
  [81,]  0.23677884
  [82,] -0.01697319
  [83,]  0.15387168
  [84,]  0.27502748
- [85,]  0.15766216
+ [85,]  0.15766217
  [86,] -0.42968887
- [87,]  0.21483082
+ [87,]  0.21483083
  [88,]  0.41433889
  [89,]  0.21807875
  [90,]  0.22107735
- [91,] -0.07248146
- [92,]  0.26975748
- [93,] -0.06964577
+ [91,] -0.07248145
+ [92,]  0.26975749
+ [93,] -0.06964576
  [94,]  0.30825551
  [95,] -0.17815966
  [96,]  0.15251409
  [97,]  0.18499674
  [98,]  0.07499089
  [99,]  0.36483072
-[100,]  0.09384336
+[100,]  0.09384337
 
 attr(,"class")
 [1] "maxLik" "maxim"  "list"  
 > print( a )
 Maximum Likelihood estimation
-Newton-Raphson maximisation, 5 iterations
+Newton-Raphson maximisation, 6 iterations
 Return code 1: gradient close to zero
 Log-Likelihood: -12.19890 (1 free parameter(s))
 Estimate(s): 2.406109 
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-Newton-Raphson maximisation, 5 iterations
+Newton-Raphson maximisation, 6 iterations
 Return code 1: gradient close to zero
 Log-Likelihood: -12.19890 
 1  free parameters
 Estimates:
      Estimate Std. error t value   Pr(> t)    
-[1,]  2.40611    0.24058  10.001 < 2.2e-16 ***
+[1,]  2.40611    0.24067  9.9975 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -1986,7 +2004,7 @@ $estimate
 [1] 2.406109
 
 $gradient
-[1] 5.245804e-14
+[1] 5.223599e-14
 
 $hessian
           [,1]
@@ -2150,16 +2168,16 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > result1 <- maxNR( f, start = c(0,0) )
 > print( result1 )
 $maximum
-[1] 2.430582e+22
+[1] 1.002001e+21
 attr(,"gradient")
-[1] -193954752242  244140983069
+[1]     -536554.8 63308783985.4
 attr(,"hessian")
      [,1] [,2]
 [1,]    2    0
 [2,]    0    2
 
 $estimate
-[1] -96977376119 122070491538
+[1]     -268275.4 31654391995.7
 
 $gradient
 [1] 0 0
@@ -2182,7 +2200,7 @@ $activePar
 [1] TRUE TRUE
 
 $iterations
-[1] 3
+[1] 4
 
 $type
 [1] "Newton-Raphson maximisation"
@@ -2192,14 +2210,14 @@ attr(,"class")
 > summary( result1 )
 --------------------------------------------
 Newton-Raphson maximisation 
-Number of iterations: 3 
+Number of iterations: 4 
 Return code: 1 
 gradient close to zero 
-Function value: 2.430582e+22 
+Function value: 1.002001e+21 
 Estimates:
-         estimate gradient
-[1,] -96977376119        0
-[2,] 122070491538        0
+          estimate gradient
+[1,]     -268275.4        0
+[2,] 31654391995.7        0
 --------------------------------------------
 > ## Now use c(1000000, -777777) as initial value and ask for hessian
 > result2 <- maxNR( f, start = c( 1000000, -777777))
@@ -2286,7 +2304,7 @@ $estimate
 [1] 1.863363
 
 $gradient
-[1] 3.352874e-08
+[1] 3.397282e-08
 
 $hessian
          [,1]

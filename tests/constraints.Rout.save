@@ -1,5 +1,5 @@
 
-R version 2.11.0 (2010-04-22)
+R version 2.11.1 (2010-05-31)
 Copyright (C) 2010 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
@@ -67,6 +67,7 @@ Type 'q()' to quit R.
 + }
 > ### --------------------------
 > library(maxLik)
+Loading required package: miscTools
 > ## mixed normal
 > set.seed(1)
 > x <- c(rnorm(1000, mean=-1), rnorm(1000, mean=1))
@@ -361,9 +362,9 @@ Log-Likelihood: -3551.773
 3  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,]  0.499997   0.025624  19.513 < 2.2e-16 ***
-[2,] -1.036016   0.058131 -17.822 < 2.2e-16 ***
-[3,]  1.010560   0.058404  17.303 < 2.2e-16 ***
+[1,]  0.499997   0.025668  19.480 < 2.2e-16 ***
+[2,] -1.036016   0.058231 -17.791 < 2.2e-16 ***
+[3,]  1.010560   0.058476  17.282 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -381,48 +382,51 @@ initial  value 4001.919360
 iter   2 value 3924.195249
 iter   3 value 3761.072160
 iter   4 value 3740.857495
-iter   5 value 3739.836050
-iter   6 value 3739.669310
+iter   5 value 3739.836051
+iter   6 value 3739.669311
 iter   7 value 3739.505188
-iter   8 value 3739.342554
-iter   9 value 3739.271535
-iter  10 value 3674.195391
-iter  11 value 3671.068131
-iter  12 value 3626.157704
-iter  13 value 3589.946385
-iter  14 value 3552.974009
-iter  15 value 3551.811720
-iter  16 value 3551.806145
-iter  17 value 3551.796622
-iter  18 value 3551.796375
-iter  19 value 3551.782439
-iter  20 value 3551.776228
-iter  21 value 3551.776073
-iter  22 value 3551.775690
-iter  23 value 3551.774437
-iter  24 value 3551.773439
-iter  24 value 3551.773426
-iter  24 value 3551.773425
-final  value 3551.773425 
+iter   8 value 3739.342555
+iter   9 value 3739.271536
+iter  10 value 3674.195892
+iter  11 value 3671.068754
+iter  12 value 3626.179862
+iter  13 value 3589.958026
+iter  14 value 3552.974654
+iter  15 value 3551.811769
+iter  16 value 3551.806189
+iter  17 value 3551.796655
+iter  18 value 3551.796407
+iter  19 value 3551.782460
+iter  20 value 3551.776241
+iter  21 value 3551.776085
+iter  22 value 3551.775694
+iter  23 value 3551.775004
+iter  24 value 3551.774150
+iter  25 value 3551.773955
+iter  26 value 3551.773847
+iter  27 value 3551.773493
+iter  27 value 3551.773487
+iter  27 value 3551.773479
+final  value 3551.773479 
 converged
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 126 iterations
+BFGS maximisation, 136 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -3551.773 
 3  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,]  0.499998   0.025610  19.524 < 2.2e-16 ***
-[2,] -1.036024   0.058110 -17.829 < 2.2e-16 ***
-[3,]  1.011119   0.058354  17.327 < 2.2e-16 ***
+[1,]  0.499997   0.025601  19.530 < 2.2e-16 ***
+[2,] -1.035720   0.058058 -17.840 < 2.2e-16 ***
+[3,]  1.011178   0.058370  17.324 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on constrOptim 
-1  outer iterations, barrier value -8.08173e-05 
+1  outer iterations, barrier value -7.679782e-05 
 --------------------------------------------
 > ## ----
 > cat("Test for equality constraints\n")
@@ -517,7 +521,7 @@ final  value 3558.470095
 converged
 SUMT iteration 2: rho = 10, function = -3553.968, barrier value = 0.4501832
 Estimate:[1]  0.4600214 -1.1326423  0.9017996
-initial  value 3598.986584 
+initial  value 3598.986585 
 iter   2 value 3581.662691
 iter   3 value 3575.592026
 iter   4 value 3574.296760
@@ -529,7 +533,7 @@ final  value 3568.828218
 converged
 SUMT iteration 3: rho = 100, function = -3565.88, barrier value = 0.02948372
 Estimate:[1]  0.3934445 -1.3035813  0.7376448
-initial  value 3595.363566 
+initial  value 3595.363567 
 iter   2 value 3575.235881
 iter   3 value 3574.538052
 iter   4 value 3574.332600
@@ -539,7 +543,7 @@ iter   6 value 3571.969966
 iter   6 value 3571.969966
 final  value 3571.969966 
 converged
-SUMT iteration 4: rho = 1000, function = -3571.557, barrier value = 0.0004130861
+SUMT iteration 4: rho = 1000, function = -3571.557, barrier value = 0.0004130862
 Estimate:[1]  0.3731857 -1.3599930  0.6901587
 initial  value 3575.687741 
 iter   2 value 3572.641972
@@ -551,11 +555,11 @@ iter   6 value 3572.348648
 iter   6 value 3572.348648
 final  value 3572.348648 
 converged
-SUMT iteration 5: rho = 10000, function = -3572.306, barrier value = 4.285694e-06
+SUMT iteration 5: rho = 10000, function = -3572.306, barrier value = 4.285691e-06
 Estimate:[1]  0.3707461 -1.3669508  0.6845105
 initial  value 3572.734360 
 iter   2 value 3572.469952
-iter   3 value 3572.469793
+iter   3 value 3572.469792
 iter   4 value 3572.469005
 iter   5 value 3572.387435
 iter   6 value 3572.387291
@@ -563,7 +567,7 @@ iter   6 value 3572.387291
 iter   6 value 3572.387291
 final  value 3572.387291 
 converged
-SUMT iteration 6: rho = 1e+05, function = -3572.383, barrier value = 4.301614e-08
+SUMT iteration 6: rho = 1e+05, function = -3572.383, barrier value = 4.301615e-08
 Estimate:[1]  0.3704972 -1.3676627  0.6839351
 initial  value 3572.426005 
 iter   2 value 3572.391185
@@ -582,9 +586,9 @@ Log-Likelihood: -3572.391
 3  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,]  0.370462   0.025476  14.542 < 2.2e-16 ***
-[2,] -1.367705   0.069700 -19.623 < 2.2e-16 ***
-[3,]  0.683863   0.051374  13.311 < 2.2e-16 ***
+[1,]  0.370462   0.025499  14.528 < 2.2e-16 ***
+[2,] -1.367705   0.069823 -19.588 < 2.2e-16 ***
+[3,]  0.683863   0.051421  13.299 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -750,8 +754,8 @@ Log-Likelihood: -3608.802
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303367   0.045794 -28.461 < 2.2e-16 ***
-[2,]  0.651713   0.035392  18.414 < 2.2e-16 ***
+[1,] -1.303367   0.045790 -28.464 < 2.2e-16 ***
+[2,]  0.651713   0.035379  18.421 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -983,29 +987,29 @@ final  value 3605.514797
 converged
 SUMT iteration 4: rho = 1000, function = -3602.419, barrier value = 0.003095606
 Estimate:[1] -1.285964  0.670801
-initial  value 3633.375253 
-iter   2 value 3610.546095
-iter   3 value 3610.527291
-iter   4 value 3608.619658
+initial  value 3633.375248 
+iter   2 value 3610.546094
+iter   3 value 3610.527290
+iter   4 value 3608.619657
 iter   5 value 3608.458020
 iter   5 value 3608.458020
 iter   5 value 3608.458020
 final  value 3608.458020 
 converged
-SUMT iteration 5: rho = 10000, function = -3608.113, barrier value = 3.454918e-05
+SUMT iteration 5: rho = 10000, function = -3608.113, barrier value = 3.454916e-05
 Estimate:[1] -1.3015300  0.6537039
-initial  value 3611.567446 
+initial  value 3611.567445 
 iter   2 value 3609.435906
 iter   3 value 3609.427333
-iter   4 value 3609.093792
+iter   4 value 3609.093790
 iter   5 value 3608.770731
 iter   5 value 3608.770731
 iter   5 value 3608.770731
 final  value 3608.770731 
 converged
-SUMT iteration 6: rho = 1e+05, function = -3608.736, barrier value = 3.494314e-07
+SUMT iteration 6: rho = 1e+05, function = -3608.736, barrier value = 3.494299e-07
 Estimate:[1] -1.3031992  0.6518951
-initial  value 3609.085219 
+initial  value 3609.085218 
 iter   2 value 3608.802363
 iter   2 value 3608.802361
 iter   3 value 3608.802198
@@ -1024,8 +1028,8 @@ Log-Likelihood: -3608.802
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303369   0.045820 -28.445 < 2.2e-16 ***
-[2,]  0.651714   0.035406  18.407 < 2.2e-16 ***
+[1,] -1.303369   0.045816 -28.448 < 2.2e-16 ***
+[2,]  0.651714   0.035393  18.414 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -1093,29 +1097,29 @@ final  value 3605.514797
 converged
 SUMT iteration 4: rho = 1000, function = -3602.419, barrier value = 0.003095606
 Estimate:[1] -1.285964  0.670801
-initial  value 3633.375253 
-iter   2 value 3610.546095
-iter   3 value 3610.527291
-iter   4 value 3608.619658
+initial  value 3633.375248 
+iter   2 value 3610.546094
+iter   3 value 3610.527290
+iter   4 value 3608.619657
 iter   5 value 3608.458020
 iter   5 value 3608.458020
 iter   5 value 3608.458020
 final  value 3608.458020 
 converged
-SUMT iteration 5: rho = 10000, function = -3608.113, barrier value = 3.454918e-05
+SUMT iteration 5: rho = 10000, function = -3608.113, barrier value = 3.454916e-05
 Estimate:[1] -1.3015300  0.6537039
-initial  value 3611.567446 
+initial  value 3611.567445 
 iter   2 value 3609.435906
 iter   3 value 3609.427333
-iter   4 value 3609.093792
+iter   4 value 3609.093790
 iter   5 value 3608.770731
 iter   5 value 3608.770731
 iter   5 value 3608.770731
 final  value 3608.770731 
 converged
-SUMT iteration 6: rho = 1e+05, function = -3608.736, barrier value = 3.494314e-07
+SUMT iteration 6: rho = 1e+05, function = -3608.736, barrier value = 3.494299e-07
 Estimate:[1] -1.3031992  0.6518951
-initial  value 3609.085219 
+initial  value 3609.085218 
 iter   2 value 3608.802363
 iter   2 value 3608.802361
 iter   3 value 3608.802198
@@ -1134,8 +1138,8 @@ Log-Likelihood: -3608.802
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303369   0.045820 -28.445 < 2.2e-16 ***
-[2,]  0.651714   0.035406  18.407 < 2.2e-16 ***
+[1,] -1.303369   0.045816 -28.448 < 2.2e-16 ***
+[2,]  0.651714   0.035393  18.414 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -1216,8 +1220,8 @@ Log-Likelihood: -3608.802
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303257   0.045816 -28.445 < 2.2e-16 ***
-[2,]  0.651657   0.035393  18.412 < 2.2e-16 ***
+[1,] -1.303257   0.045811 -28.448 < 2.2e-16 ***
+[2,]  0.651657   0.035369  18.424 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -1254,7 +1258,7 @@ converged
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 40 iterations
+BFGS maximisation, 38 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -3551.773 
 2  free parameters
@@ -1291,7 +1295,7 @@ converged
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 40 iterations
+BFGS maximisation, 38 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -3551.773 
 2  free parameters
