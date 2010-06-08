@@ -16,7 +16,13 @@ maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
   \item{fn}{function to be maximized.  It must return either a single
     number or a numeric vector, which is summed (this is useful for BHHH
     method).  If the parameters are out of range, \code{fn} should
-    return \code{NA}.  See details for constant parameters.}
+    return \code{NA}.  See details for constant parameters.
+
+    \code{fn} may also return attributes "gradient" and/or "hessian".
+    If these attributes are set, the algorithm uses these attributes as
+    corresponding gradient and hessian values for given parameter
+    values.
+  }
   \item{grad}{gradient of the function.  If \code{NULL}, numeric
     gradient is used.  It must return a gradient vector, or matrix where
     \emph{columns} correspond to individual parameters.  The column sums

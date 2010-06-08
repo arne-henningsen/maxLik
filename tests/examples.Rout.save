@@ -2154,8 +2154,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > 
 > 
-> ### summary.maxim
-> ## minimize a 2D quadratic function:
+> ### summary.maxim and for "gradient"/"hessian" attributes
+> ### Test for infinity
+> ## maximize a 2D quadratic function:
 > f <- function(b) {
 +   x <- b[1]; y <- b[2];
 +     val <- (x - 2)^2 + (y - 3)^2
@@ -2163,35 +2164,34 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 +     attr(val, "hessian") <- matrix(c(2, 0, 0, 2), 2, 2)
 +     val
 + }
-> ## Note that NR finds the minimum of a quadratic function with a single
-> ## iteration.  Use c(0,0) as initial value.  
+> ## Use c(0,0) as initial value.  
 > result1 <- maxNR( f, start = c(0,0) )
 > print( result1 )
 $maximum
-[1] 1.002001e+21
+[1] Inf
 attr(,"gradient")
-[1]     -536554.8 63308783985.4
+[1] -1.406971e+156 -2.110457e+156
 attr(,"hessian")
      [,1] [,2]
 [1,]    2    0
 [2,]    0    2
 
 $estimate
-[1]     -268275.4 31654391995.7
+[1] -7.034857e+155 -1.055228e+156
 
 $gradient
-[1] 0 0
+[1] -1.406971e+156 -2.110457e+156
 
 $hessian
      [,1] [,2]
-[1,]    0    0
-[2,]    0    0
+[1,]    2    0
+[2,]    0    2
 
 $code
-[1] 1
+[1] 5
 
 $message
-[1] "gradient close to zero"
+[1] "Infinite value"
 
 $last.step
 NULL
@@ -2200,7 +2200,7 @@ $activePar
 [1] TRUE TRUE
 
 $iterations
-[1] 4
+[1] 25
 
 $type
 [1] "Newton-Raphson maximisation"
@@ -2210,43 +2210,43 @@ attr(,"class")
 > summary( result1 )
 --------------------------------------------
 Newton-Raphson maximisation 
-Number of iterations: 4 
-Return code: 1 
-gradient close to zero 
-Function value: 1.002001e+21 
+Number of iterations: 25 
+Return code: 5 
+Infinite value 
+Function value: Inf 
 Estimates:
-          estimate gradient
-[1,]     -268275.4        0
-[2,] 31654391995.7        0
+           estimate       gradient
+[1,] -7.034857e+155 -1.406971e+156
+[2,] -1.055228e+156 -2.110457e+156
 --------------------------------------------
 > ## Now use c(1000000, -777777) as initial value and ask for hessian
 > result2 <- maxNR( f, start = c( 1000000, -777777))
 > print( result2 )
 $maximum
-[1] 7.133455e+23
+[1] Inf
 attr(,"gradient")
-[1]  1.333335e+12 -1.037111e+12
+[1]  4.220903e+155 -3.282940e+155
 attr(,"hessian")
      [,1] [,2]
 [1,]    2    0
 [2,]    0    2
 
 $estimate
-[1]  666667644444 -518555447992
+[1]  2.110451e+155 -1.641470e+155
 
 $gradient
-[1] 0 0
+[1]  4.220903e+155 -3.282940e+155
 
 $hessian
      [,1] [,2]
-[1,]    0    0
-[2,]    0    0
+[1,]    2    0
+[2,]    0    2
 
 $code
-[1] 1
+[1] 5
 
 $message
-[1] "gradient close to zero"
+[1] "Infinite value"
 
 $last.step
 NULL
@@ -2255,7 +2255,7 @@ $activePar
 [1] TRUE TRUE
 
 $iterations
-[1] 1
+[1] 24
 
 $type
 [1] "Newton-Raphson maximisation"
@@ -2265,15 +2265,38 @@ attr(,"class")
 > summary( result2 )
 --------------------------------------------
 Newton-Raphson maximisation 
-Number of iterations: 1 
+Number of iterations: 24 
+Return code: 5 
+Infinite value 
+Function value: Inf 
+Estimates:
+           estimate       gradient
+[1,]  2.110451e+155  4.220903e+155
+[2,] -1.641470e+155 -3.282940e+155
+--------------------------------------------
+> 
+> 
+> ### Test for "gradient"/"hessian" attributes.  A case which converges.
+> hub <- function(x) {
++    v <- exp(-sum(x*x))
++    val <- v
++    attr(val, "gradient") <- -2*x*v
++    attr(val, "hessian") <- 4*(x %*% t(x))*v - diag(2*c(v, v))
++    val
++ }
+> summary(a <- maxNR(hub, start=c(2,1)))
+--------------------------------------------
+Newton-Raphson maximisation 
+Number of iterations: 7 
 Return code: 1 
 gradient close to zero 
-Function value: 7.133455e+23 
+Function value: 1 
 Estimates:
-          estimate gradient
-[1,]  666667644444        0
-[2,] -518555447992        0
+          estimate     gradient
+[1,] -7.448384e-18 1.489677e-17
+[2,] -3.724192e-18 7.448384e-18
 --------------------------------------------
+> 
 > 
 > ### vcov.maxLik
 > set.seed( 17 )

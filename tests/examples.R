@@ -248,8 +248,9 @@ print( a )
 summary(a)
 
 
-### summary.maxim
-## minimize a 2D quadratic function:
+### summary.maxim and for "gradient"/"hessian" attributes
+### Test for infinity
+## maximize a 2D quadratic function:
 f <- function(b) {
   x <- b[1]; y <- b[2];
     val <- (x - 2)^2 + (y - 3)^2
@@ -257,8 +258,7 @@ f <- function(b) {
     attr(val, "hessian") <- matrix(c(2, 0, 0, 2), 2, 2)
     val
 }
-## Note that NR finds the minimum of a quadratic function with a single
-## iteration.  Use c(0,0) as initial value.  
+## Use c(0,0) as initial value.  
 result1 <- maxNR( f, start = c(0,0) )
 print( result1 )
 summary( result1 )
@@ -266,6 +266,18 @@ summary( result1 )
 result2 <- maxNR( f, start = c( 1000000, -777777))
 print( result2 )
 summary( result2 )
+
+
+### Test for "gradient"/"hessian" attributes.  A case which converges.
+hub <- function(x) {
+   v <- exp(-sum(x*x))
+   val <- v
+   attr(val, "gradient") <- -2*x*v
+   attr(val, "hessian") <- 4*(x %*% t(x))*v - diag(2*c(v, v))
+   val
+}
+summary(a <- maxNR(hub, start=c(2,1)))
+
 
 ### vcov.maxLik
 set.seed( 17 )
