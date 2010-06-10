@@ -2296,6 +2296,39 @@ Estimates:
 [1,] -7.448384e-18 1.489677e-17
 [2,] -3.724192e-18 7.448384e-18
 --------------------------------------------
+> ## Now test "gradient" attribute for BHHH/3-parameter probit
+> N <- 1000
+> loglikProbit <- function( beta) {
++    xb <- x %*% beta
++    loglik <- ifelse(y == 0,
++                     pnorm( xb, log=TRUE, lower.tail=FALSE),
++                     pnorm( xb, log.p=TRUE))
++    grad <- ifelse(y == 0,
++                   -dnorm(xb)/pnorm(xb, lower.tail=FALSE),
++                   dnorm(xb)/pnorm(xb))
++    grad <- grad*x
++    attr(loglik, "gradient") <- grad
++    loglik
++ }
+> x <- runif(N)
+> x <- cbind(x, x - runif(N), x - runif(N))
+> y <- x[,1] + 2*x[,2] - x[,3] + rnorm(N) > 0
+> summary(maxLik(loglikProbit, start=c(0,0,0), method="bhhh"))
+--------------------------------------------
+Maximum Likelihood estimation
+BHHH maximisation, 8 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -508.3503 
+3  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+[1,]  0.857811   0.090356  9.4937 < 2.2e-16 ***
+[2,]  1.938900   0.151361 12.8098 < 2.2e-16 ***
+[3,] -0.825310   0.133938 -6.1619 7.189e-10 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> 
 > 
 > 
 > ### vcov.maxLik

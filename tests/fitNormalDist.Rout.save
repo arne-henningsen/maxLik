@@ -3533,7 +3533,7 @@ Error in maxRoutine(fn = logLik, grad = grad, hess = hess, start = start,  :
 > 
 > ## BHHH method with inequality constraints
 > try( maxLik( llf, start = startVal, constraints = inEq, method = "BHHH" ) )
-Error in maxNR(fn, grad = gradient, hess = hess, start = start, iterlim = iterlim,  : 
+Error in maxNR(func, grad = gradient, hess = hess, start = start, iterlim = iterlim,  : 
   Inequality constraints not implemented for maxNR
 > 
 > ## BFGS method with inequality constraints

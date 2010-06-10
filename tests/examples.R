@@ -277,6 +277,25 @@ hub <- function(x) {
    val
 }
 summary(a <- maxNR(hub, start=c(2,1)))
+## Now test "gradient" attribute for BHHH/3-parameter probit
+N <- 1000
+loglikProbit <- function( beta) {
+   xb <- x %*% beta
+   loglik <- ifelse(y == 0,
+                    pnorm( xb, log=TRUE, lower.tail=FALSE),
+                    pnorm( xb, log.p=TRUE))
+   grad <- ifelse(y == 0,
+                  -dnorm(xb)/pnorm(xb, lower.tail=FALSE),
+                  dnorm(xb)/pnorm(xb))
+   grad <- grad*x
+   attr(loglik, "gradient") <- grad
+   loglik
+}
+x <- runif(N)
+x <- cbind(x, x - runif(N), x - runif(N))
+y <- x[,1] + 2*x[,2] - x[,3] + rnorm(N) > 0
+summary(maxLik(loglikProbit, start=c(0,0,0), method="bhhh"))
+
 
 
 ### vcov.maxLik
