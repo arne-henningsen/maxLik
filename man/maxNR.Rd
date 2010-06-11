@@ -19,9 +19,9 @@ maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
     return \code{NA}.  See details for constant parameters.
 
     \code{fn} may also return attributes "gradient" and/or "hessian".
-    If these attributes are set, the algorithm uses these attributes as
-    corresponding gradient and hessian values for given parameter
-    values.
+    If these attributes are set, the algorithm uses the corresponding
+    values as
+    gradient and hessian.  
   }
   \item{grad}{gradient of the function.  If \code{NULL}, numeric
     gradient is used.  It must return a gradient vector, or matrix where

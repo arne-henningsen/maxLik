@@ -9,7 +9,12 @@ maxBHHH <- function(fn, grad=NULL, hess=NULL,
       ## value when it is supplied as attribute
       a <- fn(theta, ...)
       if(!is.null(grad <- attr(a, "gradient")))
-      assign("gradVal", grad, inherits=TRUE)
+          assign("gradVal", grad, inherits=TRUE)
+      attr(a, "hessian") <- NULL
+                           # this is to ensure we do BHHH even if the
+                           # likelihood function supplies analytic Hessian.
+                           # Use maxNR if you have Hessian and don't
+                           # want to do BHHH!
       a
    }
    ##

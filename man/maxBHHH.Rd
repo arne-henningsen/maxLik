@@ -18,7 +18,14 @@ maxBHHH(fn, grad = NULL, hess=NULL, start, print.level = 0, iterlim = 100,
     of
     observation-specific likelihood values if numeric gradient is requested (those are summed for the
     single likelihood value).  If the parameters are out of range, \code{fn} should
-    return \code{NA}.}
+    return \code{NA}.
+
+    \code{fn} may also return attribute "gradient" (eventual attribute
+    "hessian" is ignored).
+    If this attribute is set, the algorithm uses it's value as the
+    gradient and neither calls \code{grad} nor calculates numeric
+    gradient.
+  }
   \item{grad}{gradient of the log-likelihood function.  Must have the parameter vector as
     the first argument.  If \code{NULL}, numeric
     gradient is used.  It must return a matrix, where
