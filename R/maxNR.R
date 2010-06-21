@@ -30,7 +30,6 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
    ## reltol      - maximum allowed reltive difference (stops if < reltol*(abs(fn) + reltol)
    ## gradtol     - maximum allowed norm of gradient vector
    ## iterlim     - maximum # of iterations
-   ##
    ## finalHessian  include final Hessian?  As computing final hessian does not carry any extra penalty for NR method, this option is
    ##               mostly for compatibility reasons with other maxXXX functions.
    ##               TRUE/something else  include

@@ -3,6 +3,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
                   tol=1e-6, reltol=sqrt(.Machine$double.eps),
                   gradtol=1e-6, steptol=1e-10,
                   iterlim=150,
+                             finalHessian=TRUE,
                   fixed=NULL,
                   ...) {
    ##                       iterlim = 2000,
@@ -32,6 +33,10 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
    ## reltol      - maximum allowed reltive difference (stops if < reltol*(abs(fn) + reltol)
    ## gradtol     - maximum allowed norm of gradient vector
    ## iterlim     - maximum # of iterations
+   ## finalHessian  include final Hessian?  As computing final hessian does not carry any extra penalty for NR method, this option is
+   ##               mostly for compatibility reasons with other maxXXX functions.
+   ##               TRUE/something else  include
+   ##               FALSE                do not include
    ## fixed       - a logical vector -- which parameters are taken as fixed.
    ##               Other paramters are treated as variable (free).
    ##
@@ -95,6 +100,33 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
       }
       return(gr)
    }
+   hessian <- function(theta, activePar=activePar,
+                       suppliedValue=NULL, ...) {
+      ## Hessian is only used for the final hessian (if asked)
+      ## 
+      ## suppliedValue: use hessian value supplied from elsewhere
+      ##           (attribute to fn) and only do sanity checks
+      ##
+      ## Note: a call to hessian must follow a call to gradient using
+      ## /exactly the same/ parameter values in this program. 
+      ## This ensures compatibility with maxBHHH.  This warning does not
+      ## apply for user programs.
+      if(is.null(h <- suppliedValue)) {
+         if(!is.null(hess)) {
+            h <- as.matrix(hess(theta, ...))
+         } else {
+            h <- numericHessian( f = func, grad = gradient, t0 = theta,
+                                activePar=activePar, ...)
+         }
+      }
+      if((dim(h)[1] != nParam) | (dim(h)[2] != nParam)) {
+         stop("Wrong hessian dimension.  Needed ", nParam, "x", nParam,
+              " but supplied ", dim(h)[1], "x", dim(h)[2])
+      }
+      h[ !activePar, ] <- NA
+      h[ , !activePar ] <- NA 
+      return( h )
+   }
    ##
    maxim.type <- "BFGS-YC maximization"
    argNames <- c( "fn", "grad", "hess", "start", "print.level",
@@ -150,9 +182,13 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
       stop( "length of gradient (", length(gr),
          ") not equal to the no. of parameters (", nParam, ")" )
    }
-   ##
-   Hm1 <- solve(crossprod(gri[,activePar]))
-                           # initial approximation of inverse Hessian (as in BHHH).
+   ## initial approximation for inverse Hessian
+   if(!is.null(dim(gri)) & nrow(gri) > 1)
+       invHess <- solve(crossprod(gri[,activePar]))
+                           # initial approximation of inverse Hessian (as in BHHH), if possible
+   else
+       invHess <- 1e-5*diag(1, nrow=length(gr))
+                           # if not possible (Is this OK?)
    if( print.level > 1) {
       cat( "----- Initial parameters: -----\n")
       cat( "fcn value:",
@@ -162,13 +198,15 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
                                           "free"))
       print(a)
    }
+   samm <- NULL
+                           # structure for too low 'step' value
   direction <- rep(0, nParam)
    repeat {
       if( iter >= iterlim) {
          code <- 4; break
       }
     step <- 1
-     direction[activePar] <- -as.vector(Hm1 %*% gr[activePar])
+     direction[activePar] <- -as.vector(invHess %*% gr[activePar])
       iter <- iter + 1
     oldx <- x
      oldgr <- gr
@@ -192,19 +230,23 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
        samm <- list(theta0=oldparam, f0=oldx, climb=direction)
     }
      gri <- gradient(param, suppliedValue=attr(x, "gradient"), sumObs=FALSE, ...)
-     gr <- colSums(gri)
+      if(!is.null(dim(gri)) & nrow(gri) > 0) {
+         gr <- colSums(gri)
+      }
+      else
+          gr <- gri
       incr <- step * direction
       y <- gr - oldgr
-     Hm1 <- Hm1 +
+     invHess <- invHess +
         outer( incr[activePar], incr[activePar]) *
           (sum(y[activePar] * incr[activePar]) +
-           as.vector( t(y[activePar]) %*% Hm1 %*% y[activePar])) / sum(incr[activePar] * y[activePar])^2 -
-             (Hm1 %*% outer(y[activePar], incr[activePar])
-              + outer(incr[activePar], y[activePar]) %*% Hm1)/
+           as.vector( t(y[activePar]) %*% invHess %*% y[activePar])) / sum(incr[activePar] * y[activePar])^2 -
+             (invHess %*% outer(y[activePar], incr[activePar])
+              + outer(incr[activePar], y[activePar]) %*% invHess)/
                   sum(incr[activePar] * y[activePar])
       chi2 <- -  crossprod(direction[activePar], oldgr[activePar])
     if (print.level > 0){
-       cat("iteration ", iter, ", step = ",step,
+       cat("--- iteration ", iter, ", step = ",step,
                       ", lnL = ", x,", chi2 = ",
            chi2,"\n",sep="")
        if (print.level > 1){
@@ -212,10 +254,10 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
           print(resdet)
           if(print.level > 3) {
              cat("Approximated Hessian:\n")
-             print(Hm1)
+             print(invHess)
           }
+          cat("--------------------------------------------\n")
        }
-       cat("--------------------------------------------\n")
     }
       if( step < steptol) {
          code <- 3; break
@@ -233,23 +275,57 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
          code <- 5; break
       }
   }
-   names(gr) <- colnames(gri) <- names(param)
-  attr(x, "fixed") <- !activePar
-  est.stat <- structure(list(elaps.time = NULL, nb.iter = iter, eps = chi2,
-                             method = "BFGS-YC", message = message), class = 'est.stat')
-  result <- list(optimum = x,
-                 coefficients = param,
-                 est.stat = est.stat
-                 )
-  result
+   if( print.level > 0) {
+      cat( "--------------\n")
+      cat( maximMessage( code), "\n")
+      cat( iter, " iterations\n")
+      cat( "estimate:", param, "\n")
+      cat( "Function value:", x, "\n")
+   }
+   names(gr) <- names(param)
+   # calculate (final) Hessian
+   if(tolower(finalHessian) == "bhhh") {
+      if(!is.null(dim(gri)) & nrow(gri) > 0)
+          grad <- t(gri) %*% gri
+      else {
+         hessian <- logLikHess( param, fnOrig = fn,  gradOrig = grad,
+                                hessOrig = hess, ... )
+         warning("For computing Hessian by 'BHHH' method, the log-likelihood or gradient must be supplied by observations")
+      }
+   }
+   else if(finalHessian) {
+      hessian <- logLikHess( param, fnOrig = fn,  gradOrig = grad,
+                            hessOrig = hess, ... )
+   }
+   else
+       hessian <- NULL
+   ##
+   result <-list(
+                  maximum = unname( drop( x ) ),
+                  estimate=param,
+                  gradient=gr,
+                 hessian=hessian,
+                  code=code,
+                  message=maximMessage( code),
+                  last.step=samm,
+                                        # only when could not find a
+                                        # lower point
+                  activePar=activePar,
+                  iterations=iter,
+                  type=maxim.type)
+   if(!is.null(dim(gri)) & nrow(gri) > 0) {
+      result$gradientObs <- gri
+   }
+   class(result) <- c("maxim", class(result))
+   invisible(result)
 }
-
 
 maxBFGSYC <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
                   tol=1e-8, reltol=sqrt(.Machine$double.eps),
                   gradtol=1e-6, steptol=1e-10,
                   iterlim=150,
                   constraints=NULL,
+                      finalHessian=TRUE,
                   fixed=NULL,
                   activePar=NULL,
                   ...) {
@@ -272,6 +348,10 @@ maxBFGSYC <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
    ## reltol      - maximum allowed reltive difference (stops if < reltol*(abs(fn) + reltol)
    ## gradtol     - maximum allowed norm of gradient vector
    ## iterlim     - maximum # of iterations
+   ## finalHessian  include final Hessian?  As computing final hessian does not carry any extra penalty for NR method, this option is
+   ##               mostly for compatibility reasons with other maxXXX functions.
+   ##               TRUE/something else  include
+   ##               FALSE                do not include
    ## activePar   - an index vector -- which parameters are taken as
    ##               variable (free).  Other paramters are treated as
    ##               fixed constants

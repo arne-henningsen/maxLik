@@ -21,6 +21,7 @@ maxBFGSYC(fn, grad = NULL, hess = NULL, start, print.level=0,
                   gradtol=1e-6, steptol=1e-10,
                   iterlim=150,
                   constraints=NULL,
+finalHessian=TRUE,
                   fixed=NULL,
                   activePar=NULL,
                   ...)
