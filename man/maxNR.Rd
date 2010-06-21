@@ -1,8 +1,12 @@
 \name{maxNR}
 \alias{maxNR}
-\title{Newton-Raphson Maximization}
+\alias{maxBFGSYC}
+\title{Newton- and Quasi-Newton Maximization}
 \description{
-  Unconstrained maximization based on Newton-Raphson method.
+  Unconstrained maximization based on the quadratic approximation
+  (Newton)
+  method.  Includes
+  Newton-Raphson and BFGS methods.
 }
 \usage{
 maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
@@ -11,6 +15,14 @@ maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
       iterlim = 150,
       constraints=NULL,
       fixed=NULL, activePar=NULL, ... )
+maxBFGSYC(fn, grad = NULL, hess = NULL, start, print.level=0,
+                  tol=1e-8, reltol=sqrt(.Machine$double.eps),
+                  gradtol=1e-6, steptol=1e-10,
+                  iterlim=150,
+                  constraints=NULL,
+                  fixed=NULL,
+                  activePar=NULL,
+                  ...) {
 }
 \arguments{
   \item{fn}{function to be maximized.  It must return either a single
@@ -78,7 +90,14 @@ maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
   \item{\dots}{further arguments to \code{fn}, \code{grad} and
     \code{hess}.}
 }
-\details{
+\details {
+The idea of the newton method is to approximate the function in a given
+    location with a multidimensional parabola, and use the estimated
+    maximum as the initial value for the next iteration.  Such an
+    approximation requires knowledge of both gradient and Hessian, the
+    latter of which can be quite costly to compute.  Several methods for
+    approximating Hessian exist, including BFGS.
+
 The algorithm can work with constant parameters and related changes of
 parameter values.  Constant parameters are useful if a parameter value
 is converging toward the boundary of support, or for testing.  
@@ -89,7 +108,7 @@ change.  However, parameters can also be fixed in runtime by by
 signaling with
 \code{fn}.  This may be useful if an estimation converges toward the
 edge of the parameter space possibly causing problems.  The value of
-\code{fn} may have following attributes:
+\code{fn} may have following attributes (only used by maxNR):
 \itemize{
 \item{constPar}{index vector.  Which parameters are redefined to
   constant}

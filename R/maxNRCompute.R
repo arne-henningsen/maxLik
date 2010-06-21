@@ -55,7 +55,7 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
    ## activePar   logical vector, which parameters were treated as free (resp fixed)
    ## iterations  number of iterations
    ## type        "Newton-Raphson maximisation"
-
+   
    argNames <- c( "fn", "grad", "hess", "start", "print.level",
       "tol", "reltol", "gradtol", "steptol", "lambdatol", "qrtol",
       "iterlim", "activePar", "fixed" )
@@ -250,7 +250,7 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
       ## Are we asked to write in a new value for some of the parameters?
       if(is.null(newVal <- attr(f1, "newVal"))) {
          ## no ...
-         while( is.na( f1) || ( ( f1 < f0) && ( step >= steptol))) {
+         while( is.na( f1) | ( ( f1 < f0) & ( step >= steptol))) {
                                         # We end up in a NA or a higher value.
                                         # try smaller step
             step <- step/2
