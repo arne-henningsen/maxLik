@@ -4,11 +4,18 @@ maxOptim <- function(fn, grad, hess,
                     iterlim,
                     constraints,
                     tol, reltol,
+                     finalHessian=TRUE,
                     parscale,
                     alpha = NULL, beta = NULL, gamma = NULL,
                     temp = NULL, tmax = NULL, random.seed = NULL, cand = NULL,
                     ...) {
-
+   ## Wrapper of optim-based optimization methods
+   ##
+   ## finalHessian:   how (and if) to calculate the final Hessian:
+   ##            FALSE   not calculate
+   ##            TRUE    use analytic/numeric Hessian
+   ##            bhhh/BHHH  use information equality approach
+   ##
    if( method == "Nelder-Mead" ) {
       maxMethod <- "maxNM"
    } else {
@@ -155,11 +162,7 @@ maxOptim <- function(fn, grad, hess,
    # estimates (including fixed parameters)
    estimate <- start
    estimate[ !fixed ] <- result$par
-
-   # calculate (final) Hessian
-   hessian <- logLikHess( estimate, fnOrig = fn,  gradOrig = grad,
-      hessOrig = hess, ... )
-
+   ## Calculate the final gradient
    gradient <- callWithoutSumt( estimate, "logLikGrad",
       fnOrig = fn, gradOrig = grad, hessOrig = hess, sumObs = FALSE, ... )
 
@@ -172,6 +175,16 @@ maxOptim <- function(fn, grad, hess,
       gradientObs <- matrix( gradient, ncol = 1 )
       gradient <- sum( gradient )
    }
+   # calculate (final) Hessian
+   if(tolower(finalHessian) == "bhhh") {
+      grad <- t(gradientObs) %*% gradientObs
+   }
+   else if(finalHessian) {
+      hessian <- logLikHess( estimate, fnOrig = fn,  gradOrig = grad,
+                            hessOrig = hess, ... )
+   }
+   else
+       hessian <- NULL
 
    result <- list(
                    maximum=result$value,

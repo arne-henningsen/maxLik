@@ -1,8 +1,9 @@
 logLikHess <- function( theta, fnOrig, gradOrig, hessOrig,
       start = NULL, fixed = NULL, ... ) {
+   ## Calculate the Hessian of the function, either by analytic or numeric method
 
    theta <- addFixedPar( theta = theta, start = start, fixed = fixed, ...)
-
+   
    if(!is.null(hessOrig)) {
        hessian <- hessOrig( theta, ... )
    } else {

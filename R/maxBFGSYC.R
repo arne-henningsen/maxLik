@@ -95,6 +95,8 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
       }
       return(gr)
    }
+   ##
+   maxim.type <- "BFGS-YC maximization"
    argNames <- c( "fn", "grad", "hess", "start", "print.level",
       "tol", "reltol", "gradtol", "steptol", 
       "iterlim", "activePar", "fixed" )

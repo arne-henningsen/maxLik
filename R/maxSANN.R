@@ -3,9 +3,19 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
                     print.level=0,
                     iterlim=10000,
                     constraints = NULL,
-                    tol=1e-8, reltol=tol, cand = NULL,
+                    tol=1e-8, reltol=tol,
+                    finalHessian=TRUE,
+                    cand = NULL,
                     temp=10, tmax=10, parscale=rep(1, length=length(start)),
                     random.seed = 123, ... ) {
+   ## Wrapper of optim-based 'SANN' optimization
+   ## 
+   ## contraints    constraints to be passed to 'constrOptim'
+   ## finalHessian:   how (and if) to calculate the final Hessian:
+   ##            FALSE   not calculate
+   ##            TRUE    use analytic/numeric Hessian
+   ##            bhhh/BHHH  use information equality approach
+   ##
    ## ... : further arguments to fn()
    ##
    ## Note: grad and hess are for compatibility only, SANN uses only fn values
@@ -29,7 +39,9 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    result <- maxOptim( fn = fn, grad = grad, hess = hess,
       start = start, method = "SANN", fixed = fixed,
       print.level = print.level, iterlim = iterlim, constraints = constraints,
-      tol = tol, reltol = reltol, parscale = parscale,
+      tol = tol, reltol = reltol,
+                      finalHessian=finalHessian,
+                      parscale = parscale,
       temp = temp, tmax = tmax, random.seed = random.seed, cand = cand,
       ... )
 

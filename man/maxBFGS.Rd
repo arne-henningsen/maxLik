@@ -11,17 +11,23 @@
 \usage{
 maxBFGS(fn, grad = NULL, hess=NULL, start, fixed = NULL,
    print.level = 0, iterlim = 200, constraints = NULL,
-   tol = 1e-08, reltol=tol, parscale=rep(1, length=length(start)), ... )
+   tol = 1e-08, reltol=tol,
+   finalHessian=TRUE,
+parscale=rep(1, length=length(start)), ... )
 
 maxSANN(fn, grad = NULL, hess = NULL, start, fixed = NULL,
    print.level = 0, iterlim = 10000, constraints = NULL,
-   tol = 1e-08, reltol=tol, cand = NULL, temp = 10, tmax = 10,
+   tol = 1e-08, reltol=tol,
+finalHessian=TRUE,
+cand = NULL, temp = 10, tmax = 10,
    parscale = rep(1, length = length(start)),
    random.seed = 123, ... )
 
 maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
    print.level = 0, iterlim = 500, constraints = NULL,
-   tol = 1e-08, reltol=tol, parscale = rep(1, length = length(start)),
+   tol = 1e-08, reltol=tol,
+finalHessian=TRUE,
+ parscale = rep(1, length = length(start)),
    alpha = 1, beta = 0.5, gamma = 2, ...)
 }
 
@@ -57,7 +63,16 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
     \code{\link{constrOptim2}}.
   }
   \item{tol, reltol}{the relative convergence tolerance (see
-    \code{\link{optim}}).  \code{tol} is for compatibility with \code{\link{maxNR}}.}
+    \code{\link{optim}}).  \code{tol} is for compatibility with
+    \code{\link{maxNR}}.}
+  \item{finalHessian}{how (and if) to calculate the final Hessian.  Either
+  \code{FALSE} (not calculate), \code{TRUE} (use analytic/numeric
+  Hessian) or \code{"bhhh"}/\code{"BHHH"} for information equality
+  approach.  The latter approach is only suitable for maximizing
+  log-likelihood function.  It requires the gradient/log-likelihood to
+  be supplied by individual observations, see \code{\link{maxBHHH}} for
+  details. 
+ }
   \item{cand}{a function used in the \code{"SANN"} algorithm
     to generate a new candidate point;
     if it is \code{NULL}, a default Gaussian Markov kernel is used
