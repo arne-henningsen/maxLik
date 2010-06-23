@@ -151,6 +151,26 @@ mlghBHHH <- maxLik( llfInd, gfInd, hf, start = startVal, method = "BHHH" )
 all.equal( mlgBHHH, mlghBHHH )
 
 
+### BFGS-YC method
+mlBFGSYC <- maxLik( llf, gf, start = startVal, method = "bfgsyc" , print.level=1)
+summary(mlBFGSYC)
+llfaG <- function( param ) {
+   ## Normal loglik with gradient attribute
+   mu <- param[ 1 ]
+   sigma <- param[ 2 ]
+   N <- length( x )
+   llValue <- -0.5 * log( 2 * pi ) - log( sigma ) -
+      0.5 * ( x - mu )^2 / sigma^2 
+   ll <- (sum( llValue ))
+   llGrad <- c( sum( ( x - mu ) / sigma^2 ),
+      - N / sigma + sum( ( x - mu )^2 / sigma^3 ) )
+   attr(ll, "gradient") <- llGrad
+   ll
+}
+mlBFGSYCaG <- maxLik( llf, gf, start = startVal, method = "bfgsyc" , print.level=1)
+summary(mlBFGSYCaG)
+
+
 ## BFGS method
 mlBFGS <- maxLik( llf, start = startVal, method = "BFGS" )
 print( mlBFGS )

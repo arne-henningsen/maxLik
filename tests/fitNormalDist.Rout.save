@@ -767,6 +767,110 @@ $gradientObs
 [1] TRUE
 > 
 > 
+> ### BFGS-YC method
+> mlBFGSYC <- maxLik( llf, gf, start = startVal, method = "bfgsyc" , print.level=1)
+Initial value of the function : -326.589781090132 
+--- iteration 1, step = 1, lnL = -325.0958, chi2 = 1.503935
+--- iteration 2, step = 1, lnL = -253.7229, chi2 = 110.7202
+--- iteration 3, step = 1, lnL = -232.4020, chi2 = 28.10028
+--- iteration 4, step = 1, lnL = -218.4824, chi2 = 19.94052
+--- iteration 5, step = 1, lnL = -213.2123, chi2 = 7.569534
+--- iteration 6, step = 1, lnL = -211.5038, chi2 = 2.600152
+--- iteration 7, step = 1, lnL = -211.1924, chi2 = 0.5067908
+--- iteration 8, step = 1, lnL = -211.1646, chi2 = 0.04705232
+--- iteration 9, step = 1, lnL = -211.1596, chi2 = 0.006021692
+--- iteration 10, step = 1, lnL = -211.1445, chi2 = 0.01901212
+--- iteration 11, step = 1, lnL = -211.1091, chi2 = 0.04350457
+--- iteration 12, step = 1, lnL = -211.0149, chi2 = 0.1166586
+--- iteration 13, step = 1, lnL = -210.7818, chi2 = 0.2885522
+--- iteration 14, step = 1, lnL = -210.2169, chi2 = 0.703702
+--- iteration 15, step = 1, lnL = -208.9722, chi2 = 1.573568
+--- iteration 16, step = 1, lnL = -206.7187, chi2 = 2.975142
+--- iteration 17, step = 1, lnL = -204.1217, chi2 = 3.809059
+--- iteration 18, step = 1, lnL = -202.4546, chi2 = 2.519386
+--- iteration 19, step = 1, lnL = -201.6447, chi2 = 1.593629
+--- iteration 20, step = 1, lnL = -201.5877, chi2 = 0.1548409
+--- iteration 21, step = 1, lnL = -201.5840, chi2 = 0.007150537
+--- iteration 22, step = 1, lnL = -201.5839, chi2 = 1.862803e-05
+--- iteration 23, step = 1, lnL = -201.5839, chi2 = 7.964259e-09
+--------------
+successive function values within tolerance limit 
+23  iterations
+estimate: 1.180813 1.816481 
+Function value: -201.5839 
+> summary(mlBFGSYC)
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS-YC maximization, 23 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -201.5839 
+2  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     1.18081    0.18165  6.5006 8.003e-11 ***
+sigma  1.81648    0.12844 14.1421 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> llfaG <- function( param ) {
++    ## Normal loglik with gradient attribute
++    mu <- param[ 1 ]
++    sigma <- param[ 2 ]
++    N <- length( x )
++    llValue <- -0.5 * log( 2 * pi ) - log( sigma ) -
++       0.5 * ( x - mu )^2 / sigma^2 
++    ll <- (sum( llValue ))
++    llGrad <- c( sum( ( x - mu ) / sigma^2 ),
++       - N / sigma + sum( ( x - mu )^2 / sigma^3 ) )
++    attr(ll, "gradient") <- llGrad
++    ll
++ }
+> mlBFGSYCaG <- maxLik( llf, gf, start = startVal, method = "bfgsyc" , print.level=1)
+Initial value of the function : -326.589781090132 
+--- iteration 1, step = 1, lnL = -325.0958, chi2 = 1.503935
+--- iteration 2, step = 1, lnL = -253.7229, chi2 = 110.7202
+--- iteration 3, step = 1, lnL = -232.4020, chi2 = 28.10028
+--- iteration 4, step = 1, lnL = -218.4824, chi2 = 19.94052
+--- iteration 5, step = 1, lnL = -213.2123, chi2 = 7.569534
+--- iteration 6, step = 1, lnL = -211.5038, chi2 = 2.600152
+--- iteration 7, step = 1, lnL = -211.1924, chi2 = 0.5067908
+--- iteration 8, step = 1, lnL = -211.1646, chi2 = 0.04705232
+--- iteration 9, step = 1, lnL = -211.1596, chi2 = 0.006021692
+--- iteration 10, step = 1, lnL = -211.1445, chi2 = 0.01901212
+--- iteration 11, step = 1, lnL = -211.1091, chi2 = 0.04350457
+--- iteration 12, step = 1, lnL = -211.0149, chi2 = 0.1166586
+--- iteration 13, step = 1, lnL = -210.7818, chi2 = 0.2885522
+--- iteration 14, step = 1, lnL = -210.2169, chi2 = 0.703702
+--- iteration 15, step = 1, lnL = -208.9722, chi2 = 1.573568
+--- iteration 16, step = 1, lnL = -206.7187, chi2 = 2.975142
+--- iteration 17, step = 1, lnL = -204.1217, chi2 = 3.809059
+--- iteration 18, step = 1, lnL = -202.4546, chi2 = 2.519386
+--- iteration 19, step = 1, lnL = -201.6447, chi2 = 1.593629
+--- iteration 20, step = 1, lnL = -201.5877, chi2 = 0.1548409
+--- iteration 21, step = 1, lnL = -201.5840, chi2 = 0.007150537
+--- iteration 22, step = 1, lnL = -201.5839, chi2 = 1.862803e-05
+--- iteration 23, step = 1, lnL = -201.5839, chi2 = 7.964259e-09
+--------------
+successive function values within tolerance limit 
+23  iterations
+estimate: 1.180813 1.816481 
+Function value: -201.5839 
+> summary(mlBFGSYCaG)
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS-YC maximization, 23 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -201.5839 
+2  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     1.18081    0.18165  6.5006 8.003e-11 ***
+sigma  1.81648    0.12844 14.1421 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> 
+> 
 > ## BFGS method
 > mlBFGS <- maxLik( llf, start = startVal, method = "BFGS" )
 Warning messages:

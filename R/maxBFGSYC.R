@@ -165,9 +165,14 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
       return(result)
    }
    ##
+   ## gradient by individual observations, used for BHHH approximation of initial Hessian.
+   ## If not supplied by observations, we use the summed gradient.
    gri <- gradient(param, suppliedValue=attr(x, "gradient"), sumObs=FALSE, ...)
-   gr <- colSums(gri)
-                           # gradient by individual observations and simple
+   if(observationGradient(gri)) 
+       gr <- colSums(gri)
+   else {
+      gr <- gri
+   }
    if(print.level > 2) {
       cat("Initial gradient value:\n")
       print(gr)
@@ -183,9 +188,10 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
          ") not equal to the no. of parameters (", nParam, ")" )
    }
    ## initial approximation for inverse Hessian
-   if(!is.null(dim(gri)) & nrow(gri) > 1)
-       invHess <- solve(crossprod(gri[,activePar]))
+   if(observationGradient(gri)) {
+      invHess <- solve(crossprod(gri[,activePar]))
                            # initial approximation of inverse Hessian (as in BHHH), if possible
+   }
    else
        invHess <- 1e-5*diag(1, nrow=length(gr))
                            # if not possible (Is this OK?)
@@ -230,9 +236,9 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
        samm <- list(theta0=oldparam, f0=oldx, climb=direction)
     }
      gri <- gradient(param, suppliedValue=attr(x, "gradient"), sumObs=FALSE, ...)
-      if(!is.null(dim(gri)) & nrow(gri) > 0) {
-         gr <- colSums(gri)
-      }
+                           # observation-wise gradient.  We only need it in order to compute the BHHH Hessian, if asked so.
+      if(observationGradient(gri))
+          gr <- colSums(gri)
       else
           gr <- gri
       incr <- step * direction
@@ -285,7 +291,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
    names(gr) <- names(param)
    # calculate (final) Hessian
    if(tolower(finalHessian) == "bhhh") {
-      if(!is.null(dim(gri)) & nrow(gri) > 0)
+      if(observationGradient(gri))
           grad <- t(gri) %*% gri
       else {
          hessian <- logLikHess( param, fnOrig = fn,  gradOrig = grad,
@@ -313,9 +319,8 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
                   activePar=activePar,
                   iterations=iter,
                   type=maxim.type)
-   if(!is.null(dim(gri)) & nrow(gri) > 0) {
-      result$gradientObs <- gri
-   }
+   if(observationGradient(gri))
+       result$gradientObs <- gri
    class(result) <- c("maxim", class(result))
    invisible(result)
 }
