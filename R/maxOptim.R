@@ -164,22 +164,22 @@ maxOptim <- function(fn, grad, hess,
    estimate[ !fixed ] <- result$par
    ## Calculate the final gradient
    gradient <- callWithoutSumt( estimate, "logLikGrad",
-      fnOrig = fn, gradOrig = grad, hessOrig = hess, sumObs = FALSE, ... )
-
-   if( !is.null( dim( gradient ) ) ) {
-      if( nrow( gradient ) > 1 ) {
-         gradientObs <- gradient
-      }
-      gradient <- colSums( gradient )
-   } else if( length( start ) == 1 && length( gradient ) > 1 ) {
-      gradientObs <- matrix( gradient, ncol = 1 )
-      gradient <- sum( gradient )
+                               fnOrig = fn, gradOrig = grad, hessOrig = hess, sumObs = FALSE,
+                               suppliedValue=attr(result$value, "gradient"), ... )
+   if(observationGradient(gradient, length(start))) {
+      gradientObs <- gradient
+      gradient <- colSums(as.matrix(gradient ))
    }
-   # calculate (final) Hessian
-   if(tolower(finalHessian) == "bhhh") {
-      grad <- t(gradientObs) %*% gradientObs
+   else {
+      gradientObs <- NULL
    }
-   else if(finalHessian) {
+   ## calculate (final) Hessian
+   if(tolower(finalHessian) == "bhhh" & !is.null(gradientObs)) {
+      hessian <- -t(gradientObs) %*% gradientObs
+   }
+   else if(finalHessian != FALSE) {
+      if(tolower(finalHessian) == "bhhh")
+          warning("Final BHHH Hessian: gradient by observations not available.  Using Hessian matrix")
       hessian <- logLikHess( estimate, fnOrig = fn,  gradOrig = grad,
                             hessOrig = hess, ... )
    }
@@ -189,7 +189,8 @@ maxOptim <- function(fn, grad, hess,
    result <- list(
                    maximum=result$value,
                    estimate=estimate,
-                   gradient=gradient,
+                   gradient=drop(gradient),
+                           # ensure the final (non-observation) gradient is just a vector
                    hessian=as.matrix(hessian),
                    code=result$convergence,
                    message=paste(message(result$convergence), result$message),

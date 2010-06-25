@@ -49,13 +49,13 @@ numericNHessian(f, t0, eps=1e-6, activePar, \dots)
 \section{Warning}{
   Be careful when using numerical differentiation in optimisation
   routines.  Although quite precise in simple cases, they may work very
-  poorly in more complicated cases.
+  poorly in more complicated conditions.
   }
-\author{Ott Toomet \email{siim@obs.ee}}
+\author{Ott Toomet \email{otoomet@gmail.com}}
 \seealso{\code{\link{compareDerivatives}}, \code{\link{deriv}}}
 
 \examples{
-# A simple example with Gaussian bell
+# A simple example with Gaussian bell surface
 f0 <- function(t0) exp(-t0[1]^2 - t0[2]^2)
 numericGradient(f0, c(1,2))
 numericHessian(f0, t0=c(1,2))
@@ -67,7 +67,7 @@ numericHessian(f0, gradf0, t0=c(1,2))
 
 # The central numeric derivatives have usually quite a high precision
 compareDerivatives(f0, gradf0, t0=1:2)
-# The differenc is around 1e-10
+# The difference is around 1e-10
 }
 \keyword{math}
 \keyword{utilities}

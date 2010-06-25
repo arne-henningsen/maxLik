@@ -6,7 +6,7 @@ vcov.maxLik <- function(object, eigentol=1e-12, ...) {
    ## otherwise invert hessian
    activePar <- activePar(object)
    if(!is.null(hess <- hessian(object))) {
-      hess <- hessian(object)[activePar, activePar] 
+      hess <- hessian(object)[activePar, activePar,drop=FALSE] 
       hessev <- abs(eigen(hess, symmetric=TRUE, only.values=TRUE)$values)
       varcovar <- matrix(0, nParam(object), nParam(object))
                            # this makes the fixed parameters to 0

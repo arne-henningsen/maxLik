@@ -139,7 +139,7 @@ the previous one (maximization is not performed in that step).
   \item{maximum}{\code{fn} value at maximum (the last calculated value
     if not converged).}
   \item{estimate}{estimated parameter value.}
-  \item{gradient}{last gradient value which was calculated.  Should be
+  \item{gradient}{vector, last gradient value which was calculated.  Should be
     close to 0 if normal convergence.}
   \item{gradientObs}{matrix of gradients at parameter value \code{estimate}
       evaluated at each observation (only if \code{grad} returns a matrix

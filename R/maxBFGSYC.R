@@ -168,7 +168,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
    ## gradient by individual observations, used for BHHH approximation of initial Hessian.
    ## If not supplied by observations, we use the summed gradient.
    gri <- gradient(param, suppliedValue=attr(x, "gradient"), sumObs=FALSE, ...)
-   if(observationGradient(gri)) 
+   if(observationGradient(gri, length(param))) 
        gr <- colSums(gri)
    else {
       gr <- gri
@@ -188,7 +188,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
          ") not equal to the no. of parameters (", nParam, ")" )
    }
    ## initial approximation for inverse Hessian
-   if(observationGradient(gri)) {
+   if(observationGradient(gri, length(param))) {
       invHess <- solve(crossprod(gri[,activePar]))
                            # initial approximation of inverse Hessian (as in BHHH), if possible
    }
@@ -237,7 +237,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
     }
      gri <- gradient(param, suppliedValue=attr(x, "gradient"), sumObs=FALSE, ...)
                            # observation-wise gradient.  We only need it in order to compute the BHHH Hessian, if asked so.
-      if(observationGradient(gri))
+      if(observationGradient(gri, length(param)))
           gr <- colSums(gri)
       else
           gr <- gri
@@ -291,7 +291,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
    names(gr) <- names(param)
    # calculate (final) Hessian
    if(tolower(finalHessian) == "bhhh") {
-      if(observationGradient(gri))
+      if(observationGradient(gri, length(param)))
           grad <- t(gri) %*% gri
       else {
          hessian <- logLikHess( param, fnOrig = fn,  gradOrig = grad,
@@ -319,7 +319,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
                   activePar=activePar,
                   iterations=iter,
                   type=maxim.type)
-   if(observationGradient(gri))
+   if(observationGradient(gri, length(param)))
        result$gradientObs <- gri
    class(result) <- c("maxim", class(result))
    invisible(result)

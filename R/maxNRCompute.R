@@ -101,14 +101,24 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
          }
       }
       ## Now check if the gradient is vector or matrix...
-      if( !is.null(dim(gr)) && sumObs ) {
-         gr <- colSums(gr)
-      } else {
-         ## ... or vector if only one parameter
-         if(length(gr) > nParam && sumObs ) {
-            gr <- sum(gr)
+      if(!sumObs) {
+         ## return (preferably) by observations, ensure it will be a matrix
+         if(observationGradient(gr, length(theta))) {
+            gr <- as.matrix(gr)
          }
       }
+      else {
+         ## We need just summed gradient
+         if( !is.null(dim(gr))) {
+            gr <- colSums(gr)
+         } else {
+            ## ... or vector if only one parameter
+            if(length(gr) > nParam ) {
+               gr <- sum(gr)
+            }
+         }
+      }
+      ## Why do we need this?
       if( is.null( dim( gr ) ) ) {
          gr[ !activePar ] <- NA
       } else {
@@ -137,6 +147,7 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
          stop("Wrong hessian dimension.  Needed ", nParam, "x", nParam,
               " but supplied ", dim(h)[1], "x", dim(h)[2])
       }
+      ## Why do we need this?
       h[ !activePar, ] <- NA
       h[ , !activePar ] <- NA 
       return( h )
@@ -359,25 +370,35 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
    names(start1) <- nimed
    G1 <- gradient(start1, suppliedValue=attr(f1, "gradient"),
                   sumObs=FALSE, ...)
-   if( !is.null( dim( G1 ) ) ) {
-      if( nrow( G1 ) > 1 ) {
-         gradientObs <- G1
-         colnames( gradientObs ) <- nimed 
-      }
-      G1 <- colSums( G1 )
-   } else if( length( start1 ) == 1 && length( G1 ) > 1 ) {
-      gradientObs <- matrix( G1, ncol = 1 )
-      colnames( gradientObs ) <- nimed
-      G1 <- sum( G1 )
+   if(observationGradient(G1, length(start1))) {
+      gradientObs <- G1
+      colnames( gradientObs ) <- nimed 
+      G1 <- colSums(as.matrix(G1 ))
    }
-
+   else {
+      gradientObs <- NULL
+   }
    names( G1 ) <- nimed
-   rownames( H1 ) <- colnames( H1 ) <- nimed
+   ## calculate (final) Hessian
+   if(tolower(finalHessian) == "bhhh" & !is.null(gradientObs)) {
+      hessian <- -t(gradientObs) %*% gradientObs
+      attr(hessian, "type") <- "BHHH"
+   }
+   else if(finalHessian != FALSE) {
+      if(tolower(finalHessian) == "bhhh")
+          warning("Final BHHH Hessian: gradient by observations not available.  Using Hessian matrix")
+      hessian <- hessian( start1, activePar=activePar,
+                         suppliedValue=attr(f1, "hessian"), ...)
+   }
+   else
+       hessian <- NULL
+   rownames( hessian ) <- colnames( hessian ) <- nimed
+   ##
    result <-list(
                   maximum = unname( drop( f1 ) ),
                   estimate=start1,
-                  gradient=G1,
-                 hessian=H1,
+                  gradient=drop(G1),
+                 hessian=hessian,
                   code=code,
                   message=maximMessage( code),
                   last.step=samm,

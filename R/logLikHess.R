@@ -5,7 +5,7 @@ logLikHess <- function( theta, fnOrig, gradOrig, hessOrig,
    theta <- addFixedPar( theta = theta, start = start, fixed = fixed, ...)
    
    if(!is.null(hessOrig)) {
-       hessian <- hessOrig( theta, ... )
+       hessian <- as.matrix(hessOrig( theta, ... ))
    } else {
       if( is.null( gradOrig ) ) {
          grad2 <- NULL
