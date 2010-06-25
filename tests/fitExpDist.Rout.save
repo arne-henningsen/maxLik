@@ -310,6 +310,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > all.equal( mlghBfgs, mlgBfgs )
 [1] TRUE
 > 
+> 
 > ## NM estimation
 > # Estimate with only function values
 > mlNm <- maxLik( loglik, start = 1, method = "NM" )

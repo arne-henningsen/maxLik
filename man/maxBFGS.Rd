@@ -6,7 +6,8 @@
 \title{BFGS, SANN and Nelder-Mead Maximization}
 \description{
   These functions are wrappers for \code{\link{optim}} where the arguments are
-  compatible with \code{\link{maxNR}}
+  compatible with \code{\link{maxNR}}.  Note that there is a
+  \code{\link{maxNR}}-based BFGS implementation \code{\link{maxBFGSYC}}.
 }
 \usage{
 maxBFGS(fn, grad = NULL, hess=NULL, start, fixed = NULL,
@@ -139,7 +140,8 @@ finalHessian=TRUE,
 }
 \author{Ott Toomet \email{otoomet@ut.ee}}
 
-\seealso{\code{\link{optim}}, \code{\link{nlm}}, \code{\link{maxNR}}, \code{\link{maxBHHH}}.}
+\seealso{\code{\link{optim}}, \code{\link{nlm}}, \code{\link{maxNR}},
+  \code{\link{maxBHHH}}, \code{\link{maxBFGSYC}}.}
 
 \examples{
 # Maximum Likelihood estimation of the parameter of Poissonian distribution

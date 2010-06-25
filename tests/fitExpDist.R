@@ -80,6 +80,7 @@ all.equal( mlgSumBfgs[], mlgBfgs[-12] )
 mlghBfgs <- maxLik( loglik, gradlik, hesslik, start = 1, method = "BFGS" )
 all.equal( mlghBfgs, mlgBfgs )
 
+
 ## NM estimation
 # Estimate with only function values
 mlNm <- maxLik( loglik, start = 1, method = "NM" )
