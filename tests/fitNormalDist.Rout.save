@@ -894,6 +894,12 @@ successive function values within tolerance limit
 23  iterations
 estimate: 1.180813 1.816481 
 Function value: -201.5839 
+> print( mlBFGSYC )
+Maximum Likelihood estimation
+BFGS-YC maximization, 23 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -201.5839 (2 free parameter(s))
+Estimate(s): 1.180813 1.816481 
 > summary(mlBFGSYC)
 --------------------------------------------
 Maximum Likelihood estimation
@@ -908,6 +914,43 @@ sigma  1.81648    0.12844 14.1421 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
+> activePar( mlBFGSYC )
+   mu sigma 
+ TRUE  TRUE 
+> AIC( mlBFGSYC )
+[1] 407.1679
+> coef( mlBFGSYC )
+      mu    sigma 
+1.180813 1.816481 
+> condiNumber( mlBFGSYC )
+mu 	 1 
+sigma 	 1.666670 
+> hessian( mlBFGSYC )
+                 mu         sigma
+mu    -3.030666e+01  5.384592e-05
+sigma  5.384493e-05 -6.061324e+01
+> logLik( mlBFGSYC )
+[1] -201.5839
+> maximType( mlBFGSYC )
+[1] "BFGS-YC maximization"
+> nIter( mlBFGSYC )
+[1] 23
+> nParam( mlBFGSYC )
+[1] 2
+> returnCode( mlBFGSYC )
+[1] 2
+> returnMessage( mlBFGSYC )
+[1] "successive function values within tolerance limit"
+> vcov( mlBFGSYC )
+                mu        sigma
+mu    3.299605e-02 2.931212e-08
+sigma 2.931158e-08 1.649805e-02
+> logLik( summary( mlBFGSYC ) )
+[1] -201.5839
+> all.equal( mlBFGSYC[ -c( 5, 6, 9, 10 ) ], mlg[ -c( 5, 6, 9, 10 ) ] )
+[1] "Component 2: Mean relative difference: 8.072295e-07"
+[2] "Component 3: Mean relative difference: 1.000154"    
+[3] "Component 4: Mean relative difference: 2.958816e-06"
 > llfaG <- function( param ) {
 +    ## Normal loglik with gradient attribute
 +    mu <- param[ 1 ]
@@ -951,20 +994,11 @@ successive function values within tolerance limit
 23  iterations
 estimate: 1.180813 1.816481 
 Function value: -201.5839 
-> summary(mlBFGSYCaG)
---------------------------------------------
-Maximum Likelihood estimation
-BFGS-YC maximization, 23 iterations
-Return code 2: successive function values within tolerance limit
-Log-Likelihood: -201.5839 
-2  free parameters
-Estimates:
-      Estimate Std. error t value   Pr(> t)    
-mu     1.18081    0.18168  6.4996 8.055e-11 ***
-sigma  1.81648    0.12840 14.1466 < 2.2e-16 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
---------------------------------------------
+> all.equal( mlBFGSYCaG, mlBFGSYC )
+[1] "Component 1: Attributes: < Modes: list, NULL >"                                
+[2] "Component 1: Attributes: < names for target but not for current >"             
+[3] "Component 1: Attributes: < Length mismatch: comparison on first 0 components >"
+[4] "Component 4: Mean relative difference: 0.0005268362"                           
 > 
 > 
 > ## BFGS method
