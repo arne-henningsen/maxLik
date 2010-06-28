@@ -298,6 +298,11 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
       cat( "estimate:", param, "\n")
       cat( "Function value:", x, "\n")
    }
+   if( is.matrix( gr ) ) {
+      if( dim( gr )[ 1 ] == 1 ) {
+         gr <- gr[ 1, ]
+      }
+   }
    names(gr) <- names(param)
    # calculate (final) Hessian
    if(tolower(finalHessian) == "bhhh") {
