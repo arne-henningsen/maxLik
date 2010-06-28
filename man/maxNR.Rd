@@ -106,7 +106,7 @@ The idea of the newton method is to approximate the function in a given
     approximation requires knowledge of both gradient and Hessian, the
     latter of which can be quite costly to compute.  Several methods for
     approximating Hessian exist, including BFGS.
-
+    
 The algorithm can work with constant parameters and related changes of
 parameter values.  Constant parameters are useful if a parameter value
 is converging toward the boundary of support, or for testing.  
@@ -180,6 +180,13 @@ the previous one (maximization is not performed in that step).
       \item{barrier.value}{value of the barrier function}
     }
   }
+}
+\section{Warning}{
+    No attempt is made to ensure that user-provided analytic
+    gradient/Hessian is the correct one.  However, the users are
+    recommended to use \code{\link{compareDerivatives}} function,
+    designed for this purpose.  If analytic gradient/Hessian are wrong,
+    the algorithm may not converge, or converge to a wrong point.
 }
 \references{Greene,  W., 2002, \emph{Advanced Econometrics}
   Goldfeld, S. M. and Quandt, R. E., 1972,
