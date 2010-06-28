@@ -315,6 +315,9 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
    }
    else
        hessian <- NULL
+   ## remove attributes from final value of objective (likelihood) function
+   attributes( x )$gradient <- NULL
+   attributes( x )$hessian <- NULL
    ##
    result <-list(
                   maximum = unname( drop( x ) ),

@@ -995,10 +995,7 @@ successive function values within tolerance limit
 estimate: 1.180813 1.816481 
 Function value: -201.5839 
 > all.equal( mlBFGSYCaG, mlBFGSYC )
-[1] "Component 1: Attributes: < Modes: list, NULL >"                                
-[2] "Component 1: Attributes: < names for target but not for current >"             
-[3] "Component 1: Attributes: < Length mismatch: comparison on first 0 components >"
-[4] "Component 4: Mean relative difference: 0.0005268362"                           
+[1] "Component 4: Mean relative difference: 0.0005268362"
 > 
 > 
 > ## BFGS method
