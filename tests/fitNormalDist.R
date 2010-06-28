@@ -46,6 +46,29 @@ gfInd <- function( param ) {
    return( llGrads )
 }
 
+## log likelihood function with gradients as attributes
+llfGrad <- function( param ) {
+   mu <- param[ 1 ]
+   sigma <- param[ 2 ]
+   N <- length( x )
+   llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
+      0.5 * sum( ( x - mu )^2 / sigma^2 )
+   attributes( llValue )$gradient <- c( sum( ( x - mu ) / sigma^2 ),
+      - N / sigma + sum( ( x - mu )^2 / sigma^3 ) )
+   return( llValue )
+}
+
+## log likelihood function with gradients as attributes (individual observations)
+llfGradInd <- function( param ) {
+   mu <- param[ 1 ]
+   sigma <- param[ 2 ]
+   llValues <- -0.5 * log( 2 * pi ) - log( sigma ) -
+      0.5 * ( x - mu )^2 / sigma^2
+   attributes( llValues )$gradient <- cbind( ( x - mu ) / sigma^2,
+      - 1 / sigma + ( x - mu )^2 / sigma^3 )
+   return( llValues )
+}
+
 ## function to calculate analytical Hessians
 hf <- function( param ) {
    mu <- param[ 1 ]
@@ -59,6 +82,43 @@ hf <- function( param ) {
       nrow = 2, ncol = 2 )
    return( llHess )
 }
+
+## log likelihood function with gradients and Hessian as attributes
+llfGradHess <- function( param ) {
+   mu <- param[ 1 ]
+   sigma <- param[ 2 ]
+   N <- length( x )
+   llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
+      0.5 * sum( ( x - mu )^2 / sigma^2 )
+   attributes( llValue )$gradient <- c( sum( ( x - mu ) / sigma^2 ),
+      - N / sigma + sum( ( x - mu )^2 / sigma^3 ) )
+   attributes( llValue )$hessian <- matrix( c(
+      N * ( - 1 / sigma^2 ),
+      sum( - 2 * ( x - mu ) / sigma^3 ),
+      sum( - 2 * ( x - mu ) / sigma^3 ),
+      N / sigma^2 + sum( - 3 * ( x - mu )^2 / sigma^4 ) ),
+      nrow = 2, ncol = 2 )
+   return( llValue )
+}
+
+## log likelihood function with gradients as attributes (individual observations)
+llfGradHessInd <- function( param ) {
+   mu <- param[ 1 ]
+   sigma <- param[ 2 ]
+   N <- length( x )
+   llValues <- -0.5 * log( 2 * pi ) - log( sigma ) -
+      0.5 * ( x - mu )^2 / sigma^2
+   attributes( llValues )$gradient <- cbind( ( x - mu ) / sigma^2,
+      - 1 / sigma + ( x - mu )^2 / sigma^3 )
+   attributes( llValues )$hessian <- matrix( c(
+      N * ( - 1 / sigma^2 ),
+      sum( - 2 * ( x - mu ) / sigma^3 ),
+      sum( - 2 * ( x - mu ) / sigma^3 ),
+      N / sigma^2 + sum( - 3 * ( x - mu )^2 / sigma^4 ) ),
+      nrow = 2, ncol = 2 )
+   return( llValues )
+}
+
 
 # start values
 startVal <- c( mu = 0, sigma = 1 )
@@ -96,9 +156,24 @@ all.equal( mlInd, mlgInd )
 all.equal( mlg[ ], mlgInd[ -11 ] )
 mlgInd[ 11 ]
 
+# with analytical gradients as attribute
+mlG <- maxLik( llfGrad, start = startVal )
+all.equal( mlG, mlg, tolerance = 1e-10 )
+all.equal( mlG$gradient, gf( coef( mlG ) ), check.attributes = FALSE )
+mlGInd <- maxLik( llfGradInd, start = startVal )
+all.equal( mlGInd, mlgInd, tolerance = 1e-10 )
+all.equal( mlGInd$gradient, colSums( gfInd( coef( mlGInd ) ) ),
+   check.attributes = FALSE )
+all.equal( mlGInd$gradientObs, gfInd( coef( mlGInd ) ),
+   check.attributes = FALSE )
+
 # with analytical gradients and Hessians
 mlgh <- maxLik( llf, gf, hf, start = startVal )
 all.equal( mlg, mlgh )
+
+# with analytical gradients and Hessian as attribute
+mlGH <- maxLik( llfGradHess, start = startVal )
+all.equal( mlGH, mlgh, tolerance = 1e-10 )
 
 
 ## BHHH method
@@ -146,9 +221,17 @@ mlgBHHH[ 11 ]
 mlgBHHH2 <- maxLik( llf, gfInd, start = startVal, method = "BHHH" )
 all.equal( mlgBHHH, mlgBHHH2 )
 
+# with analytical gradients as attribute
+mlGBHHH <- maxLik( llfGradInd, start = startVal, method = "BHHH" )
+all.equal( mlGBHHH, mlgBHHH, tolerance = 1e-10 )
+
 # with unused Hessian
 mlghBHHH <- maxLik( llfInd, gfInd, hf, start = startVal, method = "BHHH" )
 all.equal( mlgBHHH, mlghBHHH )
+
+# with unused Hessian as attribute
+mlGHBHHH <- maxLik( llfGradHessInd, start = startVal, method = "BHHH" )
+all.equal( mlGHBHHH, mlghBHHH, tolerance = 1e-10 )
 
 
 ### BFGS-YC method
