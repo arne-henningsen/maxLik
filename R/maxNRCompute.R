@@ -393,6 +393,9 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
    else
        hessian <- NULL
    rownames( hessian ) <- colnames( hessian ) <- nimed
+   ## remove attributes from final value of objective (likelihood) function
+   attributes( f1 )$gradient <- NULL
+   attributes( f1 )$hessian <- NULL
    ##
    result <-list(
                   maximum = unname( drop( f1 ) ),

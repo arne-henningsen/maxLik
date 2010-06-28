@@ -2168,12 +2168,6 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > print( result1 )
 $maximum
 [1] Inf
-attr(,"gradient")
-[1] -1.406971e+156 -2.110457e+156
-attr(,"hessian")
-     [,1] [,2]
-[1,]    2    0
-[2,]    0    2
 
 $estimate
 [1] -7.034857e+155 -1.055228e+156
@@ -2223,12 +2217,6 @@ Estimates:
 > print( result2 )
 $maximum
 [1] Inf
-attr(,"gradient")
-[1]  4.220903e+155 -3.282940e+155
-attr(,"hessian")
-     [,1] [,2]
-[1,]    2    0
-[2,]    0    2
 
 $estimate
 [1]  2.110451e+155 -1.641470e+155
