@@ -864,6 +864,194 @@ $gradientObs
 > 
 > 
 > ### BFGS-YC method
+> mlBFGSYC <- maxLik( llf, start = startVal, method = "bfgsyc" )
+> print( mlBFGSYC )
+Maximum Likelihood estimation
+BFGS-YC maximization, 23 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -201.5839 (2 free parameter(s))
+Estimate(s): 1.180813 1.816481 
+> summary( mlBFGSYC )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS-YC maximization, 23 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -201.5839 
+2  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     1.18081    0.18151  6.5057 7.735e-11 ***
+sigma  1.81648    0.12843 14.1433 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> activePar( mlBFGSYC )
+   mu sigma 
+ TRUE  TRUE 
+> AIC( mlBFGSYC )
+[1] 407.1679
+> coef( mlBFGSYC )
+      mu    sigma 
+1.180813 1.816481 
+> condiNumber( mlBFGSYC )
+mu 	 1 
+sigma 	 1.664482 
+> hessian( mlBFGSYC )
+             mu     sigma
+mu    -30.35439   0.00000
+sigma   0.00000 -60.62351
+> logLik( mlBFGSYC )
+[1] -201.5839
+> maximType( mlBFGSYC )
+[1] "BFGS-YC maximization"
+> nIter( mlBFGSYC )
+[1] 23
+> try( nObs( mlBFGSYC ) )
+Error in nObs.maxLik(mlBFGSYC) : 
+  cannot return the number of observations: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
+> nParam( mlBFGSYC )
+[1] 2
+> returnCode( mlBFGSYC )
+[1] 2
+> returnMessage( mlBFGSYC )
+[1] "successive function values within tolerance limit"
+> vcov( mlBFGSYC )
+              mu      sigma
+mu    0.03294417 0.00000000
+sigma 0.00000000 0.01649525
+> logLik( summary( mlBFGSYC ) )
+[1] -201.5839
+> all.equal( ml[-c(5,6,9,10)], mlBFGSYC[-c(5,6,9,10)] )
+[1] "Component 2: Mean relative difference: 8.042026e-07"
+[2] "Component 3: Mean relative difference: 244.5714"    
+[3] "Component 4: Mean relative difference: 0.001251173" 
+> mlIndBFGSYC <- maxLik( llfInd, start = startVal, method = "bfgsyc" )
+> summary( mlIndBFGSYC )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS-YC maximization, 14 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -201.5839 
+2  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     1.18081    0.18168  6.4996 8.055e-11 ***
+sigma  1.81648    0.12843 14.1433 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> all.equal( mlBFGSYC[ -9 ], mlIndBFGSYC[ -c(9,11) ] )
+[1] "Component 2: Mean relative difference: 1.065246e-06"
+[2] "Component 3: Mean relative difference: 1.342391"    
+[3] "Component 4: Mean relative difference: 0.001872659" 
+> mlIndBFGSYC[ 11 ]
+$gradientObs
+                mu        sigma
+  [1,] -0.39452126 -0.267785422
+  [2,] -0.19431634 -0.481926990
+  [3,]  0.88998804  0.888280221
+  [4,] -0.01206043 -0.550250967
+  [5,]  0.02356773 -0.549506239
+  [6,]  0.98476112  1.211024746
+  [7,]  0.22457900 -0.458899677
+  [8,] -0.82159449  0.675640843
+  [9,] -0.47112277 -0.147335262
+ [10,] -0.32492879 -0.358733509
+ [11,]  0.68715955  0.307205496
+ [12,]  0.16329741 -0.502076833
+ [13,]  0.18812322 -0.486229313
+ [14,]  0.01229060 -0.550240785
+ [15,] -0.39171212 -0.271797366
+ [16,]  1.02831073  1.370272809
+ [17,]  0.24696611 -0.439723939
+ [18,] -1.24683134  2.273364044
+ [19,]  0.37031765 -0.301411851
+ [20,] -0.34137287 -0.338830856
+ [21,] -0.70204213  0.344761047
+ [22,] -0.18691995 -0.487049054
+ [23,] -0.67669406  0.281278143
+ [24,] -0.49660366 -0.102543532
+ [25,] -0.43365546 -0.208913232
+ [26,] -1.07716000  1.557099101
+ [27,]  0.45301320 -0.177735346
+ [28,]  0.03816670 -0.547869120
+ [29,] -0.74466137  0.456760495
+ [30,]  0.70518181  0.352786675
+ [31,]  0.20369648 -0.475145314
+ [32,] -0.23365079 -0.451348629
+ [33,]  0.48776808 -0.118342359
+ [34,]  0.47746855 -0.136400873
+ [35,]  0.44319021 -0.193726534
+ [36,]  0.36261027 -0.311673072
+ [37,]  0.28095033 -0.407134779
+ [38,] -0.09232474 -0.535031760
+ [39,] -0.24025231 -0.445665810
+ [40,] -0.28541434 -0.402542252
+ [41,] -0.47588342 -0.139145901
+ [42,] -0.18082367 -0.491121360
+ [43,] -0.82179762  0.676247212
+ [44,]  1.25987985  2.332779015
+ [45,]  0.67738880  0.282986962
+ [46,] -0.73555217  0.432267885
+ [47,] -0.29900012 -0.388119890
+ [48,] -0.33765360 -0.343418346
+ [49,]  0.41796537 -0.233185061
+ [50,] -0.10533077 -0.530362109
+ [51,]  0.09874699 -0.532802738
+ [52,] -0.07210111 -0.541072080
+ [53,] -0.08078319 -0.538660968
+ [54,]  0.77475832  0.539827979
+ [55,] -0.19164541 -0.483799559
+ [56,]  0.86438633  0.806693039
+ [57,] -0.99354958  1.242606594
+ [58,]  0.29955627 -0.387515204
+ [59,]  0.02027431 -0.549768521
+ [60,]  0.07609156 -0.539997896
+ [61,]  0.17531442 -0.494685394
+ [62,] -0.35927324 -0.316048872
+ [63,] -0.25676625 -0.430756613
+ [64,] -0.67219105  0.270244766
+ [65,] -0.70444698  0.350905099
+ [66,]  0.12918105 -0.520202220
+ [67,]  0.21687720 -0.465075720
+ [68,] -0.02267029 -0.549581615
+ [69,]  0.50421965 -0.088697844
+ [70,]  1.18782793  2.012420848
+ [71,] -0.35242860 -0.324897568
+ [72,] -1.45446356  3.292184000
+ [73,]  0.55481429  0.008631789
+ [74,] -0.48466860 -0.123817320
+ [75,] -0.47182332 -0.146135333
+ [76,]  0.56683565  0.033124770
+ [77,] -0.22740854 -0.456576551
+ [78,] -0.79471638  0.596726786
+ [79,]  0.05509624 -0.545001081
+ [80,] -0.13898472 -0.515426679
+ [81,] -0.05130409 -0.545734006
+ [82,]  0.17873357 -0.492486465
+ [83,] -0.27946758 -0.408644206
+ [84,]  0.33578053 -0.345709625
+ [85,] -0.18844234 -0.486011028
+ [86,]  0.14630635 -0.511632423
+ [87,]  0.61003339  0.125471141
+ [88,]  0.20898031 -0.471184451
+ [89,] -0.25235615 -0.434835129
+ [90,]  0.64153332  0.197084551
+ [91,]  0.54739844 -0.006215834
+ [92,]  0.27760405 -0.410529925
+ [93,]  0.08990545 -0.535832588
+ [94,] -0.43539313 -0.206170130
+ [95,]  0.76993966  0.526307222
+ [96,] -0.41863566 -0.232166444
+ [97,]  1.27101879  2.383988372
+ [98,]  0.87416935  0.837588311
+ [99,] -0.19766394 -0.479543418
+[100,] -0.67694649  0.281898823
+
+> nObs( mlIndBFGSYC )
+[1] 100
+> 
+> # with analytical gradients
 > mlgBFGSYC <- maxLik( llf, gf, start = startVal, method = "bfgsyc" , print.level=1)
 Initial value of the function : -326.589781090133 
 --- iteration 1, step = 1, lnL = -325.0958, chi2 = 1.503935
@@ -894,12 +1082,6 @@ successive function values within tolerance limit
 23  iterations
 estimate: 1.180813 1.816481 
 Function value: -201.5839 
-> print( mlgBFGSYC )
-Maximum Likelihood estimation
-BFGS-YC maximization, 23 iterations
-Return code 2: successive function values within tolerance limit
-Log-Likelihood: -201.5839 (2 free parameter(s))
-Estimate(s): 1.180813 1.816481 
 > summary(mlgBFGSYC)
 --------------------------------------------
 Maximum Likelihood estimation
@@ -914,43 +1096,122 @@ sigma  1.81648    0.12844 14.1421 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
-> activePar( mlgBFGSYC )
-   mu sigma 
- TRUE  TRUE 
-> AIC( mlgBFGSYC )
-[1] 407.1679
-> coef( mlgBFGSYC )
-      mu    sigma 
-1.180813 1.816481 
-> condiNumber( mlgBFGSYC )
-mu 	 1 
-sigma 	 1.666670 
-> hessian( mlgBFGSYC )
-                 mu         sigma
-mu    -3.030666e+01  5.384592e-05
-sigma  5.384493e-05 -6.061324e+01
-> logLik( mlgBFGSYC )
-[1] -201.5839
-> maximType( mlgBFGSYC )
-[1] "BFGS-YC maximization"
-> nIter( mlgBFGSYC )
-[1] 23
-> nParam( mlgBFGSYC )
-[1] 2
-> returnCode( mlgBFGSYC )
-[1] 2
-> returnMessage( mlgBFGSYC )
-[1] "successive function values within tolerance limit"
-> vcov( mlgBFGSYC )
+> all.equal( mlBFGSYC, mlgBFGSYC )
+[1] "Component 3: Mean relative difference: 0.0002097282"
+[2] "Component 4: Mean relative difference: 0.0006386677"
+> mlgIndBFGSYC <- maxLik( llfInd, gfInd, start = startVal,
++    method = "bfgsyc" )
+> all.equal( mlIndBFGSYC, mlgIndBFGSYC )
+[1] "Component 3: Mean relative difference: 0.0006873089"
+[2] "Component 4: Mean relative difference: 0.0002118785"
+> all.equal( mlgBFGSYC[ -9 ], mlgIndBFGSYC[ -c(9,11) ] )
+[1] "Component 2: Mean relative difference: 1.065277e-06"
+[2] "Component 3: Mean relative difference: 1.342101"    
+[3] "Component 4: Mean relative difference: 4.010057e-06"
+> mlgIndBFGSYC[ 11 ]
+$gradientObs
                 mu        sigma
-mu    3.299605e-02 2.931212e-08
-sigma 2.931158e-08 1.649805e-02
-> logLik( summary( mlgBFGSYC ) )
-[1] -201.5839
-> all.equal( mlgBFGSYC[ -c( 5, 6, 9, 10 ) ], mlg[ -c( 5, 6, 9, 10 ) ] )
-[1] "Component 2: Mean relative difference: 8.072295e-07"
-[2] "Component 3: Mean relative difference: 1.000154"    
-[3] "Component 4: Mean relative difference: 2.958816e-06"
+  [1,] -0.39452126 -0.267785422
+  [2,] -0.19431634 -0.481926990
+  [3,]  0.88998804  0.888280220
+  [4,] -0.01206043 -0.550250966
+  [5,]  0.02356773 -0.549506239
+  [6,]  0.98476112  1.211024745
+  [7,]  0.22457900 -0.458899677
+  [8,] -0.82159449  0.675640843
+  [9,] -0.47112277 -0.147335263
+ [10,] -0.32492879 -0.358733509
+ [11,]  0.68715955  0.307205496
+ [12,]  0.16329741 -0.502076833
+ [13,]  0.18812322 -0.486229313
+ [14,]  0.01229060 -0.550240785
+ [15,] -0.39171212 -0.271797365
+ [16,]  1.02831072  1.370272808
+ [17,]  0.24696611 -0.439723939
+ [18,] -1.24683134  2.273364042
+ [19,]  0.37031765 -0.301411851
+ [20,] -0.34137287 -0.338830856
+ [21,] -0.70204213  0.344761047
+ [22,] -0.18691995 -0.487049054
+ [23,] -0.67669406  0.281278142
+ [24,] -0.49660366 -0.102543532
+ [25,] -0.43365546 -0.208913232
+ [26,] -1.07716000  1.557099100
+ [27,]  0.45301320 -0.177735346
+ [28,]  0.03816670 -0.547869120
+ [29,] -0.74466137  0.456760495
+ [30,]  0.70518181  0.352786675
+ [31,]  0.20369648 -0.475145314
+ [32,] -0.23365079 -0.451348629
+ [33,]  0.48776808 -0.118342359
+ [34,]  0.47746855 -0.136400873
+ [35,]  0.44319021 -0.193726534
+ [36,]  0.36261027 -0.311673072
+ [37,]  0.28095033 -0.407134779
+ [38,] -0.09232474 -0.535031760
+ [39,] -0.24025231 -0.445665810
+ [40,] -0.28541434 -0.402542252
+ [41,] -0.47588342 -0.139145901
+ [42,] -0.18082367 -0.491121360
+ [43,] -0.82179761  0.676247212
+ [44,]  1.25987984  2.332779014
+ [45,]  0.67738880  0.282986962
+ [46,] -0.73555217  0.432267884
+ [47,] -0.29900012 -0.388119890
+ [48,] -0.33765360 -0.343418346
+ [49,]  0.41796537 -0.233185061
+ [50,] -0.10533077 -0.530362109
+ [51,]  0.09874699 -0.532802738
+ [52,] -0.07210111 -0.541072080
+ [53,] -0.08078319 -0.538660968
+ [54,]  0.77475832  0.539827979
+ [55,] -0.19164541 -0.483799559
+ [56,]  0.86438633  0.806693039
+ [57,] -0.99354957  1.242606594
+ [58,]  0.29955627 -0.387515204
+ [59,]  0.02027431 -0.549768521
+ [60,]  0.07609156 -0.539997895
+ [61,]  0.17531442 -0.494685394
+ [62,] -0.35927324 -0.316048872
+ [63,] -0.25676625 -0.430756613
+ [64,] -0.67219105  0.270244766
+ [65,] -0.70444698  0.350905098
+ [66,]  0.12918105 -0.520202221
+ [67,]  0.21687720 -0.465075720
+ [68,] -0.02267029 -0.549581615
+ [69,]  0.50421965 -0.088697844
+ [70,]  1.18782793  2.012420846
+ [71,] -0.35242860 -0.324897568
+ [72,] -1.45446355  3.292183999
+ [73,]  0.55481429  0.008631789
+ [74,] -0.48466860 -0.123817320
+ [75,] -0.47182332 -0.146135334
+ [76,]  0.56683565  0.033124770
+ [77,] -0.22740854 -0.456576550
+ [78,] -0.79471638  0.596726785
+ [79,]  0.05509624 -0.545001081
+ [80,] -0.13898472 -0.515426679
+ [81,] -0.05130409 -0.545734006
+ [82,]  0.17873357 -0.492486465
+ [83,] -0.27946757 -0.408644206
+ [84,]  0.33578053 -0.345709625
+ [85,] -0.18844234 -0.486011028
+ [86,]  0.14630635 -0.511632423
+ [87,]  0.61003339  0.125471140
+ [88,]  0.20898031 -0.471184451
+ [89,] -0.25235615 -0.434835129
+ [90,]  0.64153332  0.197084551
+ [91,]  0.54739844 -0.006215834
+ [92,]  0.27760405 -0.410529925
+ [93,]  0.08990545 -0.535832588
+ [94,] -0.43539313 -0.206170130
+ [95,]  0.76993966  0.526307221
+ [96,] -0.41863566 -0.232166445
+ [97,]  1.27101878  2.383988370
+ [98,]  0.87416935  0.837588310
+ [99,] -0.19766394 -0.479543418
+[100,] -0.67694649  0.281898822
+
 > 
 > # with analytical gradients as attribute
 > mlGBFGSYC <- maxLik( llfGrad, start = startVal, method = "bfgsyc" , print.level=1)
@@ -985,6 +1246,19 @@ estimate: 1.180813 1.816481
 Function value: -201.5839 
 > all.equal( mlGBFGSYC, mlgBFGSYC )
 [1] "Component 4: Mean relative difference: 0.0003011891"
+> mlGIndBFGSYC <- maxLik( llfGradInd, start = startVal, method = "bfgsyc" )
+> all.equal( mlGIndBFGSYC, mlgIndBFGSYC )
+[1] "Component 4: Mean relative difference: 0.0005243123"
+> 
+> # with analytical gradients and Hessians
+> mlghBFGSYC <- maxLik( llf, gf, hf, start = startVal, method = "bfgsyc" )
+> all.equal( mlgBFGSYC, mlghBFGSYC )
+[1] TRUE
+> 
+> # with analytical gradients and Hessian as attribute
+> mlGHBFGSYC <- maxLik( llfGradHess, start = startVal, method = "bfgsyc" )
+> all.equal( mlGHBFGSYC, mlghBFGSYC, tolerance = 1e-10 )
+[1] "Component 4: Mean relative difference: 0.000301189"
 > 
 > 
 > ## BFGS method

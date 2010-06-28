@@ -235,27 +235,53 @@ all.equal( mlGHBHHH, mlghBHHH, tolerance = 1e-10 )
 
 
 ### BFGS-YC method
+mlBFGSYC <- maxLik( llf, start = startVal, method = "bfgsyc" )
+print( mlBFGSYC )
+summary( mlBFGSYC )
+activePar( mlBFGSYC )
+AIC( mlBFGSYC )
+coef( mlBFGSYC )
+condiNumber( mlBFGSYC )
+hessian( mlBFGSYC )
+logLik( mlBFGSYC )
+maximType( mlBFGSYC )
+nIter( mlBFGSYC )
+try( nObs( mlBFGSYC ) )
+nParam( mlBFGSYC )
+returnCode( mlBFGSYC )
+returnMessage( mlBFGSYC )
+vcov( mlBFGSYC )
+logLik( summary( mlBFGSYC ) )
+all.equal( ml[-c(5,6,9,10)], mlBFGSYC[-c(5,6,9,10)] )
+mlIndBFGSYC <- maxLik( llfInd, start = startVal, method = "bfgsyc" )
+summary( mlIndBFGSYC )
+all.equal( mlBFGSYC[ -9 ], mlIndBFGSYC[ -c(9,11) ] )
+mlIndBFGSYC[ 11 ]
+nObs( mlIndBFGSYC )
+
+# with analytical gradients
 mlgBFGSYC <- maxLik( llf, gf, start = startVal, method = "bfgsyc" , print.level=1)
-print( mlgBFGSYC )
 summary(mlgBFGSYC)
-activePar( mlgBFGSYC )
-AIC( mlgBFGSYC )
-coef( mlgBFGSYC )
-condiNumber( mlgBFGSYC )
-hessian( mlgBFGSYC )
-logLik( mlgBFGSYC )
-maximType( mlgBFGSYC )
-nIter( mlgBFGSYC )
-nParam( mlgBFGSYC )
-returnCode( mlgBFGSYC )
-returnMessage( mlgBFGSYC )
-vcov( mlgBFGSYC )
-logLik( summary( mlgBFGSYC ) )
-all.equal( mlgBFGSYC[ -c( 5, 6, 9, 10 ) ], mlg[ -c( 5, 6, 9, 10 ) ] )
+all.equal( mlBFGSYC, mlgBFGSYC )
+mlgIndBFGSYC <- maxLik( llfInd, gfInd, start = startVal,
+   method = "bfgsyc" )
+all.equal( mlIndBFGSYC, mlgIndBFGSYC )
+all.equal( mlgBFGSYC[ -9 ], mlgIndBFGSYC[ -c(9,11) ] )
+mlgIndBFGSYC[ 11 ]
 
 # with analytical gradients as attribute
 mlGBFGSYC <- maxLik( llfGrad, start = startVal, method = "bfgsyc" , print.level=1)
 all.equal( mlGBFGSYC, mlgBFGSYC )
+mlGIndBFGSYC <- maxLik( llfGradInd, start = startVal, method = "bfgsyc" )
+all.equal( mlGIndBFGSYC, mlgIndBFGSYC )
+
+# with analytical gradients and Hessians
+mlghBFGSYC <- maxLik( llf, gf, hf, start = startVal, method = "bfgsyc" )
+all.equal( mlgBFGSYC, mlghBFGSYC )
+
+# with analytical gradients and Hessian as attribute
+mlGHBFGSYC <- maxLik( llfGradHess, start = startVal, method = "bfgsyc" )
+all.equal( mlGHBFGSYC, mlghBFGSYC, tolerance = 1e-10 )
 
 
 ## BFGS method
