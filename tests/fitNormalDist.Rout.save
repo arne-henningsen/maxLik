@@ -951,21 +951,10 @@ sigma 2.931158e-08 1.649805e-02
 [1] "Component 2: Mean relative difference: 8.072295e-07"
 [2] "Component 3: Mean relative difference: 1.000154"    
 [3] "Component 4: Mean relative difference: 2.958816e-06"
-> llfaG <- function( param ) {
-+    ## Normal loglik with gradient attribute
-+    mu <- param[ 1 ]
-+    sigma <- param[ 2 ]
-+    N <- length( x )
-+    llValue <- -0.5 * log( 2 * pi ) - log( sigma ) -
-+       0.5 * ( x - mu )^2 / sigma^2 
-+    ll <- (sum( llValue ))
-+    llGrad <- c( sum( ( x - mu ) / sigma^2 ),
-+       - N / sigma + sum( ( x - mu )^2 / sigma^3 ) )
-+    attr(ll, "gradient") <- llGrad
-+    ll
-+ }
-> mlGBFGSYC <- maxLik( llfaG, start = startVal, method = "bfgsyc" , print.level=1)
-Initial value of the function : -326.589781090132 
+> 
+> # with analytical gradients as attribute
+> mlGBFGSYC <- maxLik( llfGrad, start = startVal, method = "bfgsyc" , print.level=1)
+Initial value of the function : -326.589781090133 
 --- iteration 1, step = 1, lnL = -325.0958, chi2 = 1.503935
 --- iteration 2, step = 1, lnL = -253.7229, chi2 = 110.7202
 --- iteration 3, step = 1, lnL = -232.4020, chi2 = 28.10028
@@ -995,7 +984,7 @@ successive function values within tolerance limit
 estimate: 1.180813 1.816481 
 Function value: -201.5839 
 > all.equal( mlGBFGSYC, mlgBFGSYC )
-[1] "Component 4: Mean relative difference: 0.0005268362"
+[1] "Component 4: Mean relative difference: 0.0003011891"
 > 
 > 
 > ## BFGS method

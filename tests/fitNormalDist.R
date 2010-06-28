@@ -252,20 +252,9 @@ returnMessage( mlgBFGSYC )
 vcov( mlgBFGSYC )
 logLik( summary( mlgBFGSYC ) )
 all.equal( mlgBFGSYC[ -c( 5, 6, 9, 10 ) ], mlg[ -c( 5, 6, 9, 10 ) ] )
-llfaG <- function( param ) {
-   ## Normal loglik with gradient attribute
-   mu <- param[ 1 ]
-   sigma <- param[ 2 ]
-   N <- length( x )
-   llValue <- -0.5 * log( 2 * pi ) - log( sigma ) -
-      0.5 * ( x - mu )^2 / sigma^2 
-   ll <- (sum( llValue ))
-   llGrad <- c( sum( ( x - mu ) / sigma^2 ),
-      - N / sigma + sum( ( x - mu )^2 / sigma^3 ) )
-   attr(ll, "gradient") <- llGrad
-   ll
-}
-mlGBFGSYC <- maxLik( llfaG, start = startVal, method = "bfgsyc" , print.level=1)
+
+# with analytical gradients as attribute
+mlGBFGSYC <- maxLik( llfGrad, start = startVal, method = "bfgsyc" , print.level=1)
 all.equal( mlGBFGSYC, mlgBFGSYC )
 
 
