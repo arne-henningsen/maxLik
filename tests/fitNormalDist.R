@@ -235,23 +235,23 @@ all.equal( mlGHBHHH, mlghBHHH, tolerance = 1e-10 )
 
 
 ### BFGS-YC method
-mlBFGSYC <- maxLik( llf, gf, start = startVal, method = "bfgsyc" , print.level=1)
-print( mlBFGSYC )
-summary(mlBFGSYC)
-activePar( mlBFGSYC )
-AIC( mlBFGSYC )
-coef( mlBFGSYC )
-condiNumber( mlBFGSYC )
-hessian( mlBFGSYC )
-logLik( mlBFGSYC )
-maximType( mlBFGSYC )
-nIter( mlBFGSYC )
-nParam( mlBFGSYC )
-returnCode( mlBFGSYC )
-returnMessage( mlBFGSYC )
-vcov( mlBFGSYC )
-logLik( summary( mlBFGSYC ) )
-all.equal( mlBFGSYC[ -c( 5, 6, 9, 10 ) ], mlg[ -c( 5, 6, 9, 10 ) ] )
+mlgBFGSYC <- maxLik( llf, gf, start = startVal, method = "bfgsyc" , print.level=1)
+print( mlgBFGSYC )
+summary(mlgBFGSYC)
+activePar( mlgBFGSYC )
+AIC( mlgBFGSYC )
+coef( mlgBFGSYC )
+condiNumber( mlgBFGSYC )
+hessian( mlgBFGSYC )
+logLik( mlgBFGSYC )
+maximType( mlgBFGSYC )
+nIter( mlgBFGSYC )
+nParam( mlgBFGSYC )
+returnCode( mlgBFGSYC )
+returnMessage( mlgBFGSYC )
+vcov( mlgBFGSYC )
+logLik( summary( mlgBFGSYC ) )
+all.equal( mlgBFGSYC[ -c( 5, 6, 9, 10 ) ], mlg[ -c( 5, 6, 9, 10 ) ] )
 llfaG <- function( param ) {
    ## Normal loglik with gradient attribute
    mu <- param[ 1 ]
@@ -265,8 +265,8 @@ llfaG <- function( param ) {
    attr(ll, "gradient") <- llGrad
    ll
 }
-mlBFGSYCaG <- maxLik( llfaG, start = startVal, method = "bfgsyc" , print.level=1)
-all.equal( mlBFGSYCaG, mlBFGSYC )
+mlGBFGSYC <- maxLik( llfaG, start = startVal, method = "bfgsyc" , print.level=1)
+all.equal( mlGBFGSYC, mlgBFGSYC )
 
 
 ## BFGS method

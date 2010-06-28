@@ -864,7 +864,7 @@ $gradientObs
 > 
 > 
 > ### BFGS-YC method
-> mlBFGSYC <- maxLik( llf, gf, start = startVal, method = "bfgsyc" , print.level=1)
+> mlgBFGSYC <- maxLik( llf, gf, start = startVal, method = "bfgsyc" , print.level=1)
 Initial value of the function : -326.589781090133 
 --- iteration 1, step = 1, lnL = -325.0958, chi2 = 1.503935
 --- iteration 2, step = 1, lnL = -253.7229, chi2 = 110.7202
@@ -894,13 +894,13 @@ successive function values within tolerance limit
 23  iterations
 estimate: 1.180813 1.816481 
 Function value: -201.5839 
-> print( mlBFGSYC )
+> print( mlgBFGSYC )
 Maximum Likelihood estimation
 BFGS-YC maximization, 23 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.5839 (2 free parameter(s))
 Estimate(s): 1.180813 1.816481 
-> summary(mlBFGSYC)
+> summary(mlgBFGSYC)
 --------------------------------------------
 Maximum Likelihood estimation
 BFGS-YC maximization, 23 iterations
@@ -914,40 +914,40 @@ sigma  1.81648    0.12844 14.1421 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
-> activePar( mlBFGSYC )
+> activePar( mlgBFGSYC )
    mu sigma 
  TRUE  TRUE 
-> AIC( mlBFGSYC )
+> AIC( mlgBFGSYC )
 [1] 407.1679
-> coef( mlBFGSYC )
+> coef( mlgBFGSYC )
       mu    sigma 
 1.180813 1.816481 
-> condiNumber( mlBFGSYC )
+> condiNumber( mlgBFGSYC )
 mu 	 1 
 sigma 	 1.666670 
-> hessian( mlBFGSYC )
+> hessian( mlgBFGSYC )
                  mu         sigma
 mu    -3.030666e+01  5.384592e-05
 sigma  5.384493e-05 -6.061324e+01
-> logLik( mlBFGSYC )
+> logLik( mlgBFGSYC )
 [1] -201.5839
-> maximType( mlBFGSYC )
+> maximType( mlgBFGSYC )
 [1] "BFGS-YC maximization"
-> nIter( mlBFGSYC )
+> nIter( mlgBFGSYC )
 [1] 23
-> nParam( mlBFGSYC )
+> nParam( mlgBFGSYC )
 [1] 2
-> returnCode( mlBFGSYC )
+> returnCode( mlgBFGSYC )
 [1] 2
-> returnMessage( mlBFGSYC )
+> returnMessage( mlgBFGSYC )
 [1] "successive function values within tolerance limit"
-> vcov( mlBFGSYC )
+> vcov( mlgBFGSYC )
                 mu        sigma
 mu    3.299605e-02 2.931212e-08
 sigma 2.931158e-08 1.649805e-02
-> logLik( summary( mlBFGSYC ) )
+> logLik( summary( mlgBFGSYC ) )
 [1] -201.5839
-> all.equal( mlBFGSYC[ -c( 5, 6, 9, 10 ) ], mlg[ -c( 5, 6, 9, 10 ) ] )
+> all.equal( mlgBFGSYC[ -c( 5, 6, 9, 10 ) ], mlg[ -c( 5, 6, 9, 10 ) ] )
 [1] "Component 2: Mean relative difference: 8.072295e-07"
 [2] "Component 3: Mean relative difference: 1.000154"    
 [3] "Component 4: Mean relative difference: 2.958816e-06"
@@ -964,7 +964,7 @@ sigma 2.931158e-08 1.649805e-02
 +    attr(ll, "gradient") <- llGrad
 +    ll
 + }
-> mlBFGSYCaG <- maxLik( llfaG, start = startVal, method = "bfgsyc" , print.level=1)
+> mlGBFGSYC <- maxLik( llfaG, start = startVal, method = "bfgsyc" , print.level=1)
 Initial value of the function : -326.589781090132 
 --- iteration 1, step = 1, lnL = -325.0958, chi2 = 1.503935
 --- iteration 2, step = 1, lnL = -253.7229, chi2 = 110.7202
@@ -994,7 +994,7 @@ successive function values within tolerance limit
 23  iterations
 estimate: 1.180813 1.816481 
 Function value: -201.5839 
-> all.equal( mlBFGSYCaG, mlBFGSYC )
+> all.equal( mlGBFGSYC, mlgBFGSYC )
 [1] "Component 4: Mean relative difference: 0.0005268362"
 > 
 > 
