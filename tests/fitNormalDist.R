@@ -250,7 +250,7 @@ llfaG <- function( param ) {
    attr(ll, "gradient") <- llGrad
    ll
 }
-mlBFGSYCaG <- maxLik( llf, gf, start = startVal, method = "bfgsyc" , print.level=1)
+mlBFGSYCaG <- maxLik( llfaG, start = startVal, method = "bfgsyc" , print.level=1)
 summary(mlBFGSYCaG)
 
 

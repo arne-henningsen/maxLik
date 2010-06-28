@@ -921,8 +921,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 +    attr(ll, "gradient") <- llGrad
 +    ll
 + }
-> mlBFGSYCaG <- maxLik( llf, gf, start = startVal, method = "bfgsyc" , print.level=1)
-Initial value of the function : -326.589781090133 
+> mlBFGSYCaG <- maxLik( llfaG, start = startVal, method = "bfgsyc" , print.level=1)
+Initial value of the function : -326.589781090132 
 --- iteration 1, step = 1, lnL = -325.0958, chi2 = 1.503935
 --- iteration 2, step = 1, lnL = -253.7229, chi2 = 110.7202
 --- iteration 3, step = 1, lnL = -232.4020, chi2 = 28.10028
@@ -960,8 +960,8 @@ Log-Likelihood: -201.5839
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     1.18081    0.18165  6.5006 8.003e-11 ***
-sigma  1.81648    0.12844 14.1421 < 2.2e-16 ***
+mu     1.18081    0.18168  6.4996 8.055e-11 ***
+sigma  1.81648    0.12840 14.1466 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
