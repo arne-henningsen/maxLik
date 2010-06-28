@@ -52,7 +52,7 @@ Log-Likelihood: -25.05386
 1  free parameters
 Estimates:
      Estimate Std. error t value   Pr(> t)    
-[1,]  2.11586    0.21157  10.001 < 2.2e-16 ***
+[1,]  2.11586    0.21163  9.9982 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -66,11 +66,11 @@ $estimate
 [1] 2.11586
 
 $gradient
-[1] 3.550493e-07
+[1] 7.354117e-07
 
 $hessian
           [,1]
-[1,] -22.33946
+[1,] -22.32881
 
 $code
 [1] 1
@@ -92,121 +92,122 @@ $type
 
 $gradientObs
                [,1]
-  [1,]  0.386820740
-  [2,] -1.679351421
-  [3,]  0.038568231
-  [4,]  0.071297539
-  [5,]  0.159046830
-  [6,]  0.105191912
-  [7,]  0.248215152
-  [8,]  0.447271104
-  [9,]  0.217946018
- [10,]  0.054046213
- [11,] -0.867527898
- [12,]  0.328582594
- [13,]  0.270226234
- [14,]  0.258112510
- [15,]  0.302819658
- [16,] -0.051988000
- [17,]  0.442843510
- [18,]  0.405508832
- [19,] -0.447366181
- [20,] -0.033385377
- [21,]  0.350564558
- [22,] -0.150788615
- [23,] -2.297263118
- [24,]  0.388690940
- [25,] -0.444122549
- [26,]  0.443407905
- [27,]  0.276872854
- [28,] -0.151172542
- [29,]  0.226692194
- [30,]  0.192216411
- [31,] -0.216352483
- [32,] -0.427312129
- [33,] -0.415672371
- [34,]  0.278198846
- [35,] -0.636970368
- [36,]  0.394516804
- [37,]  0.344060912
- [38,] -0.620259675
- [39,]  0.457767068
- [40,]  0.167203757
- [41,]  0.353775677
- [42,] -0.065340666
- [43,]  0.147748192
- [44,]  0.282720516
- [45,] -0.015242575
- [46,]  0.079882304
- [47,]  0.274371832
- [48,]  0.452304212
- [49,] -1.144888502
- [50,]  0.405280565
- [51,] -0.227729882
- [52,]  0.433252234
- [53,]  0.081373336
- [54,] -0.081125844
- [55,] -0.739938580
- [56,]  0.207183336
- [57,]  0.113523154
- [58,]  0.119192738
- [59,]  0.342989802
- [60,]  0.093240225
- [61,]  0.440175145
- [62,] -0.073023340
- [63,] -0.501036829
- [64,]  0.075378942
- [65,] -0.172199929
- [66,]  0.045446566
- [67,] -0.025803401
- [68,]  0.181706957
- [69,]  0.447988624
- [70,] -0.160098111
- [71,]  0.439821889
- [72,]  0.248287382
- [73,]  0.403098281
- [74,] -0.190732560
- [75,] -0.472651001
- [76,] -0.065057863
- [77,] -0.455150226
- [78,]  0.159506499
- [79,]  0.376818622
- [80,]  0.121605794
- [81,]  0.301920778
- [82,] -0.001157193
- [83,]  0.414118371
- [84,]  0.400994288
- [85,]  0.349288516
- [86,] -0.996985135
- [87,]  0.378740651
- [88,]  0.385031349
- [89,] -0.316835763
- [90,]  0.192621247
- [91,]  0.328718431
- [92,] -0.042173025
- [93,]  0.060583996
- [94,] -0.644872461
- [95,] -0.632559538
- [96,] -0.356326811
- [97,] -0.323978772
- [98,]  0.220528787
- [99,] -0.832596222
-[100,]  0.361128747
+  [1,]  0.386820744
+  [2,] -1.679351418
+  [3,]  0.038568234
+  [4,]  0.071297543
+  [5,]  0.159046834
+  [6,]  0.105191916
+  [7,]  0.248215156
+  [8,]  0.447271107
+  [9,]  0.217946022
+ [10,]  0.054046217
+ [11,] -0.867527895
+ [12,]  0.328582598
+ [13,]  0.270226238
+ [14,]  0.258112513
+ [15,]  0.302819662
+ [16,] -0.051987996
+ [17,]  0.442843513
+ [18,]  0.405508836
+ [19,] -0.447366177
+ [20,] -0.033385373
+ [21,]  0.350564562
+ [22,] -0.150788611
+ [23,] -2.297263115
+ [24,]  0.388690944
+ [25,] -0.444122545
+ [26,]  0.443407909
+ [27,]  0.276872858
+ [28,] -0.151172538
+ [29,]  0.226692198
+ [30,]  0.192216415
+ [31,] -0.216352479
+ [32,] -0.427312126
+ [33,] -0.415672368
+ [34,]  0.278198850
+ [35,] -0.636970364
+ [36,]  0.394516808
+ [37,]  0.344060916
+ [38,] -0.620259670
+ [39,]  0.457767072
+ [40,]  0.167203761
+ [41,]  0.353775681
+ [42,] -0.065340662
+ [43,]  0.147748196
+ [44,]  0.282720520
+ [45,] -0.015242571
+ [46,]  0.079882308
+ [47,]  0.274371836
+ [48,]  0.452304216
+ [49,] -1.144888499
+ [50,]  0.405280569
+ [51,] -0.227729879
+ [52,]  0.433252238
+ [53,]  0.081373340
+ [54,] -0.081125841
+ [55,] -0.739938576
+ [56,]  0.207183339
+ [57,]  0.113523158
+ [58,]  0.119192742
+ [59,]  0.342989805
+ [60,]  0.093240228
+ [61,]  0.440175149
+ [62,] -0.073023336
+ [63,] -0.501036825
+ [64,]  0.075378945
+ [65,] -0.172199925
+ [66,]  0.045446570
+ [67,] -0.025803397
+ [68,]  0.181706961
+ [69,]  0.447988628
+ [70,] -0.160098107
+ [71,]  0.439821893
+ [72,]  0.248287386
+ [73,]  0.403098285
+ [74,] -0.190732557
+ [75,] -0.472650997
+ [76,] -0.065057859
+ [77,] -0.455150222
+ [78,]  0.159506503
+ [79,]  0.376818626
+ [80,]  0.121605798
+ [81,]  0.301920782
+ [82,] -0.001157190
+ [83,]  0.414118375
+ [84,]  0.400994292
+ [85,]  0.349288519
+ [86,] -0.996985131
+ [87,]  0.378740655
+ [88,]  0.385031353
+ [89,] -0.316835760
+ [90,]  0.192621251
+ [91,]  0.328718435
+ [92,] -0.042173022
+ [93,]  0.060584000
+ [94,] -0.644872457
+ [95,] -0.632559534
+ [96,] -0.356326807
+ [97,] -0.323978768
+ [98,]  0.220528791
+ [99,] -0.832596218
+[100,]  0.361128751
 
 attr(,"class")
 [1] "maxLik" "maxim"  "list"  
 > # log-likelihood value summed over all observations
 > mlSum <- maxLik( loglikSum, start = 1 )
 > all.equal( mlSum[], ml[-11] )
-[1] "Component 3: Mean relative difference: 0.000625"
+[1] TRUE
 > 
 > # Estimate with analytic gradient
 > mlg <- maxLik( loglik, gradlik, start = 1 )
 > nObs( mlg )
 [1] 100
 > all.equal( mlg, ml )
-[1] "Component 3: Mean relative difference: 4.859286"    
-[2] "Component 4: Mean relative difference: 0.0001073857"
+[1] "Component 3: Mean relative difference: 11.13631"     
+[2] "Component 4: Mean relative difference: 0.0003697648" 
+[3] "Component 11: Mean relative difference: 1.987437e-08"
 > # gradient summed over all observations
 > mlgSum <- maxLik( loglikSum, gradlikSum, start = 1 )
 > all.equal( mlgSum[], mlg[-11] )
@@ -243,10 +244,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > nObs( mlBhhh )
 [1] 100
 > all.equal( mlBhhh[ -c( 5, 6, 10 ) ], ml[ -c( 5, 6, 10 ) ] )
-[1] "Component 2: Mean relative difference: 1.942932e-08"
-[2] "Component 3: Mean relative difference: 0.7222391"   
-[3] "Component 4: Mean relative difference: 0.02810344"  
-[4] "Component 8: Mean relative difference: 2.718984e-08"
+[1] "Component 3: Mean relative difference: 0.4246754"   
+[2] "Component 4: Mean relative difference: 0.02761294"  
+[3] "Component 8: Mean relative difference: 1.598758e-08"
 > 
 > # Estimate with analytic gradient
 > mlgBhhh <- maxLik( loglik, gradlik, start = 1, method = "BHHH" )
@@ -285,20 +285,19 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > nObs( mlBfgs )
 [1] 100
 > all.equal( mlBfgs[ -c( 5, 6, 9, 10, 11 ) ], ml[ -c( 5, 6, 9, 10 ) ] )
-[1] "Component 3: Mean relative difference: 0.6323927"   
-[2] "Component 4: Mean relative difference: 0.000317965" 
-[3] "Component 7: Mean relative difference: 1.798869e-08"
+[1] "Component 3: Mean relative difference: 0.2469304"   
+[2] "Component 4: Mean relative difference: 0.0007949126"
 > # log-likelihood value summed over all observations
 > mlSumBfgs <- maxLik( loglikSum, start = 1, method = "BFGS" )
 > all.equal( mlSumBfgs[], mlBfgs[-12] )
-[1] "Component 3: Mean relative difference: 0.0005170037"
+[1] "Component 3: Mean relative difference: 0.003193431"
 > 
 > # Estimate with analytic gradient
 > mlgBfgs <- maxLik( loglik, gradlik, start = 1, method = "BFGS" )
 > nObs( mlgBfgs )
 [1] 100
 > all.equal( mlgBfgs, mlBfgs )
-[1] "Component 3: Mean relative difference: 0.007287182" 
+[1] "Component 3: Mean relative difference: 0.003724576" 
 [2] "Component 4: Mean relative difference: 0.0004254472"
 > # gradient summed over all observations
 > mlgSumBfgs <- maxLik( loglikSum, gradlikSum, start = 1, method = "BFGS" )
@@ -332,17 +331,17 @@ Log-Likelihood: -25.05386
 1  free parameters
 Estimates:
      Estimate Std. error t value   Pr(> t)    
-[1,]  2.11602    0.21156  10.002 < 2.2e-16 ***
+[1,]  2.11602    0.21154  10.003 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > nObs( mlNm )
 [1] 100
 > all.equal( mlNm[ -c( 5, 6, 9, 10, 11 ) ], ml[ -c( 5, 6, 9, 10 ) ] )
-[1] "Component 2: Mean relative difference: 7.351024e-05"
-[2] "Component 3: Mean relative difference: 1.000102"    
-[3] "Component 4: Mean relative difference: 0.0001590078"
-[4] "Component 7: Mean relative difference: 0.0001023246"
+[1] "Component 2: Mean relative difference: 7.351838e-05"
+[2] "Component 3: Mean relative difference: 1.000212"    
+[3] "Component 4: Mean relative difference: 0.0007949126"
+[4] "Component 7: Mean relative difference: 0.0001023358"
 > 
 > # Estimate with analytic gradient (unused during estimation)
 > mlgNm <- maxLik( loglik, gradlik, start = 1, method = "NM" )
@@ -352,8 +351,8 @@ In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
 > nObs( mlgNm )
 [1] 100
 > all.equal( mlgNm, mlNm )
-[1] "Component 3: Mean relative difference: 1.818245e-07"
-[2] "Component 4: Mean relative difference: 0.0004134995"
+[1] "Component 3: Mean relative difference: 1.818244e-07"
+[2] "Component 4: Mean relative difference: 0.000572573" 
 > 
 > # Estimate with analytic gradient and Hessian (both unused during estimation)
 > mlghNm <- maxLik( loglik, gradlik, hesslik, start = 1, method = "NM" )
@@ -381,25 +380,25 @@ Log-Likelihood: -25.05386
 1  free parameters
 Estimates:
      Estimate Std. error t value   Pr(> t)    
-[1,]  2.11588    0.21161   9.999 < 2.2e-16 ***
+[1,]  2.11588    0.21154  10.002 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > nObs( mlSann )
 [1] 100
 > all.equal( mlSann[ -c( 5, 6, 9, 10, 11 ) ], ml[ -c( 5, 6, 9, 10 ) ] )
-[1] "Component 2: Mean relative difference: 1.013788e-05"
-[2] "Component 3: Mean relative difference: 1.000742"    
-[3] "Component 4: Mean relative difference: 0.0003181674"
-[4] "Component 7: Mean relative difference: 1.411139e-05"
+[1] "Component 2: Mean relative difference: 1.014602e-05"
+[2] "Component 3: Mean relative difference: 1.001536"    
+[3] "Component 4: Mean relative difference: 0.0007949126"
+[4] "Component 7: Mean relative difference: 1.41226e-05" 
 > 
 > # Estimate with analytic gradient (unused during estimation)
 > mlgSann <- maxLik( loglik, gradlik, start = 1, method = "SANN" )
 > nObs( mlgSann )
 [1] 100
 > all.equal( mlgSann, mlSann )
-[1] "Component 3: Mean relative difference: 6.705094e-06"
-[2] "Component 4: Mean relative difference: 0.0001904553"
+[1] "Component 3: Mean relative difference: 6.125469e-06"
+[2] "Component 4: Mean relative difference: 0.0004457583"
 > 
 > # Estimate with analytic gradient and Hessian (both unused during estimation)
 > mlghSann <- maxLik( loglik, gradlik, hesslik, start = 1, method = "SANN" )
@@ -490,8 +489,8 @@ Error in estfun.maxLik(mlSum) :
 Error in nObs.maxLik(x) : 
   cannot return the number of observations: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
 > bread( ml )
-         [,1]
-[1,] 4.476383
+        [,1]
+[1,] 4.47852
 > bread( mlg )
          [,1]
 [1,] 4.476864
@@ -508,14 +507,14 @@ Error in nObs.maxLik(x) :
          [,1]
 [1,] 4.476864
 > bread( mlNm )
-         [,1]
-[1,] 4.475671
+        [,1]
+[1,] 4.47496
 > bread( mlgNm )
          [,1]
 [1,] 4.477522
 > bread( mlSann )
-         [,1]
-[1,] 4.477807
+        [,1]
+[1,] 4.47496
 > bread( mlgSann )
          [,1]
 [1,] 4.476955
@@ -530,9 +529,9 @@ Error in nObs.maxLik(x) :
 +    print( all.equal( sandwich( x ), vcov( x ) ) )
 + }
 > printSandwich( ml )
-          [,1]
-[1,] 0.0435402
-[1] "Mean relative difference: 0.02810344"
+           [,1]
+[1,] 0.04358178
+[1] "Mean relative difference: 0.02761294"
 > printSandwich( mlg )
            [,1]
 [1,] 0.04354955
@@ -555,16 +554,16 @@ Error in nObs.maxLik(x) :
 [1] "Mean relative difference: 0.02799309"
 > printSandwich( mlNm )
            [,1]
-[1,] 0.04352636
-[1] "Mean relative difference: 0.02826694"
+[1,] 0.04351252
+[1] "Mean relative difference: 0.02843044"
 > printSandwich( mlgNm )
            [,1]
 [1,] 0.04356236
 [1] "Mean relative difference: 0.02784193"
 > printSandwich( mlSann )
            [,1]
-[1,] 0.04356791
-[1] "Mean relative difference: 0.02777644"
+[1,] 0.04351252
+[1] "Mean relative difference: 0.02843045"
 > printSandwich( mlgSann )
            [,1]
 [1,] 0.04355132
