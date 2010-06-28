@@ -337,8 +337,10 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
                   activePar=activePar,
                   iterations=iter,
                   type=maxim.type)
-   if(observationGradient(gri, length(param)))
+   if(observationGradient(gri, length(param))) {
+       colnames( gri ) <- names( param )
        result$gradientObs <- gri
+   }
    class(result) <- c("maxim", class(result))
    invisible(result)
 }
