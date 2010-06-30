@@ -232,6 +232,14 @@ mlgBHHH2 <- maxLik( llf, gfInd, start = startVal, method = "BHHH" )
 all.equal( mlgBHHH, mlgBHHH2 )
 
 # with analytical gradients as attribute
+try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
+x <- xSaved[1]
+try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
+try( maxLik( llfGradInd, start = startVal, method = "BHHH" ) )
+x <- xSaved[1:2]
+try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
+try( maxLik( llfGradInd, start = startVal, method = "BHHH" ) )
+x <- xSaved
 mlGBHHH <- maxLik( llfGradInd, start = startVal, method = "BHHH" )
 all.equal( mlGBHHH, mlgBHHH, tolerance = 1e-10 )
 

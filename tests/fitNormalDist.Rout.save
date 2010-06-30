@@ -866,6 +866,31 @@ $gradientObs
 [1] TRUE
 > 
 > # with analytical gradients as attribute
+> try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
+Error in hessian(start1, activePar = activePar, suppliedValue = attr(f1,  : 
+  Wrong hessian dimension.  Needed 2x2 but supplied 1x1
+> x <- xSaved[1]
+> try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
+Error in hessian(start1, activePar = activePar, suppliedValue = attr(f1,  : 
+  Wrong hessian dimension.  Needed 2x2 but supplied 1x1
+> try( maxLik( llfGradInd, start = startVal, method = "BHHH" ) )
+Maximum Likelihood estimation
+BHHH maximisation, 100 iterations
+Return code 4: Iteration limit exceeded.
+Log-Likelihood: 77.90719 (2 free parameter(s))
+Estimate(s): -0.1209513 5.837773e-35 
+> x <- xSaved[1:2]
+> try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
+Error in hessian(start1, activePar = activePar, suppliedValue = attr(f1,  : 
+  Wrong hessian dimension.  Needed 2x2 but supplied 1x1
+> try( maxLik( llfGradInd, start = startVal, method = "BHHH" ) )
+Maximum Likelihood estimation
+BHHH maximisation, 8 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -0.6227434 (2 free parameter(s))
+Estimate(s): 0.2158296 0.3302445 
+There were 25 warnings (use warnings() to see them)
+> x <- xSaved
 > mlGBHHH <- maxLik( llfGradInd, start = startVal, method = "BHHH" )
 > all.equal( mlGBHHH, mlgBHHH, tolerance = 1e-10 )
 [1] TRUE
