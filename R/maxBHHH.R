@@ -4,6 +4,22 @@ maxBHHH <- function(fn, grad=NULL, hess=NULL,
                     iterlim=100,
                     ...) {
    ## hess:   Hessian, not used, for compatibility with the other methods
+
+   ## check if arguments of user-provided functions have reserved names
+   argNames <- c( "fn", "grad", "hess", "start", "print.level", "iterlim" )
+   checkFuncArgs( fn, argNames, "fn", "maxBHHH" )
+   if( !is.null( grad ) ) {
+      checkFuncArgs( grad, argNames, "grad", "maxBHHH" )
+   }
+   if( !is.null( hess ) ) {
+      checkFuncArgs( hess, argNames, "hess", "maxBHHH" )
+   }
+
+   ## initialize variable for saving the value of gradient 
+   ## so that it can be used later for calculating the Hessian
+   gradVal <- NULL
+
+   ## wrapper function for obtaining the log-likelihood value
    func <- function(theta, ...) {
       ## we wrap the likelihood function here, in order to save gradient
       ## value when it is supplied as attribute
@@ -19,19 +35,8 @@ maxBHHH <- function(fn, grad=NULL, hess=NULL,
                            # want to do BHHH!
       a
    }
-   ##
-   argNames <- c( "fn", "grad", "hess", "start", "print.level", "iterlim" )
-   checkFuncArgs( fn, argNames, "fn", "maxBHHH" )
-   if( !is.null( grad ) ) {
-      checkFuncArgs( grad, argNames, "grad", "maxBHHH" )
-   }
-   if( !is.null( hess ) ) {
-      checkFuncArgs( hess, argNames, "hess", "maxBHHH" )
-   }
-   ## Save the value of gradient and use it later for hessian
-   gradVal <- NULL
 
-
+   ## wrapper function for obtaining the gradients
    gradient <- function(theta, ...) {
       if(!is.null(grad)) {
          ## Gradient supplied by the user.
@@ -47,10 +52,14 @@ maxBHHH <- function(fn, grad=NULL, hess=NULL,
       assign("gradVal", g, inherits=TRUE)
       return( g )
    }
+
+   ## wrapper function for obtaining the Hessian
    hess <- function(theta, ...) {
       g <- gradVal
       return( -t(g) %*% g )
    }
+
+   ## using the Newton-Raphson algorithm with BHHH method for Hessian
    a <- maxNR(func, grad=gradient, hess=hess, start=start,
               iterlim=iterlim,
               print.level=print.level, ...)
