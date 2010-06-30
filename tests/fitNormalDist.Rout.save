@@ -867,22 +867,38 @@ $gradientObs
 > 
 > # with analytical gradients as attribute
 > try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
-Error in hessian(start1, activePar = activePar, suppliedValue = attr(f1,  : 
-  Wrong hessian dimension.  Needed 2x2 but supplied 1x1
+Error in checkBhhhGrad(g = grad, theta = theta, analytic = TRUE) : 
+  Gradient is not a matrix.
+the BHHH method requires that the gradient function
+(argument 'grad') returns a numeric matrix,
+where each row must correspond to the gradient(s)
+of the log-likelihood function at an individual
+(independent) observation and each column must
+correspond to a parameter
 > x <- xSaved[1]
 > try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
-Error in hessian(start1, activePar = activePar, suppliedValue = attr(f1,  : 
-  Wrong hessian dimension.  Needed 2x2 but supplied 1x1
+Error in checkBhhhGrad(g = grad, theta = theta, analytic = TRUE) : 
+  Gradient is not a matrix.
+the BHHH method requires that the gradient function
+(argument 'grad') returns a numeric matrix,
+where each row must correspond to the gradient(s)
+of the log-likelihood function at an individual
+(independent) observation and each column must
+correspond to a parameter
 > try( maxLik( llfGradInd, start = startVal, method = "BHHH" ) )
-Maximum Likelihood estimation
-BHHH maximisation, 100 iterations
-Return code 4: Iteration limit exceeded.
-Log-Likelihood: 77.90719 (2 free parameter(s))
-Estimate(s): -0.1209513 5.837773e-35 
+Error in checkBhhhGrad(g = grad, theta = theta, analytic = TRUE) : 
+  the matrix returned by the gradient function (argument 'grad') must have at least as many rows as the number of parameters (2), where each row must correspond to the gradients of the log-likelihood function of an individual (independent) observation:
+ currently, there are (is) 2 parameter(s) but the gradient matrix has only 1 row(s)
 > x <- xSaved[1:2]
 > try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
-Error in hessian(start1, activePar = activePar, suppliedValue = attr(f1,  : 
-  Wrong hessian dimension.  Needed 2x2 but supplied 1x1
+Error in checkBhhhGrad(g = grad, theta = theta, analytic = TRUE) : 
+  Gradient is not a matrix.
+the BHHH method requires that the gradient function
+(argument 'grad') returns a numeric matrix,
+where each row must correspond to the gradient(s)
+of the log-likelihood function at an individual
+(independent) observation and each column must
+correspond to a parameter
 > try( maxLik( llfGradInd, start = startVal, method = "BHHH" ) )
 Maximum Likelihood estimation
 BHHH maximisation, 8 iterations

@@ -8,8 +8,10 @@ maxBHHH <- function(fn, grad=NULL, hess=NULL,
       ## we wrap the likelihood function here, in order to save gradient
       ## value when it is supplied as attribute
       a <- fn(theta, ...)
-      if(!is.null(grad <- attr(a, "gradient")))
+      if(!is.null(grad <- attr(a, "gradient"))) {
+         checkBhhhGrad( g = grad, theta = theta, analytic = TRUE )
           assign("gradVal", grad, inherits=TRUE)
+      }
       attr(a, "hessian") <- NULL
                            # this is to ensure we do BHHH even if the
                            # likelihood function supplies analytic Hessian.
