@@ -243,6 +243,11 @@ x <- xSaved
 mlGBHHH <- maxLik( llfGradInd, start = startVal, method = "BHHH" )
 all.equal( mlGBHHH, mlgBHHH, tolerance = 1e-10 )
 
+# with analytical gradients as argument and attribute
+mlgGBHHH <- maxLik( llfGradInd, start = startVal, method = "BHHH" )
+all.equal( mlgGBHHH, mlgBHHH, tolerance = 1e-10 )
+all.equal( mlgGBHHH, mlGBHHH, tolerance = 1e-10 )
+
 # with unused Hessian
 mlghBHHH <- maxLik( llfInd, gfInd, hf, start = startVal, method = "BHHH" )
 all.equal( mlgBHHH, mlghBHHH )
@@ -250,6 +255,11 @@ all.equal( mlgBHHH, mlghBHHH )
 # with unused Hessian as attribute
 mlGHBHHH <- maxLik( llfGradHessInd, start = startVal, method = "BHHH" )
 all.equal( mlGHBHHH, mlghBHHH, tolerance = 1e-10 )
+
+# with analytical gradients and Hessian as argument and attribute
+mlgGhHBHHH <- maxLik( llfGradHessInd, start = startVal, method = "BHHH" )
+all.equal( mlgGhHBHHH, mlghBHHH, tolerance = 1e-10 )
+all.equal( mlgGhHBHHH, mlGHBHHH, tolerance = 1e-10 )
 
 
 ### BFGS-YC method
