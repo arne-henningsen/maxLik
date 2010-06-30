@@ -15,6 +15,12 @@ maxBHHH <- function(fn, grad=NULL, hess=NULL,
       checkFuncArgs( hess, argNames, "hess", "maxBHHH" )
    }
 
+   ## extract attributes "gradient" and "hessian"
+   f1 <- callWithoutArgs( theta = start, fName = "fn", 
+      args = c( names( formals( maxNR ) ), names( formals(sumt) ) ), ... )
+   attGradient <- attributes( f1 )$gradient
+   attHessian  <- attributes( f1 )$hessian
+
    ## initialize variable for saving the value of gradient 
    ## so that it can be used later for calculating the Hessian
    gradVal <- NULL
@@ -37,20 +43,24 @@ maxBHHH <- function(fn, grad=NULL, hess=NULL,
    }
 
    ## wrapper function for obtaining the gradients
-   gradient <- function(theta, ...) {
-      if(!is.null(grad)) {
-         ## Gradient supplied by the user.
-         g <- grad(theta, ...)
-         if( length( theta ) == 1 ) {
-            g <- matrix( g, ncol = 1 )
+   if( is.null( attGradient ) ) {
+      gradient <- function(theta, ...) {
+         if(!is.null(grad)) {
+            ## Gradient supplied by the user.
+            g <- grad(theta, ...)
+            if( length( theta ) == 1 ) {
+               g <- matrix( g, ncol = 1 )
+            }
+         } else {
+            ## fall back to the numeric gradient
+            g <- numericGradient(fn, theta, ...)
          }
-      } else {
-         ## fall back to the numeric gradient
-         g <- numericGradient(fn, theta, ...)
+         checkBhhhGrad( g = g, theta = theta, analytic = !is.null( grad ) )
+         assign("gradVal", g, inherits=TRUE)
+         return( g )
       }
-      checkBhhhGrad( g = g, theta = theta, analytic = !is.null( grad ) )
-      assign("gradVal", g, inherits=TRUE)
-      return( g )
+   } else {
+      gradient <- NULL
    }
 
    ## wrapper function for obtaining the Hessian
