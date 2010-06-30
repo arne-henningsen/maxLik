@@ -167,6 +167,11 @@ all.equal( mlGInd$gradient, colSums( gfInd( coef( mlGInd ) ) ),
 all.equal( mlGInd$gradientObs, gfInd( coef( mlGInd ) ),
    check.attributes = FALSE )
 
+# with analytical gradients as argument and attribute
+mlgG <- maxLik( llfGrad, gf, start = startVal )
+all.equal( mlgG, mlg, tolerance = 1e-10 )
+all.equal( mlgG, mlG, tolerance = 1e-10 )
+
 # with analytical gradients and Hessians
 mlgh <- maxLik( llf, gf, hf, start = startVal )
 all.equal( mlg, mlgh )
@@ -174,6 +179,11 @@ all.equal( mlg, mlgh )
 # with analytical gradients and Hessian as attribute
 mlGH <- maxLik( llfGradHess, start = startVal )
 all.equal( mlGH, mlgh, tolerance = 1e-10 )
+
+# with analytical gradients and Hessian as argument and attribute
+mlgGhH <- maxLik( llfGradHess, gf, hf, start = startVal )
+all.equal( mlgGhH, mlgh, tolerance = 1e-10 )
+all.equal( mlgGhH, mlGH, tolerance = 1e-10 )
 
 
 ## BHHH method
