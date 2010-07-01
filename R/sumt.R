@@ -39,11 +39,6 @@ sumt <- function(fn, grad=NULL, hess=NULL,
          args = names(formals(maxRoutine)), ... ) )
    }
 
-   ## the penalized objective function
-   Phi <- function(theta, ...) {
-      callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn, gradOrig = grad,
-         hessOrig = hess, ... ) - rho * penalty(theta)
-   }
    SUMTMessage <- function(code) {
       message <- switch(code,
                         "1" = "penalty close to zero",
@@ -52,23 +47,32 @@ sumt <- function(fn, grad=NULL, hess=NULL,
                         paste("Code", code))
       return(message)
    }
-   ## --------------------
+   ## the penalized objective function
+   Phi <- function(theta, ...) {
+      callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn, gradOrig = grad,
+         hessOrig = hess, ... ) - rho * penalty(theta)
+   }
+   ## gradient of the penalized objective function
    if(!is.null(grad)) {
       gradPhi<- function(theta, ...) {
          g <- grad(theta, ...)
-         if(is.matrix(g))
+         if(is.matrix(g)) {
              g <- colSums(g)
-         g - rho*gPenalty(theta)
+         }
+         return( g - rho*gPenalty(theta) )
       }
-   }
-   else
+   } else {
        gradPhi <- NULL
-   if(!is.null(hess)) {
-      hessPhi <- function(theta, ...) 
-         hess(theta, ...) - rho*hessPenalty(theta)
    }
-   else
+   ## Hessian of the penalized objective function
+   if(!is.null(hess)) {
+      hessPhi <- function(theta, ...) {
+         return( hess(theta, ...) - rho*hessPenalty(theta) )
+      }
+   } else {
        hessPhi <- NULL
+   }
+
    ##
    A <- constraints$eqA
    B <- constraints$eqB
