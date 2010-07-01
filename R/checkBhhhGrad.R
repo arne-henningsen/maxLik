@@ -4,7 +4,7 @@ checkBhhhGrad <- function( g, theta, analytic ) {
          ## Check whether the gradient has enough rows (about enough
          ## observations in data)
          if( !is.matrix( g ) ) {
-            stop("Gradient is not a matrix.\n",
+            stop("gradient is not a matrix but of class '", class( g ), "';\n",
                  "the BHHH method requires that the gradient function\n",
                  "(argument 'grad') returns a numeric matrix,\n",
                  "where each row must correspond to the gradient(s)\n",
