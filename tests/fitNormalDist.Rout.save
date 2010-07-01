@@ -691,7 +691,7 @@ $gradientObs
 > # with analytical gradients
 > mlgBHHH <- try( maxLik( llf, gf, start = startVal, method = "BHHH" ) )
 Error in checkBhhhGrad(g = g, theta = theta, analytic = !is.null(grad)) : 
-  Gradient is not a matrix.
+  gradient is not a matrix but of class 'numeric';
 the BHHH method requires that the gradient function
 (argument 'grad') returns a numeric matrix,
 where each row must correspond to the gradient(s)
@@ -700,7 +700,7 @@ of the log-likelihood function at an individual
 correspond to a parameter
 > mlgBHHH <- try( maxLik( llfInd, gf, start = startVal, method = "BHHH" ) )
 Error in checkBhhhGrad(g = g, theta = theta, analytic = !is.null(grad)) : 
-  Gradient is not a matrix.
+  gradient is not a matrix but of class 'numeric';
 the BHHH method requires that the gradient function
 (argument 'grad') returns a numeric matrix,
 where each row must correspond to the gradient(s)
@@ -868,7 +868,7 @@ $gradientObs
 > # with analytical gradients as attribute
 > try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
 Error in checkBhhhGrad(g = grad, theta = theta, analytic = TRUE) : 
-  Gradient is not a matrix.
+  gradient is not a matrix but of class 'numeric';
 the BHHH method requires that the gradient function
 (argument 'grad') returns a numeric matrix,
 where each row must correspond to the gradient(s)
@@ -878,7 +878,7 @@ correspond to a parameter
 > x <- xSaved[1]
 > try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
 Error in checkBhhhGrad(g = grad, theta = theta, analytic = TRUE) : 
-  Gradient is not a matrix.
+  gradient is not a matrix but of class 'numeric';
 the BHHH method requires that the gradient function
 (argument 'grad') returns a numeric matrix,
 where each row must correspond to the gradient(s)
@@ -892,7 +892,7 @@ Error in checkBhhhGrad(g = grad, theta = theta, analytic = TRUE) :
 > x <- xSaved[1:2]
 > try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
 Error in checkBhhhGrad(g = grad, theta = theta, analytic = TRUE) : 
-  Gradient is not a matrix.
+  gradient is not a matrix but of class 'numeric';
 the BHHH method requires that the gradient function
 (argument 'grad') returns a numeric matrix,
 where each row must correspond to the gradient(s)
