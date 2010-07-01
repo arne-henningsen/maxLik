@@ -49,17 +49,23 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    }
    ## the penalized objective function
    Phi <- function(theta, ...) {
-      callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn, gradOrig = grad,
-         hessOrig = hess, ... ) - rho * penalty(theta)
+      llVal <- callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn,
+         gradOrig = grad, hessOrig = hess, ... )
+      llVal <- llVal - rho * penalty( theta ) / length( llVal )
+      return( llVal )
    }
    ## gradient of the penalized objective function
    if(!is.null(grad)) {
       gradPhi<- function(theta, ...) {
-         g <- grad(theta, ...)
+         g <- grad( theta, ... )
          if(is.matrix(g)) {
-             g <- colSums(g)
+            g <- g - matrix(
+               rep( rho * gPenalty( theta ) / nrow( g ), each = nrow( g ) ),
+               nrow = nrow( g ), ncol = ncol( g ) )
+         } else {
+            g <- g - rho * gPenalty( theta )
          }
-         return( g - rho*gPenalty(theta) )
+         return( g )
       }
    } else {
        gradPhi <- NULL
