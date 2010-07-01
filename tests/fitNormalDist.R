@@ -912,9 +912,20 @@ all.equal( mlConInd, mlgConInd )
 all.equal( mlgCon[], mlgConInd[-12] )
 mlgConInd[12]
 
+# with analytical gradients as attribute
+mlGCon <- maxLik( llfGrad, start = startVal, constraints = eqCon )
+all.equal( mlGCon, mlgCon )
+all.equal( mlGCon, mlCon )
+
 # with analytical gradients and Hessians
 mlghCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon )
 all.equal( mlgCon, mlghCon )
+
+# with analytical gradients and Hessians as attributes
+mlGHCon <- maxLik( llfGradHess, start = startVal, constraints = eqCon )
+all.equal( mlGHCon, mlghCon )
+all.equal( mlGHCon, mlCon )
+
 
 ## BHHH method with equality constraints
 mlBhhhCon <- maxLik( llfInd, start = startVal, constraints = eqCon,
@@ -947,10 +958,24 @@ mlgBhhhConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon,
    method = "BHHH" )
 all.equal( mlgBhhhCon, mlgBhhhConInd )
 
+# with analytical gradients as attribute
+mlGBhhhCon <- maxLik( llfGradInd, start = startVal, constraints = eqCon,
+   method = "BHHH" )
+summary( mlGBhhhCon )
+all.equal( mlGBhhhCon, mlgBhhhCon )
+all.equal( mlGBhhhCon, mlBhhhCon )
+
 # with analytical gradients and unused Hessians
 mlghBhhhCon <- maxLik( llf, gfInd, hf, start = startVal, constraints = eqCon,
    method = "BHHH" )
 all.equal( mlgBhhhCon, mlghBhhhCon )
+
+# with analytical gradients and unused Hessians as attributes
+mlGHBhhhCon <- maxLik( llfGradHessInd, start = startVal, constraints = eqCon,
+   method = "BHHH" )
+all.equal( mlGHBhhhCon, mlghBhhhCon )
+all.equal( mlGHBhhhCon, mlGBhhhCon )
+
 
 ## BFGS method with equality constraints
 mlBfgsCon <- maxLik( llf, start = startVal, constraints = eqCon,

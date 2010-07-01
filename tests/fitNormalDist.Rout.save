@@ -5087,10 +5087,47 @@ $gradientObs
 [100,] -0.679487785  0.17204583
 
 > 
+> # with analytical gradients as attribute
+> mlGCon <- maxLik( llfGrad, start = startVal, constraints = eqCon )
+> all.equal( mlGCon, mlgCon )
+ [1] "Component 1: Mean relative difference: 0.0003796631"              
+ [2] "Component 2: Mean relative difference: 0.01295649"                
+ [3] "Component 3: Mean relative difference: 0.0505588"                 
+ [4] "Component 4: Mean relative difference: 0.02499657"                
+ [5] "Component 5: Mean relative difference: 2"                         
+ [6] "Component 6: 1 string mismatch"                                   
+ [7] "Component 7: target is NULL, current is list"                     
+ [8] "Component 9: Mean relative difference: 0.5"                       
+ [9] "Component 11: Component 2: Mean absolute difference: 0.0001298934"
+[10] "Component 11: Component 3: Mean relative difference: 1"           
+[11] "Component 11: Component 4: 1 string mismatch"                     
+[12] "Component 11: Component 5: Mean relative difference: 0.3"         
+> all.equal( mlGCon, mlCon )
+[1] TRUE
+> 
 > # with analytical gradients and Hessians
 > mlghCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon )
 > all.equal( mlgCon, mlghCon )
 [1] "Component 11: Component 2: Mean relative difference: 5.845209e-08"
+> 
+> # with analytical gradients and Hessians as attributes
+> mlGHCon <- maxLik( llfGradHess, start = startVal, constraints = eqCon )
+> all.equal( mlGHCon, mlghCon )
+ [1] "Component 1: Mean relative difference: 0.0003796631"              
+ [2] "Component 2: Mean relative difference: 0.01295649"                
+ [3] "Component 3: Mean relative difference: 0.0505588"                 
+ [4] "Component 4: Mean relative difference: 0.02499657"                
+ [5] "Component 5: Mean relative difference: 2"                         
+ [6] "Component 6: 1 string mismatch"                                   
+ [7] "Component 7: target is NULL, current is list"                     
+ [8] "Component 9: Mean relative difference: 0.5"                       
+ [9] "Component 11: Component 2: Mean absolute difference: 0.0001298934"
+[10] "Component 11: Component 3: Mean relative difference: 1"           
+[11] "Component 11: Component 4: 1 string mismatch"                     
+[12] "Component 11: Component 5: Mean relative difference: 0.3"         
+> all.equal( mlGHCon, mlCon )
+[1] TRUE
+> 
 > 
 > ## BHHH method with equality constraints
 > mlBhhhCon <- maxLik( llfInd, start = startVal, constraints = eqCon,
@@ -5306,11 +5343,84 @@ successive function values within tolerance limit
 > all.equal( mlgBhhhCon, mlgBhhhConInd )
 [1] TRUE
 > 
+> # with analytical gradients as attribute
+> mlGBhhhCon <- maxLik( llfGradInd, start = startVal, constraints = eqCon,
++    method = "BHHH" )
+> summary( mlGBhhhCon )
+--------------------------------------------
+Maximum Likelihood estimation
+BHHH maximisation, 2 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -204.5333 
+2  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     0.81975    0.17423  4.7051 2.537e-06 ***
+sigma  1.68026    0.10715 15.6808 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+Return code: 1 
+penalty close to zero 
+10  outer iterations, barrier value 2.069940e-10 
+--------------------------------------------
+> all.equal( mlGBhhhCon, mlgBhhhCon )
+ [1] "Component 1: Mean relative difference: 0.01418374"                
+ [2] "Component 2: Mean relative difference: 0.01298474"                
+ [3] "Component 3: Mean relative difference: 0.07383964"                
+ [4] "Component 4: Mean relative difference: 0.2472045"                 
+ [5] "Component 5: Mean relative difference: 2"                         
+ [6] "Component 6: 1 string mismatch"                                   
+ [7] "Component 7: target is NULL, current is list"                     
+ [8] "Component 9: Mean relative difference: 0.5"                       
+ [9] "Component 11: Component 2: Mean absolute difference: 6.258185e-05"
+[10] "Component 11: Component 3: Mean relative difference: 1"           
+[11] "Component 11: Component 4: 1 string mismatch"                     
+[12] "Component 11: Component 5: Mean relative difference: 0.1"         
+[13] "Component 12: Mean relative difference: 0.02900471"               
+> all.equal( mlGBhhhCon, mlBhhhCon )
+ [1] "Component 1: Mean relative difference: 0.01418374"                
+ [2] "Component 2: Mean relative difference: 0.01298474"                
+ [3] "Component 3: Mean relative difference: 0.07383964"                
+ [4] "Component 4: Mean relative difference: 0.2472045"                 
+ [5] "Component 5: Mean relative difference: 2"                         
+ [6] "Component 6: 1 string mismatch"                                   
+ [7] "Component 7: target is NULL, current is list"                     
+ [8] "Component 9: Mean relative difference: 0.5"                       
+ [9] "Component 11: Component 2: Mean absolute difference: 6.258185e-05"
+[10] "Component 11: Component 3: Mean relative difference: 1"           
+[11] "Component 11: Component 4: 1 string mismatch"                     
+[12] "Component 11: Component 5: Mean relative difference: 0.1"         
+[13] "Component 12: Mean relative difference: 0.02900471"               
+> 
 > # with analytical gradients and unused Hessians
 > mlghBhhhCon <- maxLik( llf, gfInd, hf, start = startVal, constraints = eqCon,
 +    method = "BHHH" )
 > all.equal( mlgBhhhCon, mlghBhhhCon )
 [1] TRUE
+> 
+> # with analytical gradients and unused Hessians as attributes
+> mlGHBhhhCon <- maxLik( llfGradHessInd, start = startVal, constraints = eqCon,
++    method = "BHHH" )
+> all.equal( mlGHBhhhCon, mlghBhhhCon )
+ [1] "Component 1: Mean relative difference: 0.01418374"                
+ [2] "Component 2: Mean relative difference: 0.01298474"                
+ [3] "Component 3: Mean relative difference: 0.07383964"                
+ [4] "Component 4: Mean relative difference: 0.2472045"                 
+ [5] "Component 5: Mean relative difference: 2"                         
+ [6] "Component 6: 1 string mismatch"                                   
+ [7] "Component 7: target is NULL, current is list"                     
+ [8] "Component 9: Mean relative difference: 0.5"                       
+ [9] "Component 11: Component 2: Mean absolute difference: 6.258185e-05"
+[10] "Component 11: Component 3: Mean relative difference: 1"           
+[11] "Component 11: Component 4: 1 string mismatch"                     
+[12] "Component 11: Component 5: Mean relative difference: 0.1"         
+[13] "Component 12: Mean relative difference: 0.02900471"               
+> all.equal( mlGHBhhhCon, mlGBhhhCon )
+[1] TRUE
+> 
 > 
 > ## BFGS method with equality constraints
 > mlBfgsCon <- maxLik( llf, start = startVal, constraints = eqCon,
