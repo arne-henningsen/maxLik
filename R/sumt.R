@@ -172,8 +172,13 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    }
    ## Now we replace the resulting gradient and Hessian with those,
    ## calculated on the original function
-   gradient <- callWithoutMaxArgs( theta, "logLikGrad", fnOrig = fn,
+   llVal <- callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn,
       gradOrig = grad, hessOrig = hess, sumObs = FALSE, ... )
+   gradient <- attr( llVal, "gradient" )
+   if( is.null( gradient ) ) {
+      gradient <- callWithoutMaxArgs( theta, "logLikGrad", fnOrig = fn,
+         gradOrig = grad, hessOrig = hess, sumObs = FALSE, ... )
+   }
    if( !is.null( dim( gradient ) ) ) {
       if( nrow( gradient ) > 1 ) {
          gradientObs <- gradient
@@ -184,6 +189,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
       gradient <- sum( gradient )
    }
    result$gradient <- gradient
+   names( result$gradient ) <- names( result$estimate )
 
    result$hessian <- callWithoutMaxArgs( theta, "logLikHess", fnOrig = fn,
       gradOrig = grad, hessOrig = hess, ... )
@@ -195,6 +201,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
                              )
    if( exists( "gradientObs" ) ) {
       result$gradientObs <- gradientObs
+      colnames( result$gradientObs ) <- names( result$estimate )
    }
 
    if( result$constraints$barrier.value > 0.001 ) {
