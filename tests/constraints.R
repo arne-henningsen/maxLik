@@ -96,11 +96,11 @@ a <- maxLik(logLikMix,
             print.level=2, SUMTRho0=1)
 summary(a)
 ## BHHH, analytic gradient (numeric does not converge?)
-a <- maxLik(logLikMix, gradLikMix,
+try( maxLik(logLikMix, gradLikMix,
             start=start, method="bhhh",
             constraints=list(eqA=A, eqB=B),
-            print.level=2, SUMTRho0=1)
-summary(a)
+            print.level=2, SUMTRho0=1) )
+# summary(a)
 
 
 # ------------------ Now test extra parameters for the function ----

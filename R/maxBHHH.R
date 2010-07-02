@@ -15,67 +15,32 @@ maxBHHH <- function(fn, grad=NULL, hess=NULL,
       checkFuncArgs( hess, argNames, "hess", "maxBHHH" )
    }
 
-   ## extract attributes "gradient" and "hessian"
-   f1 <- callWithoutArgs( theta = start, fName = "fn", 
-      args = c( names( formals( maxNR ) ), names( formals(sumt) ) ), ... )
-   attGradient <- attributes( f1 )$gradient
-   attHessian  <- attributes( f1 )$hessian
-
-   ## initialize variable for saving the value of gradient 
-   ## so that it can be used later for calculating the Hessian
-   gradVal <- NULL
-
-   ## wrapper function for obtaining the log-likelihood value
+   ## wrapper function for obtaining the log-likelihood value, gradient, and Hessian
    func <- function(theta, ...) {
-      ## we wrap the likelihood function here, in order to save gradient
-      ## value when it is supplied as attribute
       a <- fn(theta, ...)
-      if(!is.null(grad <- attr(a, "gradient"))) {
-         checkBhhhGrad( g = grad, theta = theta, analytic = TRUE )
-         attr(a, "hessian") <- -t( grad ) %*% grad
+      if(!is.null(g <- attr(a, "gradient"))) {
+         ## gradient when it is supplied as attribute
+         checkBhhhGrad( g = g, theta = theta, analytic = TRUE )
+      } else if(!is.null(grad)) {
+         ## gradient supplied as function "grad"
+         g <- grad(theta, ...)
+         if( length( theta ) == 1 ) {
+            g <- matrix( g, ncol = 1 )
+         }
+         checkBhhhGrad( g = g, theta = theta, analytic = TRUE )
       } else {
-         attr(a, "hessian") <- NULL
-                           # this is to ensure we do BHHH even if the
-                           # likelihood function supplies analytic Hessian.
-                           # Use maxNR if you have Hessian and don't
-                           # want to do BHHH!
+         ## fall back to the numeric gradient
+         g <- numericGradient(fn, theta, ...)
+         checkBhhhGrad( g = g, theta = theta, analytic = FALSE )
       }
+      attr( a, "gradient" ) <- g
+      attr( a, "hessian" ) <- -t( g ) %*% g
 
       a
    }
 
-   if( is.null( attGradient ) ) {
-      ## wrapper function for obtaining the gradients
-      gradient <- function(theta, ...) {
-         if(!is.null(grad)) {
-            ## Gradient supplied by the user.
-            g <- grad(theta, ...)
-            if( length( theta ) == 1 ) {
-               g <- matrix( g, ncol = 1 )
-            }
-         } else {
-            ## fall back to the numeric gradient
-            g <- numericGradient(fn, theta, ...)
-         }
-         checkBhhhGrad( g = g, theta = theta, analytic = !is.null( grad ) )
-         assign("gradVal", g, inherits=TRUE)
-         return( g )
-      }
-  
-      ## wrapper function for obtaining the Hessian
-      hess <- function(theta, ...) {
-         g <- gradVal
-         return( -t(g) %*% g )
-      }
-   } else {
-      ## no functions for gradients and Hessian 
-      ## if gradients are provided as attributes
-      gradient <- NULL
-      hess <- NULL
-   }
-
    ## using the Newton-Raphson algorithm with BHHH method for Hessian
-   a <- maxNR(func, grad=gradient, hess=hess, start=start,
+   a <- maxNR(func, start=start,
               iterlim=iterlim,
               print.level=print.level, ...)
    a$type = "BHHH maximisation"

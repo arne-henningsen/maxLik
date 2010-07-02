@@ -945,8 +945,8 @@ returnCode( mlBhhhCon )
 returnMessage( mlBhhhCon )
 vcov( mlBhhhCon )
 logLik( summary( mlBhhhCon ) )
-all.equal( mlCon[ -c( 5, 6, 7, 9, 10 ) ], mlBhhhCon[ -c( 5, 6, 7, 9, 10, 11 ) ] )
-mlBhhhCon[11]
+all.equal( mlCon[ -c( 5, 6, 7, 9, 10 ) ], mlBhhhCon[ -c( 5, 6, 7, 9, 10, 12 ) ] )
+mlBhhhCon[12]
 nObs( mlBhhhCon )
 
 # with analytical gradients
@@ -962,8 +962,8 @@ all.equal( mlgBhhhCon, mlgBhhhConInd )
 mlGBhhhCon <- maxLik( llfGradInd, start = startVal, constraints = eqCon,
    method = "BHHH" )
 summary( mlGBhhhCon )
-all.equal( mlGBhhhCon[], mlgBhhhCon[ c( 1:10, 12, 11 ) ] )
-all.equal( mlGBhhhCon[], mlBhhhCon[ c( 1:10, 12, 11 ) ] )
+all.equal( mlGBhhhCon, mlgBhhhCon )
+all.equal( mlGBhhhCon, mlBhhhCon )
 
 # with analytical gradients and unused Hessians
 mlghBhhhCon <- maxLik( llf, gfInd, hf, start = startVal, constraints = eqCon,
@@ -973,7 +973,7 @@ all.equal( mlgBhhhCon, mlghBhhhCon )
 # with analytical gradients and unused Hessians as attributes
 mlGHBhhhCon <- maxLik( llfGradHessInd, start = startVal, constraints = eqCon,
    method = "BHHH" )
-all.equal( mlGHBhhhCon[], mlghBhhhCon[ c( 1:10, 12, 11 ) ] )
+all.equal( mlGHBhhhCon, mlghBhhhCon )
 all.equal( mlGHBhhhCon, mlGBhhhCon )
 
 
