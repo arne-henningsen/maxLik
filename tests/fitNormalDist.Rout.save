@@ -457,17 +457,12 @@ $gradientObs
 > # with analytical gradients as attribute
 > mlG <- maxLik( llfGrad, start = startVal )
 > all.equal( mlG, mlg, tolerance = 1e-10 )
-[1] "Component 2: Mean relative difference: 7.290774e-10"
-[2] "Component 3: Mean relative difference: 0.900224"    
-[3] "Component 4: Mean relative difference: 0.0009265906"
+[1] TRUE
 > all.equal( mlG$gradient, gf( coef( mlG ) ), check.attributes = FALSE )
 [1] TRUE
 > mlGInd <- maxLik( llfGradInd, start = startVal )
 > all.equal( mlGInd, mlgInd, tolerance = 1e-10 )
-[1] "Component 2: Mean relative difference: 4.618072e-09" 
-[2] "Component 3: Mean relative difference: 0.9693982"    
-[3] "Component 4: Mean relative difference: 0.0003017794" 
-[4] "Component 11: Mean relative difference: 1.066672e-08"
+[1] TRUE
 > all.equal( mlGInd$gradient, colSums( gfInd( coef( mlGInd ) ) ),
 +    check.attributes = FALSE )
 [1] TRUE
@@ -480,9 +475,7 @@ $gradientObs
 > all.equal( mlgG, mlg, tolerance = 1e-10 )
 [1] TRUE
 > all.equal( mlgG, mlG, tolerance = 1e-10 )
-[1] "Component 2: Mean relative difference: 7.290774e-10"
-[2] "Component 3: Mean relative difference: 8.251335"    
-[3] "Component 4: Mean relative difference: 0.0009268904"
+[1] TRUE
 > 
 > # with analytical gradients and Hessians
 > mlgh <- maxLik( llf, gf, hf, start = startVal )

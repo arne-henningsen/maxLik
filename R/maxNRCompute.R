@@ -127,7 +127,7 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
       return(gr)
    }
    hessian <- function(theta, activePar=activePar,
-                       suppliedValue=NULL, ...) {
+                       suppliedValue=NULL, gradAttr = FALSE, ...) {
       ## suppliedValue: use hessian value supplied from elsewhere
       ##           (attribute to fn) and only do sanity checks
       ##
@@ -139,7 +139,22 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
          if(!is.null(hess)) {
             h <- as.matrix(hess(theta, ...))
          } else {
-            h <- numericHessian( f = func, grad = gradient, t0 = theta,
+            if( gradAttr ) {
+               gradFunc <- function( theta, ... ) {
+                  gr <- attr( func( theta, ... ), "gradient" )
+                  if( !is.null( dim( gr ) ) ) {
+                     gr <- colSums(gr)
+                  } else {
+                     if( length( gr ) > nParam ) {
+                        gr <- sum( gr )
+                     }
+                  }
+                  return( gr )
+               }
+            } else {
+               gradFunc <- gradient
+            }
+            h <- numericHessian( f = func, grad = gradFunc, t0 = theta,
                                 activePar=activePar, ...)
          }
       }
@@ -200,7 +215,8 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
          ") not equal to the no. of parameters (", nParam, ")" )
    }
    H1 <- hessian(start1, activePar=activePar,
-                 suppliedValue=attr(f1, "hessian"), ...)
+                 suppliedValue=attr(f1, "hessian"),
+                 gradAttr = !is.null( attr( f1, "gradient" ) ), ... )
    if(any(is.na(H1[activePar, activePar]))) {
       stop("NA in the initial Hessian")
    }
@@ -321,7 +337,8 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
          code <- 6; break;
       }
       H1 <- hessian(start1, activePar=activePar,
-                    suppliedValue=attr(f1, "hessian"), ...)
+                    suppliedValue=attr(f1, "hessian"), 
+                    gradAttr = !is.null( attr( f1, "gradient" ) ), ... )
       if( print.level > 1) {
         cat( "-----Iteration", iter, "-----\n")
       }
@@ -388,7 +405,8 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
       if(tolower(finalHessian) == "bhhh")
           warning("Final BHHH Hessian: gradient by observations not available.  Using Hessian matrix")
       hessian <- hessian( start1, activePar=activePar,
-                         suppliedValue=attr(f1, "hessian"), ...)
+                         suppliedValue=attr(f1, "hessian"), 
+                         gradAttr = !is.null( attr( f1, "gradient" ) ), ... )
    }
    else
        hessian <- NULL
