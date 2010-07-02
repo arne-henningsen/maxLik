@@ -77,7 +77,109 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
       fixed = fixed )
 
    if(is.null(constraints)) {
-       result <- maxNRCompute(fn=fn, grad=grad, hess=hess,
+
+      func <- function(theta, sumObs = FALSE, ...) {
+         ## number of parameters
+         nParam <- length( theta )
+
+         ## value of log-likelihood function
+         f <- fn(theta, ...)
+         if( sumObs ) {
+            fAttr <- attributes(f)
+            f <- sum(f)
+            mostattributes(f) <- fAttr
+         }
+
+         ## gradient of log-likelihood function
+         gr <- attr( f, "gradient" )
+         if( is.null( gr ) ) {
+            if( !is.null( grad ) ) {
+               gr <- grad(theta, ...)
+            } else {
+               gr <- numericGradient(f = fn, t0 = theta,
+                                    activePar=!fixed, ...)
+            }
+         }
+         ## Now check if the gradient is vector or matrix...
+         if(!sumObs) {
+            if(observationGradient(gr, length(theta))) {
+               gr <- as.matrix(gr)
+            }
+         } else {
+            ## We need just summed gradient
+            if( !is.null(dim(gr))) {
+               gr <- colSums(gr)
+            } else {
+               ## ... or vector if only one parameter
+               if(length(gr) > nParam ) {
+                  gr <- sum(gr)
+               }
+            }
+         }
+         ## Set gradients of fixed parameters to zero so that they are always zero
+         ## (no matter if they are analytical or finite-difference gradients)
+         if( is.null( dim( gr ) ) ) {
+            gr[ fixed ] <- NA
+         } else {
+            gr[ , fixed ] <- NA
+         }
+
+         ## Hessian of log-likelihood function
+         h <- attr( f, "hessian" )
+         if( is.null( h ) ) {
+            if(!is.null(hess)) {
+               h <- as.matrix(hess(theta, ...))
+            } else {
+               llFunc <- function( theta, ... ) {
+                  return( sum( fn( theta, ... ) ) )
+               }
+               if( !is.null( attr( f, "gradient" ) ) ) {
+                  gradFunc <- function( theta, ... ) {
+                     g <- attr( fn( theta, ... ), "gradient" )
+                     if( !is.null( dim( g ) ) ) {
+                        g <- colSums(g)
+                     } else {
+                        if( length( g ) > length( theta ) ) {
+                           g <- sum( g )
+                        }
+                     }
+                     return( g )
+                  }
+               } else if( !is.null( grad ) ) {
+                  gradFunc <- function( theta, ... ) {
+                     g <- grad( theta, ... )
+                     if( !is.null(dim(g))) {
+                        g <- colSums(g)
+                     } else {
+                        if(length(g) > nParam ) {
+                           g <- sum(g)
+                        }
+                     }
+                     return( g )
+                  }
+               } else {
+                  gradFunc <- NULL
+               }
+               h <- numericHessian( f = llFunc, grad = gradFunc, t0 = theta,
+                                 activePar=!fixed, ...)
+            }
+         }
+         if((dim(h)[1] != nParam) | (dim(h)[2] != nParam)) {
+            stop("Wrong hessian dimension.  Needed ", nParam, "x", nParam,
+               " but supplied ", dim(h)[1], "x", dim(h)[2])
+         }
+         ## Set elements of the Hessian corresponding to the fixed parameters
+         ## to zero so that they are always zero (no matter if they are
+         ## calculated analytical or by the finite-difference method)
+         h[ fixed, ] <- NA
+         h[ , fixed ] <- NA
+
+         attr( f, "gradient" ) <- gr
+         attr( f, "hessian" ) <- h
+         return( f )
+      }
+
+       result <- maxNRCompute(fn=func,
                               start=start,
                               print.level=print.level,
                               tol=tol, reltol=reltol,
