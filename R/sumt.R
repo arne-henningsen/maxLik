@@ -52,12 +52,27 @@ sumt <- function(fn, grad=NULL, hess=NULL,
       llVal <- callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn,
          gradOrig = grad, hessOrig = hess, ... )
       llVal <- llVal - rho * penalty( theta ) / length( llVal )
+      g <- attributes( llVal )$gradient
+      if( !is.null( g ) ) {
+         if( is.matrix( g ) ) {
+            g <- g - matrix(
+               rep( rho * gPenalty( theta ) / nrow( g ), each = nrow( g ) ),
+               nrow = nrow( g ), ncol = ncol( g ) )
+         } else {
+            g <- g - rho * gPenalty( theta )
+         }
+         attributes( llVal )$gradient <- g - rho * gPenalty( theta )
+      }
+      h <- attributes( llVal )$hessian
+      if( !is.null( h ) ) {
+         attributes( llVal )$hessian <- h - rho * hessPenalty( theta )
+      }
       return( llVal )
    }
    ## gradient of the penalized objective function
    if(!is.null(grad)) {
       gradPhi<- function(theta, ...) {
-         g <- grad( theta, ... )
+         g <- grad(theta, ...)
          if(is.matrix(g)) {
             g <- g - matrix(
                rep( rho * gPenalty( theta ) / nrow( g ), each = nrow( g ) ),
@@ -68,7 +83,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
          return( g )
       }
    } else {
-       gradPhi <- NULL
+      gradPhi <- NULL
    }
    ## Hessian of the penalized objective function
    if(!is.null(hess)) {
@@ -76,7 +91,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
          return( hess(theta, ...) - rho*hessPenalty(theta) )
       }
    } else {
-       hessPhi <- NULL
+      hessPhi <- NULL
    }
 
    ##
