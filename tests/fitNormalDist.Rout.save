@@ -4976,10 +4976,8 @@ successive function values within tolerance limit
 [12] "Component 11: Component 5: Mean relative difference: 0.3"         
 [13] "Component 12: Mean relative difference: 0.01788957"               
 > all.equal( mlgCon[], mlgConInd[-11] )
-[1] "Component 7: Component 2: Attributes: < Component 1: Attributes: < Component 1: Mean relative difference: 99 > >"
-[2] "Component 7: Component 2: Attributes: < Component 1: Numeric: lengths (2, 200) differ >"                         
-[3] "Component 7: Component 3: Mean relative difference: 1.883145e-08"                                                
-[4] "Component 11: Component 2: Mean relative difference: 4.724812e-08"                                               
+[1] "Component 7: Component 3: Mean relative difference: 1.883145e-08" 
+[2] "Component 11: Component 2: Mean relative difference: 4.724812e-08"
 > mlgConInd[11]
 $gradientObs
                  mu       sigma

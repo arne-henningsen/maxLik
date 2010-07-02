@@ -1,4 +1,4 @@
-maxNRCompute <- function(fn, grad=NULL, hess=NULL,
+maxNRCompute <- function(fn,
                          start, print.level=0,
                   tol=1e-8, reltol=sqrt(.Machine$double.eps),
                   gradtol=1e-6, steptol=1e-10,
@@ -13,15 +13,9 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
    ## fn          - the function to be minimized.  Returns either scalar or
    ##               vector value with possible attributes 
    ##               constPar and newVal
-   ##               If fn returns the value with attributes 'gradient'
-   ##               and 'hessian', those are used instead of calculatin
-   ##               new gradient and hessian values
-   ## grad        - gradient function (numeric used if missing).  Must return either
-   ##               * vector, length=nParam
-   ##               * matrix, dim=c(nObs, 1).  Treated as vector
-   ##               * matrix, dim=c(M, nParam), where M is arbitrary.  In this case the
-   ##                 rows are simply summed (useful for maxBHHH).
-   ## hess        - hessian function (numeric used if missing)
+   ##               fn must return the value with attributes 'gradient'
+   ##               and 'hessian'
+   ##               fn must have an argument sumObs
    ## start       - initial parameter vector (eventually w/names)
    ## steptol     - minimum step size
    ## lambdatol   - max lowest eigenvalue when forcing pos. definite H
@@ -66,107 +60,14 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
       "tol", "reltol", "gradtol", "steptol", "lambdatol", "qrtol",
       "iterlim", "activePar", "fixed" )
    checkFuncArgs( fn, argNames, "fn", "maxNR" )
-   if( !is.null( grad ) ) {
-      checkFuncArgs( grad, argNames, "grad", "maxNR" )
-   }
-   if( !is.null( hess ) ) {
-      checkFuncArgs( hess, argNames, "hess", "maxNR" )
-   }
+
    max.eigen <- function( M) {
       ## return maximal eigenvalue of (symmetric) matrix
       val <- eigen(M, symmetric=TRUE, only.values=TRUE)$values
       val[1]
       ## L - eigenvalues in decreasing order, [1] - biggest in abs value
    }
-   func <- function(theta, sumObs = TRUE, ...) {
-      f <- fn(theta, ...)
-      if( sumObs ) {
-         fAttr <- attributes(f)
-         f <- sum(f)
-         mostattributes(f) <- fAttr
-      }
-      return( f )
-   }
-   gradient <- function(theta, sumObs = TRUE,
-                        suppliedValue=NULL, ...) {
-      ## suppliedValue: use gradient value supplied from elsewhere
-      ##           (attribute to fn) and only do sanity checks
-      if(is.null(gr <- suppliedValue)) {
-         if(!is.null(grad)) {  # use user-supplied if present
-            gr <- grad(theta, ...)
-         } else {
-            gr <- numericGradient(f = func, t0 = theta,
-                                  activePar=activePar, sumObs = sumObs, ...)
-                           # Note we need nObs rows x nParam cols
-         }
-      }
-      ## Now check if the gradient is vector or matrix...
-      if(!sumObs) {
-         ## return (preferably) by observations, ensure it will be a matrix
-         if(observationGradient(gr, length(theta))) {
-            gr <- as.matrix(gr)
-         }
-      }
-      else {
-         ## We need just summed gradient
-         if( !is.null(dim(gr))) {
-            gr <- colSums(gr)
-         } else {
-            ## ... or vector if only one parameter
-            if(length(gr) > nParam ) {
-               gr <- sum(gr)
-            }
-         }
-      }
-      ## Why do we need this?
-      if( is.null( dim( gr ) ) ) {
-         gr[ !activePar ] <- NA
-      } else {
-         gr[ , !activePar ] <- NA
-      }
-      return(gr)
-   }
-   hessian <- function(theta, activePar=activePar,
-                       suppliedValue=NULL, gradAttr = FALSE, ...) {
-      ## suppliedValue: use hessian value supplied from elsewhere
-      ##           (attribute to fn) and only do sanity checks
-      ##
-      ## Note: a call to hessian must follow a call to gradient using
-      ## /exactly the same/ parameter values in this program. 
-      ## This ensures compatibility with maxBHHH.  This warning does not
-      ## apply for user programs.
-      if(is.null(h <- suppliedValue)) {
-         if(!is.null(hess)) {
-            h <- as.matrix(hess(theta, ...))
-         } else {
-            if( gradAttr ) {
-               gradFunc <- function( theta, ... ) {
-                  gr <- attr( func( theta, ... ), "gradient" )
-                  if( !is.null( dim( gr ) ) ) {
-                     gr <- colSums(gr)
-                  } else {
-                     if( length( gr ) > nParam ) {
-                        gr <- sum( gr )
-                     }
-                  }
-                  return( gr )
-               }
-            } else {
-               gradFunc <- gradient
-            }
-            h <- numericHessian( f = func, grad = gradFunc, t0 = theta,
-                                activePar=activePar, ...)
-         }
-      }
-      if((dim(h)[1] != nParam) | (dim(h)[2] != nParam)) {
-         stop("Wrong hessian dimension.  Needed ", nParam, "x", nParam,
-              " but supplied ", dim(h)[1], "x", dim(h)[2])
-      }
-      ## Why do we need this?
-      h[ !activePar, ] <- NA
-      h[ , !activePar ] <- NA 
-      return( h )
-   }
+
    ## -------------------------------------------------
    maxim.type <- "Newton-Raphson maximisation"
    nimed <- names(start)
@@ -180,7 +81,7 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
                            # I is unit matrix
    start1 <- start
    iter <- 0
-   f1 <- func(start1, ...)
+   f1 <- fn(start1, sumObs = TRUE, ...)
    if(print.level > 2) {
       cat("Initial function value:", f1, "\n")
    }
@@ -199,7 +100,7 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
       class(result) <- "maxim"
       return(result)
    }
-   G1 <- gradient(start1, suppliedValue=attr(f1, "gradient"), ...)
+   G1 <- attr( f1, "gradient" )
    if(print.level > 2) {
       cat("Initial gradient value:\n")
       print(G1)
@@ -214,9 +115,7 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
       stop( "length of gradient (", length(G1),
          ") not equal to the no. of parameters (", nParam, ")" )
    }
-   H1 <- hessian(start1, activePar=activePar,
-                 suppliedValue=attr(f1, "hessian"),
-                 gradAttr = !is.null( attr( f1, "gradient" ) ), ... )
+   H1 <- attr( f1, "hessian" )
    if(any(is.na(H1[activePar, activePar]))) {
       stop("NA in the initial Hessian")
    }
@@ -270,7 +169,7 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
       amount[activePar] <- qr.solve(H[activePar,activePar,drop=FALSE],
                                     G0[activePar], tol=qrtol)
       start1 <- start0 - step*amount
-      f1 <- func(start1, ...)
+      f1 <- fn(start1, sumObs = TRUE, ...)
       ## Are we requested to fix some of the parameters?
       constPar <- attr(f1, "constPar")
       if(!is.null(constPar)) {
@@ -291,7 +190,7 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
                cat("function value difference", f1 - f0, "-> step", step, "\n")
             }
             start1 <- start0 - step*amount
-            f1 <- func(start1, ...)
+            f1 <- fn(start1, sumObs = TRUE, ...)
             ## Find out the constant parameters -- these may be other than
             ## with full step
             constPar <- attr(f1, "constPar")
@@ -322,7 +221,7 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
          start1[newVal$index] <- newVal$val
          print(start1)
       }
-      G1 <- gradient(start1, suppliedValue=attr(f1, "gradient"), ...)
+      G1 <- attr( f1, "gradient" )
       if(any(is.na(G1[activePar]))) {
          cat("Iteration", iter, "\n")
          cat("Parameter:\n")
@@ -336,9 +235,7 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
       if(any(is.infinite(G1))) {
          code <- 6; break;
       }
-      H1 <- hessian(start1, activePar=activePar,
-                    suppliedValue=attr(f1, "hessian"), 
-                    gradAttr = !is.null( attr( f1, "gradient" ) ), ... )
+      H1 <- attr( f1, "hessian" )
       if( print.level > 1) {
         cat( "-----Iteration", iter, "-----\n")
       }
@@ -385,8 +282,8 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
       cat( "Function value:", f1, "\n")
    }
    names(start1) <- nimed
-   G1 <- gradient(start1, suppliedValue=attr(f1, "gradient"),
-                  sumObs=FALSE, ...)
+   F1 <- fn( start1, sumObs = FALSE, ... )
+   G1 <- attr( F1, "gradient" )
    if(observationGradient(G1, length(start1))) {
       gradientObs <- G1
       colnames( gradientObs ) <- nimed 
@@ -404,9 +301,7 @@ maxNRCompute <- function(fn, grad=NULL, hess=NULL,
    else if(finalHessian != FALSE) {
       if(tolower(finalHessian) == "bhhh")
           warning("Final BHHH Hessian: gradient by observations not available.  Using Hessian matrix")
-      hessian <- hessian( start1, activePar=activePar,
-                         suppliedValue=attr(f1, "hessian"), 
-                         gradAttr = !is.null( attr( f1, "gradient" ) ), ... )
+      hessian <- attr( F1, "hessian" )
    }
    else
        hessian <- NULL
