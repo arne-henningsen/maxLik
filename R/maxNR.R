@@ -107,14 +107,7 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
             }
          } else {
             ## We need just summed gradient
-            if( !is.null(dim(gr))) {
-               gr <- colSums(gr)
-            } else {
-               ## ... or vector if only one parameter
-               if(length(gr) > nParam ) {
-                  gr <- sum(gr)
-               }
-            }
+            gr <- sumGradients( gr, nParam )
          }
          ## Set gradients of fixed parameters to zero so that they are always zero
          ## (no matter if they are analytical or finite-difference gradients)
@@ -135,27 +128,12 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
                }
                if( !is.null( attr( f, "gradient" ) ) ) {
                   gradFunc <- function( theta, ... ) {
-                     g <- attr( fn( theta, ... ), "gradient" )
-                     if( !is.null( dim( g ) ) ) {
-                        g <- colSums(g)
-                     } else {
-                        if( length( g ) > length( theta ) ) {
-                           g <- sum( g )
-                        }
-                     }
-                     return( g )
+                     return( sumGradients( attr( fn( theta, ... ), "gradient" ),
+                        nParam ) )
                   }
                } else if( !is.null( grad ) ) {
                   gradFunc <- function( theta, ... ) {
-                     g <- grad( theta, ... )
-                     if( !is.null(dim(g))) {
-                        g <- colSums(g)
-                     } else {
-                        if(length(g) > nParam ) {
-                           g <- sum(g)
-                        }
-                     }
-                     return( g )
+                     return( sumGradients( grad( theta, ... ), nParam ) )
                   }
                } else {
                   gradFunc <- NULL
