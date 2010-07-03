@@ -1312,10 +1312,10 @@ successive function values within tolerance limit
 estimate: 1.180813 1.816481 
 Function value: -201.5839 
 > all.equal( mlGBFGSYC, mlgBFGSYC )
-[1] "Component 4: Mean relative difference: 0.0003011891"
+[1] TRUE
 > mlGIndBFGSYC <- maxLik( llfGradInd, start = startVal, method = "bfgsyc" )
 > all.equal( mlGIndBFGSYC, mlgIndBFGSYC )
-[1] "Component 4: Mean relative difference: 0.0005243123"
+[1] TRUE
 > 
 > # with analytical gradients and Hessians
 > mlghBFGSYC <- maxLik( llf, gf, hf, start = startVal, method = "bfgsyc" )
@@ -1325,7 +1325,7 @@ Function value: -201.5839
 > # with analytical gradients and Hessian as attribute
 > mlGHBFGSYC <- maxLik( llfGradHess, start = startVal, method = "bfgsyc" )
 > all.equal( mlGHBFGSYC, mlghBFGSYC, tolerance = 1e-10 )
-[1] "Component 4: Mean relative difference: 0.000301189"
+[1] TRUE
 > 
 > 
 > ## BFGS method
@@ -5089,7 +5089,7 @@ $gradientObs
  [1] "Component 1: Mean relative difference: 0.0003796631"              
  [2] "Component 2: Mean relative difference: 0.01295649"                
  [3] "Component 3: Mean relative difference: 0.05055879"                
- [4] "Component 4: Mean relative difference: 0.02479626"                
+ [4] "Component 4: Mean relative difference: 0.02501059"                
  [5] "Component 5: Mean relative difference: 2"                         
  [6] "Component 6: 1 string mismatch"                                   
  [7] "Component 7: target is NULL, current is list"                     
@@ -5099,7 +5099,7 @@ $gradientObs
 [11] "Component 11: Component 4: 1 string mismatch"                     
 [12] "Component 11: Component 5: Mean relative difference: 0.3"         
 > all.equal( mlGCon, mlCon )
-[1] TRUE
+[1] "Component 4: Mean relative difference: 0.0004976508"
 > 
 > # with analytical gradients and Hessians
 > mlghCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon )
@@ -5113,7 +5113,7 @@ $gradientObs
  [1] "Component 1: Mean relative difference: 0.0003796631"              
  [2] "Component 2: Mean relative difference: 0.01295649"                
  [3] "Component 3: Mean relative difference: 0.05055879"                
- [4] "Component 4: Mean relative difference: 0.02479626"                
+ [4] "Component 4: Mean relative difference: 0.02501059"                
  [5] "Component 5: Mean relative difference: 2"                         
  [6] "Component 6: 1 string mismatch"                                   
  [7] "Component 7: target is NULL, current is list"                     
@@ -5123,7 +5123,7 @@ $gradientObs
 [11] "Component 11: Component 4: 1 string mismatch"                     
 [12] "Component 11: Component 5: Mean relative difference: 0.3"         
 > all.equal( mlGHCon, mlCon )
-[1] TRUE
+[1] "Component 4: Mean relative difference: 0.0004976508"
 > 
 > 
 > ## BHHH method with equality constraints
@@ -5144,8 +5144,8 @@ Log-Likelihood: -204.5333
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     0.81975    0.17430   4.703 2.564e-06 ***
-sigma  1.68026    0.10718  15.678 < 2.2e-16 ***
+mu     0.81975    0.16188  5.0639 4.108e-07 ***
+sigma  1.68026    0.10589 15.8685 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -5165,11 +5165,11 @@ penalty close to zero
 0.819750 1.680264 
 > condiNumber( mlBhhhCon )
 mu 	 1 
-sigma 	 3.610957 
+sigma 	 3.771172 
 > hessian( mlBhhhCon )
              mu     sigma
-mu    -35.38503 -15.20561
-sigma -15.20561 -93.59269
+mu    -43.03081  -22.1333
+sigma -22.13330 -100.5749
 > logLik( mlBhhhCon )
 [1] -204.5333
 > maximType( mlBhhhCon )
@@ -5183,13 +5183,13 @@ sigma -15.20561 -93.59269
 > returnMessage( mlBhhhCon )
 [1] "gradient close to zero"
 > vcov( mlBhhhCon )
-                mu        sigma
-mu     0.030381622 -0.004935976
-sigma -0.004935976  0.011486523
+               mu       sigma
+mu     0.02620546 -0.00576698
+sigma -0.00576698  0.01121197
 > logLik( summary( mlBhhhCon ) )
 [1] -204.5333
 > all.equal( mlCon[ -c( 5, 6, 7, 9, 10 ) ], mlBhhhCon[ -c( 5, 6, 7, 9, 10, 12 ) ] )
-[1] "Component 4: Mean relative difference: 0.001424501"
+[1] "Component 4: Mean relative difference: 0.1770244"
 > mlBhhhCon[12]
 $gradientObs
                  mu       sigma
@@ -5309,8 +5309,8 @@ Log-Likelihood: -204.5333
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     0.81975    0.17417  4.7066 2.519e-06 ***
-sigma  1.68026    0.10711 15.6867 < 2.2e-16 ***
+mu     0.81975    0.16188  5.0639 4.108e-07 ***
+sigma  1.68026    0.10589 15.8685 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -5321,11 +5321,11 @@ penalty close to zero
 10  outer iterations, barrier value 2.069940e-10 
 --------------------------------------------
 > all.equal( mlBhhhCon, mlgBhhhCon )
-[1] "Component 4: Mean relative difference: 0.001426534"
+[1] TRUE
 > mlgBhhhConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon,
 +    method = "BHHH" )
 > all.equal( mlgBhhhCon, mlgBhhhConInd )
-[1] "Component 4: Mean relative difference: 0.001424501"
+[1] TRUE
 > 
 > # with analytical gradients as attribute
 > mlGBhhhCon <- maxLik( llfGradInd, start = startVal, constraints = eqCon,
@@ -5339,8 +5339,8 @@ Log-Likelihood: -204.5333
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     0.81975    0.17430   4.703 2.564e-06 ***
-sigma  1.68026    0.10718  15.678 < 2.2e-16 ***
+mu     0.81975    0.16188  5.0639 4.108e-07 ***
+sigma  1.68026    0.10589 15.8685 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -5351,7 +5351,7 @@ penalty close to zero
 10  outer iterations, barrier value 2.069940e-10 
 --------------------------------------------
 > all.equal( mlGBhhhCon, mlgBhhhCon )
-[1] "Component 4: Mean relative difference: 0.001426534"
+[1] TRUE
 > all.equal( mlGBhhhCon, mlBhhhCon )
 [1] TRUE
 > 
@@ -5365,7 +5365,7 @@ penalty close to zero
 > mlGHBhhhCon <- maxLik( llfGradHessInd, start = startVal, constraints = eqCon,
 +    method = "BHHH" )
 > all.equal( mlGHBhhhCon, mlghBhhhCon )
-[1] "Component 4: Mean relative difference: 0.001426534"
+[1] TRUE
 > all.equal( mlGHBhhhCon, mlGBhhhCon )
 [1] TRUE
 > 
@@ -6485,13 +6485,13 @@ sigma -0.4935976  1.1486523
 mu     2.9714928 -0.4514259
 sigma -0.4514259  1.1111867
 > bread( mlBhhhCon )
-              mu      sigma
-mu     3.0381622 -0.4935976
-sigma -0.4935976  1.1486523
+             mu     sigma
+mu     2.620546 -0.576698
+sigma -0.576698  1.121197
 > bread( mlgBhhhCon )
-              mu      sigma
-mu     3.0334980 -0.4931619
-sigma -0.4931619  1.1473376
+             mu     sigma
+mu     2.620546 -0.576698
+sigma -0.576698  1.121197
 > bread( mlBfgsConInd )
               mu      sigma
 mu     3.0361157 -0.4935875
@@ -6644,15 +6644,15 @@ mu     0.03507970 -0.00348376
 sigma -0.00348376  0.01149578
 [1] "Mean relative difference: 0.1458582"
 > printSandwich( mlBhhhCon )
-                mu        sigma
-mu     0.035531330 -0.003892028
-sigma -0.003892028  0.011808475
-[1] "Mean relative difference: 0.1371377"
+               mu       sigma
+mu     0.02620546 -0.00576698
+sigma -0.00576698  0.01121197
+[1] TRUE
 > printSandwich( mlgBhhhCon )
-                mu        sigma
-mu     0.035421188 -0.003886518
-sigma -0.003886518  0.011781352
-[1] "Mean relative difference: 0.1361402"
+               mu       sigma
+mu     0.02620546 -0.00576698
+sigma -0.00576698  0.01121197
+[1] TRUE
 > printSandwich( mlBfgsConInd )
                 mu        sigma
 mu     0.035482345 -0.003894845
