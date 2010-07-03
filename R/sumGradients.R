@@ -4,7 +4,7 @@ sumGradients <- function( gr, nParam ) {
       gr <- colSums(gr)
    } else {
       ## ... or vector if only one parameter
-      if(length(gr) > nParam ) {
+      if( nParam == 1 && length( gr ) > 1 ) {
          gr <- sum(gr)
       }
    }
