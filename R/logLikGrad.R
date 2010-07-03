@@ -17,11 +17,7 @@ logLikGrad <- function(theta, fnOrig, gradOrig, hessOrig,
    }
    if( sumObs ) {
       ## We were requested a single (summed) gradient.  Return a vector
-      if(!is.null(dim(g)) ) {
-         g <- colSums(g)
-      } else if( length( theta ) == 1 && length( g ) > 1 ) {
-         g <- sum( g )
-      }
+      g <- sumGradients( g, length( theta ) )
       names( g ) <- names( theta )
       if( !is.null( fixed ) ) {
          g <- g[ !fixed ]
