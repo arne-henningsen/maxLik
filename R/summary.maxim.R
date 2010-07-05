@@ -48,11 +48,6 @@ summary.maxim <- function(object, hessian=FALSE, unsucc.step=FALSE,
    ## type       : type of optimisation
    ##
    nParam <- length(object$estimate)
-   if(!is.null(object$acivePar)) {
-      activePar <- object$activePar
-   } else {
-      activePar <- rep(TRUE, nParam)
-   }
    if(object$code == 3 & unsucc.step) {
       a <- cbind(object$last.step$theta0, object$last.step$theta1)
       dimnames(a) <- list(parameter=object$names,
