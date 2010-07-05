@@ -81,8 +81,8 @@ $message
 $last.step
 NULL
 
-$activePar
-[1] TRUE
+$fixed
+[1] FALSE
 
 $iterations
 [1] 5

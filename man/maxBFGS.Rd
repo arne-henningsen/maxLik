@@ -121,8 +121,8 @@ finalHessian=TRUE,
     \code{\link{optim}}).}
   \item{message}{character string giving any additional information
     returned by the optimizer, or NULL.}
-  \item{activePar}{logical vector indicating which parameters are treated
-    as free (currently all parameters).}
+  \item{fixed}{logical vector indicating which parameters are treated
+    as constants.}
   \item{iterations}{two-element integer vector giving the number of
     calls to \code{fn} and \code{gr}, respectively.
     This excludes those calls needed to

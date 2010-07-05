@@ -312,7 +312,7 @@ maxNRCompute <- function(fn,
                   last.step=samm,
                                         # only when could not find a
                                         # lower point
-                  activePar=!fixed,
+                  fixed=fixed,
                   iterations=iter,
                   type=maxim.type)
    if( exists( "gradientObs" ) ) {

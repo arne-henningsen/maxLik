@@ -334,7 +334,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
                   last.step=samm,
                                         # only when could not find a
                                         # lower point
-                  activePar=activePar,
+                  fixed=!activePar,
                   iterations=iter,
                   type=maxim.type)
    if(observationGradient(gri, length(param))) {

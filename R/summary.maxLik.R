@@ -61,7 +61,7 @@ summary.maxLik <- function(object, eigentol=1e-12,... ) {
                    returnMessage=object$message,
                    loglik=object$maximum,
                    estimate=results,
-                   activePar=activePar,
+                   fixed=!activePar,
                    NActivePar=sum(activePar),
                    constraints=object$constraints)
    class(summary) <- "summary.maxLik"

@@ -195,7 +195,7 @@ maxOptim <- function(fn, grad, hess,
                    code=result$convergence,
                    message=paste(message(result$convergence), result$message),
                    last.step=NULL,
-                   activePar = !fixed,
+                   fixed = fixed,
                    iterations=result$counts[1],
                    type=maximType,
                   constraints=resultConstraints

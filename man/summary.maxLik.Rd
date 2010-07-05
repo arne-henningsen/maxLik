@@ -39,7 +39,7 @@
   \item{estimate}{numeric matrix, the first column contains the parameter
     estimates, the second the standard errors, third t-values and fourth
     corresponding probabilities.}
-  \item{activePar}{logical vector, which parameters are treated as free.}
+  \item{fixed}{logical vector, which parameters are treated as constants.}
   \item{NActivePar}{number of free parameters.}
   \item{constraints}{information about the constrained optimization.
     Passed directly further from \code{maxim}-object.  \code{NULL} if

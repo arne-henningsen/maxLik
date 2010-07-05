@@ -112,8 +112,8 @@ parameter values.  Constant parameters are useful if a parameter value
 is converging toward the boundary of support, or for testing.  
 
 One way is to put
-\code{activePar} to non-NULL, specifying which parameters we want to
-change.  However, parameters can also be fixed in runtime by by
+\code{fixed} to non-NULL, specifying which parameters should be treated as
+constants.  However, parameters can also be fixed in runtime by
 signaling with
 \code{fn}.  This may be useful if an estimation converges toward the
 edge of the parameter space possibly causing problems.  The value of
@@ -169,7 +169,7 @@ the previous one (maximization is not performed in that step).
     \item{climb}{the movement vector to the maximum of the quadratic approximation}
     }
   }
-  \item{activePar}{logical vector, which parameters are not constants.}
+  \item{fixed}{logical vector, which parameters are constants.}
   \item{iterations}{number of iterations.}
   \item{type}{character string, type of maximization.}
   \item{constraints}{A list, describing the constrained optimization
