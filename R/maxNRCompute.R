@@ -51,8 +51,8 @@ maxNRCompute <- function(fn,
    ##             theta0    - parameter value which led to the error
    ##             f0        - function value at these parameter values
    ##             climb     - the difference between theta0 and the new approximated parameter value (theta1)
-   ##             activePar - logical vector, which parameters are active (not constant)
-   ## activePar   logical vector, which parameters were treated as free (resp fixed)
+   ##             fixed     - logical vector, which parameters are constant (fixed, inactive, non-free)
+   ## fixed       logical vector, which parameters were treated as constant (fixed, inactive, non-free)
    ## iterations  number of iterations
    ## type        "Newton-Raphson maximisation"
    
@@ -67,16 +67,13 @@ maxNRCompute <- function(fn,
    maxim.type <- "Newton-Raphson maximisation"
    nimed <- names(start)
    nParam <- length(start)
-   ## establish the active parameters.  Internally, we just use 'activePar'
-   activePar <- !fixed
-   rm( fixed )
 
    samm <- NULL
    I <- diag(rep(1, nParam))
                            # I is unit matrix
    start1 <- start
    iter <- 0
-   f1 <- fn(start1, fixed = !activePar, sumObs = TRUE, ...)
+   f1 <- fn(start1, fixed = fixed, sumObs = TRUE, ...)
    if(print.level > 2) {
       cat("Initial function value:", f1, "\n")
    }
@@ -100,10 +97,10 @@ maxNRCompute <- function(fn,
       cat("Initial gradient value:\n")
       print(G1)
    }
-   if(any(is.na(G1[activePar]))) {
+   if(any(is.na(G1[!fixed]))) {
       stop("NA in the initial gradient")
    }
-   if(any(is.infinite(G1[activePar]))) {
+   if(any(is.infinite(G1[!fixed]))) {
       stop("Infinite initial gradient")
    }
    if(length(G1) != nParam) {
@@ -111,7 +108,7 @@ maxNRCompute <- function(fn,
          ") not equal to the no. of parameters (", nParam, ")" )
    }
    H1 <- attr( f1, "hessian" )
-   if(any(is.na(H1[activePar, activePar]))) {
+   if(any(is.na(H1[!fixed, !fixed]))) {
       stop("NA in the initial Hessian")
    }
    if(any(is.infinite(H1))) {
@@ -121,12 +118,12 @@ maxNRCompute <- function(fn,
       cat( "----- Initial parameters: -----\n")
       cat( "fcn value:",
       as.vector(f1), "\n")
-      a <- cbind(start, G1, as.integer(activePar))
+      a <- cbind(start, G1, as.integer(!fixed))
       dimnames(a) <- list(nimed, c("parameter", "initial gradient",
                                           "free"))
       print(a)
       cat( "Condition number of the (active) hessian:",
-          kappa( H1[activePar, activePar]), "\n")
+          kappa( H1[!fixed, !fixed]), "\n")
       if( print.level > 3) {
          print( H1)
       }
@@ -140,39 +137,39 @@ maxNRCompute <- function(fn,
       start0 <- start1
       f0 <- f1
       G0 <- G1
-      if(any(is.na(G0[activePar]))) {
+      if(any(is.na(G0[!fixed]))) {
          stop("NA in gradient (at the iteration start)")
       }
       H0 <- H1
-      if(any(is.na(H0[activePar, activePar]))) {
+      if(any(is.na(H0[!fixed, !fixed]))) {
          stop("NA in Hessian (at the iteration start)")
       }
       step <- 1
       H <- H0
       ## check whether hessian is positive definite
-      while((me <- max.eigen( H[activePar,activePar,drop=FALSE])) >= -lambdatol |
-         (qRank <- qr(H[activePar,activePar], tol=qrtol)$rank) < sum(activePar)) {
+      while((me <- max.eigen( H[!fixed,!fixed,drop=FALSE])) >= -lambdatol |
+         (qRank <- qr(H[!fixed,!fixed], tol=qrtol)$rank) < sum(!fixed)) {
                                         # maximum eigenvalue -> negative definite
                                         # qr()$rank -> singularity
-         lambda <- abs(me) + lambdatol + min(abs(diag(H)[activePar]))/1e7
+         lambda <- abs(me) + lambdatol + min(abs(diag(H)[!fixed]))/1e7
                            # The third term corrects numeric singularity.  If diag(H) only contains large values,
                            # (H - (a small number)*I) == H because of finite precision
          H <- H - lambda*I
                                         # how to make it better?
       }
       amount <- vector("numeric", nParam)
-      amount[activePar] <- qr.solve(H[activePar,activePar,drop=FALSE],
-                                    G0[activePar], tol=qrtol)
+      amount[!fixed] <- qr.solve(H[!fixed,!fixed,drop=FALSE],
+                                    G0[!fixed], tol=qrtol)
       start1 <- start0 - step*amount
-      f1 <- fn(start1, fixed = !activePar, sumObs = TRUE, ...)
+      f1 <- fn(start1, fixed = fixed, sumObs = TRUE, ...)
       ## Are we requested to fix some of the parameters?
       constPar <- attr(f1, "constPar")
       if(!is.null(constPar)) {
          if(any(is.na(constPar))) {
             stop("NA in the list of constants")
          }
-         activePar <- rep(TRUE, nParam)
-         activePar[constPar] <- FALSE
+         fixed <- rep(FALSE, nParam)
+         fixed[constPar] <- TRUE
       }
       ## Are we asked to write in a new value for some of the parameters?
       if(is.null(newVal <- attr(f1, "newVal"))) {
@@ -185,7 +182,7 @@ maxNRCompute <- function(fn,
                cat("function value difference", f1 - f0, "-> step", step, "\n")
             }
             start1 <- start0 - step*amount
-            f1 <- fn(start1, fixed = !activePar, sumObs = TRUE, ...)
+            f1 <- fn(start1, fixed = fixed, sumObs = TRUE, ...)
             ## Find out the constant parameters -- these may be other than
             ## with full step
             constPar <- attr(f1, "constPar")
@@ -193,7 +190,7 @@ maxNRCompute <- function(fn,
                if(any(is.na(constPar))) {
                   stop("NA in the list of constants")
                }
-               activePar[constPar] <- FALSE
+               fixed[constPar] <- TRUE
                ## Any new values requested?
                if(!is.null(newVal <- attr(f1, "newVal"))) {
                   ## Yes.  Write them to parameters and go for
@@ -217,7 +214,7 @@ maxNRCompute <- function(fn,
          print(start1)
       }
       G1 <- attr( f1, "gradient" )
-      if(any(is.na(G1[activePar]))) {
+      if(any(is.na(G1[!fixed]))) {
          cat("Iteration", iter, "\n")
          cat("Parameter:\n")
          print(start1)
@@ -240,7 +237,7 @@ maxNRCompute <- function(fn,
       if(print.level > 2) {
          cat( "lambda ", lambda, " step", step, " fcn value:",
             formatC(as.vector(f1), digits=8, format="f"),  "\n")
-         a <- cbind(amount, start1, G1, as.integer(activePar))
+         a <- cbind(amount, start1, G1, as.integer(!fixed))
          dimnames(a) <- list(names(start0), c("amount", "new param",
                                              "new gradient", "active"))
          print(a)
@@ -248,15 +245,15 @@ maxNRCompute <- function(fn,
             cat("Hessian\n")
             print( H1)
          }
-         if(!any(is.na(H1[activePar, activePar]))) {
+         if(!any(is.na(H1[!fixed, !fixed]))) {
             cat( "Condition number of the hessian:",
-                kappa(H1[activePar,activePar,drop=FALSE]), "\n")
+                kappa(H1[!fixed,!fixed,drop=FALSE]), "\n")
          }
       }
       if( step < steptol) {
          code <- 3; break
       }
-      if( sqrt( t(G1[activePar])%*%G1[activePar]) < gradtol) {
+      if( sqrt( t(G1[!fixed])%*%G1[!fixed]) < gradtol) {
          code <-1; break
       }
       if(is.null(newVal) & f1 - f0 < tol) {
@@ -277,7 +274,7 @@ maxNRCompute <- function(fn,
       cat( "Function value:", f1, "\n")
    }
    names(start1) <- nimed
-   F1 <- fn( start1, fixed = !activePar, sumObs = FALSE, ... )
+   F1 <- fn( start1, fixed = fixed, sumObs = FALSE, ... )
    G1 <- attr( F1, "gradient" )
    if(observationGradient(G1, length(start1))) {
       gradientObs <- G1
@@ -315,7 +312,7 @@ maxNRCompute <- function(fn,
                   last.step=samm,
                                         # only when could not find a
                                         # lower point
-                  activePar=activePar,
+                  activePar=!fixed,
                   iterations=iter,
                   type=maxim.type)
    if( exists( "gradientObs" ) ) {
