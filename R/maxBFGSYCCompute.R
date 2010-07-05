@@ -65,9 +65,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
    func <- function(theta, sumObs = TRUE, ...) {
       f <- fn(theta, ...)
       if( sumObs ) {
-         fAttr <- attributes(f)
-         f <- sum(f)
-         mostattributes(f) <- fAttr
+         f <- sumKeepAttr( f )
       }
       return( f )
    }

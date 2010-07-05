@@ -16,9 +16,7 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
          ## value of log-likelihood function
          f <- fnOrig(theta, ...)
          if( sumObs ) {
-            fAttr <- attributes(f)
-            f <- sum(f)
-            mostattributes(f) <- fAttr
+            f <- sumKeepAttr( f )
          }
 
          ## gradient of log-likelihood function
