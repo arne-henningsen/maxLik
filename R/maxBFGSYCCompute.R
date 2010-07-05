@@ -166,11 +166,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
    ## gradient by individual observations, used for BHHH approximation of initial Hessian.
    ## If not supplied by observations, we use the summed gradient.
    gri <- gradient(param, suppliedValue=attr(x, "gradient"), sumObs=FALSE, ...)
-   if(observationGradient(gri, length(param))) 
-       gr <- colSums(gri)
-   else {
-      gr <- gri
-   }
+   gr <- sumGradients( gri, nParam = length( param ) )
    if(print.level > 2) {
       cat("Initial gradient value:\n")
       print(gr)
@@ -235,10 +231,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
     }
      gri <- gradient(param, suppliedValue=attr(x, "gradient"), sumObs=FALSE, ...)
                            # observation-wise gradient.  We only need it in order to compute the BHHH Hessian, if asked so.
-      if(observationGradient(gri, length(param)))
-          gr <- colSums(gri)
-      else
-          gr <- gri
+     gr <- sumGradients( gri, nParam = length( param ) )
       incr <- step * direction
       y <- gr - oldgr
      invHess <- invHess +
