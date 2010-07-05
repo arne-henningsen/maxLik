@@ -274,6 +274,9 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
    }
    else
        hessian <- NULL
+   if( !is.null( hessian ) ) {
+      rownames( hessian ) <- colnames( hessian ) <- nimed
+   }
    ## remove attributes from final value of objective (likelihood) function
    attributes( x )$gradient <- NULL
    attributes( x )$hessian <- NULL
