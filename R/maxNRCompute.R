@@ -56,11 +56,6 @@ maxNRCompute <- function(fn,
    ## iterations  number of iterations
    ## type        "Newton-Raphson maximisation"
    
-   argNames <- c( "fn", "grad", "hess", "start", "print.level",
-      "tol", "reltol", "gradtol", "steptol", "lambdatol", "qrtol",
-      "iterlim", "activePar", "fixed" )
-   checkFuncArgs( fn, argNames, "fn", "maxNR" )
-
    max.eigen <- function( M) {
       ## return maximal eigenvalue of (symmetric) matrix
       val <- eigen(M, symmetric=TRUE, only.values=TRUE)$values
