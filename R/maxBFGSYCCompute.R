@@ -80,7 +80,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
             gr <- grad(theta, ...)
          } else {
             gr <- numericGradient(f = func, t0 = theta,
-                                  activePar=activePar, sumObs = sumObs, ...)
+                                  fixed=!activePar, sumObs = sumObs, ...)
                            # Note we need nObs rows x nParam cols
          }
       }
@@ -126,7 +126,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
             h <- as.matrix(hess(theta, ...))
          } else {
             h <- numericHessian( f = func, grad = gradient, t0 = theta,
-                                activePar=activePar, ...)
+                                fixed=!activePar, ...)
          }
       }
       if((dim(h)[1] != nParam) | (dim(h)[2] != nParam)) {

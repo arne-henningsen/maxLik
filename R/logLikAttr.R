@@ -28,7 +28,7 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
                gr <- gradOrig(theta, ...)
             } else {
                gr <- numericGradient(f = fnOrig, t0 = theta,
-                                    activePar=!fixed, ...)
+                                    fixed=fixed, ...)
             }
          }
          ## Now check if the gradient is vector or matrix...
@@ -70,7 +70,7 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
                   gradFunc <- NULL
                }
                h <- numericHessian( f = llFunc, grad = gradFunc, t0 = theta,
-                                 activePar=!fixed, ...)
+                                 fixed=fixed, ...)
             }
          }
          if((dim(h)[1] != nParam) | (dim(h)[2] != nParam)) {
