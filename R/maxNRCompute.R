@@ -76,7 +76,7 @@ maxNRCompute <- function(fn,
                            # I is unit matrix
    start1 <- start
    iter <- 0
-   f1 <- fn(start1, sumObs = TRUE, ...)
+   f1 <- fn(start1, fixed = !activePar, sumObs = TRUE, ...)
    if(print.level > 2) {
       cat("Initial function value:", f1, "\n")
    }
@@ -164,7 +164,7 @@ maxNRCompute <- function(fn,
       amount[activePar] <- qr.solve(H[activePar,activePar,drop=FALSE],
                                     G0[activePar], tol=qrtol)
       start1 <- start0 - step*amount
-      f1 <- fn(start1, sumObs = TRUE, ...)
+      f1 <- fn(start1, fixed = !activePar, sumObs = TRUE, ...)
       ## Are we requested to fix some of the parameters?
       constPar <- attr(f1, "constPar")
       if(!is.null(constPar)) {
@@ -185,7 +185,7 @@ maxNRCompute <- function(fn,
                cat("function value difference", f1 - f0, "-> step", step, "\n")
             }
             start1 <- start0 - step*amount
-            f1 <- fn(start1, sumObs = TRUE, ...)
+            f1 <- fn(start1, fixed = !activePar, sumObs = TRUE, ...)
             ## Find out the constant parameters -- these may be other than
             ## with full step
             constPar <- attr(f1, "constPar")
@@ -277,7 +277,7 @@ maxNRCompute <- function(fn,
       cat( "Function value:", f1, "\n")
    }
    names(start1) <- nimed
-   F1 <- fn( start1, sumObs = FALSE, ... )
+   F1 <- fn( start1, fixed = !activePar, sumObs = FALSE, ... )
    G1 <- attr( F1, "gradient" )
    if(observationGradient(G1, length(start1))) {
       gradientObs <- G1
