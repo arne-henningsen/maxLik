@@ -57,8 +57,8 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
    ##             theta0    - parameter value which led to the error
    ##             f0        - function value at these parameter values
    ##             climb     - the difference between theta0 and the new approximated parameter value (theta1)
-   ##             activePar - logical vector, which parameters are active (not constant)
-   ## activePar   logical vector, which parameters were treated as free (resp fixed)
+   ##             fixed     - logical vector, which parameters are constant (fixed, inactive, non-free)
+   ## fixed       logical vector, which parameters were treated as constant (fixed, inactive, non-free)
    ## iterations  number of iterations
    ## type        "BFGS-YC maximisation"
    ## 
@@ -80,7 +80,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
             gr <- grad(theta, ...)
          } else {
             gr <- numericGradient(f = func, t0 = theta,
-                                  fixed=!activePar, sumObs = sumObs, ...)
+                                  fixed=fixed, sumObs = sumObs, ...)
                            # Note we need nObs rows x nParam cols
          }
       }
@@ -104,13 +104,13 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
       }
       ## Why do we need this?
       if( is.null( dim( gr ) ) ) {
-         gr[ !activePar ] <- NA
+         gr[ fixed ] <- NA
       } else {
-         gr[ , !activePar ] <- NA
+         gr[ , fixed ] <- NA
       }
       return(gr)
    }
-   hessian <- function(theta, activePar=activePar,
+   hessian <- function(theta, fixed=fixed,
                        suppliedValue=NULL, ...) {
       ## Hessian is only used for the final hessian (if asked)
       ## 
@@ -126,15 +126,15 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
             h <- as.matrix(hess(theta, ...))
          } else {
             h <- numericHessian( f = func, grad = gradient, t0 = theta,
-                                fixed=!activePar, ...)
+                                fixed=fixed, ...)
          }
       }
       if((dim(h)[1] != nParam) | (dim(h)[2] != nParam)) {
          stop("Wrong hessian dimension.  Needed ", nParam, "x", nParam,
               " but supplied ", dim(h)[1], "x", dim(h)[2])
       }
-      h[ !activePar, ] <- NA
-      h[ , !activePar ] <- NA 
+      h[ fixed, ] <- NA
+      h[ , fixed ] <- NA 
       return( h )
    }
    ##
@@ -142,9 +142,6 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
   param <- start
    nimed <- names(start)
    nParam <- length(param)
-   ## establish the active parameters.  Internally, we just use 'activePar'
-   activePar <- !fixed
-   rm( fixed )
    ##
   chi2 <- 1E+10
   iter <- 0
@@ -180,10 +177,10 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
       cat("Initial gradient value:\n")
       print(gr)
    }
-   if(any(is.na(gr[activePar]))) {
+   if(any(is.na(gr[!fixed]))) {
       stop("NA in the initial gradient")
    }
-   if(any(is.infinite(gr[activePar]))) {
+   if(any(is.infinite(gr[!fixed]))) {
       stop("Infinite initial gradient")
    }
    if(length(gr) != nParam) {
@@ -192,7 +189,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
    }
    ## initial approximation for inverse Hessian
    if(observationGradient(gri, length(param))) {
-      invHess <- solve(crossprod(gri[,activePar]))
+      invHess <- solve(crossprod(gri[,!fixed]))
                            # initial approximation of inverse Hessian (as in BHHH), if possible
    }
    else
@@ -202,7 +199,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
       cat( "----- Initial parameters: -----\n")
       cat( "fcn value:",
       as.vector(x), "\n")
-      a <- cbind(start, gr, as.integer(activePar))
+      a <- cbind(start, gr, as.integer(!fixed))
       dimnames(a) <- list(nimed, c("parameter", "initial gradient",
                                           "free"))
       print(a)
@@ -215,23 +212,23 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
          code <- 4; break
       }
     step <- 1
-     direction[activePar] <- -as.vector(invHess %*% gr[activePar])
+     direction[!fixed] <- -as.vector(invHess %*% gr[!fixed])
       iter <- iter + 1
     oldx <- x
      oldgr <- gr
     oldparam <- param
-    param[activePar] <- oldparam[activePar] - step * direction[activePar]
+    param[!fixed] <- oldparam[!fixed] - step * direction[!fixed]
     x <- func(param, ...)
     while((is.na(x) | x < oldx) & step > steptol) {
        step <- step/2
        if(print.level > 2) {
           cat("function values: old ", oldx, ", new ", x, ", difference ", x - oldx, " -> step ", step, "\n", sep="")
           if(print.level > 3) {
-             resdet <- cbind(param = param, gradient = gr, direction=direction, active=activePar)
+             resdet <- cbind(param = param, gradient = gr, direction=direction, active=!fixed)
              print(resdet)
           }
        }
-       param[activePar] <- oldparam[activePar] - step * direction[activePar]
+       param[!fixed] <- oldparam[!fixed] - step * direction[!fixed]
        x <- func(param, ...)
     }
     if(step < steptol) {
@@ -247,19 +244,19 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
       incr <- step * direction
       y <- gr - oldgr
      invHess <- invHess +
-        outer( incr[activePar], incr[activePar]) *
-          (sum(y[activePar] * incr[activePar]) +
-           as.vector( t(y[activePar]) %*% invHess %*% y[activePar])) / sum(incr[activePar] * y[activePar])^2 -
-             (invHess %*% outer(y[activePar], incr[activePar])
-              + outer(incr[activePar], y[activePar]) %*% invHess)/
-                  sum(incr[activePar] * y[activePar])
-      chi2 <- -  crossprod(direction[activePar], oldgr[activePar])
+        outer( incr[!fixed], incr[!fixed]) *
+          (sum(y[!fixed] * incr[!fixed]) +
+           as.vector( t(y[!fixed]) %*% invHess %*% y[!fixed])) / sum(incr[!fixed] * y[!fixed])^2 -
+             (invHess %*% outer(y[!fixed], incr[!fixed])
+              + outer(incr[!fixed], y[!fixed]) %*% invHess)/
+                  sum(incr[!fixed] * y[!fixed])
+      chi2 <- -  crossprod(direction[!fixed], oldgr[!fixed])
     if (print.level > 0){
        cat("--- iteration ", iter, ", step = ",step,
                       ", lnL = ", x,", chi2 = ",
            chi2,"\n",sep="")
        if (print.level > 1){
-          resdet <- cbind(param = param, gradient = gr, direction=direction, active=activePar)
+          resdet <- cbind(param = param, gradient = gr, direction=direction, active=!fixed)
           print(resdet)
           if(print.level > 3) {
              cat("Approximated Hessian:\n")
@@ -271,7 +268,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
       if( step < steptol) {
          code <- 3; break
       }
-      if( sqrt( t(gr[activePar])%*%gr[activePar]) < gradtol) {
+      if( sqrt( t(gr[!fixed])%*%gr[!fixed]) < gradtol) {
          code <-1; break
       }
       if(x - oldx < tol) {
@@ -327,7 +324,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
                   last.step=samm,
                                         # only when could not find a
                                         # lower point
-                  fixed=!activePar,
+                  fixed=fixed,
                   iterations=iter,
                   type=maxim.type)
    if(observationGradient(gri, length(param))) {
