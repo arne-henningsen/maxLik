@@ -9,8 +9,9 @@ logLikFunc <- function(theta, fnOrig, gradOrig, hessOrig,
 
    if( sumObs ) {
       resultAttr <- attributes( result )
+      resultAttr$names <- NULL
       result <- sum( result )
-      mostattributes( result ) <- attributes( result )
+      mostattributes( result ) <- resultAttr
       g <- attributes( result )$gradient
       if( !is.null( g ) ) {
          g <- sumGradients( g, length( theta ) )
