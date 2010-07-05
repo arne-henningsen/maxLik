@@ -42,11 +42,7 @@ summary.maxLik <- function(object, eigentol=1e-12,... ) {
    ##
    result <- object$maxim
    nParam <- length(coef <- coef.maxLik(object))
-   if(!is.null(object$activePar)) {
-      activePar <- object$activePar
-   } else {
-      activePar <- rep(TRUE, nParam)
-   }
+   activePar <- activePar( object )
    if((object$code < 100) & !is.null(coef(object))) {
                            # in case of infinity at initial values, the coefs are not provided
        t <- coef(object)/stdEr(object)
@@ -65,8 +61,8 @@ summary.maxLik <- function(object, eigentol=1e-12,... ) {
                    returnMessage=object$message,
                    loglik=object$maximum,
                    estimate=results,
-                   activePar=object$activePar,
-                   NActivePar=sum(object$activePar),
+                   activePar=activePar,
+                   NActivePar=sum(activePar),
                    constraints=object$constraints)
    class(summary) <- "summary.maxLik"
    summary
