@@ -108,33 +108,6 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
       }
       return(gr)
    }
-   hessian <- function(theta, fixed=fixed,
-                       suppliedValue=NULL, ...) {
-      ## Hessian is only used for the final hessian (if asked)
-      ## 
-      ## suppliedValue: use hessian value supplied from elsewhere
-      ##           (attribute to fn) and only do sanity checks
-      ##
-      ## Note: a call to hessian must follow a call to gradient using
-      ## /exactly the same/ parameter values in this program. 
-      ## This ensures compatibility with maxBHHH.  This warning does not
-      ## apply for user programs.
-      if(is.null(h <- suppliedValue)) {
-         if(!is.null(hess)) {
-            h <- as.matrix(hess(theta, ...))
-         } else {
-            h <- numericHessian( f = func, grad = gradient, t0 = theta,
-                                fixed=fixed, ...)
-         }
-      }
-      if((dim(h)[1] != nParam) | (dim(h)[2] != nParam)) {
-         stop("Wrong hessian dimension.  Needed ", nParam, "x", nParam,
-              " but supplied ", dim(h)[1], "x", dim(h)[2])
-      }
-      h[ fixed, ] <- NA
-      h[ , fixed ] <- NA 
-      return( h )
-   }
    ##
    maxim.type <- "BFGS-YC maximization"
   param <- start
