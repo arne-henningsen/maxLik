@@ -174,14 +174,18 @@ maxOptim <- function(fn, grad, hess,
       gradientObs <- NULL
    }
    ## calculate (final) Hessian
-   if(tolower(finalHessian) == "bhhh" & !is.null(gradientObs)) {
-      hessian <- -t(gradientObs) %*% gradientObs
+   if(tolower(finalHessian) == "bhhh") {
+      if(!is.null(gradientObs)) {
+         hessian <- as.matrix( -t(gradientObs) %*% gradientObs )
+         attr(hessian, "type") <- "BHHH"
+      } else {
+         hessian <- NULL
+         warning("For computing the final Hessian by 'BHHH' method, the log-likelihood or gradient must be supplied by observations")
+      }
    }
    else if(finalHessian != FALSE) {
-      if(tolower(finalHessian) == "bhhh")
-          warning("Final BHHH Hessian: gradient by observations not available.  Using Hessian matrix")
-      hessian <- logLikHess( estimate, fnOrig = fn,  gradOrig = grad,
-                            hessOrig = hess, ... )
+      hessian <- as.matrix( logLikHess( estimate, fnOrig = fn,  gradOrig = grad,
+                            hessOrig = hess, ... ) )
    }
    else
        hessian <- NULL
@@ -191,7 +195,7 @@ maxOptim <- function(fn, grad, hess,
                    estimate=estimate,
                    gradient=drop(gradient),
                            # ensure the final (non-observation) gradient is just a vector
-                   hessian=as.matrix(hessian),
+                   hessian=hessian,
                    code=result$convergence,
                    message=paste(message(result$convergence), result$message),
                    last.step=NULL,

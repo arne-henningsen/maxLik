@@ -286,13 +286,16 @@ maxNRCompute <- function(fn,
    }
    names( G1 ) <- nimed
    ## calculate (final) Hessian
-   if(tolower(finalHessian) == "bhhh" & !is.null(gradientObs)) {
-      hessian <- -t(gradientObs) %*% gradientObs
-      attr(hessian, "type") <- "BHHH"
+   if(tolower(finalHessian) == "bhhh") {
+      if(!is.null(gradientObs)) {
+         hessian <- -t(gradientObs) %*% gradientObs
+         attr(hessian, "type") <- "BHHH"
+      } else {
+         hessian <- NULL
+         warning("For computing the final Hessian by 'BHHH' method, the log-likelihood or gradient must be supplied by observations")
+      }
    }
    else if(finalHessian != FALSE) {
-      if(tolower(finalHessian) == "bhhh")
-          warning("Final BHHH Hessian: gradient by observations not available.  Using Hessian matrix")
       hessian <- attr( F1, "hessian" )
    }
    else
