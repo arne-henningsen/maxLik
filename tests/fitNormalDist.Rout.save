@@ -5379,13 +5379,8 @@ successive function values within tolerance limit
 9  outer iterations, barrier value 3.486001e-05 
 --------------------------------------------
 > all.equal( mlBhhhCon, mlgBhhhCon )
-[1] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Names: 1 string mismatch > >"                                                   
-[2] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Length mismatch: comparison on first 2 components > >"                          
-[3] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Component 2: Modes: list, character > >"                                        
-[4] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Component 2: Length mismatch: comparison on first 1 components > >"             
-[5] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Component 2: Component 1: Lengths (2, 1) differ (string compare on first 1) > >"
-[6] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Component 2: Component 1: 1 string mismatch > >"                                
-[7] "Component 11: Component 2: Mean relative difference: 5.593284e-08"                                                                                 
+[1] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Length mismatch: comparison on first 1 components > >"
+[2] "Component 11: Component 2: Mean relative difference: 5.593284e-08"                                                       
 > mlgBhhhConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon,
 +    method = "BHHH" )
 Warning messages:
@@ -5433,12 +5428,8 @@ successive function values within tolerance limit
 > all.equal( mlGBhhhCon, mlgBhhhCon )
 [1] TRUE
 > all.equal( mlGBhhhCon, mlBhhhCon )
-[1] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Names: 1 string mismatch > >"                         
-[2] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Length mismatch: comparison on first 2 components > >"
-[3] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Component 2: Modes: character, list > >"              
-[4] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Component 2: Lengths: 1, 2 > >"                       
-[5] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Component 2: target is character, current is list > >"
-[6] "Component 11: Component 2: Mean relative difference: 5.556443e-08"                                                       
+[1] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Length mismatch: comparison on first 1 components > >"
+[2] "Component 11: Component 2: Mean relative difference: 5.556443e-08"                                                       
 > 
 > # with analytical gradients and unused Hessians
 > mlghBhhhCon <- maxLik( llf, gfInd, hf, start = startVal, constraints = eqCon,

@@ -8,7 +8,7 @@ for likelihood maximisation only.
 }
 \usage{
 maxBHHH(fn, grad = NULL, hess=NULL, start, print.level = 0, iterlim = 100,
-   ...)
+   finalHessian = "BHHH", ... )
 }
 
 \arguments{
@@ -38,6 +38,10 @@ maxBHHH(fn, grad = NULL, hess=NULL, start, print.level = 0, iterlim = 100,
   \item{start}{initial values for the parameters.}
   \item{print.level}{a larger number prints more working information.}
   \item{iterlim}{maximum number of iterations.}
+  \item{finalHessian}{how (and if) to calculate the final Hessian.  Either
+    \code{FALSE} (not calculate), \code{TRUE} (use analytic/numeric
+    Hessian) or \code{"bhhh"}/\code{"BHHH"} for information equality
+    approach.}
   \item{\dots}{further arguments for \code{\link{maxNR}}, \code{fn} and \code{grad}.}
 }
 \details{

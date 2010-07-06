@@ -2,6 +2,7 @@ maxBHHH <- function(fn, grad=NULL, hess=NULL,
                     start,
                     print.level=0,
                     iterlim=100,
+                    finalHessian="BHHH",
                     ...) {
    ## hess:   Hessian, not used, for compatibility with the other methods
 
@@ -35,7 +36,6 @@ maxBHHH <- function(fn, grad=NULL, hess=NULL,
       }
       attr( a, "gradient" ) <- g
       attr( a, "hessian" ) <- - crossprod( g )
-      attr( attr( a, "hessian" ), "type" ) <- "BHHH"
 
       return( a )
    }
@@ -43,7 +43,21 @@ maxBHHH <- function(fn, grad=NULL, hess=NULL,
    ## using the Newton-Raphson algorithm with BHHH method for Hessian
    a <- maxNR(func, start=start,
               iterlim=iterlim,
-              print.level=print.level, ...)
+              print.level=print.level,
+              finalHessian = ( tolower( finalHessian ) == "bhhh" ),
+               ...)
+   if( tolower( finalHessian ) == "bhhh" ) {
+      attr( a$hessian, "type" ) <- "BHHH"
+   } else if( isTRUE( finalHessian ) ) {
+      a$hessian <- as.matrix( callWithoutSumt( a$estimate, "logLikHess",
+         fnOrig = fn, gradOrig = grad, hessOrig = hess, ... ) )
+   } else {
+       a$hessian <- NULL
+   }
+   if( !is.null( a$hessian ) ) {
+      rownames( a$hessian ) <- colnames( a$hessian ) <- names( a$estimate )
+   }
+
    a$type = "BHHH maximisation"
    invisible(a)
 }
