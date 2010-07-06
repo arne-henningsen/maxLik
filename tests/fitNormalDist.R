@@ -212,6 +212,12 @@ logLik( summary( mlBHHH ) )
 all.equal( ml[ ], mlBHHH[ -11 ] )
 mlBHHH[ 11 ]
 nObs( mlBHHH )
+# final Hessian = usual Hessian
+mlBhhhH <- maxLik( llfInd, start = startVal, method = "BHHH", 
+   finalHessian = TRUE )
+all.equal( mlBhhhH, mlBHHH )
+hessian( mlBhhhH ) 
+summary( mlBhhhH ) 
 
 # with analytical gradients
 mlgBHHH <- try( maxLik( llf, gf, start = startVal, method = "BHHH" ) )
@@ -230,6 +236,12 @@ all.equal( mlg[ ], mlgBHHH[ -11 ] )
 mlgBHHH[ 11 ]
 mlgBHHH2 <- maxLik( llf, gfInd, start = startVal, method = "BHHH" )
 all.equal( mlgBHHH, mlgBHHH2 )
+# final Hessian = usual Hessian
+mlgBhhhH <- maxLik( llf, gfInd, start = startVal, method = "BHHH", 
+   finalHessian = TRUE )
+all.equal( mlgBhhhH, mlBhhhH )
+all.equal( mlgBhhhH, mlgBHHH )
+hessian( mlgBhhhH ) 
 
 # with analytical gradients as attribute
 try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
@@ -242,6 +254,10 @@ try( maxLik( llfGradInd, start = startVal, method = "BHHH" ) )
 x <- xSaved
 mlGBHHH <- maxLik( llfGradInd, start = startVal, method = "BHHH" )
 all.equal( mlGBHHH, mlgBHHH, tolerance = 1e-10 )
+# final Hessian = usual Hessian
+mlGBhhhH <- maxLik( llfGradInd, start = startVal, method = "BHHH", 
+   finalHessian = TRUE )
+all.equal( mlGBhhhH, mlgBhhhH )
 
 # with analytical gradients as argument and attribute
 mlgGBHHH <- maxLik( llfGradInd, start = startVal, method = "BHHH" )
@@ -251,10 +267,19 @@ all.equal( mlgGBHHH, mlGBHHH, tolerance = 1e-10 )
 # with unused Hessian
 mlghBHHH <- maxLik( llfInd, gfInd, hf, start = startVal, method = "BHHH" )
 all.equal( mlgBHHH, mlghBHHH )
+# final Hessian = usual Hessian
+mlghBhhhH <- maxLik( llfInd, gfInd, hf, start = startVal, method = "BHHH", 
+   finalHessian = TRUE )
+all.equal( mlghBhhhH, mlghBHHH )
+all.equal( mlghBhhhH, mlgBhhhH )
 
 # with unused Hessian as attribute
 mlGHBHHH <- maxLik( llfGradHessInd, start = startVal, method = "BHHH" )
 all.equal( mlGHBHHH, mlghBHHH, tolerance = 1e-10 )
+# final Hessian = usual Hessian
+mlGHBhhhH <- maxLik( llfGradHessInd, start = startVal, method = "BHHH", 
+   finalHessian = TRUE )
+all.equal( mlGHBhhhH, mlghBhhhH )
 
 # with analytical gradients and Hessian as argument and attribute
 mlgGhHBHHH <- maxLik( llfGradHessInd, start = startVal, method = "BHHH" )

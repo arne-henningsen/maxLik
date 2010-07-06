@@ -684,6 +684,30 @@ $gradientObs
 
 > nObs( mlBHHH )
 [1] 100
+> # final Hessian = usual Hessian
+> mlBhhhH <- maxLik( llfInd, start = startVal, method = "BHHH", 
++    finalHessian = TRUE )
+> all.equal( mlBhhhH, mlBHHH )
+[1] "Component 4: Attributes: < Length mismatch: comparison on first 2 components >"
+[2] "Component 4: Mean relative difference: 0.09394433"                             
+> hessian( mlBhhhH ) 
+             mu     sigma
+mu    -30.29754   0.00000
+sigma   0.00000 -60.59508
+> summary( mlBhhhH ) 
+--------------------------------------------
+Maximum Likelihood estimation
+BHHH maximisation, 13 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -201.5839 
+2  free parameters
+Estimates:
+      Estimate Std. error t value   Pr(> t)    
+mu     1.18081    0.18168  6.4996 8.055e-11 ***
+sigma  1.81648    0.12846 14.1400 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
 > 
 > # with analytical gradients
 > mlgBHHH <- try( maxLik( llf, gf, start = startVal, method = "BHHH" ) )
@@ -862,6 +886,19 @@ $gradientObs
 > mlgBHHH2 <- maxLik( llf, gfInd, start = startVal, method = "BHHH" )
 > all.equal( mlgBHHH, mlgBHHH2 )
 [1] TRUE
+> # final Hessian = usual Hessian
+> mlgBhhhH <- maxLik( llf, gfInd, start = startVal, method = "BHHH", 
++    finalHessian = TRUE )
+> all.equal( mlgBhhhH, mlBhhhH )
+[1] "Component 3: Mean relative difference: 0.0001524068"
+[2] "Component 4: Mean relative difference: 0.0003029525"
+> all.equal( mlgBhhhH, mlgBHHH )
+[1] "Component 4: Attributes: < Length mismatch: comparison on first 2 components >"
+[2] "Component 4: Mean relative difference: 0.09401734"                             
+> hessian( mlgBhhhH ) 
+                 mu         sigma
+mu    -3.030670e+01  9.273103e-06
+sigma  9.276024e-06 -6.061345e+01
 > 
 > # with analytical gradients as attribute
 > try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
@@ -908,6 +945,11 @@ There were 25 warnings (use warnings() to see them)
 > mlGBHHH <- maxLik( llfGradInd, start = startVal, method = "BHHH" )
 > all.equal( mlGBHHH, mlgBHHH, tolerance = 1e-10 )
 [1] TRUE
+> # final Hessian = usual Hessian
+> mlGBhhhH <- maxLik( llfGradInd, start = startVal, method = "BHHH", 
++    finalHessian = TRUE )
+> all.equal( mlGBhhhH, mlgBhhhH )
+[1] TRUE
 > 
 > # with analytical gradients as argument and attribute
 > mlgGBHHH <- maxLik( llfGradInd, start = startVal, method = "BHHH" )
@@ -920,10 +962,23 @@ There were 25 warnings (use warnings() to see them)
 > mlghBHHH <- maxLik( llfInd, gfInd, hf, start = startVal, method = "BHHH" )
 > all.equal( mlgBHHH, mlghBHHH )
 [1] TRUE
+> # final Hessian = usual Hessian
+> mlghBhhhH <- maxLik( llfInd, gfInd, hf, start = startVal, method = "BHHH", 
++    finalHessian = TRUE )
+> all.equal( mlghBhhhH, mlghBHHH )
+[1] "Component 4: Attributes: < Length mismatch: comparison on first 2 components >"
+[2] "Component 4: Mean relative difference: 0.09401734"                             
+> all.equal( mlghBhhhH, mlgBhhhH )
+[1] TRUE
 > 
 > # with unused Hessian as attribute
 > mlGHBHHH <- maxLik( llfGradHessInd, start = startVal, method = "BHHH" )
 > all.equal( mlGHBHHH, mlghBHHH, tolerance = 1e-10 )
+[1] TRUE
+> # final Hessian = usual Hessian
+> mlGHBhhhH <- maxLik( llfGradHessInd, start = startVal, method = "BHHH", 
++    finalHessian = TRUE )
+> all.equal( mlGHBhhhH, mlghBhhhH )
 [1] TRUE
 > 
 > # with analytical gradients and Hessian as argument and attribute
