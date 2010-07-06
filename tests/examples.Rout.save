@@ -699,6 +699,8 @@ $gradient
 $hessian
           [,1]
 [1,] -18.42347
+attr(,"type")
+[1] "BHHH"
 
 $code
 [1] 2
@@ -849,6 +851,8 @@ $gradient
 $hessian
           [,1]
 [1,] -18.42347
+attr(,"type")
+[1] "BHHH"
 
 $code
 [1] 2

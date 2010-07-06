@@ -35,8 +35,9 @@ maxBHHH <- function(fn, grad=NULL, hess=NULL,
       }
       attr( a, "gradient" ) <- g
       attr( a, "hessian" ) <- - crossprod( g )
+      attr( attr( a, "hessian" ), "type" ) <- "BHHH"
 
-      a
+      return( a )
    }
 
    ## using the Newton-Raphson algorithm with BHHH method for Hessian

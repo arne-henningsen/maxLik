@@ -549,6 +549,8 @@ sigma 	 1.719018
               mu      sigma
 mu    -30.306718  -1.833532
 sigma  -1.833532 -55.732477
+attr(,"type")
+[1] "BHHH"
 > logLik( mlBHHH )
 [1] -201.5839
 > maximType( mlBHHH )
@@ -568,13 +570,14 @@ sigma -0.001087693  0.017978643
 > logLik( summary( mlBHHH ) )
 [1] -201.5839
 > all.equal( ml[ ], mlBHHH[ -11 ] )
-[1] "Component 2: Mean relative difference: 2.62578e-07"
-[2] "Component 3: Mean relative difference: 34.09238"   
-[3] "Component 4: Mean relative difference: 0.09459178" 
-[4] "Component 5: Mean relative difference: 1"          
-[5] "Component 6: 1 string mismatch"                    
-[6] "Component 9: Mean relative difference: 0.8571429"  
-[7] "Component 10: 1 string mismatch"                   
+[1] "Component 2: Mean relative difference: 2.62578e-07"                            
+[2] "Component 3: Mean relative difference: 34.09238"                               
+[3] "Component 4: Attributes: < Length mismatch: comparison on first 2 components >"
+[4] "Component 4: Mean relative difference: 0.09459178"                             
+[5] "Component 5: Mean relative difference: 1"                                      
+[6] "Component 6: 1 string mismatch"                                                
+[7] "Component 9: Mean relative difference: 0.8571429"                              
+[8] "Component 10: 1 string mismatch"                                               
 > mlBHHH[ 11 ]
 $gradientObs
                 mu        sigma
@@ -744,13 +747,14 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > all.equal( mlBHHH, mlgBHHH )
 [1] "Component 3: Mean relative difference: 0.0001524298"
 > all.equal( mlg[ ], mlgBHHH[ -11 ] )
-[1] "Component 2: Mean relative difference: 2.533978e-07"
-[2] "Component 3: Mean absolute difference: 1.880678e-05"
-[3] "Component 4: Mean relative difference: 0.09401655"  
-[4] "Component 5: Mean relative difference: 1"           
-[5] "Component 6: 1 string mismatch"                     
-[6] "Component 9: Mean relative difference: 0.8571429"   
-[7] "Component 10: 1 string mismatch"                    
+[1] "Component 2: Mean relative difference: 2.533978e-07"                           
+[2] "Component 3: Mean absolute difference: 1.880678e-05"                           
+[3] "Component 4: Attributes: < Length mismatch: comparison on first 2 components >"
+[4] "Component 4: Mean relative difference: 0.09401655"                             
+[5] "Component 5: Mean relative difference: 1"                                      
+[6] "Component 6: 1 string mismatch"                                                
+[7] "Component 9: Mean relative difference: 0.8571429"                              
+[8] "Component 10: 1 string mismatch"                                               
 > mlgBHHH[ 11 ]
 $gradientObs
                 mu        sigma
@@ -2828,6 +2832,8 @@ sigma 	 1
       mu     sigma
 mu    NA        NA
 sigma NA -55.98293
+attr(,"type")
+[1] "BHHH"
 > logLik( mlFixBHHH )
 [1] -202.0769
 > maximType( mlFixBHHH )
@@ -2847,9 +2853,10 @@ sigma  0 0.01786259
 > logLik( summary( mlFixBHHH ) )
 [1] -202.0769
 > all.equal( mlFix[ -c( 5, 6, 9, 10 ) ], mlFixBHHH[ -c( 5, 6, 9, 10, 11 ) ] )
-[1] "Component 2: Mean relative difference: 7.690288e-08"
-[2] "Component 3: Mean relative difference: 295.6328"    
-[3] "Component 4: Mean relative difference: 0.0673654"   
+[1] "Component 2: Mean relative difference: 7.690288e-08"                           
+[2] "Component 3: Mean relative difference: 295.6328"                               
+[3] "Component 4: Attributes: < Length mismatch: comparison on first 2 components >"
+[4] "Component 4: Mean relative difference: 0.0673654"                              
 > mlFix[[ 3 ]]
            mu         sigma 
            NA -2.842171e-08 
@@ -2864,6 +2871,8 @@ sigma NA -60.02665
       mu     sigma
 mu    NA        NA
 sigma NA -55.98293
+attr(,"type")
+[1] "BHHH"
 > mlFixBHHH[ 11 ]
 $gradientObs
        mu       sigma
@@ -5200,6 +5209,8 @@ sigma 	 3.773646
              mu      sigma
 mu    -45.03685  -22.85576
 sigma -22.85576 -107.77874
+attr(,"type")
+[1] "BHHH"
 > logLik( mlBhhhCon )
 [1] -206.177
 > maximType( mlBhhhCon )
@@ -5219,14 +5230,15 @@ sigma -0.00527648  0.01039721
 > logLik( summary( mlBhhhCon ) )
 [1] -206.177
 > all.equal( mlCon[ -c( 5, 6, 7, 9, 10 ) ], mlBhhhCon[ -c( 5, 6, 7, 9, 10, 12 ) ] )
-[1] "Component 1: Mean relative difference: 0.008036656"             
-[2] "Component 2: Mean relative difference: 0.01384220"              
-[3] "Component 3: Mean relative difference: 0.07577426"              
-[4] "Component 4: Mean relative difference: 0.243777"                
-[5] "Component 6: Component 2: Mean absolute difference: 3.48598e-05"
-[6] "Component 6: Component 3: Mean relative difference: 1"          
-[7] "Component 6: Component 4: 1 string mismatch"                    
-[8] "Component 6: Component 5: Mean relative difference: 0.1"        
+[1] "Component 1: Mean relative difference: 0.008036656"                            
+[2] "Component 2: Mean relative difference: 0.01384220"                             
+[3] "Component 3: Mean relative difference: 0.07577426"                             
+[4] "Component 4: Attributes: < Length mismatch: comparison on first 2 components >"
+[5] "Component 4: Mean relative difference: 0.243777"                               
+[6] "Component 6: Component 2: Mean absolute difference: 3.48598e-05"               
+[7] "Component 6: Component 3: Mean relative difference: 1"                         
+[8] "Component 6: Component 4: 1 string mismatch"                                   
+[9] "Component 6: Component 5: Mean relative difference: 0.1"                       
 > mlBhhhCon[12]
 $gradientObs
                   mu       sigma
@@ -5367,8 +5379,13 @@ successive function values within tolerance limit
 9  outer iterations, barrier value 3.486001e-05 
 --------------------------------------------
 > all.equal( mlBhhhCon, mlgBhhhCon )
-[1] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Length mismatch: comparison on first 1 components > >"
-[2] "Component 11: Component 2: Mean relative difference: 5.593284e-08"                                                       
+[1] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Names: 1 string mismatch > >"                                                   
+[2] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Length mismatch: comparison on first 2 components > >"                          
+[3] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Component 2: Modes: list, character > >"                                        
+[4] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Component 2: Length mismatch: comparison on first 1 components > >"             
+[5] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Component 2: Component 1: Lengths (2, 1) differ (string compare on first 1) > >"
+[6] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Component 2: Component 1: 1 string mismatch > >"                                
+[7] "Component 11: Component 2: Mean relative difference: 5.593284e-08"                                                                                 
 > mlgBhhhConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon,
 +    method = "BHHH" )
 Warning messages:
@@ -5416,8 +5433,12 @@ successive function values within tolerance limit
 > all.equal( mlGBhhhCon, mlgBhhhCon )
 [1] TRUE
 > all.equal( mlGBhhhCon, mlBhhhCon )
-[1] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Length mismatch: comparison on first 1 components > >"
-[2] "Component 11: Component 2: Mean relative difference: 5.556443e-08"                                                       
+[1] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Names: 1 string mismatch > >"                         
+[2] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Length mismatch: comparison on first 2 components > >"
+[3] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Component 2: Modes: character, list > >"              
+[4] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Component 2: Lengths: 1, 2 > >"                       
+[5] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Component 2: target is character, current is list > >"
+[6] "Component 11: Component 2: Mean relative difference: 5.556443e-08"                                                       
 > 
 > # with analytical gradients and unused Hessians
 > mlghBhhhCon <- maxLik( llf, gfInd, hf, start = startVal, constraints = eqCon,
