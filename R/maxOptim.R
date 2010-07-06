@@ -176,19 +176,21 @@ maxOptim <- function(fn, grad, hess,
    ## calculate (final) Hessian
    if(tolower(finalHessian) == "bhhh") {
       if(!is.null(gradientObs)) {
-         hessian <- as.matrix( -t(gradientObs) %*% gradientObs )
+         hessian <- - crossprod( gradientObs )
          attr(hessian, "type") <- "BHHH"
       } else {
          hessian <- NULL
          warning("For computing the final Hessian by 'BHHH' method, the log-likelihood or gradient must be supplied by observations")
       }
-   }
-   else if(finalHessian != FALSE) {
+   } else if(finalHessian != FALSE) {
       hessian <- as.matrix( logLikHess( estimate, fnOrig = fn,  gradOrig = grad,
                             hessOrig = hess, ... ) )
-   }
-   else
+   } else {
        hessian <- NULL
+   }
+   if( !is.null( hessian ) ) {
+      rownames( hessian ) <- colnames( hessian ) <- names( estimate )
+   }
 
    result <- list(
                    maximum=result$value,
