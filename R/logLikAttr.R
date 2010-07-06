@@ -1,5 +1,5 @@
 logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
-         sumObs = FALSE, ...) {
+         sumObs = FALSE, returnHessian = TRUE, ...) {
 
 # this function returns the log-likelihood value with gradient and Hessian as
 # attributes. If the log-likelihood function provided by the user does not add
@@ -47,39 +47,43 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
          }
 
          ## Hessian of log-likelihood function
-         h <- attr( f, "hessian" )
-         if( is.null( h ) ) {
-            if(!is.null(hessOrig)) {
-               h <- as.matrix(hessOrig(theta, ...))
-            } else {
-               llFunc <- function( theta, ... ) {
-                  return( sum( fnOrig( theta, ... ) ) )
-               }
-               if( !is.null( attr( f, "gradient" ) ) ) {
-                  gradFunc <- function( theta, ... ) {
-                     return( sumGradients( attr( fnOrig( theta, ... ), "gradient" ),
-                        nParam ) )
-                  }
-               } else if( !is.null( gradOrig ) ) {
-                  gradFunc <- function( theta, ... ) {
-                     return( sumGradients( gradOrig( theta, ... ), nParam ) )
-                  }
+         if( returnHessian ) {
+            h <- attr( f, "hessian" )
+            if( is.null( h ) ) {
+               if(!is.null(hessOrig)) {
+                  h <- as.matrix(hessOrig(theta, ...))
                } else {
-                  gradFunc <- NULL
+                  llFunc <- function( theta, ... ) {
+                     return( sum( fnOrig( theta, ... ) ) )
+                  }
+                  if( !is.null( attr( f, "gradient" ) ) ) {
+                     gradFunc <- function( theta, ... ) {
+                        return( sumGradients( attr( fnOrig( theta, ... ), "gradient" ),
+                           nParam ) )
+                     }
+                  } else if( !is.null( gradOrig ) ) {
+                     gradFunc <- function( theta, ... ) {
+                        return( sumGradients( gradOrig( theta, ... ), nParam ) )
+                     }
+                  } else {
+                     gradFunc <- NULL
+                  }
+                  h <- numericHessian( f = llFunc, grad = gradFunc, t0 = theta,
+                                    fixed=fixed, ...)
                }
-               h <- numericHessian( f = llFunc, grad = gradFunc, t0 = theta,
-                                 fixed=fixed, ...)
             }
+            if((dim(h)[1] != nParam) | (dim(h)[2] != nParam)) {
+               stop("Wrong hessian dimension.  Needed ", nParam, "x", nParam,
+                  " but supplied ", dim(h)[1], "x", dim(h)[2])
+            }
+            ## Set elements of the Hessian corresponding to the fixed parameters
+            ## to zero so that they are always zero (no matter if they are
+            ## calculated analytical or by the finite-difference method)
+            h[ fixed, ] <- NA
+            h[ , fixed ] <- NA
+         } else {
+            h <- NULL
          }
-         if((dim(h)[1] != nParam) | (dim(h)[2] != nParam)) {
-            stop("Wrong hessian dimension.  Needed ", nParam, "x", nParam,
-               " but supplied ", dim(h)[1], "x", dim(h)[2])
-         }
-         ## Set elements of the Hessian corresponding to the fixed parameters
-         ## to zero so that they are always zero (no matter if they are
-         ## calculated analytical or by the finite-difference method)
-         h[ fixed, ] <- NA
-         h[ , fixed ] <- NA
 
          attr( f, "gradient" ) <- gr
          attr( f, "hessian" ) <- h
