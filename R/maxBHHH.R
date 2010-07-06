@@ -34,7 +34,7 @@ maxBHHH <- function(fn, grad=NULL, hess=NULL,
          checkBhhhGrad( g = g, theta = theta, analytic = FALSE )
       }
       attr( a, "gradient" ) <- g
-      attr( a, "hessian" ) <- -t( g ) %*% g
+      attr( a, "hessian" ) <- - crossprod( g )
 
       a
    }

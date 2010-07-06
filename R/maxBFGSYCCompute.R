@@ -187,7 +187,7 @@ maxBFGSYCCompute <- function(fn,
       if( step < steptol) {
          code <- 3; break
       }
-      if( sqrt( t(gr[!fixed])%*%gr[!fixed]) < gradtol) {
+      if( sqrt( crossprod( gr[!fixed] ) ) < gradtol ) {
          code <-1; break
       }
       if(x - oldx < tol) {

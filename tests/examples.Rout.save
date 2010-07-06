@@ -694,7 +694,7 @@ $estimate
 [1] 2.197878
 
 $gradient
-[1] -4.774259e-05
+[1] -4.77513e-05
 
 $hessian
           [,1]
@@ -736,10 +736,10 @@ $gradientObs
  [14,]  0.41364538
  [15,] -0.34761003
  [16,] -0.10404020
- [17,]  0.35988394
+ [17,]  0.35988393
  [18,]  0.43321077
  [19,] -0.24283947
- [20,]  0.40753983
+ [20,]  0.40753982
  [21,]  0.43445912
  [22,]  0.21306477
  [23,] -0.72491920
@@ -831,8 +831,8 @@ Return code: 2
 successive function values within tolerance limit 
 Function value: -21.25086 
 Estimates:
-     estimate      gradient
-[1,] 2.197878 -4.774259e-05
+     estimate     gradient
+[1,] 2.197878 -4.77513e-05
 --------------------------------------------
 > ## Estimate with analytic gradient
 > a <- maxBHHH(loglik, gradlik, start=1)

@@ -253,7 +253,7 @@ maxNRCompute <- function(fn,
       if( step < steptol) {
          code <- 3; break
       }
-      if( sqrt( t(G1[!fixed])%*%G1[!fixed]) < gradtol) {
+      if( sqrt( crossprod( G1[!fixed] ) ) < gradtol ) {
          code <-1; break
       }
       if(is.null(newVal) & f1 - f0 < tol) {
