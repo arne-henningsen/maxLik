@@ -1,4 +1,4 @@
-maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
+maxBFGSYCCompute <- function(fn,
                          start, print.level=0,
                   tol=1e-6, reltol=sqrt(.Machine$double.eps),
                   gradtol=1e-6, steptol=1e-10,
@@ -16,15 +16,9 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
    ## fn          - the function to be minimized.  Returns either scalar or
    ##               vector value with possible attributes 
    ##               constPar and newVal
-   ##               If fn returns the value with attributes 'gradient'
-   ##               and 'hessian', those are used instead of calculatin
-   ##               new gradient and hessian values
-   ## grad        - gradient function (numeric used if missing).  Must return either
-   ##               * vector, length=nParam
-   ##               * matrix, dim=c(nObs, 1).  Treated as vector
-   ##               * matrix, dim=c(M, nParam), where M is arbitrary.  In this case the
-   ##                 rows are simply summed (useful for maxBHHH).
-   ## hess        - hessian function (numeric used if missing)
+   ##               fn must return the value with attribute 'gradient'
+   ##               (and also attribute 'hessian' if it should be returned)
+   ##               fn must have an argument sumObs
    ## start       - initial parameter vector (eventually w/names)
    ## steptol     - minimum step size
    ## ...         - extra arguments for fn()
@@ -62,52 +56,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
    ## iterations  number of iterations
    ## type        "BFGS-YC maximisation"
    ## 
-   func <- function(theta, sumObs = TRUE, ...) {
-      f <- fn(theta, ...)
-      if( sumObs ) {
-         f <- sumKeepAttr( f )
-      }
-      return( f )
-   }
-   gradient <- function(theta, sumObs = TRUE,
-                        suppliedValue=NULL, ...) {
-      ## suppliedValue: use gradient value supplied from elsewhere
-      ##           (attribute to fn) and only do sanity checks
-      if(is.null(gr <- suppliedValue)) {
-         if(!is.null(grad)) {  # use user-supplied if present
-            gr <- grad(theta, ...)
-         } else {
-            gr <- numericGradient(f = func, t0 = theta,
-                                  fixed=fixed, sumObs = sumObs, ...)
-                           # Note we need nObs rows x nParam cols
-         }
-      }
-      ## Now check if the gradient is vector or matrix...
-      if(!sumObs) {
-         ## return (preferably) by observations, ensure it will be a matrix
-         if(observationGradient(gr, length(theta))) {
-            gr <- as.matrix(gr)
-         }
-      }
-      else {
-         ## We need just summed gradient
-         if( !is.null(dim(gr))) {
-            gr <- colSums(gr)
-         } else {
-            ## ... or vector if only one parameter
-            if(length(gr) > nParam ) {
-               gr <- sum(gr)
-            }
-         }
-      }
-      ## Why do we need this?
-      if( is.null( dim( gr ) ) ) {
-         gr[ fixed ] <- NA
-      } else {
-         gr[ , fixed ] <- NA
-      }
-      return(gr)
-   }
+
    ##
    maxim.type <- "BFGS-YC maximization"
   param <- start
@@ -117,7 +66,8 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
   chi2 <- 1E+10
   iter <- 0
   # eval a first time the function, the gradient and the hessian
-  x <- func(param, ...)
+  x <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE, ... ) )
+            # sum of log-likelihood value but not sum of gradients
    if (print.level > 0)
     cat(paste("Initial value of the function :", as.numeric(x), "\n"))
    if(is.na(x)) {
@@ -138,7 +88,7 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
    ##
    ## gradient by individual observations, used for BHHH approximation of initial Hessian.
    ## If not supplied by observations, we use the summed gradient.
-   gri <- gradient(param, suppliedValue=attr(x, "gradient"), sumObs=FALSE, ...)
+   gri <- attr( x, "gradient" )
    gr <- sumGradients( gri, nParam = length( param ) )
    if(print.level > 2) {
       cat("Initial gradient value:\n")
@@ -185,7 +135,8 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
      oldgr <- gr
     oldparam <- param
     param[!fixed] <- oldparam[!fixed] - step * direction[!fixed]
-    x <- func(param, ...)
+    x <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE, ... ) )
+            # sum of log-likelihood value but not sum of gradients
     while((is.na(x) | x < oldx) & step > steptol) {
        step <- step/2
        if(print.level > 2) {
@@ -196,13 +147,14 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
           }
        }
        param[!fixed] <- oldparam[!fixed] - step * direction[!fixed]
-       x <- func(param, ...)
+       x <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE, ... ) )
+            # sum of log-likelihood value but not sum of gradients
     }
     if(step < steptol) {
                            # we did not find a better place to go...
        samm <- list(theta0=oldparam, f0=oldx, climb=direction)
     }
-     gri <- gradient(param, suppliedValue=attr(x, "gradient"), sumObs=FALSE, ...)
+     gri <- attr( x, "gradient" )
                            # observation-wise gradient.  We only need it in order to compute the BHHH Hessian, if asked so.
      gr <- sumGradients( gri, nParam = length( param ) )
       incr <- step * direction
@@ -263,14 +215,12 @@ maxBFGSYCCompute <- function(fn, grad=NULL, hess=NULL,
       if(observationGradient(gri, length(param)))
           hessian <- -t(gri) %*% gri
       else {
-         hessian <- logLikHess( param, fnOrig = fn,  gradOrig = grad,
-                                hessOrig = hess, ... )
+         hessian <- attr( x , "hessian" )
          warning("For computing Hessian by 'BHHH' method, the log-likelihood or gradient must be supplied by observations")
       }
    }
    else if(finalHessian) {
-      hessian <- logLikHess( param, fnOrig = fn,  gradOrig = grad,
-                            hessOrig = hess, ... )
+      hessian <- attr( x , "hessian" )
    }
    else
        hessian <- NULL

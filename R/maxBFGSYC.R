@@ -71,7 +71,8 @@ maxBFGSYC <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
    fixed <- prepareFixed( start = start, activePar = activePar,
       fixed = fixed )
    if(is.null(constraints)) {
-       result <- maxBFGSYCCompute(fn=fn, grad=grad, hess=hess,
+       result <- maxBFGSYCCompute(fn=logLikAttr,
+                              fnOrig = fn, gradOrig = grad, hessOrig = hess,
                               start=start,
                               print.level=print.level,
                               tol=tol, reltol=reltol,
