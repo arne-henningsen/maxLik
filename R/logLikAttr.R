@@ -15,9 +15,6 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
 
          ## value of log-likelihood function
          f <- fnOrig(theta, ...)
-         if( sumObs ) {
-            f <- sumKeepAttr( f )
-         }
 
          ## gradient of log-likelihood function
          gr <- attr( f, "gradient" )
@@ -29,22 +26,19 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
                                     fixed=fixed, ...)
             }
          }
-         ## Now check if the gradient is vector or matrix...
-         if(!sumObs) {
-            if(observationGradient(gr, length(theta))) {
-               gr <- as.matrix(gr)
-            }
-         } else {
-            ## We need just summed gradient
-            gr <- sumGradients( gr, nParam )
+         # if gradients are observation-specific, they must be stored in a matrix
+         if(observationGradient(gr, length(theta))) {
+            gr <- as.matrix(gr)
          }
-         ## Set gradients of fixed parameters to zero so that they are always zero
+
+         ## Set gradients of fixed parameters to NA so that they are always NA
          ## (no matter if they are analytical or finite-difference gradients)
          if( is.null( dim( gr ) ) ) {
             gr[ fixed ] <- NA
          } else {
             gr[ , fixed ] <- NA
          }
+
 
          ## Hessian of log-likelihood function
          if( returnHessian ) {
@@ -84,6 +78,18 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
          } else {
             h <- NULL
          }
+
+         ## sum log-likelihood values over observations (if requested) 
+         if( sumObs ) {
+            f <- sumKeepAttr( f )
+         }
+
+         ## sum gradients over observations (if requested)
+         if( sumObs ) {
+            ## We need just summed gradient
+            gr <- sumGradients( gr, nParam )
+         }
+
 
          attr( f, "gradient" ) <- gr
          attr( f, "hessian" ) <- h
