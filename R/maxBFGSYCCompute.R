@@ -66,7 +66,8 @@ maxBFGSYCCompute <- function(fn,
   chi2 <- 1E+10
   iter <- 0
   # eval a first time the function, the gradient and the hessian
-  x <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE, ... ) )
+  x <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE,
+      returnHessian = FALSE, ... ) )
             # sum of log-likelihood value but not sum of gradients
    if (print.level > 0)
     cat(paste("Initial value of the function :", as.numeric(x), "\n"))
@@ -135,7 +136,8 @@ maxBFGSYCCompute <- function(fn,
      oldgr <- gr
     oldparam <- param
     param[!fixed] <- oldparam[!fixed] - step * direction[!fixed]
-    x <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE, ... ) )
+    x <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE,
+      returnHessian = FALSE, ... ) )
             # sum of log-likelihood value but not sum of gradients
     while((is.na(x) | x < oldx) & step > steptol) {
        step <- step/2
@@ -147,7 +149,8 @@ maxBFGSYCCompute <- function(fn,
           }
        }
        param[!fixed] <- oldparam[!fixed] - step * direction[!fixed]
-       x <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE, ... ) )
+       x <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE,
+         returnHessian = FALSE, ... ) )
             # sum of log-likelihood value but not sum of gradients
     }
     if(step < steptol) {
@@ -215,12 +218,14 @@ maxBFGSYCCompute <- function(fn,
       if(observationGradient(gri, length(param)))
           hessian <- -t(gri) %*% gri
       else {
-         hessian <- attr( x , "hessian" )
+         hessian <- attr( fn( param, fixed = fixed, returnHessian = TRUE, ... ) ,
+            "hessian" )
          warning("For computing Hessian by 'BHHH' method, the log-likelihood or gradient must be supplied by observations")
       }
    }
    else if(finalHessian) {
-      hessian <- attr( x , "hessian" )
+      hessian <- attr( fn( param, fixed = fixed, returnHessian = TRUE, ... ) ,
+         "hessian" )
    }
    else
        hessian <- NULL
