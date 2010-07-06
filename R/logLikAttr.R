@@ -41,7 +41,7 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
 
 
          ## Hessian of log-likelihood function
-         if( returnHessian ) {
+         if( isTRUE( returnHessian ) ) {
             h <- attr( f, "hessian" )
             if( is.null( h ) ) {
                if(!is.null(hessOrig)) {
@@ -75,6 +75,13 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
             ## calculated analytical or by the finite-difference method)
             h[ fixed, ] <- NA
             h[ , fixed ] <- NA
+         } else if( tolower( returnHessian ) == "bhhh" ) {
+            if( observationGradient( gr, nParam ) ) {
+               h <- - crossprod( gr )
+               attr( h, "type" ) = "BHHH"
+            } else {
+               h <- NULL
+            }
          } else {
             h <- NULL
          }
