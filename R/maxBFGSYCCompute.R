@@ -214,21 +214,16 @@ maxBFGSYCCompute <- function(fn,
    }
    names(gr) <- names(param)
    # calculate (final) Hessian
-   if(tolower(finalHessian) == "bhhh") {
-      if(observationGradient(gri, length(param))) {
-          hessian <- -t(gri) %*% gri
-          attr(hessian, "type") <- "BHHH"
-      } else {
-         hessian <- NULL
+   if( tolower(finalHessian) == "bhhh" || isTRUE( finalHessian ) ) {
+      hessian <- attr(
+         fn( param, fixed = fixed, returnHessian = finalHessian, ... ),
+         "hessian" )
+      if( tolower( finalHessian ) == "bhhh" && is.null( hessian ) ) {
          warning("For computing the final Hessian by 'BHHH' method, the log-likelihood or gradient must be supplied by observations")
       }
-   }
-   else if(finalHessian) {
-      hessian <- attr( fn( param, fixed = fixed, returnHessian = TRUE, ... ) ,
-         "hessian" )
-   }
-   else
+   } else {
        hessian <- NULL
+   }
    if( !is.null( hessian ) ) {
       rownames( hessian ) <- colnames( hessian ) <- nimed
    }
