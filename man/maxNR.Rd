@@ -82,13 +82,16 @@ finalHessian=TRUE,
     problem is forwarded
     to \code{\link{sumt}}.
   }
-  \item{finalHessian}{include final Hessian?  As computing final hessian
+  \item{finalHessian}{how (and if) to calculate the final Hessian.  Either
+    \code{FALSE} (not calculate), \code{TRUE} (use analytic/numeric
+    Hessian) or \code{"bhhh"}/\code{"BHHH"} for information equality
+    approach.  The latter approach is only suitable for maximizing
+    log-likelihood function.  It requires the gradient/log-likelihood to
+    be supplied by individual observations, see \code{\link{maxBHHH}} for
+    details. As computing final hessian
     does not carry any extra penalty for NR method, this option is
     mostly for compatibility reasons with other \pkg{maxLik}
-    optimizers.  The value should be either \code{FALSE} (do not
-    include), \code{TRUE} or anything else will result in the final
-    Hessian included in the results.
-  }
+    optimizers.}
   \item{fixed}{parameters that should be fixed at their starting values:
       either a logical vector of the same length as argument \code{start},
       a numeric (index) vector indicating the positions of the fixed parameters,
