@@ -383,10 +383,8 @@ mlgIndBFGS[12]
 
 # with analytical gradients as attribute
 mlGBFGS <- maxLik( llfGrad, start = startVal, method = "BFGS" )
-all.equal( mlGBFGS, mlBFGS, tolerance = 1e-14 )
 all.equal( mlGBFGS, mlgBFGS, tolerance = 1e-14 )
 mlGIndBFGS <- maxLik( llfGradInd, start = startVal, method = "BFGS" )
-all.equal( mlGIndBFGS, mlIndBFGS, tolerance = 1e-14 )
 all.equal( mlGIndBFGS, mlgIndBFGS, tolerance = 1e-14 )
 
 # with analytical gradients as argument and attribute
@@ -400,7 +398,6 @@ all.equal( mlgBFGS, mlghBFGS )
 
 # with analytical gradients and Hessian as attribute
 mlGHBFGS <- maxLik( llfGradHess, start = startVal, method = "BFGS" )
-all.equal( mlGHBFGS, mlBFGS, tolerance = 1e-14 )
 all.equal( mlGHBFGS, mlghBFGS, tolerance = 1e-14 )
 
 # with analytical gradients and Hessian as argument and attribute
@@ -446,10 +443,8 @@ mlgIndNM[12]
 
 # with (unused) analytical gradients as attribute
 mlGNM <- maxLik( llfGrad, start = startVal, method = "NM" )
-all.equal( mlGNM, mlNM, tolerance = 1e-14 )
 all.equal( mlGNM, mlgNM, tolerance = 1e-14 )
 mlGIndNM <- maxLik( llfGradInd, start = startVal, method = "NM" )
-all.equal( mlGIndNM, mlIndNM, tolerance = 1e-14 )
 all.equal( mlGIndNM, mlgIndNM, tolerance = 1e-14 )
 
 # with analytical gradients as argument and attribute
