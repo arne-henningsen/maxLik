@@ -3,6 +3,9 @@
 logLikFunc <- function(theta, fnOrig, gradOrig, hessOrig,
       start = NULL, fixed = NULL, sumObs = TRUE, ...) {
 
+   # Arguments "gradOrig" and "hessOrig" are just for compatibility with
+   #    logLikGrad() and logLikHess()
+
    theta <- addFixedPar( theta = theta, start = start, fixed = fixed, ...)
 
    result <- fnOrig( theta, ... )

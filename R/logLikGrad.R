@@ -4,6 +4,9 @@ logLikGrad <- function(theta, fnOrig, gradOrig, hessOrig,
                        start = NULL, fixed = NULL, sumObs = TRUE,
                        suppliedValue=NULL,
                        ...) {
+
+   # Argument "hessOrig" is just for compatibility with logLikHess()
+
    ## suppliedValue   a call to the function may provide the (pre-calculated) value of gradient.  If non-NULL, this is used.
    theta <- addFixedPar( theta = theta, start = start, fixed = fixed, ...)
    if(!is.null(suppliedValue)) {

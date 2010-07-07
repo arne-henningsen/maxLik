@@ -1,6 +1,15 @@
+## Calculate the Hessian of the function, either by analytic or numeric method
 logLikHess <- function( theta, fnOrig, gradOrig, hessOrig,
       start = NULL, fixed = NULL, gradAttr = NULL, hessAttr = NULL, ... ) {
-   ## Calculate the Hessian of the function, either by analytic or numeric method
+
+   # argument "gradAttr" should be
+   #    - FALSE if the gradient is not provided as attribute of the log-lik value
+   #    - TRUE  if the gradient is provided as attribute of the log-lik value
+   #    - NULL  if this is not known
+   # argument "hessAttr" should be
+   #    - FALSE if the Hessian is not provided as attribute of the log-lik value
+   #    - TRUE  if the Hessian is provided as attribute of the log-lik value
+   #    - NULL  if this is not known
 
    theta <- addFixedPar( theta = theta, start = start, fixed = fixed, ...)
    
