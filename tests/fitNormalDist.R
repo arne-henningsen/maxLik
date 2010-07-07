@@ -260,7 +260,7 @@ mlGBhhhH <- maxLik( llfGradInd, start = startVal, method = "BHHH",
 all.equal( mlGBhhhH, mlgBhhhH )
 
 # with analytical gradients as argument and attribute
-mlgGBHHH <- maxLik( llfGradInd, start = startVal, method = "BHHH" )
+mlgGBHHH <- maxLik( llfGradInd, gfInd, start = startVal, method = "BHHH" )
 all.equal( mlgGBHHH, mlgBHHH, tolerance = 1e-10 )
 all.equal( mlgGBHHH, mlGBHHH, tolerance = 1e-10 )
 
@@ -282,7 +282,7 @@ mlGHBhhhH <- maxLik( llfGradHessInd, start = startVal, method = "BHHH",
 all.equal( mlGHBhhhH, mlghBhhhH )
 
 # with analytical gradients and Hessian as argument and attribute
-mlgGhHBHHH <- maxLik( llfGradHessInd, start = startVal, method = "BHHH" )
+mlgGhHBHHH <- maxLik( llfGradHessInd, gfInd, hf, start = startVal, method = "BHHH" )
 all.equal( mlgGhHBHHH, mlghBHHH, tolerance = 1e-10 )
 all.equal( mlgGhHBHHH, mlGHBHHH, tolerance = 1e-10 )
 
@@ -329,7 +329,7 @@ mlGIndBFGSYC <- maxLik( llfGradInd, start = startVal, method = "bfgsyc" )
 all.equal( mlGIndBFGSYC, mlgIndBFGSYC )
 
 # with analytical gradients as argument and attribute
-mlgGBFGSYC <- maxLik( llfGrad, start = startVal, method = "BFGSYC" )
+mlgGBFGSYC <- maxLik( llfGrad, gf, start = startVal, method = "BFGSYC" )
 all.equal( mlgGBFGSYC, mlgBFGSYC )
 all.equal( mlgGBFGSYC, mlGBFGSYC )
 
@@ -342,7 +342,7 @@ mlGHBFGSYC <- maxLik( llfGradHess, start = startVal, method = "bfgsyc" )
 all.equal( mlGHBFGSYC, mlghBFGSYC, tolerance = 1e-10 )
 
 # with analytical gradients and Hessian as argument and attribute
-mlgGhHBFGSYC <- maxLik( llfGradHess, start = startVal, method = "BFGSYC" )
+mlgGhHBFGSYC <- maxLik( llfGradHess, gf, hf, start = startVal, method = "BFGSYC" )
 all.equal( mlgGhHBFGSYC, mlghBFGSYC )
 all.equal( mlgGhHBFGSYC, mlGHBFGSYC )
 
