@@ -2,17 +2,13 @@
 ## sum over possible individual gradients
 logLikGrad <- function(theta, fnOrig, gradOrig, hessOrig,
                        start = NULL, fixed = NULL, sumObs = TRUE,
-                       suppliedValue=NULL,
                        ...) {
 
    # Argument "hessOrig" is just for compatibility with logLikHess()
 
-   ## suppliedValue   a call to the function may provide the (pre-calculated) value of gradient.  If non-NULL, this is used.
    theta <- addFixedPar( theta = theta, start = start, fixed = fixed, ...)
-   if(!is.null(suppliedValue)) {
-      g <- suppliedValue
-   }
-   else if(is.null(gradOrig)) {
+
+   if(is.null(gradOrig)) {
       g <- numericGradient(logLikFunc, theta, fnOrig = fnOrig,
          sumObs = sumObs, ...)
    } else {
