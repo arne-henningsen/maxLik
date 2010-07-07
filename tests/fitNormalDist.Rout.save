@@ -1768,14 +1768,16 @@ Warning messages:
 > # with analytical gradients as argument and attribute
 > mlgGBFGS <- maxLik( llfGrad, gf, start = startVal, method = "BFGS" )
 Warning messages:
-1: In log(sigma) : NaNs produced
+1: In maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  :
+  the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
 2: In log(sigma) : NaNs produced
+3: In log(sigma) : NaNs produced
 > all.equal( mlgGBFGS, mlgBFGS, tolerance = 1e-14 )
-[1] TRUE
-> all.equal( mlgGBFGS, mlGBFGS, tolerance = 1e-14 )
 [1] "Component 2: Mean relative difference: 8.226748e-11"
-[2] "Component 3: Mean relative difference: 0.0004838478"
+[2] "Component 3: Mean relative difference: 0.0004838186"
 [3] "Component 4: Mean relative difference: 2.455172e-10"
+> all.equal( mlgGBFGS, mlGBFGS, tolerance = 1e-14 )
+[1] TRUE
 > 
 > # with unused Hessian
 > mlghBFGS <- maxLik( llf, gf, hf, start = startVal, method = "BFGS" )
@@ -1800,14 +1802,18 @@ Warning messages:
 > # with analytical gradients and Hessian as argument and attribute
 > mlgGhHBFGS <- maxLik( llfGradHess, gf, hf, start = startVal, method = "BFGS" )
 Warning messages:
-1: In log(sigma) : NaNs produced
-2: In log(sigma) : NaNs produced
+1: In maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  :
+  the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
+2: In maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  :
+  the Hessian is provided both as attribute 'hessian' and as argument 'hess': ignoring argument 'hess'
+3: In log(sigma) : NaNs produced
+4: In log(sigma) : NaNs produced
 > all.equal( mlgGhHBFGS, mlghBFGS, tolerance = 1e-14 )
-[1] TRUE
-> all.equal( mlgGhHBFGS, mlGHBFGS, tolerance = 1e-14 )
 [1] "Component 2: Mean relative difference: 8.226748e-11"
-[2] "Component 3: Mean relative difference: 0.0004838478"
+[2] "Component 3: Mean relative difference: 0.0004838186"
 [3] "Component 4: Mean relative difference: 2.059168e-10"
+> all.equal( mlgGhHBFGS, mlGHBFGS, tolerance = 1e-14 )
+[1] TRUE
 > 
 > 
 > ## NM method
@@ -2159,10 +2165,13 @@ $gradientObs
 > 
 > # with analytical gradients as argument and attribute
 > mlgGNM <- maxLik( llfGrad, gf, start = startVal, method = "NM" )
+Warning message:
+In maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "Nelder-Mead",  :
+  the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
 > all.equal( mlgGNM, mlgNM, tolerance = 1e-14 )
-[1] TRUE
+[1] "Component 3: Mean relative difference: 1.839327e-06"
 > all.equal( mlgGNM, mlGNM, tolerance = 1e-14 )
-[1] "Component 3: Mean relative difference: 1.839324e-06"
+[1] TRUE
 > 
 > # with unused analytical gradients and Hessian
 > mlghNM <- maxLik( llf, gf, hf, start = startVal, method = "NM" )
