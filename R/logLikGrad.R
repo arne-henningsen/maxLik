@@ -2,17 +2,27 @@
 ## sum over possible individual gradients
 logLikGrad <- function(theta, fnOrig, gradOrig, hessOrig,
                        start = NULL, fixed = NULL, sumObs = TRUE,
+                       gradAttr = NULL,
                        ...) {
 
    # Argument "hessOrig" is just for compatibility with logLikHess()
+   # argument "gradAttr" should be
+   #    - FALSE if the gradient is not provided as attribute of the log-lik value
+   #    - TRUE  if the gradient is provided as attribute of the log-lik value
+   #    - NULL  if this is not known
 
    theta <- addFixedPar( theta = theta, start = start, fixed = fixed, ...)
 
-   if(is.null(gradOrig)) {
+   if(!is.null(gradOrig)) {
+      g <- gradOrig(theta, ...)
+   } else if( isTRUE( gradAttr ) || is.null( gradAttr ) ) {
+      g <- attr( fnOrig( theta, ... ), "gradient" )
+   } else {
+      g <- NULL
+   }
+   if( is.null( g ) ) {
       g <- numericGradient(logLikFunc, theta, fnOrig = fnOrig,
          sumObs = sumObs, ...)
-   } else {
-      g <- gradOrig(theta, ...)
    }
    if( sumObs ) {
       ## We were requested a single (summed) gradient.  Return a vector
