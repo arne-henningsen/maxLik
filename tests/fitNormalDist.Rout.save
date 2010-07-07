@@ -1376,6 +1376,13 @@ Function value: -201.5839
 > all.equal( mlGIndBFGSYC, mlgIndBFGSYC )
 [1] TRUE
 > 
+> # with analytical gradients as argument and attribute
+> mlgGBFGSYC <- maxLik( llfGrad, start = startVal, method = "BFGSYC" )
+> all.equal( mlgGBFGSYC, mlgBFGSYC )
+[1] TRUE
+> all.equal( mlgGBFGSYC, mlGBFGSYC )
+[1] TRUE
+> 
 > # with analytical gradients and Hessians
 > mlghBFGSYC <- maxLik( llf, gf, hf, start = startVal, method = "bfgsyc" )
 > all.equal( mlgBFGSYC, mlghBFGSYC )
@@ -1384,6 +1391,13 @@ Function value: -201.5839
 > # with analytical gradients and Hessian as attribute
 > mlGHBFGSYC <- maxLik( llfGradHess, start = startVal, method = "bfgsyc" )
 > all.equal( mlGHBFGSYC, mlghBFGSYC, tolerance = 1e-10 )
+[1] TRUE
+> 
+> # with analytical gradients and Hessian as argument and attribute
+> mlgGhHBFGSYC <- maxLik( llfGradHess, start = startVal, method = "BFGSYC" )
+> all.equal( mlgGhHBFGSYC, mlghBFGSYC )
+[1] TRUE
+> all.equal( mlgGhHBFGSYC, mlGHBFGSYC )
 [1] TRUE
 > 
 > 
