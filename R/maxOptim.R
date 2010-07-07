@@ -177,7 +177,7 @@ maxOptim <- function(fn, grad, hess,
    ## Calculate the final gradient
    gradient <- callWithoutSumt( estimate, "logLikGrad",
                                fnOrig = fn, gradOrig = grad, hessOrig = hess, sumObs = FALSE,
-                               suppliedValue=attr(result$value, "gradient"), ... )
+                               ... )
    if(observationGradient(gradient, length(start))) {
       gradientObs <- gradient
       gradient <- colSums(as.matrix(gradient ))
