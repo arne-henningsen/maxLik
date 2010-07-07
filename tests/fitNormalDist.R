@@ -381,9 +381,32 @@ mlgIndBFGS <- maxLik( llfInd, gfInd, start = startVal, method = "BFGS" )
 all.equal( mlgBFGS[], mlgIndBFGS[-12] )
 mlgIndBFGS[12]
 
+# with analytical gradients as attribute
+mlGBFGS <- maxLik( llfGrad, start = startVal, method = "BFGS" )
+all.equal( mlGBFGS, mlBFGS, tolerance = 1e-14 )
+all.equal( mlGBFGS, mlgBFGS, tolerance = 1e-14 )
+mlGIndBFGS <- maxLik( llfGradInd, start = startVal, method = "BFGS" )
+all.equal( mlGIndBFGS, mlIndBFGS, tolerance = 1e-14 )
+all.equal( mlGIndBFGS, mlgIndBFGS, tolerance = 1e-14 )
+
+# with analytical gradients as argument and attribute
+mlgGBFGS <- maxLik( llfGrad, gf, start = startVal, method = "BFGS" )
+all.equal( mlgGBFGS, mlgBFGS, tolerance = 1e-14 )
+all.equal( mlgGBFGS, mlGBFGS, tolerance = 1e-14 )
+
 # with unused Hessian
 mlghBFGS <- maxLik( llf, gf, hf, start = startVal, method = "BFGS" )
 all.equal( mlgBFGS, mlghBFGS )
+
+# with analytical gradients and Hessian as attribute
+mlGHBFGS <- maxLik( llfGradHess, start = startVal, method = "BFGS" )
+all.equal( mlGHBFGS, mlBFGS, tolerance = 1e-14 )
+all.equal( mlGHBFGS, mlghBFGS, tolerance = 1e-14 )
+
+# with analytical gradients and Hessian as argument and attribute
+mlgGhHBFGS <- maxLik( llfGradHess, gf, hf, start = startVal, method = "BFGS" )
+all.equal( mlgGhHBFGS, mlghBFGS, tolerance = 1e-14 )
+all.equal( mlgGhHBFGS, mlGHBFGS, tolerance = 1e-14 )
 
 
 ## NM method
@@ -420,6 +443,19 @@ mlgIndNM <- maxLik( llfInd, gfInd, start = startVal, method = "NM" )
 summary( mlgIndNM )
 all.equal( mlgNM[], mlgIndNM[-12] )
 mlgIndNM[12]
+
+# with (unused) analytical gradients as attribute
+mlGNM <- maxLik( llfGrad, start = startVal, method = "NM" )
+all.equal( mlGNM, mlNM, tolerance = 1e-14 )
+all.equal( mlGNM, mlgNM, tolerance = 1e-14 )
+mlGIndNM <- maxLik( llfGradInd, start = startVal, method = "NM" )
+all.equal( mlGIndNM, mlIndNM, tolerance = 1e-14 )
+all.equal( mlGIndNM, mlgIndNM, tolerance = 1e-14 )
+
+# with analytical gradients as argument and attribute
+mlgGNM <- maxLik( llfGrad, gf, start = startVal, method = "NM" )
+all.equal( mlgGNM, mlgNM, tolerance = 1e-14 )
+all.equal( mlgGNM, mlGNM, tolerance = 1e-14 )
 
 # with unused analytical gradients and Hessian
 mlghNM <- maxLik( llf, gf, hf, start = startVal, method = "NM" )
