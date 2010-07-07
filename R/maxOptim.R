@@ -69,21 +69,17 @@ maxOptim <- function(fn, grad, hess,
    if(print.level > 2) {
       cat("Initial function value:", f1, "\n")
    }
-   if( !is.null( attr( f1, "gradient" ) ) ) {
-      hasGradAttr <- TRUE
-      if( !is.null( grad ) ) {
-         grad <- NULL
-         warning( "the gradient is provided both as attribute 'gradient' and",
-            " as argument 'grad': ignoring argument 'grad'" )
-      }
+   hasGradAttr <- !is.null( attr( f1, "gradient" ) )
+   if( hasGradAttr && !is.null( grad ) ) {
+      grad <- NULL
+      warning( "the gradient is provided both as attribute 'gradient' and",
+         " as argument 'grad': ignoring argument 'grad'" )
    }
-   if( !is.null( attr( f1, "hessian" ) ) ) {
-      hasHessAttr <- TRUE
-      if( !is.null( hess ) ) {
-         hess <- NULL
-         warning( "the Hessian is provided both as attribute 'hessian' and",
-            " as argument 'hess': ignoring argument 'hess'" )
-      }
+   hasHessAttr <- !is.null( attr( f1, "hessian" ) )
+   if( hasHessAttr && !is.null( hess ) ) {
+      hess <- NULL
+      warning( "the Hessian is provided both as attribute 'hessian' and",
+         " as argument 'hess': ignoring argument 'hess'" )
    }
    if( method == "BFGS" ) {
       G1 <- callWithoutSumt( start, "logLikGrad", fnOrig = fn, gradOrig = grad,
