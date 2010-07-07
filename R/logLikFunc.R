@@ -10,6 +10,10 @@ logLikFunc <- function(theta, fnOrig, gradOrig, hessOrig,
 
    result <- fnOrig( theta, ... )
 
+   ## save gradients and the corresponding parameter values
+   assign( "lastFuncGrad", attr( result, "gradient" ), inherits = TRUE )
+   assign( "lastFuncParam", theta, inherits = TRUE )
+
    if( sumObs ) {
       result <- sumKeepAttr( result )
       g <- attributes( result )$gradient

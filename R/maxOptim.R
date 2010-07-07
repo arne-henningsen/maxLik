@@ -45,6 +45,11 @@ maxOptim <- function(fn, grad, hess,
                )
    }
 
+   ## initialize variables for saving gradients provided as attributes
+   ## and the corresponding parameter values
+   lastFuncGrad <- NULL
+   lastFuncParam <- NULL
+
    ## strip possible SUMT parameters and call the function thereafter
    environment( callWithoutSumt ) <- environment()
    maximType <- paste( method, "maximisation" )

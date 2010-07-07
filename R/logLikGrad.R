@@ -16,7 +16,18 @@ logLikGrad <- function(theta, fnOrig, gradOrig, hessOrig,
    if(!is.null(gradOrig)) {
       g <- gradOrig(theta, ...)
    } else if( isTRUE( gradAttr ) || is.null( gradAttr ) ) {
-      g <- attr( fnOrig( theta, ... ), "gradient" )
+      if( exists( "lastFuncGrad" ) && exists( "lastFuncParam" ) ) {
+         if( identical( theta, lastFuncParam ) ) {
+            g <- lastFuncGrad
+         } else {
+            g <- "different parameters"
+         }
+      } else {
+         g <- "'lastFuncGrad' or 'lastFuncParam' does not exist"
+      }
+      if( is.character( g ) ) { # do not call fnOrig() if 'lastFuncGrad' is NULL
+         g <- attr( fnOrig( theta, ... ), "gradient" )
+      }
    } else {
       g <- NULL
    }
