@@ -542,7 +542,7 @@ final  value 3571.969966
 converged
 SUMT iteration 4: rho = 1000, function = -3571.557, barrier value = 0.0004130861
 Estimate:[1]  0.3731857 -1.3599930  0.6901587
-initial  value 3575.687741 
+initial  value 3575.687740 
 iter   2 value 3572.641972
 iter   3 value 3572.631516
 iter   4 value 3572.627232
@@ -564,7 +564,7 @@ iter   6 value 3572.387291
 iter   6 value 3572.387291
 final  value 3572.387291 
 converged
-SUMT iteration 6: rho = 1e+05, function = -3572.383, barrier value = 4.301614e-08
+SUMT iteration 6: rho = 1e+05, function = -3572.383, barrier value = 4.301615e-08
 Estimate:[1]  0.3704972 -1.3676627  0.6839351
 initial  value 3572.426005 
 iter   2 value 3572.391185
@@ -583,9 +583,9 @@ Log-Likelihood: -3572.391
 3  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,]  0.370462   0.025476  14.542 < 2.2e-16 ***
-[2,] -1.367705   0.069700 -19.623 < 2.2e-16 ***
-[3,]  0.683863   0.051374  13.311 < 2.2e-16 ***
+[1,]  0.370462   0.025465  14.548 < 2.2e-16 ***
+[2,] -1.367705   0.069669 -19.631 < 2.2e-16 ***
+[3,]  0.683863   0.051382  13.309 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -683,8 +683,8 @@ Log-Likelihood: -3608.802
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303367   0.045811 -28.451 < 2.2e-16 ***
-[2,]  0.651713   0.035369  18.426 < 2.2e-16 ***
+[1,] -1.303367   0.045816 -28.448 < 2.2e-16 ***
+[2,]  0.651713   0.035393  18.414 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -930,7 +930,7 @@ Estimate:[1] -1.3015300  0.6537039
 initial  value 3611.567446 
 iter   2 value 3609.435906
 iter   3 value 3609.427333
-iter   4 value 3609.093792
+iter   4 value 3609.093788
 iter   5 value 3608.770731
 iter   5 value 3608.770731
 iter   5 value 3608.770731
@@ -957,8 +957,8 @@ Log-Likelihood: -3608.802
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303369   0.045820 -28.445 < 2.2e-16 ***
-[2,]  0.651714   0.035406  18.407 < 2.2e-16 ***
+[1,] -1.303369   0.045794 -28.462 < 2.2e-16 ***
+[2,]  0.651714   0.035392  18.414 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -1040,7 +1040,7 @@ Estimate:[1] -1.3015300  0.6537039
 initial  value 3611.567446 
 iter   2 value 3609.435906
 iter   3 value 3609.427333
-iter   4 value 3609.093792
+iter   4 value 3609.093788
 iter   5 value 3608.770731
 iter   5 value 3608.770731
 iter   5 value 3608.770731
@@ -1067,8 +1067,8 @@ Log-Likelihood: -3608.802
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303369   0.045820 -28.445 < 2.2e-16 ***
-[2,]  0.651714   0.035406  18.407 < 2.2e-16 ***
+[1,] -1.303369   0.045794 -28.462 < 2.2e-16 ***
+[2,]  0.651714   0.035392  18.414 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 

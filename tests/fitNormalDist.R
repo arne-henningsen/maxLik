@@ -965,8 +965,8 @@ vcov( mlCon )
 logLik( summary( mlCon ) )
 mlConInd <- maxLik( llfInd, start = startVal, constraints = eqCon )
 summary( mlConInd )
-all.equal( mlCon[], mlConInd[-12] )
-mlConInd[12]
+all.equal( mlCon[], mlConInd[-11] )
+mlConInd[11]
 nObs( mlConInd )
 
 # with analytical gradients
@@ -974,7 +974,7 @@ mlgCon <- maxLik( llf, gf, start = startVal, constraints = eqCon )
 summary( mlgCon )
 all.equal( mlCon[ -c( 5, 6, 7, 9 ) ], mlgCon[ -c( 5, 6, 7, 9 ) ] )
 mlgConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon )
-all.equal( mlConInd[], mlgConInd[ c( 1:10, 12, 11 ) ] )
+all.equal( mlConInd, mlgConInd )
 all.equal( mlgCon[], mlgConInd[-11] )
 mlgConInd[11]
 
@@ -1011,8 +1011,8 @@ returnCode( mlBhhhCon )
 returnMessage( mlBhhhCon )
 vcov( mlBhhhCon )
 logLik( summary( mlBhhhCon ) )
-all.equal( mlCon[ -c( 5, 6, 7, 9, 10 ) ], mlBhhhCon[ -c( 5, 6, 7, 9, 10, 12 ) ] )
-mlBhhhCon[12]
+all.equal( mlCon[ -c( 5, 6, 7, 9, 10 ) ], mlBhhhCon[ -c( 5, 6, 7, 9, 10, 11 ) ] )
+mlBhhhCon[11]
 nObs( mlBhhhCon )
 
 # with analytical gradients

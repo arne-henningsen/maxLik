@@ -50,7 +50,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    ## the penalized objective function
    Phi <- function(theta, ...) {
       llVal <- callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn,
-         gradOrig = grad, hessOrig = hess, ... )
+         gradOrig = grad, hessOrig = hess, sumObs = FALSE, ... )
       llVal <- llVal - rho * penalty( theta ) / length( llVal )
       g <- attributes( llVal )$gradient
       if( !is.null( g ) ) {
