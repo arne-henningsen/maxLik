@@ -61,7 +61,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
          } else {
             g <- g - rho * gPenalty( theta )
          }
-         attributes( llVal )$gradient <- g - rho * gPenalty( theta )
+         attributes( llVal )$gradient <- g
       }
       h <- attributes( llVal )$hessian
       if( !is.null( h ) ) {

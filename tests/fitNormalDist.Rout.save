@@ -5246,31 +5246,22 @@ $gradientObs
 > # with analytical gradients as attribute
 > mlGCon <- maxLik( llfGrad, start = startVal, constraints = eqCon )
 > all.equal( mlGCon, mlgCon )
- [1] "Component 1: Mean relative difference: 0.0004249303"                                      
- [2] "Component 2: Mean relative difference: 0.004556295"                                       
- [3] "Component 3: Mean relative difference: 0.02899006"                                        
- [4] "Component 4: Mean relative difference: 0.01277364"                                        
- [5] "Component 7: Component 1: Mean relative difference: 0.004556295"                          
- [6] "Component 7: Component 2: Attributes: < Component 1: Mean relative difference: 0.995003 >"
- [7] "Component 7: Component 2: Attributes: < Component 2: Mean relative difference: 0.994775 >"
- [8] "Component 7: Component 2: Mean relative difference: 0.0004249303"                         
- [9] "Component 7: Component 3: Mean relative difference: 0.03448583"                           
-[10] "Component 9: Mean relative difference: 0.5"                                               
-[11] "Component 11: Component 2: Mean absolute difference: 0.0001298936"                        
-[12] "Component 11: Component 3: Mean relative difference: 1"                                   
-[13] "Component 11: Component 4: 1 string mismatch"                                             
-[14] "Component 11: Component 5: Mean relative difference: 0.2222222"                           
+[1] TRUE
 > all.equal( mlGCon, mlCon )
- [1] "Component 1: Mean relative difference: 4.528438e-05"           
- [2] "Component 2: Mean relative difference: 0.01087527"             
- [3] "Component 3: Mean relative difference: 0.05193083"             
- [4] "Component 4: Mean relative difference: 0.02626401"             
+ [1] "Component 1: Mean relative difference: 0.0003798073"           
+ [2] "Component 2: Mean relative difference: 0.01289777"             
+ [3] "Component 3: Mean relative difference: 0.05046813"             
+ [4] "Component 4: Mean relative difference: 0.02459502"             
  [5] "Component 5: Mean relative difference: 0.6666667"              
  [6] "Component 6: 1 string mismatch"                                
  [7] "Component 7: Modes: list, NULL"                                
  [8] "Component 7: names for target but not for current"             
  [9] "Component 7: Length mismatch: comparison on first 0 components"
-[10] "Component 11: Component 5: Mean relative difference: 0.1111111"
+[10] "Component 9: Mean relative difference: 1"                      
+[11] "Component 11: Component 2: Mean relative difference: 0.9999984"
+[12] "Component 11: Component 3: Mean relative difference: 0.5"      
+[13] "Component 11: Component 4: 1 string mismatch"                  
+[14] "Component 11: Component 5: Mean relative difference: 0.4285714"
 > 
 > # with analytical gradients and Hessians
 > mlghCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon )
@@ -5280,32 +5271,20 @@ $gradientObs
 > 
 > # with analytical gradients and Hessians as attributes
 > mlGHCon <- maxLik( llfGradHess, start = startVal, constraints = eqCon )
-Warning messages:
-1: In log(sigma) : NaNs produced
-2: In log(sigma) : NaNs produced
 > all.equal( mlGHCon, mlghCon )
- [1] "Component 1: Mean relative difference: 5.159944e-05"                                          
- [2] "Component 2: Mean relative difference: 0.001123226"                                           
- [3] "Component 3: Mean relative difference: 0.007601977"                                           
- [4] "Component 4: Mean relative difference: 0.003383401"                                           
- [5] "Component 7: Component 1: Mean relative difference: 0.001123226"                              
- [6] "Component 7: Component 2: Attributes: < Component 1: Mean relative difference: 0.5004333 >"   
- [7] "Component 7: Component 2: Attributes: < Component 2: Mean relative difference: 0.0001469760 >"
- [8] "Component 7: Component 2: Mean relative difference: 5.159944e-05"                             
- [9] "Component 7: Component 3: Mean relative difference: 0.5003736"                                
-[10] "Component 11: Component 2: Mean relative difference: 0.7647181"                               
+[1] TRUE
 > all.equal( mlGHCon, mlCon )
- [1] "Component 1: Mean relative difference: 0.0003281883"           
- [2] "Component 2: Mean relative difference: 0.01250392"             
- [3] "Component 3: Mean relative difference: 0.05133074"             
- [4] "Component 4: Mean relative difference: 0.02526533"             
+ [1] "Component 1: Mean relative difference: 0.0003798073"           
+ [2] "Component 2: Mean relative difference: 0.01289777"             
+ [3] "Component 3: Mean relative difference: 0.05046813"             
+ [4] "Component 4: Mean relative difference: 0.02459502"             
  [5] "Component 5: Mean relative difference: 0.6666667"              
  [6] "Component 6: 1 string mismatch"                                
  [7] "Component 7: Modes: list, NULL"                                
  [8] "Component 7: names for target but not for current"             
  [9] "Component 7: Length mismatch: comparison on first 0 components"
 [10] "Component 9: Mean relative difference: 1"                      
-[11] "Component 11: Component 2: Mean relative difference: 0.9999972"
+[11] "Component 11: Component 2: Mean relative difference: 0.9999984"
 [12] "Component 11: Component 3: Mean relative difference: 0.5"      
 [13] "Component 11: Component 4: 1 string mismatch"                  
 [14] "Component 11: Component 5: Mean relative difference: 0.4285714"
@@ -5314,15 +5293,14 @@ Warning messages:
 > ## BHHH method with equality constraints
 > mlBhhhCon <- maxLik( llfInd, start = startVal, constraints = eqCon,
 +    method = "BHHH" )
-There were 36 warnings (use warnings() to see them)
 > print( mlBhhhCon )
 Maximum Likelihood estimation
 BHHH maximisation, 1 iterations
 Return code 3: Last step could not find a value above the current.
 Boundary of parameter space?  
 Consider switching to a more robust optimisation method temporarily.
-Log-Likelihood: -206.177 (2 free parameter(s))
-Estimate(s): 0.8340936 1.660002 
+Log-Likelihood: -207.4343 (2 free parameter(s))
+Estimate(s): 0.8320184 1.660071 
 > summary( mlBhhhCon )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -5330,12 +5308,12 @@ BHHH maximisation, 1 iterations
 Return code 3: Last step could not find a value above the current.
 Boundary of parameter space?  
 Consider switching to a more robust optimisation method temporarily.
-Log-Likelihood: -206.177 
+Log-Likelihood: -207.4343 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     0.83409    0.15774  5.2878 1.238e-07 ***
-sigma  1.66000    0.10197 16.2798 < 2.2e-16 ***
+mu     0.83202    0.15781  5.2723 1.347e-07 ***
+sigma  1.66007    0.10198 16.2779 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -5343,27 +5321,27 @@ Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
 Return code: 2 
 successive function values within tolerance limit 
-9  outer iterations, barrier value 3.486001e-05 
+9  outer iterations, barrier value 6.258205e-05 
 --------------------------------------------
 > activePar( mlBhhhCon )
    mu sigma 
  TRUE  TRUE 
 > AIC( mlBhhhCon )
-[1] 416.354
+[1] 418.8686
 > coef( mlBhhhCon )
        mu     sigma 
-0.8340936 1.6600022 
+0.8320184 1.6600707 
 > condiNumber( mlBhhhCon )
 mu 	 1 
-sigma 	 3.773646 
+sigma 	 3.786301 
 > hessian( mlBhhhCon )
              mu      sigma
-mu    -45.03685  -22.85576
-sigma -22.85576 -107.77874
+mu    -45.04842  -22.97396
+sigma -22.97396 -107.86518
 attr(,"type")
 [1] "BHHH"
 > logLik( mlBhhhCon )
-[1] -206.177
+[1] -207.4343
 > maximType( mlBhhhCon )
 [1] "BHHH maximisation"
 > nIter( mlBhhhCon )
@@ -5375,124 +5353,124 @@ attr(,"type")
 > returnMessage( mlBhhhCon )
 [1] "Last step could not find a value above the current.\nBoundary of parameter space?  \nConsider switching to a more robust optimisation method temporarily."
 > vcov( mlBhhhCon )
-               mu       sigma
-mu     0.02488180 -0.00527648
-sigma -0.00527648  0.01039721
+                mu        sigma
+mu     0.024903342 -0.005304105
+sigma -0.005304105  0.010400542
 > logLik( summary( mlBhhhCon ) )
-[1] -206.177
+[1] -207.4343
 > all.equal( mlCon[ -c( 5, 6, 7, 9, 10 ) ], mlBhhhCon[ -c( 5, 6, 7, 9, 10, 12 ) ] )
-[1] "Component 1: Mean relative difference: 0.008036656"                            
-[2] "Component 2: Mean relative difference: 0.01384220"                             
-[3] "Component 3: Mean relative difference: 0.07577426"                             
+[1] "Component 1: Mean relative difference: 0.01418374"                             
+[2] "Component 2: Mean relative difference: 0.01298474"                             
+[3] "Component 3: Mean relative difference: 0.07383964"                             
 [4] "Component 4: Attributes: < Length mismatch: comparison on first 2 components >"
-[5] "Component 4: Mean relative difference: 0.243777"                               
-[6] "Component 6: Component 2: Mean absolute difference: 3.48598e-05"               
+[5] "Component 4: Mean relative difference: 0.2458721"                              
+[6] "Component 6: Component 2: Mean absolute difference: 6.258185e-05"              
 [7] "Component 6: Component 3: Mean relative difference: 1"                         
 [8] "Component 6: Component 4: 1 string mismatch"                                   
 [9] "Component 6: Component 5: Mean relative difference: 0.1"                       
 > mlBhhhCon[12]
 $gradientObs
-                  mu       sigma
-  [1,] -0.3465823459 -0.40301050
-  [2,] -0.1068543163 -0.58345519
-  [3,]  1.1915061489  1.75427455
-  [4,]  0.1113813359 -0.58181518
-  [5,]  0.1540429615 -0.56301826
-  [6,]  1.3049886989  2.22456746
-  [7,]  0.3947365232 -0.34375240
-  [8,] -0.8579655049  0.61952676
-  [9,] -0.4383060139 -0.28350223
- [10,] -0.2632514045 -0.48736852
- [11,]  0.9486366279  0.89144616
- [12,]  0.3213571429 -0.43097972
- [13,]  0.3510838917 -0.39779713
- [14,]  0.1405395720 -0.56962152
- [15,] -0.3432186506 -0.40686217
- [16,]  1.3571355701  2.45501137
- [17,]  0.4215431528 -0.30742872
- [18,] -1.3671497534  2.50029871
- [19,]  0.5692459271 -0.06450019
- [20,] -0.2829417554 -0.46951564
- [21,] -0.7148119225  0.24577939
- [22,] -0.0979977752 -0.58646690
- [23,] -0.6844598062  0.17527767
- [24,] -0.4688171664 -0.23755772
- [25,] -0.3934421586 -0.34544592
- [26,] -1.1639830362  1.64665596
- [27,]  0.6682666704  0.13891552
- [28,]  0.1715239593 -0.55357080
- [29,] -0.7658447609  0.37121266
- [30,]  0.9702167154  0.96018523
- [31,]  0.3697315203 -0.37548422
- [32,] -0.1539539107 -0.56306379
- [33,]  0.7098826265  0.23412162
- [34,]  0.6975498295  0.20530800
- [35,]  0.6565044992  0.11304905
- [36,]  0.5600170017 -0.08180054
- [37,]  0.4622363059 -0.24772878
- [38,]  0.0152717772 -0.60202168
- [39,] -0.1618586514 -0.55891973
- [40,] -0.2159362675 -0.52500547
- [41,] -0.4440064827 -0.27515309
- [42,] -0.0906980149 -0.58875344
- [43,] -0.8582087299  0.62021968
- [44,]  1.6344195100  3.83200010
- [45,]  0.9369369920  0.85482564
- [46,] -0.7549372900  0.34367674
- [47,] -0.2322040675 -0.51290363
- [48,] -0.2784882513 -0.47366619
- [49,]  0.6262999319  0.04872969
- [50,] -0.0003018177 -0.60240869
- [51,]  0.2440636098 -0.50352741
- [52,]  0.0394878221 -0.59982042
- [53,]  0.0290917821 -0.60100393
- [54,]  1.0535285577  1.24006483
- [55,] -0.1036561075 -0.58457280
- [56,]  1.1608503225  1.63456610
- [57,] -1.0638668075  1.27640255
- [58,]  0.4845153119 -0.21271487
- [59,]  0.1500993725 -0.56500928
- [60,]  0.2169356912 -0.52428732
- [61,]  0.3357464615 -0.41528395
- [62,] -0.3043759018 -0.44861845
- [63,] -0.1816326736 -0.54764465
- [64,] -0.6790678442  0.16307319
- [65,] -0.7176915209  0.25262696
- [66,]  0.2805057595 -0.47179409
- [67,]  0.3855142894 -0.35569721
- [68,]  0.0986769391 -0.58624517
- [69,]  0.7295819549  0.28119345
- [70,]  1.5481435902  3.37619908
- [71,] -0.2961800409 -0.45678910
- [72,] -1.6157713301  3.73138713
- [73,]  0.7901646479  0.43403042
- [74,] -0.4545259669 -0.25946258
- [75,] -0.4391448594 -0.28228039
- [76,]  0.8045591851  0.47213629
- [77,] -0.1464793509 -0.56679150
- [78,] -0.8257812945  0.52957115
- [79,]  0.1917956152 -0.54134473
- [80,] -0.0405995011 -0.59967262
- [81,]  0.0643904567 -0.59552625
- [82,]  0.3398405994 -0.41069247
- [83,] -0.2088155364 -0.53002622
- [84,]  0.5278907220 -0.13981832
- [85,] -0.0998207106 -0.58586829
- [86,]  0.3010118179 -0.45199917
- [87,]  0.8562847289  0.61474385
- [88,]  0.3760584519 -0.36765139
- [89,] -0.1763519513 -0.55078275
- [90,]  0.8940031688  0.72433409
- [91,]  0.7812848137  0.41086640
- [92,]  0.4582294257 -0.25385119
- [93,]  0.2334766305 -0.51191990
- [94,] -0.3955228673 -0.34272085
- [95,]  1.0477586248  1.21993849
- [96,] -0.3754572444 -0.36840141
- [97,]  1.6477574256  3.90467068
- [98,]  1.1725646347  1.67994118
- [99,] -0.1108627754 -0.58200649
-[100,] -0.6847620644  0.17596468
+                mu       sigma
+  [1,] -0.34580074 -0.40387579
+  [2,] -0.10609250 -0.58369886
+  [3,]  1.19216082  1.75698722
+  [4,]  0.11212515 -0.58151349
+  [5,]  0.15478325 -0.56261225
+  [6,]  1.30563400  2.22750560
+  [7,]  0.39545695 -0.34277183
+  [8,] -0.85714169  0.61725650
+  [9,] -0.43751684 -0.28461161
+ [10,] -0.26247668 -0.48801506
+ [11,]  0.94931134  0.89365849
+ [12,]  0.32208362 -0.43017179
+ [13,]  0.35180792 -0.39691900
+ [14,]  0.14128098 -0.56924845
+ [15,] -0.34243732 -0.40771858
+ [16,]  1.35777657  2.45805134
+ [17,]  0.42226136 -0.30638563
+ [18,] -1.36628392  2.49652272
+ [19,]  0.56995195 -0.06311794
+ [20,] -0.28216540 -0.47021361
+ [21,] -0.71399993  0.24391325
+ [22,] -0.09723668 -0.58668806
+ [23,] -0.68365031  0.17349614
+ [24,] -0.46802547 -0.23874907
+ [25,] -0.39265668 -0.34643548
+ [26,] -1.16313397  1.64349353
+ [27,]  0.66896452  0.14052012
+ [28,]  0.17226281 -0.55312225
+ [29,] -0.76502855  0.36920343
+ [30,]  0.97088965  0.96244300
+ [31,]  0.37045401 -0.37456223
+ [32,] -0.15318820 -0.56342772
+ [33,]  0.71057704  0.23581848
+ [34,]  0.69824526  0.20697760
+ [35,]  0.65720332  0.11462746
+ [36,]  0.56072379 -0.08043922
+ [37,]  0.46295116 -0.24659136
+ [38,]  0.01602352 -0.60195775
+ [39,] -0.16109229 -0.55930394
+ [40,] -0.21516544 -0.52552907
+ [41,] -0.44321684 -0.27627776
+ [42,] -0.08993753 -0.58895607
+ [43,] -0.85738490  0.61794872
+ [44,]  1.63503762  3.83556278
+ [45,]  0.93761267  0.85701326
+ [46,] -0.75412198  0.34169817
+ [47,] -0.23143190 -0.51346939
+ [48,] -0.27771226 -0.47435252
+ [49,]  0.62700125  0.05024055
+ [50,]  0.00045121 -0.60238364
+ [51,]  0.24479647 -0.50290372
+ [52,]  0.04023757 -0.59969622
+ [53,]  0.02984238 -0.60090557
+ [54,]  1.05419461  1.24249623
+ [55,] -0.10289455 -0.58480833
+ [56,]  1.16150752  1.63721695
+ [57,] -1.06302600  1.27353624
+ [58,]  0.48522833 -0.21152609
+ [59,]  0.15083999 -0.56461288
+ [60,]  0.21767079 -0.52372888
+ [61,]  0.33647175 -0.41444199
+ [62,] -0.30359778 -0.44937259
+ [63,] -0.18086468 -0.54807969
+ [64,] -0.67825880  0.16130664
+ [65,] -0.71687929  0.25075277
+ [66,]  0.28123561 -0.47108323
+ [67,]  0.38623548 -0.35473821
+ [68,]  0.09942180 -0.58597469
+ [69,]  0.73027474  0.28293373
+ [70,]  1.54876882  3.37960251
+ [71,] -0.29540259 -0.45752174
+ [72,] -1.61488498  3.72683721
+ [73,]  0.79085244  0.43590323
+ [74,] -0.45373545 -0.26061549
+ [75,] -0.43835561 -0.28339202
+ [76,]  0.80524579  0.47404036
+ [77,] -0.14571426 -0.56713629
+ [78,] -0.82496014  0.52739247
+ [79,]  0.19253279 -0.54084703
+ [80,] -0.03984315 -0.59974866
+ [81,]  0.06513815 -0.59534034
+ [82,]  0.34056555 -0.40984085
+ [83,] -0.20804530 -0.53053139
+ [84,]  0.52860016 -0.13853013
+ [85,] -0.09905947 -0.58609407
+ [86,]  0.30173998 -0.45123950
+ [87,]  0.85696706  0.61675957
+ [88,]  0.37678042 -0.36671456
+ [89,] -0.17558439 -0.55120420
+ [90,]  0.89468239  0.72643054
+ [91,]  0.78197334  0.41271988
+ [92,]  0.45894461 -0.25272303
+ [93,]  0.23421036 -0.51132164
+ [94,] -0.39473722 -0.34371595
+ [95,]  1.04842515  1.22235795
+ [96,] -0.37467326 -0.36934317
+ [97,]  1.64837444  3.90825771
+ [98,]  1.17322086  1.68261570
+ [99,] -0.11010062 -0.58226036
+[100,] -0.68395255  0.17418230
 
 > nObs( mlBhhhCon )
 [1] 100
@@ -5500,13 +5478,6 @@ $gradientObs
 > # with analytical gradients
 > mlgBhhhCon <- maxLik( llf, gfInd, start = startVal, constraints = eqCon,
 +    method = "BHHH" )
-Warning messages:
-1: In log(sigma) : NaNs produced
-2: In log(sigma) : NaNs produced
-3: In log(sigma) : NaNs produced
-4: In log(sigma) : NaNs produced
-5: In log(sigma) : NaNs produced
-6: In log(sigma) : NaNs produced
 > summary( mlgBhhhCon )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -5514,12 +5485,12 @@ BHHH maximisation, 1 iterations
 Return code 3: Last step could not find a value above the current.
 Boundary of parameter space?  
 Consider switching to a more robust optimisation method temporarily.
-Log-Likelihood: -206.177 
+Log-Likelihood: -207.4343 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     0.83409    0.15774  5.2878 1.238e-07 ***
-sigma  1.66000    0.10197 16.2798 < 2.2e-16 ***
+mu     0.83202    0.15781  5.2723 1.347e-07 ***
+sigma  1.66007    0.10198 16.2779 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -5527,33 +5498,19 @@ Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
 Return code: 2 
 successive function values within tolerance limit 
-9  outer iterations, barrier value 3.486001e-05 
+9  outer iterations, barrier value 6.258206e-05 
 --------------------------------------------
 > all.equal( mlBhhhCon, mlgBhhhCon )
 [1] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Length mismatch: comparison on first 1 components > >"
-[2] "Component 11: Component 2: Mean relative difference: 5.593284e-08"                                                       
+[2] "Component 11: Component 2: Mean relative difference: 3.627125e-08"                                                       
 > mlgBhhhConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon,
 +    method = "BHHH" )
-Warning messages:
-1: In log(sigma) : NaNs produced
-2: In log(sigma) : NaNs produced
-3: In log(sigma) : NaNs produced
-4: In log(sigma) : NaNs produced
-5: In log(sigma) : NaNs produced
-6: In log(sigma) : NaNs produced
 > all.equal( mlgBhhhCon, mlgBhhhConInd )
 [1] TRUE
 > 
 > # with analytical gradients as attribute
 > mlGBhhhCon <- maxLik( llfGradInd, start = startVal, constraints = eqCon,
 +    method = "BHHH" )
-Warning messages:
-1: In log(sigma) : NaNs produced
-2: In log(sigma) : NaNs produced
-3: In log(sigma) : NaNs produced
-4: In log(sigma) : NaNs produced
-5: In log(sigma) : NaNs produced
-6: In log(sigma) : NaNs produced
 > summary( mlGBhhhCon )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -5561,12 +5518,12 @@ BHHH maximisation, 1 iterations
 Return code 3: Last step could not find a value above the current.
 Boundary of parameter space?  
 Consider switching to a more robust optimisation method temporarily.
-Log-Likelihood: -206.177 
+Log-Likelihood: -207.4343 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     0.83409    0.15774  5.2878 1.238e-07 ***
-sigma  1.66000    0.10197 16.2798 < 2.2e-16 ***
+mu     0.83202    0.15781  5.2723 1.347e-07 ***
+sigma  1.66007    0.10198 16.2779 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -5574,37 +5531,23 @@ Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
 Return code: 2 
 successive function values within tolerance limit 
-9  outer iterations, barrier value 3.486001e-05 
+9  outer iterations, barrier value 6.258206e-05 
 --------------------------------------------
 > all.equal( mlGBhhhCon, mlgBhhhCon )
 [1] TRUE
 > all.equal( mlGBhhhCon, mlBhhhCon )
 [1] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Length mismatch: comparison on first 1 components > >"
-[2] "Component 11: Component 2: Mean relative difference: 5.556443e-08"                                                       
+[2] "Component 11: Component 2: Mean relative difference: 3.791538e-08"                                                       
 > 
 > # with analytical gradients and unused Hessians
 > mlghBhhhCon <- maxLik( llf, gfInd, hf, start = startVal, constraints = eqCon,
 +    method = "BHHH" )
-Warning messages:
-1: In log(sigma) : NaNs produced
-2: In log(sigma) : NaNs produced
-3: In log(sigma) : NaNs produced
-4: In log(sigma) : NaNs produced
-5: In log(sigma) : NaNs produced
-6: In log(sigma) : NaNs produced
 > all.equal( mlgBhhhCon, mlghBhhhCon )
 [1] TRUE
 > 
 > # with analytical gradients and unused Hessians as attributes
 > mlGHBhhhCon <- maxLik( llfGradHessInd, start = startVal, constraints = eqCon,
 +    method = "BHHH" )
-Warning messages:
-1: In log(sigma) : NaNs produced
-2: In log(sigma) : NaNs produced
-3: In log(sigma) : NaNs produced
-4: In log(sigma) : NaNs produced
-5: In log(sigma) : NaNs produced
-6: In log(sigma) : NaNs produced
 > all.equal( mlGHBhhhCon, mlghBhhhCon )
 [1] TRUE
 > all.equal( mlGHBhhhCon, mlGBhhhCon )
@@ -6579,18 +6522,18 @@ Error in estfun.maxLik(ml) :
 [5,]  0.1495422 -0.5615478
 > estfun( mlBhhhCon )[ 1:5, ]
              mu      sigma
-[1,] -0.3465823 -0.4030105
-[2,] -0.1068543 -0.5834552
-[3,]  1.1915061  1.7542746
-[4,]  0.1113813 -0.5818152
-[5,]  0.1540430 -0.5630183
+[1,] -0.3458007 -0.4038758
+[2,] -0.1060925 -0.5836989
+[3,]  1.1921608  1.7569872
+[4,]  0.1121251 -0.5815135
+[5,]  0.1547833 -0.5626122
 > estfun( mlgBhhhCon )[ 1:5, ]
              mu      sigma
-[1,] -0.3465823 -0.4030105
-[2,] -0.1068543 -0.5834552
-[3,]  1.1915061  1.7542746
-[4,]  0.1113813 -0.5818152
-[5,]  0.1540430 -0.5630183
+[1,] -0.3458007 -0.4038758
+[2,] -0.1060925 -0.5836989
+[3,]  1.1921608  1.7569872
+[4,]  0.1121251 -0.5815135
+[5,]  0.1547833 -0.5626122
 > estfun( mlBfgsConInd )[ 1:5, ]
               mu      sigma
 [1,] -0.33319350 -0.4086050
@@ -6726,13 +6669,13 @@ sigma -0.4935976  1.1486523
 mu     2.9714928 -0.4514259
 sigma -0.4514259  1.1111867
 > bread( mlBhhhCon )
-             mu     sigma
-mu     2.488180 -0.527648
-sigma -0.527648  1.039721
+              mu      sigma
+mu     2.4903342 -0.5304105
+sigma -0.5304105  1.0400542
 > bread( mlgBhhhCon )
-             mu     sigma
-mu     2.488180 -0.527648
-sigma -0.527648  1.039721
+              mu      sigma
+mu     2.4903342 -0.5304105
+sigma -0.5304105  1.0400542
 > bread( mlBfgsConInd )
               mu      sigma
 mu     3.0361157 -0.4935875
@@ -6885,14 +6828,14 @@ mu     0.03507970 -0.00348376
 sigma -0.00348376  0.01149578
 [1] "Mean relative difference: 0.1458582"
 > printSandwich( mlBhhhCon )
-               mu       sigma
-mu     0.02488180 -0.00527648
-sigma -0.00527648  0.01039721
+                mu        sigma
+mu     0.024903342 -0.005304105
+sigma -0.005304105  0.010400542
 [1] TRUE
 > printSandwich( mlgBhhhCon )
-               mu       sigma
-mu     0.02488180 -0.00527648
-sigma -0.00527648  0.01039721
+                mu        sigma
+mu     0.024903342 -0.005304105
+sigma -0.005304105  0.010400542
 [1] TRUE
 > printSandwich( mlBfgsConInd )
                 mu        sigma
