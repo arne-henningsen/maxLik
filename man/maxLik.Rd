@@ -55,7 +55,7 @@ constraints=NULL, ...)
   be considered as experimental.  In particular, the variance-covariance
   matrix is not corrected for constrained parameter space.
   }
-\author{Ott Toomet \email{otoomet@ut.ee}}
+\author{Ott Toomet \email{otoomet@ut.ee}, Arne Henningsen}
 \seealso{\code{\link{maxNR}}, \code{\link{nlm}} and \code{\link{optim}}
   for different non-linear optimisation routines.}
 \examples{

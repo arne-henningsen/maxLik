@@ -197,7 +197,7 @@ the previous one (maximization is not performed in that step).
 \references{Greene,  W., 2002, \emph{Advanced Econometrics}
   Goldfeld, S. M. and Quandt, R. E., 1972,
   \emph{Nonlinear Methods in Econometrics}.  Amsterdam: North-Holland}
-\author{Ott Toomet \email{otoomet@ut.ee}}
+\author{Ott Toomet \email{otoomet@ut.ee}, Arne Henningsen}
 \seealso{\code{\link{nlm}} for Newton-Raphson optimization,
   \code{\link{optim}} for different gradient-based optimization
   methods.}

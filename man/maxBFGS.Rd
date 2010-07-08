@@ -138,7 +138,7 @@ finalHessian=TRUE,
     }
   }
 }
-\author{Ott Toomet \email{otoomet@ut.ee}}
+\author{Ott Toomet \email{otoomet@ut.ee}, Arne Henningsen}
 
 \seealso{\code{\link{optim}}, \code{\link{nlm}}, \code{\link{maxNR}},
   \code{\link{maxBHHH}}, \code{\link{maxBFGSYC}}.}

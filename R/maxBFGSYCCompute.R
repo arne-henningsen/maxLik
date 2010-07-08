@@ -9,7 +9,7 @@ maxBFGSYCCompute <- function(fn,
    ##                       iterlim = 2000,
    ##                       tol = 1E-06,
    ## This function is originally developed by Yves Croissant (and placed in 'mlogit' package).
-   ## Fitted for 'maxLik' by Ott Toomet
+   ## Fitted for 'maxLik' by Ott Toomet, and revised by Arne Henningsen
    ## 
    ## BFGS maximisation, implemented by Yves Croissant
    ## Parameters:

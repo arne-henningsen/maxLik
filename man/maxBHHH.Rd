@@ -60,7 +60,7 @@ maxBHHH(fn, grad = NULL, hess=NULL, start, print.level = 0, iterlim = 100,
   Plus the other components inherited from \code{\link{maxNR}}.
 }
 
-\author{Ott Toomet \email{otoomet@ut.ee}}
+\author{Ott Toomet \email{otoomet@ut.ee}, Arne Henningsen}
 
 \section{Warning}{As \code{maxBHHH} uses likelihood-specific
   information equation, it is only suitable for maximising log-likelihood!}

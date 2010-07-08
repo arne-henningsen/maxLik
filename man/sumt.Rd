@@ -123,7 +123,7 @@ print.level = 0, SUMTMaxIter = 100, ...)
   constraints.
 }
 \author{
-  Ott Toomet \email{otoomet@ut.ee}
+  Ott Toomet \email{otoomet@ut.ee}, Arne Henningsen
 }
 \seealso{
   \code{\link[clue]{sumt}}

@@ -48,7 +48,7 @@
   \code{coef.summary.maxLik} returns the matrix of estimated values,
     standard errors, and \eqn{$t$}{t}- and \eqn{$p$}{p}-values.
 }
-\author{Ott Toomet \email{otoomet@ut.ee}}
+\author{Ott Toomet \email{otoomet@ut.ee}, Arne Henningsen}
 \seealso{\code{\link{maxLik}}}
 \examples{
 ## ML estimation of exponential duration model:
