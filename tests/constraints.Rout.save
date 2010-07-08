@@ -600,14 +600,9 @@ penalty close to zero
 +             start=start, method="bhhh",
 +             constraints=list(eqA=A, eqB=B),
 +             print.level=2, SUMTRho0=1) )
-Error in checkBhhhGrad(g = g, theta = theta, analytic = TRUE) : 
-  gradient is not a matrix but of class 'logical';
-the BHHH method requires that the gradient function
-(argument 'grad') returns a numeric matrix,
-where each row must correspond to the gradient(s)
-of the log-likelihood function at an individual
-(independent) observation and each column must
-correspond to a parameter
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
+  the matrix returned by the gradient function (argument 'grad') must have at least as many rows as the number of parameters (3), where each row must correspond to the gradients of the log-likelihood function of an individual (independent) observation:
+ currently, there are (is) 3 parameter(s) but the gradient matrix has only 1 row(s)
 > # summary(a)
 > 
 > 
@@ -783,31 +778,31 @@ penalty close to zero
 +             print.level=1, SUMTRho0=1, rho=0.5)
 SUMT initial: rho =  0 , function =  -3551.773 , penalty =  0.9711007 
 Estimate:[1] -1.036123  1.010784
-SUMT iteration 1: rho = 1, function = -3551.79, barrier value = 0.9371304
+SUMT iteration 1: rho = 1, function = -3551.79, barrier value = 0.9371309
 Estimate:[1] -1.040191  1.004123
-SUMT iteration 2: rho = 10, function = -3553.01, barrier value = 0.7005277
-Estimate:[1] -1.0714974  0.9542364
-SUMT iteration 3: rho = 100, function = -3574.031, barrier value = 0.1327008
-Estimate:[1] -1.1949215  0.7796013
-SUMT iteration 4: rho = 1000, function = -3602.419, barrier value = 0.003095609
-Estimate:[1] -1.285964  0.670801
-SUMT iteration 5: rho = 10000, function = -3608.113, barrier value = 3.454919e-05
-Estimate:[1] -1.3015300  0.6537039
-SUMT iteration 6: rho = 1e+05, function = -3608.736, barrier value = 3.494314e-07
-Estimate:[1] -1.3031992  0.6518952
-SUMT iteration 7: rho = 1e+06, function = -3608.799, barrier value = 3.498292e-09
-Estimate:[1] -1.3033674  0.6517133
+SUMT iteration 2: rho = 10, function = -3553.01, barrier value = 0.7005272
+Estimate:[1] -1.0714974  0.9542362
+SUMT iteration 3: rho = 100, function = -3574.031, barrier value = 0.1327019
+Estimate:[1] -1.1949208  0.7796018
+SUMT iteration 4: rho = 1000, function = -3602.419, barrier value = 0.003096260
+Estimate:[1] -1.2859611  0.6708026
+SUMT iteration 5: rho = 10000, function = -3608.112, barrier value = 3.455521e-05
+Estimate:[1] -1.3015909  0.6537346
+SUMT iteration 6: rho = 1e+05, function = -3608.736, barrier value = 3.479892e-07
+Estimate:[1] -1.3034798  0.6520349
+SUMT iteration 7: rho = 1e+06, function = -3608.799, barrier value = 3.515288e-09
+Estimate:[1] -1.3036720  0.6518656
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BHHH maximisation, 3 iterations
+BHHH maximisation, 22 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -3608.802 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303367   0.046264 -28.173 < 2.2e-16 ***
-[2,]  0.651713   0.031581  20.637 < 2.2e-16 ***
+[1,] -1.303672   0.045809 -28.459 < 2.2e-16 ***
+[2,]  0.651866   0.035383  18.423 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -815,7 +810,7 @@ Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
 Return code: 1 
 penalty close to zero 
-7  outer iterations, barrier value 3.498292e-09 
+7  outer iterations, barrier value 3.515288e-09 
 --------------------------------------------
 > ## BHHH, analytic
 > a <- maxLik(logLikMix2, gradLikMix2, 
@@ -824,31 +819,31 @@ penalty close to zero
 +             print.level=1, SUMTRho0=1, rho=0.5)
 SUMT initial: rho =  0 , function =  -3551.773 , penalty =  0.9711007 
 Estimate:[1] -1.036123  1.010784
-SUMT iteration 1: rho = 1, function = -3551.79, barrier value = 0.9371304
+SUMT iteration 1: rho = 1, function = -3551.79, barrier value = 0.9371309
 Estimate:[1] -1.040191  1.004123
-SUMT iteration 2: rho = 10, function = -3553.01, barrier value = 0.7005277
-Estimate:[1] -1.0714974  0.9542364
-SUMT iteration 3: rho = 100, function = -3574.031, barrier value = 0.1327008
-Estimate:[1] -1.1949215  0.7796013
-SUMT iteration 4: rho = 1000, function = -3602.419, barrier value = 0.003095609
-Estimate:[1] -1.285964  0.670801
-SUMT iteration 5: rho = 10000, function = -3608.113, barrier value = 3.454919e-05
-Estimate:[1] -1.3015300  0.6537039
-SUMT iteration 6: rho = 1e+05, function = -3608.736, barrier value = 3.494314e-07
-Estimate:[1] -1.3031992  0.6518952
-SUMT iteration 7: rho = 1e+06, function = -3608.799, barrier value = 3.498292e-09
-Estimate:[1] -1.3033674  0.6517133
+SUMT iteration 2: rho = 10, function = -3553.01, barrier value = 0.7005272
+Estimate:[1] -1.0714974  0.9542362
+SUMT iteration 3: rho = 100, function = -3574.031, barrier value = 0.1327019
+Estimate:[1] -1.1949208  0.7796018
+SUMT iteration 4: rho = 1000, function = -3602.419, barrier value = 0.003096260
+Estimate:[1] -1.2859611  0.6708026
+SUMT iteration 5: rho = 10000, function = -3608.112, barrier value = 3.455521e-05
+Estimate:[1] -1.3015909  0.6537346
+SUMT iteration 6: rho = 1e+05, function = -3608.736, barrier value = 3.479892e-07
+Estimate:[1] -1.3034798  0.6520349
+SUMT iteration 7: rho = 1e+06, function = -3608.799, barrier value = 3.515288e-09
+Estimate:[1] -1.3036720  0.6518656
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
-BHHH maximisation, 3 iterations
+BHHH maximisation, 22 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -3608.802 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303367   0.046264 -28.173 < 2.2e-16 ***
-[2,]  0.651713   0.031581  20.637 < 2.2e-16 ***
+[1,] -1.303672   0.045809 -28.459 < 2.2e-16 ***
+[2,]  0.651866   0.035383  18.423 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -856,7 +851,7 @@ Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
 Return code: 1 
 penalty close to zero 
-7  outer iterations, barrier value 3.498292e-09 
+7  outer iterations, barrier value 3.515288e-09 
 --------------------------------------------
 > ## bfgs, no analytic gradient
 > a <- maxLik(logLikMix2, 

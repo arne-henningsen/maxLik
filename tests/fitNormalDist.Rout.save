@@ -506,11 +506,11 @@ Warning messages:
 > 
 > ## BHHH method
 > mlBHHH <- try( maxLik( llf, start = startVal, method = "BHHH" ) )
-Error in checkBhhhGrad(g = g, theta = theta, analytic = FALSE) : 
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
   if the gradients (argument 'grad') are not provided by the user, the BHHH method requires that the log-likelihood function (argument 'fn') returns a numeric vector, where each element must be the log-likelihood value corresponding to an individual (independent) observation
 > x <- xSaved[1]
 > try( maxLik( llfInd, start = startVal, method = "BHHH" ) )
-Error in checkBhhhGrad(g = g, theta = theta, analytic = FALSE) : 
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
   if the gradients (argument 'grad') are not provided by the user, the BHHH method requires that the log-likelihood function (argument 'fn') returns a numeric vector, where each element must be the log-likelihood value corresponding to an individual (independent) observation
 > x <- xSaved[1:2]
 > try( maxLik( llfInd, start = startVal, method = "BHHH" ) )
@@ -719,7 +719,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > 
 > # with analytical gradients
 > mlgBHHH <- try( maxLik( llf, gf, start = startVal, method = "BHHH" ) )
-Error in checkBhhhGrad(g = g, theta = theta, analytic = TRUE) : 
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
   gradient is not a matrix but of class 'numeric';
 the BHHH method requires that the gradient function
 (argument 'grad') returns a numeric matrix,
@@ -728,7 +728,7 @@ of the log-likelihood function at an individual
 (independent) observation and each column must
 correspond to a parameter
 > mlgBHHH <- try( maxLik( llfInd, gf, start = startVal, method = "BHHH" ) )
-Error in checkBhhhGrad(g = g, theta = theta, analytic = TRUE) : 
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
   gradient is not a matrix but of class 'numeric';
 the BHHH method requires that the gradient function
 (argument 'grad') returns a numeric matrix,
@@ -738,11 +738,11 @@ of the log-likelihood function at an individual
 correspond to a parameter
 > x <- xSaved[1]
 > try( maxLik( llf, gfInd, start = startVal, method = "BHHH" ) )
-Error in checkBhhhGrad(g = g, theta = theta, analytic = TRUE) : 
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
   the matrix returned by the gradient function (argument 'grad') must have at least as many rows as the number of parameters (2), where each row must correspond to the gradients of the log-likelihood function of an individual (independent) observation:
  currently, there are (is) 2 parameter(s) but the gradient matrix has only 1 row(s)
 > try( maxLik( llfInd, gfInd, start = startVal, method = "BHHH" ) )
-Error in checkBhhhGrad(g = g, theta = theta, analytic = TRUE) : 
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
   the matrix returned by the gradient function (argument 'grad') must have at least as many rows as the number of parameters (2), where each row must correspond to the gradients of the log-likelihood function of an individual (independent) observation:
  currently, there are (is) 2 parameter(s) but the gradient matrix has only 1 row(s)
 > x <- xSaved[1:2]
@@ -910,7 +910,7 @@ sigma  9.276024e-06 -6.061345e+01
 > 
 > # with analytical gradients as attribute
 > try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
-Error in checkBhhhGrad(g = g, theta = theta, analytic = TRUE) : 
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
   gradient is not a matrix but of class 'numeric';
 the BHHH method requires that the gradient function
 (argument 'grad') returns a numeric matrix,
@@ -920,7 +920,7 @@ of the log-likelihood function at an individual
 correspond to a parameter
 > x <- xSaved[1]
 > try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
-Error in checkBhhhGrad(g = g, theta = theta, analytic = TRUE) : 
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
   gradient is not a matrix but of class 'numeric';
 the BHHH method requires that the gradient function
 (argument 'grad') returns a numeric matrix,
@@ -929,12 +929,12 @@ of the log-likelihood function at an individual
 (independent) observation and each column must
 correspond to a parameter
 > try( maxLik( llfGradInd, start = startVal, method = "BHHH" ) )
-Error in checkBhhhGrad(g = g, theta = theta, analytic = TRUE) : 
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
   the matrix returned by the gradient function (argument 'grad') must have at least as many rows as the number of parameters (2), where each row must correspond to the gradients of the log-likelihood function of an individual (independent) observation:
  currently, there are (is) 2 parameter(s) but the gradient matrix has only 1 row(s)
 > x <- xSaved[1:2]
 > try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
-Error in checkBhhhGrad(g = g, theta = theta, analytic = TRUE) : 
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
   gradient is not a matrix but of class 'numeric';
 the BHHH method requires that the gradient function
 (argument 'grad') returns a numeric matrix,
@@ -961,6 +961,9 @@ There were 25 warnings (use warnings() to see them)
 > 
 > # with analytical gradients as argument and attribute
 > mlgGBHHH <- maxLik( llfGradInd, gfInd, start = startVal, method = "BHHH" )
+Warning message:
+In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+  the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
 > all.equal( mlgGBHHH, mlgBHHH, tolerance = 1e-10 )
 [1] TRUE
 > all.equal( mlgGBHHH, mlGBHHH, tolerance = 1e-10 )
@@ -991,6 +994,11 @@ There were 25 warnings (use warnings() to see them)
 > 
 > # with analytical gradients and Hessian as argument and attribute
 > mlgGhHBHHH <- maxLik( llfGradHessInd, gfInd, hf, start = startVal, method = "BHHH" )
+Warning messages:
+1: In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+  the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
+2: In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+  the Hessian is provided both as attribute 'hessian' and as argument 'hess': ignoring argument 'hess'
 > all.equal( mlgGhHBHHH, mlghBHHH, tolerance = 1e-10 )
 [1] TRUE
 > all.equal( mlgGhHBHHH, mlGHBHHH, tolerance = 1e-10 )
@@ -4257,7 +4265,7 @@ Error in maxRoutine(fn = logLik, grad = grad, hess = hess, start = start,  :
 > 
 > ## BHHH method with inequality constraints
 > try( maxLik( llf, start = startVal, constraints = inEq, method = "BHHH" ) )
-Error in maxNR(func, start = start, iterlim = iterlim, print.level = print.level,  : 
+Error in maxNR(fn = fn, grad = grad, hess = hess, start = start, iterlim = iterlim,  : 
   Inequality constraints not implemented for maxNR
 > 
 > ## BFGS method with inequality constraints
@@ -5294,182 +5302,169 @@ $gradientObs
 +    method = "BHHH" )
 > print( mlBhhhCon )
 Maximum Likelihood estimation
-BHHH maximisation, 1 iterations
-Return code 3: Last step could not find a value above the current.
-Boundary of parameter space?  
-Consider switching to a more robust optimisation method temporarily.
-Log-Likelihood: -207.4343 (2 free parameter(s))
-Estimate(s): 0.8320184 1.660071 
+BHHH maximisation, 8 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -204.5333 (2 free parameter(s))
+Estimate(s): 0.8199029 1.680112 
 > summary( mlBhhhCon )
 --------------------------------------------
 Maximum Likelihood estimation
-BHHH maximisation, 1 iterations
-Return code 3: Last step could not find a value above the current.
-Boundary of parameter space?  
-Consider switching to a more robust optimisation method temporarily.
-Log-Likelihood: -207.4343 
+BHHH maximisation, 8 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -204.5333 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     0.83202    0.15781  5.2723 1.347e-07 ***
-sigma  1.66007    0.10198 16.2779 < 2.2e-16 ***
+mu     0.81990    0.17417  4.7075 2.508e-06 ***
+sigma  1.68011    0.10711 15.6853 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
-Return code: 2 
-successive function values within tolerance limit 
-9  outer iterations, barrier value 6.258205e-05 
+Return code: 1 
+penalty close to zero 
+10  outer iterations, barrier value 2.084521e-10 
 --------------------------------------------
 > activePar( mlBhhhCon )
    mu sigma 
  TRUE  TRUE 
 > AIC( mlBhhhCon )
-[1] 418.8686
+[1] 413.0665
 > coef( mlBhhhCon )
        mu     sigma 
-0.8320184 1.6600707 
+0.8199029 1.6801115 
 > condiNumber( mlBhhhCon )
 mu 	 1 
-sigma 	 3.786301 
+sigma 	 3.610634 
 > hessian( mlBhhhCon )
-             mu      sigma
-mu    -45.04842  -22.97396
-sigma -22.97396 -107.86518
-attr(,"type")
-[1] "BHHH"
+             mu     sigma
+mu    -35.44187 -15.23404
+sigma -15.23404 -93.70638
 > logLik( mlBhhhCon )
-[1] -207.4343
+[1] -204.5333
 > maximType( mlBhhhCon )
 [1] "BHHH maximisation"
 > nIter( mlBhhhCon )
-[1] 1
+[1] 8
 > nParam( mlBhhhCon )
 [1] 2
 > returnCode( mlBhhhCon )
-[1] 3
+[1] 2
 > returnMessage( mlBhhhCon )
-[1] "Last step could not find a value above the current.\nBoundary of parameter space?  \nConsider switching to a more robust optimisation method temporarily."
+[1] "successive function values within tolerance limit"
 > vcov( mlBhhhCon )
                 mu        sigma
-mu     0.024903342 -0.005304105
-sigma -0.005304105  0.010400542
+mu     0.030334980 -0.004931619
+sigma -0.004931619  0.011473376
 > logLik( summary( mlBhhhCon ) )
-[1] -207.4343
+[1] -204.5333
 > all.equal( mlCon[ -c( 5, 6, 7, 9, 10 ) ], mlBhhhCon[ -c( 5, 6, 7, 9, 10, 11 ) ] )
-[1] "Component 1: Mean relative difference: 0.01418374"                             
-[2] "Component 2: Mean relative difference: 0.01298474"                             
-[3] "Component 3: Mean relative difference: 0.07383964"                             
-[4] "Component 4: Attributes: < Length mismatch: comparison on first 2 components >"
-[5] "Component 4: Mean relative difference: 0.2458721"                              
-[6] "Component 6: Component 2: Mean absolute difference: 6.258185e-05"              
-[7] "Component 6: Component 3: Mean relative difference: 1"                         
-[8] "Component 6: Component 4: 1 string mismatch"                                   
-[9] "Component 6: Component 5: Mean relative difference: 0.1"                       
+[1] "Component 2: Mean relative difference: 0.0001222853"
+[2] "Component 3: Mean relative difference: 0.0005896322"
 > mlBhhhCon[11]
 $gradientObs
-                mu       sigma
-  [1,] -0.34580074 -0.40387579
-  [2,] -0.10609250 -0.58369886
-  [3,]  1.19216082  1.75698722
-  [4,]  0.11212515 -0.58151349
-  [5,]  0.15478325 -0.56261225
-  [6,]  1.30563400  2.22750560
-  [7,]  0.39545695 -0.34277183
-  [8,] -0.85714169  0.61725650
-  [9,] -0.43751684 -0.28461161
- [10,] -0.26247668 -0.48801506
- [11,]  0.94931134  0.89365849
- [12,]  0.32208362 -0.43017180
- [13,]  0.35180792 -0.39691900
- [14,]  0.14128098 -0.56924845
- [15,] -0.34243732 -0.40771858
- [16,]  1.35777657  2.45805134
- [17,]  0.42226136 -0.30638563
- [18,] -1.36628392  2.49652272
- [19,]  0.56995195 -0.06311794
- [20,] -0.28216540 -0.47021361
- [21,] -0.71399993  0.24391325
- [22,] -0.09723668 -0.58668806
- [23,] -0.68365031  0.17349614
- [24,] -0.46802547 -0.23874907
- [25,] -0.39265668 -0.34643548
- [26,] -1.16313397  1.64349353
- [27,]  0.66896452  0.14052012
- [28,]  0.17226281 -0.55312225
- [29,] -0.76502855  0.36920343
- [30,]  0.97088964  0.96244300
- [31,]  0.37045401 -0.37456223
- [32,] -0.15318820 -0.56342772
- [33,]  0.71057704  0.23581848
- [34,]  0.69824526  0.20697760
- [35,]  0.65720332  0.11462746
- [36,]  0.56072379 -0.08043922
- [37,]  0.46295116 -0.24659136
- [38,]  0.01602352 -0.60195775
- [39,] -0.16109229 -0.55930394
- [40,] -0.21516544 -0.52552907
- [41,] -0.44321684 -0.27627776
- [42,] -0.08993753 -0.58895607
- [43,] -0.85738490  0.61794872
- [44,]  1.63503762  3.83556278
- [45,]  0.93761267  0.85701326
- [46,] -0.75412198  0.34169817
- [47,] -0.23143190 -0.51346939
- [48,] -0.27771226 -0.47435252
- [49,]  0.62700125  0.05024055
- [50,]  0.00045121 -0.60238364
- [51,]  0.24479647 -0.50290372
- [52,]  0.04023757 -0.59969622
- [53,]  0.02984238 -0.60090557
- [54,]  1.05419461  1.24249623
- [55,] -0.10289455 -0.58480833
- [56,]  1.16150752  1.63721695
- [57,] -1.06302600  1.27353624
- [58,]  0.48522833 -0.21152609
- [59,]  0.15083999 -0.56461289
- [60,]  0.21767079 -0.52372888
- [61,]  0.33647175 -0.41444199
- [62,] -0.30359778 -0.44937259
- [63,] -0.18086468 -0.54807969
- [64,] -0.67825880  0.16130664
- [65,] -0.71687929  0.25075277
- [66,]  0.28123561 -0.47108323
- [67,]  0.38623548 -0.35473821
- [68,]  0.09942180 -0.58597469
- [69,]  0.73027474  0.28293373
- [70,]  1.54876882  3.37960251
- [71,] -0.29540259 -0.45752174
- [72,] -1.61488498  3.72683721
- [73,]  0.79085244  0.43590323
- [74,] -0.45373545 -0.26061549
- [75,] -0.43835561 -0.28339202
- [76,]  0.80524579  0.47404036
- [77,] -0.14571426 -0.56713629
- [78,] -0.82496014  0.52739247
- [79,]  0.19253279 -0.54084703
- [80,] -0.03984315 -0.59974866
- [81,]  0.06513814 -0.59534034
- [82,]  0.34056555 -0.40984085
- [83,] -0.20804530 -0.53053139
- [84,]  0.52860016 -0.13853013
- [85,] -0.09905947 -0.58609407
- [86,]  0.30173998 -0.45123950
- [87,]  0.85696706  0.61675957
- [88,]  0.37678042 -0.36671456
- [89,] -0.17558439 -0.55120420
- [90,]  0.89468239  0.72643054
- [91,]  0.78197334  0.41271988
- [92,]  0.45894461 -0.25272303
- [93,]  0.23421036 -0.51132164
- [94,] -0.39473722 -0.34371595
- [95,]  1.04842515  1.22235795
- [96,] -0.37467325 -0.36934317
- [97,]  1.64837444  3.90825771
- [98,]  1.17322086  1.68261570
- [99,] -0.11010062 -0.58226036
-[100,] -0.68395255  0.17418230
+                 mu       sigma
+  [1,] -0.333308275 -0.40854759
+  [2,] -0.099284534 -0.57863702
+  [3,]  1.168181660  1.69756293
+  [4,]  0.113758237 -0.57345636
+  [5,]  0.155404736 -0.55462282
+  [6,]  1.278963912  2.15304166
+  [7,]  0.390371035 -0.33916715
+  [8,] -0.832523157  0.56927800
+  [9,] -0.422849394 -0.29479193
+ [10,] -0.251960180 -0.48853849
+ [11,]  0.931091178  0.86134183
+ [12,]  0.318737705 -0.42450979
+ [13,]  0.347757110 -0.39201428
+ [14,]  0.142222658 -0.56121449
+ [15,] -0.330024619 -0.41220713
+ [16,]  1.329869957  2.37616957
+ [17,]  0.416539805 -0.30369014
+ [18,] -1.329591450  2.37492515
+ [19,]  0.560728016 -0.06694478
+ [20,] -0.271182002 -0.47164372
+ [21,] -0.692775891  0.21115152
+ [22,] -0.090638733 -0.58139582
+ [23,] -0.663145998  0.14365166
+ [24,] -0.452634538 -0.25098064
+ [25,] -0.379053066 -0.35379809
+ [26,] -1.131259053  1.55491919
+ [27,]  0.657392578  0.13088683
+ [28,]  0.172469777 -0.54522228
+ [29,] -0.742594411  0.33129298
+ [30,]  0.952157771  0.92799797
+ [31,]  0.365961022 -0.37018549
+ [32,] -0.145263402 -0.55974578
+ [33,]  0.698018289  0.22340138
+ [34,]  0.685978949  0.19540667
+ [35,]  0.645910285  0.10574412
+ [36,]  0.551718692 -0.08378352
+ [37,]  0.456264671 -0.24543724
+ [38,]  0.019935589 -0.59453086
+ [39,] -0.152980050 -0.55587910
+ [40,] -0.205770898 -0.52405986
+ [41,] -0.428414221 -0.28683302
+ [42,] -0.083512669 -0.58348087
+ [43,] -0.832760595  0.56994232
+ [44,]  1.600555972  3.70887658
+ [45,]  0.919669935  0.82582764
+ [46,] -0.731946481  0.30491387
+ [47,] -0.221651609 -0.51265565
+ [48,] -0.266834469 -0.47557357
+ [49,]  0.616424431  0.04320866
+ [50,]  0.004732566 -0.59516095
+ [51,]  0.243283358 -0.49575817
+ [52,]  0.043575417 -0.59200835
+ [53,]  0.033426750 -0.59332131
+ [54,]  1.033487224  1.19932157
+ [55,] -0.096162426 -0.57966223
+ [56,]  1.138255284  1.58159609
+ [57,] -1.033525073  1.19945301
+ [58,]  0.478013552 -0.21129821
+ [59,]  0.151554984 -0.55660824
+ [60,]  0.216800944 -0.51622889
+ [61,]  0.332784632 -0.40913360
+ [62,] -0.292106126 -0.45184140
+ [63,] -0.172283553 -0.54533014
+ [64,] -0.657882336  0.13196910
+ [65,] -0.695586969  0.21770866
+ [66,]  0.278858373 -0.46454976
+ [67,]  0.381368243 -0.35084024
+ [68,]  0.101356139 -0.57793868
+ [69,]  0.717248875  0.26912800
+ [70,]  1.516332974  3.26782422
+ [71,] -0.284105285 -0.45958701
+ [72,] -1.572297119  3.55823578
+ [73,]  0.776390014  0.41754149
+ [74,] -0.438683396 -0.27187267
+ [75,] -0.423668279 -0.29362728
+ [76,]  0.790442034  0.45453277
+ [77,] -0.137966698 -0.56321798
+ [78,] -0.801104765  0.48304466
+ [79,]  0.192259072 -0.53309569
+ [80,] -0.034606241 -0.59318649
+ [81,]  0.067885498 -0.58745588
+ [82,]  0.336781350 -0.40463751
+ [83,] -0.198819604 -0.52878506
+ [84,]  0.520356852 -0.14027267
+ [85,] -0.092418292 -0.58084851
+ [86,]  0.298876493 -0.44511899
+ [87,]  0.840936777  0.59293373
+ [88,]  0.372137405 -0.36252624
+ [89,] -0.167128485 -0.54826982
+ [90,]  0.877757714  0.69925781
+ [91,]  0.767721474  0.39505288
+ [92,]  0.452353134 -0.25140851
+ [93,]  0.232948294 -0.50402748
+ [94,] -0.381084265 -0.35120402
+ [95,]  1.027854584  1.17981414
+ [96,] -0.361496100 -0.37564256
+ [97,]  1.613576513  3.77918882
+ [98,]  1.149690856  1.62555448
+ [99,] -0.103197613 -0.57730582
+[100,] -0.663441063  0.14430931
 
 > nObs( mlBhhhCon )
 [1] 100
@@ -5480,29 +5475,36 @@ $gradientObs
 > summary( mlgBhhhCon )
 --------------------------------------------
 Maximum Likelihood estimation
-BHHH maximisation, 1 iterations
+BHHH maximisation, 7 iterations
 Return code 3: Last step could not find a value above the current.
 Boundary of parameter space?  
 Consider switching to a more robust optimisation method temporarily.
-Log-Likelihood: -207.4343 
+Log-Likelihood: -204.5425 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     0.83202    0.15781  5.2723 1.347e-07 ***
-sigma  1.66007    0.10198 16.2779 < 2.2e-16 ***
+mu     0.83397    0.17224  4.8418 1.287e-06 ***
+sigma  1.66614    0.10491 15.8823 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
-Return code: 2 
-successive function values within tolerance limit 
-9  outer iterations, barrier value 6.258206e-05 
+Return code: 1 
+penalty close to zero 
+9  outer iterations, barrier value 1.178295e-08 
 --------------------------------------------
 > all.equal( mlBhhhCon, mlgBhhhCon )
-[1] "Component 7: Component 2: Attributes: < Component 1: names for target but not for current >"                             
-[2] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Length mismatch: comparison on first 1 components > >"
-[3] "Component 12: Component 2: Mean relative difference: 3.632132e-08"                                                       
+ [1] "Component 1: Mean relative difference: 4.516693e-05"     
+ [2] "Component 2: Mean relative difference: 0.01121305"       
+ [3] "Component 3: Mean relative difference: 0.05516369"       
+ [4] "Component 4: Mean relative difference: 0.02792587"       
+ [5] "Component 5: Mean relative difference: 0.5"              
+ [6] "Component 6: 1 string mismatch"                          
+ [7] "Component 7: target is NULL, current is list"            
+ [8] "Component 9: Mean relative difference: 0.125"            
+ [9] "Component 11: Mean relative difference: 0.02015696"      
+[10] "Component 12: Component 5: Mean relative difference: 0.1"
 > mlgBhhhConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon,
 +    method = "BHHH" )
 > all.equal( mlgBhhhCon, mlgBhhhConInd )
@@ -5514,31 +5516,40 @@ successive function values within tolerance limit
 > summary( mlGBhhhCon )
 --------------------------------------------
 Maximum Likelihood estimation
-BHHH maximisation, 1 iterations
+BHHH maximisation, 7 iterations
 Return code 3: Last step could not find a value above the current.
 Boundary of parameter space?  
 Consider switching to a more robust optimisation method temporarily.
-Log-Likelihood: -207.4343 
+Log-Likelihood: -204.5425 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     0.83202    0.15781  5.2723 1.347e-07 ***
-sigma  1.66007    0.10198 16.2779 < 2.2e-16 ***
+mu     0.83397    0.17224  4.8418 1.287e-06 ***
+sigma  1.66614    0.10491 15.8823 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
-Return code: 2 
-successive function values within tolerance limit 
-9  outer iterations, barrier value 6.258206e-05 
+Return code: 1 
+penalty close to zero 
+9  outer iterations, barrier value 1.178295e-08 
 --------------------------------------------
 > all.equal( mlGBhhhCon, mlgBhhhCon )
 [1] TRUE
 > all.equal( mlGBhhhCon, mlBhhhCon )
-[1] "Component 7: Component 2: Attributes: < Component 1: names for current but not for target >"                             
-[2] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Length mismatch: comparison on first 1 components > >"
-[3] "Component 12: Component 2: Mean relative difference: 3.796545e-08"                                                       
+ [1] "Component 1: Mean relative difference: 4.516489e-05"           
+ [2] "Component 2: Mean relative difference: 0.01121263"             
+ [3] "Component 3: Mean relative difference: 0.05343284"             
+ [4] "Component 4: Mean relative difference: 0.02732452"             
+ [5] "Component 5: Mean relative difference: 0.3333333"              
+ [6] "Component 6: 1 string mismatch"                                
+ [7] "Component 7: Modes: list, NULL"                                
+ [8] "Component 7: names for target but not for current"             
+ [9] "Component 7: Length mismatch: comparison on first 0 components"
+[10] "Component 9: Mean relative difference: 0.1428571"              
+[11] "Component 11: Mean relative difference: 0.01980579"            
+[12] "Component 12: Component 5: Mean relative difference: 0.1111111"
 > 
 > # with analytical gradients and unused Hessians
 > mlghBhhhCon <- maxLik( llf, gfInd, hf, start = startVal, constraints = eqCon,
@@ -6523,19 +6534,19 @@ Error in estfun.maxLik(ml) :
 [4,]  0.1073777 -0.5796362
 [5,]  0.1495422 -0.5615478
 > estfun( mlBhhhCon )[ 1:5, ]
-             mu      sigma
-[1,] -0.3458007 -0.4038758
-[2,] -0.1060925 -0.5836989
-[3,]  1.1921608  1.7569872
-[4,]  0.1121251 -0.5815135
-[5,]  0.1547833 -0.5626122
+              mu      sigma
+[1,] -0.33330828 -0.4085476
+[2,] -0.09928453 -0.5786370
+[3,]  1.16818166  1.6975629
+[4,]  0.11375824 -0.5734564
+[5,]  0.15540474 -0.5546228
 > estfun( mlgBhhhCon )[ 1:5, ]
              mu      sigma
-[1,] -0.3458007 -0.4038758
-[2,] -0.1060925 -0.5836989
-[3,]  1.1921608  1.7569872
-[4,]  0.1121251 -0.5815135
-[5,]  0.1547833 -0.5626122
+[1,] -0.3439868 -0.4030394
+[2,] -0.1060224 -0.5814602
+[3,]  1.1827864  1.7307168
+[4,]  0.1106078 -0.5798052
+[5,]  0.1529555 -0.5612088
 > estfun( mlBfgsConInd )[ 1:5, ]
               mu      sigma
 [1,] -0.33319350 -0.4086050
@@ -6672,12 +6683,12 @@ mu     2.9714928 -0.4514259
 sigma -0.4514259  1.1111867
 > bread( mlBhhhCon )
               mu      sigma
-mu     2.4903342 -0.5304105
-sigma -0.5304105  1.0400542
+mu     3.0334980 -0.4931619
+sigma -0.4931619  1.1473376
 > bread( mlgBhhhCon )
               mu      sigma
-mu     2.4903342 -0.5304105
-sigma -0.5304105  1.0400542
+mu     2.9667974 -0.4581954
+sigma -0.4581954  1.1005169
 > bread( mlBfgsConInd )
               mu      sigma
 mu     3.0354028 -0.4928499
@@ -6831,14 +6842,14 @@ sigma -0.00348376  0.01149578
 [1] "Mean relative difference: 0.1458582"
 > printSandwich( mlBhhhCon )
                 mu        sigma
-mu     0.024903342 -0.005304105
-sigma -0.005304105  0.010400542
-[1] TRUE
+mu     0.035434654 -0.003890371
+sigma -0.003890371  0.011787900
+[1] "Mean relative difference: 0.1362954"
 > printSandwich( mlgBhhhCon )
                 mu        sigma
-mu     0.024903342 -0.005304105
-sigma -0.005304105  0.010400542
-[1] TRUE
+mu     0.035184249 -0.003561925
+sigma -0.003561925  0.011426857
+[1] "Mean relative difference: 0.1484698"
 > printSandwich( mlBfgsConInd )
                 mu        sigma
 mu     0.035467872 -0.003877854
