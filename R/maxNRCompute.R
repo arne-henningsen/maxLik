@@ -6,6 +6,7 @@ maxNRCompute <- function(fn,
                   qrtol=1e-10,
                   iterlim=150,
                          finalHessian=TRUE,
+                  bhhhHessian = FALSE,
                   fixed=NULL,
                   ...) {
    ## Newton-Raphson maximisation
@@ -73,7 +74,9 @@ maxNRCompute <- function(fn,
                            # I is unit matrix
    start1 <- start
    iter <- 0
-   f1 <- fn(start1, fixed = fixed, sumObs = TRUE, ...)
+   returnHessian <- ifelse( bhhhHessian, "BHHH", TRUE )
+   f1 <- fn(start1, fixed = fixed, sumObs = TRUE,
+      returnHessian = returnHessian, ...)
    if(print.level > 2) {
       cat("Initial function value:", f1, "\n")
    }
@@ -169,7 +172,8 @@ maxNRCompute <- function(fn,
       amount[!fixed] <- qr.solve(H[!fixed,!fixed,drop=FALSE],
                                     G0[!fixed], tol=qrtol)
       start1 <- start0 - step*amount
-      f1 <- fn(start1, fixed = fixed, sumObs = TRUE, ...)
+      f1 <- fn(start1, fixed = fixed, sumObs = TRUE,
+         returnHessian = returnHessian, ...)
       ## Are we requested to fix some of the parameters?
       constPar <- attr(f1, "constPar")
       if(!is.null(constPar)) {
@@ -190,7 +194,8 @@ maxNRCompute <- function(fn,
                cat("function value difference", f1 - f0, "-> step", step, "\n")
             }
             start1 <- start0 - step*amount
-            f1 <- fn(start1, fixed = fixed, sumObs = TRUE, ...)
+            f1 <- fn(start1, fixed = fixed, sumObs = TRUE,
+               returnHessian = returnHessian, ...)
             ## Find out the constant parameters -- these may be other than
             ## with full step
             constPar <- attr(f1, "constPar")

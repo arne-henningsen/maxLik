@@ -14,7 +14,7 @@ maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
       steptol = 1e-10, lambdatol = 1e-06, qrtol = 1e-10,
       iterlim = 150,
       constraints=NULL,
-finalHessian=TRUE,
+      finalHessian=TRUE, bhhhHessian=FALSE,
       fixed=NULL, activePar=NULL, ... )
 maxBFGSYC(fn, grad = NULL, hess = NULL, start, print.level=0,
                   tol=1e-8, reltol=sqrt(.Machine$double.eps),
@@ -92,6 +92,9 @@ finalHessian=TRUE,
     does not carry any extra penalty for NR method, this option is
     mostly for compatibility reasons with other \pkg{maxLik}
     optimizers.}
+  \item{bhhhHessian}{logical. Indicating whether the approximation
+      for the Hessian suggested by Bernd, Hall, Hall, and Hausman (1974)
+      should be used.}
   \item{fixed}{parameters that should be fixed at their starting values:
       either a logical vector of the same length as argument \code{start},
       a numeric (index) vector indicating the positions of the fixed parameters,
