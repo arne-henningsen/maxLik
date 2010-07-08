@@ -81,6 +81,9 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
                attr( h, "type" ) = "BHHH"
             } else {
                h <- NULL
+               warning( "for computing the Hessian by the 'BHHH' method,",
+                  " the log-likelihood or gradient must be supplied",
+                  " by observations" )
             }
          } else {
             h <- NULL
