@@ -76,15 +76,10 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
             h[ fixed, ] <- NA
             h[ , fixed ] <- NA
          } else if( tolower( returnHessian ) == "bhhh" ) {
-            if( observationGradient( gr, nParam ) ) {
-               h <- - crossprod( gr )
-               attr( h, "type" ) = "BHHH"
-            } else {
-               h <- NULL
-               warning( "for computing the Hessian by the 'BHHH' method,",
-                  " the log-likelihood or gradient must be supplied",
-                  " by observations" )
-            }
+            checkBhhhGrad( g = gr, theta = theta,  analytic =
+               ( !is.null( attr( f, "gradient" ) ) || !is.null( gradOrig ) ) )
+            h <- - crossprod( gr )
+            attr( h, "type" ) = "BHHH"
          } else {
             h <- NULL
          }
