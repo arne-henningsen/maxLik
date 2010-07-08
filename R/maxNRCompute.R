@@ -92,6 +92,14 @@ maxNRCompute <- function(fn,
       class(result) <- "maxim"
       return(result)
    }
+   if( isTRUE( attr( f1, "gradBoth" ) ) ) {
+      warning( "the gradient is provided both as attribute 'gradient' and",
+         " as argument 'grad': ignoring argument 'grad'" )
+   }
+   if( isTRUE( attr( f1, "hessBoth" ) ) ) {
+      warning( "the Hessian is provided both as attribute 'hessian' and",
+         " as argument 'hess': ignoring argument 'hess'" )
+   }
    G1 <- attr( f1, "gradient" )
    if(print.level > 2) {
       cat("Initial gradient value:\n")
@@ -306,6 +314,8 @@ maxNRCompute <- function(fn,
    ## remove attributes from final value of objective (likelihood) function
    attributes( f1 )$gradient <- NULL
    attributes( f1 )$hessian <- NULL
+   attributes( f1 )$gradBoth <- NULL
+   attributes( f1 )$hessBoth <- NULL
    ##
    result <-list(
                   maximum = unname( drop( f1 ) ),

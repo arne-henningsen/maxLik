@@ -86,6 +86,14 @@ maxBFGSYCCompute <- function(fn,
       class(result) <- "maxim"
       return(result)
    }
+   if( isTRUE( attr( x, "gradBoth" ) ) ) {
+      warning( "the gradient is provided both as attribute 'gradient' and",
+         " as argument 'grad': ignoring argument 'grad'" )
+   }
+   if( isTRUE( attr( x, "hessBoth" ) ) ) {
+      warning( "the Hessian is provided both as attribute 'hessian' and",
+         " as argument 'hess': ignoring argument 'hess'" )
+   }
    ##
    ## gradient by individual observations, used for BHHH approximation of initial Hessian.
    ## If not supplied by observations, we use the summed gradient.
@@ -234,6 +242,8 @@ maxBFGSYCCompute <- function(fn,
    ## remove attributes from final value of objective (likelihood) function
    attributes( x )$gradient <- NULL
    attributes( x )$hessian <- NULL
+   attributes( x )$gradBoth <- NULL
+   attributes( x )$hessBoth <- NULL
    ##
    result <-list(
                   maximum = unname( drop( x ) ),

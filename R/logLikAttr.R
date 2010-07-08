@@ -97,6 +97,12 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
             gr <- sumGradients( gr, nParam )
          }
 
+         if( !is.null( gradOrig ) && !is.null( attr( f, "gradient" ) ) ) {
+            attr( f, "gradBoth" ) <- TRUE
+         }
+         if( !is.null( hessOrig ) && !is.null( attr( f, "hessian" ) ) ) {
+            attr( f, "hessBoth" ) <- TRUE
+         }
 
          attr( f, "gradient" ) <- gr
          attr( f, "hessian" ) <- h

@@ -473,6 +473,9 @@ $gradientObs
 > 
 > # with analytical gradients as argument and attribute
 > mlgG <- maxLik( llfGrad, gf, start = startVal )
+Warning message:
+In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+  the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
 > all.equal( mlgG, mlg, tolerance = 1e-10 )
 [1] TRUE
 > all.equal( mlgG, mlG, tolerance = 1e-10 )
@@ -490,6 +493,11 @@ $gradientObs
 > 
 > # with analytical gradients and Hessian as argument and attribute
 > mlgGhH <- maxLik( llfGradHess, gf, hf, start = startVal )
+Warning messages:
+1: In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+  the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
+2: In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+  the Hessian is provided both as attribute 'hessian' and as argument 'hess': ignoring argument 'hess'
 > all.equal( mlgGhH, mlgh, tolerance = 1e-10 )
 [1] TRUE
 > all.equal( mlgGhH, mlGH, tolerance = 1e-10 )
@@ -1378,6 +1386,9 @@ Function value: -201.5839
 > 
 > # with analytical gradients as argument and attribute
 > mlgGBFGSYC <- maxLik( llfGrad, gf, start = startVal, method = "BFGSYC" )
+Warning message:
+In maxBFGSYCCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad,  :
+  the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
 > all.equal( mlgGBFGSYC, mlgBFGSYC )
 [1] TRUE
 > all.equal( mlgGBFGSYC, mlGBFGSYC )
@@ -1395,6 +1406,11 @@ Function value: -201.5839
 > 
 > # with analytical gradients and Hessian as argument and attribute
 > mlgGhHBFGSYC <- maxLik( llfGradHess, gf, hf, start = startVal, method = "BFGSYC" )
+Warning messages:
+1: In maxBFGSYCCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad,  :
+  the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
+2: In maxBFGSYCCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad,  :
+  the Hessian is provided both as attribute 'hessian' and as argument 'hess': ignoring argument 'hess'
 > all.equal( mlgGhHBFGSYC, mlghBFGSYC )
 [1] TRUE
 > all.equal( mlgGhHBFGSYC, mlGHBFGSYC )
