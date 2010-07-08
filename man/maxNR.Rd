@@ -194,9 +194,16 @@ the previous one (maximization is not performed in that step).
     designed for this purpose.  If analytic gradient/Hessian are wrong,
     the algorithm may not converge, or converge to a wrong point.
 }
-\references{Greene,  W., 2002, \emph{Advanced Econometrics}
+\references{
+   Berndt, E., Hall, B., Hall, R. and Hausman, J., 1974,
+   Estimation and Inference in Nonlinear Structural Models,
+   \emph{Annals of Social Measurement}, Vol. 3, p. 653-665.
+
+   Greene,  W., 2002, \emph{Advanced Econometrics}
+
   Goldfeld, S. M. and Quandt, R. E., 1972,
-  \emph{Nonlinear Methods in Econometrics}.  Amsterdam: North-Holland}
+  \emph{Nonlinear Methods in Econometrics}.  Amsterdam: North-Holland
+}
 \author{Ott Toomet \email{otoomet@ut.ee}, Arne Henningsen}
 \seealso{\code{\link{nlm}} for Newton-Raphson optimization,
   \code{\link{optim}} for different gradient-based optimization

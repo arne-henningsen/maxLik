@@ -62,6 +62,12 @@ maxBHHH(fn, grad = NULL, hess=NULL, start, print.level = 0, iterlim = 100,
 
 \author{Ott Toomet \email{otoomet@ut.ee}, Arne Henningsen}
 
+\references{
+   Berndt, E., Hall, B., Hall, R. and Hausman, J., 1974,
+   Estimation and Inference in Nonlinear Structural Models,
+   \emph{Annals of Social Measurement}, Vol. 3, p. 653-665.
+}
+
 \section{Warning}{As \code{maxBHHH} uses likelihood-specific
   information equation, it is only suitable for maximising log-likelihood!}
 
