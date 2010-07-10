@@ -199,10 +199,11 @@ the previous one (maximization is not performed in that step).
    Estimation and Inference in Nonlinear Structural Models,
    \emph{Annals of Social Measurement}, Vol. 3, p. 653-665.
 
-   Greene,  W., 2002, \emph{Advanced Econometrics}
+   Greene, W.H., 2008, \emph{Econometric Analysis}, 6th edition,
+   Prentice Hall.
 
-  Goldfeld, S. M. and Quandt, R. E., 1972,
-  \emph{Nonlinear Methods in Econometrics}.  Amsterdam: North-Holland
+  Goldfeld, S.M. and Quandt, R.E., 1972,
+  \emph{Nonlinear Methods in Econometrics}.  Amsterdam: North-Holland.
 }
 \author{Ott Toomet \email{otoomet@ut.ee}, Arne Henningsen}
 \seealso{\code{\link{nlm}} for Newton-Raphson optimization,
