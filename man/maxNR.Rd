@@ -288,6 +288,13 @@ summary(a)
 a <- maxNR(loglik, gradlik, hesslik, start=1)
 summary(a)
 
+## BFGS estimation with finite-difference gradient
+a <- maxBFGSR( loglik, start=1 )
+summary(a)
+## BFGS estimation with analytic gradient
+a <- maxBFGSR( loglik, gradlik, start=1 )
+summary(a)
+
 ## For the BHHH method we need likelihood values and gradients
 ## of individual observations
 loglikInd <- function(theta) log(theta) - theta*t
