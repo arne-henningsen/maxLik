@@ -1,6 +1,7 @@
 \name{maxNR}
 \alias{maxNR}
 \alias{maxBFGSYC}
+\alias{maxBHHH}
 \title{Newton- and Quasi-Newton Maximization}
 \description{
   Unconstrained maximization based on the quadratic approximation
@@ -20,28 +21,44 @@ maxBFGSYC(fn, grad = NULL, hess = NULL, start, print.level = 0,
       steptol = 1e-10, iterlim = 150,
       constraints = NULL, finalHessian = TRUE,
       fixed = NULL, activePar = NULL, ... )
+maxBHHH(fn, grad = NULL, hess = NULL, start, print.level = 0,
+      iterlim = 100, finalHessian = "BHHH", ... )
 }
 \arguments{
-  \item{fn}{function to be maximized.  It must return either a single
-    number or a numeric vector, which is summed (this is useful for BHHH
-    method).  If the parameters are out of range, \code{fn} should
+  \item{fn}{function to be maximized.
+    It must have the parameter vector as the first argument and
+    it must return either a single number or a numeric vector, which is summed.
+    If the BHHH method is used and argument \code{gradient} is not given,
+    \code{fn} must return a numeric vector of observation-specific
+    likelihood values.
+    If the parameters are out of range, \code{fn} should
     return \code{NA}.  See details for constant parameters.
 
     \code{fn} may also return attributes "gradient" and/or "hessian".
     If these attributes are set, the algorithm uses the corresponding
     values as
-    gradient and hessian.  
+    gradient and Hessian.
   }
-  \item{grad}{gradient of the function.  If \code{NULL}, finite-difference
-    gradients are computed.  It must return a gradient vector, or matrix where
-    \emph{columns} correspond to individual parameters.  The column sums
-    are treated as gradient components (this is useful for BHHH method).
+  \item{grad}{gradient of the objective function.
+    It must have the parameter vector as the first argument and
+    it must return either a gradient vector of the objective function,
+    or a matrix, where \emph{columns} correspond to individual parameters.
+    The column sums are treated as gradient components.
+    If \code{NULL}, finite-difference gradients are computed.
+    If the BHHH method is used, \code{grad} must return a matrix,
+    where rows corresponds to the gradient vectors of individual
+    observations and the columns to the individual parameters.
+    If \code{fn} returns an object with attribute \code{gradient},
+    this argument is ignored.
   }
-  \item{hess}{Hessian matrix of the function. If missing, finite-difference
-    Hessians, based on \code{gradient}, are computed.
+  \item{hess}{Hessian matrix of the function.
+    It must have the parameter vector as the first argument and
+    it must return the Hessian matrix of the objective function.
+    If missing, finite-difference Hessians, based on \code{gradient},
+    are computed.
     Hessians are used for maximizations with the Newton-Raphson method
     but not for maximizations with the BFGS or BHHH method.}
-  \item{start}{initial value for the parameter vector}
+  \item{start}{initial value for the parameter vector.}
   \item{print.level}{this argument determines the level of
     printing which is done during the minimization process. The default
     value of 0 means that no printing occurs, a value of 1 means that
@@ -50,7 +67,7 @@ maxBFGSYC(fn, grad = NULL, hess = NULL, start, print.level = 0,
     values will result in even more details.
   }
   \item{tol}{stopping condition.  Stop if the absolute difference
-    between successive iterations less than \code{tol}, return
+    between successive iterations is less than \code{tol}, return
     \code{code=2}.}
   \item{reltol}{Relative convergence tolerance.  The algorithm stops if
           it is unable to increase the value by a factor of 'reltol *
@@ -80,15 +97,14 @@ maxBFGSYC(fn, grad = NULL, hess = NULL, start, print.level = 0,
     to \code{\link{sumt}}.
   }
   \item{finalHessian}{how (and if) to calculate the final Hessian.  Either
-    \code{FALSE} (not calculate), \code{TRUE} (use analytic/numeric
-    Hessian) or \code{"bhhh"}/\code{"BHHH"} for information equality
+    \code{FALSE} (do not calculate), \code{TRUE} (use analytic/finite-difference
+    Hessian) or \code{"bhhh"}/\code{"BHHH"} for the information equality
     approach.  The latter approach is only suitable for maximizing
-    log-likelihood function.  It requires the gradient/log-likelihood to
-    be supplied by individual observations, see \code{\link{maxBHHH}} for
-    details. As computing final hessian
-    does not carry any extra penalty for NR method, this option is
-    mostly for compatibility reasons with other \pkg{maxLik}
-    optimizers.}
+    log-likelihood functions.  It requires the gradient/log-likelihood to
+    be supplied by individual observations.
+    Note that computing the (real, not BHHH) final Hessian
+    does not carry any extra penalty for the NR method,
+    but for the other methods.}
   \item{bhhhHessian}{logical. Indicating whether the approximation
       for the Hessian suggested by Bernd, Hall, Hall, and Hausman (1974)
       should be used.}
@@ -100,7 +116,8 @@ maxBFGSYC(fn, grad = NULL, hess = NULL, start, print.level = 0,
   \item{activePar}{this argument is retained for backward compatibility only;
       please use argument \code{fixed} instead.}
   \item{\dots}{further arguments to \code{fn}, \code{grad} and
-    \code{hess}.}
+    \code{hess}.
+    Further arguments to \code{maxBHHH} are also passed to \code{maxNR}.}
 }
 \details{
 The idea of the Newton method is to approximate the function in a given
@@ -109,14 +126,28 @@ The idea of the Newton method is to approximate the function in a given
     approximation requires knowledge of both gradient and Hessian, the
     latter of which can be quite costly to compute.  Several methods for
     approximating Hessian exist, including BFGS and BHHH.
-    
-The algorithm can work with constant parameters and related changes of
+
+The BHHH method
+(\code{maxNR} with argument \code{bhhhHessian = TRUE )} or \code{maxBHHH})
+is suitable only for maximizing log-likelihood functions.
+It uses information equality in order to approximate the Hessian
+of the log-likelihood function.
+Hence, the log-likelihood values and its gradients must e calculated
+by individual observations.
+The Hessian is approximated as the negative of the sum of the outer products
+of the gradients of individual observations, or, in the matrix form,
+\code{-t(gradient) \%*\% gradient = - crossprod( gradient )}.
+
+The functions \code{maxNR}, \code{maxBFGSYC}, and \code{maxBHHH}
+can work with constant parameters and related changes of
 parameter values.  Constant parameters are useful if a parameter value
 is converging toward the boundary of support, or for testing.  
-
 One way is to put
 \code{fixed} to non-NULL, specifying which parameters should be treated as
-constants.  However, parameters can also be fixed in runtime by
+constants.
+
+However, when using \code{maxNR} or \code{maxBHHH},
+parameters can also be fixed in runtime by
 signaling with
 \code{fn}.  This may be useful if an estimation converges toward the
 edge of the parameter space possibly causing problems.  The value of
@@ -137,6 +168,7 @@ values, possibly the non-constant values as well.  If the attribute
 \code{newVal} is present, the new function value need not to exceed 
 the previous one (maximization is not performed in that step).
 }
+
 \value{
   list of class "maxim" with following components:
   \item{maximum}{\code{fn} value at maximum (the last calculated value
@@ -184,12 +216,18 @@ the previous one (maximization is not performed in that step).
     }
   }
 }
+
 \section{Warning}{
     No attempt is made to ensure that user-provided analytic
     gradient/Hessian is the correct one.  However, the users are
     recommended to use \code{\link{compareDerivatives}} function,
     designed for this purpose.  If analytic gradient/Hessian are wrong,
     the algorithm may not converge, or converge to a wrong point.
+
+    As the BHHH method
+    (\code{maxNR} with argument \code{bhhhHessian = TRUE )} or \code{maxBHHH})
+    uses the likelihood-specific information equality,
+    it is only suitable for maximizing log-likelihood functions!
 }
 
 \references{
@@ -242,13 +280,25 @@ loglik <- function(theta) sum(log(theta) - theta*t)
 ## Note the log-likelihood and gradient are summed over observations
 gradlik <- function(theta) sum(1/theta - t)
 hesslik <- function(theta) -100/theta^2
-## Estimate with numeric gradient and Hessian
+## Estimate with finite-difference gradient and Hessian
 a <- maxNR(loglik, start=1, print.level=2)
 summary(a)
 ## You would probably prefer 1/mean(t) instead ;-)
 ## Estimate with analytic gradient and Hessian
 a <- maxNR(loglik, gradlik, hesslik, start=1)
 summary(a)
+
+## For the BHHH method we need likelihood values and gradients
+## of individual observations
+loglikInd <- function(theta) log(theta) - theta*t
+gradlikInd <- function(theta) 1/theta - t
+## Estimate with finite-difference gradient
+a <- maxBHHH(loglikInd, start=1, print.level=2)
+summary(a)
+## Estimate with analytic gradient
+a <- maxBHHH(loglikInd, gradlikInd, start=1)
+summary(a)
+
 ##
 ## Next, we give an example with vector argument:  Estimate the mean and
 ## variance of a random normal sample by maximum likelihood
