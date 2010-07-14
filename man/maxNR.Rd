@@ -4,27 +4,22 @@
 \title{Newton- and Quasi-Newton Maximization}
 \description{
   Unconstrained maximization based on the quadratic approximation
-  (Newton)
-  method.  Includes
-  Newton-Raphson and BFGS methods.
+  (Newton) method.
+  The Newton-Raphson, BFGS (Broyden 1970, Fletcher 1970, Goldfarb 1970,
+  Shanno 1970), and BHHH (Berndt, Hall, Hall, Hausman 1974) methods
+  are available.
 }
 \usage{
 maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
       tol = 1e-08, reltol=sqrt(.Machine$double.eps), gradtol = 1e-06,
-      steptol = 1e-10, lambdatol = 1e-06, qrtol = 1e-10,
-      iterlim = 150,
-      constraints=NULL,
-      finalHessian=TRUE, bhhhHessian=FALSE,
-      fixed=NULL, activePar=NULL, ... )
-maxBFGSYC(fn, grad = NULL, hess = NULL, start, print.level=0,
-                  tol=1e-8, reltol=sqrt(.Machine$double.eps),
-                  gradtol=1e-6, steptol=1e-10,
-                  iterlim=150,
-                  constraints=NULL,
-finalHessian=TRUE,
-                  fixed=NULL,
-                  activePar=NULL,
-                  ...)
+      steptol = 1e-10, lambdatol = 1e-06, qrtol = 1e-10, iterlim = 150,
+      constraints = NULL, finalHessian = TRUE, bhhhHessian=FALSE,
+      fixed = NULL, activePar = NULL, ... )
+maxBFGSYC(fn, grad = NULL, hess = NULL, start, print.level = 0,
+      tol = 1e-8, reltol=sqrt(.Machine$double.eps), gradtol = 1e-6,
+      steptol = 1e-10, iterlim = 150,
+      constraints = NULL, finalHessian = TRUE,
+      fixed = NULL, activePar = NULL, ... )
 }
 \arguments{
   \item{fn}{function to be maximized.  It must return either a single
@@ -37,13 +32,15 @@ finalHessian=TRUE,
     values as
     gradient and hessian.  
   }
-  \item{grad}{gradient of the function.  If \code{NULL}, numeric
-    gradient is used.  It must return a gradient vector, or matrix where
+  \item{grad}{gradient of the function.  If \code{NULL}, finite-difference
+    gradients are computed.  It must return a gradient vector, or matrix where
     \emph{columns} correspond to individual parameters.  The column sums
     are treated as gradient components (this is useful for BHHH method).
   }
-  \item{hess}{Hessian matrix of the function.  If missing, numeric
-    Hessian, based on gradient, is used.  }
+  \item{hess}{Hessian matrix of the function. If missing, finite-difference
+    Hessians, based on \code{gradient}, are computed.
+    Hessians are used for maximizations with the Newton-Raphson method
+    but not for maximizations with the BFGS or BHHH method.}
   \item{start}{initial value for the parameter vector}
   \item{print.level}{this argument determines the level of
     printing which is done during the minimization process. The default
@@ -106,12 +103,12 @@ finalHessian=TRUE,
     \code{hess}.}
 }
 \details{
-The idea of the newton method is to approximate the function in a given
+The idea of the Newton method is to approximate the function in a given
     location with a multidimensional parabola, and use the estimated
     maximum as the initial value for the next iteration.  Such an
     approximation requires knowledge of both gradient and Hessian, the
     latter of which can be quite costly to compute.  Several methods for
-    approximating Hessian exist, including BFGS.
+    approximating Hessian exist, including BFGS and BHHH.
     
 The algorithm can work with constant parameters and related changes of
 parameter values.  Constant parameters are useful if a parameter value
@@ -194,21 +191,50 @@ the previous one (maximization is not performed in that step).
     designed for this purpose.  If analytic gradient/Hessian are wrong,
     the algorithm may not converge, or converge to a wrong point.
 }
+
 \references{
-   Berndt, E., Hall, B., Hall, R. and Hausman, J., 1974,
+   Berndt, E., Hall, B., Hall, R. and Hausman, J. (1974):
    Estimation and Inference in Nonlinear Structural Models,
-   \emph{Annals of Social Measurement}, Vol. 3, p. 653-665.
+   \emph{Annals of Social Measurement} 3, p. 653-665.
+
+   Broyden, C.G. (1970):
+   The Convergence of a Class of Double-rank Minimization Algorithms,
+   \emph{Journal of the Institute of Mathematics and Its Applications} 6,
+   p. 76-90.
+
+   Fletcher, R. (1970):
+   A New Approach to Variable Metric Algorithms,
+   \emph{Computer Journal} 13, p. 317-322.
+
+   Goldfeld, S.M. and Quandt, R.E. (1972):
+   \emph{Nonlinear Methods in Econometrics}.  Amsterdam: North-Holland.
+
+   Goldfarb, D. (1970):
+   A Family of Variable Metric Updates Derived by Variational Means,
+   \emph{Mathematics of Computation} 24, p. 23-26.
 
    Greene, W.H., 2008, \emph{Econometric Analysis}, 6th edition,
    Prentice Hall.
 
-  Goldfeld, S.M. and Quandt, R.E., 1972,
-  \emph{Nonlinear Methods in Econometrics}.  Amsterdam: North-Holland.
+   Shanno, D.F. (1970):
+   Conditioning of Quasi-Newton Methods for Function Minimization,
+   \emph{Mathematics of Computation} 24, p. 647-656.
 }
-\author{Ott Toomet \email{otoomet@ut.ee}, Arne Henningsen}
-\seealso{\code{\link{nlm}} for Newton-Raphson optimization,
+
+\author{Ott Toomet \email{otoomet@ut.ee}, Arne Henningsen,
+   function \code{maxBFGSYC} was originally developed by Yves Croissant
+   (and placed in 'mlogit' package)}
+
+\seealso{\code{\link{maxLik}} for a general framework for maximum likelihood
+   estimation (MLE),
+   \code{\link{maxBHHH}} for maximizations using the Berndt, Hall, Hall,
+   Hausman (1974) algorithm (which is a wrapper function to \code{maxNR}),
+   \code{\link{maxBFGS}} for maximization using the BFGS, Nelder-Mead (NM),
+   and Simulated Annealing (SANN) method (based \code{\link{optim}}),
+   \code{\link{nlm}} for Newton-Raphson optimization, and
   \code{\link{optim}} for different gradient-based optimization
   methods.}
+
 \examples{
 ## ML estimation of exponential duration model:
 t <- rexp(100, 2)
