@@ -7,7 +7,7 @@
 \description{
   These functions are wrappers for \code{\link{optim}} where the arguments are
   compatible with \code{\link{maxNR}}.  Note that there is a
-  \code{\link{maxNR}}-based BFGS implementation \code{\link{maxBFGSYC}}.
+  \code{\link{maxNR}}-based BFGS implementation \code{\link{maxBFGSR}}.
 }
 \usage{
 maxBFGS(fn, grad = NULL, hess=NULL, start, fixed = NULL,
@@ -141,7 +141,7 @@ finalHessian=TRUE,
 \author{Ott Toomet \email{otoomet@ut.ee}, Arne Henningsen}
 
 \seealso{\code{\link{optim}}, \code{\link{nlm}}, \code{\link{maxNR}},
-  \code{\link{maxBHHH}}, \code{\link{maxBFGSYC}}.}
+  \code{\link{maxBHHH}}, \code{\link{maxBFGSR}}.}
 
 \examples{
 # Maximum Likelihood estimation of the parameter of Poissonian distribution

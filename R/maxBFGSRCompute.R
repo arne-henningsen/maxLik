@@ -1,4 +1,4 @@
-maxBFGSYCCompute <- function(fn,
+maxBFGSRCompute <- function(fn,
                          start, print.level=0,
                   tol=1e-6, reltol=sqrt(.Machine$double.eps),
                   gradtol=1e-6, steptol=1e-10,

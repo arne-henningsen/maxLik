@@ -1,5 +1,5 @@
 
-maxBFGSYC <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
+maxBFGSR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
                   tol=1e-8, reltol=sqrt(.Machine$double.eps),
                   gradtol=1e-6, steptol=1e-10,
                   iterlim=150,
@@ -71,7 +71,7 @@ maxBFGSYC <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
    fixed <- prepareFixed( start = start, activePar = activePar,
       fixed = fixed )
    if(is.null(constraints)) {
-       result <- maxBFGSYCCompute(fn=logLikAttr,
+       result <- maxBFGSRCompute(fn=logLikAttr,
                               fnOrig = fn, gradOrig = grad, hessOrig = hess,
                               start=start,
                               print.level=print.level,
@@ -88,7 +88,7 @@ maxBFGSYC <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
                            # equality constraints: A %*% beta + B = 0
          result <- sumt(fn=fn, grad=grad, hess=hess,
                         start=start,
-                        maxRoutine=maxBFGSYC,
+                        maxRoutine=maxBFGSR,
                         constraints=constraints,
                         print.level=print.level,
                         tol=tol, reltol=reltol,

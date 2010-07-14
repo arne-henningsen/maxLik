@@ -86,20 +86,20 @@ summary(c)
 
 ## BFGS-YC
 # Estimate with only function values (single parameter)
-a <- maxLik( ll1i, gr1i, start = 1, method = "BFGSYC" )
+a <- maxLik( ll1i, gr1i, start = 1, method = "BFGSR" )
 summary(a )
-b <- maxLik( ll1i, gr1i, start = 1, method = "BFGSYC", finalHessian="bhhh")
+b <- maxLik( ll1i, gr1i, start = 1, method = "BFGSR", finalHessian="bhhh")
                            # should issue a warning as BHHH not possible
 summary(b )
-c <- maxLik( ll1i, gr1i, start = 1, method = "BFGSYC", finalHessian=FALSE)
+c <- maxLik( ll1i, gr1i, start = 1, method = "BFGSR", finalHessian=FALSE)
 summary(c)
 # Estimate with only function values (vector parameter)
-a <- maxLik( ll2, gr2, start = c(0,1), method = "BFGSYC" )
+a <- maxLik( ll2, gr2, start = c(0,1), method = "BFGSR" )
 summary(a )
-b <- maxLik( ll2, gr2, start = c(0,1), method = "BFGSYC", finalHessian="bhhh")
+b <- maxLik( ll2, gr2, start = c(0,1), method = "BFGSR", finalHessian="bhhh")
                            # should issue a warning as BHHH not possible
 summary(b )
-c <- maxLik( ll2, gr2, start = c(0,1), method = "BFGSYC", finalHessian=FALSE)
+c <- maxLik( ll2, gr2, start = c(0,1), method = "BFGSR", finalHessian=FALSE)
 summary(c)
 
 

@@ -1,6 +1,6 @@
 \name{maxNR}
 \alias{maxNR}
-\alias{maxBFGSYC}
+\alias{maxBFGSR}
 \alias{maxBHHH}
 \title{Newton- and Quasi-Newton Maximization}
 \description{
@@ -16,7 +16,7 @@ maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
       steptol = 1e-10, lambdatol = 1e-06, qrtol = 1e-10, iterlim = 150,
       constraints = NULL, finalHessian = TRUE, bhhhHessian=FALSE,
       fixed = NULL, activePar = NULL, ... )
-maxBFGSYC(fn, grad = NULL, hess = NULL, start, print.level = 0,
+maxBFGSR(fn, grad = NULL, hess = NULL, start, print.level = 0,
       tol = 1e-8, reltol=sqrt(.Machine$double.eps), gradtol = 1e-6,
       steptol = 1e-10, iterlim = 150,
       constraints = NULL, finalHessian = TRUE,
@@ -138,7 +138,7 @@ The Hessian is approximated as the negative of the sum of the outer products
 of the gradients of individual observations, or, in the matrix form,
 \code{-t(gradient) \%*\% gradient = - crossprod( gradient )}.
 
-The functions \code{maxNR}, \code{maxBFGSYC}, and \code{maxBHHH}
+The functions \code{maxNR}, \code{maxBFGSR}, and \code{maxBHHH}
 can work with constant parameters and related changes of
 parameter values.  Constant parameters are useful if a parameter value
 is converging toward the boundary of support, or for testing.  
@@ -260,7 +260,7 @@ the previous one (maximization is not performed in that step).
 }
 
 \author{Ott Toomet \email{otoomet@ut.ee}, Arne Henningsen,
-   function \code{maxBFGSYC} was originally developed by Yves Croissant
+   function \code{maxBFGSR} was originally developed by Yves Croissant
    (and placed in 'mlogit' package)}
 
 \seealso{\code{\link{maxLik}} for a general framework for maximum likelihood
