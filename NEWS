@@ -5,6 +5,51 @@ A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
 
+            CHANGES IN VERSION 0.8-0
+
+* fixed bug that occured in maxBFGS(), mxNM(), and maxSANN if the model had only
+one parameter and the function specified by argument "grad" returned a vector
+with the analytical gradients at each observation
+
+* maxNR() now performs correctly with argument "iterlim" set to 0
+
+* maxNR, maxBHHH(), maxBFGS(), maxNM(), and maxSANN() now use attributes
+"gradient" and "hessian" of the object returned by the log-likelihood function;
+if supplied, these are used instead of arguments "grad" and "hess"
+
+* added function maxBFGSR() that implements the BFGS algorithm (in R); this
+function was originally developed by Yves Croissant and placed in the "mlogit"
+package
+
+* maxNR() now has an argument "bhhhHessian" (defaults to FALSE): if this
+argument is TRUE, the Hessian is approximated by the BHHH method (using
+information equality), i.e. the BHHH optimization algorithm is used
+
+* maxLik() now has an argument 'finalHessian'; if it is TRUE, the final
+Hessian is returned; if it is the character string "BHHH", the BHHH
+approximation of the Hessian matrix (using information equality) with attribute
+"type" set to "BHHH" is returned
+
+* maxNR(), maxBHHH(), maxBFGS(), maxNM(), and maxSANN() now additionally return
+a component "gradientObs" that is the matrix of gradients evaluated at each
+observation if argument "grad" returns a matrix or argument "grad" is not
+specified and argument "fn" returns a vector
+
+* the definitions of the generic functions nObs() and nParam() have been moved
+to the "miscTools" package
+
+* added methods bread() and estfun() for objects of class "maxLik" (see
+documentation of the generic functions bread() and estfun() defined in package
+"sandwich")
+
+* replaced argument "activePar" of numericGradient(), numericHessian(), and
+numericNHessian() by argument "fixed" to be consistent with maxLik(), maxNR(),
+and the other maxXXX() functions
+
+* maxNR(), maxBHHH(), maxBFGSYC(), maxBFGS(), maxNM(), maxSANN(), and
+summary.maxLik() now return component "fixed" instead of component "activePar"
+
+
             CHANGES IN VERSION 0.7-2
 
 * corrected negative definiteness correction of Hessian in maxNR() which led
