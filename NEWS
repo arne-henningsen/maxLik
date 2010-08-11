@@ -5,6 +5,15 @@ A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
 
+            CHANGES IN VERSION 0.7-2
+
+* corrected negative definiteness correction of Hessian in maxNR() which led
+to infinite loops
+
+* changed stopping condition in sumt(): instead of checking whether estimates
+are stimilar, we check for penalty being low now
+
+
             CHANGES IN VERSION 0.7-0
 
 * Holding parameters fixed in maxNR() (and hence, also in maxBHHH()) should
