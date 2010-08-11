@@ -10,10 +10,9 @@ fnSubset                Call fnFull with variable and fixed parameters
 hessian                 Hessian matrix
 logLik.maxLik           Return the log likelihood value
 maxBFGS                 BFGS, SANN and Nelder-Mead Maximization
-maxBHHH                 BHHH Maximization
 maximType               Type of Minimization/Maximization
 maxLik                  Maximum likelihood estimation
-maxNR                   Newton-Raphson Maximization
+maxNR                   Newton- and Quasi-Newton Maximization
 nIter                   Return number of iterations for iterative
                         models
 nObs.maxLik             Number of Observations
