@@ -224,7 +224,15 @@ maxNRCompute <- function(fn,
          ## Note, this may result in a lower function value,
          ## hence we do not check f1 > f0
          start1[newVal$index] <- newVal$val
-         print(start1)
+         if( print.level > 0 ) {
+            cat( "Keeping parameter(s) ",
+               paste( newVal$index, collapse = ", " ),
+               " at the fixed values ",
+               paste( newVal$val, collapse = ", " ),
+               ", as the log-likelihood function",
+               " returned attributes 'constPar' and 'newVal'\n",
+               sep = "" )
+         }
       }
       G1 <- attr( f1, "gradient" )
       if(any(is.na(G1[!fixed]))) {
