@@ -5,6 +5,18 @@ A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
 
+            CHANGES IN VERSION 1.0-0 (2010-10-15)
+
+* moved the generic function stdEr() including a default method and a method
+for objects of class "lm" to the "miscTools" package (hence, this package now
+depends on the version 0.6-8 of the "miscTools" package that includes stdEr()
+
+* if argument print.level is 0 (the default) and some parameters are
+automatically fixed during the estimation, because the returned log-likelihood
+value has attributes "constPar" and "newVal", the adjusted "starting values"
+are no longer printed.
+
+
             CHANGES IN VERSION 0.8-0
 
 * fixed bug that occured in maxBFGS(), mxNM(), and maxSANN if the model had only
