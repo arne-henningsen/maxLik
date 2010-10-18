@@ -190,10 +190,15 @@ maxNRCompute <- function(fn,
                                         # We end up in a NA or a higher value.
                                         # try smaller step
             step <- step/2
-            if(print.level > 2) {
-               cat("function value difference", f1 - f0, "-> step", step, "\n")
-            }
             start1 <- start0 - step*amount
+            if(print.level > 2) {
+               if(print.level > 3) {
+                  cat("Try new parameters:\n")
+                  print(start1)
+               }
+               cat("function value difference", f1 - f0, "-> step", step,
+                   "\n")
+            }
             f1 <- fn(start1, fixed = fixed, sumObs = TRUE,
                returnHessian = returnHessian, ...)
             ## Find out the constant parameters -- these may be other than

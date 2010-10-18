@@ -16,9 +16,11 @@ compareDerivatives(f, grad, hess=NULL, t0, eps=1e-6, print=TRUE, ...)
     must be the first argument. The function may return a vector.
   }
   \item{grad}{
-    function returning the analytic gradient.  Must use the same set of
+    analytic gradient.  This may be either a function,
+    returning the analytic gradient, or a numeric vector, the pre-computed
+    gradient.  The function must use the same set of
     parameters as \code{f}.  If \code{f} is a vector-valued function,
-    grad must return a matrix where the number of rows equals the number
+    grad must return/be a matrix where the number of rows equals the number
     of components of \code{f}, and the number of columns must equal to
     the number of components in \code{t0}.
   }

@@ -6,7 +6,13 @@ compareDerivatives <- function(f, grad, hess=NULL, t0, eps=1e-6,
 ##  
   if(print)cat("-------- compare derivatives -------- \n")
   f0 <- f(t0, ...)
-  analytic <- grad(t0, ...)
+  if(is.function(grad))
+      analytic <- grad(t0, ...)
+  else if(is.numeric(grad))
+      analytic = grad
+  else
+      stop("Argument 'grad' must be either gradient function or ",
+           "pre-computed numeric gradient matrix")
   out <- list(t0=t0, f.t0=f0, compareGrad = list(analytic=analytic))
 #  
   if(any(is.na(analytic)))
