@@ -1,7 +1,8 @@
 
-R version 2.11.1 (2010-05-31)
+R version 2.12.0 (2010-10-15)
 Copyright (C) 2010 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
+Platform: i486-pc-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -1009,14 +1010,14 @@ Warning messages:
 > mlBFGSYC <- maxLik( llf, start = startVal, method = "bfgsr" )
 > print( mlBFGSYC )
 Maximum Likelihood estimation
-BFGS-YC maximization, 23 iterations
+BFGSR maximization, 23 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.5839 (2 free parameter(s))
 Estimate(s): 1.180813 1.816481 
 > summary( mlBFGSYC )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS-YC maximization, 23 iterations
+BFGSR maximization, 23 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.5839 
 2  free parameters
@@ -1045,7 +1046,7 @@ sigma   0.00000 -60.62351
 > logLik( mlBFGSYC )
 [1] -201.5839
 > maximType( mlBFGSYC )
-[1] "BFGS-YC maximization"
+[1] "BFGSR maximization"
 > nIter( mlBFGSYC )
 [1] 23
 > try( nObs( mlBFGSYC ) )
@@ -1071,7 +1072,7 @@ sigma 0.00000000 0.01649525
 > summary( mlIndBFGSYC )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS-YC maximization, 14 iterations
+BFGSR maximization, 14 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.5839 
 2  free parameters
@@ -1227,7 +1228,7 @@ Function value: -201.5839
 > summary(mlgBFGSYC)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS-YC maximization, 23 iterations
+BFGSR maximization, 23 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.5839 
 2  free parameters

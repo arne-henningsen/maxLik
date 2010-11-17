@@ -54,11 +54,11 @@ maxBFGSRCompute <- function(fn,
    ##             fixed     - logical vector, which parameters are constant (fixed, inactive, non-free)
    ## fixed       logical vector, which parameters were treated as constant (fixed, inactive, non-free)
    ## iterations  number of iterations
-   ## type        "BFGS-YC maximisation"
+   ## type        "BFGSR maximisation"
    ## 
 
    ##
-   maxim.type <- "BFGS-YC maximization"
+   maxim.type <- "BFGSR maximization"
   param <- start
    nimed <- names(start)
    nParam <- length(param)

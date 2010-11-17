@@ -1,7 +1,8 @@
 
-R version 2.11.1 (2010-05-31)
+R version 2.12.0 (2010-10-15)
 Copyright (C) 2010 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
+Platform: i486-pc-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -180,7 +181,7 @@ Estimates:
 > summary(a )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS-YC maximization, 5 iterations
+BFGSR maximization, 5 iterations
 Return code 1: gradient close to zero
 Log-Likelihood: -25.05386 
 1  free parameters
@@ -195,7 +196,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > summary(b )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS-YC maximization, 5 iterations
+BFGSR maximization, 5 iterations
 Return code 1: gradient close to zero
 Log-Likelihood: -25.05386 
 1  free parameters
@@ -209,7 +210,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > summary(c)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS-YC maximization, 5 iterations
+BFGSR maximization, 5 iterations
 Return code 1: gradient close to zero
 Log-Likelihood: -25.05386 
 1  free parameters
@@ -222,7 +223,7 @@ Estimates:
 > summary(a )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS-YC maximization, 23 iterations
+BFGSR maximization, 23 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -212.7524 
 2  free parameters
@@ -241,7 +242,7 @@ In maxBFGSRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad,  :
 > summary(b )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS-YC maximization, 23 iterations
+BFGSR maximization, 23 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -212.7524 
 2  free parameters
@@ -254,7 +255,7 @@ Estimates:
 > summary(c)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS-YC maximization, 23 iterations
+BFGSR maximization, 23 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -212.7524 
 2  free parameters
