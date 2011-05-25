@@ -97,46 +97,37 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    ##
    A <- constraints$eqA
    B <- constraints$eqB
-    ## <NOTE>
-    ## For the penalized minimization, the Newton-type nlm() may be
-    ## computationally infeasible (although it works much faster for
-    ## fitting ultrametrics to the Phonemes data).
-    ## De Soete recommends using Conjugate Gradients.
-    ## We provide a simple choice: by default, optim(method = "CG") is
-    ## used.  If method is non-null and not "nlm", we use optim() with
-    ## this method.  In both cases, control gives the control parameters
-    ## for optim().
-    ## If method is "nlm", nlm() is used, in which case control is
-    ## ignored.  Note that we call nlm() with checking analyticals
-    ## turned off, as in some cases (e.g. when fitting ultrametrics) the
-    ## penalty function is not even continuous ...
    ## 
     ## Note also that currently we do not check whether optimization was
     ## "successful" ...
-    ## </NOTE>
    ##
-   rho <- 0
-   result <- maxRoutine(fn=Phi, grad=gradPhi, hess=hessPhi,
-                   start=start,
-                   print.level=max(print.level - 1, 0),
-                   ...)
-   theta <- coef(result)
-   if(print.level > 0) {
-      cat("SUMT initial: rho = ", rho,
-          ", function = ", callWithoutMaxArgs( theta, "logLikFunc",
-            fnOrig = fn, gradOrig = grad, hessOrig = hess, ... ),
-          ", penalty = ", penalty(theta), "\n")
-      cat("Estimate:")
-      print(theta)
-   }
-   ## <TODO>
-   ## Better upper/lower bounds for rho?
+   ## Find a suitable inital value for rho if not specified
    if(is.null(SUMTRho0)) {
-       rho <- max( callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn,
+      rho <- 0
+      result <- maxRoutine(fn=Phi, grad=gradPhi, hess=hessPhi,
+                           start=start,
+                           print.level=max(print.level - 1, 0),
+                           ...)
+      theta <- coef(result)
+                           # Note: this may be a bad idea, if unconstrained function is unbounded
+                           # from above.  In that case rather specify SUHTRho0.
+      if(print.level > 0) {
+         cat("SUMT initial: rho = ", rho,
+             ", function = ", callWithoutMaxArgs( theta, "logLikFunc",
+                                                 fnOrig = fn, gradOrig = grad, hessOrig = hess, ... ),
+             ", penalty = ", penalty(theta), "\n")
+         cat("Estimate:")
+         print(theta)
+      }
+      ## Better upper/lower bounds for rho?
+      rho <- max( callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn,
          gradOrig = grad, hessOrig = hess, ... ), 1e-3) /
          max(penalty(start), 1e-3)
-   } else {
+   }
+   ## if rho specified, simply pick that and use previous initial values
+   else {
        rho <- SUMTRho0
+       theta <- start
    }
    ## </TODO>
    iter <- 1L
@@ -151,7 +142,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
          cat("SUMT iteration ", iter,
              ": rho = ", rho, ", function = ", callWithoutMaxArgs( theta,
              "logLikFunc", fnOrig = fn, gradOrig = grad, hessOrig = hess, ... ),
-             ", barrier value = ", penalty(theta), "\n", sep="")
+             ", penalty = ", penalty(theta), "\n", sep="")
          cat("Estimate:")
          print(theta)
       }

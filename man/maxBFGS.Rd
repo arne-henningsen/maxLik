@@ -14,21 +14,21 @@ maxBFGS(fn, grad = NULL, hess=NULL, start, fixed = NULL,
    print.level = 0, iterlim = 200, constraints = NULL,
    tol = 1e-08, reltol=tol,
    finalHessian=TRUE,
-parscale=rep(1, length=length(start)), ... )
+   parscale=rep(1, length=length(start)), ... )
 
 maxSANN(fn, grad = NULL, hess = NULL, start, fixed = NULL,
    print.level = 0, iterlim = 10000, constraints = NULL,
    tol = 1e-08, reltol=tol,
-finalHessian=TRUE,
-cand = NULL, temp = 10, tmax = 10,
+   finalHessian=TRUE,
+   cand = NULL, temp = 10, tmax = 10,
    parscale = rep(1, length = length(start)),
    random.seed = 123, ... )
 
 maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
    print.level = 0, iterlim = 500, constraints = NULL,
    tol = 1e-08, reltol=tol,
-finalHessian=TRUE,
- parscale = rep(1, length = length(start)),
+   finalHessian=TRUE,
+   parscale = rep(1, length = length(start)),
    alpha = 1, beta = 0.5, gamma = 2, ...)
 }
 

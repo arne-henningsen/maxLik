@@ -68,6 +68,11 @@ print.level = 0, SUMTMaxIter = 100, ...)
     Initial value for \code{rho}.  If not specified, a (possibly)
     suitable value is
     selected.  See Details.
+
+    One should consider supplying \code{SUMTRho0} in case where the
+    unconstrained problem does not have a maximum, or the maximum is too
+    far from the constrained value.  Otherwise the algorithm may pick
+    values too to achive convergence.
     }
   \item{print.level}{
     Integer, debugging information.  Larger number print more details.
@@ -83,7 +88,7 @@ print.level = 0, SUMTMaxIter = 100, ...)
   The Sequential Unconstrained Minimization Technique is a heuristic
   for constrained optimization.  To minimize a function \eqn{f}{f}
   subject to
-     constraints, one employs a non-negative function \eqn{P}{P} penalizing
+  constraints, one employs a non-negative function \eqn{P}{P} penalizing
      violations of the constraints, such that \eqn{P(x)}{P(x)} is zero
      iff \eqn{x}{x}
      satisfies the constraints.  One iteratively minimizes
