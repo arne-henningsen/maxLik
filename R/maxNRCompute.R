@@ -300,7 +300,8 @@ maxNRCompute <- function(fn,
       cat( "Function value:", f1, "\n")
    }
    names(start1) <- nimed
-   F1 <- fn( start1, fixed = fixed, sumObs = FALSE, ... )
+   F1 <- fn( start1, fixed = fixed, sumObs = FALSE,
+      returnHessian = ( finalHessian == TRUE ), ... )
    G1 <- attr( F1, "gradient" )
    if(observationGradient(G1, length(start1))) {
       gradientObs <- G1
