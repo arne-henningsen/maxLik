@@ -1,5 +1,5 @@
 
-R version 2.12.2 (2011-02-25)
+R version 2.13.1 (2011-07-08)
 Copyright (C) 2011 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 Platform: i686-pc-linux-gnu (32-bit)
@@ -1842,10 +1842,10 @@ Condition number of the (active) hessian: 1
 gradient close to zero 
 6  iterations
 estimate: 2.406109 
-Function value: -12.19890 
+Function value: -12.1989 
 > print.default( a )
 $maximum
-[1] -12.19890
+[1] -12.1989
 
 $estimate
 [1] 2.406109
@@ -1984,14 +1984,14 @@ attr(,"class")
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 6 iterations
 Return code 1: gradient close to zero
-Log-Likelihood: -12.19890 (1 free parameter(s))
+Log-Likelihood: -12.1989 (1 free parameter(s))
 Estimate(s): 2.406109 
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 6 iterations
 Return code 1: gradient close to zero
-Log-Likelihood: -12.19890 
+Log-Likelihood: -12.1989 
 1  free parameters
 Estimates:
      Estimate Std. error t value   Pr(> t)    
@@ -2003,7 +2003,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > a <- maxLik(loglik, gradlik, hesslik, start=1)
 > print.default( a )
 $maximum
-[1] -12.19890
+[1] -12.1989
 
 $estimate
 [1] 2.406109
@@ -2142,14 +2142,14 @@ attr(,"class")
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 6 iterations
 Return code 1: gradient close to zero
-Log-Likelihood: -12.19890 (1 free parameter(s))
+Log-Likelihood: -12.1989 (1 free parameter(s))
 Estimate(s): 2.406109 
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 6 iterations
 Return code 1: gradient close to zero
-Log-Likelihood: -12.19890 
+Log-Likelihood: -12.1989 
 1  free parameters
 Estimates:
      Estimate Std. error t value   Pr(> t)    

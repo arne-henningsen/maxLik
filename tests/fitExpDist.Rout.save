@@ -1,5 +1,5 @@
 
-R version 2.12.2 (2011-02-25)
+R version 2.13.1 (2011-07-08)
 Copyright (C) 2011 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 Platform: i686-pc-linux-gnu (32-bit)
@@ -288,7 +288,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > nObs( mlBfgs )
 [1] 100
 > all.equal( mlBfgs[ -c( 5, 6, 9, 10, 11 ) ], ml[ -c( 5, 6, 9, 10 ) ] )
-[1] "Component 2: Mean relative difference: 2.972020e-08"
+[1] "Component 2: Mean relative difference: 2.97202e-08" 
 [2] "Component 3: Mean relative difference: 1.432754"    
 [3] "Component 4: Mean relative difference: 0.0007949126"
 [4] "Component 7: Mean relative difference: 4.120738e-08"
@@ -385,7 +385,7 @@ Log-Likelihood: -25.05386
 1  free parameters
 Estimates:
      Estimate Std. error t value   Pr(> t)    
-[1,]  2.11588    0.21159  9.9998 < 2.2e-16 ***
+[1,]  2.11588    0.21154  10.002 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -394,16 +394,16 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > all.equal( mlSann[ -c( 5, 6, 9, 10, 11 ) ], ml[ -c( 5, 6, 9, 10 ) ] )
 [1] "Component 2: Mean relative difference: 1.012146e-05"
 [2] "Component 3: Mean relative difference: 0.9991173"   
-[3] "Component 4: Mean relative difference: 0.0003181167"
-[4] "Component 7: Mean relative difference: 1.408860e-05"
+[3] "Component 4: Mean relative difference: 0.0007949126"
+[4] "Component 7: Mean relative difference: 1.408849e-05"
 > 
 > # Estimate with analytic gradient (unused during estimation)
 > mlgSann <- maxLik( loglik, gradlik, start = 1, method = "SANN" )
 > nObs( mlgSann )
 [1] 100
 > all.equal( mlgSann, mlSann )
-[1] "Component 3: Mean relative difference: 1.179102e-06"
-[2] "Component 4: Mean relative difference: 3.140184e-05"
+[1] "Component 3: Mean relative difference: 6.125469e-06"
+[2] "Component 4: Mean relative difference: 0.0004457583"
 > 
 > # Estimate with analytic gradient and Hessian (both unused during estimation)
 > mlghSann <- maxLik( loglik, gradlik, hesslik, start = 1, method = "SANN" )
@@ -518,8 +518,8 @@ Error in nObs.maxLik(x) :
          [,1]
 [1,] 4.477522
 > bread( mlSann )
-         [,1]
-[1,] 4.477095
+        [,1]
+[1,] 4.47496
 > bread( mlgSann )
          [,1]
 [1,] 4.476955
@@ -567,8 +567,8 @@ Error in nObs.maxLik(x) :
 [1] "Mean relative difference: 0.02784193"
 > printSandwich( mlSann )
            [,1]
-[1,] 0.04355405
-[1] "Mean relative difference: 0.02793994"
+[1,] 0.04351252
+[1] "Mean relative difference: 0.02843045"
 > printSandwich( mlgSann )
            [,1]
 [1,] 0.04355132
