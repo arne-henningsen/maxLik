@@ -4,7 +4,11 @@ library(maxLik)
 set.seed( 4 )
 
                            # log-likelihood function, gradient, and Hessian for 1-parameter case (exponential distribution)
-ll1i <- function(theta) log(theta) - theta*t
+ll1i <- function(theta) {
+   if(!all(theta > 0))
+       return(NA)
+   log(theta) - theta*t
+}
 ll1 <- function(theta) sum( log(theta) - theta*t )
 gr1i <- function(theta) 1/theta - t
 gr1 <- function(theta) sum( 1/theta - t )
@@ -16,6 +20,9 @@ ll2 <- function( param ) {
    ## log likelihood function
    mu <- param[ 1 ]
    sigma <- param[ 2 ]
+   if(!(sigma > 0))
+       return(NA)
+                           # to avoid warnings in the output
    N <- length( x )
    llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
       0.5 * sum( ( x - mu )^2 / sigma^2 )
@@ -26,6 +33,9 @@ ll2 <- function( param ) {
 ll2i <- function( param ) {
    mu <- param[ 1 ]
    sigma <- param[ 2 ]
+   if(!(sigma > 0))
+       return(NA)
+                           # to avoid warnings in the output
    llValues <- -0.5 * log( 2 * pi ) - log( sigma ) -
       0.5 * ( x - mu )^2 / sigma^2
    return( llValues )
@@ -84,7 +94,7 @@ summary(b )
 c <- maxLik( ll2, gr2, start = c(0,1), method = "NR", finalHessian=FALSE)
 summary(c)
 
-## BFGS-YC
+## BFGSR
 # Estimate with only function values (single parameter)
 a <- maxLik( ll1i, gr1i, start = 1, method = "BFGSR" )
 summary(a )

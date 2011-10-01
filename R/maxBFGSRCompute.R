@@ -2,12 +2,12 @@ maxBFGSRCompute <- function(fn,
                          start, print.level=0,
                   tol=1e-6, reltol=sqrt(.Machine$double.eps),
                   gradtol=1e-6, steptol=1e-10,
+                            lambdatol=1e-6,
+                            qrtol=1e-10,
                   iterlim=150,
                              finalHessian=TRUE,
                   fixed=NULL,
                   ...) {
-   ##                       iterlim = 2000,
-   ##                       tol = 1E-06,
    ## This function is originally developed by Yves Croissant (and placed in 'mlogit' package).
    ## Fitted for 'maxLik' by Ott Toomet, and revised by Arne Henningsen
    ## 
@@ -57,6 +57,13 @@ maxBFGSRCompute <- function(fn,
    ## type        "BFGSR maximisation"
    ## 
 
+   ##
+   max.eigen <- function( M) {
+      ## return maximal eigenvalue of (symmetric) matrix
+      val <- eigen(M, symmetric=TRUE, only.values=TRUE)$values
+      val[1]
+      ## L - eigenvalues in decreasing order, [1] - biggest in abs value
+   }
    ##
    maxim.type <- "BFGSR maximization"
   param <- start
@@ -115,47 +122,103 @@ maxBFGSRCompute <- function(fn,
    }
    ## initial approximation for inverse Hessian
    if(observationGradient(gri, length(param))) {
-      invHess <- solve(crossprod(gri[,!fixed]))
+      invHess <- -solve(crossprod(gri[,!fixed]))
                            # initial approximation of inverse Hessian (as in BHHH), if possible
+      if(print.level > 3) {
+         cat("Initial inverse Hessian by gradient crossproduct\n")
+         if(print.level > 4) {
+            print(invHess)
+         }
+      }
    }
-   else
-       invHess <- 1e-5*diag(1, nrow=length(gr))
-                           # if not possible (Is this OK?)
+   else {
+      invHess <- -1e-5*diag(1, nrow=length(gr))
+                           # ... if not possible (Is this OK?).  Note we make this negative definite.
+      if(print.level > 3) {
+         cat("Initial inverse Hessian is diagonal\n")
+         if(print.level > 4) {
+            print(invHess)
+         }
+      }
+   }
    if( print.level > 1) {
-      cat( "----- Initial parameters: -----\n")
+      cat("-------- Initial parameters: -------\n")
       cat( "fcn value:",
       as.vector(x), "\n")
       a <- cbind(start, gr, as.integer(!fixed))
       dimnames(a) <- list(nimed, c("parameter", "initial gradient",
                                           "free"))
       print(a)
+      cat("------------------------------------\n")
    }
    samm <- NULL
-                           # structure for too low 'step' value
+                           # this will be returned in case of step getting too small
+   I <- diag(nParam)
   direction <- rep(0, nParam)
+   ## ----------- Main loop ---------------
    repeat {
-      if( iter >= iterlim) {
+      iter <- iter + 1
+      if( iter > iterlim) {
          code <- 4; break
       }
-    step <- 1
-     direction[!fixed] <- -as.vector(invHess %*% gr[!fixed])
-      iter <- iter + 1
+      if(print.level > 0) {
+         cat("Iteration ", iter, "\n")
+         if(print.level > 3) {
+            cat("Eigenvalues of approximated inverse Hessian:\n")         
+            print(eigen(invHess, only.values=TRUE)$values)
+            if(print.level > 4) {
+               cat("inverse Hessian:\n")
+               print(invHess)
+            }
+         }
+      }
+      ## Next, ensure that the approximated inverse Hessian is negative definite for computing
+      ## the new climbing direction.  However, retain the original, potentially not negative definite
+      ## for computing the following approximation.
+      ## This procedure seems to work, but unfortunately I have little idea what I am doing :-(
+      approxHess <- invHess
+                           # approxHess is used for computing climbing direction, invHess for next approximation
+      while((me <- max.eigen( approxHess[!fixed,!fixed,drop=FALSE])) >= -lambdatol |
+         (qRank <- qr(approxHess[!fixed,!fixed], tol=qrtol)$rank) < sum(!fixed)) {
+                                        # maximum eigenvalue -> negative definite
+                                        # qr()$rank -> singularity
+         lambda <- abs(me) + lambdatol + min(abs(diag(approxHess)[!fixed]))/1e7
+                           # The third term corrects numeric singularity.  If diag(H) only contains
+                           # large values, (H - (a small number)*I) == H because of finite precision
+         approxHess <- approxHess - lambda*I
+         if(print.level > 4) {
+            cat("Not negative definite.  Subtracting", lambda, "* I\n")
+            cat("Eigenvalues of new approximation:\n")         
+            print(eigen(approxHess, only.values=TRUE)$values)
+            if(print.level > 5) {
+               cat("new Hessian approximation:\n")
+               print(approxHess)
+            }
+         }
+                           # how to make it better?
+      }
+      ## next, take a step of suitable length to the suggested direction
+      step <- 1
+     direction[!fixed] <- as.vector(approxHess %*% gr[!fixed])
     oldx <- x
      oldgr <- gr
     oldparam <- param
     param[!fixed] <- oldparam[!fixed] - step * direction[!fixed]
     x <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE,
       returnHessian = FALSE, ... ) )
-            # sum of log-likelihood value but not sum of gradients
-    while((is.na(x) | x < oldx) & step > steptol) {
-       step <- step/2
-       if(print.level > 2) {
-          cat("function values: old ", oldx, ", new ", x, ", difference ", x - oldx, " -> step ", step, "\n", sep="")
-          if(print.level > 3) {
-             resdet <- cbind(param = param, gradient = gr, direction=direction, active=!fixed)
-             print(resdet)
-          }
-       }
+                           # sum of log-likelihood value but not sum of gradients
+      ## did we end up with a larger value?
+      while((is.na(x) | x < oldx) & step > steptol) {
+         step <- step/2
+         if(print.level > 2) {
+            cat("Function decreased. Function values: old ", oldx, ", new ", x, ", difference ", x - oldx, "\n")
+            if(print.level > 3) {
+               resdet <- cbind(param = param, gradient = gr, direction=direction, active=!fixed)
+               cat("Attempted parameters:\n")
+               print(resdet)
+            }
+            cat(" -> step ", step, "\n", sep="")
+         }
        param[!fixed] <- oldparam[!fixed] - step * direction[!fixed]
        x <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE,
          returnHessian = FALSE, ... ) )
@@ -170,25 +233,22 @@ maxBFGSRCompute <- function(fn,
      gr <- sumGradients( gri, nParam = length( param ) )
       incr <- step * direction
       y <- gr - oldgr
-     invHess <- invHess +
-        outer( incr[!fixed], incr[!fixed]) *
+      ## Compute new approximation for the inverse hessian
+      update <- outer( incr[!fixed], incr[!fixed]) *
           (sum(y[!fixed] * incr[!fixed]) +
-           as.vector( t(y[!fixed]) %*% invHess %*% y[!fixed])) / sum(incr[!fixed] * y[!fixed])^2 -
-             (invHess %*% outer(y[!fixed], incr[!fixed])
-              + outer(incr[!fixed], y[!fixed]) %*% invHess)/
-                  sum(incr[!fixed] * y[!fixed])
+           as.vector( t(y[!fixed]) %*% invHess %*% y[!fixed])) / sum(incr[!fixed] * y[!fixed])^2 +
+               (invHess %*% outer(y[!fixed], incr[!fixed])
+                + outer(incr[!fixed], y[!fixed]) %*% invHess)/
+                    sum(incr[!fixed] * y[!fixed])
+      invHess <- invHess - update
+      ##
       chi2 <- -  crossprod(direction[!fixed], oldgr[!fixed])
     if (print.level > 0){
-       cat("--- iteration ", iter, ", step = ",step,
-                      ", lnL = ", x,", chi2 = ",
-           chi2,"\n",sep="")
+       cat("step = ",step, ", lnL = ", x,", chi2 = ",
+           chi2, ", function increment = ", x - oldx, "\n",sep="")
        if (print.level > 1){
           resdet <- cbind(param = param, gradient = gr, direction=direction, active=!fixed)
           print(resdet)
-          if(print.level > 3) {
-             cat("Approximated Hessian:\n")
-             print(invHess)
-          }
           cat("--------------------------------------------\n")
        }
     }
@@ -202,12 +262,12 @@ maxBFGSRCompute <- function(fn,
          code <- 2; break
       }
       if(x - oldx < reltol*(x + reltol)) {
-         code <- 2; break
+         code <- 8; break
       }
       if(is.infinite(x) & x > 0) {
          code <- 5; break
       }
-  }
+   }
    if( print.level > 0) {
       cat( "--------------\n")
       cat( maximMessage( code), "\n")

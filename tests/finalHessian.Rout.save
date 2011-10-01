@@ -2,7 +2,7 @@
 R version 2.13.1 (2011-07-08)
 Copyright (C) 2011 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: i686-pc-linux-gnu (32-bit)
+Platform: i486-pc-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -23,7 +23,11 @@ Loading required package: miscTools
 > set.seed( 4 )
 > 
 >                            # log-likelihood function, gradient, and Hessian for 1-parameter case (exponential distribution)
-> ll1i <- function(theta) log(theta) - theta*t
+> ll1i <- function(theta) {
++    if(!all(theta > 0))
++        return(NA)
++    log(theta) - theta*t
++ }
 > ll1 <- function(theta) sum( log(theta) - theta*t )
 > gr1i <- function(theta) 1/theta - t
 > gr1 <- function(theta) sum( 1/theta - t )
@@ -35,6 +39,9 @@ Loading required package: miscTools
 +    ## log likelihood function
 +    mu <- param[ 1 ]
 +    sigma <- param[ 2 ]
++    if(!(sigma > 0))
++        return(NA)
++                            # to avoid warnings in the output
 +    N <- length( x )
 +    llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
 +       0.5 * sum( ( x - mu )^2 / sigma^2 )
@@ -45,6 +52,9 @@ Loading required package: miscTools
 > ll2i <- function( param ) {
 +    mu <- param[ 1 ]
 +    sigma <- param[ 2 ]
++    if(!(sigma > 0))
++        return(NA)
++                            # to avoid warnings in the output
 +    llValues <- -0.5 * log( 2 * pi ) - log( sigma ) -
 +       0.5 * ( x - mu )^2 / sigma^2
 +    return( llValues )
@@ -175,19 +185,19 @@ Estimates:
 [2,]  2.03112      NA      NA
 --------------------------------------------
 > 
-> ## BFGS-YC
+> ## BFGSR
 > # Estimate with only function values (single parameter)
 > a <- maxLik( ll1i, gr1i, start = 1, method = "BFGSR" )
 > summary(a )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGSR maximization, 5 iterations
-Return code 1: gradient close to zero
+BFGSR maximization, 26 iterations
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -25.05386 
 1  free parameters
 Estimates:
      Estimate Std. error t value   Pr(> t)    
-[1,]  2.11586    0.21159      10 < 2.2e-16 ***
+[1,]  2.11587    0.21159      10 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -196,13 +206,13 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > summary(b )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGSR maximization, 5 iterations
-Return code 1: gradient close to zero
+BFGSR maximization, 26 iterations
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -25.05386 
 1  free parameters
 Estimates:
      Estimate Std. error t value   Pr(> t)    
-[1,]  2.11586    0.21453  9.8629 < 2.2e-16 ***
+[1,]  2.11587    0.21453  9.8629 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -210,8 +220,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > summary(c)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGSR maximization, 5 iterations
-Return code 1: gradient close to zero
+BFGSR maximization, 26 iterations
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -25.05386 
 1  free parameters
 Estimates:
@@ -223,14 +233,14 @@ Estimates:
 > summary(a )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGSR maximization, 23 iterations
+BFGSR maximization, 22 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -212.7524 
 2  free parameters
 Estimates:
      Estimate Std. error t value   Pr(> t)    
-[1,]  0.85317    0.20311  4.2005 2.663e-05 ***
-[2,]  2.03112    0.14362 14.1421 < 2.2e-16 ***
+[1,]  0.85282    0.20309  4.1992 2.679e-05 ***
+[2,]  2.03094    0.14359 14.1440 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -242,27 +252,27 @@ In maxBFGSRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad,  :
 > summary(b )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGSR maximization, 23 iterations
+BFGSR maximization, 22 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -212.7524 
 2  free parameters
 Estimates:
      Estimate t value Pr(> t)
-[1,]  0.85317      NA      NA
-[2,]  2.03112      NA      NA
+[1,]  0.85282      NA      NA
+[2,]  2.03094      NA      NA
 --------------------------------------------
 > c <- maxLik( ll2, gr2, start = c(0,1), method = "BFGSR", finalHessian=FALSE)
 > summary(c)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGSR maximization, 23 iterations
+BFGSR maximization, 22 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -212.7524 
 2  free parameters
 Estimates:
      Estimate t value Pr(> t)
-[1,]  0.85317      NA      NA
-[2,]  2.03112      NA      NA
+[1,]  0.85282      NA      NA
+[2,]  2.03094      NA      NA
 --------------------------------------------
 > 
 > 

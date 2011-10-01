@@ -8,7 +8,8 @@ maximMessage <- function(code) {
                      "4" = "Iteration limit exceeded.",
                      "5" = "Infinite value",                        
                      "6" = "Infinite gradient",                        
-                     "7" = "Infinite Hessian",                        
+                     "7" = "Infinite Hessian",
+                     "8" = "Relative change of the function within relative tolerance",
                      "100" = "Initial value out of range.",
                      paste("Code", code))
    return(message)

@@ -1,3 +1,5 @@
+### Various tests for constrained optimization
+###
 
 logLikMix <- function(param) {
    rho <- param[1]
@@ -103,7 +105,7 @@ try( maxLik(logLikMix, gradLikMix,
 # summary(a)
 
 
-# ------------------ Now test extra parameters for the function ----
+### ------------------ Now test extra parameters for the function ----
 logLikMix2 <- function(param, rho) {
    mu1 <- param[1]
    mu2 <- param[2]

@@ -12,6 +12,9 @@ xSaved <- x
 llf <- function( param ) {
    mu <- param[ 1 ]
    sigma <- param[ 2 ]
+   if(!(sigma > 0))
+       return(NA)
+                           # to avoid warnings in the output
    N <- length( x )
    llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
       0.5 * sum( ( x - mu )^2 / sigma^2 )
@@ -22,6 +25,9 @@ llf <- function( param ) {
 llfInd <- function( param ) {
    mu <- param[ 1 ]
    sigma <- param[ 2 ]
+   if(!(sigma > 0))
+       return(NA)
+                           # to avoid warnings in the output
    llValues <- -0.5 * log( 2 * pi ) - log( sigma ) -
       0.5 * ( x - mu )^2 / sigma^2
    return( llValues )
@@ -50,6 +56,9 @@ gfInd <- function( param ) {
 llfGrad <- function( param ) {
    mu <- param[ 1 ]
    sigma <- param[ 2 ]
+   if(!(sigma > 0))
+       return(NA)
+                           # to avoid warnings in the output
    N <- length( x )
    llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
       0.5 * sum( ( x - mu )^2 / sigma^2 )
@@ -62,6 +71,9 @@ llfGrad <- function( param ) {
 llfGradInd <- function( param ) {
    mu <- param[ 1 ]
    sigma <- param[ 2 ]
+   if(!(sigma > 0))
+       return(NA)
+                           # to avoid warnings in the output
    llValues <- -0.5 * log( 2 * pi ) - log( sigma ) -
       0.5 * ( x - mu )^2 / sigma^2
    attributes( llValues )$gradient <- cbind( ( x - mu ) / sigma^2,
@@ -87,6 +99,9 @@ hf <- function( param ) {
 llfGradHess <- function( param ) {
    mu <- param[ 1 ]
    sigma <- param[ 2 ]
+   if(!(sigma > 0))
+       return(NA)
+                           # to avoid warnings in the output
    N <- length( x )
    llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
       0.5 * sum( ( x - mu )^2 / sigma^2 )
@@ -105,6 +120,9 @@ llfGradHess <- function( param ) {
 llfGradHessInd <- function( param ) {
    mu <- param[ 1 ]
    sigma <- param[ 2 ]
+   if(!(sigma > 0))
+       return(NA)
+                           # to avoid warnings in the output
    N <- length( x )
    llValues <- -0.5 * log( 2 * pi ) - log( sigma ) -
       0.5 * ( x - mu )^2 / sigma^2

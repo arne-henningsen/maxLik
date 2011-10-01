@@ -2,7 +2,7 @@
 R version 2.13.1 (2011-07-08)
 Copyright (C) 2011 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: i686-pc-linux-gnu (32-bit)
+Platform: i486-pc-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -16,6 +16,8 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
+> ### Various tests for constrained optimization
+> ###
 > 
 > logLikMix <- function(param) {
 +    rho <- param[1]
@@ -590,13 +592,64 @@ penalty close to zero
 +             start=start, method="bhhh",
 +             constraints=list(eqA=A, eqB=B),
 +             print.level=2, SUMTRho0=1) )
-Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
-  the matrix returned by the gradient function (argument 'grad') must have at least as many rows as the number of parameters (3), where each row must correspond to the gradients of the log-likelihood function of an individual (independent) observation:
- currently, there are (is) 3 parameter(s) but the gradient matrix has only 1 row(s)
+--------------
+successive function values within tolerance limit 
+18  iterations
+estimate: 0.4902298 1.031313 -1.013298 
+Function value: -3552.805 
+SUMT iteration 1: rho = 1, function = -3551.815, penalty = 0.9905901
+Estimate:[1]  0.4902298  1.0313127 -1.0132983
+--------------
+successive function values within tolerance limit 
+10  iterations
+estimate: 0.4515734 1.124017 -0.9126028 
+Function value: -3559.076 
+SUMT iteration 2: rho = 10, function = -3554.159, penalty = 0.4916661
+Estimate:[1]  0.4515734  1.1240165 -0.9126028
+--------------
+successive function values within tolerance limit 
+18  iterations
+estimate: 0.3819155 1.306777 -0.7430252 
+Function value: -3570.389 
+SUMT iteration 3: rho = 100, function = -3567.175, penalty = 0.03213909
+Estimate:[1]  0.3819155  1.3067766 -0.7430252
+--------------
+successive function values within tolerance limit 
+88  iterations
+estimate: 0.3608079 1.367393 -0.6942959 
+Function value: -3573.808 
+SUMT iteration 4: rho = 1000, function = -3573.359, penalty = 0.0004493975
+Estimate:[1]  0.3608079  1.3673928 -0.6942959
+--------------
+Iteration limit exceeded. 
+100  iterations
+estimate: 0.3582631 1.375572 -0.6888693 
+Function value: -3574.22 
+SUMT iteration 5: rho = 10000, function = -3574.173, penalty = 4.694195e-06
+Estimate:[1]  0.3582631  1.3755721 -0.6888693
+--------------
+Iteration limit exceeded. 
+100  iterations
+estimate: 0.3580136 1.376398 -0.6883422 
+Function value: -3574.262 
+SUMT iteration 6: rho = 1e+05, function = -3574.254, penalty = 8.219892e-08
+Estimate:[1]  0.3580136  1.3763977 -0.6883422
+--------------
+successive function values within tolerance limit 
+65  iterations
+estimate: 0.3579784 1.376516 -0.6882688 
+Function value: -3574.266 
+SUMT iteration 7: rho = 1e+06, function = -3574.265, penalty = 4.576319e-10
+Estimate:[1]  0.3579784  1.3765163 -0.6882688
+Maximum Likelihood estimation
+BHHH maximisation, 65 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -3574.266 (3 free parameter(s))
+Estimate(s): 0.3579784 1.376516 -0.6882688 
 > # summary(a)
 > 
 > 
-> # ------------------ Now test extra parameters for the function ----
+> ### ------------------ Now test extra parameters for the function ----
 > logLikMix2 <- function(param, rho) {
 +    mu1 <- param[1]
 +    mu2 <- param[2]

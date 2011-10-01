@@ -76,9 +76,28 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
             h[ fixed, ] <- NA
             h[ , fixed ] <- NA
          } else if( tolower( returnHessian ) == "bhhh" ) {
-            checkBhhhGrad( g = gr, theta = theta,  analytic =
-               ( !is.null( attr( f, "gradient" ) ) || !is.null( gradOrig ) ) )
-            h <- - crossprod( gr )
+            ## We have to return BHHH Hessian.  Check if it contains NA in free paramateres, otherwise
+            ## return outer product as Hessian.
+            h <- NULL
+                           # to keep track of what we have done
+            if(is.null(dim(gr)) & any(is.na(gr[!fixed]))) {
+                           # NA gradient: do not check but send the wrong values to the optimizer.
+                           # The optimizer should take corresponding action, such as looking for another value
+               h <- NA
+            }
+            else if(is.matrix(gr)) {
+               if(any(is.na(gr[,!fixed]))) {
+                           # NA gradient: do not check but send the wrong values to the optimizer.
+                           # The optimizer should take corresponding action, such as looking for another value
+                  h <- NA
+               }
+            }
+            if(is.null(h)) {
+                           # gr seems not to contain NA-s at free parameters
+               checkBhhhGrad( g = gr, theta = theta,  analytic =
+                             ( !is.null( attr( f, "gradient" ) ) || !is.null( gradOrig ) ) )
+               h <- - crossprod( gr )
+            }
             attr( h, "type" ) = "BHHH"
          } else {
             h <- NULL

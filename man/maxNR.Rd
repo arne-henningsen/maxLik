@@ -18,7 +18,8 @@ maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
       fixed = NULL, activePar = NULL, ... )
 maxBFGSR(fn, grad = NULL, hess = NULL, start, print.level = 0,
       tol = 1e-8, reltol=sqrt(.Machine$double.eps), gradtol = 1e-6,
-      steptol = 1e-10, iterlim = 150,
+      steptol = 1e-10, lambdatol=1e-6, qrtol=1e-10,
+      iterlim = 150,
       constraints = NULL, finalHessian = TRUE,
       fixed = NULL, activePar = NULL, ... )
 maxBHHH(fn, grad = NULL, hess = NULL, start, print.level = 0,
@@ -228,6 +229,11 @@ the previous one (maximization is not performed in that step).
     (\code{maxNR} with argument \code{bhhhHessian = TRUE )} or \code{maxBHHH})
     uses the likelihood-specific information equality,
     it is only suitable for maximizing log-likelihood functions!
+
+    Quasi-Newton methods, including these above, do not work well in
+    non-concave regions of the function.  This is especially the case
+    with the implementation in \code{maxBFGSR}.  The user is advised to experiment with
+    various tolerance options to achieve convergence.
 }
 
 \references{

@@ -119,6 +119,15 @@ maxNRCompute <- function(fn,
          ") not equal to the no. of parameters (", nParam, ")" )
    }
    H1 <- attr( f1, "hessian" )
+   if(print.level > 3) {
+      cat("Initial Hessian value:\n")
+      print(H1)
+   }
+   if(length(H1) == 1) {
+                           # Allow the user program to return a single NA in case of out of support
+      if(is.na(H1))
+          stop("NA in the initial Hessian")
+   }
    if(any(is.na(H1[!fixed, !fixed]))) {
       stop("NA in the initial Hessian")
    }

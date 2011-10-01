@@ -2,7 +2,7 @@
 R version 2.13.1 (2011-07-08)
 Copyright (C) 2011 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: i686-pc-linux-gnu (32-bit)
+Platform: i486-pc-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -31,6 +31,9 @@ Loading required package: miscTools
 > llf <- function( param ) {
 +    mu <- param[ 1 ]
 +    sigma <- param[ 2 ]
++    if(!(sigma > 0))
++        return(NA)
++                            # to avoid warnings in the output
 +    N <- length( x )
 +    llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
 +       0.5 * sum( ( x - mu )^2 / sigma^2 )
@@ -41,6 +44,9 @@ Loading required package: miscTools
 > llfInd <- function( param ) {
 +    mu <- param[ 1 ]
 +    sigma <- param[ 2 ]
++    if(!(sigma > 0))
++        return(NA)
++                            # to avoid warnings in the output
 +    llValues <- -0.5 * log( 2 * pi ) - log( sigma ) -
 +       0.5 * ( x - mu )^2 / sigma^2
 +    return( llValues )
@@ -69,6 +75,9 @@ Loading required package: miscTools
 > llfGrad <- function( param ) {
 +    mu <- param[ 1 ]
 +    sigma <- param[ 2 ]
++    if(!(sigma > 0))
++        return(NA)
++                            # to avoid warnings in the output
 +    N <- length( x )
 +    llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
 +       0.5 * sum( ( x - mu )^2 / sigma^2 )
@@ -81,6 +90,9 @@ Loading required package: miscTools
 > llfGradInd <- function( param ) {
 +    mu <- param[ 1 ]
 +    sigma <- param[ 2 ]
++    if(!(sigma > 0))
++        return(NA)
++                            # to avoid warnings in the output
 +    llValues <- -0.5 * log( 2 * pi ) - log( sigma ) -
 +       0.5 * ( x - mu )^2 / sigma^2
 +    attributes( llValues )$gradient <- cbind( ( x - mu ) / sigma^2,
@@ -106,6 +118,9 @@ Loading required package: miscTools
 > llfGradHess <- function( param ) {
 +    mu <- param[ 1 ]
 +    sigma <- param[ 2 ]
++    if(!(sigma > 0))
++        return(NA)
++                            # to avoid warnings in the output
 +    N <- length( x )
 +    llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
 +       0.5 * sum( ( x - mu )^2 / sigma^2 )
@@ -124,6 +139,9 @@ Loading required package: miscTools
 > llfGradHessInd <- function( param ) {
 +    mu <- param[ 1 ]
 +    sigma <- param[ 2 ]
++    if(!(sigma > 0))
++        return(NA)
++                            # to avoid warnings in the output
 +    N <- length( x )
 +    llValues <- -0.5 * log( 2 * pi ) - log( sigma ) -
 +       0.5 * ( x - mu )^2 / sigma^2
@@ -520,7 +538,6 @@ BHHH maximisation, 8 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -0.6227434 (2 free parameter(s))
 Estimate(s): 0.2158296 0.3302445 
-There were 50 or more warnings (use warnings() to see the first 50)
 > x <- xSaved
 > mlBHHH <- maxLik( llfInd, start = startVal, method = "BHHH" )
 > print( mlBHHH )
@@ -753,14 +770,12 @@ BHHH maximisation, 8 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -0.6227434 (2 free parameter(s))
 Estimate(s): 0.2158296 0.3302445 
-There were 25 warnings (use warnings() to see them)
 > try( maxLik( llfInd, gfInd, start = startVal, method = "BHHH" ) )
 Maximum Likelihood estimation
 BHHH maximisation, 8 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -0.6227434 (2 free parameter(s))
 Estimate(s): 0.2158296 0.3302445 
-There were 25 warnings (use warnings() to see them)
 > x <- xSaved
 > mlgBHHH <- maxLik( llfInd, gfInd, start = startVal, method = "BHHH" )
 > summary( mlgBHHH )
@@ -949,7 +964,6 @@ BHHH maximisation, 8 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -0.6227434 (2 free parameter(s))
 Estimate(s): 0.2158296 0.3302445 
-There were 25 warnings (use warnings() to see them)
 > x <- xSaved
 > mlGBHHH <- maxLik( llfGradInd, start = startVal, method = "BHHH" )
 > all.equal( mlGBHHH, mlgBHHH, tolerance = 1e-10 )
@@ -1010,21 +1024,21 @@ Warning messages:
 > mlBFGSYC <- maxLik( llf, start = startVal, method = "bfgsr" )
 > print( mlBFGSYC )
 Maximum Likelihood estimation
-BFGSR maximization, 23 iterations
+BFGSR maximization, 15 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.5839 (2 free parameter(s))
-Estimate(s): 1.180813 1.816481 
+Estimate(s): 1.180991 1.816456 
 > summary( mlBFGSYC )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGSR maximization, 23 iterations
+BFGSR maximization, 15 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.5839 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     1.18081    0.18151  6.5057 7.735e-11 ***
-sigma  1.81648    0.12843 14.1433 < 2.2e-16 ***
+mu     1.18099    0.18176  6.4975 8.167e-11 ***
+sigma  1.81646    0.12849 14.1365 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -1035,20 +1049,20 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] 407.1679
 > coef( mlBFGSYC )
       mu    sigma 
-1.180813 1.816481 
+1.180991 1.816456 
 > condiNumber( mlBFGSYC )
 mu 	 1 
-sigma 	 1.664482 
+sigma 	 1.672721 
 > hessian( mlBFGSYC )
-             mu     sigma
-mu    -30.35439   0.00000
-sigma   0.00000 -60.62351
+                mu        sigma
+mu    -30.26912054   0.05684342
+sigma   0.05684342 -60.56666280
 > logLik( mlBFGSYC )
 [1] -201.5839
 > maximType( mlBFGSYC )
 [1] "BFGSR maximization"
 > nIter( mlBFGSYC )
-[1] 23
+[1] 15
 > try( nObs( mlBFGSYC ) )
 Error in nObs.maxLik(mlBFGSYC) : 
   cannot return the number of observations: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
@@ -1059,137 +1073,137 @@ Error in nObs.maxLik(mlBFGSYC) :
 > returnMessage( mlBFGSYC )
 [1] "successive function values within tolerance limit"
 > vcov( mlBFGSYC )
-              mu      sigma
-mu    0.03294417 0.00000000
-sigma 0.00000000 0.01649525
+                mu        sigma
+mu    3.303703e-02 3.100613e-05
+sigma 3.100613e-05 1.651076e-02
 > logLik( summary( mlBFGSYC ) )
 [1] -201.5839
 > all.equal( ml[-c(5,6,9,10)], mlBFGSYC[-c(5,6,9,10)] )
-[1] "Component 2: Mean relative difference: 8.101332e-07"
-[2] "Component 3: Mean relative difference: 85.95"       
-[3] "Component 4: Mean relative difference: 0.0006248047"
+[1] "Component 2: Mean relative difference: 6.805956e-05"
+[2] "Component 3: Mean relative difference: 6106.85"     
+[3] "Component 4: Mean relative difference: 0.002811621" 
 > mlIndBFGSYC <- maxLik( llfInd, start = startVal, method = "BFGSR" )
 > summary( mlIndBFGSYC )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGSR maximization, 14 iterations
+BFGSR maximization, 34 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.5839 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
 mu     1.18081    0.18168  6.4996 8.055e-11 ***
-sigma  1.81648    0.12843 14.1433 < 2.2e-16 ***
+sigma  1.81636    0.12837 14.1490 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlBFGSYC[ -9 ], mlIndBFGSYC[ -c(9,11) ] )
-[1] "Component 2: Mean relative difference: 1.065246e-06"
-[2] "Component 3: Mean relative difference: 1.342391"    
-[3] "Component 4: Mean relative difference: 0.001872659" 
+[1] "Component 2: Mean relative difference: 9.346469e-05"
+[2] "Component 3: Mean relative difference: 1.661664"    
+[3] "Component 4: Mean relative difference: 0.0028125"   
 > mlIndBFGSYC[ 11 ]
 $gradientObs
                 mu        sigma
-  [1,] -0.39452126 -0.267785422
-  [2,] -0.19431634 -0.481926990
-  [3,]  0.88998804  0.888280221
-  [4,] -0.01206043 -0.550250967
-  [5,]  0.02356773 -0.549506239
-  [6,]  0.98476112  1.211024746
-  [7,]  0.22457900 -0.458899677
-  [8,] -0.82159449  0.675640843
-  [9,] -0.47112277 -0.147335262
- [10,] -0.32492879 -0.358733509
- [11,]  0.68715955  0.307205496
- [12,]  0.16329741 -0.502076833
- [13,]  0.18812322 -0.486229313
- [14,]  0.01229060 -0.550240785
- [15,] -0.39171212 -0.271797366
- [16,]  1.02831073  1.370272809
- [17,]  0.24696611 -0.439723939
- [18,] -1.24683134  2.273364044
- [19,]  0.37031765 -0.301411851
- [20,] -0.34137287 -0.338830856
- [21,] -0.70204213  0.344761047
- [22,] -0.18691995 -0.487049054
- [23,] -0.67669406  0.281278143
- [24,] -0.49660366 -0.102543532
- [25,] -0.43365546 -0.208913232
- [26,] -1.07716000  1.557099101
- [27,]  0.45301320 -0.177735346
- [28,]  0.03816670 -0.547869120
- [29,] -0.74466137  0.456760495
- [30,]  0.70518181  0.352786675
- [31,]  0.20369648 -0.475145314
- [32,] -0.23365079 -0.451348629
- [33,]  0.48776808 -0.118342359
- [34,]  0.47746855 -0.136400873
- [35,]  0.44319021 -0.193726534
- [36,]  0.36261027 -0.311673072
- [37,]  0.28095033 -0.407134779
- [38,] -0.09232474 -0.535031760
- [39,] -0.24025231 -0.445665810
- [40,] -0.28541434 -0.402542252
- [41,] -0.47588342 -0.139145901
- [42,] -0.18082367 -0.491121360
- [43,] -0.82179762  0.676247212
- [44,]  1.25987985  2.332779015
- [45,]  0.67738880  0.282986962
- [46,] -0.73555217  0.432267885
- [47,] -0.29900012 -0.388119890
- [48,] -0.33765360 -0.343418346
- [49,]  0.41796537 -0.233185061
- [50,] -0.10533077 -0.530362109
- [51,]  0.09874699 -0.532802738
- [52,] -0.07210111 -0.541072080
- [53,] -0.08078319 -0.538660968
- [54,]  0.77475832  0.539827979
- [55,] -0.19164541 -0.483799559
- [56,]  0.86438633  0.806693039
- [57,] -0.99354958  1.242606594
- [58,]  0.29955627 -0.387515204
- [59,]  0.02027431 -0.549768521
- [60,]  0.07609156 -0.539997896
- [61,]  0.17531442 -0.494685394
- [62,] -0.35927324 -0.316048872
- [63,] -0.25676625 -0.430756613
- [64,] -0.67219105  0.270244766
- [65,] -0.70444698  0.350905099
- [66,]  0.12918105 -0.520202220
- [67,]  0.21687720 -0.465075720
- [68,] -0.02267029 -0.549581615
- [69,]  0.50421965 -0.088697844
- [70,]  1.18782793  2.012420848
- [71,] -0.35242860 -0.324897568
- [72,] -1.45446356  3.292184000
- [73,]  0.55481429  0.008631789
- [74,] -0.48466860 -0.123817320
- [75,] -0.47182332 -0.146135333
- [76,]  0.56683565  0.033124770
- [77,] -0.22740854 -0.456576551
- [78,] -0.79471638  0.596726786
- [79,]  0.05509624 -0.545001081
- [80,] -0.13898472 -0.515426679
- [81,] -0.05130409 -0.545734006
- [82,]  0.17873357 -0.492486465
- [83,] -0.27946758 -0.408644206
- [84,]  0.33578053 -0.345709625
- [85,] -0.18844234 -0.486011028
- [86,]  0.14630635 -0.511632423
- [87,]  0.61003339  0.125471141
- [88,]  0.20898031 -0.471184451
- [89,] -0.25235615 -0.434835129
- [90,]  0.64153332  0.197084551
- [91,]  0.54739844 -0.006215834
- [92,]  0.27760405 -0.410529925
- [93,]  0.08990545 -0.535832588
- [94,] -0.43539313 -0.206170130
- [95,]  0.76993966  0.526307222
- [96,] -0.41863566 -0.232166444
- [97,]  1.27101879  2.383988372
- [98,]  0.87416935  0.837588311
- [99,] -0.19766394 -0.479543418
-[100,] -0.67694649  0.281898823
+  [1,] -0.39457550 -0.267765079
+  [2,] -0.19434300 -0.481950823
+  [3,]  0.89011079  0.888540057
+  [4,] -0.01206197 -0.550288843
+  [5,]  0.02357109 -0.549543946
+  [6,]  0.98489693  1.211351330
+  [7,]  0.22461006 -0.458918570
+  [8,] -0.82170758  0.675855999
+  [9,] -0.47118757 -0.147290057
+ [10,] -0.32497345 -0.358731935
+ [11,]  0.68725435  0.307345144
+ [12,]  0.16332003 -0.502104677
+ [13,]  0.18814926 -0.486253872
+ [14,]  0.01229241 -0.550278649
+ [15,] -0.39176598 -0.271777851
+ [16,]  1.02845253  1.370632327
+ [17,]  0.24700026 -0.439738860
+ [18,] -1.24700302  2.273909247
+ [19,]  0.37036880 -0.301398131
+ [20,] -0.34141979 -0.338825175
+ [21,] -0.70213875  0.344907864
+ [22,] -0.18694558 -0.487073942
+ [23,] -0.67678718  0.281411849
+ [24,] -0.49667197 -0.102489079
+ [25,] -0.43371510 -0.208880738
+ [26,] -1.07730830  1.557496334
+ [27,]  0.45307574 -0.177696029
+ [28,]  0.03817207 -0.547906482
+ [29,] -0.74476385  0.456930443
+ [30,]  0.70527909  0.352935753
+ [31,]  0.20372466 -0.475167574
+ [32,] -0.23368287 -0.451366158
+ [33,]  0.48783541 -0.118290751
+ [34,]  0.47753445 -0.136353002
+ [35,]  0.44325140 -0.193690527
+ [36,]  0.36266035 -0.311661477
+ [37,]  0.28098916 -0.407142950
+ [38,] -0.09233735 -0.535066525
+ [39,] -0.24028529 -0.445682167
+ [40,] -0.28545355 -0.402549716
+ [41,] -0.47594888 -0.139099005
+ [42,] -0.18084847 -0.491147087
+ [43,] -0.82191073  0.676462493
+ [44,]  1.26005356  2.333337569
+ [45,]  0.67748225  0.283121600
+ [46,] -0.73565340  0.432432774
+ [47,] -0.29904120 -0.388124378
+ [48,] -0.33770000 -0.343413612
+ [49,]  0.41802308 -0.233157220
+ [50,] -0.10534517 -0.530395914
+ [51,]  0.09876072 -0.532836961
+ [52,] -0.07211093 -0.541108085
+ [53,] -0.08079421 -0.538696477
+ [54,]  0.77486519  0.540015745
+ [55,] -0.19167170 -0.483823777
+ [56,]  0.86450555  0.806936002
+ [57,] -0.99368636  1.242938861
+ [58,]  0.29959767 -0.387519312
+ [59,]  0.02027722 -0.549806284
+ [60,]  0.07610216 -0.540033615
+ [61,]  0.17533869 -0.494711706
+ [62,] -0.35932263 -0.316038490
+ [63,] -0.25680152 -0.430769896
+ [64,] -0.67228355  0.270376195
+ [65,] -0.70454393  0.351053185
+ [66,]  0.12919897 -0.520233826
+ [67,]  0.21690720 -0.465095894
+ [68,] -0.02267330 -0.549619357
+ [69,]  0.50428924 -0.088640102
+ [70,]  1.18799171  2.012913157
+ [71,] -0.35247705 -0.324889012
+ [72,] -1.45466384  3.292939693
+ [73,]  0.55489085  0.008709669
+ [74,] -0.48473526 -0.123767259
+ [75,] -0.47188821 -0.146089880
+ [76,]  0.56691387  0.033207718
+ [77,] -0.22743975 -0.456595157
+ [78,] -0.79482576  0.596925642
+ [79,]  0.05510395 -0.545037844
+ [80,] -0.13900375 -0.515457412
+ [81,] -0.05131104 -0.545770965
+ [82,]  0.17875831 -0.492512320
+ [83,] -0.27950596 -0.408652927
+ [84,]  0.33582692 -0.345705076
+ [85,] -0.18846819 -0.486035701
+ [86,]  0.14632663 -0.511662249
+ [87,]  0.61011756  0.125573194
+ [88,]  0.20900923 -0.471205890
+ [89,] -0.25239080 -0.434849253
+ [90,]  0.64162183  0.197201419
+ [91,]  0.54747398 -0.006141025
+ [92,]  0.27764242 -0.410538799
+ [93,]  0.08991796 -0.535867441
+ [94,] -0.43545300 -0.206137069
+ [95,]  0.77004587  0.526492191
+ [96,] -0.41869322 -0.232138750
+ [97,]  1.27119403  2.384557515
+ [98,]  0.87428991  0.837837663
+ [99,] -0.19769106 -0.479566759
+[100,] -0.67703964  0.282032658
 
 > nObs( mlIndBFGSYC )
 [1] 100
@@ -1197,195 +1211,209 @@ $gradientObs
 > # with analytical gradients
 > mlgBFGSYC <- maxLik( llf, gf, start = startVal, method = "BFGSR" , print.level=1)
 Initial value of the function : -326.589781090133 
---- iteration 1, step = 1, lnL = -325.0958, chi2 = 1.503935
---- iteration 2, step = 1, lnL = -253.7229, chi2 = 110.7202
---- iteration 3, step = 1, lnL = -232.402, chi2 = 28.10028
---- iteration 4, step = 1, lnL = -218.4824, chi2 = 19.94052
---- iteration 5, step = 1, lnL = -213.2123, chi2 = 7.569534
---- iteration 6, step = 1, lnL = -211.5038, chi2 = 2.600152
---- iteration 7, step = 1, lnL = -211.1924, chi2 = 0.5067908
---- iteration 8, step = 1, lnL = -211.1646, chi2 = 0.04705232
---- iteration 9, step = 1, lnL = -211.1596, chi2 = 0.006021692
---- iteration 10, step = 1, lnL = -211.1445, chi2 = 0.01901212
---- iteration 11, step = 1, lnL = -211.1091, chi2 = 0.04350457
---- iteration 12, step = 1, lnL = -211.0149, chi2 = 0.1166586
---- iteration 13, step = 1, lnL = -210.7818, chi2 = 0.2885522
---- iteration 14, step = 1, lnL = -210.2169, chi2 = 0.703702
---- iteration 15, step = 1, lnL = -208.9722, chi2 = 1.573568
---- iteration 16, step = 1, lnL = -206.7187, chi2 = 2.975142
---- iteration 17, step = 1, lnL = -204.1217, chi2 = 3.809059
---- iteration 18, step = 1, lnL = -202.4546, chi2 = 2.519386
---- iteration 19, step = 1, lnL = -201.6447, chi2 = 1.593629
---- iteration 20, step = 1, lnL = -201.5877, chi2 = 0.1548409
---- iteration 21, step = 1, lnL = -201.584, chi2 = 0.007150537
---- iteration 22, step = 1, lnL = -201.5839, chi2 = 1.862803e-05
---- iteration 23, step = 1, lnL = -201.5839, chi2 = 7.964259e-09
+Iteration  1 
+step = 1, lnL = -325.0958, chi2 = 1.503935, function increment = 1.493962
+Iteration  2 
+step = 1, lnL = -254.9025, chi2 = 107.7505, function increment = 70.19328
+Iteration  3 
+step = 1, lnL = -254.7561, chi2 = 0.1469672, function increment = 0.1464173
+Iteration  4 
+step = 1, lnL = -249.9783, chi2 = 18.75948, function increment = 4.77787
+Iteration  5 
+step = 0.25, lnL = -218.8002, chi2 = 1496.128, function increment = 31.17808
+Iteration  6 
+step = 1, lnL = -201.7415, chi2 = 22.40888, function increment = 17.05871
+Iteration  7 
+step = 0.25, lnL = -201.6545, chi2 = 0.757718, function increment = 0.08695571
+Iteration  8 
+step = 1, lnL = -201.6009, chi2 = 0.07891834, function increment = 0.05361565
+Iteration  9 
+step = 0.25, lnL = -201.5968, chi2 = 0.07185095, function increment = 0.004090714
+Iteration  10 
+step = 0.125, lnL = -201.584, chi2 = 0.2230426, function increment = 0.01276636
+Iteration  11 
+step = 0.0625, lnL = -201.584, chi2 = 0.002795277, function increment = 6.313829e-05
+Iteration  12 
+step = 0.5, lnL = -201.5839, chi2 = 0.0001250666, function increment = 2.455796e-05
+Iteration  13 
+step = 0.0625, lnL = -201.5839, chi2 = 6.645187e-05, function increment = 4.238591e-07
+Iteration  14 
+step = 0.03125, lnL = -201.5839, chi2 = 1.782175e-05, function increment = 2.540202e-07
+Iteration  15 
+step = 0.015625, lnL = -201.5839, chi2 = 5.202959e-08, function increment = 2.603713e-10
 --------------
 successive function values within tolerance limit 
-23  iterations
-estimate: 1.180813 1.816481 
+15  iterations
+estimate: 1.180991 1.816456 
 Function value: -201.5839 
 > summary(mlgBFGSYC)
 --------------------------------------------
 Maximum Likelihood estimation
-BFGSR maximization, 23 iterations
+BFGSR maximization, 15 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.5839 
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-mu     1.18081    0.18165  6.5006 8.003e-11 ***
-sigma  1.81648    0.12844 14.1421 < 2.2e-16 ***
+mu     1.18099    0.18165  6.5016 7.946e-11 ***
+sigma  1.81646    0.12844 14.1424 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlBFGSYC, mlgBFGSYC )
-[1] "Component 3: Mean relative difference: 0.0002097282"
-[2] "Component 4: Mean relative difference: 0.0006386677"
+[1] "Component 3: Mean relative difference: 0.0001258732"
+[2] "Component 4: Mean relative difference: 0.002100446" 
 > mlgIndBFGSYC <- maxLik( llfInd, gfInd, start = startVal,
 +    method = "BFGSR" )
 > all.equal( mlIndBFGSYC, mlgIndBFGSYC )
-[1] "Component 3: Mean relative difference: 0.0006873089"
-[2] "Component 4: Mean relative difference: 0.0002118785"
+[1] "Component 3: Mean relative difference: 6.438724e-06"
+[2] "Component 4: Mean relative difference: 0.0006532159"
 > all.equal( mlgBFGSYC[ -9 ], mlgIndBFGSYC[ -c(9,11) ] )
-[1] "Component 2: Mean relative difference: 1.065277e-06"
-[2] "Component 3: Mean relative difference: 1.342101"    
-[3] "Component 4: Mean relative difference: 4.010057e-06"
+[1] "Component 2: Mean relative difference: 9.347197e-05"
+[2] "Component 3: Mean relative difference: 1.66154"     
+[3] "Component 4: Mean relative difference: 0.0003530323"
 > mlgIndBFGSYC[ 11 ]
 $gradientObs
                 mu        sigma
-  [1,] -0.39452126 -0.267785422
-  [2,] -0.19431634 -0.481926990
-  [3,]  0.88998804  0.888280220
-  [4,] -0.01206043 -0.550250966
-  [5,]  0.02356773 -0.549506239
-  [6,]  0.98476112  1.211024745
-  [7,]  0.22457900 -0.458899677
-  [8,] -0.82159449  0.675640843
-  [9,] -0.47112277 -0.147335263
- [10,] -0.32492879 -0.358733509
- [11,]  0.68715955  0.307205496
- [12,]  0.16329741 -0.502076833
- [13,]  0.18812322 -0.486229313
- [14,]  0.01229060 -0.550240785
- [15,] -0.39171212 -0.271797365
- [16,]  1.02831072  1.370272808
- [17,]  0.24696611 -0.439723939
- [18,] -1.24683134  2.273364042
- [19,]  0.37031765 -0.301411851
- [20,] -0.34137287 -0.338830856
- [21,] -0.70204213  0.344761047
- [22,] -0.18691995 -0.487049054
- [23,] -0.67669406  0.281278142
- [24,] -0.49660366 -0.102543532
- [25,] -0.43365546 -0.208913232
- [26,] -1.07716000  1.557099100
- [27,]  0.45301320 -0.177735346
- [28,]  0.03816670 -0.547869120
- [29,] -0.74466137  0.456760495
- [30,]  0.70518181  0.352786675
- [31,]  0.20369648 -0.475145314
- [32,] -0.23365079 -0.451348629
- [33,]  0.48776808 -0.118342359
- [34,]  0.47746855 -0.136400873
- [35,]  0.44319021 -0.193726534
- [36,]  0.36261027 -0.311673072
- [37,]  0.28095033 -0.407134779
- [38,] -0.09232474 -0.535031760
- [39,] -0.24025231 -0.445665810
- [40,] -0.28541434 -0.402542252
- [41,] -0.47588342 -0.139145901
- [42,] -0.18082367 -0.491121360
- [43,] -0.82179761  0.676247212
- [44,]  1.25987984  2.332779014
- [45,]  0.67738880  0.282986962
- [46,] -0.73555217  0.432267884
- [47,] -0.29900012 -0.388119890
- [48,] -0.33765360 -0.343418346
- [49,]  0.41796537 -0.233185061
- [50,] -0.10533077 -0.530362109
- [51,]  0.09874699 -0.532802738
- [52,] -0.07210111 -0.541072080
- [53,] -0.08078319 -0.538660968
- [54,]  0.77475832  0.539827979
- [55,] -0.19164541 -0.483799559
- [56,]  0.86438633  0.806693039
- [57,] -0.99354957  1.242606594
- [58,]  0.29955627 -0.387515204
- [59,]  0.02027431 -0.549768521
- [60,]  0.07609156 -0.539997895
- [61,]  0.17531442 -0.494685394
- [62,] -0.35927324 -0.316048872
- [63,] -0.25676625 -0.430756613
- [64,] -0.67219105  0.270244766
- [65,] -0.70444698  0.350905098
- [66,]  0.12918105 -0.520202221
- [67,]  0.21687720 -0.465075720
- [68,] -0.02267029 -0.549581615
- [69,]  0.50421965 -0.088697844
- [70,]  1.18782793  2.012420846
- [71,] -0.35242860 -0.324897568
- [72,] -1.45446355  3.292183999
- [73,]  0.55481429  0.008631789
- [74,] -0.48466860 -0.123817320
- [75,] -0.47182332 -0.146135334
- [76,]  0.56683565  0.033124770
- [77,] -0.22740854 -0.456576550
- [78,] -0.79471638  0.596726785
- [79,]  0.05509624 -0.545001081
- [80,] -0.13898472 -0.515426679
- [81,] -0.05130409 -0.545734006
- [82,]  0.17873357 -0.492486465
- [83,] -0.27946757 -0.408644206
- [84,]  0.33578053 -0.345709625
- [85,] -0.18844234 -0.486011028
- [86,]  0.14630635 -0.511632423
- [87,]  0.61003339  0.125471140
- [88,]  0.20898031 -0.471184451
- [89,] -0.25235615 -0.434835129
- [90,]  0.64153332  0.197084551
- [91,]  0.54739844 -0.006215834
- [92,]  0.27760405 -0.410529925
- [93,]  0.08990545 -0.535832588
- [94,] -0.43539313 -0.206170130
- [95,]  0.76993966  0.526307221
- [96,] -0.41863566 -0.232166445
- [97,]  1.27101878  2.383988370
- [98,]  0.87416935  0.837588310
- [99,] -0.19766394 -0.479543418
-[100,] -0.67694649  0.281898822
+  [1,] -0.39457550 -0.267765079
+  [2,] -0.19434300 -0.481950822
+  [3,]  0.89011079  0.888540056
+  [4,] -0.01206197 -0.550288843
+  [5,]  0.02357109 -0.549543946
+  [6,]  0.98489693  1.211351328
+  [7,]  0.22461006 -0.458918571
+  [8,] -0.82170758  0.675855999
+  [9,] -0.47118757 -0.147290056
+ [10,] -0.32497345 -0.358731934
+ [11,]  0.68725435  0.307345143
+ [12,]  0.16332003 -0.502104678
+ [13,]  0.18814926 -0.486253872
+ [14,]  0.01229241 -0.550278649
+ [15,] -0.39176598 -0.271777850
+ [16,]  1.02845253  1.370632325
+ [17,]  0.24700026 -0.439738860
+ [18,] -1.24700302  2.273909248
+ [19,]  0.37036880 -0.301398132
+ [20,] -0.34141979 -0.338825174
+ [21,] -0.70213875  0.344907865
+ [22,] -0.18694558 -0.487073942
+ [23,] -0.67678718  0.281411850
+ [24,] -0.49667197 -0.102489079
+ [25,] -0.43371510 -0.208880737
+ [26,] -1.07730830  1.557496335
+ [27,]  0.45307573 -0.177696030
+ [28,]  0.03817207 -0.547906482
+ [29,] -0.74476385  0.456930444
+ [30,]  0.70527909  0.352935751
+ [31,]  0.20372466 -0.475167575
+ [32,] -0.23368287 -0.451366158
+ [33,]  0.48783540 -0.118290752
+ [34,]  0.47753445 -0.136353003
+ [35,]  0.44325140 -0.193690527
+ [36,]  0.36266035 -0.311661477
+ [37,]  0.28098916 -0.407142950
+ [38,] -0.09233735 -0.535066525
+ [39,] -0.24028529 -0.445682167
+ [40,] -0.28545355 -0.402549715
+ [41,] -0.47594888 -0.139099004
+ [42,] -0.18084847 -0.491147087
+ [43,] -0.82191073  0.676462493
+ [44,]  1.26005356  2.333337568
+ [45,]  0.67748225  0.283121600
+ [46,] -0.73565340  0.432432775
+ [47,] -0.29904120 -0.388124378
+ [48,] -0.33770000 -0.343413611
+ [49,]  0.41802307 -0.233157220
+ [50,] -0.10534517 -0.530395914
+ [51,]  0.09876072 -0.532836961
+ [52,] -0.07211093 -0.541108085
+ [53,] -0.08079421 -0.538696478
+ [54,]  0.77486519  0.540015744
+ [55,] -0.19167170 -0.483823777
+ [56,]  0.86450555  0.806936000
+ [57,] -0.99368636  1.242938862
+ [58,]  0.29959767 -0.387519312
+ [59,]  0.02027722 -0.549806284
+ [60,]  0.07610216 -0.540033615
+ [61,]  0.17533869 -0.494711706
+ [62,] -0.35932263 -0.316038489
+ [63,] -0.25680152 -0.430769896
+ [64,] -0.67228355  0.270376195
+ [65,] -0.70454393  0.351053186
+ [66,]  0.12919897 -0.520233826
+ [67,]  0.21690720 -0.465095894
+ [68,] -0.02267330 -0.549619357
+ [69,]  0.50428924 -0.088640103
+ [70,]  1.18799171  2.012913155
+ [71,] -0.35247705 -0.324889012
+ [72,] -1.45466384  3.292939694
+ [73,]  0.55489085  0.008709668
+ [74,] -0.48473526 -0.123767259
+ [75,] -0.47188821 -0.146089880
+ [76,]  0.56691387  0.033207717
+ [77,] -0.22743975 -0.456595157
+ [78,] -0.79482576  0.596925643
+ [79,]  0.05510395 -0.545037844
+ [80,] -0.13900375 -0.515457412
+ [81,] -0.05131104 -0.545770965
+ [82,]  0.17875831 -0.492512321
+ [83,] -0.27950596 -0.408652927
+ [84,]  0.33582692 -0.345705077
+ [85,] -0.18846819 -0.486035701
+ [86,]  0.14632663 -0.511662250
+ [87,]  0.61011756  0.125573193
+ [88,]  0.20900922 -0.471205891
+ [89,] -0.25239080 -0.434849252
+ [90,]  0.64162183  0.197201419
+ [91,]  0.54747398 -0.006141026
+ [92,]  0.27764242 -0.410538799
+ [93,]  0.08991796 -0.535867441
+ [94,] -0.43545300 -0.206137069
+ [95,]  0.77004586  0.526492190
+ [96,] -0.41869322 -0.232138750
+ [97,]  1.27119403  2.384557513
+ [98,]  0.87428991  0.837837661
+ [99,] -0.19769106 -0.479566759
+[100,] -0.67703964  0.282032658
 
 > 
 > # with analytical gradients as attribute
 > mlGBFGSYC <- maxLik( llfGrad, start = startVal, method = "BFGSR" , print.level=1)
 Initial value of the function : -326.589781090133 
---- iteration 1, step = 1, lnL = -325.0958, chi2 = 1.503935
---- iteration 2, step = 1, lnL = -253.7229, chi2 = 110.7202
---- iteration 3, step = 1, lnL = -232.402, chi2 = 28.10028
---- iteration 4, step = 1, lnL = -218.4824, chi2 = 19.94052
---- iteration 5, step = 1, lnL = -213.2123, chi2 = 7.569534
---- iteration 6, step = 1, lnL = -211.5038, chi2 = 2.600152
---- iteration 7, step = 1, lnL = -211.1924, chi2 = 0.5067908
---- iteration 8, step = 1, lnL = -211.1646, chi2 = 0.04705232
---- iteration 9, step = 1, lnL = -211.1596, chi2 = 0.006021692
---- iteration 10, step = 1, lnL = -211.1445, chi2 = 0.01901212
---- iteration 11, step = 1, lnL = -211.1091, chi2 = 0.04350457
---- iteration 12, step = 1, lnL = -211.0149, chi2 = 0.1166586
---- iteration 13, step = 1, lnL = -210.7818, chi2 = 0.2885522
---- iteration 14, step = 1, lnL = -210.2169, chi2 = 0.703702
---- iteration 15, step = 1, lnL = -208.9722, chi2 = 1.573568
---- iteration 16, step = 1, lnL = -206.7187, chi2 = 2.975142
---- iteration 17, step = 1, lnL = -204.1217, chi2 = 3.809059
---- iteration 18, step = 1, lnL = -202.4546, chi2 = 2.519386
---- iteration 19, step = 1, lnL = -201.6447, chi2 = 1.593629
---- iteration 20, step = 1, lnL = -201.5877, chi2 = 0.1548409
---- iteration 21, step = 1, lnL = -201.584, chi2 = 0.007150537
---- iteration 22, step = 1, lnL = -201.5839, chi2 = 1.862803e-05
---- iteration 23, step = 1, lnL = -201.5839, chi2 = 7.964259e-09
+Iteration  1 
+step = 1, lnL = -325.0958, chi2 = 1.503935, function increment = 1.493962
+Iteration  2 
+step = 1, lnL = -254.9025, chi2 = 107.7505, function increment = 70.19328
+Iteration  3 
+step = 1, lnL = -254.7561, chi2 = 0.1469672, function increment = 0.1464173
+Iteration  4 
+step = 1, lnL = -249.9783, chi2 = 18.75948, function increment = 4.77787
+Iteration  5 
+step = 0.25, lnL = -218.8002, chi2 = 1496.128, function increment = 31.17808
+Iteration  6 
+step = 1, lnL = -201.7415, chi2 = 22.40888, function increment = 17.05871
+Iteration  7 
+step = 0.25, lnL = -201.6545, chi2 = 0.757718, function increment = 0.08695571
+Iteration  8 
+step = 1, lnL = -201.6009, chi2 = 0.07891834, function increment = 0.05361565
+Iteration  9 
+step = 0.25, lnL = -201.5968, chi2 = 0.07185095, function increment = 0.004090714
+Iteration  10 
+step = 0.125, lnL = -201.584, chi2 = 0.2230426, function increment = 0.01276636
+Iteration  11 
+step = 0.0625, lnL = -201.584, chi2 = 0.002795277, function increment = 6.313829e-05
+Iteration  12 
+step = 0.5, lnL = -201.5839, chi2 = 0.0001250666, function increment = 2.455796e-05
+Iteration  13 
+step = 0.0625, lnL = -201.5839, chi2 = 6.645187e-05, function increment = 4.238591e-07
+Iteration  14 
+step = 0.03125, lnL = -201.5839, chi2 = 1.782175e-05, function increment = 2.540202e-07
+Iteration  15 
+step = 0.015625, lnL = -201.5839, chi2 = 5.202959e-08, function increment = 2.603713e-10
 --------------
 successive function values within tolerance limit 
-23  iterations
-estimate: 1.180813 1.816481 
+15  iterations
+estimate: 1.180991 1.816456 
 Function value: -201.5839 
 > all.equal( mlGBFGSYC, mlgBFGSYC )
 [1] TRUE
@@ -1428,9 +1456,6 @@ Warning messages:
 > 
 > ## BFGS method
 > mlBFGS <- maxLik( llf, start = startVal, method = "BFGS" )
-Warning messages:
-1: In log(sigma) : NaNs produced
-2: In log(sigma) : NaNs produced
 > print( mlBFGS )
 Maximum Likelihood estimation
 BFGS maximisation, 36 iterations
@@ -1497,9 +1522,6 @@ sigma -1.543776e-05  1.648753e-02
 [9] "Component 10: 1 string mismatch"                    
 > # with individual log likelihood values
 > mlIndBFGS <- maxLik( llfInd, start = startVal, method = "BFGS" )
-Warning messages:
-1: In log(sigma) : NaNs produced
-2: In log(sigma) : NaNs produced
 > summary( mlIndBFGS )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -1626,9 +1648,6 @@ $gradientObs
 > 
 > # with analytical gradients
 > mlgBFGS <- maxLik( llf, gf, start = startVal, method = "BFGS" )
-Warning messages:
-1: In log(sigma) : NaNs produced
-2: In log(sigma) : NaNs produced
 > summary( mlgBFGS )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -1657,9 +1676,6 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [8] "Component 9: Mean relative difference: 4.142857"    
 [9] "Component 10: 1 string mismatch"                    
 > mlgIndBFGS <- maxLik( llfInd, gfInd, start = startVal, method = "BFGS" )
-Warning messages:
-1: In log(sigma) : NaNs produced
-2: In log(sigma) : NaNs produced
 > all.equal( mlgBFGS[], mlgIndBFGS[-12] )
 [1] TRUE
 > mlgIndBFGS[12]
@@ -1769,25 +1785,17 @@ $gradientObs
 > 
 > # with analytical gradients as attribute
 > mlGBFGS <- maxLik( llfGrad, start = startVal, method = "BFGS" )
-Warning messages:
-1: In log(sigma) : NaNs produced
-2: In log(sigma) : NaNs produced
 > all.equal( mlGBFGS, mlgBFGS, tolerance = 1e-14 )
 [1] TRUE
 > mlGIndBFGS <- maxLik( llfGradInd, start = startVal, method = "BFGS" )
-Warning messages:
-1: In log(sigma) : NaNs produced
-2: In log(sigma) : NaNs produced
 > all.equal( mlGIndBFGS, mlgIndBFGS, tolerance = 1e-14 )
 [1] TRUE
 > 
 > # with analytical gradients as argument and attribute
 > mlgGBFGS <- maxLik( llfGrad, gf, start = startVal, method = "BFGS" )
-Warning messages:
-1: In maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  :
+Warning message:
+In maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  :
   the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
-2: In log(sigma) : NaNs produced
-3: In log(sigma) : NaNs produced
 > all.equal( mlgGBFGS, mlgBFGS, tolerance = 1e-14 )
 [1] TRUE
 > all.equal( mlgGBFGS, mlGBFGS, tolerance = 1e-14 )
@@ -1795,17 +1803,11 @@ Warning messages:
 > 
 > # with unused Hessian
 > mlghBFGS <- maxLik( llf, gf, hf, start = startVal, method = "BFGS" )
-Warning messages:
-1: In log(sigma) : NaNs produced
-2: In log(sigma) : NaNs produced
 > all.equal( mlgBFGS, mlghBFGS )
 [1] TRUE
 > 
 > # with analytical gradients and Hessian as attribute
 > mlGHBFGS <- maxLik( llfGradHess, start = startVal, method = "BFGS" )
-Warning messages:
-1: In log(sigma) : NaNs produced
-2: In log(sigma) : NaNs produced
 > all.equal( mlGHBFGS, mlghBFGS, tolerance = 1e-14 )
 [1] TRUE
 > 
@@ -1816,8 +1818,6 @@ Warning messages:
   the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
 2: In maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  :
   the Hessian is provided both as attribute 'hessian' and as argument 'hess': ignoring argument 'hess'
-3: In log(sigma) : NaNs produced
-4: In log(sigma) : NaNs produced
 > all.equal( mlgGhHBFGS, mlghBFGS, tolerance = 1e-14 )
 [1] TRUE
 > all.equal( mlgGhHBFGS, mlGHBFGS, tolerance = 1e-14 )
@@ -2525,7 +2525,6 @@ $gradientObs
 > # with a user-specified function to generate a new candidate point
 > mlSANNCand <- maxLik( llf, start = startVal, method = "SANN",
 +    cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
-There were 50 or more warnings (use warnings() to see the first 50)
 > summary( mlSANNCand )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -3189,18 +3188,12 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > ## BFGS method with fixed parameters
 > mlFixBfgs <- maxLik( llf, start = startValFix, fixed = isFixed,
 +    method = "BFGS" )
-Warning message:
-In log(sigma) : NaNs produced
 > mlFixBfgs3 <- maxLik( llf, start = startValFix, fixed = "mu",
 +    method = "BFGS" )
-Warning message:
-In log(sigma) : NaNs produced
 > all.equal( mlFixBfgs, mlFixBfgs3 )
 [1] TRUE
 > mlFixBfgs4 <- maxLik( llf, start = startValFix, fixed = 1,
 +    method = "BFGS" )
-Warning message:
-In log(sigma) : NaNs produced
 > all.equal( mlFixBfgs, mlFixBfgs4 )
 [1] TRUE
 > print( mlFixBfgs )
@@ -3261,8 +3254,6 @@ sigma  0 0.01665927
 [2] "Component 4: 'is.NA' value mismatch: 0 in current 3 in target"
 > mlIndFixBfgs <- maxLik( llfInd, start = startValFix, fixed = isFixed,
 +    method = "BFGS" )
-Warning message:
-In log(sigma) : NaNs produced
 > all.equal( mlFixBfgs[ -9 ], mlIndFixBfgs[ -c(9,12) ] )
 [1] "Component 3: Mean relative difference: 9.669868e-08"
 [2] "Component 4: Mean relative difference: 0.00111576"  
@@ -3372,14 +3363,10 @@ $gradientObs
 
 > mlIndFixBfgs3 <- maxLik( llfInd, start = startValFix, fixed = "mu",
 +    method = "BFGS" )
-Warning message:
-In log(sigma) : NaNs produced
 > all.equal( mlIndFixBfgs, mlIndFixBfgs3 )
 [1] TRUE
 > mlIndFixBfgs4 <- maxLik( llfInd, start = startValFix, fixed = 1,
 +    method = "BFGS" )
-Warning message:
-In log(sigma) : NaNs produced
 > all.equal( mlIndFixBfgs, mlIndFixBfgs4 )
 [1] TRUE
 > nObs( mlIndFixBfgs )
@@ -3388,18 +3375,12 @@ In log(sigma) : NaNs produced
 > # with analytical gradients
 > mlgFixBfgs <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
 +    method = "BFGS" )
-Warning message:
-In log(sigma) : NaNs produced
 > mlgFixBfgs3 <- maxLik( llf, gf, start = startValFix, fixed = "mu",
 +    method = "BFGS" )
-Warning message:
-In log(sigma) : NaNs produced
 > all.equal( mlgFixBfgs, mlgFixBfgs3 )
 [1] TRUE
 > mlgFixBfgs4 <- maxLik( llf, gf, start = startValFix, fixed = 1,
 +    method = "BFGS" )
-Warning message:
-In log(sigma) : NaNs produced
 > all.equal( mlgFixBfgs, mlgFixBfgs4 )
 [1] TRUE
 > summary( mlgFixBfgs )
@@ -3421,8 +3402,6 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [2] "Component 4: Mean relative difference: 0.0004106729"
 > mlgIndFixBfgs <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
 +    method = "BFGS")
-Warning message:
-In log(sigma) : NaNs produced
 > all.equal( mlgFixBfgs[ ], mlgIndFixBfgs[ -12 ] )
 [1] "Component 3: Mean relative difference: 1.653872e-08"
 > mlgIndFixBfgs[ 12 ]
@@ -3531,34 +3510,24 @@ $gradientObs
 
 > mlgIndFixBfgs3 <- maxLik( llfInd, gfInd, start = startValFix, fixed = "mu",
 +    method = "BFGS" )
-Warning message:
-In log(sigma) : NaNs produced
 > all.equal( mlgIndFixBfgs, mlgIndFixBfgs3 )
 [1] TRUE
 > mlgIndFixBfgs4 <- maxLik( llfInd, gfInd, start = startValFix, fixed = 1,
 +    method = "BFGS" )
-Warning message:
-In log(sigma) : NaNs produced
 > all.equal( mlgIndFixBfgs, mlgIndFixBfgs4 )
 [1] TRUE
 > 
 > # with unused Hessians
 > mlghFixBfgs <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
 +    method = "BFGS" )
-Warning message:
-In log(sigma) : NaNs produced
 > all.equal( mlgFixBfgs, mlghFixBfgs )
 [1] TRUE
 > mlghFixBfgs3 <- maxLik( llf, gf, hf, start = startValFix, fixed = "mu",
 +    method = "BFGS" )
-Warning message:
-In log(sigma) : NaNs produced
 > all.equal( mlghFixBfgs, mlghFixBfgs3 )
 [1] TRUE
 > mlghFixBfgs4 <- maxLik( llf, gf, hf, start = startValFix, fixed = 1,
 +    method = "BFGS" )
-Warning message:
-In log(sigma) : NaNs produced
 > all.equal( mlghFixBfgs, mlghFixBfgs4 )
 [1] TRUE
 > 
@@ -4876,7 +4845,6 @@ sigma -0.004680885  0.011136972
 > # with a user-specified function to generate a new candidate point
 > mlSannInEqCand <- maxLik( llf, start = startVal, constraints = inEq,
 +    method = "SANN", cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
-There were 50 or more warnings (use warnings() to see the first 50)
 > summary( mlSannInEqCand )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -5570,7 +5538,6 @@ penalty close to zero
 > ## BFGS method with equality constraints
 > mlBfgsCon <- maxLik( llf, start = startVal, constraints = eqCon,
 +    method = "BFGS" )
-There were 17 warnings (use warnings() to see them)
 > print( mlBfgsCon )
 Maximum Likelihood estimation
 BFGS maximisation, 33 iterations
@@ -5635,7 +5602,6 @@ sigma -0.004926892  0.011474593
 [1] "Component 4: Mean relative difference: 0.0007127584"
 > mlBfgsConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
 +    method = "BFGS" )
-There were 17 warnings (use warnings() to see them)
 > summary( mlBfgsConInd )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -5769,11 +5735,10 @@ $gradientObs
 > # with analytical gradients
 > mlgBfgsCon <- maxLik( llf, gf, start = startVal, constraints = eqCon,
 +    method = "BFGS" )
-There were 22 warnings (use warnings() to see them)
 > summary( mlgBfgsCon )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 32 iterations
+BFGS maximisation, 30 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.8512 
 2  free parameters
@@ -5795,14 +5760,13 @@ successive function values within tolerance limit
 [2] "Component 2: Mean relative difference: 0.006305671"               
 [3] "Component 3: Mean relative difference: 0.05463436"                
 [4] "Component 4: Mean relative difference: 0.02725743"                
-[5] "Component 9: Mean relative difference: 0.03030303"                
+[5] "Component 9: Mean relative difference: 0.09090909"                
 [6] "Component 11: Component 2: Mean absolute difference: 0.0002480585"
 [7] "Component 11: Component 3: Mean relative difference: 1"           
 [8] "Component 11: Component 4: 1 string mismatch"                     
 [9] "Component 11: Component 5: Mean relative difference: 0.3"         
 > mlgBfgsConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon,
 +    method = "BFGS" )
-There were 22 warnings (use warnings() to see them)
 > all.equal( mlgBfgsCon[], mlgBfgsConInd[-12] )
 [1] TRUE
 > mlgBfgsConInd[12]
@@ -5913,7 +5877,6 @@ $gradientObs
 > # with analytical gradients and unused Hessians
 > mlghBfgsCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon,
 +    method = "BFGS" )
-There were 22 warnings (use warnings() to see them)
 > all.equal( mlgBfgsCon, mlghBfgsCon )
 [1] TRUE
 > 
@@ -6237,10 +6200,6 @@ $gradientObs
 > ## SANN method with equality constraints
 > mlSannCon <- maxLik( llf, start = startVal, constraints = eqCon,
 +    method = "SANN", SUMTTol=0)
-Warning messages:
-1: In log(sigma) : NaNs produced
-2: In log(sigma) : NaNs produced
-3: In log(sigma) : NaNs produced
 > print( mlSannCon )
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
@@ -6311,17 +6270,15 @@ sigma -0.00503112  0.01160524
 > # with unused analytical gradients
 > mlgSannCon <- maxLik( llf, gf, start = startVal, constraints = eqCon,
 +    method = "SANN", SUMTTol=0)
-Warning messages:
-1: In log(sigma) : NaNs produced
-2: In log(sigma) : NaNs produced
-3: In log(sigma) : NaNs produced
 > all.equal( mlSannCon, mlgSannCon )
 [1] "Component 4: Mean relative difference: 0.0002449429"
 > 
 > # with a user-specified function to generate a new candidate point
 > mlSannConCand <- maxLik( llf, start = startVal, constraints = eqCon,
 +    method = "SANN", cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
-There were 50 or more warnings (use warnings() to see the first 50)
+Warning message:
+In function (fn, grad = NULL, hess = NULL, start, maxRoutine, constraints,  :
+  problem in imposing equality constraints: the constraints are not satisfied (barrier value = 0.254780368286165). Try setting 'SUMTTol' to 0
 > summary( mlSannConCand )
 --------------------------------------------
 Maximum Likelihood estimation
