@@ -154,9 +154,9 @@ signaling with
 edge of the parameter space possibly causing problems.  The value of
 \code{fn} may have following attributes (only used by maxNR):
 \itemize{
-\item{constPar}{index vector.  Which parameters are redefined to
+\item{constPar}{ index vector.  Which parameters are redefined to
   constant}
-\item{newVal}{a list with following components:
+\item{newVal}{ a list with following components:
   \itemize{
   \item{index}{which parameters will have a new value}
   \item{val}{the new value of parameters}
@@ -184,25 +184,27 @@ the previous one (maximization is not performed in that step).
     not converged).}
   \item{code}{return code:
     \itemize{
-    \item{1}{gradient close to zero (normal convergence).}
-    \item{2}{successive function values within tolerance limit (normal
+    \item{1}{ gradient close to zero (normal convergence).}
+    \item{2}{ successive function values within tolerance limit (normal
       convergence).}
-    \item{3}{last step could not find higher value (probably not
+    \item{3}{ last step could not find higher value (probably not
       converged).}
-    \item{4}{iteration limit exceeded.}
-    \item{5}{Infinite value.}
-    \item{6}{Infinite gradient.}
-    \item{7}{Infinite Hessian.}
-    \item{100}{Initial value out of range.}
+    \item{4}{ iteration limit exceeded.}
+    \item{5}{ Infinite value.}
+    \item{6}{ Infinite gradient.}
+    \item{7}{ Infinite Hessian.}
+    \item{8}{ Successive function values withing relative tolerance
+      limit (normal convergence).}
+    \item{100}{ Initial value out of range.}
     }
   }
-  \item{message}{a short message, describing \code{code}.}
-  \item{last.step}{list describing the last unsuccessful step if
+  \item{message}{ a short message, describing \code{code}.}
+  \item{last.step}{ list describing the last unsuccessful step if
     \code{code=3} with following components:
     \itemize{
-    \item{theta0}{previous parameter value}
-    \item{f0}{\code{fn} value at \code{theta0}}
-    \item{climb}{the movement vector to the maximum of the quadratic approximation}
+    \item{theta0}{ previous parameter value}
+    \item{f0}{ \code{fn} value at \code{theta0}}
+    \item{climb}{ the movement vector to the maximum of the quadratic approximation}
     }
   }
   \item{fixed}{logical vector, which parameters are constants.}
@@ -211,22 +213,22 @@ the previous one (maximization is not performed in that step).
   \item{constraints}{A list, describing the constrained optimization
     (\code{NULL} if unconstrained).  Includes the following components:
     \itemize{
-      \item{type}{type of constrained optimization}
-      \item{outer.iterations}{number of iterations in the constraints step}
-      \item{barrier.value}{value of the barrier function}
+      \item{type}{ type of constrained optimization}
+      \item{outer.iterations}{ number of iterations in the constraints step}
+      \item{barrier.value}{ value of the barrier function}
     }
   }
 }
 
 \section{Warning}{
     No attempt is made to ensure that user-provided analytic
-    gradient/Hessian is the correct one.  However, the users are
+    gradient/Hessian correct.  However, the users are
     recommended to use \code{\link{compareDerivatives}} function,
     designed for this purpose.  If analytic gradient/Hessian are wrong,
     the algorithm may not converge, or converge to a wrong point.
 
     As the BHHH method
-    (\code{maxNR} with argument \code{bhhhHessian = TRUE )} or \code{maxBHHH})
+    (\code{maxNR} with argument \code{bhhhHessian = TRUE} or \code{maxBHHH})
     uses the likelihood-specific information equality,
     it is only suitable for maximizing log-likelihood functions!
 
