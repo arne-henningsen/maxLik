@@ -120,7 +120,7 @@ maxBFGSRCompute <- function(fn,
       stop( "length of gradient (", length(gr),
          ") not equal to the no. of parameters (", nParam, ")" )
    }
-   ## initial approximation for inverse Hessian
+   ## initial approximation for inverse Hessian.  We only work with the non-fixed part
    if(observationGradient(gri, length(param))) {
       invHess <- -solve(crossprod(gri[,!fixed]))
                            # initial approximation of inverse Hessian (as in BHHH), if possible
@@ -132,7 +132,7 @@ maxBFGSRCompute <- function(fn,
       }
    }
    else {
-      invHess <- -1e-5*diag(1, nrow=length(gr))
+      invHess <- -1e-5*diag(1, nrow=length(gr[!fixed]))
                            # ... if not possible (Is this OK?).  Note we make this negative definite.
       if(print.level > 3) {
          cat("Initial inverse Hessian is diagonal\n")
@@ -153,13 +153,18 @@ maxBFGSRCompute <- function(fn,
    }
    samm <- NULL
                            # this will be returned in case of step getting too small
-   I <- diag(nParam)
+   I <- diag(nParam - sum(fixed))
   direction <- rep(0, nParam)
    ## ----------- Main loop ---------------
    repeat {
       iter <- iter + 1
       if( iter > iterlim) {
          code <- 4; break
+      }
+      if(any(is.na(invHess))) {
+         cat("Error in the approximated (free) inverse Hessian:\n")
+         print(invHess)
+         stop("NA in Hessian")
       }
       if(print.level > 0) {
          cat("Iteration ", iter, "\n")
@@ -178,11 +183,11 @@ maxBFGSRCompute <- function(fn,
       ## This procedure seems to work, but unfortunately I have little idea what I am doing :-(
       approxHess <- invHess
                            # approxHess is used for computing climbing direction, invHess for next approximation
-      while((me <- max.eigen( approxHess[!fixed,!fixed,drop=FALSE])) >= -lambdatol |
-         (qRank <- qr(approxHess[!fixed,!fixed], tol=qrtol)$rank) < sum(!fixed)) {
+      while((me <- max.eigen( approxHess)) >= -lambdatol |
+         (qRank <- qr(approxHess, tol=qrtol)$rank) < sum(!fixed)) {
                                         # maximum eigenvalue -> negative definite
                                         # qr()$rank -> singularity
-         lambda <- abs(me) + lambdatol + min(abs(diag(approxHess)[!fixed]))/1e7
+         lambda <- abs(me) + lambdatol + min(abs(diag(approxHess)))/1e7
                            # The third term corrects numeric singularity.  If diag(H) only contains
                            # large values, (H - (a small number)*I) == H because of finite precision
          approxHess <- approxHess - lambda*I
@@ -199,7 +204,7 @@ maxBFGSRCompute <- function(fn,
       }
       ## next, take a step of suitable length to the suggested direction
       step <- 1
-     direction[!fixed] <- as.vector(approxHess %*% gr[!fixed])
+      direction[!fixed] <- as.vector(approxHess %*% gr[!fixed])
     oldx <- x
      oldgr <- gr
     oldparam <- param
@@ -233,6 +238,10 @@ maxBFGSRCompute <- function(fn,
      gr <- sumGradients( gri, nParam = length( param ) )
       incr <- step * direction
       y <- gr - oldgr
+      if(all(y == 0)) {
+                           # gradient did not change -> cannot proceed
+         code <- 9; break
+      }
       ## Compute new approximation for the inverse hessian
       update <- outer( incr[!fixed], incr[!fixed]) *
           (sum(y[!fixed] * incr[!fixed]) +

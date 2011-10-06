@@ -62,6 +62,7 @@ A <- matrix(c(-1, 0, 0,
               0, 0, 1), 3, 3, byrow=TRUE)
 B <- c(0.5, 1, 1)
 start <- c(0.4, 0, 0.9)
+                           # x < 0.5, y < 1, z < 1
 ## analytic gradient
 a <- maxLik(logLikMix, grad=gradLikMix, hess=hessLikMix,
             start=start,
@@ -224,3 +225,22 @@ a <- maxLik(logLikMix2, gradLikMix2,
             constraints=list(ineqA=A, ineqB=B),
             print.level=1, rho=0.5)
 summary(a)
+
+## fixed parameters with constrained optimization, BFGS.  Thanks to Bob Loos for finding this error.
+## Optimize 3D hat with one parameter fixed (== 2D hat).
+## Add an equality constraint on that
+hat3 <- function(param) {
+   ## Hat function.  Hessian negative definite if sqrt(x^2 + y^2) < 0.5
+   x <- param[1]
+   y <- param[2]
+   z <- param[3]
+   exp(-x^2-y^2-z^2)
+}
+library(maxLik)
+sv <- c(1,1,1)
+## constraints: x + y + z >= 2.5
+A <- matrix(c(1,1,1), 1, 3)
+B <- -2.5
+constraints <- list(ineqA=A, ineqB=B)
+res <- maxBFGS(hat3, start=sv, constraints=constraints, fixed=3)
+summary(res)

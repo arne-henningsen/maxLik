@@ -138,13 +138,15 @@ maxOptim <- function(fn, grad, hess,
       ## linear equality and inequality constraints
                            # equality constraints: A %*% beta + B >= 0
       if(identical(names(constraints), c("ineqA", "ineqB"))) {
-         ui <- constraints$ineqA
-         ci <- -constraints$ineqB
-         result <- constrOptim2( theta = start[ !fixed ],
+         result <- constrOptim2( theta = start,
                           f = logLikFunc, grad = gradOptim,
-                          ui=ui, ci=ci, control=control,
+                          ineqA=constraints$ineqA,
+                                ineqB=-constraints$ineqB,
+                           # Note the constrOptim uses the B vector with different sign
+                                control=control,
                           method = method, fnOrig = fn, gradOrig = grad,
-                          hessOrig = hess, start = start, fixed = fixed, ...)
+                          hessOrig = hess, fixed = fixed, start=start, ...)
+                           # 'start' argument is needed for adding fixed parameters later in the call chain
          resultConstraints <- list(type="constrOptim",
                                    barrier.value=result$barrier.value,
                                    outer.iterations=result$outer.iterations

@@ -16,7 +16,7 @@ adaptive barrier algorithm.
    but it has been modified thereafter.   
 }
 \usage{
-constrOptim2(theta, f, grad = NULL, ui, ci, mu = 1e-04, control = list(),
+constrOptim2(theta, f, grad = NULL, ineqA, ineqB, mu = 1e-04, control = list(),
             method = if(is.null(grad)) "Nelder-Mead" else "BFGS",
             outer.iterations = 100, outer.eps = 1e-05, \dots)
 }
@@ -24,8 +24,8 @@ constrOptim2(theta, f, grad = NULL, ui, ci, mu = 1e-04, control = list(),
   \item{theta}{Starting value: must be in the feasible region.}
   \item{f}{Function to minimise (see below).}
   \item{grad}{Gradient of \code{f} (see below).}
-  \item{ui}{Constraints (see below).}
-  \item{ci}{Constraints (see below).}
+  \item{ineqA}{Constraints (see below).}
+  \item{ineqB}{Constraints (see below).}
   \item{mu}{(Small) tuning parameter.}
   \item{control}{Passed to \code{\link{optim}}.}
   \item{method}{Passed to \code{\link{optim}}.}
@@ -36,7 +36,7 @@ constrOptim2(theta, f, grad = NULL, ui, ci, mu = 1e-04, control = list(),
     will pass them to \code{f} and \code{grad} if it does not use them.}
 }
 \details{
-  The feasible region is defined by \code{ui \%*\% theta - ci >= 0}. The
+  The feasible region is defined by \code{ineqA \%*\% theta - ineqB >= 0}. The
   starting value must be in the interior of the feasible region, but the
   minimum may be on the boundary. 
   
@@ -106,9 +106,9 @@ grr <- function(x) { ## Gradient of 'fr'
 
 optim(c(-1.2,1), fr, grr)
 #Box-constraint, optimum on the boundary
-constrOptim2(c(-1.2,0.9), fr, grr, ui=rbind(c(-1,0),c(0,-1)), ci=c(-1,-1))
+constrOptim2(c(-1.2,0.9), fr, grr, ineqA=rbind(c(-1,0),c(0,-1)), ineqB=c(1,-1))
 #  x<=0.9,  y-x>0.1
-constrOptim2(c(.5,0), fr, grr, ui=rbind(c(-1,0),c(1,-1)), ci=c(-0.9,0.1))
+constrOptim2(c(.5,0), fr, grr, ineqA=rbind(c(-1,0),c(1,-1)), ineqB=c(-0.9,0.1))
 
 
 ## Solves linear and quadratic programming problems
@@ -119,14 +119,14 @@ constrOptim2(c(.5,0), fr, grr, ui=rbind(c(-1,0),c(1,-1)), ci=c(-0.9,0.1))
 fQP <- function(b) {-sum(c(0,5,0)*b)+0.5*sum(b*b)}
 Amat       <- matrix(c(-4,-3,0,2,1,0,0,-2,1),3,3)
 bvec       <- c(-8,2,0)
-constrOptim2(c(2,-1,-1), fQP, NULL, ui=t(Amat),ci=bvec)
+constrOptim2(c(2,-1,-1), fQP, NULL, ineqA=t(Amat),ineqB=bvec)
 # derivative
 gQP <- function(b) {-c(0,5,0)+b}
-constrOptim2(c(2,-1,-1), fQP, gQP, ui=t(Amat), ci=bvec)
+constrOptim2(c(2,-1,-1), fQP, gQP, ineqA=t(Amat), ineqB=bvec)
 
 ## Now with maximisation instead of minimisation
 hQP <- function(b) {sum(c(0,5,0)*b)-0.5*sum(b*b)}
-constrOptim2(c(2,-1,-1), hQP, NULL, ui=t(Amat), ci=bvec,
+constrOptim2(c(2,-1,-1), hQP, NULL, ineqA=t(Amat), ineqB=bvec,
             control=list(fnscale=-1))
 }
 \keyword{optimize}

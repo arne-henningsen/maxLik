@@ -15,40 +15,85 @@
 #  http://www.r-project.org/Licenses/
 
 
-constrOptim2<-function(theta,f,grad=NULL,ui,ci,mu=0.0001,control=list(),
+constrOptim2<-function(theta,
+                       f,grad=NULL,
+                       ineqA,ineqB,
+                       mu=0.0001,control=list(),
                   method=if(is.null(grad)) "Nelder-Mead" else "BFGS",
-                  outer.iterations=100,outer.eps=0.00001,...){
-
-    if (!is.null(control$fnscale) && control$fnscale<0)
-      mu<- -mu ##maximizing
-  
-    R<-function(theta,theta.old,...){
-        ui.theta<-ui%*%theta
-        gi<- ui.theta-ci
-        if (any(gi<0)) return(NaN)
-        gi.old<-ui%*%theta.old-ci
-        bar<-sum( gi.old*log(gi)-ui.theta)
+                  outer.iterations=100,outer.eps=0.00001,
+                       ...){
+   ## Optimize with inequality constraint using SUMT/logarithmic barrier
+   ## 
+   ## start      initial value of parameters, included the fixed ones
+   ##
+   ## This function has to operate with free parameter components only as 'optim' cannot handle
+   ## fixed parameters.  However, for computing constraints in 'R' and 'dR' we have to invoke full
+   ## parameters.
+    R<-function(thetaFree, thetaFree.old, ...) {
+       ## Wrapper for the function.  As this will be feed to the 'optim',
+       ## we have to call it with free parameters only (thetaFree) and
+       ## internally expand it to the full (theta)
+       ## 
+       ## Were we called with 'fixed' argument in ... ?
+       dotdotdot <- list(...)
+                           # can this be made better?
+       fixed <- dotdotdot[["fixed"]]
+       theta <- addFixedPar( theta = thetaFree, start = theta0, fixed = fixed)
+       theta.old <- addFixedPar( theta = thetaFree.old, start = theta0, fixed = fixed)
+       ineqA.theta<-ineqA%*%theta
+        gi<- ineqA.theta - ineqB
+       if (any(gi<0)) return(NaN)
+        gi.old<-ineqA%*%theta.old - ineqB
+        bar<-sum( gi.old*log(gi)-ineqA.theta)
         if (!is.finite(bar)) bar<- -Inf
-        f(theta,...)-mu*bar
+       f(thetaFree, ...)-mu*bar
+                           # do not send 'fixed' and 'start' to the function here --
+                           # we have already expanded theta to the full parameter
     }
- 
-    dR<-function(theta,theta.old,...){
-        ui.theta<-ui%*%theta
-        gi<-drop(ui.theta-ci)
-        gi.old<-drop(ui%*%theta.old-ci)
-        dbar<-colSums( ui*gi.old/gi-ui)
-        grad(theta,...)-mu*dbar
+    dR<-function(thetaFree, thetaFree.old, ...){
+       ## Wrapper for the function.  As this will be feed to the 'optim',
+       ## we have to call it with free parameters only (thetaFree) and
+       ## internally expand it to the full (theta)
+       ## 
+       ## Were we called with 'fixed' argument in ... ?
+       dotdotdot <- list(...)
+                           # can this be made better?
+       fixed <- dotdotdot[["fixed"]]
+       theta <- addFixedPar( theta = thetaFree, start = theta0, fixed = fixed)
+       theta.old <- addFixedPar( theta = thetaFree.old, start = theta0, fixed = fixed)
+       ineqA.theta<-ineqA%*%theta
+        gi<-drop(ineqA.theta - ineqB)
+        gi.old<-drop(ineqA%*%theta.old - ineqB)
+        dbar<-colSums( ineqA*gi.old/gi-ineqA)
+       if(!is.null(fixed))
+           gr <- grad(thetaFree,...)- (mu*dbar)[!fixed]
+                           # grad only gives gradient for the free parameters in order to maintain
+                           # compatibility with 'optim'.  Hence we compute barrier gradient
+                           # for the free parameters only as well.
+       else
+           gr <- grad(thetaFree,...)- (mu*dbar)
+       return(gr)
     }
-
-    if (any(ui%*%theta-ci<=0))
-        stop("initial value not feasible")
-    obj<-f(theta,...)
-    r<-R(theta,theta,...)
+    if (!is.null(control$fnscale) && control$fnscale<0)
+      mu <- -mu ##maximizing
+    if(any(ineqA%*%theta - ineqB < 0))
+        stop("initial value not the feasible region")
+    theta0 <- theta
+                           # inital value, for keeping the fixed params
+    ## Were we called with 'fixed' argument in ... ?
+    fixed <- list(...)[["fixed"]]
+    if(!is.null(fixed))
+        thetaFree <- theta[!fixed]
+    else
+        thetaFree <- theta
+    ##
+    obj<-f(thetaFree, ...)
+    r<-R(thetaFree,thetaFree,...)
     for(i in 1L:outer.iterations){
         obj.old<-obj
         r.old<-r
-        theta.old<-theta
-        fun<-function(theta,...){ R(theta,theta.old,...)}
+        thetaFree.old<-thetaFree
+        fun<-function(thetaFree,...){ R(thetaFree,thetaFree.old,...)}
         
         if( method == "SANN" ) {
           if( is.null( grad ) ) {
@@ -57,16 +102,17 @@ constrOptim2<-function(theta,f,grad=NULL,ui,ci,mu=0.0001,control=list(),
             gradient <- grad
           }
         } else {
-          gradient <- function(theta, ...) {
-            dR(theta, theta.old, ...)
+          gradient <- function(thetaFree, ...) {
+            dR(thetaFree, thetaFree.old, ...)
           }
         }
-        a<-optim(par=theta.old,fn=fun,gr=gradient,control=control,method=method,...)
+        ## As 'optim' does not directly support fixed parameters, 
+        a<-optim(par=thetaFree.old,fn=fun,gr=gradient,control=control,method=method,...)
         r<-a$value
         if (is.finite(r) && is.finite(r.old) && abs(r-r.old)/(outer.eps+abs(r-r.old))<outer.eps)
             break
-        theta<-a$par
-        obj<-f(theta,...)
+        thetaFree<-a$par
+        obj<-f(thetaFree, ...)
         if (obj>obj.old) break
     }
     if (i==outer.iterations){
@@ -85,7 +131,7 @@ constrOptim2<-function(theta,f,grad=NULL,ui,ci,mu=0.0001,control=list(),
         
     a$outer.iterations<-i
     a$barrier.value<-a$value
-    a$value<-f(a$par,...)
+    a$value<-f(a$par, ...)
     a$barrier.value<-a$barrier.value-a$value
     a
     

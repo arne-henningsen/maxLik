@@ -1,5 +1,4 @@
 addFixedPar <- function( theta, start, fixed, ...) {
-
    if( is.null( fixed ) ) {
       start <- theta
    } else {

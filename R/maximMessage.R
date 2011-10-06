@@ -10,6 +10,9 @@ maximMessage <- function(code) {
                      "6" = "Infinite gradient",                        
                      "7" = "Infinite Hessian",
                      "8" = "Relative change of the function within relative tolerance",
+                     "9" = paste("Gradient did not change,",
+                     "cannot improve BFGS approximation for the Hessian.\n",
+                     "Use different optimizer and/or analytic gradient."),
                      "100" = "Initial value out of range.",
                      paste("Code", code))
    return(message)

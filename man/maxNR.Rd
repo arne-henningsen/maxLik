@@ -188,13 +188,20 @@ the previous one (maximization is not performed in that step).
     \item{2}{ successive function values within tolerance limit (normal
       convergence).}
     \item{3}{ last step could not find higher value (probably not
-      converged).}
+      converged).  This is related to line search step getting too
+      small, usually because hitting the boundary of the parameter
+      space.  It may also be related to attempts to move to a wrong
+      direction because of numerical errors.  In some cases it can be
+      helped by changing \code{steptol}.}
     \item{4}{ iteration limit exceeded.}
     \item{5}{ Infinite value.}
     \item{6}{ Infinite gradient.}
     \item{7}{ Infinite Hessian.}
     \item{8}{ Successive function values withing relative tolerance
       limit (normal convergence).}
+    \item{9}{ (BFGS) Hessian approximation cannot be improved because of
+      gradient did not change.  May be related to numerical
+      approximation problems or wrong analytic gradient.}
     \item{100}{ Initial value out of range.}
     }
   }
@@ -232,12 +239,11 @@ the previous one (maximization is not performed in that step).
     uses the likelihood-specific information equality,
     it is only suitable for maximizing log-likelihood functions!
 
-    Quasi-Newton methods, including these above, do not work well in
-    non-concave regions of the function.  This is especially the case
-    with the implementation in \code{maxBFGSR}.  The user is advised to experiment with
-    various tolerance options to achieve convergence.
-}
-
+    Quasi-Newton methods, including those mentioned above, do not work
+    well in non-concave regions.  This is especially the case with the
+    implementation in \code{maxBFGSR}.  The user is advised to
+    experiment with various tolerance options to achieve convergence.
+  }
 \references{
    Berndt, E., Hall, B., Hall, R. and Hausman, J. (1974):
    Estimation and Inference in Nonlinear Structural Models,

@@ -10,7 +10,6 @@ logLikGrad <- function(theta, fnOrig, gradOrig, hessOrig,
    #    - FALSE if the gradient is not provided as attribute of the log-lik value
    #    - TRUE  if the gradient is provided as attribute of the log-lik value
    #    - NULL  if this is not known
-
    theta <- addFixedPar( theta = theta, start = start, fixed = fixed, ...)
 
    if(!is.null(gradOrig)) {
