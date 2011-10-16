@@ -4,6 +4,18 @@ Please note that only the most significant changes are reported here.
 A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
+	CHANGES IN VERSION 1.0-2 (2011-10-16)
+
+This is mainly bugfix release.
+
+* maxBFGSR works with fixed parameters.
+
+* maxBFGS and other optim-based routines work with both fixed
+  parameters and inequality constraints.
+
+* constrOptim2 removed from API.  Names of it's formal arguments are
+  changed.
+
 
             CHANGES IN VERSION 1.0-0 (2010-10-15)
 
