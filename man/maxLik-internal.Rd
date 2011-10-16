@@ -1,6 +1,7 @@
 \name{maxLik-internal}
 \alias{checkFuncArgs}
 \alias{coef.maxim}
+\alias{constrOptim2}
 \alias{maximMessage}
 \alias{maxNRCompute}
 \alias{observationGradient}
@@ -20,7 +21,7 @@
 }
 
 \details{
-   These are either various methods, or functions, not to be called
+   These are either various methods, or functions, not intended to be called
    directly by the user (or in some cases are just
    waiting for proper documentation to be written :).
 }

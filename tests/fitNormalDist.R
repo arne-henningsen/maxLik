@@ -687,7 +687,8 @@ all.equal( mlghFix[ -c( 5, 6, 9, 10 ) ], mlFixBfgs[ -c( 5, 6, 9, 10, 11 ) ] )
 mlIndFixBfgs <- maxLik( llfInd, start = startValFix, fixed = isFixed,
    method = "BFGS" )
 all.equal( mlFixBfgs[ -9 ], mlIndFixBfgs[ -c(9,12) ] )
-mlIndFixBfgs[ 12 ]
+print(formatC(mlIndFixBfgs$gradientObs, format="f", digits=4, width=7), quote=FALSE)
+                           # print fradient, only 4 digits to avoid clutter in R CMD tests
 mlIndFixBfgs3 <- maxLik( llfInd, start = startValFix, fixed = "mu",
    method = "BFGS" )
 all.equal( mlIndFixBfgs, mlIndFixBfgs3 )

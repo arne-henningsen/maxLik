@@ -4,7 +4,6 @@ bread.maxLik            Bread for Sandwich Estimator
 compareDerivatives      function to compare analytic and numeric
                         derivatives
 condiNumber             Print matrix condition numbers column-by-column
-constrOptim2            Linearly constrained optimisation
 estfun.maxLik           Extract Gradients Evaluated at each Observation
 fnSubset                Call fnFull with variable and fixed parameters
 hessian                 Hessian matrix
