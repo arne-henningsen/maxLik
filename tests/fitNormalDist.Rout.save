@@ -6551,8 +6551,8 @@ mu    3.300598 0.000000
 sigma 0.000000 1.650299
 > bread( mlgInd )
                  mu         sigma
-mu     3.299602e+00 -5.580985e-11
-sigma -9.972115e-11  1.649801e+00
+mu     3.299602e+00 -7.776550e-11
+sigma -7.776550e-11  1.649801e+00
 > bread( mlBHHH )
               mu      sigma
 mu     3.3061790 -0.1087693
@@ -6567,7 +6567,7 @@ mu    3.303697 0.000000
 sigma 0.000000 1.648752
 > bread( mlgIndBFGS )
                  mu         sigma
-mu     3.299605e+00 -2.235369e-06
+mu     3.299605e+00 -2.235368e-06
 sigma -2.235368e-06  1.649804e+00
 > bread( mlIndNM )
                 mu        sigma

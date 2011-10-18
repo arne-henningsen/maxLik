@@ -14,6 +14,8 @@ vcov.maxLik <- function(object, eigentol=1e-12, ...) {
       if(min(hessev) > (eigentol*max(hessev))) {
       ## If hessian is not singular, fill in the free parameter values
          varcovar[activePar,activePar] <- solve(-hessian(object)[activePar,activePar])
+         # guarantee that the returned variance covariance matrix is symmetric
+         varcovar <- ( varcovar + t( varcovar ) ) / 2
       }
       else {
       ## If singular, the free parameter values will be Inf
