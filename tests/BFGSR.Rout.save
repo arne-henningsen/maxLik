@@ -1,8 +1,8 @@
 
-R version 2.13.1 (2011-07-08)
+R version 2.13.2 (2011-09-30)
 Copyright (C) 2011 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: i486-pc-linux-gnu (32-bit)
+Platform: i686-pc-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -23,6 +23,7 @@ Type 'q()' to quit R.
 > ## Optimize quadratic form t(D) %*% W %*% D with p.d. weight matrix
 > ## (ie unbounded problems).
 > ## All solutions should go to large values with a message about successful convergence
+> set.seed(0)
 > quadForm <- function(D) {
 +    return(t(D) %*% W %*% D)
 + }
@@ -49,7 +50,6 @@ Estimates:
 --------------------------------------------
 > 
 > ## b) add noice to
-> set.seed(0)
 > W <- diag(N) + matrix(runif(N*N), N, N)
 >                            # diagonal weight matrix with some noise
 > D <- rep(1/N, N)

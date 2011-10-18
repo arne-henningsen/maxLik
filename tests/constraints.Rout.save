@@ -1,5 +1,5 @@
 
-R version 2.13.1 (2011-07-08)
+R version 2.13.2 (2011-09-30)
 Copyright (C) 2011 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 Platform: i686-pc-linux-gnu (32-bit)
@@ -720,8 +720,8 @@ Log-Likelihood: -3608.802
 2  free parameters
 Estimates:
       Estimate Std. error t value   Pr(> t)    
-[1,] -1.303367   0.045790 -28.464 < 2.2e-16 ***
-[2,]  0.651713   0.035379  18.421 < 2.2e-16 ***
+[1,] -1.303367   0.045816 -28.448 < 2.2e-16 ***
+[2,]  0.651713   0.035383  18.419 < 2.2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
