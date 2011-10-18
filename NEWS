@@ -4,6 +4,13 @@ Please note that only the most significant changes are reported here.
 A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
+
+        CHANGES IN VERSION 1.0-4 (???)
+
+* it is guaranteed now that the variance covariance matrix returned 
+by the vcov() method is always symmetric
+
+
 	CHANGES IN VERSION 1.0-2 (2011-10-16)
 
 This is mainly bugfix release.
