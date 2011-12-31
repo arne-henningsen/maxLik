@@ -8,9 +8,9 @@ vcov.maxLik <- function(object, eigentol=1e-12, ...) {
    if(!is.null(hess <- hessian(object))) {
       hess <- hessian(object)[activePar, activePar,drop=FALSE] 
       hessev <- abs(eigen(hess, symmetric=TRUE, only.values=TRUE)$values)
-      varcovar <- matrix(0, nParam(object), nParam(object))
+      varcovar <- matrix(0, nParam.maxim(object), nParam.maxim(object))
                            # this makes the fixed parameters to 0
-      rownames( varcovar ) <- colnames(varcovar ) <- names(coef(object))
+      rownames( varcovar ) <- colnames(varcovar ) <- names(coef.maxLik(object))
       if(min(hessev) > (eigentol*max(hessev))) {
       ## If hessian is not singular, fill in the free parameter values
          varcovar[activePar,activePar] <- solve(-hessian(object)[activePar,activePar])

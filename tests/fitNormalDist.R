@@ -1,6 +1,7 @@
 # load the 'maxLik' package
 library(maxLik)
-
+options(digits = 5)
+                           # just to avoid so many differences when comparing these output files
 ## data to fit a normal distribution
 # set seed for pseudo random numbers
 set.seed( 123 )
