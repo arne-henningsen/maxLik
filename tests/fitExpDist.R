@@ -5,6 +5,8 @@ library( maxLik )
 ## e.g. estimation of an exponential duration model
 
 # generate data
+options(digits=5)
+                           # less differences b/w different platforms
 set.seed( 4 )
 t <- rexp( 100, 2 )
 
