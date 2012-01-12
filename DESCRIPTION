@@ -1,8 +1,8 @@
 Package: maxLik
-Version: 1.0-3
-Date: 2010/10/15
+Version: 1.1-0
+Date: 2012/01/12
 Title: Maximum Likelihood Estimation
-Author: Ott Toomet <otoomet@ut.ee>,
+Author: Ott Toomet <otoomet@gmail.com>,
    Arne Henningsen <arne.henningsen@googlemail.com>,
    with contributions from Spencer Graves and Yves Croissant
 Maintainer: Arne Henningsen <arne.henningsen@googlemail.com>
