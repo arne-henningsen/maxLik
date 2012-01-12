@@ -39,6 +39,7 @@ maxOptim <- function(fn, grad, hess,
    message <- function(c) {
       switch(as.character(c),
                "0" = "successful convergence",
+             "1" = "iteration limit exceeded",
                "10" = "degeneracy in Nelder-Mead simplex",
                "51" = "warning from the 'L-BFGS-B' method; see the corresponding component 'message' for details",
                "52" = "error from the 'L-BFGS-B' method; see the corresponding component 'message' for details"
@@ -117,6 +118,8 @@ maxOptim <- function(fn, grad, hess,
             return( cand( theta, ... ) )
          }
       }
+   } else if( method == "CG" ) {
+      gradOptim <- logLikGrad
    } else if( method == "Nelder-Mead" ) {
       gradOptim <- NULL
    } else {

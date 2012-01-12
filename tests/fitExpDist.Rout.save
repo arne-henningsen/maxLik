@@ -415,6 +415,56 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] TRUE
 > 
 > 
+> ## CG estimation
+> # Estimate with only function values
+> mlCg <- maxLik( loglik, start = 1, method = "CG" )
+> print(summary( mlCg))
+--------------------------------------------
+Maximum Likelihood estimation
+CG maximisation, 33 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -25.054 
+1  free parameters
+Estimates:
+     Estimate Std. error t value Pr(> t)    
+[1,]    2.116      0.212      10  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> 
+> # Estimate with analytic gradient
+> mlgCg <- maxLik( loglik, gradlik, start = 1, method = "CG" )
+> print(summary( mlgCg))
+--------------------------------------------
+Maximum Likelihood estimation
+CG maximisation, 33 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -25.054 
+1  free parameters
+Estimates:
+     Estimate Std. error t value Pr(> t)    
+[1,]    2.116      0.212      10  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> 
+> # Estimate with analytic gradient and Hessian (not used for estimation)
+> mlghCg <- maxLik( loglik, gradlik, hesslik, start = 1, method = "CG" )
+> print(summary( mlghCg))
+--------------------------------------------
+Maximum Likelihood estimation
+CG maximisation, 33 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -25.054 
+1  free parameters
+Estimates:
+     Estimate Std. error t value Pr(> t)    
+[1,]    2.116      0.212      10  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+--------------------------------------------
+> 
+> 
 > ## test for method "estfun"
 > library( sandwich )
 Loading required package: zoo

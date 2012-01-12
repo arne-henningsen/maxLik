@@ -1,5 +1,6 @@
 ### Various tests for constrained optimization
 ###
+options(digits=5)
 
 logLikMix <- function(param) {
    rho <- param[1]

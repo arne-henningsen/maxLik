@@ -1,8 +1,8 @@
 
-R version 2.13.2 (2011-09-30)
+R version 2.14.1 (2011-12-22)
 Copyright (C) 2011 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: i686-pc-linux-gnu (32-bit)
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -24,6 +24,7 @@ Type 'q()' to quit R.
 > ## (ie unbounded problems).
 > ## All solutions should go to large values with a message about successful convergence
 > set.seed(0)
+> options(digits=5)
 > quadForm <- function(D) {
 +    return(t(D) %*% W %*% D)
 + }
@@ -41,12 +42,12 @@ BFGSR maximization
 Number of iterations: 20 
 Return code: 1 
 gradient close to zero 
-Function value: 1.182985e+24 
+Function value: 8.104e+25 
 Estimates:
-         estimate gradient
-[1,] 5.932011e+09        0
-[2,] 2.922554e+10        0
-[3,] 1.087242e+12        0
+        estimate gradient
+[1,]  6.2506e+12        0
+[2,]  6.2506e+12        0
+[3,] -1.7026e+12        0
 --------------------------------------------
 > 
 > ## b) add noice to
@@ -60,12 +61,12 @@ BFGSR maximization
 Number of iterations: 17 
 Return code: 1 
 gradient close to zero 
-Function value: 2.411885e+21 
+Function value: 2.4071e+21 
 Estimates:
         estimate gradient
-[1,]  8877158828        0
-[2,] 33431909639        0
-[3,] -2635180904        0
+[1,]  7684926721        0
+[2,] 33806418069        0
+[3,] -2319374069        0
 --------------------------------------------
 > 
 > ## Next, optimize hat function in non-concave region.  Does not work well.
@@ -79,14 +80,14 @@ Estimates:
 > summary(hatNC <- maxBFGSR(hat, start=c(1,1), tol=0, reltol=0))
 --------------------------------------------
 BFGSR maximization 
-Number of iterations: 20 
+Number of iterations: 26 
 Return code: 1 
 gradient close to zero 
 Function value: 1 
 Estimates:
-          estimate     gradient
-[1,] -1.027022e-07 2.053913e-07
-[2,] -9.060433e-08 1.811884e-07
+       estimate    gradient
+[1,] 1.8402e-07 -3.6804e-07
+[2,] 1.8402e-07 -3.6804e-07
 --------------------------------------------
 >                            # should converge to c(0,0).
 > 
@@ -108,20 +109,20 @@ Estimates:
 > summary(hat3CF <- maxBFGSR(hat3, start=sv, constraints=constraints, fixed=3))
 --------------------------------------------
 BFGSR maximization 
-Number of iterations: 11 
+Number of iterations: 13 
 Return code: 2 
 successive function values within tolerance limit 
-Function value: 0.2231336 
+Function value: 0.22313 
 Estimates:
-      estimate   gradient
-[1,] 0.4998756 -0.2230818
-[2,] 0.5000925 -0.2231786
-[3,] 1.0000000 -0.4462745
+     estimate gradient
+[1,]  0.49999 -0.22313
+[2,]  0.49999 -0.22313
+[3,]  1.00000 -0.44627
 
 Constrained optimization based on SUMT 
 Return code: 1 
 penalty close to zero 
-5  outer iterations, barrier value 1.013669e-09 
+5  outer iterations, barrier value 6.5361e-10 
 --------------------------------------------
 > 
 > 

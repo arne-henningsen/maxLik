@@ -6,6 +6,7 @@
 ## (ie unbounded problems).
 ## All solutions should go to large values with a message about successful convergence
 set.seed(0)
+options(digits=5)
 quadForm <- function(D) {
    return(t(D) %*% W %*% D)
 }

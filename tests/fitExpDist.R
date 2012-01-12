@@ -118,6 +118,20 @@ mlghSann <- maxLik( loglik, gradlik, hesslik, start = 1, method = "SANN" )
 all.equal( mlghSann, mlgSann )
 
 
+## CG estimation
+# Estimate with only function values
+mlCg <- maxLik( loglik, start = 1, method = "CG" )
+print(summary( mlCg))
+
+# Estimate with analytic gradient
+mlgCg <- maxLik( loglik, gradlik, start = 1, method = "CG" )
+print(summary( mlgCg))
+
+# Estimate with analytic gradient and Hessian (not used for estimation)
+mlghCg <- maxLik( loglik, gradlik, hesslik, start = 1, method = "CG" )
+print(summary( mlghCg))
+
+
 ## test for method "estfun"
 library( sandwich )
 try( estfun( mlSum ) )

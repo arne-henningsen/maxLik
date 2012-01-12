@@ -1,9 +1,10 @@
 \name{maxBFGS}
 \alias{maxBFGS}
+\alias{maxCG}
 \alias{maxSANN}
 \alias{maxNM}
 
-\title{BFGS, SANN and Nelder-Mead Maximization}
+\title{BFGS, conjugate gradient, SANN and Nelder-Mead Maximization}
 \description{
   These functions are wrappers for \code{\link{optim}} where the arguments are
   compatible with \code{\link{maxNR}}.  Note that there is a
@@ -15,6 +16,13 @@ maxBFGS(fn, grad = NULL, hess=NULL, start, fixed = NULL,
    tol = 1e-08, reltol=tol,
    finalHessian=TRUE,
    parscale=rep(1, length=length(start)), ... )
+
+maxCG(fn, grad = NULL, hess = NULL, start, fixed = NULL,
+   print.level = 0, iterlim = 500, constraints = NULL,
+   tol = 1e-08, reltol=tol,
+   finalHessian=TRUE,
+   parscale = rep(1, length = length(start)),
+   alpha = 1, beta = 0.5, gamma = 2, ...)
 
 maxSANN(fn, grad = NULL, hess = NULL, start, fixed = NULL,
    print.level = 0, iterlim = 10000, constraints = NULL,

@@ -7,3 +7,4 @@ y <- x + rnorm(100)
 m <- lm(y ~ x)
 print(nObs(m))
 print(stdEr(m))
+
