@@ -1,0 +1,44 @@
+
+R version 2.14.1 (2011-12-22)
+Copyright (C) 2011 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> 
+> ### test numeric methods, in particular handling of unequal
+> ### function lengths
+> library(maxLik)
+Loading required package: miscTools
+> 
+> f <- function(x) {
++    if(x[1] <= 0)
++        return(NA)
++                            # support of x[1] is (0, Inf)
++    return(c(log(x[1]),x[2]))
++ }
+> 
+> ng <- numericGradient(f, c(0.01,1), eps=0.1)
+Problem in numeric gradient
+Function value at
+[1] -0.04  1.00
+:
+[1] NA
+(length 1) does not conform with the original vector length 2
+component 1 will be set to NA
+> 
+> nh <- try(numericHessian(f, t0=c(0.01,1), eps=0.1))
+Error in numericNHessian(f = f, t0 = t0, eps = eps, fixed = fixed, ...) : 
+  Numeric Hessian only works for scalar functions
+> 

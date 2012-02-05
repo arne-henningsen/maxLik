@@ -34,6 +34,9 @@ maxNRCompute <- function(fn,
    ##               FALSE                do not include
    ## fixed       - a logical vector -- which parameters are taken as fixed.
    ##               Other paramters are treated as variable (free).
+   ## ...           additional argument to 'fn'.  This may include
+   ##               'fnOrig', 'gradOrig', 'hessOrig' if called fromm
+   ##               'maxNR'.
    ##
    ## RESULTS:
    ## a list of class "maxim":
@@ -124,7 +127,9 @@ maxNRCompute <- function(fn,
       print(H1)
    }
    if(length(H1) == 1) {
-                           # Allow the user program to return a single NA in case of out of support
+                           # Allow the user program to return a
+                           # single NA in case of out of support or
+                           # other problems
       if(is.na(H1))
           stop("NA in the initial Hessian")
    }
@@ -210,6 +215,7 @@ maxNRCompute <- function(fn,
             }
             f1 <- fn(start1, fixed = fixed, sumObs = TRUE,
                returnHessian = returnHessian, ...)
+                           # WTF does the 'returnHessian' here ?
             ## Find out the constant parameters -- these may be other than
             ## with full step
             constPar <- attr(f1, "constPar")

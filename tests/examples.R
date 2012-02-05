@@ -1,4 +1,5 @@
 library( maxLik )
+options(digits=5)
 
 ### activePar
 # a simple two-dimensional exponential hat

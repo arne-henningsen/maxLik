@@ -12,8 +12,13 @@ numericHessian <- function(f, grad=NULL, t0, eps=1e-6, fixed,
 
 numericNHessian <- function( f, t0, eps=1e-6, fixed, ...) {
    ## Numeric Hessian without gradient
+   ## Assume f() returns a scalar
+   ## 
    ## fixed   calculate the Hessian only for the non-fixed parameters
    f00 <- f( t0, ...)
+   if(length(f00) > 1) {
+      stop("Numeric Hessian only works for scalar functions")
+   }
    eps2 <- eps*eps
    N <- length( t0)
    H <- matrix(NA, N, N)

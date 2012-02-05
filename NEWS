@@ -5,7 +5,11 @@ A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
 
-        CHANGES IN VERSION 1.1-0
+* numericGradient and numericHessian check for the length of
+  vector function
+
+
+        CHANGES IN VERSION 1.1-0 (2012-01-...)
 
 * Conjugate-gradient (CG) optimization  method included.
 
