@@ -1,5 +1,17 @@
-checkBhhhGrad <- function( g, theta, analytic ) {
-      if( analytic ) {
+checkBhhhGrad <- function( g, theta, analytic, fixed=NULL) {
+   ## This function controls if the user-supplied analytic or
+   ## numeric gradient of the right dimension.
+   ## If not, signals an error.
+   ##
+   ## analytic:   logical, do we have a user-supplied analytic
+   ##             gradient?
+   if(is.null(fixed)) {
+      activePar <- rep(T, length=length(theta))
+   }
+   else {
+      activePar <- !fixed
+   }
+   if( analytic ) {
          ## Gradient supplied by the user.
          ## Check whether the gradient has enough rows (about enough
          ## observations in data)
@@ -11,7 +23,7 @@ checkBhhhGrad <- function( g, theta, analytic ) {
                  "of the log-likelihood function at an individual\n",
                  "(independent) observation and each column must\n",
                  "correspond to a parameter" )
-         } else if( nrow( g ) < length( theta ) ) {
+         } else if( nrow( g ) < length( theta[activePar] ) ) {
             stop( "the matrix returned by the gradient function",
                " (argument 'grad') must have at least as many",
                " rows as the number of parameters (", length( theta ), "),",

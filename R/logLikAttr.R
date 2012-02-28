@@ -1,6 +1,7 @@
 logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
          sumObs = FALSE, returnHessian = TRUE, ...) {
-
+   ## fixed:    logical, which parameters to keep fixed
+   ## 
 # this function returns the log-likelihood value with gradient and Hessian as
 # attributes. If the log-likelihood function provided by the user does not add
 # these attributes, this functions uses the functions provided by the user
@@ -94,8 +95,11 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
             }
             if(is.null(h)) {
                            # gr seems not to contain NA-s at free parameters
-               checkBhhhGrad( g = gr, theta = theta,  analytic =
-                             ( !is.null( attr( f, "gradient" ) ) || !is.null( gradOrig ) ) )
+               checkBhhhGrad( g = gr, theta = theta,
+                             analytic =
+                             ( !is.null( attr( f, "gradient" ) ) ||
+                              !is.null( gradOrig ) ),
+                             fixed=fixed)
                h <- - crossprod( gr )
             }
             attr( h, "type" ) = "BHHH"

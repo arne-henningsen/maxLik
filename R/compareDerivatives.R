@@ -6,6 +6,8 @@ compareDerivatives <- function(f, grad, hess=NULL, t0, eps=1e-6,
 ##  
   if(print)cat("-------- compare derivatives -------- \n")
   f0 <- f(t0, ...)
+  attributes(f0) <- NULL
+                           # keep only array data when printing
   if(is.function(grad))
       analytic <- grad(t0, ...)
   else if(is.numeric(grad))
@@ -15,8 +17,6 @@ compareDerivatives <- function(f, grad, hess=NULL, t0, eps=1e-6,
            "pre-computed numeric gradient matrix")
   out <- list(t0=t0, f.t0=f0, compareGrad = list(analytic=analytic))
 #  
-  if(any(is.na(analytic)))
-      stop("NA in analytic gradient!\n")
   if(is.null(dim(analytic))) {
       if(print)cat("Note: analytic gradient is vector. ",
         "Transforming into a matrix form\n")
@@ -28,7 +28,10 @@ compareDerivatives <- function(f, grad, hess=NULL, t0, eps=1e-6,
         analytic <- matrix(analytic, 1, length(analytic))
 # f returns a scalar -> we have row vector along t0
   }
-  if(print)cat("Function value:", f0, "\n")
+  if(print) {
+     cat("Function value:\n")
+     print(f0)
+  }
   if(print)cat("Dim of analytic gradient:", dim(analytic), "\n")
   numeric <- numericGradient(f, t0, eps, ...)
   out$compareGrad$numeric = numeric 

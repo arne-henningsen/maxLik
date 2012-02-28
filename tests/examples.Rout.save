@@ -159,7 +159,8 @@ b 3.5151e-07 -2.5863e-07
 > compareDerivatives(f, cos, t0=1)
 -------- compare derivatives -------- 
 Note: analytic gradient is vector.  Transforming into a matrix form
-Function value: 0.84147 
+Function value:
+[1] 0.84147
 Dim of analytic gradient: 1 1 
        numeric          : 1 1 
       
@@ -180,7 +181,8 @@ Max relative difference: 5.1299e-11
 > compareDerivatives(l, gradl, t0=c(1,2))
 -------- compare derivatives -------- 
 Note: analytic gradient is vector.  Transforming into a matrix form
-Function value: -227.88 
+Function value:
+[1] -227.88
 Dim of analytic gradient: 1 2 
        numeric          : 1 2 
 t0
@@ -1638,7 +1640,8 @@ F-statistic:  114 on 2 and 97 DF,  p-value: <2e-16
 > compareDerivatives(f0, gradf0, t0=1:2)
 -------- compare derivatives -------- 
 Note: analytic gradient is vector.  Transforming into a matrix form
-Function value: 0.0067379 
+Function value:
+[1] 0.0067379
 Dim of analytic gradient: 1 2 
        numeric          : 1 2 
 t0

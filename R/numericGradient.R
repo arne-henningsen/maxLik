@@ -28,7 +28,7 @@ numericGradient <- function(f, t0, eps=1e-6, fixed,
          grad[,i] <- (ft2 - ft1)/eps
       }
       else {
-         cat("Problem in numeric gradient\n")
+         warning("Problem in numeric gradient\n")
          max.print <- 10
          if(length(ft1) != nVal) {
             cat("Function value at\n")
