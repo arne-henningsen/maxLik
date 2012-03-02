@@ -28,33 +28,46 @@ numericGradient <- function(f, t0, eps=1e-6, fixed,
          grad[,i] <- (ft2 - ft1)/eps
       }
       else {
-         warning("Problem in numeric gradient\n")
+         warnMsg <- "Problem in numeric gradient\n"
          max.print <- 10
          if(length(ft1) != nVal) {
-            cat("Function value at\n")
-            print(t1[seq(length=min(max.print,length(t1)))])
+            warnMsg <- c(warnMsg,"Function value at\n")
+            warnMsg <- c(warnMsg,
+                             format(t1[seq(length=min(max.print,length(t1)))]),
+                             "\n")
             if(max.print < length(t1))
-                cat("...\n")
-            cat(":\n")
-            print(ft1[seq(length=min(max.print,length(ft1)))])
+                warnMsg <- c(warnMsg, "...\n")
+            warnMsg <- c(warnMsg, " =\n")
+            warnMsg <- c(warnMsg,
+                         format(paste(ft1[seq(length=min(max.print,length(ft1)))],
+                                      collapse=" ")
+                                ), "\n")
             if(max.print < length(ft1))
-                cat("...\n")
-            cat("(length ", length(ft1), ") does not conform with ",
-                "the original vector length ", nVal, "\n", sep="")
+                warnMsg <- c(warnMsg, "...\n")
+            warnMsg <- c(warnMsg, "(length ", length(ft1), ") does not conform with ",
+                "the length at original value ", nVal, "\n", sep="")
          }
          if(length(ft2) != nVal) {
-            cat("Function value at\n")
-            print(t2[seq(length=min(max.print,length(t2)))])
+            warnMsg <- c(warnMsg, "Function value at\n")
+            warnMsg <- c(warnMsg,
+                         paste(format(t2[seq(length=min(max.print,length(t2)))]),
+                               collapse=" "),
+                         "\n")
             if(max.print < length(t2))
-                cat("...\n")
-            cat(":\n")
-            print(ft2[seq(length=min(max.print,length(ft2)))])
+                warnMsg <- c(warnMsg,"...\n")
+            warnMsg <- c(warnMsg, " =\n")
+            warnMsg <- c(warnMsg,
+                             paste(format(ft2[seq(length=min(max.print,length(ft2)))]),
+                                   collapse=" "),
+                             "\n")
             if(max.print < length(ft2))
-                cat("...\n")
-            cat("(length ", length(ft1), ") does not conform with ",
-                "the original vector length ", nVal, sep="")
+                warnMsg <- c(warnMsg, "...\n")
+            warnMsg <- c(warnMsg,
+                         "(length ", length(ft2), ") does not conform with ",
+                         "the length at original value ", nVal, "\n", sep="")
          }
-         cat("component", i, "will be set to NA\n")
+         warnMsg <- c(warnMsg,"component ", i, " will be set to NA")
+         warning(warnMsg)
          grad[,i] <- NA
       }
    }
