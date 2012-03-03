@@ -17,8 +17,10 @@ numericNHessian(f, t0, eps=1e-6, fixed, \dots)
 
 \arguments{
   \item{f}{function to be differentiated.  The first argument must be
-    the parameter vector with respect to which it is differentiated.}
-  \item{grad}{function, gradient of f}
+    the parameter vector with respect to which it is differentiated.
+  For numeric gradient, \code{f} may return a (numeric) vector, for Hessian it
+  must return a numeric scalar}
+  \item{grad}{function, gradient of \code{f}}
   \item{t0}{vector, the value of parameters}
   \item{eps}{numeric, the step for numeric differentiation}
   \item{fixed}{logical vector, length of which equal the length of
