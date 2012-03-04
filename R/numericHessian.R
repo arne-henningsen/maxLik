@@ -38,7 +38,7 @@ numericNHessian <- function( f, t0, eps=1e-6, fixed, ...) {
          return(warnMsg)
       }
       if(!is.numeric(value))
-          stop("The function value must be a scalar")
+          stop("The function value must be numeric")
       return(NULL)
    }
    f00 <- f( t0, ...)

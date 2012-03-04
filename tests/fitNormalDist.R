@@ -162,8 +162,10 @@ vcov( ml )
 logLik( summary( ml ) )
 mlInd <- maxLik( llfInd, start = startVal )
 summary( mlInd )
-all.equal( ml[ ], mlInd[ -11 ] )
-mlInd[ 11 ]
+all.equal( ml[-3], mlInd[ c(-3,-11) ] )
+                           # 3  gradient, should be close to 0, but may vary enormously in relative terms
+mlInd[[11]][sample(nrow(mlInd[[11]]), 10),]
+                           # just print a sample of 10
 nObs( mlInd )
 
 # with analytical gradients

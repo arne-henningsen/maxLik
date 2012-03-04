@@ -2,7 +2,7 @@
 R version 2.14.1 (2011-12-22)
 Copyright (C) 2011 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: x86_64-pc-linux-gnu (64-bit)
+Platform: i486-pc-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -30,15 +30,14 @@ Loading required package: miscTools
 + }
 > 
 > ng <- numericGradient(f, c(0.01,1), eps=0.1)
-Problem in numeric gradient
-Function value at
-[1] -0.04  1.00
-:
-[1] NA
-(length 1) does not conform with the original vector length 2
-component 1 will be set to NA
+Warning message:
+In numericGradient(f, c(0.01, 1), eps = 0.1) : Function value at
+-0.04  1.00
+ =
+NA
+(length 1) does not conform with the length at original value 2
+Component 1 set to NA
 > 
 > nh <- try(numericHessian(f, t0=c(0.01,1), eps=0.1))
-Error in numericNHessian(f = f, t0 = t0, eps = eps, fixed = fixed, ...) : 
-  Numeric Hessian only works for scalar functions
+There were 13 warnings (use warnings() to see them)
 > 

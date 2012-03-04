@@ -5,6 +5,8 @@ A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
 
+* BHHH only considers free parameters when analysing the size of gradient
+
 * numericGradient and numericHessian check for the length of
   vector function
 

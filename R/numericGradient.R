@@ -7,6 +7,33 @@ numericGradient <- function(f, t0, eps=1e-6, fixed,
    ## return:
    ## NvalxNPar matrix, gradient
    ## gradient along parameters which are not active are NA
+   warnMessage <- function(theta, value, i) {
+      ## issue a warning if the function value at theta is not a scalar
+      max.print <- 10
+      if(length(value) != nVal) {
+         warnMsg <- "Function value at\n"
+         warnMsg <- c(warnMsg,
+                      paste(format(theta[seq(length=min(max.print,length(theta)))]),
+                             collapse=" "),
+                      "\n")
+         if(max.print < length(theta))
+             warnMsg <- c(warnMsg, "...\n")
+         warnMsg <- c(warnMsg, " =\n")
+         warnMsg <- c(warnMsg,
+                      paste(format(value[seq(length=min(max.print,length(value)))]),
+                                   collapse=" "),
+                      "\n")
+         if(max.print < length(value))
+             warnMsg <- c(warnMsg, "...\n")
+         warnMsg <- c(warnMsg, "(length ", length(value), ") does not conform with ",
+                      "the length at original value ", nVal, "\n")
+         warnMsg <- c(warnMsg, "Component ", i, " set to NA")
+         return(warnMsg)
+      }
+      if(!all(is.na(value)) & !is.numeric(value))
+          stop("The function value must be numeric for 'numericGradient'")
+      return(NULL)
+   }
    NPar <- length(t0)
    nVal <- length(f0 <- f(t0, ...))
    grad <- matrix(NA, nVal, NPar)
@@ -24,52 +51,15 @@ numericGradient <- function(f, t0, eps=1e-6, fixed,
       ft2 <- f(t2, ...)
       ## give meaningful error message if the functions give vectors
       ## of different length at t1, t2
-      if(length(ft1) == nVal & length(ft2) == nVal) {
-         grad[,i] <- (ft2 - ft1)/eps
+      if(!is.null(msg <- warnMessage(t1, ft1, i))) {
+         warning(msg)
+         ft1 <- NA
       }
-      else {
-         warnMsg <- "Problem in numeric gradient\n"
-         max.print <- 10
-         if(length(ft1) != nVal) {
-            warnMsg <- c(warnMsg,"Function value at\n")
-            warnMsg <- c(warnMsg,
-                             format(t1[seq(length=min(max.print,length(t1)))]),
-                             "\n")
-            if(max.print < length(t1))
-                warnMsg <- c(warnMsg, "...\n")
-            warnMsg <- c(warnMsg, " =\n")
-            warnMsg <- c(warnMsg,
-                         format(paste(ft1[seq(length=min(max.print,length(ft1)))],
-                                      collapse=" ")
-                                ), "\n")
-            if(max.print < length(ft1))
-                warnMsg <- c(warnMsg, "...\n")
-            warnMsg <- c(warnMsg, "(length ", length(ft1), ") does not conform with ",
-                "the length at original value ", nVal, "\n", sep="")
-         }
-         if(length(ft2) != nVal) {
-            warnMsg <- c(warnMsg, "Function value at\n")
-            warnMsg <- c(warnMsg,
-                         paste(format(t2[seq(length=min(max.print,length(t2)))]),
-                               collapse=" "),
-                         "\n")
-            if(max.print < length(t2))
-                warnMsg <- c(warnMsg,"...\n")
-            warnMsg <- c(warnMsg, " =\n")
-            warnMsg <- c(warnMsg,
-                             paste(format(ft2[seq(length=min(max.print,length(ft2)))]),
-                                   collapse=" "),
-                             "\n")
-            if(max.print < length(ft2))
-                warnMsg <- c(warnMsg, "...\n")
-            warnMsg <- c(warnMsg,
-                         "(length ", length(ft2), ") does not conform with ",
-                         "the length at original value ", nVal, "\n", sep="")
-         }
-         warnMsg <- c(warnMsg,"component ", i, " will be set to NA")
-         warning(warnMsg)
-         grad[,i] <- NA
+      if(!is.null(msg <- warnMessage(t2, ft2, i))) {
+         warning(msg)
+         ft2 <- NA
       }
+      grad[,i] <- (ft2 - ft1)/eps
    }
    return(grad)
 }
