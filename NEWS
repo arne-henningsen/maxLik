@@ -4,6 +4,10 @@ Please note that only the most significant changes are reported here.
 A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
+	CHANGES IN VERSION ....
+
+
+	CHANGES IN VERSION 1.1-2 (2012-03-04)
 
 * BHHH only considers free parameters when analysing the size of gradient
 
