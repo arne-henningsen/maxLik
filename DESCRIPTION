@@ -10,4 +10,5 @@ Depends: R (>= 2.4.0), miscTools (>= 0.6-8)
 Imports: sandwich
 Description: Tools for Maximum Likelihood Estimation
 License: GPL (>= 2)
+ByteCompile: yes
 URL: http://www.maxLik.org
