@@ -1,8 +1,8 @@
 
-R version 2.14.1 (2011-12-22)
-Copyright (C) 2011 The R Foundation for Statistical Computing
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: i486-pc-linux-gnu (32-bit)
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -166,20 +166,20 @@ Loading required package: miscTools
 > print( ml )
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
-Return code 1: gradient close to zero
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.58 (2 free parameter(s))
 Estimate(s): 1.1808 1.8165 
 > summary( ml )
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
-Return code 1: gradient close to zero
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.58 
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
 mu       1.181      0.182     6.5 7.9e-11 ***
-sigma    1.816      0.128    14.2 < 2e-16 ***
+sigma    1.816      0.128    14.1 < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -193,11 +193,11 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 1.1808 1.8165 
 > condiNumber( ml )
 mu 	 1 
-sigma 	 1.6667 
+sigma 	 1.6686 
 > hessian( ml )
-           mu   sigma
-mu    -30.326   0.000
-sigma   0.000 -60.652
+              mu      sigma
+mu    -30.325964  -0.028422
+sigma  -0.028422 -60.623506
 > logLik( ml )
 [1] -201.58
 > maximType( ml )
@@ -210,13 +210,13 @@ Error in nObs.maxLik(ml) :
 > nParam( ml )
 [1] 2
 > returnCode( ml )
-[1] 1
+[1] 2
 > returnMessage( ml )
-[1] "gradient close to zero"
+[1] "successive function values within tolerance limit"
 > vcov( ml )
-            mu    sigma
-mu    0.032975 0.000000
-sigma 0.000000 0.016488
+               mu       sigma
+mu     3.2975e-02 -1.5459e-05
+sigma -1.5459e-05  1.6495e-02
 > logLik( summary( ml ) )
 [1] -201.58
 > mlInd <- maxLik( llfInd, start = startVal )
@@ -230,12 +230,14 @@ Log-Likelihood: -201.58
 Estimates:
       Estimate Std. error t value Pr(> t)    
 mu       1.181      0.182     6.5 8.1e-11 ***
-sigma    1.816      0.128    14.1 < 2e-16 ***
+sigma    1.816      0.128    14.2 < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( ml[-3], mlInd[ c(-3,-11) ] )
-[1] "Component 3: Mean relative difference: 0.00093721"
+[1] "Component 3: Mean relative difference: 0.0012492"
+[2] "Component 4: Mean relative difference: 0.5"      
+[3] "Component 5: 1 string mismatch"                  
 >                            # 3  gradient, should be close to 0, but may vary enormously in relative terms
 > mlInd[[11]][sample(nrow(mlInd[[11]]), 10),]
              mu    sigma
@@ -270,13 +272,15 @@ sigma    1.816      0.128    14.1  <2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( ml, mlg )
-[1] "Component 3: Mean relative difference: 1.0121"    
-[2] "Component 4: Mean relative difference: 0.00063571"
+[1] "Component 2: Mean relative difference: 1.6411e-08"
+[2] "Component 3: Mean relative difference: 1.0078"    
+[3] "Component 4: Mean relative difference: 0.00094782"
+[4] "Component 5: Mean relative difference: 0.5"       
+[5] "Component 6: 1 string mismatch"                   
 > mlgInd <- maxLik( llfInd, gfInd, start = startVal )
 > all.equal( mlInd, mlgInd )
-[1] "Component 3: Mean relative difference: 0.98526"    
-[2] "Component 4: Mean relative difference: 0.00030178" 
-[3] "Component 11: Mean relative difference: 1.5624e-08"
+[1] "Component 3: Mean relative difference: 1.0502"    
+[2] "Component 4: Mean relative difference: 0.00052447"
 > all.equal( mlg[ ], mlgInd[ -11 ] )
 [1] TRUE
 > mlgInd[ 11 ]
@@ -506,14 +510,12 @@ sigma -0.0010877  0.0179786
 > logLik( summary( mlBHHH ) )
 [1] -201.58
 > all.equal( ml[ ], mlBHHH[ -11 ] )
-[1] "Component 2: Mean relative difference: 2.6258e-07"                             
-[2] "Component 3: Mean relative difference: 34.092"                                 
+[1] "Component 2: Mean relative difference: 2.472e-07"                              
+[2] "Component 3: Mean relative difference: 19.398"                                 
 [3] "Component 4: Attributes: < Length mismatch: comparison on first 2 components >"
-[4] "Component 4: Mean relative difference: 0.094592"                               
-[5] "Component 5: Mean relative difference: 1"                                      
-[6] "Component 6: 1 string mismatch"                                                
-[7] "Component 9: Mean relative difference: 0.85714"                                
-[8] "Component 10: 1 string mismatch"                                               
+[4] "Component 4: Mean relative difference: 0.093625"                               
+[5] "Component 9: Mean relative difference: 0.85714"                                
+[6] "Component 10: 1 string mismatch"                                               
 > mlBHHH[ 11 ]
 $gradientObs
               mu      sigma
@@ -625,11 +627,11 @@ $gradientObs
 +    finalHessian = TRUE )
 > all.equal( mlBhhhH, mlBHHH )
 [1] "Component 4: Attributes: < Length mismatch: comparison on first 2 components >"
-[2] "Component 4: Mean relative difference: 0.093944"                               
+[2] "Component 4: Mean relative difference: 0.094309"                               
 > hessian( mlBhhhH ) 
            mu   sigma
-mu    -30.298   0.000
-sigma   0.000 -60.595
+mu    -30.326   0.000
+sigma   0.000 -60.624
 > summary( mlBhhhH ) 
 --------------------------------------------
 Maximum Likelihood estimation
@@ -639,7 +641,7 @@ Log-Likelihood: -201.58
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5 8.1e-11 ***
+mu       1.181      0.182     6.5 7.9e-11 ***
 sigma    1.816      0.128    14.1 < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
@@ -703,7 +705,7 @@ sigma    1.816      0.134   13.55 < 2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlBHHH, mlgBHHH )
-[1] "Component 3: Mean relative difference: 0.00015243"
+[1] "Component 3: Mean relative difference: 0.00065265"
 > all.equal( mlg[ ], mlgBHHH[ -11 ] )
 [1] "Component 2: Mean relative difference: 2.534e-07"                              
 [2] "Component 3: Mean absolute difference: 1.8807e-05"                             
@@ -824,15 +826,15 @@ $gradientObs
 > mlgBhhhH <- maxLik( llf, gfInd, start = startVal, method = "BHHH", 
 +    finalHessian = TRUE )
 > all.equal( mlgBhhhH, mlBhhhH )
-[1] "Component 3: Mean relative difference: 0.00015241"
-[2] "Component 4: Mean relative difference: 0.00030295"
+[1] "Component 3: Mean relative difference: 0.00065222"
+[2] "Component 4: Mean relative difference: 0.00032266"
 > all.equal( mlgBhhhH, mlgBHHH )
 [1] "Component 4: Attributes: < Length mismatch: comparison on first 2 components >"
 [2] "Component 4: Mean relative difference: 0.094017"                               
 > hessian( mlgBhhhH ) 
                mu       sigma
-mu    -3.0307e+01  9.2731e-06
-sigma  9.2760e-06 -6.0613e+01
+mu    -3.0307e+01  9.2728e-06
+sigma  9.2734e-06 -6.0613e+01
 > 
 > # with analytical gradients as attribute
 > try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
@@ -947,8 +949,8 @@ Log-Likelihood: -201.58
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5 8.2e-11 ***
-sigma    1.816      0.128    14.1 < 2e-16 ***
+mu       1.181      0.182     6.5   8e-11 ***
+sigma    1.816      0.129    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -962,11 +964,11 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 1.1810 1.8165 
 > condiNumber( mlBFGSYC )
 mu 	 1 
-sigma 	 1.6727 
+sigma 	 1.6679 
 > hessian( mlBFGSYC )
               mu      sigma
-mu    -30.269121   0.056843
-sigma   0.056843 -60.566663
+mu    -30.297542   0.028422
+sigma   0.028422 -60.538241
 > logLik( mlBFGSYC )
 [1] -201.58
 > maximType( mlBFGSYC )
@@ -984,14 +986,14 @@ Error in nObs.maxLik(mlBFGSYC) :
 [1] "successive function values within tolerance limit"
 > vcov( mlBFGSYC )
               mu      sigma
-mu    3.3037e-02 3.1006e-05
-sigma 3.1006e-05 1.6511e-02
+mu    3.3006e-02 1.5496e-05
+sigma 1.5496e-05 1.6518e-02
 > logLik( summary( mlBFGSYC ) )
 [1] -201.58
 > all.equal( ml[-c(5,6,9,10)], mlBFGSYC[-c(5,6,9,10)] )
-[1] "Component 2: Mean relative difference: 6.806e-05"
-[2] "Component 3: Mean relative difference: 6106.9"   
-[3] "Component 4: Mean relative difference: 0.0028116"
+[1] "Component 2: Mean relative difference: 6.8052e-05"
+[2] "Component 3: Mean relative difference: 3592"      
+[3] "Component 4: Mean relative difference: 0.0024984" 
 > mlIndBFGSYC <- maxLik( llfInd, start = startVal, method = "BFGSR" )
 > summary( mlIndBFGSYC )
 --------------------------------------------
@@ -1002,15 +1004,15 @@ Log-Likelihood: -201.58
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5 8.1e-11 ***
+mu       1.181      0.182     6.5 7.9e-11 ***
 sigma    1.816      0.128    14.2 < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlBFGSYC[ -9 ], mlIndBFGSYC[ -c(9,11) ] )
-[1] "Component 2: Mean relative difference: 9.3465e-05"
-[2] "Component 3: Mean relative difference: 1.6617"    
-[3] "Component 4: Mean relative difference: 0.0028125" 
+[1] "Component 2: Mean relative difference: 9.347e-05"
+[2] "Component 3: Mean relative difference: 1.6615"   
+[3] "Component 4: Mean relative difference: 0.0025016"
 > mlIndBFGSYC[ 11 ]
 $gradientObs
               mu      sigma
@@ -1028,7 +1030,7 @@ $gradientObs
  [12,]  0.163320 -0.5021047
  [13,]  0.188149 -0.4862539
  [14,]  0.012292 -0.5502786
- [15,] -0.391766 -0.2717779
+ [15,] -0.391766 -0.2717778
  [16,]  1.028453  1.3706323
  [17,]  0.247000 -0.4397389
  [18,] -1.247003  2.2739092
@@ -1036,7 +1038,7 @@ $gradientObs
  [20,] -0.341420 -0.3388252
  [21,] -0.702139  0.3449079
  [22,] -0.186946 -0.4870739
- [23,] -0.676787  0.2814118
+ [23,] -0.676787  0.2814119
  [24,] -0.496672 -0.1024891
  [25,] -0.433715 -0.2088807
  [26,] -1.077308  1.5574963
@@ -1050,7 +1052,7 @@ $gradientObs
  [34,]  0.477534 -0.1363530
  [35,]  0.443251 -0.1936905
  [36,]  0.362660 -0.3116615
- [37,]  0.280989 -0.4071429
+ [37,]  0.280989 -0.4071430
  [38,] -0.092337 -0.5350665
  [39,] -0.240285 -0.4456822
  [40,] -0.285454 -0.4025497
@@ -1109,7 +1111,7 @@ $gradientObs
  [93,]  0.089918 -0.5358674
  [94,] -0.435453 -0.2061371
  [95,]  0.770046  0.5264922
- [96,] -0.418693 -0.2321388
+ [96,] -0.418693 -0.2321387
  [97,]  1.271194  2.3845575
  [98,]  0.874290  0.8378377
  [99,] -0.197691 -0.4795668
@@ -1120,7 +1122,7 @@ $gradientObs
 > 
 > # with analytical gradients
 > mlgBFGSYC <- maxLik( llf, gf, start = startVal, method = "BFGSR" , print.level=1)
-Initial value of the function : -326.589781090133 
+Initial value of the function : -326.589781090132 
 Iteration  1 
 step = 1, lnL = -325.1, chi2 = 1.5039, function increment = 1.494
 Iteration  2 
@@ -1150,7 +1152,7 @@ step = 0.0625, lnL = -201.58, chi2 = 6.6452e-05, function increment = 4.2386e-07
 Iteration  14 
 step = 0.03125, lnL = -201.58, chi2 = 1.7822e-05, function increment = 2.5402e-07
 Iteration  15 
-step = 0.015625, lnL = -201.58, chi2 = 5.203e-08, function increment = 2.6037e-10
+step = 0.015625, lnL = -201.58, chi2 = 5.203e-08, function increment = 2.6043e-10
 --------------
 successive function values within tolerance limit 
 15  iterations
@@ -1171,13 +1173,13 @@ sigma    1.816      0.128    14.1 < 2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlBFGSYC, mlgBFGSYC )
-[1] "Component 3: Mean relative difference: 0.00012587"
-[2] "Component 4: Mean relative difference: 0.0021004" 
+[1] "Component 3: Mean relative difference: 1.9416e-05"
+[2] "Component 4: Mean relative difference: 0.0014764" 
 > mlgIndBFGSYC <- maxLik( llfInd, gfInd, start = startVal,
 +    method = "BFGSR" )
 > all.equal( mlIndBFGSYC, mlgIndBFGSYC )
-[1] "Component 3: Mean relative difference: 6.4387e-06"
-[2] "Component 4: Mean relative difference: 0.00065322"
+[1] "Component 3: Mean relative difference: 6.6842e-06"
+[2] "Component 4: Mean relative difference: 0.00067237"
 > all.equal( mlgBFGSYC[ -9 ], mlgIndBFGSYC[ -c(9,11) ] )
 [1] "Component 2: Mean relative difference: 9.3472e-05"
 [2] "Component 3: Mean relative difference: 1.6615"    
@@ -1289,7 +1291,7 @@ $gradientObs
 > 
 > # with analytical gradients as attribute
 > mlGBFGSYC <- maxLik( llfGrad, start = startVal, method = "BFGSR" , print.level=1)
-Initial value of the function : -326.589781090133 
+Initial value of the function : -326.589781090132 
 Iteration  1 
 step = 1, lnL = -325.1, chi2 = 1.5039, function increment = 1.494
 Iteration  2 
@@ -1319,7 +1321,7 @@ step = 0.0625, lnL = -201.58, chi2 = 6.6452e-05, function increment = 4.2386e-07
 Iteration  14 
 step = 0.03125, lnL = -201.58, chi2 = 1.7822e-05, function increment = 2.5402e-07
 Iteration  15 
-step = 0.015625, lnL = -201.58, chi2 = 5.203e-08, function increment = 2.6037e-10
+step = 0.015625, lnL = -201.58, chi2 = 5.203e-08, function increment = 2.6043e-10
 --------------
 successive function values within tolerance limit 
 15  iterations
@@ -1381,8 +1383,8 @@ Log-Likelihood: -201.58
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182    6.51 7.7e-11 ***
-sigma    1.816      0.128   14.15 < 2e-16 ***
+mu       1.181      0.182     6.5 8.2e-11 ***
+sigma    1.816      0.128    14.1 < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -1396,11 +1398,11 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 1.1808 1.8165 
 > condiNumber( mlBFGS )
 mu 	 1 
-sigma 	 1.6679 
+sigma 	 1.6715 
 > hessian( mlBFGS )
               mu      sigma
-mu    -30.354386  -0.028422
-sigma  -0.028422 -60.651928
+mu    -30.269121   0.028422
+sigma   0.028422 -60.623506
 > logLik( mlBFGS )
 [1] -201.58
 > maximType( mlBFGS )
@@ -1415,16 +1417,16 @@ function
 > returnMessage( mlBFGS )
 [1] "successful convergence "
 > vcov( mlBFGS )
-               mu       sigma
-mu     3.2944e-02 -1.5438e-05
-sigma -1.5438e-05  1.6488e-02
+              mu      sigma
+mu    3.3037e-02 1.5489e-05
+sigma 1.5489e-05 1.6495e-02
 > logLik( summary( mlBFGS ) )
 [1] -201.58
 > all.equal( ml, mlBFGS )
 [1] "Length mismatch: comparison on first 10 components"
-[2] "Component 2: Mean relative difference: 6.3918e-07" 
-[3] "Component 3: Mean relative difference: 69.8"       
-[4] "Component 4: Mean relative difference: 0.0028116"  
+[2] "Component 2: Mean relative difference: 6.548e-07"  
+[3] "Component 3: Mean relative difference: 41.721"     
+[4] "Component 4: Mean relative difference: 0.0056127"  
 [5] "Component 5: Mean relative difference: 1"          
 [6] "Component 6: 1 string mismatch"                    
 [7] "Component 9: names for current but not for target" 
@@ -1441,14 +1443,14 @@ Log-Likelihood: -201.58
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5 8.2e-11 ***
+mu       1.181      0.182     6.5 8.1e-11 ***
 sigma    1.816      0.128    14.2 < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlBFGS[], mlIndBFGS[-12] )
-[1] "Component 3: Mean relative difference: 0.00040276"
-[2] "Component 4: Mean relative difference: 0.0046729" 
+[1] "Component 3: Mean relative difference: 0.00063978"
+[2] "Component 4: Mean relative difference: 0.00125"   
 > mlIndBFGS[12]
 $gradientObs
               mu      sigma
@@ -1573,13 +1575,13 @@ sigma    1.816      0.128    14.1  <2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlBFGS, mlgBFGS )
-[1] "Component 3: Mean relative difference: 0.00048382"
-[2] "Component 4: Mean relative difference: 0.0015721" 
+[1] "Component 3: Mean relative difference: 0.00041338"
+[2] "Component 4: Mean relative difference: 0.0011514" 
 > all.equal( mlg, mlgBFGS )
 [1] "Length mismatch: comparison on first 10 components"
 [2] "Component 2: Mean relative difference: 6.4838e-07" 
 [3] "Component 3: Mean absolute difference: 4.025e-05"  
-[4] "Component 4: Mean relative difference: 2.4729e-06" 
+[4] "Component 4: Mean relative difference: 2.4728e-06" 
 [5] "Component 5: Mean relative difference: 1"          
 [6] "Component 6: 1 string mismatch"                    
 [7] "Component 9: names for current but not for target" 
@@ -1751,8 +1753,8 @@ Log-Likelihood: -201.58
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5 8.1e-11 ***
-sigma    1.817      0.129    14.1 < 2e-16 ***
+mu       1.181      0.182     6.5 8.3e-11 ***
+sigma    1.817      0.128    14.1 < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -1766,11 +1768,11 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 1.1806 1.8166 
 > condiNumber( mlNM )
 mu 	 1 
-sigma 	 1.6679 
+sigma 	 1.6681 
 > hessian( mlNM )
-              mu      sigma
-mu    -30.297542   0.028422
-sigma   0.028422 -60.538241
+           mu   sigma
+mu    -30.269   0.000
+sigma   0.000 -60.595
 > logLik( mlNM )
 [1] -201.58
 > maximType( mlNM )
@@ -1785,16 +1787,16 @@ function
 > returnMessage( mlNM )
 [1] "successful convergence "
 > vcov( mlNM )
-              mu      sigma
-mu    3.3006e-02 1.5496e-05
-sigma 1.5496e-05 1.6518e-02
+            mu    sigma
+mu    0.033037 0.000000
+sigma 0.000000 0.016503
 > logLik( summary( mlNM ) )
 [1] -201.58
 > all.equal( ml, mlNM )
 [1] "Length mismatch: comparison on first 10 components"
-[2] "Component 2: Mean relative difference: 0.00011983" 
-[3] "Component 3: Mean relative difference: 13715"      
-[4] "Component 4: Mean relative difference: 0.0021868"  
+[2] "Component 2: Mean relative difference: 0.00011984" 
+[3] "Component 3: Mean relative difference: 8068.5"     
+[4] "Component 4: Mean relative difference: 0.0015615"  
 [5] "Component 5: Mean relative difference: 1"          
 [6] "Component 6: 1 string mismatch"                    
 [7] "Component 9: names for current but not for target" 
@@ -1817,8 +1819,8 @@ sigma    1.817      0.128    14.1  <2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlNM[], mlIndNM[-12] )
-[1] "Component 3: Mean relative difference: 1.7799e-06"
-[2] "Component 4: Mean relative difference: 0.0025016" 
+[1] "Component 3: Mean relative difference: 1.5236e-06"
+[2] "Component 4: Mean relative difference: 0.0037559" 
 > mlIndNM[12]
 $gradientObs
               mu      sigma
@@ -1893,7 +1895,7 @@ $gradientObs
  [69,]  0.504195 -0.0886566
  [70,]  1.187686  2.0120745
  [71,] -0.352307 -0.3249873
- [72,] -1.454153  3.2909172
+ [72,] -1.454152  3.2909172
  [73,]  0.554781  0.0086593
  [74,] -0.484524 -0.1239883
  [75,] -0.471681 -0.1462977
@@ -1943,8 +1945,8 @@ sigma    1.817      0.128    14.1 < 2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlNM, mlgNM )
-[1] "Component 3: Mean relative difference: 1.8393e-06"
-[2] "Component 4: Mean relative difference: 0.0013598" 
+[1] "Component 3: Mean relative difference: 1.7481e-06"
+[2] "Component 4: Mean relative difference: 0.00059006"
 > # with individual log likelihood values and gradients
 > mlgIndNM <- maxLik( llfInd, gfInd, start = startVal, method = "NM" )
 > summary( mlgIndNM )
@@ -2124,11 +2126,11 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 1.1818 1.8165 
 > condiNumber( mlSANN )
 mu 	 1 
-sigma 	 1.6727 
+sigma 	 1.6735 
 > hessian( mlSANN )
               mu      sigma
 mu    -30.269121   0.056843
-sigma   0.056843 -60.566663
+sigma   0.056843 -60.595085
 > logLik( mlSANN )
 [1] -201.58
 > maximType( mlSANN )
@@ -2144,16 +2146,16 @@ function
 [1] "successful convergence "
 > vcov( mlSANN )
               mu      sigma
-mu    3.3037e-02 3.1006e-05
-sigma 3.1006e-05 1.6511e-02
+mu    3.3037e-02 3.0992e-05
+sigma 3.0992e-05 1.6503e-02
 > logLik( summary( mlSANN ) )
 [1] -201.58
 > all.equal( ml, mlSANN )
  [1] "Length mismatch: comparison on first 10 components"
  [2] "Component 1: Mean relative difference: 7.0286e-08" 
- [3] "Component 2: Mean relative difference: 0.00033492" 
- [4] "Component 3: Mean relative difference: 27769"      
- [5] "Component 4: Mean relative difference: 0.0028116"  
+ [3] "Component 2: Mean relative difference: 0.0003349"  
+ [4] "Component 3: Mean relative difference: 16334"      
+ [5] "Component 4: Mean relative difference: 0.0028107"  
  [6] "Component 5: Mean relative difference: 1"          
  [7] "Component 6: 1 string mismatch"                    
  [8] "Component 9: names for current but not for target" 
@@ -2171,13 +2173,13 @@ Log-Likelihood: -201.58
 Estimates:
       Estimate Std. error t value Pr(> t)    
 mu       1.182      0.182    6.51 7.6e-11 ***
-sigma    1.817      0.128   14.14 < 2e-16 ***
+sigma    1.817      0.128   14.15 < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlSANN[], mlIndSANN[-12] )
-[1] "Component 3: Mean relative difference: 7.0334e-07"
-[2] "Component 4: Mean relative difference: 0.001875"  
+[1] "Component 3: Mean relative difference: 1.0972e-06"
+[2] "Component 4: Mean relative difference: 0.0024992" 
 > mlIndSANN[12]
 $gradientObs
               mu      sigma
@@ -2302,8 +2304,8 @@ sigma    1.817      0.128   14.14 < 2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlSANN, mlgSANN )
-[1] "Component 3: Mean relative difference: 7.2846e-07"
-[2] "Component 4: Mean relative difference: 0.001384"  
+[1] "Component 3: Mean relative difference: 1.0721e-06"
+[2] "Component 4: Mean relative difference: 0.0010711" 
 > # with individual log likelihood values and gradients
 > mlgIndSANN <- maxLik( llfInd, gfInd, start = startVal, method = "SANN" )
 > summary( mlgIndSANN )
@@ -2444,8 +2446,8 @@ Log-Likelihood: -201.59
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.200      0.181    6.62 3.6e-11 ***
-sigma    1.813      0.128   14.19 < 2e-16 ***
+mu       1.200      0.181    6.62 3.5e-11 ***
+sigma    1.813      0.128   14.18 < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
@@ -2453,7 +2455,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] "Component 1: Mean relative difference: 3.0992e-05"
 [2] "Component 2: Mean relative difference: 0.0074753" 
 [3] "Component 3: Mean relative difference: 0.96794"   
-[4] "Component 4: Mean relative difference: 0.022005"  
+[4] "Component 4: Mean relative difference: 0.0214"    
 > 
 > ############### with fixed parameters ###############
 > # start values
@@ -2507,9 +2509,9 @@ FALSE  TRUE
 > condiNumber( mlFix )
 sigma 	 1 
 > hessian( mlFix )
-      mu   sigma
-mu    NA      NA
-sigma NA -60.027
+      mu  sigma
+mu    NA     NA
+sigma NA -59.97
 > logLik( mlFix )
 [1] -202.08
 > maximType( mlFix )
@@ -2525,7 +2527,7 @@ sigma NA -60.027
 > vcov( mlFix )
       mu    sigma
 mu     0 0.000000
-sigma  0 0.016659
+sigma  0 0.016675
 > logLik( summary( mlFix ) )
 [1] -202.08
 > mlIndFix <- maxLik( llfInd, start = startValFix, activePar = !isFixed )
@@ -2551,19 +2553,19 @@ Log-Likelihood: -202.08
 Estimates:
       Estimate Std. error t value Pr(> t)    
 mu       1.000      0.000      NA      NA    
-sigma    1.825      0.129    14.2  <2e-16 ***
+sigma    1.825      0.129    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlFix[ ], mlIndFix[ -11 ] )
-[1] "Component 3: Mean relative difference: 0.28906"   
-[2] "Component 4: Mean relative difference: 0.00047348"
+[1] "Component 3: Mean relative difference: 0.13281"   
+[2] "Component 4: Mean relative difference: 0.00047393"
 > mlFix[[3]]
-         mu       sigma 
-         NA -2.8422e-08 
+        mu      sigma 
+        NA 2.8422e-08 
 > mlIndFix[[3]]
-         mu       sigma 
-         NA -3.6637e-08 
+        mu      sigma 
+        NA 2.4647e-08 
 > mlIndFix[ 11 ]
 $gradientObs
        mu     sigma
@@ -2694,36 +2696,36 @@ sigma    1.825      0.129    14.1  <2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlFix, mlgFix )
-[1] "Component 3: Mean relative difference: 1"         
-[2] "Component 4: Mean relative difference: 0.00013249"
+[1] "Component 3: Mean relative difference: 0.99998"   
+[2] "Component 4: Mean relative difference: 0.00081525"
 > mlFix[[3]]
-         mu       sigma 
-         NA -2.8422e-08 
+        mu      sigma 
+        NA 2.8422e-08 
 > mlgFix[[3]]
         mu      sigma 
-        NA 5.5422e-13 
+        NA 5.4712e-13 
 > mlFix[[4]]
-      mu   sigma
-mu    NA      NA
-sigma NA -60.027
+      mu  sigma
+mu    NA     NA
+sigma NA -59.97
 > mlgFix[[4]]
       mu   sigma
 mu    NA      NA
 sigma NA -60.019
 > mlgIndFix <- maxLik( llfInd, gfInd, start = startValFix, activePar = !isFixed )
 > all.equal( mlIndFix, mlgIndFix )
-[1] "Component 3: Mean relative difference: 1"         
-[2] "Component 4: Mean relative difference: 0.00060569"
+[1] "Component 3: Mean relative difference: 0.99998"   
+[2] "Component 4: Mean relative difference: 0.00034115"
 > mlIndFix[[3]]
-         mu       sigma 
-         NA -3.6637e-08 
+        mu      sigma 
+        NA 2.4647e-08 
 > mlgIndFix[[3]]
         mu      sigma 
-        NA 5.5395e-13 
+        NA 5.4839e-13 
 > mlIndFix[[4]]
       mu   sigma
 mu    NA      NA
-sigma NA -60.055
+sigma NA -59.998
 > mlgIndFix[[4]]
       mu   sigma
 mu    NA      NA
@@ -2922,20 +2924,20 @@ sigma  0 0.017863
 > logLik( summary( mlFixBHHH ) )
 [1] -202.08
 > all.equal( mlFix[ -c( 5, 6, 9, 10 ) ], mlFixBHHH[ -c( 5, 6, 9, 10, 11 ) ] )
-[1] "Component 2: Mean relative difference: 7.6903e-08"                             
-[2] "Component 3: Mean relative difference: 295.63"                                 
+[1] "Component 2: Mean relative difference: 7.6899e-08"                             
+[2] "Component 3: Mean relative difference: 298.54"                                 
 [3] "Component 4: Attributes: < Length mismatch: comparison on first 2 components >"
-[4] "Component 4: Mean relative difference: 0.067365"                               
+[4] "Component 4: Mean relative difference: 0.066481"                               
 > mlFix[[ 3 ]]
-         mu       sigma 
-         NA -2.8422e-08 
+        mu      sigma 
+        NA 2.8422e-08 
 > mlFixBHHH[[ 3 ]]
          mu       sigma 
-         NA -8.4308e-06 
+         NA -8.4566e-06 
 > mlFix[[ 4 ]]
-      mu   sigma
-mu    NA      NA
-sigma NA -60.027
+      mu  sigma
+mu    NA     NA
+sigma NA -59.97
 > mlFixBHHH[[ 4 ]]
       mu   sigma
 mu    NA      NA
@@ -3083,7 +3085,7 @@ sigma    1.825      0.134    13.7  <2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlFixBHHH, mlgFixBHHH )
-[1] "Component 3: Mean relative difference: 0.0018656"
+[1] "Component 3: Mean relative difference: 0.0011859"
 > mlgFixBHHH2 <- maxLik( llf, gfInd, start = startValFix, activePar = !isFixed,
 +    method = "BHHH")
 > all.equal( mlgFixBHHH, mlgFixBHHH2 )
@@ -3138,7 +3140,7 @@ FALSE  TRUE
 sigma 	 1 
 > hessian( mlFixBfgs )
             mu    sigma
-mu    -29.9849  -5.9401
+mu    -30.0133  -5.9401
 sigma  -5.9401 -60.0267
 > logLik( mlFixBfgs )
 [1] -202.08
@@ -3165,8 +3167,8 @@ sigma  0 0.016659
 > mlIndFixBfgs <- maxLik( llfInd, start = startValFix, fixed = isFixed,
 +    method = "BFGS" )
 > all.equal( mlFixBfgs[ -9 ], mlIndFixBfgs[ -c(9,12) ] )
-[1] "Component 3: Mean relative difference: 9.6699e-08"
-[2] "Component 4: Mean relative difference: 0.0011158" 
+[1] "Component 3: Mean relative difference: 8.7205e-08"
+[2] "Component 4: Mean relative difference: 0.0011154" 
 > print(formatC(mlIndFixBfgs$gradientObs, format="f", digits=4, width=7), quote=FALSE)
        mu      sigma  
   [1,] -0.3364 -0.3412
@@ -3295,7 +3297,7 @@ sigma  0 0.016659
 > summary( mlgFixBfgs )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 29 iterations
+BFGS maximisation, 27 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -202.08 
 1  free parameters
@@ -3307,12 +3309,11 @@ sigma    1.825      0.129    14.1  <2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlFixBfgs[ -9 ], mlgFixBfgs[ -9 ] )
-[1] "Component 3: Mean relative difference: 9.379e-08" 
-[2] "Component 4: Mean relative difference: 0.00041067"
+[1] "Component 4: Mean relative difference: 0.00020974"
 > mlgIndFixBfgs <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
 +    method = "BFGS")
 > all.equal( mlgFixBfgs[ ], mlgIndFixBfgs[ -12 ] )
-[1] "Component 3: Mean relative difference: 1.6539e-08"
+[1] TRUE
 > mlgIndFixBfgs[ 12 ]
 $gradientObs
                mu     sigma
@@ -3326,7 +3327,7 @@ $gradientObs
   [8,] -0.7592733  0.504561
   [9,] -0.4122401 -0.237586
  [10,] -0.2674805 -0.417204
- [11,]  0.7346780  0.437486
+ [11,]  0.7346779  0.437486
  [12,]  0.2159556 -0.462674
  [13,]  0.2405378 -0.442190
  [14,]  0.0664303 -0.539752
@@ -3341,14 +3342,14 @@ $gradientObs
  [23,] -0.6157945  0.144411
  [24,] -0.4374710 -0.198450
  [25,] -0.3751404 -0.290911
- [26,] -1.0123314  1.322948
+ [26,] -1.0123313  1.322948
  [27,]  0.5028289 -0.086265
  [28,]  0.0920525 -0.532340
  [29,] -0.6830950  0.303985
  [30,]  0.7525234  0.485933
  [31,]  0.2559583 -0.428214
  [32,] -0.1770981 -0.490555
- [33,]  0.5372428 -0.020926
+ [33,]  0.5372428 -0.020927
  [34,]  0.5270443 -0.040740
  [35,]  0.4931023 -0.103948
  [36,]  0.4133129 -0.235969
@@ -3385,7 +3386,7 @@ $gradientObs
  [67,]  0.2690097 -0.415706
  [68,]  0.0318124 -0.545960
  [69,]  0.5535329  0.011510
- [70,]  1.2304341  2.215877
+ [70,]  1.2304341  2.215876
  [71,] -0.2947105 -0.389259
  [72,] -1.3859331  2.958550
  [73,]  0.6036312  0.117335
@@ -3415,7 +3416,7 @@ $gradientObs
  [97,]  1.3128088  2.598308
  [98,]  0.9198529  0.996765
  [99,] -0.1414643 -0.511277
-[100,] -0.6160445  0.144973
+[100,] -0.6160444  0.144973
 
 > mlgIndFixBfgs3 <- maxLik( llfInd, gfInd, start = startValFix, fixed = "mu",
 +    method = "BFGS" )
@@ -3495,8 +3496,8 @@ FALSE  TRUE
 sigma 	 1 
 > hessian( mlFixNm )
             mu    sigma
-mu    -30.0417  -5.9686
-sigma  -5.9686 -60.0551
+mu    -30.0133  -5.9401
+sigma  -5.9401 -60.0551
 > logLik( mlFixNm )
 [1] -202.08
 > maximType( mlFixNm )
@@ -3518,8 +3519,8 @@ sigma  0 0.016651
 [1] -202.08
 > all.equal( mlFixBfgs[ -c( 9, 10 ) ], mlFixNm[ -c( 9, 10 ) ] )
 [1] "Component 2: Mean relative difference: 3.6613e-05"
-[2] "Component 3: Mean relative difference: 0.00081259"
-[3] "Component 4: Mean relative difference: 0.0013947" 
+[2] "Component 3: Mean relative difference: 0.0008126" 
+[3] "Component 4: Mean relative difference: 0.00047348"
 > mlIndFixNm <- maxLik( llfInd, start = startValFix, fixed = isFixed,
 +    method = "NM" )
 Warning message:
@@ -3527,7 +3528,7 @@ In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
   one-diml optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlFixNm[ ], mlIndFixNm[ -12 ] )
-[1] TRUE
+[1] "Component 4: Mean relative difference: 0.0020353"
 > mlIndFixNm[ 12 ]
 $gradientObs
                mu     sigma
@@ -3689,7 +3690,7 @@ sigma    1.825      0.129    14.1  <2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlFixNm, mlgFixNm )
-[1] "Component 4: Mean relative difference: 0.00099652"
+[1] "Component 4: Mean relative difference: 0.00037194"
 > mlgIndFixNm <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
 +    method = "NM")
 Warning message:
@@ -3873,7 +3874,7 @@ sigma 	 1
 > hessian( mlFixSann )
             mu    sigma
 mu    -29.9849  -5.9401
-sigma  -5.9401 -59.9982
+sigma  -5.9401 -60.0267
 > logLik( mlFixSann )
 [1] -202.08
 > maximType( mlFixSann )
@@ -3890,17 +3891,17 @@ function
 > vcov( mlFixSann )
       mu    sigma
 mu     0 0.000000
-sigma  0 0.016667
+sigma  0 0.016659
 > logLik( summary( mlFixSann ) )
 [1] -202.08
 > all.equal( mlFixBfgs[ -c( 9, 10 ) ], mlFixSann[ -c( 9, 10 ) ] )
-[1] "Component 2: Mean relative difference: 8.9399e-06"
-[2] "Component 3: Mean relative difference: 0.00019839"
-[3] "Component 4: Mean relative difference: 0.00047348"
+[1] "Component 2: Mean relative difference: 8.9402e-06"
+[2] "Component 3: Mean relative difference: 0.00019841"
+[3] "Component 4: Mean relative difference: 0.00094697"
 > mlIndFixSann <- maxLik( llfInd, start = startValFix, fixed = isFixed,
 +    method = "SANN" )
 > all.equal( mlFixSann[ ], mlIndFixSann[ -12 ] )
-[1] "Component 4: Mean relative difference: 0.00094757"
+[1] "Component 4: Mean relative difference: 0.00063151"
 > mlIndFixSann[ 12 ]
 $gradientObs
                mu     sigma
@@ -4026,7 +4027,7 @@ sigma    1.825      0.129    14.1  <2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 --------------------------------------------
 > all.equal( mlFixSann, mlgFixSann )
-[1] "Component 4: Mean relative difference: 0.00056838"
+[1] "Component 4: Mean relative difference: 0.00039275"
 > mlgIndFixSann <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
 +    method = "SANN")
 > all.equal( mlgFixSann[ ], mlgIndFixSann[ -12 ] )
@@ -4178,8 +4179,8 @@ Log-Likelihood: -204.53
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.820      0.174     4.7 2.5e-06 ***
-sigma    1.680      0.107    15.7 < 2e-16 ***
+mu       0.820      0.174    4.71 2.5e-06 ***
+sigma    1.680      0.107   15.69 < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -4197,11 +4198,11 @@ Constrained optimization based on constrOptim
 0.81972 1.68027 
 > condiNumber( mlBfgsInEq )
 mu 	 1 
-sigma 	 3.6086 
+sigma 	 3.6106 
 > hessian( mlBfgsInEq )
            mu   sigma
-mu    -35.413 -15.206
-sigma -15.206 -93.621
+mu    -35.442 -15.234
+sigma -15.234 -93.706
 > logLik( mlBfgsInEq )
 [1] -204.53
 > maximType( mlBfgsInEq )
@@ -4217,8 +4218,8 @@ function
 [1] "successful convergence "
 > vcov( mlBfgsInEq )
               mu      sigma
-mu     0.0303547 -0.0049301
-sigma -0.0049301  0.0114821
+mu     0.0303350 -0.0049316
+sigma -0.0049316  0.0114734
 > logLik( summary( mlBfgsInEq ) )
 [1] -204.53
 > mlBfgsInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
@@ -4232,8 +4233,8 @@ Log-Likelihood: -204.53
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.820      0.174     4.7 2.6e-06 ***
-sigma    1.680      0.107    15.7 < 2e-16 ***
+mu       0.820      0.174    4.71 2.5e-06 ***
+sigma    1.680      0.107   15.69 < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -4242,9 +4243,9 @@ Constrained optimization based on constrOptim
 1  outer iterations, barrier value -0.0014505 
 --------------------------------------------
 > all.equal( mlBfgsInEq[ ], mlBfgsInEqInd[ -12 ] )
-[1] "Component 3: Mean relative difference: 2.0253e-08"              
-[2] "Component 4: Mean relative difference: 0.00066079"              
-[3] "Component 11: Component 2: Mean relative difference: 7.9943e-07"
+[1] "Component 3: Mean relative difference: 1.4957e-08"              
+[2] "Component 4: Mean relative difference: 0.00071225"              
+[3] "Component 11: Component 2: Mean relative difference: 7.1367e-07"
 > mlBfgsInEqInd[ 12 ]
 $gradientObs
               mu     sigma
@@ -4356,10 +4357,10 @@ $gradientObs
 > mlgBfgsInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
 +    method = "BFGS" )
 > all.equal( mlBfgsInEq, mlgBfgsInEq )
-[1] "Component 2: Mean relative difference: 2.6426e-08"             
-[2] "Component 3: Mean relative difference: 1.2831e-07"             
-[3] "Component 4: Mean relative difference: 0.00058164"             
-[4] "Component 11: Component 2: Mean relative difference: 4.753e-06"
+[1] "Component 2: Mean relative difference: 2.7021e-08"              
+[2] "Component 3: Mean relative difference: 1.3164e-07"              
+[3] "Component 4: Mean relative difference: 0.00048736"              
+[4] "Component 11: Component 2: Mean relative difference: 4.8053e-06"
 > mlgBfgsInEqInd <- maxLik( llfInd, gfInd, start = startVal, constraints = inEq,
 +    method = "BFGS" )
 > all.equal( mlgBfgsInEqInd[ -12 ], mlgBfgsInEq[ ] )
@@ -4496,8 +4497,8 @@ Log-Likelihood: -204.53
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.820      0.174     4.7 2.6e-06 ***
-sigma    1.680      0.107    15.7 < 2e-16 ***
+mu       0.820      0.174    4.71 2.5e-06 ***
+sigma    1.680      0.107   15.68 < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -4515,11 +4516,11 @@ Constrained optimization based on constrOptim
 0.81971 1.68028 
 > condiNumber( mlNmInEq )
 mu 	 1 
-sigma 	 3.6128 
+sigma 	 3.61 
 > hessian( mlNmInEq )
            mu   sigma
-mu    -35.385 -15.206
-sigma -15.206 -93.678
+mu    -35.442 -15.234
+sigma -15.234 -93.678
 > logLik( mlNmInEq )
 [1] -204.53
 > maximType( mlNmInEq )
@@ -4535,15 +4536,15 @@ function
 [1] "successful convergence "
 > vcov( mlNmInEq )
               mu      sigma
-mu     0.0303795 -0.0049311
-sigma -0.0049311  0.0114753
+mu     0.0303357 -0.0049332
+sigma -0.0049332  0.0114771
 > logLik( summary( mlNmInEq ) )
 [1] -204.53
 > all.equal( mlBfgsInEq, mlNmInEq )
 [1] "Component 1: Mean relative difference: 8.099e-08"             
-[2] "Component 2: Mean relative difference: 5.2847e-06"            
-[3] "Component 3: Mean relative difference: 2.6951e-05"            
-[4] "Component 4: Mean relative difference: 0.00066079"            
+[2] "Component 2: Mean relative difference: 5.2841e-06"            
+[3] "Component 3: Mean relative difference: 2.6948e-05"            
+[4] "Component 4: Mean relative difference: 0.00030331"            
 [5] "Component 9: Mean relative difference: 0.20769"               
 [6] "Component 10: 1 string mismatch"                              
 [7] "Component 11: Component 2: Mean relative difference: 0.011895"
@@ -4559,7 +4560,7 @@ Log-Likelihood: -204.53
 Estimates:
       Estimate Std. error t value Pr(> t)    
 mu       0.820      0.174    4.71 2.5e-06 ***
-sigma    1.680      0.107   15.68 < 2e-16 ***
+sigma    1.680      0.107   15.69 < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -4568,7 +4569,7 @@ Constrained optimization based on constrOptim
 1  outer iterations, barrier value -0.0014678 
 --------------------------------------------
 > all.equal( mlNmInEq[ ], mlNmInEqInd[ -12 ] )
-[1] "Component 4: Mean relative difference: 0.0017279"
+[1] "Component 4: Mean relative difference: 0.00091575"
 > mlNmInEqInd[ 12 ]
 $gradientObs
                mu     sigma
@@ -4680,7 +4681,7 @@ $gradientObs
 > mlgNmInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
 +    method = "NM" )
 > all.equal( mlNmInEq, mlgNmInEq )
-[1] "Component 4: Mean relative difference: 0.00048537"
+[1] "Component 4: Mean relative difference: 0.00032168"
 > 
 > # with unused analytical gradients and Hessians
 > mlghNmInEq <- maxLik( llf, gf, hf, start = startVal, constraints = inEq,
@@ -4753,7 +4754,7 @@ sigma -0.0046809  0.0111370
 [1] "Component 1: Mean relative difference: 3.5212e-05"           
 [2] "Component 2: Mean relative difference: 0.0080159"            
 [3] "Component 3: Mean relative difference: 0.039456"             
-[4] "Component 4: Mean relative difference: 0.020143"             
+[4] "Component 4: Mean relative difference: 0.019765"             
 [5] "Component 9: Mean relative difference: 75.923"               
 [6] "Component 10: 1 string mismatch"                             
 [7] "Component 11: Component 2: Mean relative difference: 0.28103"
@@ -4776,7 +4777,7 @@ Log-Likelihood: -204.61
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.812      0.175    4.64 3.4e-06 ***
+mu       0.812      0.175    4.65 3.4e-06 ***
 sigma    1.682      0.108   15.65 < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
@@ -4789,7 +4790,7 @@ Constrained optimization based on constrOptim
 [1] "Component 1: Mean relative difference: 0.00034901"        
 [2] "Component 2: Mean relative difference: 0.012165"          
 [3] "Component 3: Mean relative difference: 0.051956"          
-[4] "Component 4: Mean relative difference: 0.026522"          
+[4] "Component 4: Mean relative difference: 0.026157"          
 [5] "Component 11: Component 2: Mean relative difference: 1.02"
 > 
 > ############### equality constraints ###############
@@ -4813,7 +4814,7 @@ Log-Likelihood: -204.53
 Estimates:
       Estimate Std. error t value Pr(> t)    
 mu       0.820      0.174    4.71 2.5e-06 ***
-sigma    1.680      0.107   15.69 < 2e-16 ***
+sigma    1.680      0.107   15.68 < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -4833,11 +4834,11 @@ penalty close to zero
 0.81975 1.68026 
 > condiNumber( mlCon )
 mu 	 1 
-sigma 	 3.6106 
+sigma 	 3.6139 
 > hessian( mlCon )
            mu   sigma
-mu    -35.442 -15.234
-sigma -15.234 -93.706
+mu    -35.442 -15.262
+sigma -15.262 -93.706
 > logLik( mlCon )
 [1] -204.53
 > maximType( mlCon )
@@ -4852,8 +4853,8 @@ sigma -15.234 -93.706
 [1] "gradient close to zero"
 > vcov( mlCon )
               mu      sigma
-mu     0.0303350 -0.0049316
-sigma -0.0049316  0.0114734
+mu     0.0303435 -0.0049422
+sigma -0.0049422  0.0114766
 > logLik( summary( mlCon ) )
 [1] -204.53
 > mlConInd <- maxLik( llfInd, start = startVal, constraints = eqCon )
@@ -4867,7 +4868,7 @@ Log-Likelihood: -204.53
 Estimates:
       Estimate Std. error t value Pr(> t)    
 mu       0.820      0.174    4.71 2.5e-06 ***
-sigma    1.680      0.107   15.68 < 2e-16 ***
+sigma    1.680      0.107   15.69 < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 
@@ -4878,7 +4879,7 @@ penalty close to zero
 10  outer iterations, barrier value 2.0699e-10 
 --------------------------------------------
 > all.equal( mlCon[], mlConInd[-11] )
-[1] "Component 4: Mean relative difference: 0.00060661"
+[1] "Component 4: Mean relative difference: 0.0018622"
 > mlConInd[11]
 $gradientObs
                mu     sigma
@@ -5014,7 +5015,7 @@ successive function values within tolerance limit
 [1] "Component 1: Mean relative difference: 0.00037966"             
 [2] "Component 2: Mean relative difference: 0.012956"               
 [3] "Component 3: Mean relative difference: 0.050559"               
-[4] "Component 4: Mean relative difference: 0.024796"               
+[4] "Component 4: Mean relative difference: 0.025143"               
 [5] "Component 7: Component 2: Mean absolute difference: 0.00012989"
 [6] "Component 7: Component 3: Mean relative difference: 1"         
 [7] "Component 7: Component 4: 1 string mismatch"                   
@@ -5024,7 +5025,7 @@ successive function values within tolerance limit
  [1] "Component 1: Mean relative difference: 0.00037966"              
  [2] "Component 2: Mean relative difference: 0.012956"                
  [3] "Component 3: Mean relative difference: 0.050559"                
- [4] "Component 4: Mean relative difference: 0.025161"                
+ [4] "Component 4: Mean relative difference: 0.024796"                
  [5] "Component 5: Mean relative difference: 2"                       
  [6] "Component 6: 1 string mismatch"                                 
  [7] "Component 7: target is NULL, current is list"                   
@@ -5035,7 +5036,7 @@ successive function values within tolerance limit
 [12] "Component 12: Component 4: 1 string mismatch"                   
 [13] "Component 12: Component 5: Mean relative difference: 0.3"       
 > all.equal( mlgCon[], mlgConInd[-11] )
-[1] "Component 11: Component 2: Mean relative difference: 4.9945e-08"
+[1] TRUE
 > mlgConInd[11]
 $gradientObs
                mu     sigma
@@ -5149,7 +5150,7 @@ $gradientObs
  [1] "Component 1: Mean relative difference: 0.00037981"             
  [2] "Component 2: Mean relative difference: 0.012898"               
  [3] "Component 3: Mean relative difference: 0.050468"               
- [4] "Component 4: Mean relative difference: 0.024595"               
+ [4] "Component 4: Mean relative difference: 0.024948"               
  [5] "Component 5: Mean relative difference: 0.66667"                
  [6] "Component 6: 1 string mismatch"                                
  [7] "Component 7: Modes: list, NULL"                                
@@ -5165,7 +5166,7 @@ $gradientObs
 > mlghCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon )
 > all.equal( mlgCon, mlghCon )
 [1] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Length mismatch: comparison on first 1 components > >"
-[2] "Component 11: Component 2: Mean relative difference: 5.8452e-08"                                                         
+[2] "Component 11: Component 2: Mean relative difference: 2.305e-08"                                                          
 > 
 > # with analytical gradients and Hessians as attributes
 > mlGHCon <- maxLik( llfGradHess, start = startVal, constraints = eqCon )
@@ -5175,7 +5176,7 @@ $gradientObs
  [1] "Component 1: Mean relative difference: 0.00037981"             
  [2] "Component 2: Mean relative difference: 0.012898"               
  [3] "Component 3: Mean relative difference: 0.050468"               
- [4] "Component 4: Mean relative difference: 0.024595"               
+ [4] "Component 4: Mean relative difference: 0.024948"               
  [5] "Component 5: Mean relative difference: 0.66667"                
  [6] "Component 6: 1 string mismatch"                                
  [7] "Component 7: Modes: list, NULL"                                
@@ -5227,11 +5228,11 @@ penalty close to zero
 0.8199 1.6801 
 > condiNumber( mlBhhhCon )
 mu 	 1 
-sigma 	 3.6106 
+sigma 	 3.6148 
 > hessian( mlBhhhCon )
            mu   sigma
-mu    -35.442 -15.234
-sigma -15.234 -93.706
+mu    -35.413 -15.234
+sigma -15.234 -93.763
 > logLik( mlBhhhCon )
 [1] -204.53
 > maximType( mlBhhhCon )
@@ -5246,13 +5247,14 @@ sigma -15.234 -93.706
 [1] "successive function values within tolerance limit"
 > vcov( mlBhhhCon )
               mu      sigma
-mu     0.0303350 -0.0049316
-sigma -0.0049316  0.0114734
+mu     0.0303598 -0.0049327
+sigma -0.0049327  0.0114666
 > logLik( summary( mlBhhhCon ) )
 [1] -204.53
 > all.equal( mlCon[ -c( 5, 6, 7, 9, 10 ) ], mlBhhhCon[ -c( 5, 6, 7, 9, 10, 11 ) ] )
 [1] "Component 2: Mean relative difference: 0.00012229"
 [2] "Component 3: Mean relative difference: 0.00058963"
+[3] "Component 4: Mean relative difference: 0.00089"   
 > mlBhhhCon[11]
 $gradientObs
                mu     sigma
@@ -5389,7 +5391,7 @@ penalty close to zero
  [1] "Component 1: Mean relative difference: 4.5167e-05"       
  [2] "Component 2: Mean relative difference: 0.011213"         
  [3] "Component 3: Mean relative difference: 0.055164"         
- [4] "Component 4: Mean relative difference: 0.027926"         
+ [4] "Component 4: Mean relative difference: 0.027743"         
  [5] "Component 5: Mean relative difference: 0.5"              
  [6] "Component 6: 1 string mismatch"                          
  [7] "Component 7: target is NULL, current is list"            
@@ -5432,7 +5434,7 @@ penalty close to zero
  [1] "Component 1: Mean relative difference: 4.5165e-05"             
  [2] "Component 2: Mean relative difference: 0.011213"               
  [3] "Component 3: Mean relative difference: 0.053433"               
- [4] "Component 4: Mean relative difference: 0.027325"               
+ [4] "Component 4: Mean relative difference: 0.02715"                
  [5] "Component 5: Mean relative difference: 0.33333"                
  [6] "Component 6: 1 string mismatch"                                
  [7] "Component 7: Modes: list, NULL"                                
@@ -5462,69 +5464,11 @@ penalty close to zero
 +    method = "BFGS" )
 > print( mlBfgsCon )
 Maximum Likelihood estimation
-BFGS maximisation, 33 iterations
+BFGS maximisation, 31 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.53 (2 free parameter(s))
 Estimate(s): 0.81975 1.6803 
 > summary( mlBfgsCon )
---------------------------------------------
-Maximum Likelihood estimation
-BFGS maximisation, 33 iterations
-Return code 0: successful convergence 
-Log-Likelihood: -204.53 
-2  free parameters
-Estimates:
-      Estimate Std. error t value Pr(> t)    
-mu       0.820      0.174    4.71 2.5e-06 ***
-sigma    1.680      0.107   15.69 < 2e-16 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
-
-Warning: constrained likelihood estimation. Inference is probably wrong
-Constrained optimization based on SUMT 
-Return code: 1 
-penalty close to zero 
-10  outer iterations, barrier value 2.0699e-10 
---------------------------------------------
-> activePar( mlBfgsCon )
-   mu sigma 
- TRUE  TRUE 
-> AIC( mlBfgsCon )
-[1] 413.07
-> coef( mlBfgsCon )
-     mu   sigma 
-0.81975 1.68026 
-> condiNumber( mlBfgsCon )
-mu 	 1 
-sigma 	 3.6098 
-> hessian( mlBfgsCon )
-           mu   sigma
-mu    -35.413 -15.206
-sigma -15.206 -93.678
-> logLik( mlBfgsCon )
-[1] -204.53
-> maximType( mlBfgsCon )
-[1] "BFGS maximisation"
-> nIter( mlBfgsCon )
-function 
-      33 
-> nParam( mlBfgsCon )
-[1] 2
-> returnCode( mlBfgsCon )
-[1] 0
-> returnMessage( mlBfgsCon )
-[1] "successful convergence "
-> vcov( mlBfgsCon )
-              mu      sigma
-mu     0.0303533 -0.0049269
-sigma -0.0049269  0.0114746
-> logLik( summary( mlBfgsCon ) )
-[1] -204.53
-> all.equal( mlBfgsCon[ -c( 5, 6, 9, 10 ) ], mlCon[ -c( 5, 6, 9, 10 ) ] )
-[1] "Component 4: Mean relative difference: 0.00071276"
-> mlBfgsConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
-+    method = "BFGS" )
-> summary( mlBfgsConInd )
 --------------------------------------------
 Maximum Likelihood estimation
 BFGS maximisation, 31 iterations
@@ -5544,9 +5488,66 @@ Return code: 1
 penalty close to zero 
 10  outer iterations, barrier value 2.07e-10 
 --------------------------------------------
+> activePar( mlBfgsCon )
+   mu sigma 
+ TRUE  TRUE 
+> AIC( mlBfgsCon )
+[1] 413.07
+> coef( mlBfgsCon )
+     mu   sigma 
+0.81975 1.68026 
+> condiNumber( mlBfgsCon )
+mu 	 1 
+sigma 	 3.6092 
+> hessian( mlBfgsCon )
+           mu   sigma
+mu    -35.413 -15.206
+sigma -15.206 -93.650
+> logLik( mlBfgsCon )
+[1] -204.53
+> maximType( mlBfgsCon )
+[1] "BFGS maximisation"
+> nIter( mlBfgsCon )
+function 
+      31 
+> nParam( mlBfgsCon )
+[1] 2
+> returnCode( mlBfgsCon )
+[1] 0
+> returnMessage( mlBfgsCon )
+[1] "successful convergence "
+> vcov( mlBfgsCon )
+              mu      sigma
+mu     0.0303540 -0.0049285
+sigma -0.0049285  0.0114783
+> logLik( summary( mlBfgsCon ) )
+[1] -204.53
+> all.equal( mlBfgsCon[ -c( 5, 6, 9, 10 ) ], mlCon[ -c( 5, 6, 9, 10 ) ] )
+[1] "Component 4: Mean relative difference: 0.0012475"
+> mlBfgsConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
++    method = "BFGS" )
+> summary( mlBfgsConInd )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS maximisation, 31 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.53 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu       0.820      0.174     4.7 2.5e-06 ***
+sigma    1.680      0.107    15.7 < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+Return code: 1 
+penalty close to zero 
+10  outer iterations, barrier value 2.07e-10 
+--------------------------------------------
 > all.equal( mlBfgsCon[], mlBfgsConInd[-12] )
-[1] "Component 4: Mean relative difference: 0.0003034"
-[2] "Component 9: Mean relative difference: 0.060606" 
+[1] "Component 4: Mean relative difference: 0.00068729"
 > mlBfgsConInd[12]
 $gradientObs
                mu     sigma
@@ -5681,8 +5682,8 @@ successive function values within tolerance limit
 [1] "Component 1: Mean relative difference: 0.0015544"               
 [2] "Component 2: Mean relative difference: 0.0063057"               
 [3] "Component 3: Mean relative difference: 0.054634"                
-[4] "Component 4: Mean relative difference: 0.027257"                
-[5] "Component 9: Mean relative difference: 0.090909"                
+[4] "Component 4: Mean relative difference: 0.027441"                
+[5] "Component 9: Mean relative difference: 0.032258"                
 [6] "Component 11: Component 2: Mean absolute difference: 0.00024806"
 [7] "Component 11: Component 3: Mean relative difference: 1"         
 [8] "Component 11: Component 4: 1 string mismatch"                   
@@ -5867,7 +5868,7 @@ sigma -0.0049285  0.0114783
 > all.equal( mlNmCon[ -c( 5, 6, 9, 10 ) ], mlCon[ -c( 5, 6, 9, 10 ) ] )
 [1] "Component 2: Mean relative difference: 4.2987e-05"
 [2] "Component 3: Mean relative difference: 0.00020857"
-[3] "Component 4: Mean relative difference: 0.00089111"
+[3] "Component 4: Mean relative difference: 0.0012475" 
 > mlNmConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
 +    method = "NM", SUMTTol=0)
 > summary( mlNmConInd )
@@ -5891,7 +5892,7 @@ penalty close to zero
 10  outer iterations, barrier value 2.4176e-10 
 --------------------------------------------
 > all.equal( mlNmCon[], mlNmConInd[-12] )
-[1] TRUE
+[1] "Component 4: Mean relative difference: 0.00091638"
 > mlNmConInd[12]
 $gradientObs
                mu     sigma
@@ -6186,7 +6187,7 @@ sigma -0.0050311  0.0116052
 [1] "Component 1: Mean relative difference: 6.296e-06"           
 [2] "Component 2: Mean relative difference: 0.0030133"           
 [3] "Component 3: Mean relative difference: 0.014507"            
-[4] "Component 4: Mean relative difference: 0.0075242"           
+[4] "Component 4: Mean relative difference: 0.007345"            
 [5] "Component 7: Component 5: Mean relative difference: 0.11111"
 > 
 > # with unused analytical gradients
@@ -6200,7 +6201,7 @@ sigma -0.0050311  0.0116052
 +    method = "SANN", cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
 Warning message:
 In function (fn, grad = NULL, hess = NULL, start, maxRoutine, constraints,  :
-  problem in imposing equality constraints: the constraints are not satisfied (barrier value = 0.254780368286165). Try setting 'SUMTTol' to 0
+  problem in imposing equality constraints: the constraints are not satisfied (barrier value = 0.254780368286163). Try setting 'SUMTTol' to 0
 > summary( mlSannConCand )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -6225,7 +6226,7 @@ successive function values within tolerance limit
 [1] "Component 1: Mean relative difference: 0.014627"         
 [2] "Component 2: Mean relative difference: 0.168"            
 [3] "Component 3: Mean relative difference: 68.17"            
-[4] "Component 4: Mean relative difference: 0.76341"          
+[4] "Component 4: Mean relative difference: 0.76467"          
 [5] "Component 11: Component 2: Mean relative difference: 1"  
 [6] "Component 11: Component 3: Mean relative difference: 0.5"
 [7] "Component 11: Component 4: 1 string mismatch"            
@@ -6235,7 +6236,13 @@ successive function values within tolerance limit
 > ## test for method "estfun"
 > library( sandwich )
 Loading required package: zoo
-Warning: locked binding of 'as.Date.numeric' will not be changed
+
+Attaching package: 'zoo'
+
+The following object(s) are masked from 'package:base':
+
+    as.Date, as.Date.numeric
+
 > try( estfun( ml ) )
 Error in estfun.maxLik(ml) : 
   cannot return the gradients of the log-likelihood function evaluated at each observation: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
@@ -6465,11 +6472,11 @@ Error in nObs.maxLik(x) :
 > bread( mlInd )
           mu  sigma
 mu    3.3006 0.0000
-sigma 0.0000 1.6503
+sigma 0.0000 1.6488
 > bread( mlgInd )
                mu       sigma
-mu     3.2996e+00 -7.7766e-11
-sigma -7.7766e-11  1.6498e+00
+mu     3.2996e+00 -8.4565e-11
+sigma -8.4565e-11  1.6498e+00
 > bread( mlBHHH )
             mu    sigma
 mu     3.30618 -0.10877
@@ -6480,7 +6487,7 @@ mu     3.30618 -0.10877
 sigma -0.10877  1.79786
 > bread( mlIndBFGS )
           mu  sigma
-mu    3.3037 0.0000
+mu    3.3006 0.0000
 sigma 0.0000 1.6488
 > bread( mlgIndBFGS )
                mu       sigma
@@ -6488,16 +6495,16 @@ mu     3.2996e+00 -2.2354e-06
 sigma -2.2354e-06  1.6498e+00
 > bread( mlIndNM )
               mu      sigma
-mu     3.2975059 -0.0015459
-sigma -0.0015459  1.6495259
+mu     3.2975059 -0.0015467
+sigma -0.0015467  1.6502996
 > bread( mlgIndNM )
                mu       sigma
 mu     3.30016691 -0.00037019
 sigma -0.00037019  1.65050714
 > bread( mlIndSANN )
-             mu     sigma
-mu    3.2975059 0.0015459
-sigma 0.0015459 1.6495259
+          mu  sigma
+mu    3.2975 0.0000
+sigma 0.0000 1.6488
 > bread( mlgIndSANN )
              mu     sigma
 mu    3.2997434 0.0017539
@@ -6505,7 +6512,7 @@ sigma 0.0017539 1.6499756
 > bread( mlIndFix )
       mu  sigma
 mu     0 0.0000
-sigma  0 1.6651
+sigma  0 1.6667
 > bread( mlgIndFix )
       mu  sigma
 mu     0 0.0000
@@ -6521,7 +6528,7 @@ sigma  0 1.7863
 > bread( mlIndFixBfgs )
       mu  sigma
 mu     0 0.0000
-sigma  0 1.6651
+sigma  0 1.6667
 > bread( mlgIndFixBfgs )
       mu  sigma
 mu     0 0.0000
@@ -6537,51 +6544,51 @@ sigma  0 1.6658
 > bread( mlIndFixSann )
       mu  sigma
 mu     0 0.0000
-sigma  0 1.6659
+sigma  0 1.6667
 > bread( mlgIndFixSann )
       mu  sigma
 mu     0 0.0000
 sigma  0 1.6661
 > bread( mlBfgsInEqInd )
             mu    sigma
-mu     3.03795 -0.49311
-sigma -0.49311  1.14753
+mu     3.03533 -0.49269
+sigma -0.49269  1.14746
 > bread( mlgBfgsInEqInd )
            mu   sigma
 mu     3.0353 -0.4933
 sigma -0.4933  1.1477
 > bread( mlNmInEqInd )
             mu    sigma
-mu     3.03357 -0.49332
-sigma -0.49332  1.14771
+mu     3.03428 -0.49406
+sigma -0.49406  1.14729
 > bread( mlConInd )
             mu    sigma
-mu     3.03364 -0.49348
-sigma -0.49348  1.14809
+mu     3.03350 -0.49316
+sigma -0.49316  1.14734
 > bread( mlgConInd )
             mu    sigma
 mu     2.97149 -0.45143
 sigma -0.45143  1.11119
 > bread( mlBhhhCon )
             mu    sigma
-mu     3.03350 -0.49316
-sigma -0.49316  1.14734
+mu     3.03598 -0.49327
+sigma -0.49327  1.14666
 > bread( mlgBhhhCon )
            mu   sigma
 mu     2.9668 -0.4582
 sigma -0.4582  1.1005
 > bread( mlBfgsConInd )
             mu    sigma
-mu     3.03540 -0.49285
-sigma -0.49285  1.14783
+mu     3.03618 -0.49375
+sigma -0.49375  1.14778
 > bread( mlgBfgsConInd )
             mu    sigma
 mu     3.00532 -0.49028
 sigma -0.49028  1.11608
 > bread( mlNmConInd )
             mu    sigma
-mu     3.03540 -0.49285
-sigma -0.49285  1.14783
+mu     3.03612 -0.49359
+sigma -0.49359  1.14741
 > bread( mlgNmConInd )
             mu    sigma
 mu     3.03553 -0.49338
@@ -6598,9 +6605,9 @@ Error in nObs.maxLik(x) :
 + }
 > printSandwich( mlInd )
               mu      sigma
-mu    0.03301594 0.00099872
-sigma 0.00099872 0.01517864
-[1] "Mean relative difference: 0.06638"
+mu    0.03301594 0.00099779
+sigma 0.00099779 0.01515020
+[1] "Mean relative difference: 0.066642"
 > printSandwich( mlgInd )
               mu      sigma
 mu    0.03299602 0.00099812
@@ -6618,9 +6625,9 @@ sigma -0.0010877  0.0179786
 [1] TRUE
 > printSandwich( mlIndBFGS )
               mu      sigma
-mu    0.03307792 0.00099874
-sigma 0.00099874 0.01515017
-[1] "Mean relative difference: 0.067213"
+mu    0.03301589 0.00099781
+sigma 0.00099781 0.01515017
+[1] "Mean relative difference: 0.066642"
 > printSandwich( mlgIndBFGS )
              mu     sigma
 mu    0.0329960 0.0009981
@@ -6628,19 +6635,19 @@ sigma 0.0009981 0.0151695
 [1] "Mean relative difference: 0.066282"
 > printSandwich( mlIndNM )
               mu      sigma
-mu    0.03294097 0.00097094
-sigma 0.00097094 0.01515593
-[1] "Mean relative difference: 0.066872"
+mu    0.03294097 0.00097139
+sigma 0.00097139 0.01517015
+[1] "Mean relative difference: 0.066741"
 > printSandwich( mlgIndNM )
               mu      sigma
 mu    0.03299557 0.00099489
 sigma 0.00099489 0.01517468
 [1] "Mean relative difference: 0.066461"
 > printSandwich( mlIndSANN )
-             mu     sigma
-mu    0.0329532 0.0010094
-sigma 0.0010094 0.0151624
-[1] "Mean relative difference: 0.066672"
+              mu      sigma
+mu    0.03295130 0.00097923
+sigma 0.00097923 0.01514723
+[1] "Mean relative difference: 0.066374"
 > printSandwich( mlgIndSANN )
              mu     sigma
 mu    0.0329982 0.0010143
@@ -6669,8 +6676,8 @@ sigma NA    NA
 > printSandwich( mlIndFixBfgs )
       mu    sigma
 mu     0 0.000000
-sigma  0 0.015522
-[1] "Mean relative difference: 0.072738"
+sigma  0 0.015552
+[1] "Mean relative difference: 0.071723"
 > printSandwich( mlgIndFixBfgs )
       mu    sigma
 mu     0 0.000000
@@ -6689,8 +6696,8 @@ sigma  0 0.015539
 > printSandwich( mlIndFixSann )
       mu    sigma
 mu     0 0.000000
-sigma  0 0.015538
-[1] "Mean relative difference: 0.072173"
+sigma  0 0.015553
+[1] "Mean relative difference: 0.071666"
 > printSandwich( mlgIndFixSann )
       mu    sigma
 mu     0 0.000000
@@ -6698,9 +6705,9 @@ sigma  0 0.015541
 [1] "Mean relative difference: 0.072079"
 > printSandwich( mlBfgsInEqInd )
               mu      sigma
-mu     0.0355274 -0.0038827
-sigma -0.0038827  0.0117852
-[1] "Mean relative difference: 0.13716"
+mu     0.0354661 -0.0038744
+sigma -0.0038744  0.0117841
+[1] "Mean relative difference: 0.13686"
 > printSandwich( mlgBfgsInEqInd )
               mu      sigma
 mu     0.0354638 -0.0038875
@@ -6708,14 +6715,14 @@ sigma -0.0038875  0.0117891
 [1] "Mean relative difference: 0.13654"
 > printSandwich( mlNmInEqInd )
               mu      sigma
-mu     0.0354210 -0.0038887
-sigma -0.0038887  0.0117885
-[1] "Mean relative difference: 0.13614"
+mu     0.0354355 -0.0039057
+sigma -0.0039057  0.0117790
+[1] "Mean relative difference: 0.13573"
 > printSandwich( mlConInd )
               mu      sigma
-mu     0.0354234 -0.0038924
-sigma -0.0038924  0.0117967
-[1] "Mean relative difference: 0.13613"
+mu     0.0354212 -0.0038865
+sigma -0.0038865  0.0117814
+[1] "Mean relative difference: 0.13614"
 > printSandwich( mlgConInd )
               mu      sigma
 mu     0.0350797 -0.0034838
@@ -6723,9 +6730,9 @@ sigma -0.0034838  0.0114958
 [1] "Mean relative difference: 0.14586"
 > printSandwich( mlBhhhCon )
               mu      sigma
-mu     0.0354347 -0.0038904
-sigma -0.0038904  0.0117879
-[1] "Mean relative difference: 0.1363"
+mu     0.0354936 -0.0038929
+sigma -0.0038929  0.0117736
+[1] "Mean relative difference: 0.13661"
 > printSandwich( mlgBhhhCon )
               mu      sigma
 mu     0.0351842 -0.0035619
@@ -6733,9 +6740,9 @@ sigma -0.0035619  0.0114269
 [1] "Mean relative difference: 0.14847"
 > printSandwich( mlBfgsConInd )
               mu      sigma
-mu     0.0354679 -0.0038779
-sigma -0.0038779  0.0117920
-[1] "Mean relative difference: 0.13685"
+mu     0.0354834 -0.0038978
+sigma -0.0038978  0.0117901
+[1] "Mean relative difference: 0.13643"
 > printSandwich( mlgBfgsConInd )
               mu      sigma
 mu     0.0355211 -0.0038822
@@ -6743,12 +6750,15 @@ sigma -0.0038822  0.0115646
 [1] "Mean relative difference: 0.14426"
 > printSandwich( mlNmConInd )
               mu      sigma
-mu     0.0354631 -0.0038765
-sigma -0.0038765  0.0117897
-[1] "Mean relative difference: 0.13679"
+mu     0.0354776 -0.0038935
+sigma -0.0038935  0.0117801
+[1] "Mean relative difference: 0.13638"
 > printSandwich( mlgNmConInd )
               mu      sigma
 mu     0.0354644 -0.0038883
 sigma -0.0038883  0.0117903
 [1] "Mean relative difference: 0.1365"
 > 
+> proc.time()
+   user  system elapsed 
+ 38.194   0.060  38.277 

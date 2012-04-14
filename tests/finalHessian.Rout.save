@@ -1,8 +1,8 @@
 
-R version 2.13.2 (2011-09-30)
-Copyright (C) 2011 The R Foundation for Statistical Computing
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: i686-pc-linux-gnu (32-bit)
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -313,3 +313,6 @@ Estimates:
 [2,]  2.03121      NA      NA
 --------------------------------------------
 > 
+> proc.time()
+   user  system elapsed 
+  0.312   0.024   0.328 
