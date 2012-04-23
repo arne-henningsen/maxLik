@@ -16,7 +16,13 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
 
          ## value of log-likelihood function
          f <- fnOrig(theta, ...)
-
+         ## if there are NA-s in the function value, do not
+         ## compute gradient and Hessian
+         if(any(is.na(f))) {
+            attr(f, "gradient") <- NA
+            attr(f, "hessian") <- NA
+            return(f)
+         }
          ## gradient of log-likelihood function
          gr <- attr( f, "gradient" )
          if( is.null( gr ) ) {
@@ -26,6 +32,18 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
                gr <- numericGradient(f = fnOrig, t0 = theta,
                                     fixed=fixed, ...)
             }
+         }
+         ## if there are NA-s in active gradient, do not compute Hessian
+         if(is.matrix(gr)) {
+            activeGr <- gr[,!fixed]
+         }
+         else {
+            activeGr <- gr[!fixed]
+         }
+         if(any(is.na(activeGr))) {
+            attr(f, "gradient") <- gr
+            attr(f, "hessian") <- NA
+            return(f)
          }
          # if gradients are observation-specific, they must be stored in a matrix
          if(observationGradient(gr, length(theta))) {
@@ -39,7 +57,6 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
          } else {
             gr[ , fixed ] <- NA
          }
-
 
          ## Hessian of log-likelihood function
          if( isTRUE( returnHessian ) ) {
@@ -63,19 +80,26 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
                   } else {
                      gradFunc <- NULL
                   }
-                  h <- numericHessian( f = llFunc, grad = gradFunc, t0 = theta,
-                                    fixed=fixed, ...)
+                  h <- numericHessian(f = llFunc, grad = gradFunc,
+                                      t0 = theta,
+                                      fixed=fixed, ...)
                }
             }
+            ## Check the correct size of Hessian.
             if((dim(h)[1] != nParam) | (dim(h)[2] != nParam)) {
                stop("Wrong hessian dimension.  Needed ", nParam, "x", nParam,
-                  " but supplied ", dim(h)[1], "x", dim(h)[2])
+                    " but supplied ", dim(h)[1], "x", dim(h)[2])
             }
-            ## Set elements of the Hessian corresponding to the fixed parameters
-            ## to zero so that they are always zero (no matter if they are
-            ## calculated analytical or by the finite-difference method)
-            h[ fixed, ] <- NA
-            h[ , fixed ] <- NA
+            else {
+               ## Set elements of the Hessian corresponding to the
+               ## fixed parameters
+               ## to NA so that they are always zero
+               ## (no matter if they are
+               ## calculated analytical or by the finite-difference
+               ## method)
+               h[ fixed, ] <- NA
+               h[ , fixed ] <- NA
+            }
          } else if( tolower( returnHessian ) == "bhhh" ) {
             ## We have to return BHHH Hessian.  Check if it contains NA in free paramateres, otherwise
             ## return outer product as Hessian.

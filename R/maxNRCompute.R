@@ -188,6 +188,8 @@ maxNRCompute <- function(fn,
       start1 <- start0 - step*amount
       f1 <- fn(start1, fixed = fixed, sumObs = TRUE,
          returnHessian = returnHessian, ...)
+                           # The call calculates new function,
+                           # gradient, and Hessian values
       ## Are we requested to fix some of the parameters?
       constPar <- attr(f1, "constPar")
       if(!is.null(constPar)) {
