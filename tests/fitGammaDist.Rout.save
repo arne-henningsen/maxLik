@@ -1,0 +1,305 @@
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ## the idea and most commands were provided by Marco J. Maier, Institute for
+> ## Statistics and Mathematics, Vienna University of Economics and Business
+> 
+> library(maxLik)
+Loading required package: miscTools
+> options(warn = -1)
+> set.seed(5)
+> some_data <- rgamma(1e4, shape = 5, scale = 2)
+> 
+> # log-likelihood function(s)
+> logLL <- function(x, X)   # per observation for maxLik
++    .Internal(dgamma(x = X, shape = exp(x[1]), scale = exp(x[2]), log = TRUE))
+> logLL_sum <- function(x, X)   # negative sum for nlm()
++    -sum(.Internal(dgamma(x = X, shape = exp(x[1]), scale = exp(x[2]), log = TRUE)))
+> 
+> sum(logLL(log(c(5,2)),some_data))
+[1] -28528.21
+> logLL_sum(log(c(5,2)),some_data)
+[1] 28528.21
+> all.equal( sum(logLL(log(c(5,2)),some_data)), -logLL_sum(log(c(5,2)),some_data))
+[1] TRUE
+> 
+> # gradient of log-likelihood function
+> d_logLL <- function(x, X){   # analytic 1. derivatives
++    cbind(shape=exp(x[1])*(-x[2]-psigamma(exp(x[1]),0)+log(X)),
++          scale= X / exp(x[2]) - exp(x[1]))
++ }
+> 
+> d_logLLNum <- function(x, X){
++    numericGradient( logLL, x, X = X )
++ }
+> 
+> colSums(d_logLL(log(c(5,2)),some_data))
+    shape     scale 
+ 92.95068 135.26821 
+> colSums(d_logLLNum(log(c(5,2)),some_data))
+[1]  92.95067 135.26821
+> 
+> all.equal( d_logLL(log(c(5,2)),some_data), d_logLLNum(log(c(5,2)),some_data),
++    check.attributes=FALSE)
+[1] TRUE
+> 
+> # Hessian of log-likelihood function
+> dd_logLL <- function(x, X){   # analytic 2. derivatives
++    grad <- d_logLL( x, X )
++    hessian <- matrix(0, 2, 2)
++    hessian[1,1] <- sum( grad[,1] - exp(x[1])^2 * psigamma(exp(x[1]), 1) )
++    hessian[2,2] <- - sum( X / exp(x[2]) )
++    hessian[cbind(c(2,1), c(1,2))] <- -exp(x[1]) * length(X)
++    return(hessian)
++ }
+> 
+> dd_logLLNum <- function(x, X){
++    numericHessian( function(x,X) sum(logLL(x,X)), t0=x, X = X )
++ }
+> dd_logLLNumGrad <- function(x, X){
++    numericHessian( function(x,X) sum(logLL(x,X)), 
++       grad = function(x,X) colSums(d_logLL(x,X)), x, X = X )
++ }
+> 
+> dd_logLL(log(c(5,2)),some_data)
+          [,1]      [,2]
+[1,] -55237.79 -50000.00
+[2,] -50000.00 -50135.27
+> dd_logLLNum(log(c(5,2)),some_data)
+          [,1]      [,2]
+[1,] -55235.43 -50000.38
+[2,] -50000.38 -50134.99
+> all.equal(dd_logLL(log(c(5,2)),some_data), dd_logLLNum(log(c(5,2)),some_data))
+[1] "Mean relative difference: 1.6554e-05"
+> dd_logLLNumGrad(log(c(5,2)),some_data)
+           [,1]      [,2]
+shape -55237.79 -50000.00
+scale -50000.00 -50135.27
+> all.equal(dd_logLL(log(c(5,2)),some_data), dd_logLLNumGrad(log(c(5,2)),some_data),
++    check.attributes=FALSE)
+[1] TRUE
+> 
+> # estimation with nlm()
+> t_nlm <- system.time( r_nlm  <- nlm(logLL_sum, c(0,0), X=some_data, hessian=TRUE) )
+> 
+> # estimation with nlm() and gradients
+> logLL_grad <- function(x, X) {
++    result <- logLL_sum( x, X )
++    attr( result, "gradient" ) <- - colSums( d_logLL( x, X ) )
++    return( result )
++ }
+> t_nlmg <- system.time( r_nlmg  <- nlm(logLL_grad, c(0,0), X=some_data, hessian=TRUE) )
+> 
+> # estimation with nlm() and gradients and Hessian
+> logLL_hess <- function(x, X) {
++    result <- logLL_sum( x, X )
++    attr( result, "gradient" ) <- - colSums( d_logLL( x, X ) )
++    attr( result, "hessian" ) <- - dd_logLL( x, X )
++    return( result )
++ }
+> t_nlmgh <- system.time( r_nlmgh  <- nlm(logLL_hess, c(0,0), X=some_data, hessian=TRUE) )
+> 
+> # estimation with optim() / BFGS
+> t_bfgs <- system.time( r_bfgs <- optim(c(0,0), logLL_sum, X=some_data, 
++    method="BFGS", hessian=TRUE) )
+> 
+> # estimation with maxLik() / BFGS
+> t_bfgsM <- system.time( r_bfgsM <- maxLik( logLL, start = c(0,0), 
++    method="BFGS", X=some_data ) )
+> 
+> # estimation with maxLik() / BFGS with gradients
+> t_bfgsMg <- system.time( r_bfgsMg <- maxLik( logLL, d_logLL, start = c(0,0), 
++    method="BFGS", X=some_data ) )
+> 
+> # estimation with maxLik() / BHHH
+> t_bhhh <- system.time( r_bhhh <- maxLik( logLL, start = c(0,0), 
++    method="BHHH", X=some_data ) )
+> 
+> # estimation with maxLik() / BHHH with gradients
+> t_bhhhg <- system.time( r_bhhhg <- maxLik( logLL, d_logLL, start = c(0,0), 
++    method="BHHH", X=some_data ) )
+> 
+> # estimation with maxLik() / NR
+> t_NRn <- system.time( r_NRn <- maxLik( logLL, start = c(0,0), 
++    method="NR", X=some_data ) )
+> 
+> # estimation with maxLik() / NR with gradients
+> t_NRg <- system.time( r_NRg <- maxLik( logLL, d_logLL, start = c(0,0), 
++    method="NR", X=some_data ) )
+> 
+> # estimation with maxLik() / NR with gradients and Hessian
+> t_NRgh <- system.time( r_NRgh <- maxLik( logLL, d_logLL, dd_logLL, start = c(0,0), 
++    method="NR", X=some_data ) )
+> 
+> # log likelihood values
+> rbind(NLM=-r_nlm$minimum, 
++       NLM_grad=-r_nlmg$minimum,
++       NLM_gradHess=-r_nlmgh$minimum,
++       BFGS=-r_bfgs$value,
++       maxLikBfgs = logLik( r_bfgsM ),
++       maxLikBfgs_grad = logLik( r_bfgsMg ),
++       BHHH = logLik( r_bhhh ),
++       BHHH_grad = logLik( r_bhhhg ),
++       NR_numeric= logLik( r_NRn ),
++       NR_grad= logLik( r_NRg ),
++       NR_gradHess= logLik( r_NRgh ) )
+                     [,1]
+NLM             -28527.86
+NLM_grad        -28527.86
+NLM_gradHess    -28527.86
+BFGS            -28527.86
+maxLikBfgs      -28527.86
+maxLikBfgs_grad -28527.86
+BHHH            -28527.86
+BHHH_grad       -28527.86
+NR_numeric      -28527.86
+NR_grad         -28527.86
+NR_gradHess     -28527.86
+>       
+> 
+> # estimated coefficients
+> pp <- exp(rbind(NLM=r_nlm$estimate, 
++                 NLM_grad=r_nlmg$estimate,
++                 NLM_gradHess=r_nlmgh$estimate,
++                 BFGS=r_bfgs$par,
++                 maxLikBfgs = coef( r_bfgsM ),
++                 maxLikBfgs_grad = coef( r_bfgsMg ),
++                 BHHH = coef( r_bhhh ),
++                 BHHH_grad = coef( r_bhhhg ),
++                 NR_numeric= coef( r_NRn ),
++                 NR_grad= coef( r_NRg ),
++                 NR_gradHess= coef( r_NRgh ) ))
+> colnames(pp) <- c("shape_alpha", "scale_theta")
+> pp
+                shape_alpha scale_theta
+NLM                4.960781    2.021264
+NLM_grad           4.960799    2.021258
+NLM_gradHess       4.960628    2.021335
+BFGS               4.960775    2.021267
+maxLikBfgs         4.960798    2.021257
+maxLikBfgs_grad    4.960798    2.021257
+BHHH               4.960799    2.021258
+BHHH_grad          4.960799    2.021258
+NR_numeric         4.960799    2.021258
+NR_grad            4.960799    2.021258
+NR_gradHess        4.960799    2.021258
+> 
+> 
+> # some Hessians
+> -round(r_nlm$hessian,0)
+       [,1]   [,2]
+[1,] -54958 -49612
+[2,] -49612 -49603
+> round(solve(r_nlm$hessian),6)
+          [,1]      [,2]
+[1,]  0.000187 -0.000187
+[2,] -0.000187  0.000208
+> 
+> -round(r_nlmg$hessian,0)
+       [,1]   [,2]
+[1,] -54958 -49612
+[2,] -49612 -49603
+> round(solve(r_nlmg$hessian),6)
+          [,1]      [,2]
+[1,]  0.000187 -0.000187
+[2,] -0.000187  0.000208
+> 
+> -round(r_nlmgh$hessian,0)
+       [,1]   [,2]
+[1,] -54956 -49610
+[2,] -49610 -49601
+> round(solve(r_nlmgh$hessian),6)
+          [,1]      [,2]
+[1,]  0.000187 -0.000187
+[2,] -0.000187  0.000208
+> 
+> -round(r_bfgs$hessian,0)
+       [,1]   [,2]
+[1,] -54941 -49608
+[2,] -49608 -49608
+> round(solve(r_bfgs$hessian),6)
+          [,1]      [,2]
+[1,]  0.000187 -0.000187
+[2,] -0.000187  0.000208
+> 
+> round(r_NRn$hessian,0)
+       [,1]   [,2]
+[1,] -54926 -49607
+[2,] -49607 -49604
+> round(solve(-r_NRn$hessian),6)
+          [,1]      [,2]
+[1,]  0.000188 -0.000188
+[2,] -0.000188  0.000208
+> 
+> round(r_NRg$hessian,2)
+          [,1]      [,2]
+[1,] -54941.30 -49607.99
+[2,] -49607.99 -49607.99
+> round(solve(-r_NRg$hessian),6)
+          [,1]      [,2]
+[1,]  0.000188 -0.000188
+[2,] -0.000188  0.000208
+> 
+> 
+> # standard errors
+> se <- exp(rbind(NLM=sqrt(diag( solve(r_nlm$hessian) )), 
++                 NLM_grad=sqrt(diag( solve(r_nlmg$hessian) )),
++                 NLM_gradHess=sqrt(diag( solve(r_nlmgh$hessian) )),
++                 BFGS=sqrt(diag( solve(r_bfgs$hessian) )),
++                 maxLikBfgs = stdEr( r_bfgsM ),
++                 maxLikBfgs_grad = stdEr( r_bfgsMg ),
++                 BHHH = stdEr( r_bhhh ),
++                 BHHH_grad = stdEr( r_bhhhg ),
++                 NR_numeric= stdEr( r_NRn ),
++                 NR_grad= stdEr( r_NRg ),
++                 NR_gradHess= stdEr( r_NRgh ) ))
+> colnames(se) <- c("shape_alpha", "scale_theta")
+> se
+                shape_alpha scale_theta
+NLM                1.013782    1.014512
+NLM_grad           1.013782    1.014512
+NLM_gradHess       1.013783    1.014513
+BFGS               1.013787    1.014515
+maxLikBfgs         1.013792    1.014519
+maxLikBfgs_grad    1.013787    1.014515
+BHHH               1.013926    1.014600
+BHHH_grad          1.013926    1.014600
+NR_numeric         1.013811    1.014538
+NR_grad            1.013787    1.014515
+NR_gradHess        1.013787    1.014515
+> 
+> # execution times
+> tt <- rbind(t_nlm, t_nlmg, t_nlmgh, t_bfgs, t_bfgsM, t_bfgsMg, 
++             t_bhhh, t_bhhhg, t_NRn, t_NRg, t_NRgh )
+> tt
+         user.self sys.self elapsed user.child sys.child
+t_nlm        0.168    0.000   0.170          0         0
+t_nlmg       0.096    0.000   0.097          0         0
+t_nlmgh      0.580    0.004   0.584          0         0
+t_bfgs       0.944    0.000   0.946          0         0
+t_bfgsM      0.992    0.000   0.996          0         0
+t_bfgsMg     0.772    0.000   0.771          0         0
+t_bhhh       0.480    0.000   0.478          0         0
+t_bhhhg      0.128    0.000   0.125          0         0
+t_NRn        2.988    0.000   2.989          0         0
+t_NRg        1.968    0.000   1.968          0         0
+t_NRgh       1.860    0.000   1.859          0         0
+> 
+> proc.time()
+   user  system elapsed 
+ 11.460   0.032  11.492 
