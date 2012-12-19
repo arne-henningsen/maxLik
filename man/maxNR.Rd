@@ -4,7 +4,8 @@
 \alias{maxBHHH}
 \title{Newton- and Quasi-Newton Maximization}
 \description{
-  Unconstrained maximization based on the quadratic approximation
+  Unconstrained and equality-constrained
+  maximization based on the quadratic approximation
   (Newton) method.
   The Newton-Raphson, BFGS (Broyden 1970, Fletcher 1970, Goldfarb 1970,
   Shanno 1970), and BHHH (Berndt, Hall, Hall, Hausman 1974) methods
@@ -278,12 +279,13 @@ the previous one (maximization is not performed in that step).
    (and placed in 'mlogit' package)}
 
 \seealso{\code{\link{maxLik}} for a general framework for maximum likelihood
-   estimation (MLE),
+   estimation (MLE);
    \code{\link{maxBHHH}} for maximizations using the Berndt, Hall, Hall,
-   Hausman (1974) algorithm (which is a wrapper function to \code{maxNR}),
+   Hausman (1974) algorithm (which is a wrapper function to \code{maxNR});
    \code{\link{maxBFGS}} for maximization using the BFGS, Nelder-Mead (NM),
    and Simulated Annealing (SANN) method (based \code{\link{optim}}),
-   \code{\link{nlm}} for Newton-Raphson optimization, and
+   also supporting inequality constraints;
+   \code{\link{nlm}} for Newton-Raphson optimization; and
   \code{\link{optim}} for different gradient-based optimization
   methods.}
 

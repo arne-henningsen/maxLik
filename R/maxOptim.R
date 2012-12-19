@@ -141,6 +141,21 @@ maxOptim <- function(fn, grad, hess,
       ## linear equality and inequality constraints
                            # equality constraints: A %*% beta + B >= 0
       if(identical(names(constraints), c("ineqA", "ineqB"))) {
+         if(length(dim(constraints$ineqA)) != 2) {
+            stop("Inequality constraint A must be a matrix\n",
+                 "Current dimension", dim(constraints$ineqA))
+         }
+         if(length(constraints$ineqB) != 1) {
+            stop("Inequality constraint B must be a scalar\n",
+                 "Current length", length(constraints$ineqB))
+         }
+         if(ncol(constraints$ineqA) != length(start)) {
+            stop("Inequality constraint A cannot be matrix multiplied",
+                 " with the start value.\n",
+                 "A is a ", nrow(constraints$ineqA), "x",
+                 ncol(constraints$ineqA), " matrix,",
+                 " start value has lenght ", length(start))
+         }
          result <- constrOptim2( theta = start,
                           f = logLikFunc, grad = gradOptim,
                           ineqA=constraints$ineqA,

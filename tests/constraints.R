@@ -58,12 +58,12 @@ set.seed(1)
 x <- c(rnorm(1000, mean=-1), rnorm(1000, mean=1))
 
 cat("Test for inequality constraints\n")
+## Inequality constraints: x + y + z < 0.5
 A <- matrix(c(-1, 0, 0,
               0, -1, 0,
               0, 0, 1), 3, 3, byrow=TRUE)
-B <- c(0.5, 1, 1)
+B <- 0.5
 start <- c(0.4, 0, 0.9)
-                           # x < 0.5, y < 1, z < 1
 ## analytic gradient
 a <- maxLik(logLikMix, grad=gradLikMix, hess=hessLikMix,
             start=start,
@@ -206,7 +206,7 @@ summary(a)
 ## ----------- inequality -------------
 A <- matrix(c(-1, 0,
               0,  1), 2,2, byrow=TRUE)
-B <- c(1, 1)
+B <- 1
 start <- c(0.8, 0.9)
 ##
 a <- maxLik(logLikMix2, gradLikMix2,
@@ -226,6 +226,31 @@ a <- maxLik(logLikMix2, gradLikMix2,
             constraints=list(ineqA=A, ineqB=B),
             print.level=1, rho=0.5)
 summary(a)
+
+## Now test error handling: insert wrong A and B forms
+A1 <- c(-1, 0, 0, 1)
+try(maxLik(logLikMix2, gradLikMix2,
+           start=start, method="bfgs",
+           constraints=list(ineqA=A1, ineqB=B),
+           print.level=1, rho=0.5)
+    )
+                           # should explain that matrix needed
+B1 <- 1:2
+try(maxLik(logLikMix2, gradLikMix2,
+           start=start, method="bfgs",
+           constraints=list(ineqA=A, ineqB=B1),
+           print.level=1, rho=0.5)
+    )
+                           # should explain that scalar needed
+A1 <- matrix(c(-1, 0, 0, 1), 1, 4)
+try(maxLik(logLikMix2, gradLikMix2,
+           start=start, method="bfgs",
+           constraints=list(ineqA=A1, ineqB=B),
+           print.level=1, rho=0.5)
+    )
+                           # should explain that wrong matrix
+                           # dimension
+
 
 ## fixed parameters with constrained optimization, BFGS.  Thanks to Bob Loos for finding this error.
 ## Optimize 3D hat with one parameter fixed (== 2D hat).
