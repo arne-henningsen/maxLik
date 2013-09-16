@@ -2,7 +2,7 @@
 ## Statistics and Mathematics, Vienna University of Economics and Business
 
 library(maxLik)
-options(warn = -1)
+options(warn = -1, digits = 4 )
 set.seed(5)
 some_data <- rgamma(1e4, shape = 5, scale = 2)
 

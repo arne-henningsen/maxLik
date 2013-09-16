@@ -5,7 +5,7 @@ library( maxLik )
 ## e.g. estimation of an exponential duration model
 
 # generate data
-options(digits=5)
+options(digits=4)
                            # less differences b/w different platforms
 set.seed( 4 )
 t <- rexp( 100, 2 )
@@ -27,19 +27,19 @@ nObs( ml )
 print.default( ml )
 # log-likelihood value summed over all observations
 mlSum <- maxLik( loglikSum, start = 1 )
-all.equal( mlSum[], ml[-11] )
+all.equal( mlSum[], ml[-11], tolerance = 1e-3 )
 
 # Estimate with analytic gradient
 mlg <- maxLik( loglik, gradlik, start = 1 )
 nObs( mlg )
-all.equal( mlg, ml )
+all.equal( mlg, ml, tolerance = 1e-3 )
 # gradient summed over all observations
 mlgSum <- maxLik( loglikSum, gradlikSum, start = 1 )
-all.equal( mlgSum[], mlg[-11] )
+all.equal( mlgSum[], mlg[-11], tolerance = 1e-3 )
 
 # Estimate with analytic gradient and Hessian
 mlgh <- maxLik( loglik, gradlik, hesslik, start = 1 )
-all.equal( mlgh, mlg )
+all.equal( mlgh, mlg, tolerance = 1e-3 )
 
 
 ## BHHH estimation
@@ -48,16 +48,17 @@ mlBhhh <- maxLik( loglik, start = 1, method = "BHHH" )
 print( mlBhhh )
 summary( mlBhhh )
 nObs( mlBhhh )
-all.equal( mlBhhh[ -c( 5, 6, 10 ) ], ml[ -c( 5, 6, 10 ) ] )
+all.equal( mlBhhh[ -c( 5, 6, 10 ) ], ml[ -c( 5, 6, 10 ) ], 
+   check.attributes = FALSE, tolerance = 1e-3 )
 
 # Estimate with analytic gradient
 mlgBhhh <- maxLik( loglik, gradlik, start = 1, method = "BHHH" )
 nObs( mlgBhhh )
-all.equal( mlgBhhh, mlBhhh )
+all.equal( mlgBhhh, mlBhhh, tolerance = 1e-3 )
 
 # Estimate with analytic gradient and Hessian (unused during estimation)
 mlghBhhh <- maxLik( loglik, gradlik, hesslik, start = 1, method = "BHHH" )
-all.equal( mlghBhhh, mlgBhhh )
+all.equal( mlghBhhh, mlgBhhh, tolerance = 1e-3 )
 
 ## BFGS estimation
 # Estimate with only function values
@@ -65,22 +66,23 @@ mlBfgs <- maxLik( loglik, start = 1, method = "BFGS" )
 print( mlBfgs )
 summary( mlBfgs )
 nObs( mlBfgs )
-all.equal( mlBfgs[ -c( 5, 6, 9, 10, 11 ) ], ml[ -c( 5, 6, 9, 10 ) ] )
+all.equal( mlBfgs[ -c( 5, 6, 9, 10, 11 ) ], ml[ -c( 5, 6, 9, 10 ) ], 
+   tolerance = 1e-3 )
 # log-likelihood value summed over all observations
 mlSumBfgs <- maxLik( loglikSum, start = 1, method = "BFGS" )
-all.equal( mlSumBfgs[], mlBfgs[-12] )
+all.equal( mlSumBfgs[], mlBfgs[-12], tolerance = 1e-3 )
 
 # Estimate with analytic gradient
 mlgBfgs <- maxLik( loglik, gradlik, start = 1, method = "BFGS" )
 nObs( mlgBfgs )
-all.equal( mlgBfgs, mlBfgs )
+all.equal( mlgBfgs, mlBfgs, tolerance = 1e-3 )
 # gradient summed over all observations
 mlgSumBfgs <- maxLik( loglikSum, gradlikSum, start = 1, method = "BFGS" )
-all.equal( mlgSumBfgs[], mlgBfgs[-12] )
+all.equal( mlgSumBfgs[], mlgBfgs[-12], tolerance = 1e-3 )
 
 # Estimate with analytic gradient and Hessian (unused during estimation)
 mlghBfgs <- maxLik( loglik, gradlik, hesslik, start = 1, method = "BFGS" )
-all.equal( mlghBfgs, mlgBfgs )
+all.equal( mlghBfgs, mlgBfgs, tolerance = 1e-3 )
 
 
 ## NM estimation
@@ -89,16 +91,17 @@ mlNm <- maxLik( loglik, start = 1, method = "NM" )
 print( mlNm )
 summary( mlNm )
 nObs( mlNm )
-all.equal( mlNm[ -c( 5, 6, 9, 10, 11 ) ], ml[ -c( 5, 6, 9, 10 ) ] )
+all.equal( mlNm[ -c( 5, 6, 9, 10, 11 ) ], ml[ -c( 5, 6, 9, 10 ) ], 
+   tolerance = 1e-3 )
 
 # Estimate with analytic gradient (unused during estimation)
 mlgNm <- maxLik( loglik, gradlik, start = 1, method = "NM" )
 nObs( mlgNm )
-all.equal( mlgNm, mlNm )
+all.equal( mlgNm, mlNm, tolerance = 1e-3 )
 
 # Estimate with analytic gradient and Hessian (both unused during estimation)
 mlghNm <- maxLik( loglik, gradlik, hesslik, start = 1, method = "NM" )
-all.equal( mlghNm, mlgNm )
+all.equal( mlghNm, mlgNm, tolerance = 1e-3 )
 
 ## SANN estimation
 # Estimate with only function values
@@ -106,16 +109,17 @@ mlSann <- maxLik( loglik, start = 1, method = "SANN" )
 print( mlSann )
 summary( mlSann )
 nObs( mlSann )
-all.equal( mlSann[ -c( 5, 6, 9, 10, 11 ) ], ml[ -c( 5, 6, 9, 10 ) ] )
+all.equal( mlSann[ -c( 5, 6, 9, 10, 11 ) ], ml[ -c( 5, 6, 9, 10 ) ], 
+   tolerance = 1e-3 )
 
 # Estimate with analytic gradient (unused during estimation)
 mlgSann <- maxLik( loglik, gradlik, start = 1, method = "SANN" )
 nObs( mlgSann )
-all.equal( mlgSann, mlSann )
+all.equal( mlgSann, mlSann, tolerance = 1e-3 )
 
 # Estimate with analytic gradient and Hessian (both unused during estimation)
 mlghSann <- maxLik( loglik, gradlik, hesslik, start = 1, method = "SANN" )
-all.equal( mlghSann, mlgSann )
+all.equal( mlghSann, mlgSann, tolerance = 1e-3 )
 
 
 ## CG estimation

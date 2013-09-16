@@ -23,7 +23,7 @@ Type 'q()' to quit R.
 > ## (ie unbounded problems).
 > ## All solutions should go to large values with a message about successful convergence
 > set.seed(0)
-> options(digits=5)
+> options(digits=4)
 > quadForm <- function(D) {
 +    return(t(D) %*% W %*% D)
 + }
@@ -49,10 +49,10 @@ Return code: 1
 gradient close to zero 
 Function value: 8.104e+25 
 Estimates:
-        estimate gradient
-[1,]  6.2506e+12        0
-[2,]  6.2506e+12        0
-[3,] -1.7026e+12        0
+       estimate gradient
+[1,]  6.251e+12        0
+[2,]  6.251e+12        0
+[3,] -1.703e+12        0
 --------------------------------------------
 > 
 > ## b) add noice to
@@ -66,12 +66,12 @@ BFGSR maximization
 Number of iterations: 17 
 Return code: 1 
 gradient close to zero 
-Function value: 2.4071e+21 
+Function value: 2.407e+21 
 Estimates:
-        estimate gradient
-[1,]  7684926721        0
-[2,] 33806418069        0
-[3,] -2319374069        0
+       estimate gradient
+[1,]  7.685e+09        0
+[2,]  3.381e+10        0
+[3,] -2.319e+09        0
 --------------------------------------------
 > 
 > ## Next, optimize hat function in non-concave region.  Does not work well.
@@ -90,9 +90,9 @@ Return code: 1
 gradient close to zero 
 Function value: 1 
 Estimates:
-       estimate    gradient
-[1,] 1.8402e-07 -3.6804e-07
-[2,] 1.8402e-07 -3.6804e-07
+     estimate  gradient
+[1,] 1.84e-07 -3.68e-07
+[2,] 1.84e-07 -3.68e-07
 --------------------------------------------
 >                            # should converge to c(0,0).
 > 
@@ -117,20 +117,20 @@ BFGSR maximization
 Number of iterations: 13 
 Return code: 2 
 successive function values within tolerance limit 
-Function value: 0.22313 
+Function value: 0.2231 
 Estimates:
      estimate gradient
-[1,]  0.49999 -0.22313
-[2,]  0.49999 -0.22313
-[3,]  1.00000 -0.44627
+[1,]      0.5  -0.2231
+[2,]      0.5  -0.2231
+[3,]      1.0  -0.4463
 
 Constrained optimization based on SUMT 
 Return code: 1 
 penalty close to zero 
-5  outer iterations, barrier value 6.5361e-10 
+5  outer iterations, barrier value 6.536e-10 
 --------------------------------------------
 > 
 > 
 > proc.time()
    user  system elapsed 
-  0.276   0.028   0.288 
+  0.260   0.036   0.284 
