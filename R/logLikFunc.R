@@ -1,3 +1,7 @@
+if( getRversion() >= "2.15.1" ) {
+   globalVariables( c( "lastFuncGrad", "lastFuncParam" ) )
+}
+
 ## objective function:
 ## sum over possible individual likelihoods
 logLikFunc <- function(theta, fnOrig, gradOrig, hessOrig,
