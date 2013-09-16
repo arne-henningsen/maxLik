@@ -28,15 +28,24 @@ constraints=NULL, ...)
     vector as the first argument.  Must return a square matrix.  If
     \code{NULL}, numeric gradient will be used.}
   \item{start}{numeric vector, initial value of parameters.}
-  \item{method}{maximisation method, currently either "Newton-Raphson",
-    "BFGS", "BFGSR",
-    "BHHH", "SANN" or "NM" (for Nelder-Mead).  Lower-case letters and
-    shortcuts (as 'nr' for Newton-Raphson) allowed.  If missing, a
-    suitable method is selected automathically.}
+  \item{method}{maximisation method, currently either 
+   "NR" (for Newton-Raphson),
+   "BFGS" (for Broyden-Fletcher-Goldfarb-Shanno), 
+   "BFGSR" (for the BFGS algorithm implemented in \R),
+   "BHHH" (for Berndt-Hall-Hall-Hausman), 
+   "SANN" (for Simulated ANNealing), 
+   "CG" (for Conjugate Gradients), 
+   or "NM" (for Nelder-Mead).  
+   Lower-case letters (such as "nr" for Newton-Raphson) are allowed.
+   If missing, a suitable method is selected automatically.}
   \item{constraints}{either \code{NULL} for unconstrained maximization
     or a list, specifying the constraints.  See \code{\link{maxBFGS}}.
   }
-  \item{\dots}{further arguments for the maximisation routine.}
+  \item{\dots}{further arguments are passed to the selected maximisation routine,
+     i.e. \code{\link{maxNR}}, \code{\link{maxBFGS}}, \code{\link{maxBFGSR}},
+     \code{\link{maxBHHH}}, \code{\link{maxSANN}}, \code{\link{maxCG}},
+     or \code{\link{maxNM}}
+     (depending on argument \code{method}).}
 }
 \details{
   \code{maxLik} "support" constrained optimization in the sense that
