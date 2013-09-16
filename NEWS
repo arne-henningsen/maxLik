@@ -4,7 +4,22 @@ Please note that only the most significant changes are reported here.
 A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
-	CHANGES IN VERSION ....
+
+      CHANGES IN VERSION 1.1-4 (2013-09-16)
+
+* the package code is byte-compiled
+
+* if the log-likelihood function contains NA, the gradient is not calculated; 
+if components of the gradient contain NA, the Hessian is not calculated
+
+* slightly improved documentation
+
+* improved warning messages and error messages when doing constrained
+optimisation
+
+* added citation information
+
+* added start-up message 
 
 
 	CHANGES IN VERSION 1.1-2 (2012-03-04)
