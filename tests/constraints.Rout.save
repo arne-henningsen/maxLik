@@ -71,6 +71,12 @@ Type 'q()' to quit R.
 > ### --------------------------
 > library(maxLik)
 Loading required package: miscTools
+
+Please cite the 'maxLik' package as:
+Henningsen, Arne and Toomet, Ott (2011). maxLik: A package for maximum likelihood estimation in R. Computational Statistics 26(3), 443-458. DOI 10.1007/s00180-010-0217-1.
+
+If you have questions, suggestions, or comments regarding the 'maxLik' package, please use a forum or 'tracker' at maxLik's R-Forge site:
+https://r-forge.r-project.org/projects/maxlik/
 > ## mixed normal
 > set.seed(1)
 > x <- c(rnorm(1000, mean=-1), rnorm(1000, mean=1))
@@ -1372,4 +1378,4 @@ Constrained optimization based on constrOptim
 > 
 > proc.time()
    user  system elapsed 
- 50.264   0.044  50.359 
+ 51.088   0.060  51.213 

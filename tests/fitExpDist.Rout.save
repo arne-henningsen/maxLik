@@ -18,6 +18,12 @@ Type 'q()' to quit R.
 > ## load the maxLik package
 > library( maxLik )
 Loading required package: miscTools
+
+Please cite the 'maxLik' package as:
+Henningsen, Arne and Toomet, Ott (2011). maxLik: A package for maximum likelihood estimation in R. Computational Statistics 26(3), 443-458. DOI 10.1007/s00180-010-0217-1.
+
+If you have questions, suggestions, or comments regarding the 'maxLik' package, please use a forum or 'tracker' at maxLik's R-Forge site:
+https://r-forge.r-project.org/projects/maxlik/
 > 
 > ## fitting an exponential distribution by ML,
 > ## e.g. estimation of an exponential duration model
@@ -636,4 +642,4 @@ Error in nObs.maxLik(x) :
 > 
 > proc.time()
    user  system elapsed 
-  0.988   0.028   1.005 
+  1.020   0.032   1.040 
