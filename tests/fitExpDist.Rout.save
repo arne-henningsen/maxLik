@@ -1,7 +1,6 @@
 
-R version 2.15.0 (2012-03-30)
-Copyright (C) 2012 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
+R version 3.0.1 (2013-05-16) -- "Good Sport"
+Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -57,7 +56,7 @@ Estimates:
      Estimate Std. error t value Pr(> t)    
 [1,]    2.116      0.212      10  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > nObs( ml )
 [1] 100
@@ -242,7 +241,7 @@ Estimates:
      Estimate Std. error t value Pr(> t)    
 [1,]    2.116      0.215    9.86  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > nObs( mlBhhh )
 [1] 100
@@ -285,7 +284,7 @@ Estimates:
      Estimate Std. error t value Pr(> t)    
 [1,]    2.116      0.212      10  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > nObs( mlBfgs )
 [1] 100
@@ -322,7 +321,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > mlNm <- maxLik( loglik, start = 1, method = "NM" )
 Warning message:
 In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
-  one-diml optimization by Nelder-Mead is unreliable:
+  one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > print( mlNm )
 Maximum Likelihood estimation
@@ -341,7 +340,7 @@ Estimates:
      Estimate Std. error t value Pr(> t)    
 [1,]    2.116      0.212      10  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > nObs( mlNm )
 [1] 100
@@ -355,7 +354,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > mlgNm <- maxLik( loglik, gradlik, start = 1, method = "NM" )
 Warning message:
 In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
-  one-diml optimization by Nelder-Mead is unreliable:
+  one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > nObs( mlgNm )
 [1] 100
@@ -367,7 +366,7 @@ use "Brent" or optimize() directly
 > mlghNm <- maxLik( loglik, gradlik, hesslik, start = 1, method = "NM" )
 Warning message:
 In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
-  one-diml optimization by Nelder-Mead is unreliable:
+  one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlghNm, mlgNm )
 [1] TRUE
@@ -392,7 +391,7 @@ Estimates:
      Estimate Std. error t value Pr(> t)    
 [1,]    2.116      0.212      10  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > nObs( mlSann )
 [1] 100
@@ -429,7 +428,7 @@ Estimates:
      Estimate Std. error t value Pr(> t)    
 [1,]    2.116      0.212      10  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > 
 > # Estimate with analytic gradient
@@ -445,7 +444,7 @@ Estimates:
      Estimate Std. error t value Pr(> t)    
 [1,]    2.116      0.212      10  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > 
 > # Estimate with analytic gradient and Hessian (not used for estimation)
@@ -461,7 +460,7 @@ Estimates:
      Estimate Std. error t value Pr(> t)    
 [1,]    2.116      0.212      10  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > 
 > 
@@ -471,7 +470,7 @@ Loading required package: zoo
 
 Attaching package: 'zoo'
 
-The following object(s) are masked from 'package:base':
+The following object is masked from 'package:base':
 
     as.Date, as.Date.numeric
 
@@ -637,4 +636,4 @@ Error in nObs.maxLik(x) :
 > 
 > proc.time()
    user  system elapsed 
-  1.144   0.028   1.161 
+  0.988   0.028   1.005 

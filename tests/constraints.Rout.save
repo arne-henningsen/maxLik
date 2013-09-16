@@ -1,7 +1,6 @@
 
-R version 2.15.2 (2012-10-26) -- "Trick or Treat"
-Copyright (C) 2012 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
+R version 3.0.1 (2013-05-16) -- "Good Sport"
+Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -133,7 +132,7 @@ Estimates:
 [2,]  -1.0358     0.0581   -17.8  <2e-16 ***
 [3,]   1.0111     0.0584    17.3  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on constrOptim 
@@ -371,7 +370,7 @@ Estimates:
 [2,]  -1.0360     0.0582   -17.8  <2e-16 ***
 [3,]   1.0106     0.0585    17.3  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on constrOptim 
@@ -427,7 +426,7 @@ Estimates:
 [2,]  -1.0359     0.0581   -17.8  <2e-16 ***
 [3,]   1.0111     0.0584    17.3  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on constrOptim 
@@ -478,7 +477,7 @@ Estimates:
 [2,]  -1.3677     0.0697   -19.6  <2e-16 ***
 [3,]   0.6839     0.0514    13.3  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -584,7 +583,7 @@ Estimates:
 [2,]  -1.3677     0.0697   -19.6  <2e-16 ***
 [3,]   0.6839     0.0514    13.3  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -727,7 +726,7 @@ Estimates:
 [1,]  -1.3034     0.0458   -28.4  <2e-16 ***
 [2,]   0.6517     0.0354    18.4  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -766,7 +765,7 @@ Estimates:
 [1,]  -1.3034     0.0458   -28.4  <2e-16 ***
 [2,]   0.6517     0.0354    18.4  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -805,7 +804,7 @@ Estimates:
 [1,]  -1.3034     0.0458   -28.4  <2e-16 ***
 [2,]   0.6517     0.0354    18.4  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -844,7 +843,7 @@ Estimates:
 [1,]  -1.3037     0.0458   -28.5  <2e-16 ***
 [2,]   0.6519     0.0354    18.4  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -883,7 +882,7 @@ Estimates:
 [1,]  -1.3037     0.0458   -28.5  <2e-16 ***
 [2,]   0.6519     0.0354    18.4  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -983,7 +982,7 @@ Estimates:
 [1,]  -1.3034     0.0458   -28.4  <2e-16 ***
 [2,]   0.6517     0.0354    18.4  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -1083,7 +1082,7 @@ Estimates:
 [1,]  -1.3034     0.0458   -28.4  <2e-16 ***
 [2,]   0.6517     0.0354    18.4  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -1122,7 +1121,7 @@ Estimates:
 [1,]  -1.3121     0.0459   -28.6  <2e-16 ***
 [2,]   0.6561     0.0354    18.5  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -1161,7 +1160,7 @@ Estimates:
 [1,]  -1.3034     0.0458   -28.4  <2e-16 ***
 [2,]   0.6517     0.0354    18.4  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -1205,7 +1204,7 @@ Estimates:
 [1,]  -1.0361     0.0398   -26.0  <2e-16 ***
 [2,]   1.0108     0.0400    25.3  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on constrOptim 
@@ -1242,7 +1241,7 @@ Estimates:
 [1,]  -1.0361     0.0399   -26.0  <2e-16 ***
 [2,]   1.0108     0.0400    25.3  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on constrOptim 
@@ -1296,7 +1295,7 @@ Estimates:
 [1,]  -1.0362     0.0398   -26.0  <2e-16 ***
 [2,]   1.0104     0.0399    25.3  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on constrOptim 
@@ -1331,8 +1330,8 @@ Current length2
 +            print.level=1, rho=0.5)
 +     )
 Error in maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  : 
-  Inequality constraint A cannot be matrix multipliedwith start value.
-A is a 1x4 matrix,start value is of lenght 2
+  Inequality constraint A cannot be matrix multiplied with the start value.
+A is a 1x4 matrix, start value has lenght 2
 >                            # should explain that wrong matrix
 >                            # dimension
 > 
@@ -1373,4 +1372,4 @@ Constrained optimization based on constrOptim
 > 
 > proc.time()
    user  system elapsed 
- 73.908   0.084  74.069 
+ 50.264   0.044  50.359 

@@ -1,7 +1,6 @@
 
-R version 2.15.0 (2012-03-30)
-Copyright (C) 2012 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
+R version 3.0.1 (2013-05-16) -- "Good Sport"
+Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -181,7 +180,7 @@ Estimates:
 mu       1.181      0.182     6.5 7.9e-11 ***
 sigma    1.816      0.128    14.1 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > activePar( ml )
    mu sigma 
@@ -232,7 +231,7 @@ Estimates:
 mu       1.181      0.182     6.5 8.1e-11 ***
 sigma    1.816      0.128    14.2 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( ml[-3], mlInd[ c(-3,-11) ] )
 [1] "Component 3: Mean relative difference: 0.0012492"
@@ -269,7 +268,7 @@ Estimates:
 mu       1.181      0.182     6.5   8e-11 ***
 sigma    1.816      0.128    14.1  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( ml, mlg )
 [1] "Component 2: Mean relative difference: 1.6411e-08"
@@ -472,7 +471,7 @@ Estimates:
 mu       1.181      0.182    6.49 8.4e-11 ***
 sigma    1.816      0.134   13.55 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > activePar( mlBHHH )
    mu sigma 
@@ -644,7 +643,7 @@ Estimates:
 mu       1.181      0.182     6.5 7.9e-11 ***
 sigma    1.816      0.128    14.1 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > 
 > # with analytical gradients
@@ -702,7 +701,7 @@ Estimates:
 mu       1.181      0.182    6.49 8.4e-11 ***
 sigma    1.816      0.134   13.55 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlBHHH, mlgBHHH )
 [1] "Component 3: Mean relative difference: 0.00065265"
@@ -952,7 +951,7 @@ Estimates:
 mu       1.181      0.182     6.5   8e-11 ***
 sigma    1.816      0.129    14.1  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > activePar( mlBFGSYC )
    mu sigma 
@@ -1007,7 +1006,7 @@ Estimates:
 mu       1.181      0.182     6.5 7.9e-11 ***
 sigma    1.816      0.128    14.2 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlBFGSYC[ -9 ], mlIndBFGSYC[ -c(9,11) ] )
 [1] "Component 2: Mean relative difference: 9.347e-05"
@@ -1170,7 +1169,7 @@ Estimates:
 mu       1.181      0.182     6.5 7.9e-11 ***
 sigma    1.816      0.128    14.1 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlBFGSYC, mlgBFGSYC )
 [1] "Component 3: Mean relative difference: 1.9416e-05"
@@ -1386,7 +1385,7 @@ Estimates:
 mu       1.181      0.182     6.5 8.2e-11 ***
 sigma    1.816      0.128    14.1 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > activePar( mlBFGS )
    mu sigma 
@@ -1446,7 +1445,7 @@ Estimates:
 mu       1.181      0.182     6.5 8.1e-11 ***
 sigma    1.816      0.128    14.2 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlBFGS[], mlIndBFGS[-12] )
 [1] "Component 3: Mean relative difference: 0.00063978"
@@ -1572,7 +1571,7 @@ Estimates:
 mu       1.181      0.182     6.5   8e-11 ***
 sigma    1.816      0.128    14.1  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlBFGS, mlgBFGS )
 [1] "Component 3: Mean relative difference: 0.00041338"
@@ -1756,7 +1755,7 @@ Estimates:
 mu       1.181      0.182     6.5 8.3e-11 ***
 sigma    1.817      0.128    14.1 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > activePar( mlNM )
    mu sigma 
@@ -1816,7 +1815,7 @@ Estimates:
 mu       1.181      0.182     6.5   8e-11 ***
 sigma    1.817      0.128    14.1  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlNM[], mlIndNM[-12] )
 [1] "Component 3: Mean relative difference: 1.5236e-06"
@@ -1942,7 +1941,7 @@ Estimates:
 mu       1.181      0.182     6.5 8.1e-11 ***
 sigma    1.817      0.128    14.1 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlNM, mlgNM )
 [1] "Component 3: Mean relative difference: 1.7481e-06"
@@ -1961,7 +1960,7 @@ Estimates:
 mu       1.181      0.182     6.5 8.1e-11 ***
 sigma    1.817      0.128    14.1 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlgNM[], mlgIndNM[-12] )
 [1] TRUE
@@ -2114,7 +2113,7 @@ Estimates:
 mu       1.182      0.182     6.5 7.9e-11 ***
 sigma    1.817      0.128    14.1 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > activePar( mlSANN )
    mu sigma 
@@ -2175,7 +2174,7 @@ Estimates:
 mu       1.182      0.182    6.51 7.6e-11 ***
 sigma    1.817      0.128   14.15 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlSANN[], mlIndSANN[-12] )
 [1] "Component 3: Mean relative difference: 1.0972e-06"
@@ -2301,7 +2300,7 @@ Estimates:
 mu       1.182      0.182    6.51 7.7e-11 ***
 sigma    1.817      0.128   14.14 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlSANN, mlgSANN )
 [1] "Component 3: Mean relative difference: 1.0721e-06"
@@ -2320,7 +2319,7 @@ Estimates:
 mu       1.182      0.182    6.51 7.7e-11 ***
 sigma    1.817      0.128   14.14 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlgSANN[], mlgIndSANN[-12] )
 [1] TRUE
@@ -2449,7 +2448,7 @@ Estimates:
 mu       1.200      0.181    6.62 3.5e-11 ***
 sigma    1.813      0.128   14.18 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlSANNCand, mlSANN )
 [1] "Component 1: Mean relative difference: 3.0992e-05"
@@ -2496,7 +2495,7 @@ Estimates:
 mu       1.000      0.000      NA      NA    
 sigma    1.825      0.129    14.1  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > activePar( mlFix )
    mu sigma 
@@ -2555,7 +2554,7 @@ Estimates:
 mu       1.000      0.000      NA      NA    
 sigma    1.825      0.129    14.1  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlFix[ ], mlIndFix[ -11 ] )
 [1] "Component 3: Mean relative difference: 0.13281"   
@@ -2693,7 +2692,7 @@ Estimates:
 mu       1.000      0.000      NA      NA    
 sigma    1.825      0.129    14.1  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlFix, mlgFix )
 [1] "Component 3: Mean relative difference: 0.99998"   
@@ -2887,7 +2886,7 @@ Estimates:
 mu       1.000      0.000      NA      NA    
 sigma    1.825      0.134    13.7  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > activePar( mlFixBHHH )
    mu sigma 
@@ -3082,7 +3081,7 @@ Estimates:
 mu       1.000      0.000      NA      NA    
 sigma    1.825      0.134    13.7  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlFixBHHH, mlgFixBHHH )
 [1] "Component 3: Mean relative difference: 0.0011859"
@@ -3126,7 +3125,7 @@ Estimates:
 mu       1.000      0.000      NA      NA    
 sigma    1.825      0.129    14.1  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > activePar( mlFixBfgs )
    mu sigma 
@@ -3306,7 +3305,7 @@ Estimates:
 mu       1.000      0.000      NA      NA    
 sigma    1.825      0.129    14.1  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlFixBfgs[ -9 ], mlgFixBfgs[ -9 ] )
 [1] "Component 4: Mean relative difference: 0.00020974"
@@ -3446,13 +3445,13 @@ $gradientObs
 +    method = "NM" )
 Warning message:
 In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
-  one-diml optimization by Nelder-Mead is unreliable:
+  one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > mlFixNm3 <- maxLik( llf, start = startValFix, fixed = "mu",
 +    method = "NM" )
 Warning message:
 In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
-  one-diml optimization by Nelder-Mead is unreliable:
+  one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlFixNm, mlFixNm3 )
 [1] TRUE
@@ -3460,7 +3459,7 @@ use "Brent" or optimize() directly
 +    method = "NM" )
 Warning message:
 In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
-  one-diml optimization by Nelder-Mead is unreliable:
+  one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlFixNm, mlFixNm4 )
 [1] TRUE
@@ -3482,7 +3481,7 @@ Estimates:
 mu       1.000      0.000      NA      NA    
 sigma    1.825      0.129    14.2  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > activePar( mlFixNm )
    mu sigma 
@@ -3525,7 +3524,7 @@ sigma  0 0.016651
 +    method = "NM" )
 Warning message:
 In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
-  one-diml optimization by Nelder-Mead is unreliable:
+  one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlFixNm[ ], mlIndFixNm[ -12 ] )
 [1] "Component 4: Mean relative difference: 0.0020353"
@@ -3637,7 +3636,7 @@ $gradientObs
 +    method = "NM" )
 Warning message:
 In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
-  one-diml optimization by Nelder-Mead is unreliable:
+  one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlIndFixNm, mlIndFixNm3 )
 [1] TRUE
@@ -3645,7 +3644,7 @@ use "Brent" or optimize() directly
 +    method = "NM" )
 Warning message:
 In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
-  one-diml optimization by Nelder-Mead is unreliable:
+  one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlIndFixNm, mlIndFixNm4 )
 [1] TRUE
@@ -3657,13 +3656,13 @@ use "Brent" or optimize() directly
 +    method = "NM" )
 Warning message:
 In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
-  one-diml optimization by Nelder-Mead is unreliable:
+  one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > mlgFixNm3 <- maxLik( llf, gf, start = startValFix, fixed = "mu",
 +    method = "NM" )
 Warning message:
 In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
-  one-diml optimization by Nelder-Mead is unreliable:
+  one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlgFixNm, mlgFixNm3 )
 [1] TRUE
@@ -3671,7 +3670,7 @@ use "Brent" or optimize() directly
 +    method = "NM" )
 Warning message:
 In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
-  one-diml optimization by Nelder-Mead is unreliable:
+  one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlgFixNm, mlgFixNm4 )
 [1] TRUE
@@ -3687,7 +3686,7 @@ Estimates:
 mu       1.000      0.000      NA      NA    
 sigma    1.825      0.129    14.1  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlFixNm, mlgFixNm )
 [1] "Component 4: Mean relative difference: 0.00037194"
@@ -3695,7 +3694,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 +    method = "NM")
 Warning message:
 In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
-  one-diml optimization by Nelder-Mead is unreliable:
+  one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlgFixNm[ ], mlgIndFixNm[ -12 ] )
 [1] TRUE
@@ -3809,7 +3808,7 @@ $gradientObs
 +    method = "NM" )
 Warning message:
 In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
-  one-diml optimization by Nelder-Mead is unreliable:
+  one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlgFixNm, mlghFixNm )
 [1] TRUE
@@ -3817,7 +3816,7 @@ use "Brent" or optimize() directly
 +    method = "NM" )
 Warning message:
 In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
-  one-diml optimization by Nelder-Mead is unreliable:
+  one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlghFixNm, mlghFixNm3 )
 [1] TRUE
@@ -3825,7 +3824,7 @@ use "Brent" or optimize() directly
 +    method = "NM" )
 Warning message:
 In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
-  one-diml optimization by Nelder-Mead is unreliable:
+  one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlghFixNm, mlghFixNm4 )
 [1] TRUE
@@ -3859,7 +3858,7 @@ Estimates:
 mu       1.000      0.000      NA      NA    
 sigma    1.825      0.129    14.1  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > activePar( mlFixSann )
    mu sigma 
@@ -4024,7 +4023,7 @@ Estimates:
 mu       1.000      0.000      NA      NA    
 sigma    1.825      0.129    14.1  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlFixSann, mlgFixSann )
 [1] "Component 4: Mean relative difference: 0.00039275"
@@ -4182,7 +4181,7 @@ Estimates:
 mu       0.820      0.174    4.71 2.5e-06 ***
 sigma    1.680      0.107   15.69 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on constrOptim 
@@ -4236,7 +4235,7 @@ Estimates:
 mu       0.820      0.174    4.71 2.5e-06 ***
 sigma    1.680      0.107   15.69 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on constrOptim 
@@ -4500,7 +4499,7 @@ Estimates:
 mu       0.820      0.174    4.71 2.5e-06 ***
 sigma    1.680      0.107   15.68 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on constrOptim 
@@ -4562,7 +4561,7 @@ Estimates:
 mu       0.820      0.174    4.71 2.5e-06 ***
 sigma    1.680      0.107   15.69 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on constrOptim 
@@ -4710,7 +4709,7 @@ Estimates:
 mu       0.830      0.173     4.8 1.6e-06 ***
 sigma    1.670      0.106    15.8 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on constrOptim 
@@ -4780,7 +4779,7 @@ Estimates:
 mu       0.812      0.175    4.65 3.4e-06 ***
 sigma    1.682      0.108   15.65 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on constrOptim 
@@ -4816,7 +4815,7 @@ Estimates:
 mu       0.820      0.174    4.71 2.5e-06 ***
 sigma    1.680      0.107   15.68 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -4870,7 +4869,7 @@ Estimates:
 mu       0.820      0.174    4.71 2.5e-06 ***
 sigma    1.680      0.107   15.69 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -5003,7 +5002,7 @@ Estimates:
 mu       0.842      0.172    4.88   1e-06 ***
 sigma    1.670      0.105   15.84  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -5210,7 +5209,7 @@ Estimates:
 mu       0.820      0.174    4.71 2.5e-06 ***
 sigma    1.680      0.107   15.69 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -5379,7 +5378,7 @@ Estimates:
 mu       0.834      0.172    4.84 1.3e-06 ***
 sigma    1.666      0.105   15.88 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -5420,7 +5419,7 @@ Estimates:
 mu       0.834      0.172    4.84 1.3e-06 ***
 sigma    1.666      0.105   15.88 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -5480,7 +5479,7 @@ Estimates:
 mu       0.820      0.174    4.71 2.5e-06 ***
 sigma    1.680      0.107   15.68 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -5538,7 +5537,7 @@ Estimates:
 mu       0.820      0.174     4.7 2.5e-06 ***
 sigma    1.680      0.107    15.7 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -5670,7 +5669,7 @@ Estimates:
 mu       0.814      0.173     4.7 2.7e-06 ***
 sigma    1.670      0.106    15.8 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -5823,7 +5822,7 @@ Estimates:
 mu       0.820      0.174     4.7 2.5e-06 ***
 sigma    1.680      0.107    15.7 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -5883,7 +5882,7 @@ Estimates:
 mu       0.820      0.174     4.7 2.5e-06 ***
 sigma    1.680      0.107    15.7 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -6141,7 +6140,7 @@ Estimates:
 mu       0.816      0.175    4.67   3e-06 ***
 sigma    1.684      0.108   15.63  <2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -6200,7 +6199,7 @@ sigma -0.0050311  0.0116052
 > mlSannConCand <- maxLik( llf, start = startVal, constraints = eqCon,
 +    method = "SANN", cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
 Warning message:
-In function (fn, grad = NULL, hess = NULL, start, maxRoutine, constraints,  :
+In (function (fn, grad = NULL, hess = NULL, start, maxRoutine, constraints,  :
   problem in imposing equality constraints: the constraints are not satisfied (barrier value = 0.254780368286163). Try setting 'SUMTTol' to 0
 > summary( mlSannConCand )
 --------------------------------------------
@@ -6214,7 +6213,7 @@ Estimates:
 mu       1.183      0.182     6.5 8.2e-11 ***
 sigma    1.822      0.129    14.1 < 2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
@@ -6239,7 +6238,7 @@ Loading required package: zoo
 
 Attaching package: 'zoo'
 
-The following object(s) are masked from 'package:base':
+The following object is masked from 'package:base':
 
     as.Date, as.Date.numeric
 
@@ -6761,4 +6760,4 @@ sigma -0.0038883  0.0117903
 > 
 > proc.time()
    user  system elapsed 
- 38.194   0.060  38.277 
+ 30.084   0.060  30.163 
