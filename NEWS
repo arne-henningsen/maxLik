@@ -5,7 +5,7 @@ A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
 
-      CHANGES IN VERSION 1.1-6 (2013-09-17)
+      CHANGES IN VERSION 1.1-8 (2013-09-17)
 
 * fixed bug that could occur in the Newton-Raphson algorithm if the 
 log-likelihood function returns a vector with observation-specific values
