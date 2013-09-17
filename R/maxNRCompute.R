@@ -83,7 +83,7 @@ maxNRCompute <- function(fn,
    if(print.level > 2) {
       cat("Initial function value:", f1, "\n")
    }
-   if(is.na( f1)) {
+   if(any(is.na( f1))) {
       result <- list(code=100, message=maximMessage("100"),
                      iterations=0,
                      type=maxim.type)
@@ -130,7 +130,7 @@ maxNRCompute <- function(fn,
                            # Allow the user program to return a
                            # single NA in case of out of support or
                            # other problems
-      if(is.na(H1))
+      if(any(is.na(H1)))
           stop("NA in the initial Hessian")
    }
    if(any(is.na(H1[!fixed, !fixed]))) {
@@ -202,7 +202,7 @@ maxNRCompute <- function(fn,
       ## Are we asked to write in a new value for some of the parameters?
       if(is.null(newVal <- attr(f1, "newVal"))) {
          ## no ...
-         while( is.na( f1) | ( ( f1 < f0) & ( step >= steptol))) {
+         while( any(is.na(f1)) | ( ( f1 < f0) & ( step >= steptol))) {
                                         # We end up in a NA or a higher value.
                                         # try smaller step
             step <- step/2
