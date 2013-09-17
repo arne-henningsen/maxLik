@@ -5,6 +5,12 @@ A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
 
+      CHANGES IN VERSION 1.1-6 (2013-09-17)
+
+* fixed bug that could occur in the Newton-Raphson algorithm if there are NAs
+in the function values, gradients, or Hessian
+
+
       CHANGES IN VERSION 1.1-4 (2013-09-16)
 
 * the package code is byte-compiled
