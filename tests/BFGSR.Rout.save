@@ -1,5 +1,5 @@
 
-R version 3.0.1 (2013-05-16) -- "Good Sport"
+R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -25,7 +25,7 @@ Type 'q()' to quit R.
 > set.seed(0)
 > options(digits=4)
 > quadForm <- function(D) {
-+    return(t(D) %*% W %*% D)
++    return( - t(D - (1:N) ) %*% W %*% ( D - (1:N) ) )
 + }
 > N <- 3
 >                            # 3-dimensional case
@@ -44,15 +44,15 @@ https://r-forge.r-project.org/projects/maxlik/
 > summary(res)
 --------------------------------------------
 BFGSR maximization 
-Number of iterations: 20 
-Return code: 1 
-gradient close to zero 
-Function value: 8.104e+25 
+Number of iterations: 3 
+Return code: 2 
+successive function values within tolerance limit 
+Function value: -2.306e-08 
 Estimates:
-       estimate gradient
-[1,]  6.251e+12        0
-[2,]  6.251e+12        0
-[3,] -1.703e+12        0
+     estimate  gradient
+[1,]        1 6.299e-05
+[2,]        2 1.575e-04
+[3,]        3 2.520e-04
 --------------------------------------------
 > 
 > ## b) add noice to
@@ -63,15 +63,15 @@ Estimates:
 > summary(res)
 --------------------------------------------
 BFGSR maximization 
-Number of iterations: 17 
-Return code: 1 
-gradient close to zero 
-Function value: 2.407e+21 
+Number of iterations: 27 
+Return code: 2 
+successive function values within tolerance limit 
+Function value: -2.4e-06 
 Estimates:
-       estimate gradient
-[1,]  7.685e+09        0
-[2,]  3.381e+10        0
-[3,] -2.319e+09        0
+     estimate   gradient
+[1,]    1.001 -0.0027577
+[2,]    1.999  0.0025758
+[3,]    3.000 -0.0001638
 --------------------------------------------
 > 
 > ## Next, optimize hat function in non-concave region.  Does not work well.
@@ -79,7 +79,7 @@ Estimates:
 +    ## Hat function.  Hessian negative definite if sqrt(x^2 + y^2) < 0.5
 +    x <- param[1]
 +    y <- param[2]
-+    exp(-x^2 - y^2)
++    exp(-(x-2)^2 - (y-2)^2)
 + }
 > 
 > summary(hatNC <- maxBFGSR(hat, start=c(1,1), tol=0, reltol=0))
@@ -91,8 +91,8 @@ gradient close to zero
 Function value: 1 
 Estimates:
      estimate  gradient
-[1,] 1.84e-07 -3.68e-07
-[2,] 1.84e-07 -3.68e-07
+[1,]        2 3.708e-07
+[2,]        2 3.708e-07
 --------------------------------------------
 >                            # should converge to c(0,0).
 > 
@@ -100,37 +100,37 @@ Estimates:
 > ## Optimize 3D hat with one parameter fixed (== 2D hat).
 > ## Add an equality constraint on that
 > hat3 <- function(param) {
-+    ## Hat function.  Hessian negative definite if sqrt(x^2 + y^2) < 0.5
++    ## Hat function.  Hessian negative definite if sqrt((x-2)^2 + (y-2)^2) < 0.5
 +    x <- param[1]
 +    y <- param[2]
 +    z <- param[3]
-+    exp(-x^2-y^2-z^2)
++    exp(-(x-2)^2-(y-2)^2-(z-2)^2)
 + }
 > sv <- c(1,1,1)
-> ## constraints: x + y + z = 2
+> ## constraints: x + y + z = 8
 > A <- matrix(c(1,1,1), 1, 3)
-> B <- -2
+> B <- -8
 > constraints <- list(eqA=A, eqB=B)
 > summary(hat3CF <- maxBFGSR(hat3, start=sv, constraints=constraints, fixed=3))
 --------------------------------------------
 BFGSR maximization 
-Number of iterations: 13 
+Number of iterations: 3 
 Return code: 2 
 successive function values within tolerance limit 
-Function value: 0.2231 
+Function value: 0.004087 
 Estimates:
-     estimate gradient
-[1,]      0.5  -0.2231
-[2,]      0.5  -0.2231
-[3,]      1.0  -0.4463
+     estimate  gradient
+[1,]      3.5 -0.012262
+[2,]      3.5 -0.012262
+[3,]      1.0  0.008175
 
 Constrained optimization based on SUMT 
 Return code: 1 
 penalty close to zero 
-5  outer iterations, barrier value 6.536e-10 
+5  outer iterations, barrier value 2.127e-09 
 --------------------------------------------
 > 
 > 
 > proc.time()
    user  system elapsed 
-  0.260   0.036   0.284 
+  0.316   0.020   0.326 

@@ -8,7 +8,7 @@
 set.seed(0)
 options(digits=4)
 quadForm <- function(D) {
-   return(t(D) %*% W %*% D)
+   return( - t(D - (1:N) ) %*% W %*% ( D - (1:N) ) )
 }
 N <- 3
                            # 3-dimensional case
@@ -31,7 +31,7 @@ hat <- function(param) {
    ## Hat function.  Hessian negative definite if sqrt(x^2 + y^2) < 0.5
    x <- param[1]
    y <- param[2]
-   exp(-x^2 - y^2)
+   exp(-(x-2)^2 - (y-2)^2)
 }
 
 summary(hatNC <- maxBFGSR(hat, start=c(1,1), tol=0, reltol=0))
@@ -41,16 +41,16 @@ summary(hatNC <- maxBFGSR(hat, start=c(1,1), tol=0, reltol=0))
 ## Optimize 3D hat with one parameter fixed (== 2D hat).
 ## Add an equality constraint on that
 hat3 <- function(param) {
-   ## Hat function.  Hessian negative definite if sqrt(x^2 + y^2) < 0.5
+   ## Hat function.  Hessian negative definite if sqrt((x-2)^2 + (y-2)^2) < 0.5
    x <- param[1]
    y <- param[2]
    z <- param[3]
-   exp(-x^2-y^2-z^2)
+   exp(-(x-2)^2-(y-2)^2-(z-2)^2)
 }
 sv <- c(1,1,1)
-## constraints: x + y + z = 2
+## constraints: x + y + z = 8
 A <- matrix(c(1,1,1), 1, 3)
-B <- -2
+B <- -8
 constraints <- list(eqA=A, eqB=B)
 summary(hat3CF <- maxBFGSR(hat3, start=sv, constraints=constraints, fixed=3))
 
