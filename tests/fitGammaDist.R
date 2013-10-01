@@ -8,9 +8,9 @@ some_data <- rgamma(1e4, shape = 5, scale = 2)
 
 # log-likelihood function(s)
 logLL <- function(x, X)   # per observation for maxLik
-   .Internal(dgamma(x = X, shape = exp(x[1]), scale = exp(x[2]), log = TRUE))
+   dgamma(x = X, shape = exp(x[1]), scale = exp(x[2]), log = TRUE)
 logLL_sum <- function(x, X)   # negative sum for nlm()
-   -sum(.Internal(dgamma(x = X, shape = exp(x[1]), scale = exp(x[2]), log = TRUE)))
+   -sum(dgamma(x = X, shape = exp(x[1]), scale = exp(x[2]), log = TRUE))
 
 sum(logLL(log(c(5,2)),some_data))
 logLL_sum(log(c(5,2)),some_data)

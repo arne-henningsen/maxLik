@@ -1,5 +1,5 @@
 
-R version 3.0.1 (2013-05-16) -- "Good Sport"
+R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -32,9 +32,9 @@ https://r-forge.r-project.org/projects/maxlik/
 > 
 > # log-likelihood function(s)
 > logLL <- function(x, X)   # per observation for maxLik
-+    .Internal(dgamma(x = X, shape = exp(x[1]), scale = exp(x[2]), log = TRUE))
++    dgamma(x = X, shape = exp(x[1]), scale = exp(x[2]), log = TRUE)
 > logLL_sum <- function(x, X)   # negative sum for nlm()
-+    -sum(.Internal(dgamma(x = X, shape = exp(x[1]), scale = exp(x[2]), log = TRUE)))
++    -sum(dgamma(x = X, shape = exp(x[1]), scale = exp(x[2]), log = TRUE))
 > 
 > sum(logLL(log(c(5,2)),some_data))
 [1] -28528
@@ -293,18 +293,18 @@ NR_gradHess           1.014       1.015
 +             t_bhhh, t_bhhhg, t_NRn, t_NRg, t_NRgh )
 > tt
          user.self sys.self elapsed user.child sys.child
-t_nlm        0.160    0.000   0.160          0         0
-t_nlmg       0.092    0.000   0.094          0         0
-t_nlmgh      0.564    0.000   0.563          0         0
-t_bfgs       0.900    0.000   0.905          0         0
-t_bfgsM      0.960    0.000   0.962          0         0
-t_bfgsMg     0.748    0.000   0.753          0         0
-t_bhhh       0.476    0.004   0.481          0         0
-t_bhhhg      0.124    0.000   0.129          0         0
-t_NRn        2.892    0.020   2.920          0         0
-t_NRg        1.952    0.016   1.976          0         0
-t_NRgh       1.892    0.000   1.897          0         0
+t_nlm        0.160    0.000   0.159          0         0
+t_nlmg       0.096    0.000   0.093          0         0
+t_nlmgh      0.584    0.000   0.586          0         0
+t_bfgs       0.936    0.000   0.939          0         0
+t_bfgsM      0.976    0.000   0.975          0         0
+t_bfgsMg     0.760    0.004   0.766          0         0
+t_bhhh       0.464    0.000   0.467          0         0
+t_bhhhg      0.112    0.000   0.113          0         0
+t_NRn        2.904    0.008   2.914          0         0
+t_NRg        1.932    0.012   1.944          0         0
+t_NRgh       1.840    0.000   1.844          0         0
 > 
 > proc.time()
    user  system elapsed 
- 11.352   0.068  11.435 
+ 11.320   0.048  11.377 
