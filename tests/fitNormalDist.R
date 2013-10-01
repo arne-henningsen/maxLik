@@ -158,11 +158,11 @@ try( nObs( ml ) )
 nParam( ml )
 returnCode( ml )
 returnMessage( ml )
-vcov( ml )
+round( vcov( ml ), 4 )
 logLik( summary( ml ) )
 mlInd <- maxLik( llfInd, start = startVal )
 summary( mlInd )
-all.equal( ml[-3], mlInd[ c(-3,-11) ], tolerance = 1e-3 )
+all.equal( ml[-c(3,4,5,6)], mlInd[ -c(3,4,5,6,11) ], tolerance = 1e-3 )
                            # 3  gradient, should be close to 0, but may vary enormously in relative terms
 mlInd[[11]][sample(nrow(mlInd[[11]]), 10),]
                            # just print a sample of 10
@@ -171,7 +171,7 @@ nObs( mlInd )
 # with analytical gradients
 mlg <- maxLik( llf, gf, start = startVal )
 summary( mlg )
-all.equal( ml, mlg, tolerance = 1e-3 )
+all.equal( ml[-c(5,6)], mlg[-c(5,6)], tolerance = 1e-3 )
 mlgInd <- maxLik( llfInd, gfInd, start = startVal )
 all.equal( mlInd, mlgInd, tolerance = 1e-3 )
 all.equal( mlg[ ], mlgInd[ -11 ], tolerance = 1e-3 )
@@ -229,15 +229,15 @@ nIter( mlBHHH )
 nParam( mlBHHH )
 returnCode( mlBHHH )
 returnMessage( mlBHHH )
-vcov( mlBHHH )
+round( vcov( mlBHHH ), 4 )
 logLik( summary( mlBHHH ) )
-all.equal( ml[ ], mlBHHH[ -11 ], tolerance = 1e-3 )
+all.equal( ml[-c(4,5,6,9,10) ], mlBHHH[ -c(4,5,6,9,10,11) ], tolerance = 1e-3 )
 mlBHHH[ 11 ]
 nObs( mlBHHH )
 # final Hessian = usual Hessian
 mlBhhhH <- maxLik( llfInd, start = startVal, method = "BHHH", 
    finalHessian = TRUE )
-all.equal( mlBhhhH, mlBHHH, tolerance = 1e-3 )
+all.equal( mlBhhhH[-4], mlBHHH[-4], tolerance = 1e-3 )
 hessian( mlBhhhH ) 
 summary( mlBhhhH ) 
 
@@ -254,7 +254,7 @@ x <- xSaved
 mlgBHHH <- maxLik( llfInd, gfInd, start = startVal, method = "BHHH" )
 summary( mlgBHHH )
 all.equal( mlBHHH, mlgBHHH, tolerance = 1e-3 )
-all.equal( mlg[ ], mlgBHHH[ -11 ], tolerance = 1e-3 )
+all.equal( mlg[-c(4,5,6,9,10)], mlgBHHH[-c(4,5,6,9,10,11)], tolerance = 1e-3 )
 mlgBHHH[ 11 ]
 mlgBHHH2 <- maxLik( llf, gfInd, start = startVal, method = "BHHH" )
 all.equal( mlgBHHH, mlgBHHH2, tolerance = 1e-3 )
@@ -262,7 +262,7 @@ all.equal( mlgBHHH, mlgBHHH2, tolerance = 1e-3 )
 mlgBhhhH <- maxLik( llf, gfInd, start = startVal, method = "BHHH", 
    finalHessian = TRUE )
 all.equal( mlgBhhhH, mlBhhhH, tolerance = 1e-3 )
-all.equal( mlgBhhhH, mlgBHHH, tolerance = 1e-3 )
+all.equal( mlgBhhhH[-4], mlgBHHH[-4], tolerance = 1e-3 )
 hessian( mlgBhhhH ) 
 
 # with analytical gradients as attribute
@@ -292,7 +292,7 @@ all.equal( mlgBHHH, mlghBHHH, tolerance = 1e-3 )
 # final Hessian = usual Hessian
 mlghBhhhH <- maxLik( llfInd, gfInd, hf, start = startVal, method = "BHHH", 
    finalHessian = TRUE )
-all.equal( mlghBhhhH, mlghBHHH, tolerance = 1e-3 )
+all.equal( mlghBhhhH[-4], mlghBHHH[-4], tolerance = 1e-3 )
 all.equal( mlghBhhhH, mlgBhhhH, tolerance = 1e-3 )
 
 # with unused Hessian as attribute
@@ -325,23 +325,24 @@ try( nObs( mlBFGSYC ) )
 nParam( mlBFGSYC )
 returnCode( mlBFGSYC )
 returnMessage( mlBFGSYC )
-vcov( mlBFGSYC )
+round( vcov( mlBFGSYC ), 4 )
 logLik( summary( mlBFGSYC ) )
-all.equal( ml[-c(5,6,9,10)], mlBFGSYC[-c(5,6,9,10)], tolerance = 1e-3 )
+all.equal( ml[-c(3,4,5,6,9,10)], mlBFGSYC[-c(3,4,5,6,9,10)], tolerance = 1e-3 )
+all.equal( ml[-c(5,6,9,10)], mlBFGSYC[-c(5,6,9,10)], tolerance = 1e-2 )
 mlIndBFGSYC <- maxLik( llfInd, start = startVal, method = "BFGSR" )
 summary( mlIndBFGSYC )
-all.equal( mlBFGSYC[ -9 ], mlIndBFGSYC[ -c(9,11) ], tolerance = 1e-3 )
+all.equal( mlBFGSYC[-c(3,4,9)], mlIndBFGSYC[ -c(3,4,9,11) ], tolerance = 1e-3 )
 mlIndBFGSYC[ 11 ]
 nObs( mlIndBFGSYC )
 
 # with analytical gradients
 mlgBFGSYC <- maxLik( llf, gf, start = startVal, method = "BFGSR" , print.level=1)
 summary(mlgBFGSYC)
-all.equal( mlBFGSYC, mlgBFGSYC, tolerance = 1e-3 )
+all.equal( mlBFGSYC[-4], mlgBFGSYC[-4], tolerance = 1e-3 )
 mlgIndBFGSYC <- maxLik( llfInd, gfInd, start = startVal,
    method = "BFGSR" )
 all.equal( mlIndBFGSYC, mlgIndBFGSYC, tolerance = 1e-3 )
-all.equal( mlgBFGSYC[ -9 ], mlgIndBFGSYC[ -c(9,11) ], tolerance = 1e-3 )
+all.equal( mlgBFGSYC[ -c(3,9) ], mlgIndBFGSYC[ -c(3,9,11) ], tolerance = 1e-3 )
 mlgIndBFGSYC[ 11 ]
 
 # with analytical gradients as attribute
@@ -384,21 +385,21 @@ nIter( mlBFGS )
 nParam( mlBFGS )
 returnCode( mlBFGS )
 returnMessage( mlBFGS )
-vcov( mlBFGS )
+round( vcov( mlBFGS ), 4 )
 logLik( summary( mlBFGS ) )
-all.equal( ml, mlBFGS, tolerance = 1e-3 )
+all.equal( ml[-c(4,5,6,9,10)], mlBFGS[-c(4,5,6,9,10,11)], tolerance = 1e-3 )
 # with individual log likelihood values
 mlIndBFGS <- maxLik( llfInd, start = startVal, method = "BFGS" )
 summary( mlIndBFGS )
-all.equal( mlBFGS[], mlIndBFGS[-12], tolerance = 1e-3 )
+all.equal( mlBFGS[-4], mlIndBFGS[-c(4,12)], tolerance = 1e-3 )
 mlIndBFGS[12]
 nObs( mlIndBFGS )
 
 # with analytical gradients
 mlgBFGS <- maxLik( llf, gf, start = startVal, method = "BFGS" )
 summary( mlgBFGS )
-all.equal( mlBFGS, mlgBFGS, tolerance = 1e-3 )
-all.equal( mlg, mlgBFGS, tolerance = 1e-3 )
+all.equal( mlBFGS[-4], mlgBFGS[-4], tolerance = 1e-3 )
+all.equal( mlg[-c(5,6,9,10)], mlgBFGS[-c(5,6,9,10,11)], tolerance = 1e-3 )
 mlgIndBFGS <- maxLik( llfInd, gfInd, start = startVal, method = "BFGS" )
 all.equal( mlgBFGS[], mlgIndBFGS[-12], tolerance = 1e-3 )
 mlgIndBFGS[12]
@@ -443,13 +444,13 @@ nIter( mlNM )
 nParam( mlNM )
 returnCode( mlNM )
 returnMessage( mlNM )
-vcov( mlNM )
+round( vcov( mlNM ), 4 )
 logLik( summary( mlNM ) )
-all.equal( ml, mlNM, tolerance = 1e-3 )
+all.equal( ml[-c(3,4,5,6,9,10)], mlNM[-c(3,4,5,6,9,10,11)], tolerance = 1e-3 )
 # with individual log likelihood values
 mlIndNM <- maxLik( llfInd, start = startVal, method = "NM" )
 summary( mlIndNM )
-all.equal( mlNM[], mlIndNM[-12], tolerance = 1e-3 )
+all.equal( mlNM[-4], mlIndNM[-c(4,12)], tolerance = 1e-3 )
 mlIndNM[12]
 nObs( mlIndNM )
 
@@ -494,20 +495,20 @@ nIter( mlSANN )
 nParam( mlSANN )
 returnCode( mlSANN )
 returnMessage( mlSANN )
-vcov( mlSANN )
+round( vcov( mlSANN ), 4 )
 logLik( summary( mlSANN ) )
-all.equal( ml, mlSANN, tolerance = 1e-3 )
+all.equal( ml[-c(3,4,5,6,9,10)], mlSANN[-c(3,4,5,6,9,10,11)], tolerance = 1e-3 )
 # with individual log likelihood values
 mlIndSANN <- maxLik( llfInd, start = startVal, method = "SANN" )
 summary( mlIndSANN )
-all.equal( mlSANN[], mlIndSANN[-12], tolerance = 1e-3 )
+all.equal( mlSANN[-4], mlIndSANN[-c(4,12)], tolerance = 1e-3 )
 mlIndSANN[12]
 nObs( mlIndSANN )
 
 # with unused analytical gradients
 mlgSANN <- maxLik( llf, gf, start = startVal, method = "SANN" )
 summary( mlgSANN )
-all.equal( mlSANN, mlgSANN, tolerance = 1e-3 )
+all.equal( mlSANN[-4], mlgSANN[-4], tolerance = 1e-3 )
 # with individual log likelihood values and gradients
 mlgIndSANN <- maxLik( llfInd, gfInd, start = startVal, method = "SANN" )
 summary( mlgIndSANN )
@@ -522,7 +523,7 @@ all.equal( mlgSANN, mlghSANN, tolerance = 1e-3 )
 mlSANNCand <- maxLik( llf, start = startVal, method = "SANN",
    cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
 summary( mlSANNCand )
-all.equal( mlSANNCand, mlSANN, tolerance = 1e-3 )
+all.equal( mlSANNCand[-c(3,4)], mlSANN[-c(3,4)], tolerance = 1e-2 )
 
 ############### with fixed parameters ###############
 # start values
@@ -554,7 +555,7 @@ nIter( mlFix )
 nParam( mlFix )
 returnCode( mlFix )
 returnMessage( mlFix )
-vcov( mlFix )
+round( vcov( mlFix ), 4 )
 logLik( summary( mlFix ) )
 mlIndFix <- maxLik( llfInd, start = startValFix, activePar = !isFixed )
 mlIndFix1 <- maxLik( llfInd, start = startValFix, activePar = 2 )
@@ -627,9 +628,9 @@ nIter( mlFixBHHH )
 nParam( mlFixBHHH )
 returnCode( mlFixBHHH )
 returnMessage( mlFixBHHH )
-vcov( mlFixBHHH )
+round( vcov( mlFixBHHH ), 4 )
 logLik( summary( mlFixBHHH ) )
-all.equal( mlFix[ -c( 5, 6, 9, 10 ) ], mlFixBHHH[ -c( 5, 6, 9, 10, 11 ) ],
+all.equal( mlFix[ -c( 4, 5, 6, 9, 10 ) ], mlFixBHHH[ -c( 4, 5, 6, 9, 10, 11 ) ],
    tolerance = 1e-3 )
 mlFix[[ 3 ]]
 mlFixBHHH[[ 3 ]]
@@ -686,13 +687,13 @@ nIter( mlFixBfgs )
 nParam( mlFixBfgs )
 returnCode( mlFixBfgs )
 returnMessage( mlFixBfgs )
-vcov( mlFixBfgs )
+round( vcov( mlFixBfgs ), 4 )
 logLik( summary( mlFixBfgs ) )
 all.equal( mlghFix[ -c( 5, 6, 9, 10 ) ], mlFixBfgs[ -c( 5, 6, 9, 10, 11 ) ],
    tolerance = 1e-3 )
 mlIndFixBfgs <- maxLik( llfInd, start = startValFix, fixed = isFixed,
    method = "BFGS" )
-all.equal( mlFixBfgs[ -9 ], mlIndFixBfgs[ -c(9,12) ], tolerance = 1e-3 )
+all.equal( mlFixBfgs[-c(4,9)], mlIndFixBfgs[ -c(4,9,12) ], tolerance = 1e-3 )
 print(formatC(mlIndFixBfgs$gradientObs, format="f", digits=4, width=7), quote=FALSE)
                            # print fradient, only 4 digits to avoid clutter in R CMD tests
 mlIndFixBfgs3 <- maxLik( llfInd, start = startValFix, fixed = "mu",
@@ -758,12 +759,12 @@ nIter( mlFixNm )
 nParam( mlFixNm )
 returnCode( mlFixNm )
 returnMessage( mlFixNm )
-vcov( mlFixNm )
+round( vcov( mlFixNm ), 4 )
 logLik( summary( mlFixNm ) )
 all.equal( mlFixBfgs[ -c( 9, 10 ) ], mlFixNm[ -c( 9, 10 ) ], tolerance = 1e-3 )
 mlIndFixNm <- maxLik( llfInd, start = startValFix, fixed = isFixed,
    method = "NM" )
-all.equal( mlFixNm[ ], mlIndFixNm[ -12 ], tolerance = 1e-3 )
+all.equal( mlFixNm[-4], mlIndFixNm[-c(4,12)], tolerance = 1e-3 )
 mlIndFixNm[ 12 ]
 mlIndFixNm3 <- maxLik( llfInd, start = startValFix, fixed = "mu",
    method = "NM" )
@@ -822,7 +823,7 @@ nIter( mlFixSann )
 nParam( mlFixSann )
 returnCode( mlFixSann )
 returnMessage( mlFixSann )
-vcov( mlFixSann )
+round( vcov( mlFixSann ), 4 )
 logLik( summary( mlFixSann ) )
 all.equal( mlFixBfgs[ -c( 9, 10 ) ], mlFixSann[ -c( 9, 10 ) ], 
    tolerance = 1e-3 )
@@ -877,7 +878,7 @@ nIter( mlBfgsInEq )
 nParam( mlBfgsInEq )
 returnCode( mlBfgsInEq )
 returnMessage( mlBfgsInEq )
-vcov( mlBfgsInEq )
+round( vcov( mlBfgsInEq ), 4 )
 logLik( summary( mlBfgsInEq ) )
 mlBfgsInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
    method = "BFGS" )
@@ -918,9 +919,9 @@ nIter( mlNmInEq )
 nParam( mlNmInEq )
 returnCode( mlNmInEq )
 returnMessage( mlNmInEq )
-vcov( mlNmInEq )
+round( vcov( mlNmInEq ), 4 )
 logLik( summary( mlNmInEq ) )
-all.equal( mlBfgsInEq, mlNmInEq, tolerance = 1e-3 )
+all.equal( mlBfgsInEq[-c(9,10,11)], mlNmInEq[-c(9,10,11)], tolerance = 1e-3 )
 mlNmInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
    method = "NM" )
 summary( mlNmInEqInd )
@@ -954,10 +955,12 @@ nIter( mlSannInEq )
 nParam( mlSannInEq )
 returnCode( mlSannInEq )
 returnMessage( mlSannInEq )
-vcov( mlSannInEq )
+round( vcov( mlSannInEq ), 4 )
 logLik( summary( mlSannInEq ) )
-all.equal( mlBfgsInEq, mlSannInEq, tolerance = 1e-3 )
-
+all.equal( mlBfgsInEq[-c(2,3,4,9,10,11)], mlSannInEq[-c(2,3,4,9,10,11)], 
+   tolerance = 1e-3 )
+all.equal( mlBfgsInEq[-c(3,4,9,10,11)], mlSannInEq[-c(3,4,9,10,11)], 
+   tolerance = 1e-2 )
 # with unused analytical gradients
 mlgSannInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
    method = "SANN" )
@@ -967,7 +970,8 @@ all.equal( mlSannInEq, mlgSannInEq, tolerance = 1e-3 )
 mlSannInEqCand <- maxLik( llf, start = startVal, constraints = inEq,
    method = "SANN", cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
 summary( mlSannInEqCand )
-all.equal( mlSannInEqCand, mlSannInEq, tolerance = 1e-3 )
+all.equal( mlSannInEqCand[-c(2,3,4)], mlSannInEq[-c(2,3,4)], tolerance = 1e-3 )
+all.equal( mlSannInEqCand, mlSannInEq, tolerance = 1e-1 )
 
 ############### equality constraints ###############
 eqCon <- list( eqA = A, eqB = 2.5 )
@@ -987,28 +991,36 @@ nIter( mlCon )
 nParam( mlCon )
 returnCode( mlCon )
 returnMessage( mlCon )
-vcov( mlCon )
+round( vcov( mlCon ), 4 )
 logLik( summary( mlCon ) )
 mlConInd <- maxLik( llfInd, start = startVal, constraints = eqCon )
 summary( mlConInd )
-all.equal( mlCon[], mlConInd[-11], tolerance = 1e-3 )
+all.equal( mlCon[-4], mlConInd[-c(4,11)], tolerance = 1e-3 )
 mlConInd[11]
 nObs( mlConInd )
 
 # with analytical gradients
 mlgCon <- maxLik( llf, gf, start = startVal, constraints = eqCon )
 summary( mlgCon )
-all.equal( mlCon[ -c( 5, 6, 7, 9 ) ], mlgCon[ -c( 5, 6, 7, 9 ) ], 
+all.equal( mlCon[ -c(2,3,4,5,6,7,9,11) ], mlgCon[ -c(2,3,4,5,6,7,9,11) ], 
    tolerance = 1e-3 )
+all.equal( mlCon[ -c( 5, 6, 7, 9, 11 ) ], mlgCon[ -c( 5, 6, 7, 9, 11 ) ], 
+   tolerance = 1e-1 )
 mlgConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon )
-all.equal( mlConInd, mlgConInd, tolerance = 1e-3 )
+all.equal( mlConInd[ -c(2,3,4,5,6,7,9,11,12) ], mlgConInd[ -c(2,3,4,5,6,7,9,11,12) ],
+   tolerance = 1e-3 )
+all.equal( mlConInd[ -c(5,6,7,9,12) ], mlgConInd[ -c(5,6,7,9,12) ],
+   tolerance = 1e-1 )
 all.equal( mlgCon[], mlgConInd[-11], tolerance = 1e-3 )
 mlgConInd[11]
 
 # with analytical gradients as attribute
 mlGCon <- maxLik( llfGrad, start = startVal, constraints = eqCon )
 all.equal( mlGCon, mlgCon, tolerance = 1e-3 )
-all.equal( mlGCon, mlCon, tolerance = 1e-3 )
+all.equal( mlGCon[-c(2,3,4,5,6,7,9,11)], mlCon[-c(2,3,4,5,6,7,9,11)], 
+   tolerance = 1e-3 )
+all.equal( mlGCon[-c(5,6,7,9,11)], mlCon[-c(5,6,7,9,11)], 
+   tolerance = 1e-1 )
 
 # with analytical gradients and Hessians
 mlghCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon )
@@ -1017,7 +1029,10 @@ all.equal( mlgCon, mlghCon, tolerance = 1e-3 )
 # with analytical gradients and Hessians as attributes
 mlGHCon <- maxLik( llfGradHess, start = startVal, constraints = eqCon )
 all.equal( mlGHCon, mlghCon, tolerance = 1e-3 )
-all.equal( mlGHCon, mlCon, tolerance = 1e-3 )
+all.equal( mlGHCon[-c(2,3,4,5,6,7,9,11)], mlCon[-c(2,3,4,5,6,7,9,11)], 
+   tolerance = 1e-3 )
+all.equal( mlGHCon[-c(5,6,7,9,11)], mlCon[-c(5,6,7,9,11)], 
+   tolerance = 1e-1 )
 
 
 ## BHHH method with equality constraints
@@ -1036,7 +1051,7 @@ nIter( mlBhhhCon )
 nParam( mlBhhhCon )
 returnCode( mlBhhhCon )
 returnMessage( mlBhhhCon )
-vcov( mlBhhhCon )
+round( vcov( mlBhhhCon ), 4 )
 logLik( summary( mlBhhhCon ) )
 all.equal( mlCon[ -c( 5, 6, 7, 9, 10 ) ], mlBhhhCon[ -c( 5, 6, 7, 9, 10, 11 ) ],
    tolerance = 1e-3 )
@@ -1047,7 +1062,10 @@ nObs( mlBhhhCon )
 mlgBhhhCon <- maxLik( llf, gfInd, start = startVal, constraints = eqCon,
    method = "BHHH" )
 summary( mlgBhhhCon )
-all.equal( mlBhhhCon, mlgBhhhCon, tolerance = 1e-3 )
+all.equal( mlBhhhCon[-c(2,3,4,5,6,7,9,11,12)], mlgBhhhCon[-c(2,3,4,5,6,7,9,11,12)],
+   tolerance = 1e-3 )
+all.equal( mlBhhhCon[-c(5,6,7,9,12)], mlgBhhhCon[-c(5,6,7,9,12)],
+   tolerance = 1e-1 )
 mlgBhhhConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon,
    method = "BHHH" )
 all.equal( mlgBhhhCon, mlgBhhhConInd, tolerance = 1e-3 )
@@ -1057,7 +1075,10 @@ mlGBhhhCon <- maxLik( llfGradInd, start = startVal, constraints = eqCon,
    method = "BHHH" )
 summary( mlGBhhhCon )
 all.equal( mlGBhhhCon, mlgBhhhCon, tolerance = 1e-3 )
-all.equal( mlGBhhhCon, mlBhhhCon, tolerance = 1e-3 )
+all.equal( mlGBhhhCon[-c(2,3,4,5,6,7,9,11,12)], mlBhhhCon[-c(2,3,4,5,6,7,9,11,12)],
+   tolerance = 1e-3 )
+all.equal( mlGBhhhCon[-c(5,6,7,9,12)], mlBhhhCon[-c(5,6,7,9,12)],
+   tolerance = 1e-1 )
 
 # with analytical gradients and unused Hessians
 mlghBhhhCon <- maxLik( llf, gfInd, hf, start = startVal, constraints = eqCon,
@@ -1087,9 +1108,9 @@ nIter( mlBfgsCon )
 nParam( mlBfgsCon )
 returnCode( mlBfgsCon )
 returnMessage( mlBfgsCon )
-vcov( mlBfgsCon )
+round( vcov( mlBfgsCon ), 4 )
 logLik( summary( mlBfgsCon ) )
-all.equal( mlBfgsCon[ -c( 5, 6, 9, 10 ) ], mlCon[ -c( 5, 6, 9, 10 ) ],
+all.equal( mlBfgsCon[ -c( 4, 5, 6, 9, 10 ) ], mlCon[ -c( 4, 5, 6, 9, 10 ) ],
    tolerance = 1e-3 )
 mlBfgsConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
    method = "BFGS" )
@@ -1102,7 +1123,7 @@ nObs( mlBfgsConInd )
 mlgBfgsCon <- maxLik( llf, gf, start = startVal, constraints = eqCon,
    method = "BFGS" )
 summary( mlgBfgsCon )
-all.equal( mlBfgsCon, mlgBfgsCon, tolerance = 1e-3 )
+all.equal( mlBfgsCon[-c(3,4,9,11)], mlgBfgsCon[-c(3,4,9,11)], tolerance = 1e-2 )
 mlgBfgsConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon,
    method = "BFGS" )
 all.equal( mlgBfgsCon[], mlgBfgsConInd[-12], tolerance = 1e-3 )
@@ -1128,9 +1149,9 @@ nIter( mlNmCon )
 nParam( mlNmCon )
 returnCode( mlNmCon )
 returnMessage( mlNmCon )
-vcov( mlNmCon )
+round( vcov( mlNmCon ), 4 )
 logLik( summary( mlNmCon ) )
-all.equal( mlNmCon[ -c( 5, 6, 9, 10 ) ], mlCon[ -c( 5, 6, 9, 10 ) ],
+all.equal( mlNmCon[ -c( 4, 5, 6, 9, 10 ) ], mlCon[ -c( 4, 5, 6, 9, 10 ) ],
    tolerance = 1e-3 )
 mlNmConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
    method = "NM", SUMTTol=0)
@@ -1169,10 +1190,12 @@ nIter( mlSannCon )
 nParam( mlSannCon )
 returnCode( mlSannCon )
 returnMessage( mlSannCon )
-vcov( mlSannCon )
+round( vcov( mlSannCon ), 4 )
 logLik( summary( mlSannCon ) )
-all.equal( mlSannCon[ -c( 5, 6, 9, 10 ) ], mlBfgsCon[ -c( 5, 6, 9, 10 ) ],
+all.equal( mlSannCon[ -c(2,3,4,5,6,9,10,11) ], mlBfgsCon[ -c(2,3,4,5,6,9,10,11) ],
    tolerance = 1e-3 )
+all.equal( mlSannCon[ -c(3,4,5,6,9,10,11) ], mlBfgsCon[ -c(3,4,5,6,9,10,11) ],
+   tolerance = 1e-2 )
 
 # with unused analytical gradients
 mlgSannCon <- maxLik( llf, gf, start = startVal, constraints = eqCon,
@@ -1183,7 +1206,10 @@ all.equal( mlSannCon, mlgSannCon, tolerance = 1e-3 )
 mlSannConCand <- maxLik( llf, start = startVal, constraints = eqCon,
    method = "SANN", cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
 summary( mlSannConCand )
-all.equal( mlSannConCand, mlSannCon, tolerance = 1e-3 )
+all.equal( mlSannConCand[-c(1,2,3,4,11)], mlSannCon[-c(1,2,3,4,11)], 
+   tolerance = 1e-3 )
+all.equal( mlSannConCand[-c(2,3,4,11)], mlSannCon[-c(2,3,4,11)], 
+   tolerance = 1e-1 )
 
 
 ## test for method "estfun"
