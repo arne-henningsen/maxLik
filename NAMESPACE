@@ -21,6 +21,7 @@ export( "returnMessage" )
 
 importFrom( "miscTools", "nObs" )
 importFrom( "miscTools", "nParam" )
+importFrom( "miscTools", "sumKeepAttr" )
 importFrom( "sandwich", "bread" )
 importFrom( "sandwich", "estfun" )
 
