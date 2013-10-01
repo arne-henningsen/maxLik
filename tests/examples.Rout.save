@@ -66,7 +66,7 @@ $type
 
 attr(,"class")
 [1] "maxim" "list" 
-> summary(free)  # results should be close to (0,0)
+> summary(free)  # results should be close to (2,4)
 --------------------------------------------
 Newton-Raphson maximisation 
 Number of iterations: 7 
@@ -117,7 +117,7 @@ $type
 
 attr(,"class")
 [1] "maxim" "list" 
-> summary(cons) # result should be around (1,0)
+> summary(cons) # result should be around (1,4)
 --------------------------------------------
 Newton-Raphson maximisation 
 Number of iterations: 4 
@@ -2653,4 +2653,4 @@ Estimate(s): 1.863
 > 
 > proc.time()
    user  system elapsed 
-  0.584   0.040   0.611 
+  0.580   0.032   0.600 

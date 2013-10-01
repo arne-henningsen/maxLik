@@ -8,12 +8,12 @@ f <- function(a) exp(-(a[1]-2)^2 - (a[2]-4)^2)
 # maximize wrt. both parameters 
 free <- maxNR(f, start=1:2)
 print( free )
-summary(free)  # results should be close to (0,0)
+summary(free)  # results should be close to (2,4)
 activePar(free)
 # allow only the second parameter to vary
 cons <- maxNR(f, start=1:2, activePar=c(FALSE,TRUE))
 print( cons )
-summary(cons) # result should be around (1,0)
+summary(cons) # result should be around (1,4)
 activePar(cons)
 # specify fixed par in different ways
 cons2 <- maxNR(f, start=1:2, fixed=1)
