@@ -140,23 +140,23 @@ pp
 
 
 # some Hessians
--round(r_nlm$hessian,0)
-round(solve(r_nlm$hessian),6)
+-100*round(r_nlm$hessian/100,0)
+round(solve(r_nlm$hessian),5)
 
--round(r_nlmg$hessian,0)
-round(solve(r_nlmg$hessian),6)
+-100*round(r_nlmg$hessian/100,0)
+round(solve(r_nlmg$hessian),5)
 
--round(r_nlmgh$hessian,0)
-round(solve(r_nlmgh$hessian),6)
+-100*round(r_nlmgh$hessian/100,0)
+round(solve(r_nlmgh$hessian),5)
 
--round(r_bfgs$hessian,0)
-round(solve(r_bfgs$hessian),6)
+-100*round(r_bfgs$hessian/100,0)
+round(solve(r_bfgs$hessian),5)
 
-round(r_NRn$hessian,0)
-round(solve(-r_NRn$hessian),6)
+100*round(r_NRn$hessian/100,0)
+round(solve(-r_NRn$hessian),5)
 
-round(r_NRg$hessian,2)
-round(solve(-r_NRg$hessian),6)
+100*round(r_NRg$hessian/100,0)
+round(solve(-r_NRg$hessian),5)
 
 
 # standard errors
