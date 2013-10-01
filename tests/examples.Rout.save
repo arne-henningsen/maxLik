@@ -1,5 +1,5 @@
 
-R version 3.0.1 (2013-05-16) -- "Good Sport"
+R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -27,7 +27,7 @@ https://r-forge.r-project.org/projects/maxlik/
 > 
 > ### activePar
 > # a simple two-dimensional exponential hat
-> f <- function(a) exp(-a[1]^2 - a[2]^2)
+> f <- function(a) exp(-(a[1]-2)^2 - (a[2]-4)^2)
 > #
 > # maximize wrt. both parameters 
 > free <- maxNR(f, start=1:2)
@@ -36,15 +36,15 @@ $maximum
 [1] 1
 
 $estimate
-[1] -3.332e-11 -5.643e-11
+[1] 2 4
 
 $gradient
-[1] 1.11e-10 1.11e-10
+[1] 0 0
 
 $hessian
-     [,1] [,2]
-[1,]   -2    0
-[2,]    0   -2
+          [,1]      [,2]
+[1,] -1.999956  0.000111
+[2,]  0.000111 -1.999956
 
 $code
 [1] 1
@@ -74,9 +74,9 @@ Return code: 1
 gradient close to zero 
 Function value: 1 
 Estimates:
-       estimate gradient
-[1,] -3.332e-11 1.11e-10
-[2,] -5.643e-11 1.11e-10
+     estimate gradient
+[1,]        2        0
+[2,]        4        0
 --------------------------------------------
 > activePar(free)
 [1] TRUE TRUE
@@ -87,15 +87,15 @@ $maximum
 [1] 0.3679
 
 $estimate
-[1] 1.000e+00 3.515e-07
+[1] 1 4
 
 $gradient
-[1]         NA -2.586e-07
+[1]        NA 5.944e-07
 
 $hessian
      [,1]    [,2]
 [1,]   NA      NA
-[2,]   NA -0.7357
+[2,]   NA -0.7359
 
 $code
 [1] 1
@@ -125,9 +125,9 @@ Return code: 1
 gradient close to zero 
 Function value: 0.3679 
 Estimates:
-      estimate   gradient
-[1,] 1.000e+00         NA
-[2,] 3.515e-07 -2.586e-07
+     estimate  gradient
+[1,]        1        NA
+[2,]        4 5.944e-07
 --------------------------------------------
 > activePar(cons)
 [1] FALSE  TRUE
@@ -147,9 +147,9 @@ Return code: 1
 gradient close to zero 
 Function value: 0.3679 
 Estimates:
-   estimate   gradient
-a 1.000e+00         NA
-b 3.515e-07 -2.586e-07
+  estimate  gradient
+a        1        NA
+b        4 5.944e-07
 --------------------------------------------
 > all.equal( cons, cons4 )
 [1] "Component 2: names for current but not for target"                             
@@ -2653,4 +2653,4 @@ Estimate(s): 1.863
 > 
 > proc.time()
    user  system elapsed 
-  0.580   0.024   0.589 
+  0.584   0.040   0.611 

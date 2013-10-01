@@ -3,7 +3,7 @@ options(digits=4)
 
 ### activePar
 # a simple two-dimensional exponential hat
-f <- function(a) exp(-a[1]^2 - a[2]^2)
+f <- function(a) exp(-(a[1]-2)^2 - (a[2]-4)^2)
 #
 # maximize wrt. both parameters 
 free <- maxNR(f, start=1:2)
