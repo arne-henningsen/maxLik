@@ -177,4 +177,4 @@ se
 # execution times
 tt <- rbind(t_nlm, t_nlmg, t_nlmgh, t_bfgs, t_bfgsM, t_bfgsMg, 
             t_bhhh, t_bhhhg, t_NRn, t_NRg, t_NRgh )
-tt
+# tt

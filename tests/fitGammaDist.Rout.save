@@ -291,20 +291,8 @@ NR_gradHess           1.014       1.015
 > # execution times
 > tt <- rbind(t_nlm, t_nlmg, t_nlmgh, t_bfgs, t_bfgsM, t_bfgsMg, 
 +             t_bhhh, t_bhhhg, t_NRn, t_NRg, t_NRgh )
-> tt
-         user.self sys.self elapsed user.child sys.child
-t_nlm        0.160    0.000   0.159          0         0
-t_nlmg       0.096    0.000   0.093          0         0
-t_nlmgh      0.584    0.000   0.586          0         0
-t_bfgs       0.936    0.000   0.939          0         0
-t_bfgsM      0.976    0.000   0.975          0         0
-t_bfgsMg     0.760    0.004   0.766          0         0
-t_bhhh       0.464    0.000   0.467          0         0
-t_bhhhg      0.112    0.000   0.113          0         0
-t_NRn        2.904    0.008   2.914          0         0
-t_NRg        1.932    0.012   1.944          0         0
-t_NRgh       1.840    0.000   1.844          0         0
+> # tt
 > 
 > proc.time()
    user  system elapsed 
- 11.320   0.048  11.377 
+ 11.524   0.036  11.576 
