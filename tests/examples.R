@@ -1,18 +1,33 @@
 library( maxLik )
 options(digits=4)
 
+printRounded <- function( x ) {
+   for( i in names( x ) ) {
+      cat ( "$", i, "\n", sep = "" )
+      if( is.numeric( x[[i]] ) ) {
+         print( round( x[[i]], 4 ) )
+      } else {
+         print( x[[i]] )
+      }
+      cat( "\n" )
+   }
+   cat( "attr(,\"class\")\n" )
+   print( class( x ) )
+}
+
+
 ### activePar
 # a simple two-dimensional exponential hat
 f <- function(a) exp(-(a[1]-2)^2 - (a[2]-4)^2)
 #
 # maximize wrt. both parameters 
 free <- maxNR(f, start=1:2)
-print( free )
+printRounded( free )
 summary(free)  # results should be close to (2,4)
 activePar(free)
 # allow only the second parameter to vary
 cons <- maxNR(f, start=1:2, activePar=c(FALSE,TRUE))
-print( cons )
+printRounded( cons )
 summary(cons) # result should be around (1,4)
 activePar(cons)
 # specify fixed par in different ways
@@ -51,7 +66,7 @@ ll <- function(a) sum(-log(a[2]) - (x - a[1])^2/(2*a[2]^2))
 x <- rnorm(1000) # sample from standard normal
 ml <- maxLik(ll, start=c(1,1))
 # ignore eventual warnings "NaNs produced in: log(x)"
-print.default( ml )
+printRounded( ml )
 print( ml )
 summary(ml) # result should be close to c(0,1)
 hessian(ml) # How the Hessian looks like
@@ -61,7 +76,7 @@ print(stdEr(ml))
 #
 # Now run the same example while fixing a[2] = 1
 mlf <- maxLik(ll, start=c(1,1), activePar=c(TRUE, FALSE))
-print.default( mlf )
+printRounded( mlf )
 print( mlf )
 summary(mlf) # first parameter close to 0, the second exactly 1.0
 hessian(mlf)
@@ -94,7 +109,7 @@ gradlik <- function(theta) 1/theta - t
 hesslik <- function(theta) -100/theta^2
 ## Estimate with analytic gradient and hessian
 a <- maxLik(loglik, gradlik, hesslik, start=1)
-print.default( a )
+printRounded( a )
 print( a )
 ## print log likelihood value
 logLik( a )
@@ -122,12 +137,12 @@ set.seed( 7 )
 t <- rexp(100, 2)
 ## Estimate with numeric gradient and hessian
 a <- maxLik(loglik, start=1, print.level=2)
-print.default( a )
+printRounded( a )
 print( a )
 summary(a)
 ## Estimate with analytic gradient and hessian
 a <- maxLik(loglik, gradlik, hesslik, start=1)
-print.default( a )
+printRounded( a )
 print( a )
 summary(a)
 
@@ -239,12 +254,12 @@ gradlik <- function(theta) 1/theta - t
 hesslik <- function(theta) -100/theta^2
 ## Estimate with numeric gradient and hessian
 a <- maxLik(loglik, start=1, print.level=2)
-print.default( a )
+printRounded( a )
 print( a )
 summary(a)
 ## Estimate with analytic gradient and hessian
 a <- maxLik(loglik, gradlik, hesslik, start=1)
-print.default( a )
+printRounded( a )
 print( a )
 summary(a)
 
@@ -305,12 +320,12 @@ set.seed( 17 )
 t <- rexp(100, 2)
 ## Estimate with numeric gradient and hessian
 a <- maxLik(loglik, start=1, print.level=2)
-print.default( a )
+printRounded( a )
 print( a )
 vcov(a)
 ## Estimate with analytic gradient and hessian
 a <- maxLik(loglik, gradlik, hesslik, start=1)
-print.default( a )
+printRounded( a )
 print( a )
 vcov(a)
 print(stdEr(a))
