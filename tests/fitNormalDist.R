@@ -150,7 +150,7 @@ activePar( ml )
 AIC( ml )
 coef( ml )
 condiNumber( ml )
-hessian( ml )
+round( hessian( ml ), 2 )
 logLik( ml )
 maximType( ml )
 nIter( ml )
@@ -175,7 +175,7 @@ all.equal( ml[-c(5,6)], mlg[-c(5,6)], tolerance = 1e-3 )
 mlgInd <- maxLik( llfInd, gfInd, start = startVal )
 all.equal( mlInd, mlgInd, tolerance = 1e-3 )
 all.equal( mlg[ ], mlgInd[ -11 ], tolerance = 1e-3 )
-mlgInd[ 11 ]
+round( mlgInd[[ 11 ]], 3 )
 
 # with analytical gradients as attribute
 mlG <- maxLik( llfGrad, start = startVal )
@@ -222,7 +222,7 @@ activePar( mlBHHH )
 AIC( mlBHHH )
 coef( mlBHHH )
 condiNumber( mlBHHH )
-hessian( mlBHHH )
+round( hessian( mlBHHH ), 2 )
 logLik( mlBHHH )
 maximType( mlBHHH )
 nIter( mlBHHH )
@@ -232,13 +232,13 @@ returnMessage( mlBHHH )
 round( vcov( mlBHHH ), 4 )
 logLik( summary( mlBHHH ) )
 all.equal( ml[-c(4,5,6,9,10) ], mlBHHH[ -c(4,5,6,9,10,11) ], tolerance = 1e-3 )
-mlBHHH[ 11 ]
+round( mlBHHH[[ 11 ]], 3 )
 nObs( mlBHHH )
 # final Hessian = usual Hessian
 mlBhhhH <- maxLik( llfInd, start = startVal, method = "BHHH", 
    finalHessian = TRUE )
 all.equal( mlBhhhH[-4], mlBHHH[-4], tolerance = 1e-3 )
-hessian( mlBhhhH ) 
+round( hessian( mlBhhhH ), 2 )
 summary( mlBhhhH ) 
 
 # with analytical gradients
@@ -255,7 +255,7 @@ mlgBHHH <- maxLik( llfInd, gfInd, start = startVal, method = "BHHH" )
 summary( mlgBHHH )
 all.equal( mlBHHH, mlgBHHH, tolerance = 1e-3 )
 all.equal( mlg[-c(4,5,6,9,10)], mlgBHHH[-c(4,5,6,9,10,11)], tolerance = 1e-3 )
-mlgBHHH[ 11 ]
+round( mlgBHHH[[ 11 ]], 3 )
 mlgBHHH2 <- maxLik( llf, gfInd, start = startVal, method = "BHHH" )
 all.equal( mlgBHHH, mlgBHHH2, tolerance = 1e-3 )
 # final Hessian = usual Hessian
@@ -263,7 +263,7 @@ mlgBhhhH <- maxLik( llf, gfInd, start = startVal, method = "BHHH",
    finalHessian = TRUE )
 all.equal( mlgBhhhH, mlBhhhH, tolerance = 1e-3 )
 all.equal( mlgBhhhH[-4], mlgBHHH[-4], tolerance = 1e-3 )
-hessian( mlgBhhhH ) 
+round( hessian( mlgBhhhH ), 2 )
 
 # with analytical gradients as attribute
 try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
@@ -317,7 +317,7 @@ activePar( mlBFGSYC )
 AIC( mlBFGSYC )
 coef( mlBFGSYC )
 condiNumber( mlBFGSYC )
-hessian( mlBFGSYC )
+round( hessian( mlBFGSYC ), 2 )
 logLik( mlBFGSYC )
 maximType( mlBFGSYC )
 nIter( mlBFGSYC )
@@ -332,7 +332,7 @@ all.equal( ml[-c(5,6,9,10)], mlBFGSYC[-c(5,6,9,10)], tolerance = 1e-2 )
 mlIndBFGSYC <- maxLik( llfInd, start = startVal, method = "BFGSR" )
 summary( mlIndBFGSYC )
 all.equal( mlBFGSYC[-c(3,4,9)], mlIndBFGSYC[ -c(3,4,9,11) ], tolerance = 1e-3 )
-mlIndBFGSYC[ 11 ]
+round( mlIndBFGSYC[[ 11 ]], 3 )
 nObs( mlIndBFGSYC )
 
 # with analytical gradients
@@ -343,7 +343,7 @@ mlgIndBFGSYC <- maxLik( llfInd, gfInd, start = startVal,
    method = "BFGSR" )
 all.equal( mlIndBFGSYC, mlgIndBFGSYC, tolerance = 1e-3 )
 all.equal( mlgBFGSYC[ -c(3,9) ], mlgIndBFGSYC[ -c(3,9,11) ], tolerance = 1e-3 )
-mlgIndBFGSYC[ 11 ]
+round( mlgIndBFGSYC[[ 11 ]], 3 )
 
 # with analytical gradients as attribute
 mlGBFGSYC <- maxLik( llfGrad, start = startVal, method = "BFGSR" , print.level=1)
@@ -378,7 +378,7 @@ activePar( mlBFGS )
 AIC( mlBFGS )
 coef( mlBFGS )
 condiNumber( mlBFGS )
-hessian( mlBFGS )
+round( hessian( mlBFGS ), 2 )
 logLik( mlBFGS )
 maximType( mlBFGS )
 nIter( mlBFGS )
@@ -437,7 +437,7 @@ activePar( mlNM )
 AIC( mlNM )
 coef( mlNM )
 condiNumber( mlNM )
-hessian( mlNM )
+round( hessian( mlNM ), 2 )
 logLik( mlNM )
 maximType( mlNM )
 nIter( mlNM )
@@ -457,7 +457,7 @@ nObs( mlIndNM )
 # with unused analytical gradients
 mlgNM <- maxLik( llf, gf, start = startVal, method = "NM" )
 summary( mlgNM )
-all.equal( mlNM, mlgNM, tolerance = 1e-3 )
+all.equal( mlNM[-4], mlgNM[-4], tolerance = 1e-3 )
 # with individual log likelihood values and gradients
 mlgIndNM <- maxLik( llfInd, gfInd, start = startVal, method = "NM" )
 summary( mlgIndNM )
@@ -488,7 +488,7 @@ activePar( mlSANN )
 AIC( mlSANN )
 coef( mlSANN )
 condiNumber( mlSANN )
-hessian( mlSANN )
+round( hessian( mlSANN ), 2 )
 logLik( mlSANN )
 maximType( mlSANN )
 nIter( mlSANN )
@@ -548,7 +548,7 @@ activePar( mlFix )
 AIC( mlFix )
 coef( mlFix )
 condiNumber( mlFix )
-hessian( mlFix )
+round( hessian( mlFix ), 2 )
 logLik( mlFix )
 maximType( mlFix )
 nIter( mlFix )
@@ -568,9 +568,9 @@ mlIndFix4 <- maxLik( llfInd, start = startValFix, fixed = 1 )
 all.equal( mlIndFix, mlIndFix4, tolerance = 1e-3 )
 summary( mlIndFix )
 all.equal( mlFix[ ], mlIndFix[ -11 ], tolerance = 1e-3 )
-mlFix[[3]]
-mlIndFix[[3]]
-mlIndFix[ 11 ]
+round( mlFix[[3]], 5 )
+round( mlIndFix[[3]], 5 )
+round( mlIndFix[[ 11 ]], 3 )
 nObs( mlIndFix )
 
 # with analytical gradients
@@ -581,18 +581,18 @@ mlgFix2 <- maxLik( llf, gf, start = startValFix, fixed = isFixed )
 all.equal( mlgFix, mlgFix2, tolerance = 1e-3 )
 summary( mlgFix )
 all.equal( mlFix, mlgFix, tolerance = 1e-3 )
-mlFix[[3]]
-mlgFix[[3]]
+round( mlFix[[3]], 5 )
+round( mlgFix[[3]], 5 )
 mlFix[[4]]
 mlgFix[[4]]
 mlgIndFix <- maxLik( llfInd, gfInd, start = startValFix, activePar = !isFixed )
 all.equal( mlIndFix, mlgIndFix, tolerance = 1e-3 )
-mlIndFix[[3]]
-mlgIndFix[[3]]
+round( mlIndFix[[3]], 5 )
+round( mlgIndFix[[3]], 5 )
 mlIndFix[[4]]
 mlgIndFix[[4]]
 all.equal( mlgFix[ ], mlgIndFix[ -11 ], tolerance = 1e-3 )
-mlgIndFix[ 11 ]
+round( mlgIndFix[[ 11 ]], 3 )
 
 # with analytical gradients and Hessians
 mlghFix <- maxLik( llf, gf, hf, start = startValFix, activePar = !isFixed )
@@ -621,7 +621,7 @@ activePar( mlFixBHHH )
 AIC( mlFixBHHH )
 coef( mlFixBHHH )
 condiNumber( mlFixBHHH )
-hessian( mlFixBHHH )
+round( hessian( mlFixBHHH ), 2 )
 logLik( mlFixBHHH )
 maximType( mlFixBHHH )
 nIter( mlFixBHHH )
@@ -636,7 +636,7 @@ mlFix[[ 3 ]]
 mlFixBHHH[[ 3 ]]
 mlFix[[ 4 ]]
 mlFixBHHH[[ 4 ]]
-mlFixBHHH[ 11 ]
+round( mlFixBHHH[[ 11 ]], 3 )
 nObs( mlFixBHHH )
 
 # with analytical gradients
@@ -680,7 +680,7 @@ activePar( mlFixBfgs )
 AIC( mlFixBfgs )
 coef( mlFixBfgs )
 condiNumber( mlFixBfgs )
-hessian( mlFixBfgs )
+round( hessian( mlFixBfgs ), 2 )
 logLik( mlFixBfgs )
 maximType( mlFixBfgs )
 nIter( mlFixBfgs )
@@ -718,7 +718,7 @@ all.equal( mlFixBfgs[ -9 ], mlgFixBfgs[ -9 ], tolerance = 1e-3 )
 mlgIndFixBfgs <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
    method = "BFGS")
 all.equal( mlgFixBfgs[ ], mlgIndFixBfgs[ -12 ], tolerance = 1e-3 )
-mlgIndFixBfgs[ 12 ]
+round( mlgIndFixBfgs[[ 12 ]], 3 )
 mlgIndFixBfgs3 <- maxLik( llfInd, gfInd, start = startValFix, fixed = "mu",
    method = "BFGS" )
 all.equal( mlgIndFixBfgs, mlgIndFixBfgs3, tolerance = 1e-3 )
@@ -752,7 +752,7 @@ activePar( mlFixNm )
 AIC( mlFixNm )
 coef( mlFixNm )
 condiNumber( mlFixNm )
-hessian( mlFixNm )
+round( hessian( mlFixNm ), 2 )
 logLik( mlFixNm )
 maximType( mlFixNm )
 nIter( mlFixNm )
@@ -761,11 +761,11 @@ returnCode( mlFixNm )
 returnMessage( mlFixNm )
 round( vcov( mlFixNm ), 4 )
 logLik( summary( mlFixNm ) )
-all.equal( mlFixBfgs[ -c( 9, 10 ) ], mlFixNm[ -c( 9, 10 ) ], tolerance = 1e-3 )
+all.equal( mlFixBfgs[ -c(4,9,10) ], mlFixNm[ -c(4,9,10) ], tolerance = 1e-3 )
 mlIndFixNm <- maxLik( llfInd, start = startValFix, fixed = isFixed,
    method = "NM" )
 all.equal( mlFixNm[-4], mlIndFixNm[-c(4,12)], tolerance = 1e-3 )
-mlIndFixNm[ 12 ]
+round( mlIndFixNm[[ 12 ]], 3 )
 mlIndFixNm3 <- maxLik( llfInd, start = startValFix, fixed = "mu",
    method = "NM" )
 all.equal( mlIndFixNm, mlIndFixNm3, tolerance = 1e-3 )
@@ -788,7 +788,7 @@ all.equal( mlFixNm, mlgFixNm, tolerance = 1e-3 )
 mlgIndFixNm <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
    method = "NM")
 all.equal( mlgFixNm[ ], mlgIndFixNm[ -12 ], tolerance = 1e-3 )
-mlgIndFixNm[ 12 ]
+round( mlgIndFixNm[[ 12 ]], 3 )
 
 # with unused Hessians
 mlghFixNm <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
@@ -816,7 +816,7 @@ activePar( mlFixSann )
 AIC( mlFixSann )
 coef( mlFixSann )
 condiNumber( mlFixSann )
-hessian( mlFixSann )
+round( hessian( mlFixSann ), 2 )
 logLik( mlFixSann )
 maximType( mlFixSann )
 nIter( mlFixSann )
@@ -825,23 +825,23 @@ returnCode( mlFixSann )
 returnMessage( mlFixSann )
 round( vcov( mlFixSann ), 4 )
 logLik( summary( mlFixSann ) )
-all.equal( mlFixBfgs[ -c( 9, 10 ) ], mlFixSann[ -c( 9, 10 ) ], 
+all.equal( mlFixBfgs[ -c(4,9,10) ], mlFixSann[ -c(4,9,10) ], 
    tolerance = 1e-3 )
 mlIndFixSann <- maxLik( llfInd, start = startValFix, fixed = isFixed,
    method = "SANN" )
 all.equal( mlFixSann[ ], mlIndFixSann[ -12 ], tolerance = 1e-3 )
-mlIndFixSann[ 12 ]
+round( mlIndFixSann[[ 12 ]], 3 )
 nObs( mlIndFixSann )
 
 # with analytical gradients
 mlgFixSann <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
    method = "SANN" )
 summary( mlgFixSann )
-all.equal( mlFixSann, mlgFixSann, tolerance = 1e-3 )
+all.equal( mlFixSann[-4], mlgFixSann[-4], tolerance = 1e-3 )
 mlgIndFixSann <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
    method = "SANN")
 all.equal( mlgFixSann[ ], mlgIndFixSann[ -12 ], tolerance = 1e-3 )
-mlgIndFixSann[ 12 ]
+round( mlgIndFixSann[[ 12 ]], 3 )
 
 # with unused Hessians
 mlghFixSann <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
@@ -871,7 +871,7 @@ activePar( mlBfgsInEq )
 AIC( mlBfgsInEq )
 coef( mlBfgsInEq )
 condiNumber( mlBfgsInEq )
-hessian( mlBfgsInEq )
+round( hessian( mlBfgsInEq ), 2 )
 logLik( mlBfgsInEq )
 maximType( mlBfgsInEq )
 nIter( mlBfgsInEq )
@@ -884,7 +884,7 @@ mlBfgsInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
    method = "BFGS" )
 summary( mlBfgsInEqInd )
 all.equal( mlBfgsInEq[ ], mlBfgsInEqInd[ -12 ], tolerance = 1e-3 )
-mlBfgsInEqInd[ 12 ]
+round( mlBfgsInEqInd[[ 12 ]], 3 )
 nObs( mlBfgsInEqInd )
 
 # with analytical gradients
@@ -894,7 +894,7 @@ all.equal( mlBfgsInEq, mlgBfgsInEq, tolerance = 1e-3 )
 mlgBfgsInEqInd <- maxLik( llfInd, gfInd, start = startVal, constraints = inEq,
    method = "BFGS" )
 all.equal( mlgBfgsInEqInd[ -12 ], mlgBfgsInEq[ ], tolerance = 1e-3 )
-mlgBfgsInEqInd[ 12 ]
+round( mlgBfgsInEqInd[[ 12 ]], 3 )
 mlgBfgsInEqInd2 <- maxLik( llf, gfInd, start = startVal, constraints = inEq,
    method = "BFGS" )
 all.equal( mlgBfgsInEqInd, mlgBfgsInEqInd2, tolerance = 1e-3 )
@@ -912,7 +912,7 @@ activePar( mlNmInEq )
 AIC( mlNmInEq )
 coef( mlNmInEq )
 condiNumber( mlNmInEq )
-hessian( mlNmInEq )
+round( hessian( mlNmInEq ), 2 )
 logLik( mlNmInEq )
 maximType( mlNmInEq )
 nIter( mlNmInEq )
@@ -925,8 +925,8 @@ all.equal( mlBfgsInEq[-c(9,10,11)], mlNmInEq[-c(9,10,11)], tolerance = 1e-3 )
 mlNmInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
    method = "NM" )
 summary( mlNmInEqInd )
-all.equal( mlNmInEq[ ], mlNmInEqInd[ -12 ], tolerance = 1e-3 )
-mlNmInEqInd[ 12 ]
+all.equal( mlNmInEq[-4], mlNmInEqInd[-c(4,12)], tolerance = 1e-3 )
+round( mlNmInEqInd[[ 12 ]], 3 )
 nObs( mlNmInEqInd )
 
 # with unused analytical gradients
@@ -948,7 +948,7 @@ activePar( mlSannInEq )
 AIC( mlSannInEq )
 coef( mlSannInEq )
 condiNumber( mlSannInEq )
-hessian( mlSannInEq )
+round( hessian( mlSannInEq ), 2 )
 logLik( mlSannInEq )
 maximType( mlSannInEq )
 nIter( mlSannInEq )
@@ -984,7 +984,7 @@ activePar( mlCon )
 AIC( mlCon )
 coef( mlCon )
 condiNumber( mlCon )
-hessian( mlCon )
+round( hessian( mlCon ), 2 )
 logLik( mlCon )
 maximType( mlCon )
 nIter( mlCon )
@@ -1044,7 +1044,7 @@ activePar( mlBhhhCon )
 AIC( mlBhhhCon )
 coef( mlBhhhCon )
 condiNumber( mlBhhhCon )
-hessian( mlBhhhCon )
+round( hessian( mlBhhhCon ), 2 )
 logLik( mlBhhhCon )
 maximType( mlBhhhCon )
 nIter( mlBhhhCon )
@@ -1101,7 +1101,7 @@ activePar( mlBfgsCon )
 AIC( mlBfgsCon )
 coef( mlBfgsCon )
 condiNumber( mlBfgsCon )
-hessian( mlBfgsCon )
+round( hessian( mlBfgsCon ), 2 )
 logLik( mlBfgsCon )
 maximType( mlBfgsCon )
 nIter( mlBfgsCon )
@@ -1115,7 +1115,7 @@ all.equal( mlBfgsCon[ -c( 4, 5, 6, 9, 10 ) ], mlCon[ -c( 4, 5, 6, 9, 10 ) ],
 mlBfgsConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
    method = "BFGS" )
 summary( mlBfgsConInd )
-all.equal( mlBfgsCon[], mlBfgsConInd[-12], tolerance = 1e-3 )
+all.equal( mlBfgsCon[-4], mlBfgsConInd[-c(4,12)], tolerance = 1e-3 )
 mlBfgsConInd[12]
 nObs( mlBfgsConInd )
 
@@ -1142,7 +1142,7 @@ activePar( mlNmCon )
 AIC( mlNmCon )
 coef( mlNmCon )
 condiNumber( mlNmCon )
-hessian( mlNmCon )
+round( hessian( mlNmCon ), 2 )
 logLik( mlNmCon )
 maximType( mlNmCon )
 nIter( mlNmCon )
@@ -1183,7 +1183,7 @@ activePar( mlSannCon )
 AIC( mlSannCon )
 coef( mlSannCon )
 condiNumber( mlSannCon )
-hessian( mlSannCon )
+round( hessian( mlSannCon ), 2 )
 logLik( mlSannCon )
 maximType( mlSannCon )
 nIter( mlSannCon )
@@ -1250,44 +1250,47 @@ estfun( mlgNmConInd )[ 1:5, ]
 
 ## test for method "bread"
 try( bread( ml ) )
-bread( mlInd )
-bread( mlgInd )
-bread( mlBHHH )
-bread( mlgBHHH )
-bread( mlIndBFGS )
-bread( mlgIndBFGS )
-bread( mlIndNM )
-bread( mlgIndNM )
-bread( mlIndSANN )
-bread( mlgIndSANN )
-bread( mlIndFix )
-bread( mlgIndFix )
-bread( mlFixBHHH )
-bread( mlgFixBHHH )
-bread( mlIndFixBfgs )
-bread( mlgIndFixBfgs )
-bread( mlIndFixNm )
-bread( mlgIndFixNm )
-bread( mlIndFixSann )
-bread( mlgIndFixSann )
-bread( mlBfgsInEqInd )
-bread( mlgBfgsInEqInd )
-bread( mlNmInEqInd )
-bread( mlConInd )
-bread( mlgConInd )
-bread( mlBhhhCon )
-bread( mlgBhhhCon )
-bread( mlBfgsConInd )
-bread( mlgBfgsConInd )
-bread( mlNmConInd )
-bread( mlgNmConInd )
+round( bread( mlInd ), 3 )
+round( bread( mlgInd ), 3 )
+round( bread( mlBHHH ), 3 )
+round( bread( mlgBHHH ), 3 )
+round( bread( mlIndBFGS ), 3 )
+round( bread( mlgIndBFGS ), 3 )
+round( bread( mlIndNM ), 3 )
+round( bread( mlgIndNM ), 3 )
+round( bread( mlIndSANN ), 3 )
+round( bread( mlgIndSANN ), 3 )
+round( bread( mlIndFix ), 3 )
+round( bread( mlgIndFix ), 3 )
+round( bread( mlFixBHHH ), 3 )
+round( bread( mlgFixBHHH ), 3 )
+round( bread( mlIndFixBfgs ), 3 )
+round( bread( mlgIndFixBfgs ), 3 )
+round( bread( mlIndFixNm ), 3 )
+round( bread( mlgIndFixNm ), 3 )
+round( bread( mlIndFixSann ), 3 )
+round( bread( mlgIndFixSann ), 3 )
+round( bread( mlBfgsInEqInd ), 3 )
+round( bread( mlgBfgsInEqInd ), 3 )
+round( bread( mlNmInEqInd ), 3 )
+round( bread( mlConInd ), 3 )
+round( bread( mlgConInd ), 3 )
+round( bread( mlBhhhCon ), 3 )
+round( bread( mlgBhhhCon ), 3 )
+round( bread( mlBfgsConInd ), 3 )
+round( bread( mlgBfgsConInd ), 3 )
+round( bread( mlNmConInd ), 3 )
+round( bread( mlgNmConInd ), 3 )
 
 
 ## test for method "sandwich"
 try( sandwich( ml ) )
 printSandwich <- function( x ) {
-   print( sandwich( x ) )
-   print( all.equal( sandwich( x ), vcov( x ) ) )
+   print( round( sandwich( x ), 3 ) )
+   tmp <- all.equal( sandwich( x ), vcov( x ) )
+   if( isTRUE( tmp ) ) {
+      print( tmp )
+   }
 }
 printSandwich( mlInd )
 printSandwich( mlgInd )
