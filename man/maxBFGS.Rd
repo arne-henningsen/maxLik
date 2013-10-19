@@ -66,8 +66,11 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
     or a list with two components.  The components may be either
     \code{eqA} and \code{eqB} for equality-constrained optimization
     \eqn{A \theta + B = 0}{A \%*\% theta + B = 0}; or \code{ineqA} and
-    \code{ineqB} for inequality constraints \eqn{A \theta + B \ge 0}{A
-      \%*\% theta + B >= 0}.  The equality-constrained problem is forwarded
+    \code{ineqB} for inequality constraints \eqn{A \theta + B > 0}{A
+      \%*\% theta + B > 0}.  In the inequality-constraints-case, more
+       than one
+       row in \code{ineqA} (and \code{ineqB}) corresponds to more than
+       one linear constraint.  The equality-constrained problem is forwarded
     to \code{\link{sumt}}, the inequality-constrained case to
     \code{\link{constrOptim2}}.
   }

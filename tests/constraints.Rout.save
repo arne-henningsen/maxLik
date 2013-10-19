@@ -1,5 +1,5 @@
 
-R version 3.0.1 (2013-05-16) -- "Good Sport"
+R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -656,8 +656,6 @@ BHHH maximisation, 65 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -3574 (3 free parameter(s))
 Estimate(s): 0.358 1.377 -0.6883 
-> # summary(a)
-> 
 > 
 > ### ------------------ Now test extra parameters for the function ----
 > logLikMix2 <- function(param, rho) {
@@ -1183,21 +1181,7 @@ penalty close to zero
 > a <- maxLik(logLikMix2, gradLikMix2,
 +             start=start, method="bfgs",
 +             constraints=list(ineqA=A, ineqB=B),
-+             print.level=1, rho=0.5)
-initial  value 4650.395504 
-iter   2 value 4126.486293
-iter   3 value 3988.319246
-iter   4 value 3794.409355
-iter   5 value 3612.875661
-iter   6 value 3579.444764
-iter   7 value 3552.403784
-iter   8 value 3551.977036
-iter   9 value 3551.774563
-iter  10 value 3551.773354
-iter  10 value 3551.773354
-iter  10 value 3551.773354
-final  value 3551.773354 
-converged
++             rho=0.5)
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
@@ -1220,21 +1204,7 @@ Constrained optimization based on constrOptim
 > a <- maxLik(logLikMix2, 
 +             start=start, method="bfgs",
 +             constraints=list(ineqA=A, ineqB=B),
-+             print.level=1, rho=0.5)
-initial  value 4650.395504 
-iter   2 value 4126.486292
-iter   3 value 3988.319244
-iter   4 value 3794.409355
-iter   5 value 3612.875661
-iter   6 value 3579.444764
-iter   7 value 3552.403784
-iter   8 value 3551.977036
-iter   9 value 3551.774563
-iter  10 value 3551.773354
-iter  10 value 3551.773354
-iter  10 value 3551.773354
-final  value 3551.773354 
-converged
++             rho=0.5)
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
@@ -1257,38 +1227,7 @@ Constrained optimization based on constrOptim
 > a <- maxLik(logLikMix2, gradLikMix2,
 +             start=start, method="nm",
 +             constraints=list(ineqA=A, ineqB=B),
-+             print.level=1, rho=0.5)
-  Nelder-Mead direct search function minimizer
-function value for initial parameters = 4650.395504
-  Scaled convergence tolerance is 4.6504e-05
-Stepsize computed as 0.090000
-BUILD              3 4734.650205 4650.395504
-EXTENSION          5 4717.867666 4545.541480
-EXTENSION          7 4650.395504 4398.107307
-EXTENSION          9 4545.541480 4057.025391
-EXTENSION         11 4398.107307 3765.820064
-REFLECTION        13 4057.025391 3607.605056
-REFLECTION        15 3765.820064 3555.268193
-LO-REDUCTION      17 3607.605056 3555.268193
-HI-REDUCTION      19 3577.952096 3555.268193
-LO-REDUCTION      21 3568.490004 3555.268193
-REFLECTION        23 3562.899144 3551.815286
-LO-REDUCTION      25 3555.268193 3551.815286
-LO-REDUCTION      27 3554.962931 3551.815286
-LO-REDUCTION      29 3552.878451 3551.815286
-HI-REDUCTION      31 3552.035159 3551.815286
-HI-REDUCTION      33 3551.928631 3551.815286
-HI-REDUCTION      35 3551.835416 3551.804225
-HI-REDUCTION      37 3551.815286 3551.786153
-HI-REDUCTION      39 3551.804225 3551.775106
-HI-REDUCTION      41 3551.786153 3551.775106
-LO-REDUCTION      43 3551.782575 3551.774053
-HI-REDUCTION      45 3551.775106 3551.774053
-HI-REDUCTION      47 3551.774844 3551.773446
-HI-REDUCTION      49 3551.774053 3551.773446
-LO-REDUCTION      51 3551.773707 3551.773439
-Exiting from Nelder Mead minimizer
-    53 function evaluations used
++             rho=0.5)
 > summary(a)
 --------------------------------------------
 Maximum Likelihood estimation
@@ -1307,7 +1246,16 @@ Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on constrOptim 
 1  outer iterations, barrier value -5.775e-05 
 --------------------------------------------
-> 
+> ## ---------- test vector B for inequality  --------------
+> B1 <- c(1,-2)
+> a <- maxLik(logLikMix2, gradLikMix2,
++             start=c(0.5, 2.5), method="bfgs",
++             constraints=list(ineqA=A, ineqB=B1),
++             rho=0.5)
+> coef(a)
+[1] -0.8019  2.0000
+>                            # components should be larger than
+>                            # (-1, -2)
 > ## Now test error handling: insert wrong A and B forms
 > A1 <- c(-1, 0, 0, 1)
 > try(maxLik(logLikMix2, gradLikMix2,
@@ -1319,16 +1267,6 @@ Error in maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BF
   Inequality constraint A must be a matrix
 Current dimension
 >                            # should explain that matrix needed
-> B1 <- 1:2
-> try(maxLik(logLikMix2, gradLikMix2,
-+            start=start, method="bfgs",
-+            constraints=list(ineqA=A, ineqB=B1),
-+            print.level=1, rho=0.5)
-+     )
-Error in maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  : 
-  Inequality constraint B must be a scalar
-Current length2
->                            # should explain that scalar needed
 > A1 <- matrix(c(-1, 0, 0, 1), 1, 4)
 > try(maxLik(logLikMix2, gradLikMix2,
 +            start=start, method="bfgs",
@@ -1336,8 +1274,8 @@ Current length2
 +            print.level=1, rho=0.5)
 +     )
 Error in maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  : 
-  Inequality constraint A cannot be matrix multiplied with the start value.
-A is a 1x4 matrix, start value has lenght 2
+  Inequality constraint A must have the same number of columns as length of the parameter.
+Currently 4 and 2.
 >                            # should explain that wrong matrix
 >                            # dimension
 > 
@@ -1378,4 +1316,4 @@ Constrained optimization based on constrOptim
 > 
 > proc.time()
    user  system elapsed 
- 49.756   0.056  49.859 
+ 72.900   0.052  73.042 

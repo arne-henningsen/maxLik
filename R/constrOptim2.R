@@ -10,33 +10,43 @@ constrOptim2<-function(theta,
                   method=if(is.null(grad)) "Nelder-Mead" else "BFGS",
                   outer.iterations=100,outer.eps=0.00001,
                        ...){
-   ## Optimize with inequality constraint using SUMT/logarithmic barrier
+   ## Optimize with inequality constraint using SUMT/logarithmic
+   ## barrier
    ## 
    ## start      initial value of parameters, included the fixed ones
    ##
-   ## This function has to operate with free parameter components only as 'optim' cannot handle
-   ## fixed parameters.  However, for computing constraints in 'R' and 'dR' we have to invoke full
-   ## parameters.
-    R<-function(thetaFree, thetaFree.old, ...) {
-       ## Wrapper for the function.  As this will be feed to the 'optim',
-       ## we have to call it with free parameters only (thetaFree) and
-       ## internally expand it to the full (theta)
-       ## 
-       ## Were we called with 'fixed' argument in ... ?
-       dotdotdot <- list(...)
+   ## This function has to operate with free parameter components
+   ## only as 'optim' cannot handle
+   ## fixed parameters.  However, for computing constraints in
+   ## 'R' and 'dR' we have to use the complete parameter vector.
+   ## 
+   R <- function(thetaFree, thetaFree.old, ...) {
+      ## Wrapper for the function.  As this will be feed to the
+      ## 'optim', we have to call it with free parameters only
+      ## (thetaFree) and internally expand it to the full (theta)
+      ## 
+      ## Were we called with 'fixed' argument in ... ?
+      dotdotdot <- list(...)
                            # can this be made better?
-       fixed <- dotdotdot[["fixed"]]
-       theta <- addFixedPar( theta = thetaFree, start = theta0, fixed = fixed)
-       theta.old <- addFixedPar( theta = thetaFree.old, start = theta0, fixed = fixed)
+      fixed <- dotdotdot[["fixed"]]
+      theta <- addFixedPar( theta = thetaFree, start = theta0, fixed = fixed)
+      theta.old <- addFixedPar( theta = thetaFree.old, start = theta0, fixed = fixed)
        ineqA.theta<-ineqA%*%theta
-        gi<- ineqA.theta - ineqB
-       if (any(gi<0)) return(NaN)
-        gi.old<-ineqA%*%theta.old - ineqB
-        bar<-sum( gi.old*log(gi)-ineqA.theta)
-        if (!is.finite(bar)) bar<- -Inf
-       f(thetaFree, ...)-mu*bar
-                           # do not send 'fixed' and 'start' to the function here --
-                           # we have already expanded theta to the full parameter
+       gi<- ineqA.theta + ineqB
+      if(any(gi < 0))
+           ## at least one of the constraints not fulfilled
+           return(NaN)
+       gi.old <- ineqA%*%theta.old + ineqB
+      bar <- sum(gi.old*log(gi) - ineqA.theta)
+                           # logarithmic barrier value: sum over
+                           # components
+      if(!is.finite(bar))
+          bar<- -Inf
+      result <- f(thetaFree, ...)-mu*bar
+                           # do not send 'fixed' and 'start' to the
+                           # function here -- we have already
+                           # expanded theta to the full parameter
+      result
     }
     dR<-function(thetaFree, thetaFree.old, ...){
        ## Wrapper for the function.  As this will be feed to the 'optim',
@@ -50,8 +60,8 @@ constrOptim2<-function(theta,
        theta <- addFixedPar( theta = thetaFree, start = theta0, fixed = fixed)
        theta.old <- addFixedPar( theta = thetaFree.old, start = theta0, fixed = fixed)
        ineqA.theta<-ineqA%*%theta
-        gi<-drop(ineqA.theta - ineqB)
-        gi.old<-drop(ineqA%*%theta.old - ineqB)
+        gi<-drop(ineqA.theta + ineqB)
+        gi.old<-drop(ineqA%*%theta.old + ineqB)
         dbar<-colSums( ineqA*gi.old/gi-ineqA)
        if(!is.null(fixed))
            gr <- grad(thetaFree,...)- (mu*dbar)[!fixed]
@@ -64,7 +74,7 @@ constrOptim2<-function(theta,
     }
     if (!is.null(control$fnscale) && control$fnscale<0)
       mu <- -mu ##maximizing
-    if(any(ineqA%*%theta - ineqB < 0))
+    if(any(ineqA%*%theta + ineqB < 0))
         stop("initial value not the feasible region")
     theta0 <- theta
                            # inital value, for keeping the fixed params

@@ -59,7 +59,7 @@ maxNRCompute <- function(fn,
    ## fixed       logical vector, which parameters were treated as constant (fixed, inactive, non-free)
    ## iterations  number of iterations
    ## type        "Newton-Raphson maximisation"
-   
+   ## 
    max.eigen <- function( M) {
       ## return maximal eigenvalue of (symmetric) matrix
       val <- eigen(M, symmetric=TRUE, only.values=TRUE)$values

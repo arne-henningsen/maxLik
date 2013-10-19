@@ -104,8 +104,6 @@ try( maxLik(logLikMix, gradLikMix,
             start=start, method="bhhh",
             constraints=list(eqA=A, eqB=B),
             print.level=2, SUMTRho0=1) )
-# summary(a)
-
 
 ### ------------------ Now test extra parameters for the function ----
 logLikMix2 <- function(param, rho) {
@@ -212,21 +210,29 @@ start <- c(0.8, 0.9)
 a <- maxLik(logLikMix2, gradLikMix2,
             start=start, method="bfgs",
             constraints=list(ineqA=A, ineqB=B),
-            print.level=1, rho=0.5)
+            rho=0.5)
 summary(a)
 ##
 a <- maxLik(logLikMix2, 
             start=start, method="bfgs",
             constraints=list(ineqA=A, ineqB=B),
-            print.level=1, rho=0.5)
+            rho=0.5)
 summary(a)
 ##
 a <- maxLik(logLikMix2, gradLikMix2,
             start=start, method="nm",
             constraints=list(ineqA=A, ineqB=B),
-            print.level=1, rho=0.5)
+            rho=0.5)
 summary(a)
-
+## ---------- test vector B for inequality  --------------
+B1 <- c(1,-2)
+a <- maxLik(logLikMix2, gradLikMix2,
+            start=c(0.5, 2.5), method="bfgs",
+            constraints=list(ineqA=A, ineqB=B1),
+            rho=0.5)
+coef(a)
+                           # components should be larger than
+                           # (-1, -2)
 ## Now test error handling: insert wrong A and B forms
 A1 <- c(-1, 0, 0, 1)
 try(maxLik(logLikMix2, gradLikMix2,
@@ -235,13 +241,6 @@ try(maxLik(logLikMix2, gradLikMix2,
            print.level=1, rho=0.5)
     )
                            # should explain that matrix needed
-B1 <- 1:2
-try(maxLik(logLikMix2, gradLikMix2,
-           start=start, method="bfgs",
-           constraints=list(ineqA=A, ineqB=B1),
-           print.level=1, rho=0.5)
-    )
-                           # should explain that scalar needed
 A1 <- matrix(c(-1, 0, 0, 1), 1, 4)
 try(maxLik(logLikMix2, gradLikMix2,
            start=start, method="bfgs",

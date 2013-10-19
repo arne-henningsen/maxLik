@@ -11,7 +11,6 @@ logLikFunc <- function(theta, fnOrig, gradOrig, hessOrig,
    #    logLikGrad() and logLikHess()
 
    theta <- addFixedPar( theta = theta, start = start, fixed = fixed, ...)
-
    result <- fnOrig( theta, ... )
 
    ## save gradients and the corresponding parameter values

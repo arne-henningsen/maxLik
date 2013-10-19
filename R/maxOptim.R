@@ -139,16 +139,22 @@ maxOptim <- function(fn, grad, hess,
     }
    else {
       ## linear equality and inequality constraints
-                           # equality constraints: A %*% beta + B >= 0
+                           # inequality constraints: A %*% beta + B >= 0
       if(identical(names(constraints), c("ineqA", "ineqB"))) {
          if(length(dim(constraints$ineqA)) != 2) {
             stop("Inequality constraint A must be a matrix\n",
                  "Current dimension", dim(constraints$ineqA))
          }
-         if(length(constraints$ineqB) != 1) {
-            stop("Inequality constraint B must be a scalar\n",
-                 "Current length", length(constraints$ineqB))
+         if(ncol(constraints$ineqA) != length(start)) {
+            stop("Inequality constraint A must have the same ",
+                 "number of columns as length of the parameter.\n",
+                 "Currently ", ncol(constraints$ineqA),
+                 " and ", length(start), ".")
          }
+         ## if(length(constraints$ineqB) != 1) {
+         ##    stop("Inequality constraint B must be a scalar\n",
+         ##         "Current length", length(constraints$ineqB))
+         ## }
          if(ncol(constraints$ineqA) != length(start)) {
             stop("Inequality constraint A cannot be matrix multiplied",
                  " with the start value.\n",
@@ -159,8 +165,7 @@ maxOptim <- function(fn, grad, hess,
          result <- constrOptim2( theta = start,
                           f = logLikFunc, grad = gradOptim,
                           ineqA=constraints$ineqA,
-                                ineqB=-constraints$ineqB,
-                           # Note the constrOptim uses the B vector with different sign
+                                ineqB=constraints$ineqB,
                                 control=control,
                           method = method, fnOrig = fn, gradOrig = grad,
                           hessOrig = hess, fixed = fixed, start=start, ...)
