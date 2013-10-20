@@ -87,7 +87,7 @@ Test for inequality constraints
 > A <- matrix(c(-1, 0, 0,
 +               0, -1, 0,
 +               0, 0, 1), 3, 3, byrow=TRUE)
-> B <- 0.5
+> B <- rep(0.5, 3)
 > start <- c(0.4, 0, 0.9)
 > ## analytic gradient
 > a <- maxLik(logLikMix, grad=gradLikMix, hess=hessLikMix,
@@ -1175,7 +1175,7 @@ penalty close to zero
 > ## ----------- inequality -------------
 > A <- matrix(c(-1, 0,
 +               0,  1), 2,2, byrow=TRUE)
-> B <- 1
+> B <- c(1,1)
 > start <- c(0.8, 0.9)
 > ##
 > a <- maxLik(logLikMix2, gradLikMix2,
@@ -1256,21 +1256,21 @@ Constrained optimization based on constrOptim
 [1] -0.8019  2.0000
 >                            # components should be larger than
 >                            # (-1, -2)
-> ## Now test error handling: insert wrong A and B forms
-> A1 <- c(-1, 0, 0, 1)
+> ## ---- Now test error handling: insert wrong A and B forms ----
+> A2 <- c(-1, 0, 0, 1)
 > try(maxLik(logLikMix2, gradLikMix2,
 +            start=start, method="bfgs",
-+            constraints=list(ineqA=A1, ineqB=B),
++            constraints=list(ineqA=A2, ineqB=B),
 +            print.level=1, rho=0.5)
 +     )
 Error in maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  : 
   Inequality constraint A must be a matrix
 Current dimension
 >                            # should explain that matrix needed
-> A1 <- matrix(c(-1, 0, 0, 1), 1, 4)
+> A2 <- matrix(c(-1, 0, 0, 1), 1, 4)
 > try(maxLik(logLikMix2, gradLikMix2,
 +            start=start, method="bfgs",
-+            constraints=list(ineqA=A1, ineqB=B),
++            constraints=list(ineqA=A2, ineqB=B),
 +            print.level=1, rho=0.5)
 +     )
 Error in maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  : 
@@ -1278,7 +1278,24 @@ Error in maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BF
 Currently 4 and 2.
 >                            # should explain that wrong matrix
 >                            # dimension
-> 
+> B2 <- 1:3
+> try(maxLik(logLikMix2, gradLikMix2,
++            start=start, method="bfgs",
++            constraints=list(ineqA=A, ineqB=B2),
++            print.level=1, rho=0.5)
++     )
+Error in maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  : 
+  Inequality constraints A and B suggest different number of constraints: 2 and 3
+>                            # A & B do not match
+> B2 <- matrix(1,2,2)
+> try(maxLik(logLikMix2, gradLikMix2,
++            start=start, method="bfgs",
++            constraints=list(ineqA=A, ineqB=B2),
++            print.level=1, rho=0.5)
++     )
+Error in maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  : 
+  Inequality constraint B must be a vector (or Nx1 matrix).  Currently 2 columns
+>                            # B must be a vector
 > 
 > ## fixed parameters with constrained optimization, BFGS.  Thanks to Bob Loos for finding this error.
 > ## Optimize 3D hat with one parameter fixed (== 2D hat).
@@ -1316,4 +1333,4 @@ Constrained optimization based on constrOptim
 > 
 > proc.time()
    user  system elapsed 
- 72.900   0.052  73.042 
+ 75.708   0.084  75.890 

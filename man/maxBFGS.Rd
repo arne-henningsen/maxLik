@@ -69,8 +69,9 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
     \code{ineqB} for inequality constraints \eqn{A \theta + B > 0}{A
       \%*\% theta + B > 0}.  In the inequality-constraints-case, more
        than one
-       row in \code{ineqA} (and \code{ineqB}) corresponds to more than
-       one linear constraint.  The equality-constrained problem is forwarded
+       row in \code{ineqA} and \code{ineqB} corresponds to more than
+       one linear constraint, in that case all these must be positive.
+       The equality-constrained problem is forwarded
     to \code{\link{sumt}}, the inequality-constrained case to
     \code{\link{constrOptim2}}.
   }

@@ -141,6 +141,13 @@ maxOptim <- function(fn, grad, hess,
       ## linear equality and inequality constraints
                            # inequality constraints: A %*% beta + B >= 0
       if(identical(names(constraints), c("ineqA", "ineqB"))) {
+         nra <- nrow(constraints$ineqA)
+         nrb <- nrow(as.matrix(constraints$ineqB))
+         ncb <- ncol(as.matrix(constraints$ineqB))
+         if(ncb != 1) {
+            stop("Inequality constraint B must be a vector ",
+                 "(or Nx1 matrix).  Currently ", ncb, " columns")
+         }
          if(length(dim(constraints$ineqA)) != 2) {
             stop("Inequality constraint A must be a matrix\n",
                  "Current dimension", dim(constraints$ineqA))
@@ -151,16 +158,16 @@ maxOptim <- function(fn, grad, hess,
                  "Currently ", ncol(constraints$ineqA),
                  " and ", length(start), ".")
          }
-         ## if(length(constraints$ineqB) != 1) {
-         ##    stop("Inequality constraint B must be a scalar\n",
-         ##         "Current length", length(constraints$ineqB))
-         ## }
          if(ncol(constraints$ineqA) != length(start)) {
             stop("Inequality constraint A cannot be matrix multiplied",
                  " with the start value.\n",
                  "A is a ", nrow(constraints$ineqA), "x",
                  ncol(constraints$ineqA), " matrix,",
                  " start value has lenght ", length(start))
+         }
+         if(nra != nrb) {
+            stop("Inequality constraints A and B suggest different number ",
+                 "of constraints: ", nra, " and ", nrb)
          }
          result <- constrOptim2( theta = start,
                           f = logLikFunc, grad = gradOptim,
@@ -182,7 +189,7 @@ maxOptim <- function(fn, grad, hess,
                         maxRoutine = get( maxMethod ),
                         constraints=constraints,
                         print.level=print.level,
-                        iterlim = iterlim,
+ iterlim = iterlim,
                         tol = tol, reltol = reltol, parscale = parscale,
                         alpha = alpha, beta= beta, gamma = gamma,
                         temp = temp, tmax = tmax, random.seed = random.seed,
