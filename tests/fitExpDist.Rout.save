@@ -1,5 +1,5 @@
 
-R version 3.0.1 (2013-05-16) -- "Good Sport"
+R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -459,14 +459,6 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > 
 > ## test for method "estfun"
 > library( sandwich )
-Loading required package: zoo
-
-Attaching package: 'zoo'
-
-The following object is masked from 'package:base':
-
-    as.Date, as.Date.numeric
-
 > try( estfun( mlSum ) )
 Error in estfun.maxLik(mlSum) : 
   cannot return the gradients of the log-likelihood function evaluated at each observation: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
@@ -629,4 +621,4 @@ Error in nObs.maxLik(x) :
 > 
 > proc.time()
    user  system elapsed 
-  0.984   0.012   0.992 
+  1.008   0.052   1.047 

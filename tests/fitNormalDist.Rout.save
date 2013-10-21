@@ -6060,14 +6060,6 @@ successive function values within tolerance limit
 > 
 > ## test for method "estfun"
 > library( sandwich )
-Loading required package: zoo
-
-Attaching package: 'zoo'
-
-The following objects are masked from 'package:base':
-
-    as.Date, as.Date.numeric
-
 > try( estfun( ml ) )
 Error in estfun.maxLik(ml) : 
   cannot return the gradients of the log-likelihood function evaluated at each observation: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
@@ -6560,4 +6552,4 @@ sigma -0.004  0.012
 > 
 > proc.time()
    user  system elapsed 
- 29.424   0.084  29.546 
+  29.92    0.06   30.00 
