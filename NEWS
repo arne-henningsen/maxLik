@@ -4,13 +4,19 @@ Please note that only the most significant changes are reported here.
 A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
-      CHANGES IN VERSION 1.1-9 (2013-10-20)
+      CHANGES IN VERSION 1.2-0 (2013-10-21)
 
 * Inequality constraints now support multiple constraints 
   (B may be a vector).
 
 * Fixed a bug in documentation, inequality constraint requires
   A %*% theta + B > 0, not >= 0 as stated earlier.
+
+* function sumKeepAttr() is imported from the miscTools package now (before
+maxLik() could not be used by another package when this package imported (and 
+not depended on) the maxLik package) (bug reported and solution provided by
+Martin Becker)
+
 
       CHANGES IN VERSION 1.1-8 (2013-09-17)
 
