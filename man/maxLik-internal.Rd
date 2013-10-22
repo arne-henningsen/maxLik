@@ -1,6 +1,5 @@
 \name{maxLik-internal}
 \alias{checkFuncArgs}
-\alias{coef.maxim}
 \alias{constrOptim2}
 \alias{maximMessage}
 \alias{maxNRCompute}

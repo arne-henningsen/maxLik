@@ -1,4 +1,5 @@
-### SUMT function borrowed from 'clue' package
+### SUMT (Sequential Unconstrained Maximization Technique)
+### borrowed from package 'clue'
 ### 
 ### Adapted for linear constraints
 sumt <- function(fn, grad=NULL, hess=NULL,
@@ -93,14 +94,22 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    } else {
       hessPhi <- NULL
    }
-
-   ##
+   ## -------- SUMT Main code ---------
+   ## Note also that currently we do not check whether optimization was
+   ## "successful" ...
    A <- constraints$eqA
-   B <- constraints$eqB
-   ## 
-    ## Note also that currently we do not check whether optimization was
-    ## "successful" ...
-   ##
+   B <- as.matrix(constraints$eqB)
+   ## Check if the matrices conform
+   if(ncol(A) != length(start)) {
+      stop("Equality constraint matrix A must have the same number\n",
+           "of columns as the parameter length ",
+           "(currently ", ncol(A), " and ", length(start), ")")
+   }
+   if(nrow(A) != nrow(B)) {
+      stop("Equality constraint matrix A must have the same number\n",
+           "of rows as the matrix B ",
+           "(currently ", nrow(A), " and ", nrow(B), ")")
+   }
    ## Find a suitable inital value for rho if not specified
    if(is.null(SUMTRho0)) {
       rho <- 0
@@ -109,12 +118,15 @@ sumt <- function(fn, grad=NULL, hess=NULL,
                            print.level=max(print.level - 1, 0),
                            ...)
       theta <- coef(result)
-                           # Note: this may be a bad idea, if unconstrained function is unbounded
-                           # from above.  In that case rather specify SUHTRho0.
+                           # Note: this may be a bad idea,
+                           # if unconstrained function is unbounded
+                           # from above.  In that case rather specify SUMTRho0.
       if(print.level > 0) {
          cat("SUMT initial: rho = ", rho,
-             ", function = ", callWithoutMaxArgs( theta, "logLikFunc",
-                                                 fnOrig = fn, gradOrig = grad, hessOrig = hess, ... ),
+             ", function = ",
+             callWithoutMaxArgs( theta, "logLikFunc",
+                                fnOrig = fn, gradOrig = grad,
+                                hessOrig = hess, ... ),
              ", penalty = ", penalty(theta), "\n")
          cat("Estimate:")
          print(theta)

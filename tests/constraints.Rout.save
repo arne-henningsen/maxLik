@@ -1172,7 +1172,32 @@ Return code: 1
 penalty close to zero 
 7  outer iterations, barrier value 3.755e-09 
 --------------------------------------------
-> ## ----------- inequality -------------
+> f <- function(theta) exp(-theta %*% theta)
+> ## NR, multiple constraints
+> A <- matrix(c(1, 0, 1,
++               1, 1, 0), 2, 3, byrow=TRUE)
+> B <- c(-1, -1)
+> a <- maxNR(f, start=c(1,1.1,2), constraints=list(eqA=A, eqB=B))
+> coef(a)
+[1] 0.6667 0.3333 0.3333
+> ## Error handling for equality constraints
+> A <- matrix(c(1, 1), 1, 2)
+> B <- -1
+> try(a <- maxNR(f, start=c(1, 2, 3), constraints=list(eqA=A, eqB=B)))
+Error in sumt(fn = fn, grad = grad, hess = hess, start = start, maxRoutine = maxNR,  : 
+  Equality constraint matrix A must have the same number
+of columns as the parameter length (currently 2 and 3)
+>                            # ncol(A) != length(start)
+> A <- matrix(c(1, 1), 1, 2)
+> B <- c(-1, 2)
+> try(a <- maxNR(f, start=c(1, 2), constraints=list(eqA=A, eqB=B)))
+Error in sumt(fn = fn, grad = grad, hess = hess, start = start, maxRoutine = maxNR,  : 
+  Equality constraint matrix A must have the same number
+of rows as the matrix B (currently 1 and 2)
+>                            # nrow(A) != nrow(B)
+> ##                           
+> ## -------------- inequality constraints ----------------
+> ##
 > A <- matrix(c(-1, 0,
 +               0,  1), 2,2, byrow=TRUE)
 > B <- c(1,1)
@@ -1333,4 +1358,4 @@ Constrained optimization based on constrOptim
 > 
 > proc.time()
    user  system elapsed 
- 75.708   0.084  75.890 
+ 73.500   0.056  73.652 

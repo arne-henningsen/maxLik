@@ -92,11 +92,18 @@ maxBHHH(fn, grad = NULL, hess = NULL, start, print.level = 0,
   \item{iterlim}{stopping condition.  Stop if more than \code{iterlim}
     iterations, return \code{code=4}.}
   \item{constraints}{either \code{NULL} for unconstrained optimization
-    or a list with two components
+    or a list with two components.  The components may be either
     \code{eqA} and \code{eqB} for equality-constrained optimization
-    \eqn{A \theta + B = 0}{A \%*\% theta + B = 0}.  The constrained
-    problem is forwarded
-    to \code{\link{sumt}}.
+    \eqn{A \theta + B = 0}{A \%*\% theta + B = 0}; or \code{ineqA} and
+    \code{ineqB} for inequality constraints \eqn{A \theta + B > 0}{A
+      \%*\% theta + B > 0}.  More
+       than one
+       row in \code{ineqA} and \code{ineqB} corresponds to more than
+       one linear constraint, in that case all these must be zero
+       (equality) or positive (inequality constraints).
+       The equality-constrained problem is forwarded
+    to \code{\link{sumt}}, the inequality-constrained case to
+    \code{\link{constrOptim2}}.
   }
   \item{finalHessian}{how (and if) to calculate the final Hessian.  Either
     \code{FALSE} (do not calculate), \code{TRUE} (use analytic/finite-difference
@@ -231,7 +238,7 @@ the previous one (maximization is not performed in that step).
 \section{Warning}{
     No attempt is made to ensure that user-provided analytic
     gradient/Hessian correct.  However, the users are
-    recommended to use \code{\link{compareDerivatives}} function,
+    encouraged to use \code{\link{compareDerivatives}} function,
     designed for this purpose.  If analytic gradient/Hessian are wrong,
     the algorithm may not converge, or converge to a wrong point.
 

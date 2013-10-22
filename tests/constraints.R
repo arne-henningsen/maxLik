@@ -201,7 +201,25 @@ a <- maxLik(logLikMix2,
             constraints=list(eqA=A, eqB=B),
             print.level=1, SUMTRho0=1, rho=0.5)
 summary(a)
-## ----------- inequality -------------
+f <- function(theta) exp(-theta %*% theta)
+## NR, multiple constraints
+A <- matrix(c(1, 0, 1,
+              1, 1, 0), 2, 3, byrow=TRUE)
+B <- c(-1, -1)
+a <- maxNR(f, start=c(1,1.1,2), constraints=list(eqA=A, eqB=B))
+coef(a)
+## Error handling for equality constraints
+A <- matrix(c(1, 1), 1, 2)
+B <- -1
+try(a <- maxNR(f, start=c(1, 2, 3), constraints=list(eqA=A, eqB=B)))
+                           # ncol(A) != length(start)
+A <- matrix(c(1, 1), 1, 2)
+B <- c(-1, 2)
+try(a <- maxNR(f, start=c(1, 2), constraints=list(eqA=A, eqB=B)))
+                           # nrow(A) != nrow(B)
+##                           
+## -------------- inequality constraints ----------------
+##
 A <- matrix(c(-1, 0,
               0,  1), 2,2, byrow=TRUE)
 B <- c(1,1)

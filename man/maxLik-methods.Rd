@@ -1,5 +1,6 @@
 \name{AIC.maxLik}
 \alias{AIC.maxLik}
+\alias{coef.maxim}
 \alias{std.maxlik}
 
 \title{Methods for the various standard functions}
