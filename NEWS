@@ -4,6 +4,14 @@ Please note that only the most significant changes are reported here.
 A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
+
+      CHANGES IN VERSION 1.2-2 (2013-10-22)
+
+* Equality constraints (SUMT) checks conformity of the matrices
+
+* coef.maxim is now exported
+
+
       CHANGES IN VERSION 1.2-0 (2013-10-22)
 
 * Inequality constraints now support multiple constraints 
@@ -11,10 +19,6 @@ on R-Forge.
 
 * Fixed a bug in documentation, inequality constraint requires
   A %*% theta + B > 0, not >= 0 as stated earlier.
-
-* Equality constraints (SUMT) checks conformity of the matrices
-
-* coef.maxim is now exported
 
 * function sumKeepAttr() is imported from the miscTools package now (before
 maxLik() could not be used by another package when this package imported (and 
