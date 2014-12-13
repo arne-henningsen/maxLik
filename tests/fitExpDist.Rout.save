@@ -1,6 +1,6 @@
 
-R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R version 3.1.2 (2014-10-31) -- "Pumpkin Helmet"
+Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -251,7 +251,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] 100
 > all.equal( mlBhhh[ -c( 5, 6, 10 ) ], ml[ -c( 5, 6, 10 ) ], 
 +    check.attributes = FALSE, tolerance = 1e-3 )
-[1] "Component 4: Mean relative difference: 0.02778"
+[1] "Component \"hessian\": Mean relative difference: 0.02778"
 > 
 > # Estimate with analytic gradient
 > mlgBhhh <- maxLik( loglik, gradlik, start = 1, method = "BHHH" )
@@ -344,7 +344,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] 100
 > all.equal( mlNm[ -c( 5, 6, 9, 10, 11 ) ], ml[ -c( 5, 6, 9, 10 ) ], 
 +    tolerance = 1e-3 )
-[1] "Component 3: Mean relative difference: 0.9999"
+[1] "Component \"gradient\": Mean relative difference: 0.9999"
 > 
 > # Estimate with analytic gradient (unused during estimation)
 > mlgNm <- maxLik( loglik, gradlik, start = 1, method = "NM" )
@@ -621,4 +621,4 @@ Error in nObs.maxLik(x) :
 > 
 > proc.time()
    user  system elapsed 
-  1.008   0.052   1.047 
+  0.848   0.024   0.868 

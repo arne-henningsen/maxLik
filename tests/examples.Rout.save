@@ -1,6 +1,6 @@
 
-R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R version 3.1.2 (2014-10-31) -- "Pumpkin Helmet"
+Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -57,9 +57,9 @@ $gradient
 [1] 0 0
 
 $hessian
-       [,1]   [,2]
-[1,] -2e+00  1e-04
-[2,]  1e-04 -2e+00
+     [,1] [,2]
+[1,]   -2    0
+[2,]    0   -2
 
 $code
 [1] 1
@@ -90,8 +90,8 @@ gradient close to zero
 Function value: 1 
 Estimates:
      estimate gradient
-[1,]        2        0
-[2,]        4        0
+[1,]        2 0.00e+00
+[2,]        4 1.11e-10
 --------------------------------------------
 > activePar(free)
 [1] TRUE TRUE
@@ -167,10 +167,10 @@ a        1        NA
 b        4 5.944e-07
 --------------------------------------------
 > all.equal( cons, cons4 )
-[1] "Component 2: names for current but not for target"                             
-[2] "Component 3: names for current but not for target"                             
-[3] "Component 4: Attributes: < Length mismatch: comparison on first 1 components >"
-[4] "Component 8: names for current but not for target"                             
+[1] "Component \"estimate\": names for current but not for target"                            
+[2] "Component \"gradient\": names for current but not for target"                            
+[3] "Component \"hessian\": Attributes: < Length mismatch: comparison on first 1 components >"
+[4] "Component \"fixed\": names for current but not for target"                               
 > 
 > ### compareDerivatives
 > set.seed( 2 )
@@ -1482,7 +1482,7 @@ $estimate
 [1] 2 1
 
 $gradient
-[1] 1.11e-10 0.00e+00
+[1] -1.11e-10  1.11e-10
 
 $hessian
      [,1] [,2]
@@ -1517,9 +1517,9 @@ Return code: 1
 gradient close to zero 
 Function value: 1 
 Estimates:
-     estimate gradient
-[1,]        2 1.11e-10
-[2,]        1 0.00e+00
+     estimate  gradient
+[1,]        2 -1.11e-10
+[2,]        1  1.11e-10
 --------------------------------------------
 > maximType(m)
 [1] "Newton-Raphson maximisation"
@@ -2668,4 +2668,4 @@ Estimate(s): 1.863
 > 
 > proc.time()
    user  system elapsed 
-  0.580   0.040   0.606 
+  0.576   0.032   0.602 

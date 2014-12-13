@@ -1,6 +1,6 @@
 
-R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R version 3.1.2 (2014-10-31) -- "Pumpkin Helmet"
+Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -3077,8 +3077,8 @@ sigma  0 0.0167
 [1] -202.1
 > all.equal( mlghFix[ -c( 5, 6, 9, 10 ) ], mlFixBfgs[ -c( 5, 6, 9, 10, 11 ) ],
 +    tolerance = 1e-3 )
-[1] "Component 3: 'is.NA' value mismatch: 0 in current 1 in target"
-[2] "Component 4: 'is.NA' value mismatch: 0 in current 3 in target"
+[1] "Component \"gradient\": 'is.NA' value mismatch: 0 in current 1 in target"
+[2] "Component \"hessian\": 'is.NA' value mismatch: 0 in current 3 in target" 
 > mlIndFixBfgs <- maxLik( llfInd, start = startValFix, fixed = isFixed,
 +    method = "BFGS" )
 > all.equal( mlFixBfgs[-c(4,9)], mlIndFixBfgs[ -c(4,9,12) ], tolerance = 1e-3 )
@@ -4747,7 +4747,7 @@ Log-Likelihood: -204.5
 Estimates:
       Estimate Std. error t value Pr(> t)    
 mu       0.820      0.174    4.71 2.5e-06 ***
-sigma    1.680      0.107   15.69 < 2e-16 ***
+sigma    1.680      0.107   15.68 < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -5024,7 +5024,7 @@ $gradientObs
 > # with analytical gradients and Hessians
 > mlghCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon )
 > all.equal( mlgCon, mlghCon, tolerance = 1e-3 )
-[1] "Component 7: Component 2: Attributes: < Component 2: Attributes: < Length mismatch: comparison on first 1 components > >"
+[1] "Component \"last.step\": Component \"f0\": Attributes: < Component \"hessian\": Attributes: < Length mismatch: comparison on first 1 components > >"
 > 
 > # with analytical gradients and Hessians as attributes
 > mlGHCon <- maxLik( llfGradHess, start = startVal, constraints = eqCon )
@@ -5077,11 +5077,11 @@ penalty close to zero
 0.8199 1.6801 
 > condiNumber( mlBhhhCon )
 mu 	 1 
-sigma 	 3.615 
+sigma 	 3.611 
 > round( hessian( mlBhhhCon ), 2 )
           mu  sigma
-mu    -35.41 -15.23
-sigma -15.23 -93.76
+mu    -35.44 -15.23
+sigma -15.23 -93.71
 > logLik( mlBhhhCon )
 [1] -204.5
 > maximType( mlBhhhCon )
@@ -5096,13 +5096,13 @@ sigma -15.23 -93.76
 [1] "successive function values within tolerance limit"
 > round( vcov( mlBhhhCon ), 4 )
            mu   sigma
-mu     0.0304 -0.0049
+mu     0.0303 -0.0049
 sigma -0.0049  0.0115
 > logLik( summary( mlBhhhCon ) )
 [1] -204.5
 > all.equal( mlCon[ -c( 5, 6, 7, 9, 10 ) ], mlBhhhCon[ -c( 5, 6, 7, 9, 10, 11 ) ],
 +    tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"hessian\": Mean relative difference: 0.001862"
 > mlBhhhCon[11]
 $gradientObs
               mu    sigma
@@ -6380,15 +6380,15 @@ mu     3.034 -0.494
 sigma -0.494  1.147
 > round( bread( mlConInd ), 3 )
           mu  sigma
-mu     3.033 -0.493
-sigma -0.493  1.147
+mu     3.034 -0.493
+sigma -0.493  1.148
 > round( bread( mlgConInd ), 3 )
           mu  sigma
 mu     2.971 -0.451
 sigma -0.451  1.111
 > round( bread( mlBhhhCon ), 3 )
           mu  sigma
-mu     3.036 -0.493
+mu     3.033 -0.493
 sigma -0.493  1.147
 > round( bread( mlgBhhhCon ), 3 )
           mu  sigma
@@ -6552,4 +6552,4 @@ sigma -0.004  0.012
 > 
 > proc.time()
    user  system elapsed 
-  29.92    0.06   30.00 
+ 31.218   0.207  31.451 
