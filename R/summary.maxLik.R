@@ -1,4 +1,6 @@
-print.summary.maxLik <- function( x, ... ) {
+print.summary.maxLik <- function( x,
+      digits = max( 3L, getOption("digits") - 3L ), ... ) {
+   
    cat("--------------------------------------------\n")
    cat("Maximum Likelihood estimation\n")
    cat(maximType(x), ", ", nIter(x), " iterations\n", sep="")
@@ -7,7 +9,7 @@ print.summary.maxLik <- function( x, ... ) {
       cat("Log-Likelihood:", x$loglik, "\n")
       cat(x$NActivePar, " free parameters\n")
       cat("Estimates:\n")
-      printCoefmat(x$estimate)
+      printCoefmat( x$estimate, digits = digits )
    }
    if(!is.null(x$constraints)) {
       cat("\nWarning: constrained likelihood estimation.",
