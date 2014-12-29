@@ -196,9 +196,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > coef( ml )
    mu sigma 
 1.181 1.816 
-> condiNumber( ml )
+> condiNumber( ml, digits = 3 )
 mu 	 1 
-sigma 	 1.669 
+sigma 	 1.67 
 > round( hessian( ml ), 1 )
          mu sigma
 mu    -30.3   0.0
@@ -479,9 +479,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > coef( mlBHHH )
    mu sigma 
 1.181 1.816 
-> condiNumber( mlBHHH )
+> condiNumber( mlBHHH, digits = 3 )
 mu 	 1 
-sigma 	 1.719 
+sigma 	 1.72 
 > round( hessian( mlBHHH ), 1 )
          mu sigma
 mu    -30.3  -1.8
@@ -939,9 +939,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > coef( mlBFGSYC )
    mu sigma 
 1.181 1.816 
-> condiNumber( mlBFGSYC )
+> condiNumber( mlBFGSYC, digits = 3 )
 mu 	 1 
-sigma 	 1.668 
+sigma 	 1.67 
 > round( hessian( mlBFGSYC ), 1 )
          mu sigma
 mu    -30.3   0.0
@@ -1363,9 +1363,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > coef( mlBFGS )
    mu sigma 
 1.181 1.816 
-> condiNumber( mlBFGS )
+> condiNumber( mlBFGS, digits = 3 )
 mu 	 1 
-sigma 	 1.672 
+sigma 	 1.67 
 > round( hessian( mlBFGS ), 1 )
          mu sigma
 mu    -30.3   0.0
@@ -1715,9 +1715,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > coef( mlNM )
    mu sigma 
 1.181 1.817 
-> condiNumber( mlNM )
+> condiNumber( mlNM, digits = 3 )
 mu 	 1 
-sigma 	 1.668 
+sigma 	 1.67 
 > round( hessian( mlNM ), 1 )
          mu sigma
 mu    -30.3   0.0
@@ -2063,9 +2063,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > coef( mlSANN )
    mu sigma 
 1.182 1.817 
-> condiNumber( mlSANN )
+> condiNumber( mlSANN, digits = 3 )
 mu 	 1 
-sigma 	 1.673 
+sigma 	 1.67 
 > round( hessian( mlSANN ), 1 )
          mu sigma
 mu    -30.3   0.1
@@ -2431,7 +2431,7 @@ FALSE  TRUE
 > coef( mlFix )
    mu sigma 
 1.000 1.825 
-> condiNumber( mlFix )
+> condiNumber( mlFix, digits = 3 )
 sigma 	 1 
 > round( hessian( mlFix ), 1 )
       mu sigma
@@ -2785,7 +2785,7 @@ FALSE  TRUE
 > coef( mlFixBHHH )
    mu sigma 
 1.000 1.825 
-> condiNumber( mlFixBHHH )
+> condiNumber( mlFixBHHH, digits = 3 )
 sigma 	 1 
 > round( hessian( mlFixBHHH ), 1 )
       mu sigma
@@ -3004,7 +3004,7 @@ FALSE  TRUE
 > coef( mlFixBfgs )
    mu sigma 
 1.000 1.825 
-> condiNumber( mlFixBfgs )
+> condiNumber( mlFixBfgs, digits = 3 )
 sigma 	 1 
 > round( hessian( mlFixBfgs ), 1 )
          mu sigma
@@ -3358,7 +3358,7 @@ FALSE  TRUE
 > coef( mlFixNm )
    mu sigma 
 1.000 1.825 
-> condiNumber( mlFixNm )
+> condiNumber( mlFixNm, digits = 3 )
 sigma 	 1 
 > round( hessian( mlFixNm ), 1 )
          mu sigma
@@ -3729,7 +3729,7 @@ FALSE  TRUE
 > coef( mlFixSann )
    mu sigma 
 1.000 1.825 
-> condiNumber( mlFixSann )
+> condiNumber( mlFixSann, digits = 3 )
 sigma 	 1 
 > round( hessian( mlFixSann ), 1 )
          mu sigma
@@ -4051,9 +4051,9 @@ Constrained optimization based on constrOptim
 > coef( mlBfgsInEq )
     mu  sigma 
 0.8197 1.6803 
-> condiNumber( mlBfgsInEq )
+> condiNumber( mlBfgsInEq, digits = 3 )
 mu 	 1 
-sigma 	 3.611 
+sigma 	 3.61 
 > round( hessian( mlBfgsInEq ), 1 )
          mu sigma
 mu    -35.4 -15.2
@@ -4360,7 +4360,7 @@ Constrained optimization based on constrOptim
 > coef( mlNmInEq )
     mu  sigma 
 0.8197 1.6803 
-> condiNumber( mlNmInEq )
+> condiNumber( mlNmInEq, digits = 3 )
 mu 	 1 
 sigma 	 3.61 
 > round( hessian( mlNmInEq ), 1 )
@@ -4562,9 +4562,9 @@ Constrained optimization based on constrOptim
 > coef( mlSannInEq )
     mu  sigma 
 0.8297 1.6702 
-> condiNumber( mlSannInEq )
+> condiNumber( mlSannInEq, digits = 3 )
 mu 	 1 
-sigma 	 3.601 
+sigma 	 3.6 
 > round( hessian( mlSannInEq ), 1 )
          mu sigma
 mu    -35.8 -15.1
@@ -4665,9 +4665,9 @@ penalty close to zero
 > coef( mlCon )
     mu  sigma 
 0.8198 1.6803 
-> condiNumber( mlCon )
+> condiNumber( mlCon, digits = 3 )
 mu 	 1 
-sigma 	 3.614 
+sigma 	 3.61 
 > round( hessian( mlCon ), 1 )
          mu sigma
 mu    -35.4 -15.3
@@ -5029,9 +5029,9 @@ penalty close to zero
 > coef( mlBhhhCon )
     mu  sigma 
 0.8199 1.6801 
-> condiNumber( mlBhhhCon )
+> condiNumber( mlBhhhCon, digits = 3 )
 mu 	 1 
-sigma 	 3.611 
+sigma 	 3.61 
 > round( hessian( mlBhhhCon ), 1 )
          mu sigma
 mu    -35.4 -15.2
@@ -5286,9 +5286,9 @@ penalty close to zero
 > coef( mlBfgsCon )
     mu  sigma 
 0.8198 1.6803 
-> condiNumber( mlBfgsCon )
+> condiNumber( mlBfgsCon, digits = 3 )
 mu 	 1 
-sigma 	 3.609 
+sigma 	 3.61 
 > round( hessian( mlBfgsCon ), 1 )
          mu sigma
 mu    -35.4 -15.2
@@ -5622,9 +5622,9 @@ penalty close to zero
 > coef( mlNmCon )
     mu  sigma 
 0.8197 1.6803 
-> condiNumber( mlNmCon )
+> condiNumber( mlNmCon, digits = 3 )
 mu 	 1 
-sigma 	 3.609 
+sigma 	 3.61 
 > round( hessian( mlNmCon ), 1 )
          mu sigma
 mu    -35.4 -15.2
@@ -5939,9 +5939,9 @@ penalty close to zero
 > coef( mlSannCon )
    mu sigma 
 0.816 1.684 
-> condiNumber( mlSannCon )
+> condiNumber( mlSannCon, digits = 3 )
 mu 	 1 
-sigma 	 3.616 
+sigma 	 3.62 
 > round( hessian( mlSannCon ), 1 )
          mu sigma
 mu    -35.3 -15.3
@@ -6506,4 +6506,4 @@ sigma 0.00  0.01
 > 
 > proc.time()
    user  system elapsed 
- 26.922   0.104  27.039 
+ 28.980   0.194  29.192 
