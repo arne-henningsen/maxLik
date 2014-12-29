@@ -174,7 +174,7 @@ Newton-Raphson maximisation, 7 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.6 (2 free parameter(s))
 Estimate(s): 1.181 1.816 
-> summary( ml )
+> print( summary( ml ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
@@ -183,8 +183,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5 7.9e-11 ***
-sigma    1.816      0.128    14.1 < 2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -199,10 +199,10 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > condiNumber( ml )
 mu 	 1 
 sigma 	 1.669 
-> round( hessian( ml ), 2 )
-          mu  sigma
-mu    -30.33  -0.03
-sigma  -0.03 -60.62
+> round( hessian( ml ), 1 )
+         mu sigma
+mu    -30.3   0.0
+sigma   0.0 -60.6
 > logLik( ml )
 [1] -201.6
 > maximType( ml )
@@ -218,14 +218,14 @@ Error in nObs.maxLik(ml) :
 [1] 2
 > returnMessage( ml )
 [1] "successive function values within tolerance limit"
-> round( vcov( ml ), 4 )
-         mu  sigma
-mu    0.033 0.0000
-sigma 0.000 0.0165
+> round( vcov( ml ), 3 )
+         mu sigma
+mu    0.033 0.000
+sigma 0.000 0.016
 > logLik( summary( ml ) )
 [1] -201.6
 > mlInd <- maxLik( llfInd, start = startVal )
-> summary( mlInd )
+> print( summary( mlInd ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
@@ -234,8 +234,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5 8.1e-11 ***
-sigma    1.816      0.128    14.2 < 2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -260,7 +260,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > 
 > # with analytical gradients
 > mlg <- maxLik( llf, gf, start = startVal )
-> summary( mlg )
+> print( summary( mlg ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
@@ -269,8 +269,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5   8e-11 ***
-sigma    1.816      0.128    14.1  <2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -457,7 +457,7 @@ BHHH maximisation, 13 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.6 (2 free parameter(s))
 Estimate(s): 1.181 1.816 
-> summary( mlBHHH )
+> print( summary( mlBHHH ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 13 iterations
@@ -466,8 +466,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182    6.49 8.4e-11 ***
-sigma    1.816      0.134   13.55 < 2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    13.5  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -482,10 +482,10 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > condiNumber( mlBHHH )
 mu 	 1 
 sigma 	 1.719 
-> round( hessian( mlBHHH ), 2 )
-          mu  sigma
-mu    -30.31  -1.83
-sigma  -1.83 -55.73
+> round( hessian( mlBHHH ), 1 )
+         mu sigma
+mu    -30.3  -1.8
+sigma  -1.8 -55.7
 attr(,"type")
 [1] "BHHH"
 > logLik( mlBHHH )
@@ -500,10 +500,10 @@ attr(,"type")
 [1] 2
 > returnMessage( mlBHHH )
 [1] "successive function values within tolerance limit"
-> round( vcov( mlBHHH ), 4 )
-           mu   sigma
-mu     0.0331 -0.0011
-sigma -0.0011  0.0180
+> round( vcov( mlBHHH ), 3 )
+          mu  sigma
+mu     0.033 -0.001
+sigma -0.001  0.018
 > logLik( summary( mlBHHH ) )
 [1] -201.6
 > all.equal( ml[-c(4,5,6,9,10) ], mlBHHH[ -c(4,5,6,9,10,11) ], tolerance = 1e-3 )
@@ -617,11 +617,11 @@ sigma -0.0011  0.0180
 +    finalHessian = TRUE )
 > all.equal( mlBhhhH[-4], mlBHHH[-4], tolerance = 1e-3 )
 [1] TRUE
-> round( hessian( mlBhhhH ), 2 )
-          mu  sigma
-mu    -30.33   0.00
-sigma   0.00 -60.62
-> summary( mlBhhhH ) 
+> round( hessian( mlBhhhH ), 1 )
+         mu sigma
+mu    -30.3   0.0
+sigma   0.0 -60.6
+> print( summary( mlBhhhH ) , digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 13 iterations
@@ -630,8 +630,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5 7.9e-11 ***
-sigma    1.816      0.128    14.1 < 2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -679,7 +679,7 @@ Log-Likelihood: -0.6227 (2 free parameter(s))
 Estimate(s): 0.2158 0.3302 
 > x <- xSaved
 > mlgBHHH <- maxLik( llfInd, gfInd, start = startVal, method = "BHHH" )
-> summary( mlgBHHH )
+> print( summary( mlgBHHH ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 13 iterations
@@ -688,8 +688,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182    6.49 8.4e-11 ***
-sigma    1.816      0.134   13.55 < 2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    13.5  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -809,10 +809,10 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] TRUE
 > all.equal( mlgBhhhH[-4], mlgBHHH[-4], tolerance = 1e-3 )
 [1] TRUE
-> round( hessian( mlgBhhhH ), 2 )
-          mu  sigma
-mu    -30.31   0.00
-sigma   0.00 -60.61
+> round( hessian( mlgBhhhH ), 1 )
+         mu sigma
+mu    -30.3   0.0
+sigma   0.0 -60.6
 > 
 > # with analytical gradients as attribute
 > try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
@@ -917,7 +917,7 @@ BFGSR maximization, 15 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.6 (2 free parameter(s))
 Estimate(s): 1.181 1.816 
-> summary( mlBFGSYC )
+> print( summary( mlBFGSYC ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BFGSR maximization, 15 iterations
@@ -926,8 +926,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5   8e-11 ***
-sigma    1.816      0.129    14.1  <2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -942,10 +942,10 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > condiNumber( mlBFGSYC )
 mu 	 1 
 sigma 	 1.668 
-> round( hessian( mlBFGSYC ), 2 )
-          mu  sigma
-mu    -30.30   0.03
-sigma   0.03 -60.54
+> round( hessian( mlBFGSYC ), 1 )
+         mu sigma
+mu    -30.3   0.0
+sigma   0.0 -60.5
 > logLik( mlBFGSYC )
 [1] -201.6
 > maximType( mlBFGSYC )
@@ -961,10 +961,10 @@ Error in nObs.maxLik(mlBFGSYC) :
 [1] 2
 > returnMessage( mlBFGSYC )
 [1] "successive function values within tolerance limit"
-> round( vcov( mlBFGSYC ), 4 )
-         mu  sigma
-mu    0.033 0.0000
-sigma 0.000 0.0165
+> round( vcov( mlBFGSYC ), 3 )
+         mu sigma
+mu    0.033 0.000
+sigma 0.000 0.017
 > logLik( summary( mlBFGSYC ) )
 [1] -201.6
 > all.equal( ml[-c(3,4,5,6,9,10)], mlBFGSYC[-c(3,4,5,6,9,10)], tolerance = 1e-3 )
@@ -972,7 +972,7 @@ sigma 0.000 0.0165
 > all.equal( ml[-c(5,6,9,10)], mlBFGSYC[-c(5,6,9,10)], tolerance = 1e-2 )
 [1] TRUE
 > mlIndBFGSYC <- maxLik( llfInd, start = startVal, method = "BFGSR" )
-> summary( mlIndBFGSYC )
+> print( summary( mlIndBFGSYC ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BFGSR maximization, 34 iterations
@@ -981,8 +981,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5 7.9e-11 ***
-sigma    1.816      0.128    14.2 < 2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -1131,7 +1131,7 @@ successive function values within tolerance limit
 15  iterations
 estimate: 1.181 1.816 
 Function value: -201.6 
-> summary(mlgBFGSYC)
+> print( summary(mlgBFGSYC), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BFGSR maximization, 15 iterations
@@ -1140,8 +1140,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5 7.9e-11 ***
-sigma    1.816      0.128    14.1 < 2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -1341,7 +1341,7 @@ BFGS maximisation, 36 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 (2 free parameter(s))
 Estimate(s): 1.181 1.816 
-> summary( mlBFGS )
+> print( summary( mlBFGS ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BFGS maximisation, 36 iterations
@@ -1350,8 +1350,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5 8.2e-11 ***
-sigma    1.816      0.128    14.1 < 2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -1366,10 +1366,10 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > condiNumber( mlBFGS )
 mu 	 1 
 sigma 	 1.672 
-> round( hessian( mlBFGS ), 2 )
-          mu  sigma
-mu    -30.27   0.03
-sigma   0.03 -60.62
+> round( hessian( mlBFGS ), 1 )
+         mu sigma
+mu    -30.3   0.0
+sigma   0.0 -60.6
 > logLik( mlBFGS )
 [1] -201.6
 > maximType( mlBFGS )
@@ -1383,17 +1383,17 @@ function
 [1] 0
 > returnMessage( mlBFGS )
 [1] "successful convergence "
-> round( vcov( mlBFGS ), 4 )
-         mu  sigma
-mu    0.033 0.0000
-sigma 0.000 0.0165
+> round( vcov( mlBFGS ), 3 )
+         mu sigma
+mu    0.033 0.000
+sigma 0.000 0.016
 > logLik( summary( mlBFGS ) )
 [1] -201.6
 > all.equal( ml[-c(4,5,6,9,10)], mlBFGS[-c(4,5,6,9,10,11)], tolerance = 1e-3 )
 [1] TRUE
 > # with individual log likelihood values
 > mlIndBFGS <- maxLik( llfInd, start = startVal, method = "BFGS" )
-> summary( mlIndBFGS )
+> print( summary( mlIndBFGS ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BFGS maximisation, 36 iterations
@@ -1402,8 +1402,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5 8.1e-11 ***
-sigma    1.816      0.128    14.2 < 2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -1518,7 +1518,7 @@ $gradientObs
 > 
 > # with analytical gradients
 > mlgBFGS <- maxLik( llf, gf, start = startVal, method = "BFGS" )
-> summary( mlgBFGS )
+> print( summary( mlgBFGS ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BFGS maximisation, 36 iterations
@@ -1527,8 +1527,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5   8e-11 ***
-sigma    1.816      0.128    14.1  <2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -1693,7 +1693,7 @@ Nelder-Mead maximisation, 63 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 (2 free parameter(s))
 Estimate(s): 1.181 1.817 
-> summary( mlNM )
+> print( summary( mlNM ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Nelder-Mead maximisation, 63 iterations
@@ -1702,8 +1702,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5 8.3e-11 ***
-sigma    1.817      0.128    14.1 < 2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -1718,10 +1718,10 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > condiNumber( mlNM )
 mu 	 1 
 sigma 	 1.668 
-> round( hessian( mlNM ), 2 )
-          mu sigma
-mu    -30.27   0.0
-sigma   0.00 -60.6
+> round( hessian( mlNM ), 1 )
+         mu sigma
+mu    -30.3   0.0
+sigma   0.0 -60.6
 > logLik( mlNM )
 [1] -201.6
 > maximType( mlNM )
@@ -1735,17 +1735,17 @@ function
 [1] 0
 > returnMessage( mlNM )
 [1] "successful convergence "
-> round( vcov( mlNM ), 4 )
-         mu  sigma
-mu    0.033 0.0000
-sigma 0.000 0.0165
+> round( vcov( mlNM ), 3 )
+         mu sigma
+mu    0.033 0.000
+sigma 0.000 0.017
 > logLik( summary( mlNM ) )
 [1] -201.6
 > all.equal( ml[-c(3,4,5,6,9,10)], mlNM[-c(3,4,5,6,9,10,11)], tolerance = 1e-3 )
 [1] TRUE
 > # with individual log likelihood values
 > mlIndNM <- maxLik( llfInd, start = startVal, method = "NM" )
-> summary( mlIndNM )
+> print( summary( mlIndNM ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Nelder-Mead maximisation, 63 iterations
@@ -1754,8 +1754,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5   8e-11 ***
-sigma    1.817      0.128    14.1  <2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -1870,7 +1870,7 @@ $gradientObs
 > 
 > # with unused analytical gradients
 > mlgNM <- maxLik( llf, gf, start = startVal, method = "NM" )
-> summary( mlgNM )
+> print( summary( mlgNM ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Nelder-Mead maximisation, 63 iterations
@@ -1879,8 +1879,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5 8.1e-11 ***
-sigma    1.817      0.128    14.1 < 2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -1888,7 +1888,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] TRUE
 > # with individual log likelihood values and gradients
 > mlgIndNM <- maxLik( llfInd, gfInd, start = startVal, method = "NM" )
-> summary( mlgIndNM )
+> print( summary( mlgIndNM ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Nelder-Mead maximisation, 63 iterations
@@ -1897,8 +1897,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.181      0.182     6.5 8.1e-11 ***
-sigma    1.817      0.128    14.1 < 2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -2041,7 +2041,7 @@ SANN maximisation, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 (2 free parameter(s))
 Estimate(s): 1.182 1.817 
-> summary( mlSANN )
+> print( summary( mlSANN ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
@@ -2050,8 +2050,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.182      0.182     6.5 7.9e-11 ***
-sigma    1.817      0.128    14.1 < 2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -2066,10 +2066,10 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > condiNumber( mlSANN )
 mu 	 1 
 sigma 	 1.673 
-> round( hessian( mlSANN ), 2 )
-          mu  sigma
-mu    -30.27   0.06
-sigma   0.06 -60.60
+> round( hessian( mlSANN ), 1 )
+         mu sigma
+mu    -30.3   0.1
+sigma   0.1 -60.6
 > logLik( mlSANN )
 [1] -201.6
 > maximType( mlSANN )
@@ -2083,17 +2083,17 @@ function
 [1] 0
 > returnMessage( mlSANN )
 [1] "successful convergence "
-> round( vcov( mlSANN ), 4 )
-         mu  sigma
-mu    0.033 0.0000
-sigma 0.000 0.0165
+> round( vcov( mlSANN ), 3 )
+         mu sigma
+mu    0.033 0.000
+sigma 0.000 0.017
 > logLik( summary( mlSANN ) )
 [1] -201.6
 > all.equal( ml[-c(3,4,5,6,9,10)], mlSANN[-c(3,4,5,6,9,10,11)], tolerance = 1e-3 )
 [1] TRUE
 > # with individual log likelihood values
 > mlIndSANN <- maxLik( llfInd, start = startVal, method = "SANN" )
-> summary( mlIndSANN )
+> print( summary( mlIndSANN ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
@@ -2102,8 +2102,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.182      0.182    6.51 7.6e-11 ***
-sigma    1.817      0.128   14.15 < 2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -2218,7 +2218,7 @@ $gradientObs
 > 
 > # with unused analytical gradients
 > mlgSANN <- maxLik( llf, gf, start = startVal, method = "SANN" )
-> summary( mlgSANN )
+> print( summary( mlgSANN ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
@@ -2227,8 +2227,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.182      0.182    6.51 7.7e-11 ***
-sigma    1.817      0.128   14.14 < 2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -2236,7 +2236,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] TRUE
 > # with individual log likelihood values and gradients
 > mlgIndSANN <- maxLik( llfInd, gfInd, start = startVal, method = "SANN" )
-> summary( mlgIndSANN )
+> print( summary( mlgIndSANN ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
@@ -2245,8 +2245,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.182      0.182    6.51 7.7e-11 ***
-sigma    1.817      0.128   14.14 < 2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -2365,7 +2365,7 @@ $gradientObs
 > # with a user-specified function to generate a new candidate point
 > mlSANNCand <- maxLik( llf, start = startVal, method = "SANN",
 +    cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
-> summary( mlSANNCand )
+> print( summary( mlSANNCand ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
@@ -2374,8 +2374,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.200      0.181    6.62 3.5e-11 ***
-sigma    1.813      0.128   14.18 < 2e-16 ***
+mu        1.20       0.18     6.6   3e-11 ***
+sigma     1.81       0.13    14.2  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -2409,7 +2409,7 @@ Newton-Raphson maximisation, 7 iterations
 Return code 1: gradient close to zero
 Log-Likelihood: -202.1 (1 free parameter(s))
 Estimate(s): 1 1.825 
-> summary( mlFix )
+> print( summary( mlFix ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
@@ -2418,8 +2418,8 @@ Log-Likelihood: -202.1
 1  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.000      0.000      NA      NA    
-sigma    1.825      0.129    14.1  <2e-16 ***
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -2433,10 +2433,10 @@ FALSE  TRUE
 1.000 1.825 
 > condiNumber( mlFix )
 sigma 	 1 
-> round( hessian( mlFix ), 2 )
-      mu  sigma
-mu    NA     NA
-sigma NA -59.97
+> round( hessian( mlFix ), 1 )
+      mu sigma
+mu    NA    NA
+sigma NA   -60
 > logLik( mlFix )
 [1] -202.1
 > maximType( mlFix )
@@ -2449,10 +2449,10 @@ sigma NA -59.97
 [1] 1
 > returnMessage( mlFix )
 [1] "gradient close to zero"
-> round( vcov( mlFix ), 4 )
-      mu  sigma
-mu     0 0.0000
-sigma  0 0.0167
+> round( vcov( mlFix ), 3 )
+      mu sigma
+mu     0 0.000
+sigma  0 0.017
 > logLik( summary( mlFix ) )
 [1] -202.1
 > mlIndFix <- maxLik( llfInd, start = startValFix, activePar = !isFixed )
@@ -2468,7 +2468,7 @@ sigma  0 0.0167
 > mlIndFix4 <- maxLik( llfInd, start = startValFix, fixed = 1 )
 > all.equal( mlIndFix, mlIndFix4, tolerance = 1e-3 )
 [1] TRUE
-> summary( mlIndFix )
+> print( summary( mlIndFix ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
@@ -2477,8 +2477,8 @@ Log-Likelihood: -202.1
 1  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.000      0.000      NA      NA    
-sigma    1.825      0.129    14.1  <2e-16 ***
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -2603,7 +2603,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > mlgFix2 <- maxLik( llf, gf, start = startValFix, fixed = isFixed )
 > all.equal( mlgFix, mlgFix2, tolerance = 1e-3 )
 [1] TRUE
-> summary( mlgFix )
+> print( summary( mlgFix ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
@@ -2612,44 +2612,14 @@ Log-Likelihood: -202.1
 1  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.000      0.000      NA      NA    
-sigma    1.825      0.129    14.1  <2e-16 ***
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
-> all.equal( mlFix, mlgFix, tolerance = 1e-3 )
-[1] TRUE
-> round( mlFix[[3]], 5 )
-   mu sigma 
-   NA     0 
-> round( mlgFix[[3]], 5 )
-   mu sigma 
-   NA     0 
-> mlFix[[4]]
-      mu  sigma
-mu    NA     NA
-sigma NA -59.97
-> mlgFix[[4]]
-      mu  sigma
-mu    NA     NA
-sigma NA -60.02
 > mlgIndFix <- maxLik( llfInd, gfInd, start = startValFix, activePar = !isFixed )
 > all.equal( mlIndFix, mlgIndFix, tolerance = 1e-3 )
 [1] TRUE
-> round( mlIndFix[[3]], 5 )
-   mu sigma 
-   NA     0 
-> round( mlgIndFix[[3]], 5 )
-   mu sigma 
-   NA     0 
-> mlIndFix[[4]]
-      mu sigma
-mu    NA    NA
-sigma NA   -60
-> mlgIndFix[[4]]
-      mu  sigma
-mu    NA     NA
-sigma NA -60.02
 > all.equal( mlgFix[ ], mlgIndFix[ -11 ], tolerance = 1e-3 )
 [1] TRUE
 > round( mlgIndFix[[ 11 ]], 3 )
@@ -2793,7 +2763,7 @@ BHHH maximisation, 10 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -202.1 (1 free parameter(s))
 Estimate(s): 1 1.825 
-> summary( mlFixBHHH )
+> print( summary( mlFixBHHH ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 10 iterations
@@ -2802,8 +2772,8 @@ Log-Likelihood: -202.1
 1  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.000      0.000      NA      NA    
-sigma    1.825      0.134    13.7  <2e-16 ***
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -2817,10 +2787,10 @@ FALSE  TRUE
 1.000 1.825 
 > condiNumber( mlFixBHHH )
 sigma 	 1 
-> round( hessian( mlFixBHHH ), 2 )
-      mu  sigma
-mu    NA     NA
-sigma NA -55.98
+> round( hessian( mlFixBHHH ), 1 )
+      mu sigma
+mu    NA    NA
+sigma NA   -56
 attr(,"type")
 [1] "BHHH"
 > logLik( mlFixBHHH )
@@ -2835,31 +2805,15 @@ attr(,"type")
 [1] 2
 > returnMessage( mlFixBHHH )
 [1] "successive function values within tolerance limit"
-> round( vcov( mlFixBHHH ), 4 )
-      mu  sigma
-mu     0 0.0000
-sigma  0 0.0179
+> round( vcov( mlFixBHHH ), 3 )
+      mu sigma
+mu     0 0.000
+sigma  0 0.018
 > logLik( summary( mlFixBHHH ) )
 [1] -202.1
 > all.equal( mlFix[ -c( 4, 5, 6, 9, 10 ) ], mlFixBHHH[ -c( 4, 5, 6, 9, 10, 11 ) ],
 +    tolerance = 1e-3 )
 [1] TRUE
-> mlFix[[ 3 ]]
-       mu     sigma 
-       NA 2.842e-08 
-> mlFixBHHH[[ 3 ]]
-        mu      sigma 
-        NA -8.457e-06 
-> mlFix[[ 4 ]]
-      mu  sigma
-mu    NA     NA
-sigma NA -59.97
-> mlFixBHHH[[ 4 ]]
-      mu  sigma
-mu    NA     NA
-sigma NA -55.98
-attr(,"type")
-[1] "BHHH"
 > round( mlFixBHHH[[ 11 ]], 3 )
        mu  sigma
   [1,] NA -0.341
@@ -2984,7 +2938,7 @@ attr(,"type")
 +    method = "BHHH" )
 > all.equal( mlgFixBHHH, mlgFixBHHH4, tolerance = 1e-3 )
 [1] TRUE
-> summary( mlgFixBHHH )
+> print( summary( mlgFixBHHH ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 10 iterations
@@ -2993,8 +2947,8 @@ Log-Likelihood: -202.1
 1  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.000      0.000      NA      NA    
-sigma    1.825      0.134    13.7  <2e-16 ***
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -3028,7 +2982,7 @@ BFGS maximisation, 27 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -202.1 (1 free parameter(s))
 Estimate(s): 1 1.825 
-> summary( mlFixBfgs )
+> print( summary( mlFixBfgs ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BFGS maximisation, 27 iterations
@@ -3037,8 +2991,8 @@ Log-Likelihood: -202.1
 1  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.000      0.000      NA      NA    
-sigma    1.825      0.129    14.1  <2e-16 ***
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -3052,10 +3006,10 @@ FALSE  TRUE
 1.000 1.825 
 > condiNumber( mlFixBfgs )
 sigma 	 1 
-> round( hessian( mlFixBfgs ), 2 )
-          mu  sigma
-mu    -30.01  -5.94
-sigma  -5.94 -60.03
+> round( hessian( mlFixBfgs ), 1 )
+         mu sigma
+mu    -30.0  -5.9
+sigma  -5.9 -60.0
 > logLik( mlFixBfgs )
 [1] -202.1
 > maximType( mlFixBfgs )
@@ -3069,10 +3023,10 @@ function
 [1] 0
 > returnMessage( mlFixBfgs )
 [1] "successful convergence "
-> round( vcov( mlFixBfgs ), 4 )
-      mu  sigma
-mu     0 0.0000
-sigma  0 0.0167
+> round( vcov( mlFixBfgs ), 3 )
+      mu sigma
+mu     0 0.000
+sigma  0 0.017
 > logLik( summary( mlFixBfgs ) )
 [1] -202.1
 > all.equal( mlghFix[ -c( 5, 6, 9, 10 ) ], mlFixBfgs[ -c( 5, 6, 9, 10, 11 ) ],
@@ -3208,7 +3162,7 @@ sigma  0 0.0167
 +    method = "BFGS" )
 > all.equal( mlgFixBfgs, mlgFixBfgs4, tolerance = 1e-3 )
 [1] TRUE
-> summary( mlgFixBfgs )
+> print( summary( mlgFixBfgs ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BFGS maximisation, 27 iterations
@@ -3217,8 +3171,8 @@ Log-Likelihood: -202.1
 1  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.000      0.000      NA      NA    
-sigma    1.825      0.129    14.1  <2e-16 ***
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -3382,7 +3336,7 @@ Nelder-Mead maximisation, 28 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -202.1 (1 free parameter(s))
 Estimate(s): 1 1.825 
-> summary( mlFixNm )
+> print( summary( mlFixNm ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Nelder-Mead maximisation, 28 iterations
@@ -3391,8 +3345,8 @@ Log-Likelihood: -202.1
 1  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.000      0.000      NA      NA    
-sigma    1.825      0.129    14.2  <2e-16 ***
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -3406,10 +3360,10 @@ FALSE  TRUE
 1.000 1.825 
 > condiNumber( mlFixNm )
 sigma 	 1 
-> round( hessian( mlFixNm ), 2 )
-          mu  sigma
-mu    -30.01  -5.94
-sigma  -5.94 -60.06
+> round( hessian( mlFixNm ), 1 )
+         mu sigma
+mu    -30.0  -5.9
+sigma  -5.9 -60.1
 > logLik( mlFixNm )
 [1] -202.1
 > maximType( mlFixNm )
@@ -3423,10 +3377,10 @@ function
 [1] 0
 > returnMessage( mlFixNm )
 [1] "successful convergence "
-> round( vcov( mlFixNm ), 4 )
-      mu  sigma
-mu     0 0.0000
-sigma  0 0.0167
+> round( vcov( mlFixNm ), 3 )
+      mu sigma
+mu     0 0.000
+sigma  0 0.017
 > logLik( summary( mlFixNm ) )
 [1] -202.1
 > all.equal( mlFixBfgs[ -c(4,9,10) ], mlFixNm[ -c(4,9,10) ], tolerance = 1e-3 )
@@ -3583,7 +3537,7 @@ In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
 use "Brent" or optimize() directly
 > all.equal( mlgFixNm, mlgFixNm4, tolerance = 1e-3 )
 [1] TRUE
-> summary( mlgFixNm )
+> print( summary( mlgFixNm ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Nelder-Mead maximisation, 28 iterations
@@ -3592,8 +3546,8 @@ Log-Likelihood: -202.1
 1  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.000      0.000      NA      NA    
-sigma    1.825      0.129    14.1  <2e-16 ***
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -3753,7 +3707,7 @@ SANN maximisation, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -202.1 (1 free parameter(s))
 Estimate(s): 1 1.825 
-> summary( mlFixSann )
+> print( summary( mlFixSann ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
@@ -3762,8 +3716,8 @@ Log-Likelihood: -202.1
 1  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.000      0.000      NA      NA    
-sigma    1.825      0.129    14.1  <2e-16 ***
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -3777,10 +3731,10 @@ FALSE  TRUE
 1.000 1.825 
 > condiNumber( mlFixSann )
 sigma 	 1 
-> round( hessian( mlFixSann ), 2 )
-          mu  sigma
-mu    -29.98  -5.94
-sigma  -5.94 -60.03
+> round( hessian( mlFixSann ), 1 )
+         mu sigma
+mu    -30.0  -5.9
+sigma  -5.9 -60.0
 > logLik( mlFixSann )
 [1] -202.1
 > maximType( mlFixSann )
@@ -3794,10 +3748,10 @@ function
 [1] 0
 > returnMessage( mlFixSann )
 [1] "successful convergence "
-> round( vcov( mlFixSann ), 4 )
-      mu  sigma
-mu     0 0.0000
-sigma  0 0.0167
+> round( vcov( mlFixSann ), 3 )
+      mu sigma
+mu     0 0.000
+sigma  0 0.017
 > logLik( summary( mlFixSann ) )
 [1] -202.1
 > all.equal( mlFixBfgs[ -c(4,9,10) ], mlFixSann[ -c(4,9,10) ], 
@@ -3805,7 +3759,7 @@ sigma  0 0.0167
 [1] TRUE
 > mlIndFixSann <- maxLik( llfInd, start = startValFix, fixed = isFixed,
 +    method = "SANN" )
-> all.equal( mlFixSann[ ], mlIndFixSann[ -12 ], tolerance = 1e-3 )
+> all.equal( mlFixSann[ ], mlIndFixSann[ -12 ], tolerance = 1e-2 )
 [1] TRUE
 > round( mlIndFixSann[[ 12 ]], 3 )
            mu  sigma
@@ -3915,7 +3869,7 @@ sigma  0 0.0167
 > # with analytical gradients
 > mlgFixSann <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
 +    method = "SANN" )
-> summary( mlgFixSann )
+> print( summary( mlgFixSann ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
@@ -3924,8 +3878,8 @@ Log-Likelihood: -202.1
 1  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.000      0.000      NA      NA    
-sigma    1.825      0.129    14.1  <2e-16 ***
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
@@ -4071,7 +4025,7 @@ BFGS maximisation, 130 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 (2 free parameter(s))
 Estimate(s): 0.8197 1.68 
-> summary( mlBfgsInEq )
+> print( summary( mlBfgsInEq ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BFGS maximisation, 130 iterations
@@ -4080,8 +4034,8 @@ Log-Likelihood: -204.5
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.820      0.174    4.71 2.5e-06 ***
-sigma    1.680      0.107   15.69 < 2e-16 ***
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -4100,10 +4054,10 @@ Constrained optimization based on constrOptim
 > condiNumber( mlBfgsInEq )
 mu 	 1 
 sigma 	 3.611 
-> round( hessian( mlBfgsInEq ), 2 )
-          mu  sigma
-mu    -35.44 -15.23
-sigma -15.23 -93.71
+> round( hessian( mlBfgsInEq ), 1 )
+         mu sigma
+mu    -35.4 -15.2
+sigma -15.2 -93.7
 > logLik( mlBfgsInEq )
 [1] -204.5
 > maximType( mlBfgsInEq )
@@ -4117,15 +4071,15 @@ function
 [1] 0
 > returnMessage( mlBfgsInEq )
 [1] "successful convergence "
-> round( vcov( mlBfgsInEq ), 4 )
-           mu   sigma
-mu     0.0303 -0.0049
-sigma -0.0049  0.0115
+> round( vcov( mlBfgsInEq ), 3 )
+          mu  sigma
+mu     0.030 -0.005
+sigma -0.005  0.011
 > logLik( summary( mlBfgsInEq ) )
 [1] -204.5
 > mlBfgsInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
 +    method = "BFGS" )
-> summary( mlBfgsInEqInd )
+> print( summary( mlBfgsInEqInd ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BFGS maximisation, 130 iterations
@@ -4134,8 +4088,8 @@ Log-Likelihood: -204.5
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.820      0.174    4.71 2.5e-06 ***
-sigma    1.680      0.107   15.69 < 2e-16 ***
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -4380,7 +4334,7 @@ Nelder-Mead maximisation, 103 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 (2 free parameter(s))
 Estimate(s): 0.8197 1.68 
-> summary( mlNmInEq )
+> print( summary( mlNmInEq ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Nelder-Mead maximisation, 103 iterations
@@ -4389,8 +4343,8 @@ Log-Likelihood: -204.5
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.820      0.174    4.71 2.5e-06 ***
-sigma    1.680      0.107   15.68 < 2e-16 ***
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -4409,10 +4363,10 @@ Constrained optimization based on constrOptim
 > condiNumber( mlNmInEq )
 mu 	 1 
 sigma 	 3.61 
-> round( hessian( mlNmInEq ), 2 )
-          mu  sigma
-mu    -35.44 -15.23
-sigma -15.23 -93.68
+> round( hessian( mlNmInEq ), 1 )
+         mu sigma
+mu    -35.4 -15.2
+sigma -15.2 -93.7
 > logLik( mlNmInEq )
 [1] -204.5
 > maximType( mlNmInEq )
@@ -4426,17 +4380,17 @@ function
 [1] 0
 > returnMessage( mlNmInEq )
 [1] "successful convergence "
-> round( vcov( mlNmInEq ), 4 )
-           mu   sigma
-mu     0.0303 -0.0049
-sigma -0.0049  0.0115
+> round( vcov( mlNmInEq ), 3 )
+          mu  sigma
+mu     0.030 -0.005
+sigma -0.005  0.011
 > logLik( summary( mlNmInEq ) )
 [1] -204.5
 > all.equal( mlBfgsInEq[-c(9,10,11)], mlNmInEq[-c(9,10,11)], tolerance = 1e-3 )
 [1] TRUE
 > mlNmInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
 +    method = "NM" )
-> summary( mlNmInEqInd )
+> print( summary( mlNmInEqInd ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Nelder-Mead maximisation, 103 iterations
@@ -4445,8 +4399,8 @@ Log-Likelihood: -204.5
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.820      0.174    4.71 2.5e-06 ***
-sigma    1.680      0.107   15.69 < 2e-16 ***
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -4582,7 +4536,7 @@ SANN maximisation, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 (2 free parameter(s))
 Estimate(s): 0.8297 1.67 
-> summary( mlSannInEq )
+> print( summary( mlSannInEq ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
@@ -4591,8 +4545,8 @@ Log-Likelihood: -204.5
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.830      0.173     4.8 1.6e-06 ***
-sigma    1.670      0.106    15.8 < 2e-16 ***
+mu        0.83       0.17     4.8   2e-06 ***
+sigma     1.67       0.11    15.8  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -4611,10 +4565,10 @@ Constrained optimization based on constrOptim
 > condiNumber( mlSannInEq )
 mu 	 1 
 sigma 	 3.601 
-> round( hessian( mlSannInEq ), 2 )
-          mu  sigma
-mu    -35.84 -15.06
-sigma -15.06 -96.12
+> round( hessian( mlSannInEq ), 1 )
+         mu sigma
+mu    -35.8 -15.1
+sigma -15.1 -96.1
 > logLik( mlSannInEq )
 [1] -204.5
 > maximType( mlSannInEq )
@@ -4628,10 +4582,10 @@ function
 [1] 0
 > returnMessage( mlSannInEq )
 [1] "successful convergence "
-> round( vcov( mlSannInEq ), 4 )
-           mu   sigma
-mu     0.0299 -0.0047
-sigma -0.0047  0.0111
+> round( vcov( mlSannInEq ), 3 )
+          mu  sigma
+mu     0.030 -0.005
+sigma -0.005  0.011
 > logLik( summary( mlSannInEq ) )
 [1] -204.5
 > all.equal( mlBfgsInEq[-c(2,3,4,9,10,11)], mlSannInEq[-c(2,3,4,9,10,11)], 
@@ -4649,7 +4603,7 @@ sigma -0.0047  0.0111
 > # with a user-specified function to generate a new candidate point
 > mlSannInEqCand <- maxLik( llf, start = startVal, constraints = inEq,
 +    method = "SANN", cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
-> summary( mlSannInEqCand )
+> print( summary( mlSannInEqCand ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
@@ -4658,8 +4612,8 @@ Log-Likelihood: -204.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.812      0.175    4.65 3.4e-06 ***
-sigma    1.682      0.108   15.65 < 2e-16 ***
+mu        0.81       0.17     4.6   3e-06 ***
+sigma     1.68       0.11    15.6  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -4683,7 +4637,7 @@ Newton-Raphson maximisation, 2 iterations
 Return code 1: gradient close to zero
 Log-Likelihood: -204.5 (2 free parameter(s))
 Estimate(s): 0.8198 1.68 
-> summary( mlCon )
+> print( summary( mlCon ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 2 iterations
@@ -4692,8 +4646,8 @@ Log-Likelihood: -204.5
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.820      0.174    4.71 2.5e-06 ***
-sigma    1.680      0.107   15.68 < 2e-16 ***
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -4714,10 +4668,10 @@ penalty close to zero
 > condiNumber( mlCon )
 mu 	 1 
 sigma 	 3.614 
-> round( hessian( mlCon ), 2 )
-          mu  sigma
-mu    -35.44 -15.26
-sigma -15.26 -93.71
+> round( hessian( mlCon ), 1 )
+         mu sigma
+mu    -35.4 -15.3
+sigma -15.3 -93.7
 > logLik( mlCon )
 [1] -204.5
 > maximType( mlCon )
@@ -4730,14 +4684,14 @@ sigma -15.26 -93.71
 [1] 1
 > returnMessage( mlCon )
 [1] "gradient close to zero"
-> round( vcov( mlCon ), 4 )
-           mu   sigma
-mu     0.0303 -0.0049
-sigma -0.0049  0.0115
+> round( vcov( mlCon ), 3 )
+          mu  sigma
+mu     0.030 -0.005
+sigma -0.005  0.011
 > logLik( summary( mlCon ) )
 [1] -204.5
 > mlConInd <- maxLik( llfInd, start = startVal, constraints = eqCon )
-> summary( mlConInd )
+> print( summary( mlConInd ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 2 iterations
@@ -4746,8 +4700,8 @@ Log-Likelihood: -204.5
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.820      0.174    4.71 2.5e-06 ***
-sigma    1.680      0.107   15.68 < 2e-16 ***
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -4868,7 +4822,7 @@ $gradientObs
 > 
 > # with analytical gradients
 > mlgCon <- maxLik( llf, gf, start = startVal, constraints = eqCon )
-> summary( mlgCon )
+> print( summary( mlgCon ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 1 iterations
@@ -4879,8 +4833,8 @@ Log-Likelihood: -204.5
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.842      0.172    4.88   1e-06 ***
-sigma    1.670      0.105   15.84  <2e-16 ***
+mu        0.84       0.17     4.9   1e-06 ***
+sigma     1.67       0.11    15.8  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -5047,7 +5001,7 @@ BHHH maximisation, 8 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -204.5 (2 free parameter(s))
 Estimate(s): 0.8199 1.68 
-> summary( mlBhhhCon )
+> print( summary( mlBhhhCon ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 8 iterations
@@ -5056,8 +5010,8 @@ Log-Likelihood: -204.5
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.820      0.174    4.71 2.5e-06 ***
-sigma    1.680      0.107   15.69 < 2e-16 ***
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -5078,10 +5032,10 @@ penalty close to zero
 > condiNumber( mlBhhhCon )
 mu 	 1 
 sigma 	 3.611 
-> round( hessian( mlBhhhCon ), 2 )
-          mu  sigma
-mu    -35.44 -15.23
-sigma -15.23 -93.71
+> round( hessian( mlBhhhCon ), 1 )
+         mu sigma
+mu    -35.4 -15.2
+sigma -15.2 -93.7
 > logLik( mlBhhhCon )
 [1] -204.5
 > maximType( mlBhhhCon )
@@ -5094,15 +5048,15 @@ sigma -15.23 -93.71
 [1] 2
 > returnMessage( mlBhhhCon )
 [1] "successive function values within tolerance limit"
-> round( vcov( mlBhhhCon ), 4 )
-           mu   sigma
-mu     0.0303 -0.0049
-sigma -0.0049  0.0115
+> round( vcov( mlBhhhCon ), 3 )
+          mu  sigma
+mu     0.030 -0.005
+sigma -0.005  0.011
 > logLik( summary( mlBhhhCon ) )
 [1] -204.5
 > all.equal( mlCon[ -c( 5, 6, 7, 9, 10 ) ], mlBhhhCon[ -c( 5, 6, 7, 9, 10, 11 ) ],
-+    tolerance = 1e-3 )
-[1] "Component \"hessian\": Mean relative difference: 0.001862"
++    tolerance = 5e-3 )
+[1] TRUE
 > mlBhhhCon[11]
 $gradientObs
               mu    sigma
@@ -5213,7 +5167,7 @@ $gradientObs
 > # with analytical gradients
 > mlgBhhhCon <- maxLik( llf, gfInd, start = startVal, constraints = eqCon,
 +    method = "BHHH" )
-> summary( mlgBhhhCon )
+> print( summary( mlgBhhhCon ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 7 iterations
@@ -5224,8 +5178,8 @@ Log-Likelihood: -204.5
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.834      0.172    4.84 1.3e-06 ***
-sigma    1.666      0.105   15.88 < 2e-16 ***
+mu        0.83       0.17     4.8   1e-06 ***
+sigma     1.67       0.10    15.9  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -5249,7 +5203,7 @@ penalty close to zero
 > # with analytical gradients as attribute
 > mlGBhhhCon <- maxLik( llfGradInd, start = startVal, constraints = eqCon,
 +    method = "BHHH" )
-> summary( mlGBhhhCon )
+> print( summary( mlGBhhhCon ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 7 iterations
@@ -5260,8 +5214,8 @@ Log-Likelihood: -204.5
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.834      0.172    4.84 1.3e-06 ***
-sigma    1.666      0.105   15.88 < 2e-16 ***
+mu        0.83       0.17     4.8   1e-06 ***
+sigma     1.67       0.10    15.9  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -5304,7 +5258,7 @@ BFGS maximisation, 31 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 (2 free parameter(s))
 Estimate(s): 0.8198 1.68 
-> summary( mlBfgsCon )
+> print( summary( mlBfgsCon ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BFGS maximisation, 31 iterations
@@ -5313,8 +5267,8 @@ Log-Likelihood: -204.5
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.820      0.174    4.71 2.5e-06 ***
-sigma    1.680      0.107   15.68 < 2e-16 ***
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -5335,10 +5289,10 @@ penalty close to zero
 > condiNumber( mlBfgsCon )
 mu 	 1 
 sigma 	 3.609 
-> round( hessian( mlBfgsCon ), 2 )
-          mu  sigma
-mu    -35.41 -15.21
-sigma -15.21 -93.65
+> round( hessian( mlBfgsCon ), 1 )
+         mu sigma
+mu    -35.4 -15.2
+sigma -15.2 -93.6
 > logLik( mlBfgsCon )
 [1] -204.5
 > maximType( mlBfgsCon )
@@ -5352,10 +5306,10 @@ function
 [1] 0
 > returnMessage( mlBfgsCon )
 [1] "successful convergence "
-> round( vcov( mlBfgsCon ), 4 )
-           mu   sigma
-mu     0.0304 -0.0049
-sigma -0.0049  0.0115
+> round( vcov( mlBfgsCon ), 3 )
+          mu  sigma
+mu     0.030 -0.005
+sigma -0.005  0.011
 > logLik( summary( mlBfgsCon ) )
 [1] -204.5
 > all.equal( mlBfgsCon[ -c( 4, 5, 6, 9, 10 ) ], mlCon[ -c( 4, 5, 6, 9, 10 ) ],
@@ -5363,7 +5317,7 @@ sigma -0.0049  0.0115
 [1] TRUE
 > mlBfgsConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
 +    method = "BFGS" )
-> summary( mlBfgsConInd )
+> print( summary( mlBfgsConInd ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BFGS maximisation, 31 iterations
@@ -5372,8 +5326,8 @@ Log-Likelihood: -204.5
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.820      0.174     4.7 2.5e-06 ***
-sigma    1.680      0.107    15.7 < 2e-16 ***
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -5383,7 +5337,7 @@ Return code: 1
 penalty close to zero 
 10  outer iterations, barrier value 2.07e-10 
 --------------------------------------------
-> all.equal( mlBfgsCon[-4], mlBfgsConInd[-c(4,12)], tolerance = 1e-3 )
+> all.equal( mlBfgsCon[-c(4,9)], mlBfgsConInd[-c(4,9,12)], tolerance = 1e-3 )
 [1] TRUE
 > mlBfgsConInd[12]
 $gradientObs
@@ -5495,7 +5449,7 @@ $gradientObs
 > # with analytical gradients
 > mlgBfgsCon <- maxLik( llf, gf, start = startVal, constraints = eqCon,
 +    method = "BFGS" )
-> summary( mlgBfgsCon )
+> print( summary( mlgBfgsCon ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BFGS maximisation, 30 iterations
@@ -5504,8 +5458,8 @@ Log-Likelihood: -204.9
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.814      0.173     4.7 2.7e-06 ***
-sigma    1.670      0.106    15.8 < 2e-16 ***
+mu        0.81       0.17     4.7   3e-06 ***
+sigma     1.67       0.11    15.8  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -5640,7 +5594,7 @@ Nelder-Mead maximisation, 57 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 (2 free parameter(s))
 Estimate(s): 0.8197 1.68 
-> summary( mlNmCon )
+> print( summary( mlNmCon ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Nelder-Mead maximisation, 57 iterations
@@ -5649,8 +5603,8 @@ Log-Likelihood: -204.5
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.820      0.174     4.7 2.5e-06 ***
-sigma    1.680      0.107    15.7 < 2e-16 ***
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -5671,10 +5625,10 @@ penalty close to zero
 > condiNumber( mlNmCon )
 mu 	 1 
 sigma 	 3.609 
-> round( hessian( mlNmCon ), 2 )
-          mu  sigma
-mu    -35.41 -15.21
-sigma -15.21 -93.65
+> round( hessian( mlNmCon ), 1 )
+         mu sigma
+mu    -35.4 -15.2
+sigma -15.2 -93.6
 > logLik( mlNmCon )
 [1] -204.5
 > maximType( mlNmCon )
@@ -5688,10 +5642,10 @@ function
 [1] 0
 > returnMessage( mlNmCon )
 [1] "successful convergence "
-> round( vcov( mlNmCon ), 4 )
-           mu   sigma
-mu     0.0304 -0.0049
-sigma -0.0049  0.0115
+> round( vcov( mlNmCon ), 3 )
+          mu  sigma
+mu     0.030 -0.005
+sigma -0.005  0.011
 > logLik( summary( mlNmCon ) )
 [1] -204.5
 > all.equal( mlNmCon[ -c( 4, 5, 6, 9, 10 ) ], mlCon[ -c( 4, 5, 6, 9, 10 ) ],
@@ -5699,7 +5653,7 @@ sigma -0.0049  0.0115
 [1] TRUE
 > mlNmConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
 +    method = "NM", SUMTTol=0)
-> summary( mlNmConInd )
+> print( summary( mlNmConInd ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Nelder-Mead maximisation, 57 iterations
@@ -5708,8 +5662,8 @@ Log-Likelihood: -204.5
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.820      0.174     4.7 2.5e-06 ***
-sigma    1.680      0.107    15.7 < 2e-16 ***
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -5957,7 +5911,7 @@ SANN maximisation, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 (2 free parameter(s))
 Estimate(s): 0.816 1.684 
-> summary( mlSannCon )
+> print( summary( mlSannCon ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
@@ -5966,8 +5920,8 @@ Log-Likelihood: -204.5
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       0.816      0.175    4.67   3e-06 ***
-sigma    1.684      0.108   15.63  <2e-16 ***
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.6  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -5988,10 +5942,10 @@ penalty close to zero
 > condiNumber( mlSannCon )
 mu 	 1 
 sigma 	 3.616 
-> round( hessian( mlSannCon ), 2 )
-          mu  sigma
-mu    -35.27 -15.29
-sigma -15.29 -92.80
+> round( hessian( mlSannCon ), 1 )
+         mu sigma
+mu    -35.3 -15.3
+sigma -15.3 -92.8
 > logLik( mlSannCon )
 [1] -204.5
 > maximType( mlSannCon )
@@ -6005,10 +5959,10 @@ function
 [1] 0
 > returnMessage( mlSannCon )
 [1] "successful convergence "
-> round( vcov( mlSannCon ), 4 )
-           mu   sigma
-mu     0.0305 -0.0050
-sigma -0.0050  0.0116
+> round( vcov( mlSannCon ), 3 )
+          mu  sigma
+mu     0.031 -0.005
+sigma -0.005  0.012
 > logLik( summary( mlSannCon ) )
 [1] -204.5
 > all.equal( mlSannCon[ -c(2,3,4,5,6,9,10,11) ], mlBfgsCon[ -c(2,3,4,5,6,9,10,11) ],
@@ -6030,7 +5984,7 @@ sigma -0.0050  0.0116
 Warning message:
 In (function (fn, grad = NULL, hess = NULL, start, maxRoutine, constraints,  :
   problem in imposing equality constraints: the constraints are not satisfied (barrier value = 0.254780368286163). Try setting 'SUMTTol' to 0
-> summary( mlSannConCand )
+> print( summary( mlSannConCand ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 SANN maximisation, 10000 iterations
@@ -6039,8 +5993,8 @@ Log-Likelihood: -201.6
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu       1.183      0.182     6.5 8.2e-11 ***
-sigma    1.822      0.129    14.1 < 2e-16 ***
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -6286,130 +6240,130 @@ Error in estfun.maxLik(ml) :
 > try( bread( ml ) )
 Error in nObs.maxLik(x) : 
   cannot return the number of observations: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
-> round( bread( mlInd ), 3 )
-         mu sigma
-mu    3.301 0.000
-sigma 0.000 1.649
-> round( bread( mlgInd ), 3 )
+> round( bread( mlInd ), 2 )
        mu sigma
 mu    3.3  0.00
 sigma 0.0  1.65
-> round( bread( mlBHHH ), 3 )
-          mu  sigma
-mu     3.306 -0.109
-sigma -0.109  1.798
-> round( bread( mlgBHHH ), 3 )
-          mu  sigma
-mu     3.306 -0.109
-sigma -0.109  1.798
-> round( bread( mlIndBFGS ), 3 )
-         mu sigma
-mu    3.301 0.000
-sigma 0.000 1.649
-> round( bread( mlgIndBFGS ), 3 )
+> round( bread( mlgInd ), 2 )
        mu sigma
 mu    3.3  0.00
 sigma 0.0  1.65
-> round( bread( mlIndNM ), 3 )
-          mu  sigma
-mu     3.298 -0.002
-sigma -0.002  1.650
-> round( bread( mlgIndNM ), 3 )
+> round( bread( mlBHHH ), 2 )
+         mu sigma
+mu     3.31 -0.11
+sigma -0.11  1.80
+> round( bread( mlgBHHH ), 2 )
+         mu sigma
+mu     3.31 -0.11
+sigma -0.11  1.80
+> round( bread( mlIndBFGS ), 2 )
        mu sigma
-mu    3.3 0.000
-sigma 0.0 1.651
-> round( bread( mlIndSANN ), 3 )
+mu    3.3  0.00
+sigma 0.0  1.65
+> round( bread( mlgIndBFGS ), 2 )
+       mu sigma
+mu    3.3  0.00
+sigma 0.0  1.65
+> round( bread( mlIndNM ), 2 )
+       mu sigma
+mu    3.3  0.00
+sigma 0.0  1.65
+> round( bread( mlgIndNM ), 2 )
+       mu sigma
+mu    3.3  0.00
+sigma 0.0  1.65
+> round( bread( mlIndSANN ), 2 )
+       mu sigma
+mu    3.3  0.00
+sigma 0.0  1.65
+> round( bread( mlgIndSANN ), 2 )
+       mu sigma
+mu    3.3  0.00
+sigma 0.0  1.65
+> round( bread( mlIndFix ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.67
+> round( bread( mlgIndFix ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.67
+> round( bread( mlFixBHHH ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.79
+> round( bread( mlgFixBHHH ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.79
+> round( bread( mlIndFixBfgs ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.67
+> round( bread( mlgIndFixBfgs ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.67
+> round( bread( mlIndFixNm ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.67
+> round( bread( mlgIndFixNm ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.67
+> round( bread( mlIndFixSann ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.67
+> round( bread( mlgIndFixSann ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.67
+> round( bread( mlBfgsInEqInd ), 2 )
          mu sigma
-mu    3.298 0.000
-sigma 0.000 1.649
-> round( bread( mlgIndSANN ), 3 )
+mu     3.04 -0.49
+sigma -0.49  1.15
+> round( bread( mlgBfgsInEqInd ), 2 )
          mu sigma
-mu    3.300 0.002
-sigma 0.002 1.650
-> round( bread( mlIndFix ), 3 )
-      mu sigma
-mu     0 0.000
-sigma  0 1.667
-> round( bread( mlgIndFix ), 3 )
-      mu sigma
-mu     0 0.000
-sigma  0 1.666
-> round( bread( mlFixBHHH ), 3 )
-      mu sigma
-mu     0 0.000
-sigma  0 1.786
-> round( bread( mlgFixBHHH ), 3 )
-      mu sigma
-mu     0 0.000
-sigma  0 1.786
-> round( bread( mlIndFixBfgs ), 3 )
-      mu sigma
-mu     0 0.000
-sigma  0 1.667
-> round( bread( mlgIndFixBfgs ), 3 )
-      mu sigma
-mu     0 0.000
-sigma  0 1.666
-> round( bread( mlIndFixNm ), 3 )
-      mu sigma
-mu     0 0.000
-sigma  0 1.665
-> round( bread( mlgIndFixNm ), 3 )
-      mu sigma
-mu     0 0.000
-sigma  0 1.666
-> round( bread( mlIndFixSann ), 3 )
-      mu sigma
-mu     0 0.000
-sigma  0 1.667
-> round( bread( mlgIndFixSann ), 3 )
-      mu sigma
-mu     0 0.000
-sigma  0 1.666
-> round( bread( mlBfgsInEqInd ), 3 )
-          mu  sigma
-mu     3.035 -0.493
-sigma -0.493  1.147
-> round( bread( mlgBfgsInEqInd ), 3 )
-          mu  sigma
-mu     3.035 -0.493
-sigma -0.493  1.148
-> round( bread( mlNmInEqInd ), 3 )
-          mu  sigma
-mu     3.034 -0.494
-sigma -0.494  1.147
-> round( bread( mlConInd ), 3 )
-          mu  sigma
-mu     3.034 -0.493
-sigma -0.493  1.148
-> round( bread( mlgConInd ), 3 )
-          mu  sigma
-mu     2.971 -0.451
-sigma -0.451  1.111
-> round( bread( mlBhhhCon ), 3 )
-          mu  sigma
-mu     3.033 -0.493
-sigma -0.493  1.147
-> round( bread( mlgBhhhCon ), 3 )
-          mu  sigma
-mu     2.967 -0.458
-sigma -0.458  1.101
-> round( bread( mlBfgsConInd ), 3 )
-          mu  sigma
-mu     3.036 -0.494
-sigma -0.494  1.148
-> round( bread( mlgBfgsConInd ), 3 )
-          mu  sigma
-mu     3.005 -0.490
-sigma -0.490  1.116
-> round( bread( mlNmConInd ), 3 )
-          mu  sigma
-mu     3.036 -0.494
-sigma -0.494  1.147
-> round( bread( mlgNmConInd ), 3 )
-          mu  sigma
-mu     3.036 -0.493
-sigma -0.493  1.148
+mu     3.04 -0.49
+sigma -0.49  1.15
+> round( bread( mlNmInEqInd ), 2 )
+         mu sigma
+mu     3.03 -0.49
+sigma -0.49  1.15
+> round( bread( mlConInd ), 2 )
+         mu sigma
+mu     3.03 -0.49
+sigma -0.49  1.15
+> round( bread( mlgConInd ), 2 )
+         mu sigma
+mu     2.97 -0.45
+sigma -0.45  1.11
+> round( bread( mlBhhhCon ), 2 )
+         mu sigma
+mu     3.03 -0.49
+sigma -0.49  1.15
+> round( bread( mlgBhhhCon ), 2 )
+         mu sigma
+mu     2.97 -0.46
+sigma -0.46  1.10
+> round( bread( mlBfgsConInd ), 2 )
+         mu sigma
+mu     3.04 -0.49
+sigma -0.49  1.15
+> round( bread( mlgBfgsConInd ), 2 )
+         mu sigma
+mu     3.01 -0.49
+sigma -0.49  1.12
+> round( bread( mlNmConInd ), 2 )
+         mu sigma
+mu     3.04 -0.49
+sigma -0.49  1.15
+> round( bread( mlgNmConInd ), 2 )
+         mu sigma
+mu     3.04 -0.49
+sigma -0.49  1.15
 > 
 > 
 > ## test for method "sandwich"
@@ -6417,54 +6371,54 @@ sigma -0.493  1.148
 Error in nObs.maxLik(x) : 
   cannot return the number of observations: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
 > printSandwich <- function( x ) {
-+    print( round( sandwich( x ), 3 ) )
++    print( round( sandwich( x ), 2 ) )
 +    tmp <- all.equal( sandwich( x ), vcov( x ) )
 +    if( isTRUE( tmp ) ) {
 +       print( tmp )
 +    }
 + }
 > printSandwich( mlInd )
-         mu sigma
-mu    0.033 0.001
-sigma 0.001 0.015
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
 > printSandwich( mlgInd )
-         mu sigma
-mu    0.033 0.001
-sigma 0.001 0.015
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
 > printSandwich( mlBHHH )
-          mu  sigma
-mu     0.033 -0.001
-sigma -0.001  0.018
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
 [1] TRUE
 > printSandwich( mlgBHHH )
-          mu  sigma
-mu     0.033 -0.001
-sigma -0.001  0.018
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
 [1] TRUE
 > printSandwich( mlIndBFGS )
-         mu sigma
-mu    0.033 0.001
-sigma 0.001 0.015
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
 > printSandwich( mlgIndBFGS )
-         mu sigma
-mu    0.033 0.001
-sigma 0.001 0.015
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
 > printSandwich( mlIndNM )
-         mu sigma
-mu    0.033 0.001
-sigma 0.001 0.015
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
 > printSandwich( mlgIndNM )
-         mu sigma
-mu    0.033 0.001
-sigma 0.001 0.015
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
 > printSandwich( mlIndSANN )
-         mu sigma
-mu    0.033 0.001
-sigma 0.001 0.015
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
 > printSandwich( mlgIndSANN )
-         mu sigma
-mu    0.033 0.001
-sigma 0.001 0.015
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
 > printSandwich( mlIndFix )
       mu sigma
 mu    NA    NA
@@ -6483,73 +6437,73 @@ mu    NA    NA
 sigma NA    NA
 > printSandwich( mlIndFixBfgs )
       mu sigma
-mu     0 0.000
-sigma  0 0.016
+mu     0  0.00
+sigma  0  0.02
 > printSandwich( mlgIndFixBfgs )
       mu sigma
-mu     0 0.000
-sigma  0 0.016
+mu     0  0.00
+sigma  0  0.02
 > printSandwich( mlIndFixNm )
       mu sigma
-mu     0 0.000
-sigma  0 0.016
+mu     0  0.00
+sigma  0  0.02
 > printSandwich( mlgIndFixNm )
       mu sigma
-mu     0 0.000
-sigma  0 0.016
+mu     0  0.00
+sigma  0  0.02
 > printSandwich( mlIndFixSann )
       mu sigma
-mu     0 0.000
-sigma  0 0.016
+mu     0  0.00
+sigma  0  0.02
 > printSandwich( mlgIndFixSann )
       mu sigma
-mu     0 0.000
-sigma  0 0.016
+mu     0  0.00
+sigma  0  0.02
 > printSandwich( mlBfgsInEqInd )
-          mu  sigma
-mu     0.035 -0.004
-sigma -0.004  0.012
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
 > printSandwich( mlgBfgsInEqInd )
-          mu  sigma
-mu     0.035 -0.004
-sigma -0.004  0.012
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
 > printSandwich( mlNmInEqInd )
-          mu  sigma
-mu     0.035 -0.004
-sigma -0.004  0.012
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
 > printSandwich( mlConInd )
-          mu  sigma
-mu     0.035 -0.004
-sigma -0.004  0.012
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
 > printSandwich( mlgConInd )
-          mu  sigma
-mu     0.035 -0.003
-sigma -0.003  0.011
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
 > printSandwich( mlBhhhCon )
-          mu  sigma
-mu     0.035 -0.004
-sigma -0.004  0.012
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
 > printSandwich( mlgBhhhCon )
-          mu  sigma
-mu     0.035 -0.004
-sigma -0.004  0.011
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
 > printSandwich( mlBfgsConInd )
-          mu  sigma
-mu     0.035 -0.004
-sigma -0.004  0.012
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
 > printSandwich( mlgBfgsConInd )
-          mu  sigma
-mu     0.036 -0.004
-sigma -0.004  0.012
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
 > printSandwich( mlNmConInd )
-          mu  sigma
-mu     0.035 -0.004
-sigma -0.004  0.012
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
 > printSandwich( mlgNmConInd )
-          mu  sigma
-mu     0.035 -0.004
-sigma -0.004  0.012
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
 > 
 > proc.time()
    user  system elapsed 
- 31.218   0.207  31.451 
+  28.27    0.15   28.44 
