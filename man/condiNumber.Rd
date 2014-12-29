@@ -24,7 +24,10 @@ print.level=1, ...)
     unit norm}
   \item{print.level}{numeric, positive value will output the numbers
     during the calculations.  Useful for interactive work.}
-  \item{\dots}{other arguments to different methods} 
+  \item{\dots}{Further arguments to \code{condiNumber.default}
+      are currently ignored;
+      further arguments to \code{condiNumber.maxLik}
+      are passed to \code{condiNumber.default}.} 
 }
 \details{
   Statistical model often fail because of strong correlation between

@@ -29,4 +29,5 @@ condiNumber.default <- function(x, exact=FALSE, norm=FALSE, print.level=1, ...) 
 }
 
 condiNumber.maxLik <- function(x, ...)
-    condiNumber.default(hessian(x, ...)[activePar(x), activePar(x),drop=FALSE])
+    condiNumber.default( x = hessian(x)[activePar(x), activePar(x),drop=FALSE],
+       ... )
