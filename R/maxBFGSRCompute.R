@@ -77,7 +77,7 @@ maxBFGSRCompute <- function(fn,
       returnHessian = FALSE, ... ) )
             # sum of log-likelihood value but not sum of gradients
    if (print.level > 0)
-    cat(paste("Initial value of the function :", as.numeric(x), "\n"))
+    cat( "Initial value of the function :", x, "\n" )
    if(is.na(x)) {
       result <- list(code=100, message=maximMessage("100"),
                      iterations=0,

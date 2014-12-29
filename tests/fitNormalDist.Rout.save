@@ -1095,7 +1095,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > 
 > # with analytical gradients
 > mlgBFGSYC <- maxLik( llf, gf, start = startVal, method = "BFGSR" , print.level=1)
-Initial value of the function : -326.589781090132 
+Initial value of the function : -326.6 
 Iteration  1 
 step = 1, lnL = -325.1, chi2 = 1.504, function increment = 1.494
 Iteration  2 
@@ -1258,7 +1258,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > 
 > # with analytical gradients as attribute
 > mlGBFGSYC <- maxLik( llfGrad, start = startVal, method = "BFGSR" , print.level=1)
-Initial value of the function : -326.589781090132 
+Initial value of the function : -326.6 
 Iteration  1 
 step = 1, lnL = -325.1, chi2 = 1.504, function increment = 1.494
 Iteration  2 
@@ -6506,4 +6506,4 @@ sigma 0.00  0.01
 > 
 > proc.time()
    user  system elapsed 
-  28.27    0.15   28.44 
+ 26.922   0.104  27.039 
