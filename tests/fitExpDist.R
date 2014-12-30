@@ -24,7 +24,8 @@ ml <- maxLik( loglik, start = 1 )
 print( ml )
 summary( ml )
 nObs( ml )
-print.default( ml )
+print.default( ml[ -3 ] )  # no gradient
+class( ml )
 # log-likelihood value summed over all observations
 mlSum <- maxLik( loglikSum, start = 1 )
 all.equal( mlSum[], ml[-11], tolerance = 1e-3 )
@@ -48,8 +49,10 @@ mlBhhh <- maxLik( loglik, start = 1, method = "BHHH" )
 print( mlBhhh )
 summary( mlBhhh )
 nObs( mlBhhh )
-all.equal( mlBhhh[ -c( 5, 6, 10 ) ], ml[ -c( 5, 6, 10 ) ], 
+all.equal( mlBhhh[ -c( 4, 5, 6, 10 ) ], ml[ -c( 4, 5, 6, 10 ) ], 
    check.attributes = FALSE, tolerance = 1e-3 )
+all.equal( mlBhhh[ 4 ], ml[ 4 ],  # hessian
+   check.attributes = FALSE, tolerance = 5e-2 )
 
 # Estimate with analytic gradient
 mlgBhhh <- maxLik( loglik, gradlik, start = 1, method = "BHHH" )
@@ -153,23 +156,23 @@ estfun( mlgSann )[ 1:5, , drop = FALSE ]
 
 ## test for method "bread"
 try( bread( mlSum ) )
-bread( ml )
-bread( mlg )
-bread( mlBhhh )
-bread( mlgBhhh )
-bread( mlBfgs )
-bread( mlgBfgs )
-bread( mlNm )
-bread( mlgNm )
-bread( mlSann )
-bread( mlgSann )
+round( bread( ml ), 2 )
+round( bread( mlg ), 2 )
+round( bread( mlBhhh ), 2 )
+round( bread( mlgBhhh ), 2 )
+round( bread( mlBfgs ), 2 )
+round( bread( mlgBfgs ), 2 )
+round( bread( mlNm ), 2 )
+round( bread( mlgNm ), 2 )
+round( bread( mlSann ), 2 )
+round( bread( mlgSann ), 2 )
 
 
 ## test for method "sandwich"
 try( sandwich( mlSum ) )
 printSandwich <- function( x ) {
-   print( sandwich( x ) )
-   print( all.equal( sandwich( x ), vcov( x ) ) )
+   print( round( sandwich( x ), 4 ) )
+   print( round( sum( abs( sandwich( x ) - vcov( x ) ) ), 4 ) )
 }
 printSandwich( ml )
 printSandwich( mlg )
