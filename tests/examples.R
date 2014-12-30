@@ -5,7 +5,7 @@ printRounded <- function( x ) {
    for( i in names( x ) ) {
       cat ( "$", i, "\n", sep = "" )
       if( is.numeric( x[[i]] ) ) {
-         print( round( x[[i]], 4 ) )
+         print( round( x[[i]], 3 ) )
       } else {
          print( x[[i]] )
       }
@@ -94,7 +94,8 @@ n <- rpois(100, 3)
 loglik <- function(l) n*log(l) - l - lfactorial(n)
 # we use numeric gradient
 a <- maxBFGS(loglik, start=1)
-print( a )
+print( a[-3] )
+class( a )
 summary( a )
 # you would probably prefer mean(n) instead of that ;-)
 # Note also that maxLik is better suited for Maximum Likelihood
@@ -322,11 +323,11 @@ t <- rexp(100, 2)
 a <- maxLik(loglik, start=1, print.level=2)
 printRounded( a )
 print( a )
-vcov(a)
+round( vcov( a ), 3 )
 ## Estimate with analytic gradient and hessian
 a <- maxLik(loglik, gradlik, hesslik, start=1)
 printRounded( a )
 print( a )
-vcov(a)
+round( vcov( a ), 3 )
 print(stdEr(a))
                            # test single stdEr

@@ -69,20 +69,20 @@ a <- maxLik(logLikMix, grad=gradLikMix, hess=hessLikMix,
             start=start,
             constraints=list(ineqA=A, ineqB=B),
             print.level=1)
-summary(a)
+print( summary( a ), digits = 2 )
 ## No analytic gradient
 a <- maxLik(logLikMix, 
             start=start,
             constraints=list(ineqA=A, ineqB=B),
             print.level=1)
-summary(a)
+print( summary( a ), digits = 2 )
 ## No analytic gradient, BFGS
 a <- maxLik(logLikMix, 
             start=start,
             method="bfgs",
             constraints=list(ineqA=A, ineqB=B),
             print.level=1)
-summary(a)
+print( summary( a ), digits = 2 )
 ## ----
 cat("Test for equality constraints\n")
 A <- matrix(c(0, 1, 2), 1, 3)
@@ -92,13 +92,13 @@ a <- maxLik(logLikMix, grad=gradLikMix, hess=hessLikMix,
             start=start,
             constraints=list(eqA=A, eqB=B),
             print.level=1)
-summary(a)
+print( summary( a ), digits = 2 )
 ## BFGS, numeric gradient
 a <- maxLik(logLikMix, 
             start=start, method="bfgs",
             constraints=list(eqA=A, eqB=B),
             print.level=2, SUMTRho0=1)
-summary(a)
+print( summary( a ), digits = 2 )
 ## BHHH, analytic gradient (numeric does not converge?)
 try( maxLik(logLikMix, gradLikMix,
             start=start, method="bhhh",
@@ -152,55 +152,55 @@ a <- maxLik(logLikMix2,
             start=start, method="nr",
             constraints=list(eqA=A, eqB=B),
             print.level=1, SUMTRho0=1, rho=0.5)
-summary(a)
+print( summary( a ), digits = 2 )
 ## nr, numeric hessian
 a <- maxLik(logLikMix2, gradLikMix2, 
             start=start, method="nr",
             constraints=list(eqA=A, eqB=B),
             print.level=1, SUMTRho0=1, rho=0.5)
-summary(a)
+print( summary( a ), digits = 2 )
 ## nr, analytic hessian
 a <- maxLik(logLikMix2, gradLikMix2, hessLikMix2,
             start=start, method="nr",
             constraints=list(eqA=A, eqB=B),
             print.level=1, SUMTRho0=1, rho=0.5)
-summary(a)
+print( summary( a ), digits = 2 )
 ## BHHH
 a <- maxLik(logLikMix2, gradLikMix2, 
             start=start, method="bhhh",
             constraints=list(eqA=A, eqB=B),
             print.level=1, SUMTRho0=1, rho=0.5)
-summary(a)
+print( summary( a ), digits = 2 )
 ## BHHH, analytic
 a <- maxLik(logLikMix2, gradLikMix2, 
             start=start, method="bhhh",
             constraints=list(eqA=A, eqB=B),
             print.level=1, SUMTRho0=1, rho=0.5)
-summary(a)
+print( summary( a ), digits = 2 )
 ## bfgs, no analytic gradient
 a <- maxLik(logLikMix2, 
             start=start, method="bfgs",
             constraints=list(eqA=A, eqB=B),
             print.level=2, SUMTRho0=1, rho=0.5)
-summary(a)
+print( summary( a ), digits = 2 )
 ## bfgs, analytic gradient
 a <- maxLik(logLikMix2, 
             start=start, method="bfgs",
             constraints=list(eqA=A, eqB=B),
             print.level=2, SUMTRho0=1, rho=0.5)
-summary(a)
+print( summary( a ), digits = 2 )
 ## SANN, analytic gradient
 a <- maxLik(logLikMix2, gradLikMix2,
             start=start, method="SANN",
             constraints=list(eqA=A, eqB=B),
             print.level=1, SUMTRho0=1, rho=0.5)
-summary(a)
+print( summary( a ), digits = 2 )
 ## NM, numeric
 a <- maxLik(logLikMix2, 
             start=start, method="nm",
             constraints=list(eqA=A, eqB=B),
             print.level=1, SUMTRho0=1, rho=0.5)
-summary(a)
+print( summary( a ), digits = 2 )
 f <- function(theta) exp(-theta %*% theta)
 ## NR, multiple constraints
 A <- matrix(c(1, 0, 1,
@@ -229,19 +229,19 @@ a <- maxLik(logLikMix2, gradLikMix2,
             start=start, method="bfgs",
             constraints=list(ineqA=A, ineqB=B),
             rho=0.5)
-summary(a)
+print( summary( a ), digits = 2 )
 ##
 a <- maxLik(logLikMix2, 
             start=start, method="bfgs",
             constraints=list(ineqA=A, ineqB=B),
             rho=0.5)
-summary(a)
+print( summary( a ), digits = 2 )
 ##
 a <- maxLik(logLikMix2, gradLikMix2,
             start=start, method="nm",
             constraints=list(ineqA=A, ineqB=B),
             rho=0.5)
-summary(a)
+print( summary( a ), digits = 2 )
 ## ---------- test vector B for inequality  --------------
 B1 <- c(1,-2)
 a <- maxLik(logLikMix2, gradLikMix2,
