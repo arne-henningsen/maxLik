@@ -9,7 +9,14 @@ on R-Forge.
 
 * Equality constraints (SUMT) checks conformity of the matrices
 
-* coef.maxim is now exported
+* coef.maxim() is now exported
+
+* added argument "digits" to print.summary.maxLik()
+
+* added argument "digits" to condiNumber.default()
+
+* further arguments to condiNumber.maxLik() are now passed to
+condiNumber.default() rather than to hessian()
 
 
       CHANGES IN VERSION 1.2-0 (2013-10-22)
