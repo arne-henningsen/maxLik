@@ -15,6 +15,11 @@ printRounded <- function( x ) {
    print( class( x ) )
 }
 
+# round gradients to increase reproducibility of the accuracy
+roundGradients <- function( object ) {
+   object$gradient <- round( object$gradient, 3 )
+   return( object )   
+}
 
 ### activePar
 # a simple two-dimensional exponential hat
@@ -23,19 +28,22 @@ f <- function(a) exp(-(a[1]-2)^2 - (a[2]-4)^2)
 # maximize wrt. both parameters 
 free <- maxNR(f, start=1:2)
 printRounded( free )
+free <- roundGradients( free )
 summary(free)  # results should be close to (2,4)
 activePar(free)
 # allow only the second parameter to vary
 cons <- maxNR(f, start=1:2, activePar=c(FALSE,TRUE))
 printRounded( cons )
+cons <- roundGradients( cons )
 summary(cons) # result should be around (1,4)
 activePar(cons)
 # specify fixed par in different ways
 cons2 <- maxNR(f, start=1:2, fixed=1)
-all.equal( cons, cons2 )
+all.equal( cons[-3], cons2[-3] )
 cons3 <- maxNR(f, start=1:2, fixed=c(TRUE,FALSE))
-all.equal( cons, cons3 )
+all.equal( cons[-3], cons3[-3] )
 cons4 <- maxNR(f, start=c(a=1, b=2), fixed="a")
+cons4 <- roundGradients( cons4 )
 print(summary(cons4))
 all.equal( cons, cons4 )
 
@@ -96,6 +104,7 @@ loglik <- function(l) n*log(l) - l - lfactorial(n)
 a <- maxBFGS(loglik, start=1)
 print( a[-3] )
 class( a )
+a <- roundGradients( a )
 summary( a )
 # you would probably prefer mean(n) instead of that ;-)
 # Note also that maxLik is better suited for Maximum Likelihood
@@ -125,10 +134,12 @@ t <- rexp(100, 2)
 ## Estimate with numeric gradient and hessian
 a <- maxBHHH(loglik, start=1, print.level=2)
 print( a )
+a <- roundGradients( a )
 summary(a)
 ## Estimate with analytic gradient
 a <- maxBHHH(loglik, gradlik, start=1)
 print( a )
+a <- roundGradients( a )
 summary(a)
 
 
@@ -157,11 +168,13 @@ loglikSum <- function(theta) sum(log(theta) - theta*t)
 gradlikSum <- function(theta) sum(1/theta - t)
 ## Estimate with numeric gradient and Hessian
 a <- maxNR(loglikSum, start=1, print.level=2)
+a <- roundGradients( a )
 print( a )
 summary(a)
 ## You would probably prefer 1/mean(t) instead ;-)
 ## Estimate with analytic gradient and Hessian
 a <- maxNR(loglikSum, gradlikSum, hesslik, start=1)
+a <- roundGradients( a )
 print( a )
 summary(a)
 
@@ -170,11 +183,13 @@ summary(a)
 ## maximise two-dimensional exponential hat.  Maximum is at c(2,1):
 f <- function(a) exp(-(a[1] - 2)^2 - (a[2] - 1)^2)
 m <- maxNR(f, start=c(0,0))
+m <- roundGradients( m )
 print( m )
 summary(m)
 maximType(m)
 ## Now use BFGS maximisation.
 m <- maxBFGS(f, start=c(0,0))
+m <- roundGradients( m )
 print( m )
 summary(m)
 maximType(m)
@@ -183,6 +198,7 @@ maximType(m)
 ### Request by Yves Croissant
 f <- function(a) exp(-(a[1] - 2)^2 - (a[2] - 1)^2)
 m0 <- maxNR(f, start=c(1.1, 2.1), iterlim=0)
+m0 <- roundGradients( m0 )
 summary(m0)
 
 ### nObs
@@ -224,11 +240,13 @@ compareDerivatives(f0, gradf0, t0=1:2)
 ## maximise the exponential bell
 f1 <- function(x) exp(-x^2)
 a <- maxNR(f1, start=2)
+a <- roundGradients( a )
 print( a )
 returnCode(a) # should be success (1 or 2)
 ## Now try to maximise log() function
 f2 <- function(x) log(x)
 a <- maxNR(f2, start=2)
+a <- roundGradients( a )
 print( a )
 returnCode(a) # should give a failure (4)
 
@@ -237,11 +255,13 @@ returnCode(a) # should give a failure (4)
 ## maximise the exponential bell
 f1 <- function(x) exp(-x^2)
 a <- maxNR(f1, start=2)
+a <- roundGradients( a )
 print( a )
 returnMessage(a) # should be success (1 or 2)
 ## Now try to maximise log() function
 f2 <- function(x) log(x)
 a <- maxNR(f2, start=2)
+a <- roundGradients( a )
 print( a )
 returnMessage(a) # should give a failure (4)
 
@@ -293,7 +313,9 @@ hub <- function(x) {
    attr(val, "hessian") <- 4*(x %*% t(x))*v - diag(2*c(v, v))
    val
 }
-summary(a <- maxNR(hub, start=c(2,1)))
+a <- maxNR(hub, start=c(2,1))
+a <- roundGradients( a )
+summary( a )
 ## Now test "gradient" attribute for BHHH/3-parameter probit
 N <- 1000
 loglikProbit <- function( beta) {

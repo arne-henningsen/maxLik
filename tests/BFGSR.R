@@ -11,19 +11,27 @@ quadForm <- function(D) {
    return( - t(D - (1:N) ) %*% W %*% ( D - (1:N) ) )
 }
 N <- 3
+
+# round gradients to increase reproducibility of the accuracy
+roundGradients <- function( object ) {
+   object$gradient <- round( object$gradient, 3 )
+   return( object )   
+}
                            # 3-dimensional case
 ## a) test quadratic function t(D) %*% D
 W <- diag(N)
 library(maxLik)
 D <- rep(1/N, N)
 res <- maxBFGSR(quadForm, start=D)
+res <- roundGradients( res )
 summary(res)
 
 ## b) add noice to
 W <- diag(N) + matrix(runif(N*N), N, N)
                            # diagonal weight matrix with some noise
 D <- rep(1/N, N)
-res <- maxBFGSR(quadForm, start=D)
+res <- maxBFGSR(quadForm, start=D, tol = 1e-10 )
+res <- roundGradients( res )
 summary(res)
 
 ## Next, optimize hat function in non-concave region.  Does not work well.
@@ -34,8 +42,11 @@ hat <- function(param) {
    exp(-(x-2)^2 - (y-2)^2)
 }
 
-summary(hatNC <- maxBFGSR(hat, start=c(1,1), tol=0, reltol=0))
-                           # should converge to c(0,0).
+hatNC <- maxBFGSR(hat, start=c(1,1), tol=0, reltol=0)
+hatNC <- roundGradients( hatNC )
+summary( hatNC )
+
+# should converge to c(0,0).
 
 ## Test BFGSR with fixed parameters and equality constraints
 ## Optimize 3D hat with one parameter fixed (== 2D hat).
@@ -52,5 +63,7 @@ sv <- c(1,1,1)
 A <- matrix(c(1,1,1), 1, 3)
 B <- -8
 constraints <- list(eqA=A, eqB=B)
-summary(hat3CF <- maxBFGSR(hat3, start=sv, constraints=constraints, fixed=3))
+hat3CF <- maxBFGSR(hat3, start=sv, constraints=constraints, fixed=3)
+hat3CF <- roundGradients( hat3CF )
+summary( hat3CF )
 

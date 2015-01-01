@@ -39,6 +39,11 @@ https://r-forge.r-project.org/projects/maxlik/
 +    print( class( x ) )
 + }
 > 
+> # round gradients to increase reproducibility of the accuracy
+> roundGradients <- function( object ) {
++    object$gradient <- round( object$gradient, 3 )
++    return( object )   
++ }
 > 
 > ### activePar
 > # a simple two-dimensional exponential hat
@@ -81,6 +86,7 @@ $type
 
 attr(,"class")
 [1] "maxim" "list" 
+> free <- roundGradients( free )
 > summary(free)  # results should be close to (2,4)
 --------------------------------------------
 Newton-Raphson maximisation 
@@ -90,8 +96,8 @@ gradient close to zero
 Function value: 1 
 Estimates:
      estimate gradient
-[1,]        2 0.00e+00
-[2,]        4 1.11e-10
+[1,]        2        0
+[2,]        4        0
 --------------------------------------------
 > activePar(free)
 [1] TRUE TRUE
@@ -132,6 +138,7 @@ $type
 
 attr(,"class")
 [1] "maxim" "list" 
+> cons <- roundGradients( cons )
 > summary(cons) # result should be around (1,4)
 --------------------------------------------
 Newton-Raphson maximisation 
@@ -140,20 +147,21 @@ Return code: 1
 gradient close to zero 
 Function value: 0.3679 
 Estimates:
-     estimate  gradient
-[1,]        1        NA
-[2,]        4 5.944e-07
+     estimate gradient
+[1,]        1       NA
+[2,]        4        0
 --------------------------------------------
 > activePar(cons)
 [1] FALSE  TRUE
 > # specify fixed par in different ways
 > cons2 <- maxNR(f, start=1:2, fixed=1)
-> all.equal( cons, cons2 )
+> all.equal( cons[-3], cons2[-3] )
 [1] TRUE
 > cons3 <- maxNR(f, start=1:2, fixed=c(TRUE,FALSE))
-> all.equal( cons, cons3 )
+> all.equal( cons[-3], cons3[-3] )
 [1] TRUE
 > cons4 <- maxNR(f, start=c(a=1, b=2), fixed="a")
+> cons4 <- roundGradients( cons4 )
 > print(summary(cons4))
 --------------------------------------------
 Newton-Raphson maximisation 
@@ -162,9 +170,9 @@ Return code: 1
 gradient close to zero 
 Function value: 0.3679 
 Estimates:
-  estimate  gradient
-a        1        NA
-b        4 5.944e-07
+  estimate gradient
+a        1       NA
+b        4        0
 --------------------------------------------
 > all.equal( cons, cons4 )
 [1] "Component \"estimate\": names for current but not for target"                            
@@ -510,6 +518,7 @@ $gradientObs
 
 > class( a )
 [1] "maxim"
+> a <- roundGradients( a )
 > summary( a )
 --------------------------------------------
 BFGS maximisation 
@@ -518,8 +527,8 @@ Return code: 0
 successful convergence  
 Function value: -199.2 
 Estimates:
-     estimate  gradient
-[1,]     3.19 1.583e-05
+     estimate gradient
+[1,]     3.19        0
 --------------------------------------------
 > # you would probably prefer mean(n) instead of that ;-)
 > # Note also that maxLik is better suited for Maximum Likelihood
@@ -846,6 +855,7 @@ $gradientObs
 
 attr(,"class")
 [1] "maxim" "list" 
+> a <- roundGradients( a )
 > summary(a)
 --------------------------------------------
 BHHH maximisation 
@@ -854,8 +864,8 @@ Return code: 2
 successive function values within tolerance limit 
 Function value: -21.25 
 Estimates:
-     estimate   gradient
-[1,]    2.198 -4.775e-05
+     estimate gradient
+[1,]    2.198        0
 --------------------------------------------
 > ## Estimate with analytic gradient
 > a <- maxBHHH(loglik, gradlik, start=1)
@@ -998,6 +1008,7 @@ $gradientObs
 
 attr(,"class")
 [1] "maxim" "list" 
+> a <- roundGradients( a )
 > summary(a)
 --------------------------------------------
 BHHH maximisation 
@@ -1006,8 +1017,8 @@ Return code: 2
 successive function values within tolerance limit 
 Function value: -21.25 
 Estimates:
-     estimate   gradient
-[1,]    2.198 -4.775e-05
+     estimate gradient
+[1,]    2.198        0
 --------------------------------------------
 > 
 > 
@@ -1372,6 +1383,7 @@ gradient close to zero
 5  iterations
 estimate: 2.151 
 Function value: -23.41 
+> a <- roundGradients( a )
 > print( a )
 $maximum
 [1] -23.41
@@ -1380,7 +1392,7 @@ $estimate
 [1] 2.151
 
 $gradient
-[1] -2.416e-07
+[1] 0
 
 $hessian
        [,1]
@@ -1414,12 +1426,13 @@ Return code: 1
 gradient close to zero 
 Function value: -23.41 
 Estimates:
-     estimate   gradient
-[1,]    2.151 -2.416e-07
+     estimate gradient
+[1,]    2.151        0
 --------------------------------------------
 > ## You would probably prefer 1/mean(t) instead ;-)
 > ## Estimate with analytic gradient and Hessian
 > a <- maxNR(loglikSum, gradlikSum, hesslik, start=1)
+> a <- roundGradients( a )
 > print( a )
 $maximum
 [1] -23.41
@@ -1428,7 +1441,7 @@ $estimate
 [1] 2.151
 
 $gradient
-[1] 9.493e-08
+[1] 0
 
 $hessian
        [,1]
@@ -1462,8 +1475,8 @@ Return code: 1
 gradient close to zero 
 Function value: -23.41 
 Estimates:
-     estimate  gradient
-[1,]    2.151 9.493e-08
+     estimate gradient
+[1,]    2.151        0
 --------------------------------------------
 > 
 > 
@@ -1471,6 +1484,7 @@ Estimates:
 > ## maximise two-dimensional exponential hat.  Maximum is at c(2,1):
 > f <- function(a) exp(-(a[1] - 2)^2 - (a[2] - 1)^2)
 > m <- maxNR(f, start=c(0,0))
+> m <- roundGradients( m )
 > print( m )
 $maximum
 [1] 1
@@ -1479,7 +1493,7 @@ $estimate
 [1] 2 1
 
 $gradient
-[1] -1.11e-10  1.11e-10
+[1] 0 0
 
 $hessian
      [,1] [,2]
@@ -1514,14 +1528,15 @@ Return code: 1
 gradient close to zero 
 Function value: 1 
 Estimates:
-     estimate  gradient
-[1,]        2 -1.11e-10
-[2,]        1  1.11e-10
+     estimate gradient
+[1,]        2        0
+[2,]        1        0
 --------------------------------------------
 > maximType(m)
 [1] "Newton-Raphson maximisation"
 > ## Now use BFGS maximisation.
 > m <- maxBFGS(f, start=c(0,0))
+> m <- roundGradients( m )
 > print( m )
 $maximum
 [1] 1
@@ -1530,7 +1545,7 @@ $estimate
 [1] 2 1
 
 $gradient
-[1] 1.088e-08 5.329e-09
+[1] 0 0
 
 $hessian
      [,1] [,2]
@@ -1569,9 +1584,9 @@ Return code: 0
 successful convergence  
 Function value: 1 
 Estimates:
-     estimate  gradient
-[1,]        2 1.088e-08
-[2,]        1 5.329e-09
+     estimate gradient
+[1,]        2        0
+[2,]        1        0
 --------------------------------------------
 > maximType(m)
 [1] "BFGS maximisation"
@@ -1580,6 +1595,7 @@ Estimates:
 > ### Request by Yves Croissant
 > f <- function(a) exp(-(a[1] - 2)^2 - (a[2] - 1)^2)
 > m0 <- maxNR(f, start=c(1.1, 2.1), iterlim=0)
+> m0 <- roundGradients( m0 )
 > summary(m0)
 --------------------------------------------
 Newton-Raphson maximisation 
@@ -1589,8 +1605,8 @@ Iteration limit exceeded.
 Function value: 0.1327 
 Estimates:
      estimate gradient
-[1,]      1.1   0.2388
-[2,]      2.1  -0.2918
+[1,]      1.1    0.239
+[2,]      2.1   -0.292
 --------------------------------------------
 > 
 > ### nObs
@@ -1681,6 +1697,7 @@ Max relative difference: 2.764e-10
 > ## maximise the exponential bell
 > f1 <- function(x) exp(-x^2)
 > a <- maxNR(f1, start=2)
+> a <- roundGradients( a )
 > print( a )
 $maximum
 [1] 1
@@ -1689,7 +1706,7 @@ $estimate
 [1] 3.632e-10
 
 $gradient
-[1] -6.661e-10
+[1] 0
 
 $hessian
      [,1]
@@ -1720,6 +1737,7 @@ attr(,"class")
 > ## Now try to maximise log() function
 > f2 <- function(x) log(x)
 > a <- maxNR(f2, start=2)
+> a <- roundGradients( a )
 > print( a )
 $maximum
 [1] 9.277
@@ -1728,7 +1746,7 @@ $estimate
 [1] 10685
 
 $gradient
-[1] 9.359e-05
+[1] 0
 
 $hessian
          [,1]
@@ -1762,6 +1780,7 @@ attr(,"class")
 > ## maximise the exponential bell
 > f1 <- function(x) exp(-x^2)
 > a <- maxNR(f1, start=2)
+> a <- roundGradients( a )
 > print( a )
 $maximum
 [1] 1
@@ -1770,7 +1789,7 @@ $estimate
 [1] 3.632e-10
 
 $gradient
-[1] -6.661e-10
+[1] 0
 
 $hessian
      [,1]
@@ -1801,6 +1820,7 @@ attr(,"class")
 > ## Now try to maximise log() function
 > f2 <- function(x) log(x)
 > a <- maxNR(f2, start=2)
+> a <- roundGradients( a )
 > print( a )
 $maximum
 [1] 9.277
@@ -1809,7 +1829,7 @@ $estimate
 [1] 10685
 
 $gradient
-[1] 9.359e-05
+[1] 0
 
 $hessian
          [,1]
@@ -2297,7 +2317,9 @@ Estimates:
 +    attr(val, "hessian") <- 4*(x %*% t(x))*v - diag(2*c(v, v))
 +    val
 + }
-> summary(a <- maxNR(hub, start=c(2,1)))
+> a <- maxNR(hub, start=c(2,1))
+> a <- roundGradients( a )
+> summary( a )
 --------------------------------------------
 Newton-Raphson maximisation 
 Number of iterations: 7 
@@ -2305,9 +2327,9 @@ Return code: 1
 gradient close to zero 
 Function value: 1 
 Estimates:
-       estimate  gradient
-[1,] -7.448e-18 1.490e-17
-[2,] -3.724e-18 7.448e-18
+       estimate gradient
+[1,] -7.448e-18        0
+[2,] -3.724e-18        0
 --------------------------------------------
 > ## Now test "gradient" attribute for BHHH/3-parameter probit
 > N <- 1000
@@ -2665,4 +2687,4 @@ Estimate(s): 1.863
 > 
 > proc.time()
    user  system elapsed 
-  0.607   0.033   0.635 
+  0.563   0.030   0.588 
