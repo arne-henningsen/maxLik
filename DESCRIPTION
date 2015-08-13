@@ -1,6 +1,6 @@
 Package: maxLik
 Version: 1.2-5
-Date: 2014/12/31
+Date: 2015-08-12
 Title: Maximum Likelihood Estimation
 Author: Ott Toomet <otoomet@gmail.com>,
    Arne Henningsen <arne.henningsen@gmail.com>,
@@ -8,7 +8,7 @@ Author: Ott Toomet <otoomet@gmail.com>,
 Maintainer: Ott Toomet <otoomet@gmail.com>
 Depends: R (>= 2.4.0), miscTools (>= 0.6-8)
 Imports: sandwich
-Description: Tools for Maximum Likelihood Estimation
+Description: Function for Maximum Likelihood estimation and non-linear optimization, and related tools.
 License: GPL (>= 2)
 ByteCompile: yes
 URL: http://www.maxLik.org

@@ -13,7 +13,6 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
 
          ## number of parameters
          nParam <- length( theta )
-
          ## value of log-likelihood function
          f <- fnOrig(theta, ...)
          ## if there are NA-s in the function value, do not
@@ -57,7 +56,6 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
          } else {
             gr[ , fixed ] <- NA
          }
-
          ## Hessian of log-likelihood function
          if( isTRUE( returnHessian ) ) {
             h <- attr( f, "hessian" )
@@ -141,7 +139,6 @@ logLikAttr <- function(theta, fnOrig, gradOrig, hessOrig, fixed,
             ## We need just summed gradient
             gr <- sumGradients( gr, nParam )
          }
-
          if( !is.null( gradOrig ) && !is.null( attr( f, "gradient" ) ) ) {
             attr( f, "gradBoth" ) <- TRUE
          }

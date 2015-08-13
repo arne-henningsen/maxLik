@@ -1,6 +1,6 @@
 
-R version 3.1.2 (2014-10-31) -- "Pumpkin Helmet"
-Copyright (C) 2014 The R Foundation for Statistical Computing
+R version 3.2.0 (2015-04-16) -- "Full of Ingredients"
+Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -1735,43 +1735,7 @@ attr(,"class")
 > returnCode(a) # should be success (1 or 2)
 [1] 1
 > ## Now try to maximise log() function
-> f2 <- function(x) log(x)
-> a <- maxNR(f2, start=2)
-> a <- roundGradients( a )
-> print( a )
-$maximum
-[1] 9.277
-
-$estimate
-[1] 10685
-
-$gradient
-[1] 0
-
-$hessian
-         [,1]
-[1,] 0.001776
-
-$code
-[1] 4
-
-$message
-[1] "Iteration limit exceeded."
-
-$last.step
-NULL
-
-$fixed
-[1] FALSE
-
-$iterations
-[1] 150
-
-$type
-[1] "Newton-Raphson maximisation"
-
-attr(,"class")
-[1] "maxim" "list" 
+> a <- maxNR(log, start=2)
 > returnCode(a) # should give a failure (4)
 [1] 4
 > 
@@ -1819,43 +1783,8 @@ attr(,"class")
 [1] "gradient close to zero"
 > ## Now try to maximise log() function
 > f2 <- function(x) log(x)
-> a <- maxNR(f2, start=2)
-> a <- roundGradients( a )
-> print( a )
-$maximum
-[1] 9.277
-
-$estimate
-[1] 10685
-
-$gradient
-[1] 0
-
-$hessian
-         [,1]
-[1,] 0.001776
-
-$code
-[1] 4
-
-$message
-[1] "Iteration limit exceeded."
-
-$last.step
-NULL
-
-$fixed
-[1] FALSE
-
-$iterations
-[1] 150
-
-$type
-[1] "Newton-Raphson maximisation"
-
-attr(,"class")
-[1] "maxim" "list" 
-> returnMessage(a) # should give a failure (4)
+> a <- maxNR(log, start=2)
+> returnMessage(a) # should give 'Iteration limit exceeded.'
 [1] "Iteration limit exceeded."
 > 
 > 
@@ -2687,4 +2616,4 @@ Estimate(s): 1.863
 > 
 > proc.time()
    user  system elapsed 
-  0.563   0.030   0.588 
+  0.541   0.262   0.549 

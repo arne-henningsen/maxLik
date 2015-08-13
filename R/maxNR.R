@@ -1,8 +1,16 @@
 maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
                   tol=1e-8, reltol=sqrt(.Machine$double.eps),
                   gradtol=1e-6, steptol=1e-10,
+                           #
+                  lambda0=1e-2,
+                  lambdaStep=2,
+                  maxLambda=1e12,
+                           #
                   lambdatol=1e-6,
+                           #
                   qrtol=1e-10,
+                  guessCorrection="stephalving",
+                           #
                   iterlim=150,
                   constraints=NULL,
                   finalHessian=TRUE,
@@ -23,6 +31,11 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
    ## hess        - hessian function (numeric used if missing)
    ## start       - initial parameter vector (eventually w/names)
    ## steptol     - minimum step size
+   ## lambdaStep    how much Hessian corrector lambda is changed between
+   ##               two lambda trials
+   ##               (nu in Marquardt (1963, p 438)
+   ## lambda0       initial Hessian corrector (see Marquardt, 1963, p 438)
+   ## maxLambda     largest possible lambda (if exceeded will give step error)
    ## lambdatol   - max lowest eigenvalue when forcing pos. definite H
    ## qrtol       - tolerance for qr decomposition
    ## ...         - extra arguments for fn()
@@ -85,11 +98,15 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
                               print.level=print.level,
                               tol=tol, reltol=reltol,
                               gradtol=gradtol, steptol=steptol,
+                              lambdaStep=lambdaStep,
+                              lambda0=lambda0,
+                              maxLambda=maxLambda,
                               lambdatol=lambdatol,
                               qrtol=qrtol,
+                              guessCorrection=guessCorrection,
+                              iterlim=iterlim,
                               finalHessian=finalHessian,
                               bhhhHessian=bhhhHessian,
-                              iterlim=iterlim,
                               fixed=fixed,
                               ...)
    } else {
@@ -104,15 +121,19 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
                         print.level=print.level,
                         tol=tol, reltol=reltol,
                         gradtol=gradtol, steptol=steptol,
+                        lambdaStep=lambdaStep,
+                        lambda0=lambda0,
+                        maxLambda=maxLambda,
                         lambdatol=lambdatol,
                         qrtol=qrtol,
+                        guessCorrection=guessCorrection,
+                        iterlim=iterlim,
                         finalHessian=finalHessian,
                         bhhhHessian=bhhhHessian,
-                        iterlim=iterlim,
                         fixed=fixed,
                         ...) 
       } else {
-         stop("maxBFGS only supports the following constraints:\n",
+         stop("maxNR only supports the following constraints:\n",
               "constraints=list(ineqA, ineqB)\n",
               "\tfor A %*% beta + B >= 0 linear inequality constraints\n",
               "current constraints:",

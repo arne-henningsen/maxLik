@@ -14,7 +14,13 @@
 \usage{
 maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
       tol = 1e-08, reltol=sqrt(.Machine$double.eps), gradtol = 1e-06,
-      steptol = 1e-10, lambdatol = 1e-06, qrtol = 1e-10, iterlim = 150,
+      steptol = 1e-10,
+      lambda0=1e-2,
+      lambdaStep=2,
+      maxLambda=1e12,
+      lambdatol = 1e-06, qrtol = 1e-10,
+      guessCorrection="stephalving",
+      iterlim = 150,
       constraints = NULL, finalHessian = TRUE, bhhhHessian=FALSE,
       fixed = NULL, activePar = NULL, ... )
 maxBFGSR(fn, grad = NULL, hess = NULL, start, print.level = 0,
@@ -82,6 +88,12 @@ maxBHHH(fn, grad = NULL, hess = NULL, start, print.level = 0,
     \code{NA}, the step length
     is halved and a new attempt is made.  This procedure is repeated
     until step < \code{steptol}, thereafter \code{code=3} is returned.}
+  Next three arguments control the Marquardt (1963) correction:
+  \item{lambda0}{positive numeric, initial correction term}
+  \item{lambdaStep}{how much the correction is decreased/increased at
+    successful/unsuccesful step}
+  \item{maxLambda}{maximum allowed correction term.  If exceeded, the
+    algorithm exits with return code 3.}
   \item{lambdatol}{control whether the Hessian is treated as negative
     definite.  If the
     largest of the eigenvalues of the Hessian is larger than
@@ -89,6 +101,13 @@ maxBHHH(fn, grad = NULL, hess = NULL, start, print.level = 0,
     Hessian (quadratic hill-climbing) in order to enforce nagetive
     definiteness.}
   \item{qrtol}{QR-decomposition tolerance}
+  \item{guessCorrection}{character, the type of behavior when the new
+    guess was worse than the initial one.  "stephalving" decreases the
+    step length while keeping the quadratic approximation direction,
+    "marquardt" uses
+    Marquardt (1963) method by simultaneously decresing step and
+    moving closer to the sole gradient direction.  May be faster and
+    more robust in areas where quadratic approximation behaves poorly.}
   \item{iterlim}{stopping condition.  Stop if more than \code{iterlim}
     iterations, return \code{code=4}.}
   \item{constraints}{either \code{NULL} for unconstrained optimization
@@ -273,8 +292,12 @@ the previous one (maximization is not performed in that step).
    A Family of Variable Metric Updates Derived by Variational Means,
    \emph{Mathematics of Computation} 24, p. 23-26.
 
-   Greene, W.H., 2008, \emph{Econometric Analysis}, 6th edition,
+   Greene, W.H., (2008), \emph{Econometric Analysis}, 6th edition,
    Prentice Hall.
+
+   Marquardt, D.W., (1963) An Algorithm for LEast-Squares Estimation of
+   Nonlinear Parameters, \emph{Journal of the Society for Industrial &
+   Applied Mathematics} 11(2), pp 431-441
 
    Shanno, D.F. (1970):
    Conditioning of Quasi-Newton Methods for Function Minimization,
@@ -346,9 +369,10 @@ res <- maxNR(loglik, start=c(0,1)) # use 'wrong' start values
 summary(res)
 ###
 ### Now an example of constrained optimization
+### use previous hat function
 ###
 ## We maximize exp(-x^2 - y^2) where x+y = 1
-f <- function(theta) {
+hatf <- function(theta) {
   x <- theta[1]
   y <- theta[2]
   exp(-(x^2 + y^2))
@@ -357,7 +381,7 @@ f <- function(theta) {
 ## use constraints: x + y = 1
 A <- matrix(c(1, 1), 1, 2)
 B <- -1
-res <- maxNR(f, start=c(0,0), constraints=list(eqA=A, eqB=B), print.level=1)
+res <- maxNR(hatf, start=c(0,0), constraints=list(eqA=A, eqB=B), print.level=1)
 print(summary(res))
 }
 \keyword{optimize}
