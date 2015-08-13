@@ -1,0 +1,6525 @@
+
+R version 3.2.0 (2015-04-16) -- "Full of Ingredients"
+Copyright (C) 2015 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # load the 'maxLik' package
+> library(maxLik)
+Loading required package: miscTools
+
+Please cite the 'maxLik' package as:
+Henningsen, Arne and Toomet, Ott (2011). maxLik: A package for maximum likelihood estimation in R. Computational Statistics 26(3), 443-458. DOI 10.1007/s00180-010-0217-1.
+
+If you have questions, suggestions, or comments regarding the 'maxLik' package, please use a forum or 'tracker' at maxLik's R-Forge site:
+https://r-forge.r-project.org/projects/maxlik/
+> options(digits = 4)
+>                            # just to avoid so many differences when comparing these output files
+> ## data to fit a normal distribution
+> # set seed for pseudo random numbers
+> set.seed( 123 )
+> # generate a variable from normally distributed random numbers
+> x <- rnorm( 100, 1, 2 )
+> xSaved <- x
+> 
+> ## log likelihood function
+> llf <- function( param ) {
++    mu <- param[ 1 ]
++    sigma <- param[ 2 ]
++    if(!(sigma > 0))
++        return(NA)
++                            # to avoid warnings in the output
++    N <- length( x )
++    llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
++       0.5 * sum( ( x - mu )^2 / sigma^2 )
++    return( llValue )
++ }
+> 
+> ## log likelihood function (individual observations)
+> llfInd <- function( param ) {
++    mu <- param[ 1 ]
++    sigma <- param[ 2 ]
++    if(!(sigma > 0))
++        return(NA)
++                            # to avoid warnings in the output
++    llValues <- -0.5 * log( 2 * pi ) - log( sigma ) -
++       0.5 * ( x - mu )^2 / sigma^2
++    return( llValues )
++ }
+> 
+> ## function to calculate analytical gradients
+> gf <- function( param ) {
++    mu <- param[ 1 ]
++    sigma <- param[ 2 ]
++    N <- length( x )
++    llGrad <- c( sum( ( x - mu ) / sigma^2 ),
++       - N / sigma + sum( ( x - mu )^2 / sigma^3 ) )
++    return( llGrad )
++ }
+> 
+> ## function to calculate analytical gradients (individual observations)
+> gfInd <- function( param ) {
++    mu <- param[ 1 ]
++    sigma <- param[ 2 ]
++    llGrads <- cbind( ( x - mu ) / sigma^2,
++       - 1 / sigma + ( x - mu )^2 / sigma^3 )
++    return( llGrads )
++ }
+> 
+> ## log likelihood function with gradients as attributes
+> llfGrad <- function( param ) {
++    mu <- param[ 1 ]
++    sigma <- param[ 2 ]
++    if(!(sigma > 0))
++        return(NA)
++                            # to avoid warnings in the output
++    N <- length( x )
++    llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
++       0.5 * sum( ( x - mu )^2 / sigma^2 )
++    attributes( llValue )$gradient <- c( sum( ( x - mu ) / sigma^2 ),
++       - N / sigma + sum( ( x - mu )^2 / sigma^3 ) )
++    return( llValue )
++ }
+> 
+> ## log likelihood function with gradients as attributes (individual observations)
+> llfGradInd <- function( param ) {
++    mu <- param[ 1 ]
++    sigma <- param[ 2 ]
++    if(!(sigma > 0))
++        return(NA)
++                            # to avoid warnings in the output
++    llValues <- -0.5 * log( 2 * pi ) - log( sigma ) -
++       0.5 * ( x - mu )^2 / sigma^2
++    attributes( llValues )$gradient <- cbind( ( x - mu ) / sigma^2,
++       - 1 / sigma + ( x - mu )^2 / sigma^3 )
++    return( llValues )
++ }
+> 
+> ## function to calculate analytical Hessians
+> hf <- function( param ) {
++    mu <- param[ 1 ]
++    sigma <- param[ 2 ]
++    N <- length( x )
++    llHess <- matrix( c(
++       N * ( - 1 / sigma^2 ),
++       sum( - 2 * ( x - mu ) / sigma^3 ),
++       sum( - 2 * ( x - mu ) / sigma^3 ),
++       N / sigma^2 + sum( - 3 * ( x - mu )^2 / sigma^4 ) ),
++       nrow = 2, ncol = 2 )
++    return( llHess )
++ }
+> 
+> ## log likelihood function with gradients and Hessian as attributes
+> llfGradHess <- function( param ) {
++    mu <- param[ 1 ]
++    sigma <- param[ 2 ]
++    if(!(sigma > 0))
++        return(NA)
++                            # to avoid warnings in the output
++    N <- length( x )
++    llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
++       0.5 * sum( ( x - mu )^2 / sigma^2 )
++    attributes( llValue )$gradient <- c( sum( ( x - mu ) / sigma^2 ),
++       - N / sigma + sum( ( x - mu )^2 / sigma^3 ) )
++    attributes( llValue )$hessian <- matrix( c(
++       N * ( - 1 / sigma^2 ),
++       sum( - 2 * ( x - mu ) / sigma^3 ),
++       sum( - 2 * ( x - mu ) / sigma^3 ),
++       N / sigma^2 + sum( - 3 * ( x - mu )^2 / sigma^4 ) ),
++       nrow = 2, ncol = 2 )
++    return( llValue )
++ }
+> 
+> ## log likelihood function with gradients as attributes (individual observations)
+> llfGradHessInd <- function( param ) {
++    mu <- param[ 1 ]
++    sigma <- param[ 2 ]
++    if(!(sigma > 0))
++        return(NA)
++                            # to avoid warnings in the output
++    N <- length( x )
++    llValues <- -0.5 * log( 2 * pi ) - log( sigma ) -
++       0.5 * ( x - mu )^2 / sigma^2
++    attributes( llValues )$gradient <- cbind( ( x - mu ) / sigma^2,
++       - 1 / sigma + ( x - mu )^2 / sigma^3 )
++    attributes( llValues )$hessian <- matrix( c(
++       N * ( - 1 / sigma^2 ),
++       sum( - 2 * ( x - mu ) / sigma^3 ),
++       sum( - 2 * ( x - mu ) / sigma^3 ),
++       N / sigma^2 + sum( - 3 * ( x - mu )^2 / sigma^4 ) ),
++       nrow = 2, ncol = 2 )
++    return( llValues )
++ }
+> 
+> 
+> # start values
+> startVal <- c( mu = 0, sigma = 1 )
+> 
+> ## NR method
+> ml <- maxLik( llf, start = startVal )
+> print( ml )
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 7 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -201.6 (2 free parameter(s))
+Estimate(s): 1.181 1.816 
+> print( summary( ml ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 7 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> activePar( ml )
+   mu sigma 
+ TRUE  TRUE 
+> AIC( ml )
+[1] 407.2
+> coef( ml )
+   mu sigma 
+1.181 1.816 
+> condiNumber( ml, digits = 3 )
+mu 	 1 
+sigma 	 1.67 
+> round( hessian( ml ), 1 )
+         mu sigma
+mu    -30.3   0.0
+sigma   0.0 -60.6
+> logLik( ml )
+[1] -201.6
+> maximType( ml )
+[1] "Newton-Raphson maximisation"
+> nIter( ml )
+[1] 7
+> try( nObs( ml ) )
+Error in nObs.maxLik(ml) : 
+  cannot return the number of observations: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
+> nParam( ml )
+[1] 2
+> returnCode( ml )
+[1] 2
+> returnMessage( ml )
+[1] "successive function values within tolerance limit"
+> round( vcov( ml ), 3 )
+         mu sigma
+mu    0.033 0.000
+sigma 0.000 0.016
+> logLik( summary( ml ) )
+[1] -201.6
+> mlInd <- maxLik( llfInd, start = startVal )
+> print( summary( mlInd ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 7 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( ml[-c(3,4,5,6)], mlInd[ -c(3,4,5,6,11) ], tolerance = 1e-3 )
+[1] TRUE
+>                            # 3  gradient, should be close to 0, but may vary enormously in relative terms
+> mlInd[[11]][sample(nrow(mlInd[[11]]), 10),]
+            mu   sigma
+ [1,] -0.49660 -0.1025
+ [2,] -0.41864 -0.2322
+ [3,]  0.02027 -0.5498
+ [4,] -0.10533 -0.5304
+ [5,] -0.24025 -0.4457
+ [6,]  0.33578 -0.3457
+ [7,]  0.44319 -0.1937
+ [8,]  0.45301 -0.1777
+ [9,]  1.02831  1.3703
+[10,]  0.27760 -0.4105
+>                            # just print a sample of 10
+> nObs( mlInd )
+[1] 100
+> ## Marquardt (1963) correction
+> mlM <- maxLik( llf, start = startVal, guessCorrection="marquardt")
+> print(coef(mlM))
+   mu sigma 
+1.181 1.816 
+> print(returnMessage(mlM))
+[1] "gradient close to zero"
+>                            # coefficients should be the same as above
+> 
+> # with analytical gradients
+> mlg <- maxLik( llf, gf, start = startVal )
+> print( summary( mlg ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 7 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( ml[-c(5,6)], mlg[-c(5,6)], tolerance = 1e-3 )
+[1] TRUE
+> mlgInd <- maxLik( llfInd, gfInd, start = startVal )
+> all.equal( mlInd, mlgInd, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlg[ ], mlgInd[ -11 ], tolerance = 1e-3 )
+[1] TRUE
+> round( mlgInd[[ 11 ]], 3 )
+           mu  sigma
+  [1,] -0.395 -0.268
+  [2,] -0.194 -0.482
+  [3,]  0.890  0.888
+  [4,] -0.012 -0.550
+  [5,]  0.024 -0.550
+  [6,]  0.985  1.211
+  [7,]  0.225 -0.459
+  [8,] -0.822  0.676
+  [9,] -0.471 -0.147
+ [10,] -0.325 -0.359
+ [11,]  0.687  0.307
+ [12,]  0.163 -0.502
+ [13,]  0.188 -0.486
+ [14,]  0.012 -0.550
+ [15,] -0.392 -0.272
+ [16,]  1.028  1.370
+ [17,]  0.247 -0.440
+ [18,] -1.247  2.273
+ [19,]  0.370 -0.301
+ [20,] -0.341 -0.339
+ [21,] -0.702  0.345
+ [22,] -0.187 -0.487
+ [23,] -0.677  0.281
+ [24,] -0.497 -0.103
+ [25,] -0.434 -0.209
+ [26,] -1.077  1.557
+ [27,]  0.453 -0.178
+ [28,]  0.038 -0.548
+ [29,] -0.745  0.457
+ [30,]  0.705  0.353
+ [31,]  0.204 -0.475
+ [32,] -0.234 -0.451
+ [33,]  0.488 -0.118
+ [34,]  0.477 -0.136
+ [35,]  0.443 -0.194
+ [36,]  0.363 -0.312
+ [37,]  0.281 -0.407
+ [38,] -0.092 -0.535
+ [39,] -0.240 -0.446
+ [40,] -0.285 -0.403
+ [41,] -0.476 -0.139
+ [42,] -0.181 -0.491
+ [43,] -0.822  0.676
+ [44,]  1.260  2.333
+ [45,]  0.677  0.283
+ [46,] -0.736  0.432
+ [47,] -0.299 -0.388
+ [48,] -0.338 -0.343
+ [49,]  0.418 -0.233
+ [50,] -0.105 -0.530
+ [51,]  0.099 -0.533
+ [52,] -0.072 -0.541
+ [53,] -0.081 -0.539
+ [54,]  0.775  0.540
+ [55,] -0.192 -0.484
+ [56,]  0.864  0.807
+ [57,] -0.994  1.243
+ [58,]  0.300 -0.388
+ [59,]  0.020 -0.550
+ [60,]  0.076 -0.540
+ [61,]  0.175 -0.495
+ [62,] -0.359 -0.316
+ [63,] -0.257 -0.431
+ [64,] -0.672  0.270
+ [65,] -0.704  0.351
+ [66,]  0.129 -0.520
+ [67,]  0.217 -0.465
+ [68,] -0.023 -0.550
+ [69,]  0.504 -0.089
+ [70,]  1.188  2.012
+ [71,] -0.352 -0.325
+ [72,] -1.454  3.292
+ [73,]  0.555  0.009
+ [74,] -0.485 -0.124
+ [75,] -0.472 -0.146
+ [76,]  0.567  0.033
+ [77,] -0.227 -0.457
+ [78,] -0.795  0.597
+ [79,]  0.055 -0.545
+ [80,] -0.139 -0.515
+ [81,] -0.051 -0.546
+ [82,]  0.179 -0.492
+ [83,] -0.279 -0.409
+ [84,]  0.336 -0.346
+ [85,] -0.188 -0.486
+ [86,]  0.146 -0.512
+ [87,]  0.610  0.125
+ [88,]  0.209 -0.471
+ [89,] -0.252 -0.435
+ [90,]  0.642  0.197
+ [91,]  0.547 -0.006
+ [92,]  0.278 -0.411
+ [93,]  0.090 -0.536
+ [94,] -0.435 -0.206
+ [95,]  0.770  0.526
+ [96,] -0.419 -0.232
+ [97,]  1.271  2.384
+ [98,]  0.874  0.838
+ [99,] -0.198 -0.480
+[100,] -0.677  0.282
+> 
+> # with analytical gradients as attribute
+> mlG <- maxLik( llfGrad, start = startVal )
+> all.equal( mlG, mlg, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlG$gradient, gf( coef( mlG ) ), check.attributes = FALSE,
++    tolerance = 1e-3 )
+[1] TRUE
+> mlGInd <- maxLik( llfGradInd, start = startVal )
+> all.equal( mlGInd, mlgInd, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlGInd$gradient, colSums( gfInd( coef( mlGInd ) ) ),
++    check.attributes = FALSE, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlGInd$gradientObs, gfInd( coef( mlGInd ) ),
++    check.attributes = FALSE, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with analytical gradients as argument and attribute
+> mlgG <- maxLik( llfGrad, gf, start = startVal )
+Warning message:
+In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+  the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
+> all.equal( mlgG, mlg, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlgG, mlG, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with analytical gradients and Hessians
+> mlgh <- maxLik( llf, gf, hf, start = startVal )
+> all.equal( mlg, mlgh, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with analytical gradients and Hessian as attribute
+> mlGH <- maxLik( llfGradHess, start = startVal )
+> all.equal( mlGH, mlgh, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with analytical gradients and Hessian as argument and attribute
+> mlgGhH <- maxLik( llfGradHess, gf, hf, start = startVal )
+Warning messages:
+1: In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+  the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
+2: In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+  the Hessian is provided both as attribute 'hessian' and as argument 'hess': ignoring argument 'hess'
+> all.equal( mlgGhH, mlgh, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlgGhH, mlGH, tolerance = 1e-3 )
+[1] TRUE
+> 
+> 
+> ## BHHH method
+> mlBHHH <- try( maxLik( llf, start = startVal, method = "BHHH" ) )
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
+  if the gradients (argument 'grad') are not provided by the user, the BHHH method requires that the log-likelihood function (argument 'fn') returns a numeric vector, where each element must be the log-likelihood value corresponding to an individual (independent) observation
+> x <- xSaved[1]
+> try( maxLik( llfInd, start = startVal, method = "BHHH" ) )
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
+  if the gradients (argument 'grad') are not provided by the user, the BHHH method requires that the log-likelihood function (argument 'fn') returns a numeric vector, where each element must be the log-likelihood value corresponding to an individual (independent) observation
+> x <- xSaved[1:2]
+> try( maxLik( llfInd, start = startVal, method = "BHHH" ) )
+Maximum Likelihood estimation
+BHHH maximisation, 8 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -0.6227 (2 free parameter(s))
+Estimate(s): 0.2158 0.3302 
+> x <- xSaved
+> mlBHHH <- maxLik( llfInd, start = startVal, method = "BHHH" )
+> print( mlBHHH )
+Maximum Likelihood estimation
+BHHH maximisation, 13 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -201.6 (2 free parameter(s))
+Estimate(s): 1.181 1.816 
+> print( summary( mlBHHH ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BHHH maximisation, 13 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    13.5  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> activePar( mlBHHH )
+   mu sigma 
+ TRUE  TRUE 
+> AIC( mlBHHH )
+[1] 407.2
+> coef( mlBHHH )
+   mu sigma 
+1.181 1.816 
+> condiNumber( mlBHHH, digits = 3 )
+mu 	 1 
+sigma 	 1.72 
+> round( hessian( mlBHHH ), 1 )
+         mu sigma
+mu    -30.3  -1.8
+sigma  -1.8 -55.7
+attr(,"type")
+[1] "BHHH"
+> logLik( mlBHHH )
+[1] -201.6
+> maximType( mlBHHH )
+[1] "BHHH maximisation"
+> nIter( mlBHHH )
+[1] 13
+> nParam( mlBHHH )
+[1] 2
+> returnCode( mlBHHH )
+[1] 2
+> returnMessage( mlBHHH )
+[1] "successive function values within tolerance limit"
+> round( vcov( mlBHHH ), 3 )
+          mu  sigma
+mu     0.033 -0.001
+sigma -0.001  0.018
+> logLik( summary( mlBHHH ) )
+[1] -201.6
+> all.equal( ml[-c(4,5,6,9,10) ], mlBHHH[ -c(4,5,6,9,10,11) ], tolerance = 1e-3 )
+[1] TRUE
+> round( mlBHHH[[ 11 ]], 3 )
+           mu  sigma
+  [1,] -0.395 -0.268
+  [2,] -0.194 -0.482
+  [3,]  0.890  0.888
+  [4,] -0.012 -0.550
+  [5,]  0.024 -0.550
+  [6,]  0.985  1.211
+  [7,]  0.225 -0.459
+  [8,] -0.822  0.676
+  [9,] -0.471 -0.147
+ [10,] -0.325 -0.359
+ [11,]  0.687  0.307
+ [12,]  0.163 -0.502
+ [13,]  0.188 -0.486
+ [14,]  0.012 -0.550
+ [15,] -0.392 -0.272
+ [16,]  1.028  1.370
+ [17,]  0.247 -0.440
+ [18,] -1.247  2.273
+ [19,]  0.370 -0.301
+ [20,] -0.341 -0.339
+ [21,] -0.702  0.345
+ [22,] -0.187 -0.487
+ [23,] -0.677  0.281
+ [24,] -0.497 -0.103
+ [25,] -0.434 -0.209
+ [26,] -1.077  1.557
+ [27,]  0.453 -0.178
+ [28,]  0.038 -0.548
+ [29,] -0.745  0.457
+ [30,]  0.705  0.353
+ [31,]  0.204 -0.475
+ [32,] -0.234 -0.451
+ [33,]  0.488 -0.118
+ [34,]  0.477 -0.136
+ [35,]  0.443 -0.194
+ [36,]  0.363 -0.312
+ [37,]  0.281 -0.407
+ [38,] -0.092 -0.535
+ [39,] -0.240 -0.446
+ [40,] -0.285 -0.403
+ [41,] -0.476 -0.139
+ [42,] -0.181 -0.491
+ [43,] -0.822  0.676
+ [44,]  1.260  2.333
+ [45,]  0.677  0.283
+ [46,] -0.736  0.432
+ [47,] -0.299 -0.388
+ [48,] -0.338 -0.343
+ [49,]  0.418 -0.233
+ [50,] -0.105 -0.530
+ [51,]  0.099 -0.533
+ [52,] -0.072 -0.541
+ [53,] -0.081 -0.539
+ [54,]  0.775  0.540
+ [55,] -0.192 -0.484
+ [56,]  0.864  0.807
+ [57,] -0.994  1.243
+ [58,]  0.300 -0.388
+ [59,]  0.020 -0.550
+ [60,]  0.076 -0.540
+ [61,]  0.175 -0.495
+ [62,] -0.359 -0.316
+ [63,] -0.257 -0.431
+ [64,] -0.672  0.270
+ [65,] -0.704  0.351
+ [66,]  0.129 -0.520
+ [67,]  0.217 -0.465
+ [68,] -0.023 -0.550
+ [69,]  0.504 -0.089
+ [70,]  1.188  2.012
+ [71,] -0.352 -0.325
+ [72,] -1.454  3.292
+ [73,]  0.555  0.009
+ [74,] -0.485 -0.124
+ [75,] -0.472 -0.146
+ [76,]  0.567  0.033
+ [77,] -0.227 -0.457
+ [78,] -0.795  0.597
+ [79,]  0.055 -0.545
+ [80,] -0.139 -0.515
+ [81,] -0.051 -0.546
+ [82,]  0.179 -0.492
+ [83,] -0.279 -0.409
+ [84,]  0.336 -0.346
+ [85,] -0.188 -0.486
+ [86,]  0.146 -0.512
+ [87,]  0.610  0.125
+ [88,]  0.209 -0.471
+ [89,] -0.252 -0.435
+ [90,]  0.642  0.197
+ [91,]  0.547 -0.006
+ [92,]  0.278 -0.411
+ [93,]  0.090 -0.536
+ [94,] -0.435 -0.206
+ [95,]  0.770  0.526
+ [96,] -0.419 -0.232
+ [97,]  1.271  2.384
+ [98,]  0.874  0.838
+ [99,] -0.198 -0.480
+[100,] -0.677  0.282
+> nObs( mlBHHH )
+[1] 100
+> # final Hessian = usual Hessian
+> mlBhhhH <- maxLik( llfInd, start = startVal, method = "BHHH", 
++    finalHessian = TRUE )
+> all.equal( mlBhhhH[-4], mlBHHH[-4], tolerance = 1e-3 )
+[1] TRUE
+> round( hessian( mlBhhhH ), 1 )
+         mu sigma
+mu    -30.3   0.0
+sigma   0.0 -60.6
+> print( summary( mlBhhhH ) , digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BHHH maximisation, 13 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> ## Marquardt (1963) correction
+> mlBHHHM <- maxLik( llfInd, start = startVal, method = "BHHH", guessCorrect="marquardt")
+> print(coef(mlBHHHM))
+   mu sigma 
+1.181 1.816 
+> print(returnMessage(mlBHHHM))
+[1] "successive function values within tolerance limit"
+> 
+> # with analytical gradients
+> mlgBHHH <- try( maxLik( llf, gf, start = startVal, method = "BHHH" ) )
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
+  gradient is not a matrix but of class 'numeric';
+the BHHH method requires that the gradient function
+(argument 'grad') returns a numeric matrix,
+where each row must correspond to the gradient(s)
+of the log-likelihood function at an individual
+(independent) observation and each column must
+correspond to a parameter
+> mlgBHHH <- try( maxLik( llfInd, gf, start = startVal, method = "BHHH" ) )
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
+  gradient is not a matrix but of class 'numeric';
+the BHHH method requires that the gradient function
+(argument 'grad') returns a numeric matrix,
+where each row must correspond to the gradient(s)
+of the log-likelihood function at an individual
+(independent) observation and each column must
+correspond to a parameter
+> x <- xSaved[1]
+> try( maxLik( llf, gfInd, start = startVal, method = "BHHH" ) )
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
+  the matrix returned by the gradient function (argument 'grad') must have at least as many rows as the number of parameters (2), where each row must correspond to the gradients of the log-likelihood function of an individual (independent) observation:
+ currently, there are (is) 2 parameter(s) but the gradient matrix has only 1 row(s)
+> try( maxLik( llfInd, gfInd, start = startVal, method = "BHHH" ) )
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
+  the matrix returned by the gradient function (argument 'grad') must have at least as many rows as the number of parameters (2), where each row must correspond to the gradients of the log-likelihood function of an individual (independent) observation:
+ currently, there are (is) 2 parameter(s) but the gradient matrix has only 1 row(s)
+> x <- xSaved[1:2]
+> try( maxLik( llf, gfInd, start = startVal, method = "BHHH" ) )
+Maximum Likelihood estimation
+BHHH maximisation, 8 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -0.6227 (2 free parameter(s))
+Estimate(s): 0.2158 0.3302 
+> try( maxLik( llfInd, gfInd, start = startVal, method = "BHHH" ) )
+Maximum Likelihood estimation
+BHHH maximisation, 8 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -0.6227 (2 free parameter(s))
+Estimate(s): 0.2158 0.3302 
+> x <- xSaved
+> mlgBHHH <- maxLik( llfInd, gfInd, start = startVal, method = "BHHH" )
+> print( summary( mlgBHHH ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BHHH maximisation, 13 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    13.5  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( mlBHHH, mlgBHHH, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlg[-c(4,5,6,9,10)], mlgBHHH[-c(4,5,6,9,10,11)], tolerance = 1e-3 )
+[1] TRUE
+> round( mlgBHHH[[ 11 ]], 3 )
+           mu  sigma
+  [1,] -0.395 -0.268
+  [2,] -0.194 -0.482
+  [3,]  0.890  0.888
+  [4,] -0.012 -0.550
+  [5,]  0.024 -0.550
+  [6,]  0.985  1.211
+  [7,]  0.225 -0.459
+  [8,] -0.822  0.676
+  [9,] -0.471 -0.147
+ [10,] -0.325 -0.359
+ [11,]  0.687  0.307
+ [12,]  0.163 -0.502
+ [13,]  0.188 -0.486
+ [14,]  0.012 -0.550
+ [15,] -0.392 -0.272
+ [16,]  1.028  1.370
+ [17,]  0.247 -0.440
+ [18,] -1.247  2.273
+ [19,]  0.370 -0.301
+ [20,] -0.341 -0.339
+ [21,] -0.702  0.345
+ [22,] -0.187 -0.487
+ [23,] -0.677  0.281
+ [24,] -0.497 -0.103
+ [25,] -0.434 -0.209
+ [26,] -1.077  1.557
+ [27,]  0.453 -0.178
+ [28,]  0.038 -0.548
+ [29,] -0.745  0.457
+ [30,]  0.705  0.353
+ [31,]  0.204 -0.475
+ [32,] -0.234 -0.451
+ [33,]  0.488 -0.118
+ [34,]  0.477 -0.136
+ [35,]  0.443 -0.194
+ [36,]  0.363 -0.312
+ [37,]  0.281 -0.407
+ [38,] -0.092 -0.535
+ [39,] -0.240 -0.446
+ [40,] -0.285 -0.403
+ [41,] -0.476 -0.139
+ [42,] -0.181 -0.491
+ [43,] -0.822  0.676
+ [44,]  1.260  2.333
+ [45,]  0.677  0.283
+ [46,] -0.736  0.432
+ [47,] -0.299 -0.388
+ [48,] -0.338 -0.343
+ [49,]  0.418 -0.233
+ [50,] -0.105 -0.530
+ [51,]  0.099 -0.533
+ [52,] -0.072 -0.541
+ [53,] -0.081 -0.539
+ [54,]  0.775  0.540
+ [55,] -0.192 -0.484
+ [56,]  0.864  0.807
+ [57,] -0.994  1.243
+ [58,]  0.300 -0.388
+ [59,]  0.020 -0.550
+ [60,]  0.076 -0.540
+ [61,]  0.175 -0.495
+ [62,] -0.359 -0.316
+ [63,] -0.257 -0.431
+ [64,] -0.672  0.270
+ [65,] -0.704  0.351
+ [66,]  0.129 -0.520
+ [67,]  0.217 -0.465
+ [68,] -0.023 -0.550
+ [69,]  0.504 -0.089
+ [70,]  1.188  2.012
+ [71,] -0.352 -0.325
+ [72,] -1.454  3.292
+ [73,]  0.555  0.009
+ [74,] -0.485 -0.124
+ [75,] -0.472 -0.146
+ [76,]  0.567  0.033
+ [77,] -0.227 -0.457
+ [78,] -0.795  0.597
+ [79,]  0.055 -0.545
+ [80,] -0.139 -0.515
+ [81,] -0.051 -0.546
+ [82,]  0.179 -0.492
+ [83,] -0.279 -0.409
+ [84,]  0.336 -0.346
+ [85,] -0.188 -0.486
+ [86,]  0.146 -0.512
+ [87,]  0.610  0.125
+ [88,]  0.209 -0.471
+ [89,] -0.252 -0.435
+ [90,]  0.642  0.197
+ [91,]  0.547 -0.006
+ [92,]  0.278 -0.411
+ [93,]  0.090 -0.536
+ [94,] -0.435 -0.206
+ [95,]  0.770  0.526
+ [96,] -0.419 -0.232
+ [97,]  1.271  2.384
+ [98,]  0.874  0.838
+ [99,] -0.198 -0.480
+[100,] -0.677  0.282
+> mlgBHHH2 <- maxLik( llf, gfInd, start = startVal, method = "BHHH" )
+> all.equal( mlgBHHH, mlgBHHH2, tolerance = 1e-3 )
+[1] TRUE
+> # final Hessian = usual Hessian
+> mlgBhhhH <- maxLik( llf, gfInd, start = startVal, method = "BHHH", 
++    finalHessian = TRUE )
+> all.equal( mlgBhhhH, mlBhhhH, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlgBhhhH[-4], mlgBHHH[-4], tolerance = 1e-3 )
+[1] TRUE
+> round( hessian( mlgBhhhH ), 1 )
+         mu sigma
+mu    -30.3   0.0
+sigma   0.0 -60.6
+> 
+> # with analytical gradients as attribute
+> try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
+  gradient is not a matrix but of class 'numeric';
+the BHHH method requires that the gradient function
+(argument 'grad') returns a numeric matrix,
+where each row must correspond to the gradient(s)
+of the log-likelihood function at an individual
+(independent) observation and each column must
+correspond to a parameter
+> x <- xSaved[1]
+> try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
+  gradient is not a matrix but of class 'numeric';
+the BHHH method requires that the gradient function
+(argument 'grad') returns a numeric matrix,
+where each row must correspond to the gradient(s)
+of the log-likelihood function at an individual
+(independent) observation and each column must
+correspond to a parameter
+> try( maxLik( llfGradInd, start = startVal, method = "BHHH" ) )
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
+  the matrix returned by the gradient function (argument 'grad') must have at least as many rows as the number of parameters (2), where each row must correspond to the gradients of the log-likelihood function of an individual (independent) observation:
+ currently, there are (is) 2 parameter(s) but the gradient matrix has only 1 row(s)
+> x <- xSaved[1:2]
+> try( maxLik( llfGrad, start = startVal, method = "BHHH" ) )
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  : 
+  gradient is not a matrix but of class 'numeric';
+the BHHH method requires that the gradient function
+(argument 'grad') returns a numeric matrix,
+where each row must correspond to the gradient(s)
+of the log-likelihood function at an individual
+(independent) observation and each column must
+correspond to a parameter
+> try( maxLik( llfGradInd, start = startVal, method = "BHHH" ) )
+Maximum Likelihood estimation
+BHHH maximisation, 8 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -0.6227 (2 free parameter(s))
+Estimate(s): 0.2158 0.3302 
+> x <- xSaved
+> mlGBHHH <- maxLik( llfGradInd, start = startVal, method = "BHHH" )
+> all.equal( mlGBHHH, mlgBHHH, tolerance = 1e-3 )
+[1] TRUE
+> # final Hessian = usual Hessian
+> mlGBhhhH <- maxLik( llfGradInd, start = startVal, method = "BHHH", 
++    finalHessian = TRUE )
+> all.equal( mlGBhhhH, mlgBhhhH, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with analytical gradients as argument and attribute
+> mlgGBHHH <- maxLik( llfGradInd, gfInd, start = startVal, method = "BHHH" )
+Warning message:
+In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+  the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
+> all.equal( mlgGBHHH, mlgBHHH, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlgGBHHH, mlGBHHH, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with unused Hessian
+> mlghBHHH <- maxLik( llfInd, gfInd, hf, start = startVal, method = "BHHH" )
+> all.equal( mlgBHHH, mlghBHHH, tolerance = 1e-3 )
+[1] TRUE
+> # final Hessian = usual Hessian
+> mlghBhhhH <- maxLik( llfInd, gfInd, hf, start = startVal, method = "BHHH", 
++    finalHessian = TRUE )
+> all.equal( mlghBhhhH[-4], mlghBHHH[-4], tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlghBhhhH, mlgBhhhH, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with unused Hessian as attribute
+> mlGHBHHH <- maxLik( llfGradHessInd, start = startVal, method = "BHHH" )
+> all.equal( mlGHBHHH, mlghBHHH, tolerance = 1e-3 )
+[1] TRUE
+> # final Hessian = usual Hessian
+> mlGHBhhhH <- maxLik( llfGradHessInd, start = startVal, method = "BHHH", 
++    finalHessian = TRUE )
+> all.equal( mlGHBhhhH, mlghBhhhH, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with analytical gradients and Hessian as argument and attribute
+> mlgGhHBHHH <- maxLik( llfGradHessInd, gfInd, hf, start = startVal, method = "BHHH" )
+Warning messages:
+1: In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+  the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
+2: In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+  the Hessian is provided both as attribute 'hessian' and as argument 'hess': ignoring argument 'hess'
+> all.equal( mlgGhHBHHH, mlghBHHH, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlgGhHBHHH, mlGHBHHH, tolerance = 1e-3 )
+[1] TRUE
+> 
+> 
+> 
+> ### BFGS-YC method
+> mlBFGSYC <- maxLik( llf, start = startVal, method = "bfgsr" )
+> print( mlBFGSYC )
+Maximum Likelihood estimation
+BFGSR maximization, 15 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -201.6 (2 free parameter(s))
+Estimate(s): 1.181 1.816 
+> print( summary( mlBFGSYC ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGSR maximization, 15 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> activePar( mlBFGSYC )
+   mu sigma 
+ TRUE  TRUE 
+> AIC( mlBFGSYC )
+[1] 407.2
+> coef( mlBFGSYC )
+   mu sigma 
+1.181 1.816 
+> condiNumber( mlBFGSYC, digits = 3 )
+mu 	 1 
+sigma 	 1.67 
+> round( hessian( mlBFGSYC ), 1 )
+         mu sigma
+mu    -30.3   0.0
+sigma   0.0 -60.5
+> logLik( mlBFGSYC )
+[1] -201.6
+> maximType( mlBFGSYC )
+[1] "BFGSR maximization"
+> nIter( mlBFGSYC )
+[1] 15
+> try( nObs( mlBFGSYC ) )
+Error in nObs.maxLik(mlBFGSYC) : 
+  cannot return the number of observations: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
+> nParam( mlBFGSYC )
+[1] 2
+> returnCode( mlBFGSYC )
+[1] 2
+> returnMessage( mlBFGSYC )
+[1] "successive function values within tolerance limit"
+> round( vcov( mlBFGSYC ), 3 )
+         mu sigma
+mu    0.033 0.000
+sigma 0.000 0.017
+> logLik( summary( mlBFGSYC ) )
+[1] -201.6
+> all.equal( ml[-c(3,4,5,6,9,10)], mlBFGSYC[-c(3,4,5,6,9,10)], tolerance = 1e-3 )
+[1] TRUE
+> all.equal( ml[-c(5,6,9,10)], mlBFGSYC[-c(5,6,9,10)], tolerance = 1e-2 )
+[1] TRUE
+> mlIndBFGSYC <- maxLik( llfInd, start = startVal, method = "BFGSR" )
+> print( summary( mlIndBFGSYC ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGSR maximization, 34 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( mlBFGSYC[-c(3,4,9)], mlIndBFGSYC[ -c(3,4,9,11) ], tolerance = 1e-3 )
+[1] TRUE
+> round( mlIndBFGSYC[[ 11 ]], 3 )
+           mu  sigma
+  [1,] -0.395 -0.268
+  [2,] -0.194 -0.482
+  [3,]  0.890  0.889
+  [4,] -0.012 -0.550
+  [5,]  0.024 -0.550
+  [6,]  0.985  1.211
+  [7,]  0.225 -0.459
+  [8,] -0.822  0.676
+  [9,] -0.471 -0.147
+ [10,] -0.325 -0.359
+ [11,]  0.687  0.307
+ [12,]  0.163 -0.502
+ [13,]  0.188 -0.486
+ [14,]  0.012 -0.550
+ [15,] -0.392 -0.272
+ [16,]  1.028  1.371
+ [17,]  0.247 -0.440
+ [18,] -1.247  2.274
+ [19,]  0.370 -0.301
+ [20,] -0.341 -0.339
+ [21,] -0.702  0.345
+ [22,] -0.187 -0.487
+ [23,] -0.677  0.281
+ [24,] -0.497 -0.102
+ [25,] -0.434 -0.209
+ [26,] -1.077  1.557
+ [27,]  0.453 -0.178
+ [28,]  0.038 -0.548
+ [29,] -0.745  0.457
+ [30,]  0.705  0.353
+ [31,]  0.204 -0.475
+ [32,] -0.234 -0.451
+ [33,]  0.488 -0.118
+ [34,]  0.478 -0.136
+ [35,]  0.443 -0.194
+ [36,]  0.363 -0.312
+ [37,]  0.281 -0.407
+ [38,] -0.092 -0.535
+ [39,] -0.240 -0.446
+ [40,] -0.285 -0.403
+ [41,] -0.476 -0.139
+ [42,] -0.181 -0.491
+ [43,] -0.822  0.676
+ [44,]  1.260  2.333
+ [45,]  0.677  0.283
+ [46,] -0.736  0.432
+ [47,] -0.299 -0.388
+ [48,] -0.338 -0.343
+ [49,]  0.418 -0.233
+ [50,] -0.105 -0.530
+ [51,]  0.099 -0.533
+ [52,] -0.072 -0.541
+ [53,] -0.081 -0.539
+ [54,]  0.775  0.540
+ [55,] -0.192 -0.484
+ [56,]  0.865  0.807
+ [57,] -0.994  1.243
+ [58,]  0.300 -0.388
+ [59,]  0.020 -0.550
+ [60,]  0.076 -0.540
+ [61,]  0.175 -0.495
+ [62,] -0.359 -0.316
+ [63,] -0.257 -0.431
+ [64,] -0.672  0.270
+ [65,] -0.705  0.351
+ [66,]  0.129 -0.520
+ [67,]  0.217 -0.465
+ [68,] -0.023 -0.550
+ [69,]  0.504 -0.089
+ [70,]  1.188  2.013
+ [71,] -0.352 -0.325
+ [72,] -1.455  3.293
+ [73,]  0.555  0.009
+ [74,] -0.485 -0.124
+ [75,] -0.472 -0.146
+ [76,]  0.567  0.033
+ [77,] -0.227 -0.457
+ [78,] -0.795  0.597
+ [79,]  0.055 -0.545
+ [80,] -0.139 -0.515
+ [81,] -0.051 -0.546
+ [82,]  0.179 -0.493
+ [83,] -0.280 -0.409
+ [84,]  0.336 -0.346
+ [85,] -0.188 -0.486
+ [86,]  0.146 -0.512
+ [87,]  0.610  0.126
+ [88,]  0.209 -0.471
+ [89,] -0.252 -0.435
+ [90,]  0.642  0.197
+ [91,]  0.547 -0.006
+ [92,]  0.278 -0.411
+ [93,]  0.090 -0.536
+ [94,] -0.435 -0.206
+ [95,]  0.770  0.526
+ [96,] -0.419 -0.232
+ [97,]  1.271  2.385
+ [98,]  0.874  0.838
+ [99,] -0.198 -0.480
+[100,] -0.677  0.282
+> nObs( mlIndBFGSYC )
+[1] 100
+> 
+> # with analytical gradients
+> mlgBFGSYC <- maxLik( llf, gf, start = startVal, method = "BFGSR" , print.level=1)
+Initial value of the function : -326.6 
+Iteration  1 
+step = 1, lnL = -325.1, chi2 = 1.504, function increment = 1.494
+Iteration  2 
+step = 1, lnL = -254.9, chi2 = 107.8, function increment = 70.19
+Iteration  3 
+step = 1, lnL = -254.8, chi2 = 0.147, function increment = 0.1464
+Iteration  4 
+step = 1, lnL = -250, chi2 = 18.76, function increment = 4.778
+Iteration  5 
+step = 0.25, lnL = -218.8, chi2 = 1496, function increment = 31.18
+Iteration  6 
+step = 1, lnL = -201.7, chi2 = 22.41, function increment = 17.06
+Iteration  7 
+step = 0.25, lnL = -201.7, chi2 = 0.7577, function increment = 0.08696
+Iteration  8 
+step = 1, lnL = -201.6, chi2 = 0.07892, function increment = 0.05362
+Iteration  9 
+step = 0.25, lnL = -201.6, chi2 = 0.07185, function increment = 0.004091
+Iteration  10 
+step = 0.125, lnL = -201.6, chi2 = 0.223, function increment = 0.01277
+Iteration  11 
+step = 0.0625, lnL = -201.6, chi2 = 0.002795, function increment = 6.314e-05
+Iteration  12 
+step = 0.5, lnL = -201.6, chi2 = 0.0001251, function increment = 2.456e-05
+Iteration  13 
+step = 0.0625, lnL = -201.6, chi2 = 6.645e-05, function increment = 4.239e-07
+Iteration  14 
+step = 0.03125, lnL = -201.6, chi2 = 1.782e-05, function increment = 2.54e-07
+Iteration  15 
+step = 0.01562, lnL = -201.6, chi2 = 5.203e-08, function increment = 2.604e-10
+--------------
+successive function values within tolerance limit 
+15  iterations
+estimate: 1.181 1.816 
+Function value: -201.6 
+> print( summary(mlgBFGSYC), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGSR maximization, 15 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( mlBFGSYC[-4], mlgBFGSYC[-4], tolerance = 1e-3 )
+[1] TRUE
+> mlgIndBFGSYC <- maxLik( llfInd, gfInd, start = startVal,
++    method = "BFGSR" )
+> all.equal( mlIndBFGSYC, mlgIndBFGSYC, tolerance = 1e-3 )
+[1] "Component \"hessian\": Mean relative difference: 0.001516"
+> all.equal( mlgBFGSYC[ -c(3,9) ], mlgIndBFGSYC[ -c(3,9,11) ], tolerance = 1e-3 )
+[1] TRUE
+> round( mlgIndBFGSYC[[ 11 ]], 3 )
+           mu  sigma
+  [1,] -0.395 -0.268
+  [2,] -0.194 -0.482
+  [3,]  0.890  0.889
+  [4,] -0.012 -0.550
+  [5,]  0.024 -0.550
+  [6,]  0.985  1.211
+  [7,]  0.225 -0.459
+  [8,] -0.822  0.676
+  [9,] -0.471 -0.147
+ [10,] -0.325 -0.359
+ [11,]  0.687  0.307
+ [12,]  0.163 -0.502
+ [13,]  0.188 -0.486
+ [14,]  0.012 -0.550
+ [15,] -0.392 -0.272
+ [16,]  1.028  1.371
+ [17,]  0.247 -0.440
+ [18,] -1.247  2.274
+ [19,]  0.370 -0.301
+ [20,] -0.341 -0.339
+ [21,] -0.702  0.345
+ [22,] -0.187 -0.487
+ [23,] -0.677  0.281
+ [24,] -0.497 -0.102
+ [25,] -0.434 -0.209
+ [26,] -1.077  1.557
+ [27,]  0.453 -0.178
+ [28,]  0.038 -0.548
+ [29,] -0.745  0.457
+ [30,]  0.705  0.353
+ [31,]  0.204 -0.475
+ [32,] -0.234 -0.451
+ [33,]  0.488 -0.118
+ [34,]  0.478 -0.136
+ [35,]  0.443 -0.194
+ [36,]  0.363 -0.312
+ [37,]  0.281 -0.407
+ [38,] -0.092 -0.535
+ [39,] -0.240 -0.446
+ [40,] -0.285 -0.403
+ [41,] -0.476 -0.139
+ [42,] -0.181 -0.491
+ [43,] -0.822  0.676
+ [44,]  1.260  2.333
+ [45,]  0.677  0.283
+ [46,] -0.736  0.432
+ [47,] -0.299 -0.388
+ [48,] -0.338 -0.343
+ [49,]  0.418 -0.233
+ [50,] -0.105 -0.530
+ [51,]  0.099 -0.533
+ [52,] -0.072 -0.541
+ [53,] -0.081 -0.539
+ [54,]  0.775  0.540
+ [55,] -0.192 -0.484
+ [56,]  0.865  0.807
+ [57,] -0.994  1.243
+ [58,]  0.300 -0.388
+ [59,]  0.020 -0.550
+ [60,]  0.076 -0.540
+ [61,]  0.175 -0.495
+ [62,] -0.359 -0.316
+ [63,] -0.257 -0.431
+ [64,] -0.672  0.270
+ [65,] -0.705  0.351
+ [66,]  0.129 -0.520
+ [67,]  0.217 -0.465
+ [68,] -0.023 -0.550
+ [69,]  0.504 -0.089
+ [70,]  1.188  2.013
+ [71,] -0.352 -0.325
+ [72,] -1.455  3.293
+ [73,]  0.555  0.009
+ [74,] -0.485 -0.124
+ [75,] -0.472 -0.146
+ [76,]  0.567  0.033
+ [77,] -0.227 -0.457
+ [78,] -0.795  0.597
+ [79,]  0.055 -0.545
+ [80,] -0.139 -0.515
+ [81,] -0.051 -0.546
+ [82,]  0.179 -0.493
+ [83,] -0.280 -0.409
+ [84,]  0.336 -0.346
+ [85,] -0.188 -0.486
+ [86,]  0.146 -0.512
+ [87,]  0.610  0.126
+ [88,]  0.209 -0.471
+ [89,] -0.252 -0.435
+ [90,]  0.642  0.197
+ [91,]  0.547 -0.006
+ [92,]  0.278 -0.411
+ [93,]  0.090 -0.536
+ [94,] -0.435 -0.206
+ [95,]  0.770  0.526
+ [96,] -0.419 -0.232
+ [97,]  1.271  2.385
+ [98,]  0.874  0.838
+ [99,] -0.198 -0.480
+[100,] -0.677  0.282
+> 
+> # with analytical gradients as attribute
+> mlGBFGSYC <- maxLik( llfGrad, start = startVal, method = "BFGSR" , print.level=1)
+Initial value of the function : -326.6 
+Iteration  1 
+step = 1, lnL = -325.1, chi2 = 1.504, function increment = 1.494
+Iteration  2 
+step = 1, lnL = -254.9, chi2 = 107.8, function increment = 70.19
+Iteration  3 
+step = 1, lnL = -254.8, chi2 = 0.147, function increment = 0.1464
+Iteration  4 
+step = 1, lnL = -250, chi2 = 18.76, function increment = 4.778
+Iteration  5 
+step = 0.25, lnL = -218.8, chi2 = 1496, function increment = 31.18
+Iteration  6 
+step = 1, lnL = -201.7, chi2 = 22.41, function increment = 17.06
+Iteration  7 
+step = 0.25, lnL = -201.7, chi2 = 0.7577, function increment = 0.08696
+Iteration  8 
+step = 1, lnL = -201.6, chi2 = 0.07892, function increment = 0.05362
+Iteration  9 
+step = 0.25, lnL = -201.6, chi2 = 0.07185, function increment = 0.004091
+Iteration  10 
+step = 0.125, lnL = -201.6, chi2 = 0.223, function increment = 0.01277
+Iteration  11 
+step = 0.0625, lnL = -201.6, chi2 = 0.002795, function increment = 6.314e-05
+Iteration  12 
+step = 0.5, lnL = -201.6, chi2 = 0.0001251, function increment = 2.456e-05
+Iteration  13 
+step = 0.0625, lnL = -201.6, chi2 = 6.645e-05, function increment = 4.239e-07
+Iteration  14 
+step = 0.03125, lnL = -201.6, chi2 = 1.782e-05, function increment = 2.54e-07
+Iteration  15 
+step = 0.01562, lnL = -201.6, chi2 = 5.203e-08, function increment = 2.604e-10
+--------------
+successive function values within tolerance limit 
+15  iterations
+estimate: 1.181 1.816 
+Function value: -201.6 
+> all.equal( mlGBFGSYC, mlgBFGSYC, tolerance = 1e-3 )
+[1] TRUE
+> mlGIndBFGSYC <- maxLik( llfGradInd, start = startVal, method = "BFGSR" )
+> all.equal( mlGIndBFGSYC, mlgIndBFGSYC, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with analytical gradients as argument and attribute
+> mlgGBFGSYC <- maxLik( llfGrad, gf, start = startVal, method = "BFGSR" )
+Warning message:
+In maxBFGSRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad,  :
+  the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
+> all.equal( mlgGBFGSYC, mlgBFGSYC, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlgGBFGSYC, mlGBFGSYC, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with analytical gradients and Hessians
+> mlghBFGSYC <- maxLik( llf, gf, hf, start = startVal, method = "BFGSR" )
+> all.equal( mlgBFGSYC, mlghBFGSYC, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with analytical gradients and Hessian as attribute
+> mlGHBFGSYC <- maxLik( llfGradHess, start = startVal, method = "BFGSR" )
+> all.equal( mlGHBFGSYC, mlghBFGSYC, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with analytical gradients and Hessian as argument and attribute
+> mlgGhHBFGSYC <- maxLik( llfGradHess, gf, hf, start = startVal, method = "BFGSR" )
+Warning messages:
+1: In maxBFGSRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad,  :
+  the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
+2: In maxBFGSRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad,  :
+  the Hessian is provided both as attribute 'hessian' and as argument 'hess': ignoring argument 'hess'
+> all.equal( mlgGhHBFGSYC, mlghBFGSYC, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlgGhHBFGSYC, mlGHBFGSYC, tolerance = 1e-3 )
+[1] TRUE
+> 
+> 
+> ## BFGS method
+> mlBFGS <- maxLik( llf, start = startVal, method = "BFGS" )
+> print( mlBFGS )
+Maximum Likelihood estimation
+BFGS maximisation, 36 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 (2 free parameter(s))
+Estimate(s): 1.181 1.816 
+> print( summary( mlBFGS ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS maximisation, 36 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> activePar( mlBFGS )
+   mu sigma 
+ TRUE  TRUE 
+> AIC( mlBFGS )
+[1] 407.2
+> coef( mlBFGS )
+   mu sigma 
+1.181 1.816 
+> condiNumber( mlBFGS, digits = 3 )
+mu 	 1 
+sigma 	 1.67 
+> round( hessian( mlBFGS ), 1 )
+         mu sigma
+mu    -30.3   0.0
+sigma   0.0 -60.6
+> logLik( mlBFGS )
+[1] -201.6
+> maximType( mlBFGS )
+[1] "BFGS maximisation"
+> nIter( mlBFGS )
+function 
+      36 
+> nParam( mlBFGS )
+[1] 2
+> returnCode( mlBFGS )
+[1] 0
+> returnMessage( mlBFGS )
+[1] "successful convergence "
+> round( vcov( mlBFGS ), 3 )
+         mu sigma
+mu    0.033 0.000
+sigma 0.000 0.016
+> logLik( summary( mlBFGS ) )
+[1] -201.6
+> all.equal( ml[-c(4,5,6,9,10)], mlBFGS[-c(4,5,6,9,10,11)], tolerance = 1e-3 )
+[1] TRUE
+> # with individual log likelihood values
+> mlIndBFGS <- maxLik( llfInd, start = startVal, method = "BFGS" )
+> print( summary( mlIndBFGS ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS maximisation, 36 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( mlBFGS[-4], mlIndBFGS[-c(4,12)], tolerance = 1e-3 )
+[1] TRUE
+> mlIndBFGS[12]
+$gradientObs
+             mu     sigma
+  [1,] -0.39452 -0.267786
+  [2,] -0.19432 -0.481927
+  [3,]  0.88999  0.888279
+  [4,] -0.01206 -0.550251
+  [5,]  0.02357 -0.549506
+  [6,]  0.98476  1.211023
+  [7,]  0.22458 -0.458899
+  [8,] -0.82159  0.675638
+  [9,] -0.47112 -0.147336
+ [10,] -0.32493 -0.358734
+ [11,]  0.68716  0.307205
+ [12,]  0.16330 -0.502076
+ [13,]  0.18812 -0.486229
+ [14,]  0.01229 -0.550240
+ [15,] -0.39171 -0.271798
+ [16,]  1.02831  1.370271
+ [17,]  0.24697 -0.439724
+ [18,] -1.24683  2.273358
+ [19,]  0.37032 -0.301412
+ [20,] -0.34137 -0.338831
+ [21,] -0.70204  0.344759
+ [22,] -0.18692 -0.487049
+ [23,] -0.67669  0.281276
+ [24,] -0.49660 -0.102544
+ [25,] -0.43365 -0.208914
+ [26,] -1.07716  1.557095
+ [27,]  0.45301 -0.177735
+ [28,]  0.03817 -0.547869
+ [29,] -0.74466  0.456758
+ [30,]  0.70518  0.352786
+ [31,]  0.20370 -0.475145
+ [32,] -0.23365 -0.451349
+ [33,]  0.48777 -0.118342
+ [34,]  0.47747 -0.136401
+ [35,]  0.44319 -0.193726
+ [36,]  0.36261 -0.311673
+ [37,]  0.28095 -0.407134
+ [38,] -0.09232 -0.535032
+ [39,] -0.24025 -0.445666
+ [40,] -0.28541 -0.402542
+ [41,] -0.47588 -0.139147
+ [42,] -0.18082 -0.491121
+ [43,] -0.82180  0.676245
+ [44,]  1.25988  2.332775
+ [45,]  0.67739  0.282986
+ [46,] -0.73555  0.432266
+ [47,] -0.29900 -0.388120
+ [48,] -0.33765 -0.343419
+ [49,]  0.41797 -0.233185
+ [50,] -0.10533 -0.530362
+ [51,]  0.09875 -0.532802
+ [52,] -0.07210 -0.541072
+ [53,] -0.08078 -0.538661
+ [54,]  0.77476  0.539827
+ [55,] -0.19164 -0.483800
+ [56,]  0.86439  0.806692
+ [57,] -0.99355  1.242603
+ [58,]  0.29956 -0.387515
+ [59,]  0.02027 -0.549768
+ [60,]  0.07609 -0.539998
+ [61,]  0.17531 -0.494685
+ [62,] -0.35927 -0.316049
+ [63,] -0.25677 -0.430757
+ [64,] -0.67219  0.270243
+ [65,] -0.70445  0.350903
+ [66,]  0.12918 -0.520202
+ [67,]  0.21688 -0.465075
+ [68,] -0.02267 -0.549581
+ [69,]  0.50422 -0.088698
+ [70,]  1.18783  2.012418
+ [71,] -0.35243 -0.324898
+ [72,] -1.45446  3.292176
+ [73,]  0.55481  0.008632
+ [74,] -0.48467 -0.123818
+ [75,] -0.47182 -0.146136
+ [76,]  0.56684  0.033125
+ [77,] -0.22741 -0.456577
+ [78,] -0.79472  0.596724
+ [79,]  0.05510 -0.545001
+ [80,] -0.13898 -0.515427
+ [81,] -0.05130 -0.545734
+ [82,]  0.17873 -0.492486
+ [83,] -0.27947 -0.408644
+ [84,]  0.33578 -0.345709
+ [85,] -0.18844 -0.486011
+ [86,]  0.14631 -0.511632
+ [87,]  0.61003  0.125471
+ [88,]  0.20898 -0.471184
+ [89,] -0.25236 -0.434835
+ [90,]  0.64153  0.197084
+ [91,]  0.54740 -0.006216
+ [92,]  0.27760 -0.410530
+ [93,]  0.08991 -0.535832
+ [94,] -0.43539 -0.206171
+ [95,]  0.76994  0.526306
+ [96,] -0.41863 -0.232167
+ [97,]  1.27102  2.383985
+ [98,]  0.87417  0.837587
+ [99,] -0.19766 -0.479543
+[100,] -0.67695  0.281897
+
+> nObs( mlIndBFGS )
+[1] 100
+> 
+> # with analytical gradients
+> mlgBFGS <- maxLik( llf, gf, start = startVal, method = "BFGS" )
+> print( summary( mlgBFGS ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS maximisation, 36 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( mlBFGS[-4], mlgBFGS[-4], tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlg[-c(5,6,9,10)], mlgBFGS[-c(5,6,9,10,11)], tolerance = 1e-3 )
+[1] TRUE
+> mlgIndBFGS <- maxLik( llfInd, gfInd, start = startVal, method = "BFGS" )
+> all.equal( mlgBFGS[], mlgIndBFGS[-12], tolerance = 1e-3 )
+[1] TRUE
+> mlgIndBFGS[12]
+$gradientObs
+             mu     sigma
+  [1,] -0.39452 -0.267786
+  [2,] -0.19432 -0.481927
+  [3,]  0.88999  0.888279
+  [4,] -0.01206 -0.550251
+  [5,]  0.02357 -0.549506
+  [6,]  0.98476  1.211023
+  [7,]  0.22458 -0.458899
+  [8,] -0.82159  0.675638
+  [9,] -0.47112 -0.147336
+ [10,] -0.32493 -0.358734
+ [11,]  0.68716  0.307205
+ [12,]  0.16330 -0.502076
+ [13,]  0.18812 -0.486229
+ [14,]  0.01229 -0.550240
+ [15,] -0.39171 -0.271798
+ [16,]  1.02831  1.370271
+ [17,]  0.24697 -0.439724
+ [18,] -1.24683  2.273358
+ [19,]  0.37032 -0.301412
+ [20,] -0.34137 -0.338831
+ [21,] -0.70204  0.344759
+ [22,] -0.18692 -0.487049
+ [23,] -0.67669  0.281276
+ [24,] -0.49660 -0.102544
+ [25,] -0.43365 -0.208914
+ [26,] -1.07716  1.557095
+ [27,]  0.45301 -0.177735
+ [28,]  0.03817 -0.547869
+ [29,] -0.74466  0.456758
+ [30,]  0.70518  0.352786
+ [31,]  0.20370 -0.475145
+ [32,] -0.23365 -0.451349
+ [33,]  0.48777 -0.118342
+ [34,]  0.47747 -0.136401
+ [35,]  0.44319 -0.193726
+ [36,]  0.36261 -0.311673
+ [37,]  0.28095 -0.407134
+ [38,] -0.09232 -0.535032
+ [39,] -0.24025 -0.445666
+ [40,] -0.28541 -0.402542
+ [41,] -0.47588 -0.139147
+ [42,] -0.18082 -0.491121
+ [43,] -0.82180  0.676245
+ [44,]  1.25988  2.332775
+ [45,]  0.67739  0.282986
+ [46,] -0.73555  0.432266
+ [47,] -0.29900 -0.388120
+ [48,] -0.33765 -0.343419
+ [49,]  0.41797 -0.233185
+ [50,] -0.10533 -0.530362
+ [51,]  0.09875 -0.532802
+ [52,] -0.07210 -0.541072
+ [53,] -0.08078 -0.538661
+ [54,]  0.77476  0.539827
+ [55,] -0.19164 -0.483800
+ [56,]  0.86439  0.806692
+ [57,] -0.99355  1.242603
+ [58,]  0.29956 -0.387515
+ [59,]  0.02027 -0.549768
+ [60,]  0.07609 -0.539998
+ [61,]  0.17531 -0.494685
+ [62,] -0.35927 -0.316049
+ [63,] -0.25677 -0.430757
+ [64,] -0.67219  0.270243
+ [65,] -0.70445  0.350903
+ [66,]  0.12918 -0.520202
+ [67,]  0.21688 -0.465075
+ [68,] -0.02267 -0.549581
+ [69,]  0.50422 -0.088698
+ [70,]  1.18783  2.012418
+ [71,] -0.35243 -0.324898
+ [72,] -1.45446  3.292176
+ [73,]  0.55481  0.008632
+ [74,] -0.48467 -0.123818
+ [75,] -0.47182 -0.146136
+ [76,]  0.56684  0.033125
+ [77,] -0.22741 -0.456577
+ [78,] -0.79472  0.596724
+ [79,]  0.05510 -0.545001
+ [80,] -0.13898 -0.515427
+ [81,] -0.05130 -0.545734
+ [82,]  0.17873 -0.492486
+ [83,] -0.27947 -0.408644
+ [84,]  0.33578 -0.345709
+ [85,] -0.18844 -0.486011
+ [86,]  0.14631 -0.511632
+ [87,]  0.61003  0.125471
+ [88,]  0.20898 -0.471184
+ [89,] -0.25236 -0.434835
+ [90,]  0.64153  0.197084
+ [91,]  0.54740 -0.006216
+ [92,]  0.27760 -0.410530
+ [93,]  0.08991 -0.535832
+ [94,] -0.43539 -0.206171
+ [95,]  0.76994  0.526306
+ [96,] -0.41863 -0.232167
+ [97,]  1.27102  2.383985
+ [98,]  0.87417  0.837587
+ [99,] -0.19766 -0.479543
+[100,] -0.67695  0.281897
+
+> 
+> # with analytical gradients as attribute
+> mlGBFGS <- maxLik( llfGrad, start = startVal, method = "BFGS" )
+> all.equal( mlGBFGS, mlgBFGS, tolerance = 1e-3 )
+[1] TRUE
+> mlGIndBFGS <- maxLik( llfGradInd, start = startVal, method = "BFGS" )
+> all.equal( mlGIndBFGS, mlgIndBFGS, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with analytical gradients as argument and attribute
+> mlgGBFGS <- maxLik( llfGrad, gf, start = startVal, method = "BFGS" )
+Warning message:
+In maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  :
+  the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
+> all.equal( mlgGBFGS, mlgBFGS, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlgGBFGS, mlGBFGS, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with unused Hessian
+> mlghBFGS <- maxLik( llf, gf, hf, start = startVal, method = "BFGS" )
+> all.equal( mlgBFGS, mlghBFGS, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with analytical gradients and Hessian as attribute
+> mlGHBFGS <- maxLik( llfGradHess, start = startVal, method = "BFGS" )
+> all.equal( mlGHBFGS, mlghBFGS, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with analytical gradients and Hessian as argument and attribute
+> mlgGhHBFGS <- maxLik( llfGradHess, gf, hf, start = startVal, method = "BFGS" )
+Warning messages:
+1: In maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  :
+  the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
+2: In maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  :
+  the Hessian is provided both as attribute 'hessian' and as argument 'hess': ignoring argument 'hess'
+> all.equal( mlgGhHBFGS, mlghBFGS, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlgGhHBFGS, mlGHBFGS, tolerance = 1e-3 )
+[1] TRUE
+> 
+> 
+> ## NM method
+> mlNM <- maxLik( llf, start = startVal, method = "NM" )
+> print( mlNM )
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 63 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 (2 free parameter(s))
+Estimate(s): 1.181 1.817 
+> print( summary( mlNM ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 63 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> activePar( mlNM )
+   mu sigma 
+ TRUE  TRUE 
+> AIC( mlNM )
+[1] 407.2
+> coef( mlNM )
+   mu sigma 
+1.181 1.817 
+> condiNumber( mlNM, digits = 3 )
+mu 	 1 
+sigma 	 1.67 
+> round( hessian( mlNM ), 1 )
+         mu sigma
+mu    -30.3   0.0
+sigma   0.0 -60.6
+> logLik( mlNM )
+[1] -201.6
+> maximType( mlNM )
+[1] "Nelder-Mead maximisation"
+> nIter( mlNM )
+function 
+      63 
+> nParam( mlNM )
+[1] 2
+> returnCode( mlNM )
+[1] 0
+> returnMessage( mlNM )
+[1] "successful convergence "
+> round( vcov( mlNM ), 3 )
+         mu sigma
+mu    0.033 0.000
+sigma 0.000 0.017
+> logLik( summary( mlNM ) )
+[1] -201.6
+> all.equal( ml[-c(3,4,5,6,9,10)], mlNM[-c(3,4,5,6,9,10,11)], tolerance = 1e-3 )
+[1] TRUE
+> # with individual log likelihood values
+> mlIndNM <- maxLik( llfInd, start = startVal, method = "NM" )
+> print( summary( mlIndNM ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 63 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( mlNM[-4], mlIndNM[-c(4,12)], tolerance = 1e-3 )
+[1] TRUE
+> mlIndNM[12]
+$gradientObs
+             mu     sigma
+  [1,] -0.39439 -0.267899
+  [2,] -0.19422 -0.481941
+  [3,]  0.88990  0.888156
+  [4,] -0.01200 -0.550207
+  [5,]  0.02363 -0.549454
+  [6,]  0.98465  1.210839
+  [7,]  0.22460 -0.458826
+  [8,] -0.82139  0.675189
+  [9,] -0.47098 -0.147497
+ [10,] -0.32481 -0.358808
+ [11,]  0.68710  0.307186
+ [12,]  0.16333 -0.502006
+ [13,]  0.18815 -0.486157
+ [14,]  0.01235 -0.550191
+ [15,] -0.39158 -0.271909
+ [16,]  1.02820  1.370056
+ [17,]  0.24699 -0.439650
+ [18,] -1.24656  2.272406
+ [19,]  0.37032 -0.301346
+ [20,] -0.34125 -0.338914
+ [21,] -0.70186  0.344421
+ [22,] -0.18683 -0.487060
+ [23,] -0.67652  0.280960
+ [24,] -0.49646 -0.102723
+ [25,] -0.43352 -0.209051
+ [26,] -1.07691  1.556363
+ [27,]  0.45300 -0.177683
+ [28,]  0.03822 -0.547814
+ [29,] -0.74447  0.456382
+ [30,]  0.70512  0.352759
+ [31,]  0.20372 -0.475072
+ [32,] -0.23355 -0.451379
+ [33,]  0.48775 -0.118297
+ [34,]  0.47745 -0.136353
+ [35,]  0.44318 -0.193672
+ [36,]  0.36261 -0.311606
+ [37,]  0.28096 -0.407062
+ [38,] -0.09225 -0.535009
+ [39,] -0.24015 -0.445699
+ [40,] -0.28530 -0.402597
+ [41,] -0.47574 -0.139311
+ [42,] -0.18073 -0.491130
+ [43,] -0.82160  0.675795
+ [44,]  1.25973  2.332366
+ [45,]  0.67733  0.282971
+ [46,] -0.73536  0.431898
+ [47,] -0.29889 -0.388181
+ [48,] -0.33753 -0.343500
+ [49,]  0.41796 -0.233126
+ [50,] -0.10525 -0.530344
+ [51,]  0.09879 -0.532738
+ [52,] -0.07203 -0.541043
+ [53,] -0.08071 -0.538635
+ [54,]  0.77469  0.539768
+ [55,] -0.19155 -0.483812
+ [56,]  0.86430  0.806585
+ [57,] -0.99332  1.241970
+ [58,]  0.29957 -0.387443
+ [59,]  0.02033 -0.549717
+ [60,]  0.07614 -0.539936
+ [61,]  0.17535 -0.494613
+ [62,] -0.35915 -0.316142
+ [63,] -0.25666 -0.430798
+ [64,] -0.67201  0.269930
+ [65,] -0.70426  0.350563
+ [66,]  0.12922 -0.520134
+ [67,]  0.21690 -0.465002
+ [68,] -0.02260 -0.549540
+ [69,]  0.50419 -0.088657
+ [70,]  1.18769  2.012075
+ [71,] -0.35231 -0.324987
+ [72,] -1.45415  3.290917
+ [73,]  0.55478  0.008659
+ [74,] -0.48452 -0.123988
+ [75,] -0.47168 -0.146298
+ [76,]  0.56680  0.033149
+ [77,] -0.22731 -0.456604
+ [78,] -0.79452  0.596301
+ [79,]  0.05515 -0.544943
+ [80,] -0.13890 -0.515420
+ [81,] -0.05123 -0.545699
+ [82,]  0.17876 -0.492414
+ [83,] -0.27936 -0.408696
+ [84,]  0.33578 -0.345640
+ [85,] -0.18835 -0.486023
+ [86,]  0.14634 -0.511562
+ [87,]  0.60999  0.125481
+ [88,]  0.20901 -0.471111
+ [89,] -0.25225 -0.434874
+ [90,]  0.64148  0.197083
+ [91,]  0.54737 -0.006186
+ [92,]  0.27762 -0.410457
+ [93,]  0.08995 -0.535769
+ [94,] -0.43526 -0.206309
+ [95,]  0.76987  0.526250
+ [96,] -0.41850 -0.232295
+ [97,]  1.27086  2.383565
+ [98,]  0.87408  0.837474
+ [99,] -0.19757 -0.479559
+[100,] -0.67677  0.281580
+
+> nObs( mlIndNM )
+[1] 100
+> 
+> # with unused analytical gradients
+> mlgNM <- maxLik( llf, gf, start = startVal, method = "NM" )
+> print( summary( mlgNM ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 63 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( mlNM[-4], mlgNM[-4], tolerance = 1e-3 )
+[1] TRUE
+> # with individual log likelihood values and gradients
+> mlgIndNM <- maxLik( llfInd, gfInd, start = startVal, method = "NM" )
+> print( summary( mlgIndNM ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 63 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( mlgNM[], mlgIndNM[-12], tolerance = 1e-3 )
+[1] TRUE
+> mlgIndNM[12]
+$gradientObs
+             mu     sigma
+  [1,] -0.39439 -0.267899
+  [2,] -0.19422 -0.481941
+  [3,]  0.88990  0.888156
+  [4,] -0.01200 -0.550207
+  [5,]  0.02363 -0.549454
+  [6,]  0.98465  1.210839
+  [7,]  0.22460 -0.458826
+  [8,] -0.82139  0.675189
+  [9,] -0.47098 -0.147497
+ [10,] -0.32481 -0.358808
+ [11,]  0.68710  0.307186
+ [12,]  0.16333 -0.502006
+ [13,]  0.18815 -0.486157
+ [14,]  0.01235 -0.550191
+ [15,] -0.39158 -0.271909
+ [16,]  1.02820  1.370056
+ [17,]  0.24699 -0.439650
+ [18,] -1.24656  2.272406
+ [19,]  0.37032 -0.301346
+ [20,] -0.34125 -0.338914
+ [21,] -0.70186  0.344421
+ [22,] -0.18683 -0.487060
+ [23,] -0.67652  0.280960
+ [24,] -0.49646 -0.102723
+ [25,] -0.43352 -0.209051
+ [26,] -1.07691  1.556363
+ [27,]  0.45300 -0.177683
+ [28,]  0.03822 -0.547814
+ [29,] -0.74447  0.456382
+ [30,]  0.70512  0.352759
+ [31,]  0.20372 -0.475072
+ [32,] -0.23355 -0.451379
+ [33,]  0.48775 -0.118297
+ [34,]  0.47745 -0.136353
+ [35,]  0.44318 -0.193672
+ [36,]  0.36261 -0.311606
+ [37,]  0.28096 -0.407062
+ [38,] -0.09225 -0.535009
+ [39,] -0.24015 -0.445699
+ [40,] -0.28530 -0.402597
+ [41,] -0.47574 -0.139311
+ [42,] -0.18073 -0.491130
+ [43,] -0.82160  0.675795
+ [44,]  1.25973  2.332366
+ [45,]  0.67733  0.282971
+ [46,] -0.73536  0.431898
+ [47,] -0.29889 -0.388181
+ [48,] -0.33753 -0.343500
+ [49,]  0.41796 -0.233126
+ [50,] -0.10525 -0.530344
+ [51,]  0.09879 -0.532738
+ [52,] -0.07203 -0.541043
+ [53,] -0.08071 -0.538635
+ [54,]  0.77469  0.539768
+ [55,] -0.19155 -0.483812
+ [56,]  0.86430  0.806585
+ [57,] -0.99332  1.241970
+ [58,]  0.29957 -0.387443
+ [59,]  0.02033 -0.549717
+ [60,]  0.07614 -0.539936
+ [61,]  0.17535 -0.494613
+ [62,] -0.35915 -0.316142
+ [63,] -0.25666 -0.430798
+ [64,] -0.67201  0.269930
+ [65,] -0.70426  0.350563
+ [66,]  0.12922 -0.520134
+ [67,]  0.21690 -0.465002
+ [68,] -0.02260 -0.549540
+ [69,]  0.50419 -0.088657
+ [70,]  1.18769  2.012075
+ [71,] -0.35231 -0.324987
+ [72,] -1.45415  3.290917
+ [73,]  0.55478  0.008659
+ [74,] -0.48452 -0.123988
+ [75,] -0.47168 -0.146298
+ [76,]  0.56680  0.033149
+ [77,] -0.22731 -0.456604
+ [78,] -0.79452  0.596301
+ [79,]  0.05515 -0.544943
+ [80,] -0.13890 -0.515420
+ [81,] -0.05123 -0.545699
+ [82,]  0.17876 -0.492414
+ [83,] -0.27936 -0.408696
+ [84,]  0.33578 -0.345640
+ [85,] -0.18835 -0.486023
+ [86,]  0.14634 -0.511562
+ [87,]  0.60999  0.125481
+ [88,]  0.20901 -0.471111
+ [89,] -0.25225 -0.434874
+ [90,]  0.64148  0.197083
+ [91,]  0.54737 -0.006186
+ [92,]  0.27762 -0.410457
+ [93,]  0.08995 -0.535769
+ [94,] -0.43526 -0.206309
+ [95,]  0.76987  0.526250
+ [96,] -0.41850 -0.232295
+ [97,]  1.27086  2.383565
+ [98,]  0.87408  0.837474
+ [99,] -0.19757 -0.479559
+[100,] -0.67677  0.281580
+
+> 
+> # with (unused) analytical gradients as attribute
+> mlGNM <- maxLik( llfGrad, start = startVal, method = "NM" )
+> all.equal( mlGNM, mlgNM, tolerance = 1e-3 )
+[1] TRUE
+> mlGIndNM <- maxLik( llfGradInd, start = startVal, method = "NM" )
+> all.equal( mlGIndNM, mlgIndNM, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with analytical gradients as argument and attribute
+> mlgGNM <- maxLik( llfGrad, gf, start = startVal, method = "NM" )
+Warning message:
+In maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "Nelder-Mead",  :
+  the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
+> all.equal( mlgGNM, mlgNM, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlgGNM, mlGNM, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with unused analytical gradients and Hessian
+> mlghNM <- maxLik( llf, gf, hf, start = startVal, method = "NM" )
+> all.equal( mlgNM, mlghNM, tolerance = 1e-3 )
+[1] TRUE
+> 
+> 
+> ## SANN method
+> mlSANN <- maxLik( llf, start = startVal, method = "SANN" )
+> print( mlSANN )
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 (2 free parameter(s))
+Estimate(s): 1.182 1.817 
+> print( summary( mlSANN ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> activePar( mlSANN )
+   mu sigma 
+ TRUE  TRUE 
+> AIC( mlSANN )
+[1] 407.2
+> coef( mlSANN )
+   mu sigma 
+1.182 1.817 
+> condiNumber( mlSANN, digits = 3 )
+mu 	 1 
+sigma 	 1.67 
+> round( hessian( mlSANN ), 1 )
+         mu sigma
+mu    -30.3   0.1
+sigma   0.1 -60.6
+> logLik( mlSANN )
+[1] -201.6
+> maximType( mlSANN )
+[1] "SANN maximisation"
+> nIter( mlSANN )
+function 
+   10000 
+> nParam( mlSANN )
+[1] 2
+> returnCode( mlSANN )
+[1] 0
+> returnMessage( mlSANN )
+[1] "successful convergence "
+> round( vcov( mlSANN ), 3 )
+         mu sigma
+mu    0.033 0.000
+sigma 0.000 0.017
+> logLik( summary( mlSANN ) )
+[1] -201.6
+> all.equal( ml[-c(3,4,5,6,9,10)], mlSANN[-c(3,4,5,6,9,10,11)], tolerance = 1e-3 )
+[1] TRUE
+> # with individual log likelihood values
+> mlIndSANN <- maxLik( llfInd, start = startVal, method = "SANN" )
+> print( summary( mlIndSANN ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( mlSANN[-4], mlIndSANN[-c(4,12)], tolerance = 1e-3 )
+[1] TRUE
+> mlIndSANN[12]
+$gradientObs
+             mu     sigma
+  [1,] -0.39480 -0.267372
+  [2,] -0.19460 -0.481713
+  [3,]  0.88966  0.887254
+  [4,] -0.01235 -0.550226
+  [5,]  0.02327 -0.549519
+  [6,]  0.98443  1.209877
+  [7,]  0.22428 -0.459132
+  [8,] -0.82185  0.676448
+  [9,] -0.47140 -0.146848
+ [10,] -0.32521 -0.358388
+ [11,]  0.68684  0.306432
+ [12,]  0.16300 -0.502242
+ [13,]  0.18782 -0.486422
+ [14,]  0.01200 -0.550242
+ [15,] -0.39199 -0.271387
+ [16,]  1.02797  1.369068
+ [17,]  0.24666 -0.439982
+ [18,] -1.24707  2.274521
+ [19,]  0.37001 -0.301810
+ [20,] -0.34165 -0.338469
+ [21,] -0.70230  0.345462
+ [22,] -0.18720 -0.486842
+ [23,] -0.67696  0.281956
+ [24,] -0.49688 -0.102032
+ [25,] -0.43393 -0.208462
+ [26,] -1.07741  1.558122
+ [27,]  0.45270 -0.178229
+ [28,]  0.03787 -0.547898
+ [29,] -0.74492  0.457500
+ [30,]  0.70486  0.351991
+ [31,]  0.20340 -0.475355
+ [32,] -0.23393 -0.451095
+ [33,]  0.48745 -0.118877
+ [34,]  0.47716 -0.136923
+ [35,]  0.44288 -0.194209
+ [36,]  0.36230 -0.312062
+ [37,]  0.28065 -0.407431
+ [38,] -0.09261 -0.534923
+ [39,] -0.24053 -0.445405
+ [40,] -0.28569 -0.402236
+ [41,] -0.47616 -0.138654
+ [42,] -0.18111 -0.490921
+ [43,] -0.82206  0.677055
+ [44,]  1.25953  2.331267
+ [45,]  0.67707  0.282225
+ [46,] -0.73581  0.432999
+ [47,] -0.29928 -0.387800
+ [48,] -0.33793 -0.343061
+ [49,]  0.41765 -0.233638
+ [50,] -0.10562 -0.530239
+ [51,]  0.09845 -0.532897
+ [52,] -0.07239 -0.540984
+ [53,] -0.08107 -0.538564
+ [54,]  0.77443  0.538946
+ [55,] -0.19193 -0.483588
+ [56,]  0.86406  0.805699
+ [57,] -0.99380  1.243560
+ [58,]  0.29925 -0.387832
+ [59,]  0.01998 -0.549778
+ [60,]  0.07580 -0.540068
+ [61,]  0.17501 -0.494864
+ [62,] -0.35955 -0.315670
+ [63,] -0.25705 -0.430479
+ [64,] -0.67246  0.270919
+ [65,] -0.70471  0.351608
+ [66,]  0.12888 -0.520330
+ [67,]  0.21658 -0.465300
+ [68,] -0.02296 -0.549546
+ [69,]  0.50391 -0.089252
+ [70,]  1.18748  2.011006
+ [71,] -0.35271 -0.324525
+ [72,] -1.45469  3.293497
+ [73,]  0.55450  0.008018
+ [74,] -0.48494 -0.123317
+ [75,] -0.47210 -0.145648
+ [76,]  0.56652  0.032497
+ [77,] -0.22769 -0.456329
+ [78,] -0.79498  0.597510
+ [79,]  0.05480 -0.545048
+ [80,] -0.13927 -0.515269
+ [81,] -0.05159 -0.545668
+ [82,]  0.17843 -0.492668
+ [83,] -0.27975 -0.408344
+ [84,]  0.33547 -0.346068
+ [85,] -0.18873 -0.485803
+ [86,]  0.14601 -0.511779
+ [87,]  0.60971  0.124791
+ [88,]  0.20868 -0.471400
+ [89,] -0.25264 -0.434562
+ [90,]  0.64121  0.196366
+ [91,]  0.54708 -0.006821
+ [92,]  0.27730 -0.410822
+ [93,]  0.08961 -0.535917
+ [94,] -0.43567 -0.205717
+ [95,]  0.76961  0.525431
+ [96,] -0.41891 -0.231730
+ [97,]  1.27067  2.382461
+ [98,]  0.87384  0.836582
+ [99,] -0.19795 -0.479326
+[100,] -0.67721  0.282577
+
+> nObs( mlIndSANN )
+[1] 100
+> 
+> # with unused analytical gradients
+> mlgSANN <- maxLik( llf, gf, start = startVal, method = "SANN" )
+> print( summary( mlgSANN ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( mlSANN[-4], mlgSANN[-4], tolerance = 1e-3 )
+[1] TRUE
+> # with individual log likelihood values and gradients
+> mlgIndSANN <- maxLik( llfInd, gfInd, start = startVal, method = "SANN" )
+> print( summary( mlgIndSANN ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( mlgSANN[], mlgIndSANN[-12], tolerance = 1e-3 )
+[1] TRUE
+> mlgIndSANN[12]
+$gradientObs
+             mu     sigma
+  [1,] -0.39480 -0.267372
+  [2,] -0.19460 -0.481713
+  [3,]  0.88966  0.887254
+  [4,] -0.01235 -0.550226
+  [5,]  0.02327 -0.549519
+  [6,]  0.98443  1.209877
+  [7,]  0.22428 -0.459132
+  [8,] -0.82185  0.676448
+  [9,] -0.47140 -0.146848
+ [10,] -0.32521 -0.358388
+ [11,]  0.68684  0.306432
+ [12,]  0.16300 -0.502242
+ [13,]  0.18782 -0.486422
+ [14,]  0.01200 -0.550242
+ [15,] -0.39199 -0.271387
+ [16,]  1.02797  1.369068
+ [17,]  0.24666 -0.439982
+ [18,] -1.24707  2.274521
+ [19,]  0.37001 -0.301810
+ [20,] -0.34165 -0.338469
+ [21,] -0.70230  0.345462
+ [22,] -0.18720 -0.486842
+ [23,] -0.67696  0.281956
+ [24,] -0.49688 -0.102032
+ [25,] -0.43393 -0.208462
+ [26,] -1.07741  1.558122
+ [27,]  0.45270 -0.178229
+ [28,]  0.03787 -0.547898
+ [29,] -0.74492  0.457500
+ [30,]  0.70486  0.351991
+ [31,]  0.20340 -0.475355
+ [32,] -0.23393 -0.451095
+ [33,]  0.48745 -0.118877
+ [34,]  0.47716 -0.136923
+ [35,]  0.44288 -0.194209
+ [36,]  0.36230 -0.312062
+ [37,]  0.28065 -0.407431
+ [38,] -0.09261 -0.534923
+ [39,] -0.24053 -0.445405
+ [40,] -0.28569 -0.402236
+ [41,] -0.47616 -0.138654
+ [42,] -0.18111 -0.490921
+ [43,] -0.82206  0.677055
+ [44,]  1.25953  2.331267
+ [45,]  0.67707  0.282225
+ [46,] -0.73581  0.432999
+ [47,] -0.29928 -0.387800
+ [48,] -0.33793 -0.343061
+ [49,]  0.41765 -0.233638
+ [50,] -0.10562 -0.530239
+ [51,]  0.09845 -0.532897
+ [52,] -0.07239 -0.540984
+ [53,] -0.08107 -0.538564
+ [54,]  0.77443  0.538946
+ [55,] -0.19193 -0.483588
+ [56,]  0.86406  0.805699
+ [57,] -0.99380  1.243560
+ [58,]  0.29925 -0.387832
+ [59,]  0.01998 -0.549778
+ [60,]  0.07580 -0.540068
+ [61,]  0.17501 -0.494864
+ [62,] -0.35955 -0.315670
+ [63,] -0.25705 -0.430479
+ [64,] -0.67246  0.270919
+ [65,] -0.70471  0.351608
+ [66,]  0.12888 -0.520330
+ [67,]  0.21658 -0.465300
+ [68,] -0.02296 -0.549546
+ [69,]  0.50391 -0.089252
+ [70,]  1.18748  2.011006
+ [71,] -0.35271 -0.324525
+ [72,] -1.45469  3.293497
+ [73,]  0.55450  0.008018
+ [74,] -0.48494 -0.123317
+ [75,] -0.47210 -0.145648
+ [76,]  0.56652  0.032497
+ [77,] -0.22769 -0.456329
+ [78,] -0.79498  0.597510
+ [79,]  0.05480 -0.545048
+ [80,] -0.13927 -0.515269
+ [81,] -0.05159 -0.545668
+ [82,]  0.17843 -0.492668
+ [83,] -0.27975 -0.408344
+ [84,]  0.33547 -0.346068
+ [85,] -0.18873 -0.485803
+ [86,]  0.14601 -0.511779
+ [87,]  0.60971  0.124791
+ [88,]  0.20868 -0.471400
+ [89,] -0.25264 -0.434562
+ [90,]  0.64121  0.196366
+ [91,]  0.54708 -0.006821
+ [92,]  0.27730 -0.410822
+ [93,]  0.08961 -0.535917
+ [94,] -0.43567 -0.205717
+ [95,]  0.76961  0.525431
+ [96,] -0.41891 -0.231730
+ [97,]  1.27067  2.382461
+ [98,]  0.87384  0.836582
+ [99,] -0.19795 -0.479326
+[100,] -0.67721  0.282577
+
+> 
+> # with unused analytical gradients and Hessian
+> mlghSANN <- maxLik( llf, gf, hf, start = startVal, method = "SANN" )
+> all.equal( mlgSANN, mlghSANN, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with a user-specified function to generate a new candidate point
+> mlSANNCand <- maxLik( llf, start = startVal, method = "SANN",
++    cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
+> print( summary( mlSANNCand ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.20       0.18     6.6   3e-11 ***
+sigma     1.81       0.13    14.2  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( mlSANNCand[-c(3,4)], mlSANN[-c(3,4)], tolerance = 1e-2 )
+[1] TRUE
+> 
+> ############### with fixed parameters ###############
+> # start values
+> startValFix <- c( mu = 1, sigma = 1 )
+> 
+> # fix mu (the mean ) at its start value
+> isFixed <- c( TRUE, FALSE )
+> 
+> ## NR method with fixed parameters
+> mlFix <- maxLik( llf, start = startValFix, activePar = !isFixed )
+> mlFix1 <- maxLik( llf, start = startValFix, activePar = 2 )
+> all.equal( mlFix, mlFix1, tolerance = 1e-3 )
+[1] TRUE
+> mlFix2 <- maxLik( llf, start = startValFix, fixed = isFixed )
+> all.equal( mlFix, mlFix2, tolerance = 1e-3 )
+[1] TRUE
+> mlFix3 <- maxLik( llf, start = startValFix, fixed = "mu" )
+> all.equal( mlFix, mlFix3, tolerance = 1e-3 )
+[1] TRUE
+> mlFix4 <- maxLik( llf, start = startValFix, fixed = 1 )
+> all.equal( mlFix, mlFix4, tolerance = 1e-3 )
+[1] TRUE
+> print( mlFix )
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 7 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -202.1 (1 free parameter(s))
+Estimate(s): 1 1.825 
+> print( summary( mlFix ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 7 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -202.1 
+1  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> activePar( mlFix )
+   mu sigma 
+FALSE  TRUE 
+> AIC( mlFix )
+[1] 406.2
+> coef( mlFix )
+   mu sigma 
+1.000 1.825 
+> condiNumber( mlFix, digits = 3 )
+sigma 	 1 
+> round( hessian( mlFix ), 1 )
+      mu sigma
+mu    NA    NA
+sigma NA   -60
+> logLik( mlFix )
+[1] -202.1
+> maximType( mlFix )
+[1] "Newton-Raphson maximisation"
+> nIter( mlFix )
+[1] 7
+> nParam( mlFix )
+[1] 2
+> returnCode( mlFix )
+[1] 1
+> returnMessage( mlFix )
+[1] "gradient close to zero"
+> round( vcov( mlFix ), 3 )
+      mu sigma
+mu     0 0.000
+sigma  0 0.017
+> logLik( summary( mlFix ) )
+[1] -202.1
+> mlIndFix <- maxLik( llfInd, start = startValFix, activePar = !isFixed )
+> mlIndFix1 <- maxLik( llfInd, start = startValFix, activePar = 2 )
+> all.equal( mlIndFix, mlIndFix1, tolerance = 1e-3 )
+[1] TRUE
+> mlIndFix2 <- maxLik( llfInd, start = startValFix, fixed = isFixed )
+> all.equal( mlIndFix, mlIndFix2, tolerance = 1e-3 )
+[1] TRUE
+> mlIndFix3 <- maxLik( llfInd, start = startValFix, fixed = "mu" )
+> all.equal( mlIndFix, mlIndFix3, tolerance = 1e-3 )
+[1] TRUE
+> mlIndFix4 <- maxLik( llfInd, start = startValFix, fixed = 1 )
+> all.equal( mlIndFix, mlIndFix4, tolerance = 1e-3 )
+[1] TRUE
+> print( summary( mlIndFix ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 7 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -202.1 
+1  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( mlFix[ ], mlIndFix[ -11 ], tolerance = 1e-3 )
+[1] TRUE
+> round( mlFix[[3]], 5 )
+   mu sigma 
+   NA     0 
+> round( mlIndFix[[3]], 5 )
+   mu sigma 
+   NA     0 
+> round( mlIndFix[[ 11 ]], 3 )
+       mu  sigma
+  [1,] NA -0.341
+  [2,] NA -0.513
+  [3,] NA  1.050
+  [4,] NA -0.545
+  [5,] NA -0.537
+  [6,] NA  1.386
+  [7,] NA -0.408
+  [8,] NA  0.505
+  [9,] NA -0.238
+ [10,] NA -0.417
+ [11,] NA  0.437
+ [12,] NA -0.463
+ [13,] NA -0.442
+ [14,] NA -0.540
+ [15,] NA -0.345
+ [16,] NA  1.552
+ [17,] NA -0.385
+ [18,] NA  1.995
+ [19,] NA -0.224
+ [20,] NA -0.401
+ [21,] NA  0.202
+ [22,] NA -0.517
+ [23,] NA  0.144
+ [24,] NA -0.198
+ [25,] NA -0.291
+ [26,] NA  1.323
+ [27,] NA -0.086
+ [28,] NA -0.532
+ [29,] NA  0.304
+ [30,] NA  0.486
+ [31,] NA -0.428
+ [32,] NA -0.491
+ [33,] NA -0.021
+ [34,] NA -0.041
+ [35,] NA -0.104
+ [36,] NA -0.236
+ [37,] NA -0.346
+ [38,] NA -0.545
+ [39,] NA -0.486
+ [40,] NA -0.453
+ [41,] NA -0.230
+ [42,] NA -0.519
+ [43,] NA  0.505
+ [44,] NA  2.546
+ [45,] NA  0.412
+ [46,] NA  0.282
+ [47,] NA -0.441
+ [48,] NA -0.405
+ [49,] NA -0.148
+ [50,] NA -0.543
+ [51,] NA -0.506
+ [52,] NA -0.547
+ [53,] NA -0.547
+ [54,] NA  0.684
+ [55,] NA -0.514
+ [56,] NA  0.964
+ [57,] NA  1.029
+ [58,] NA -0.323
+ [59,] NA -0.538
+ [60,] NA -0.517
+ [61,] NA -0.453
+ [62,] NA -0.382
+ [63,] NA -0.475
+ [64,] NA  0.134
+ [65,] NA  0.208
+ [66,] NA -0.487
+ [67,] NA -0.416
+ [68,] NA -0.546
+ [69,] NA  0.012
+ [70,] NA  2.216
+ [71,] NA -0.389
+ [72,] NA  2.959
+ [73,] NA  0.117
+ [74,] NA -0.217
+ [75,] NA -0.237
+ [76,] NA  0.144
+ [77,] NA -0.494
+ [78,] NA  0.432
+ [79,] NA -0.526
+ [80,] NA -0.535
+ [81,] NA -0.548
+ [82,] NA -0.450
+ [83,] NA -0.457
+ [84,] NA -0.275
+ [85,] NA -0.516
+ [86,] NA -0.475
+ [87,] NA  0.243
+ [88,] NA -0.423
+ [89,] NA -0.478
+ [90,] NA  0.320
+ [91,] NA  0.101
+ [92,] NA -0.350
+ [93,] NA -0.510
+ [94,] NA -0.289
+ [95,] NA  0.670
+ [96,] NA -0.311
+ [97,] NA  2.598
+ [98,] NA  0.997
+ [99,] NA -0.511
+[100,] NA  0.145
+> nObs( mlIndFix )
+[1] 100
+> 
+> # with analytical gradients
+> mlgFix <- maxLik( llf, gf, start = startValFix, activePar = !isFixed )
+> mlgFix1 <- maxLik( llf, gf, start = startValFix, activePar = 2 )
+> all.equal( mlgFix, mlgFix1, tolerance = 1e-3 )
+[1] TRUE
+> mlgFix2 <- maxLik( llf, gf, start = startValFix, fixed = isFixed )
+> all.equal( mlgFix, mlgFix2, tolerance = 1e-3 )
+[1] TRUE
+> print( summary( mlgFix ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 7 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -202.1 
+1  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> mlgIndFix <- maxLik( llfInd, gfInd, start = startValFix, activePar = !isFixed )
+> all.equal( mlIndFix, mlgIndFix, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlgFix[ ], mlgIndFix[ -11 ], tolerance = 1e-3 )
+[1] TRUE
+> round( mlgIndFix[[ 11 ]], 3 )
+       mu  sigma
+  [1,] NA -0.341
+  [2,] NA -0.513
+  [3,] NA  1.050
+  [4,] NA -0.545
+  [5,] NA -0.537
+  [6,] NA  1.386
+  [7,] NA -0.408
+  [8,] NA  0.505
+  [9,] NA -0.238
+ [10,] NA -0.417
+ [11,] NA  0.437
+ [12,] NA -0.463
+ [13,] NA -0.442
+ [14,] NA -0.540
+ [15,] NA -0.345
+ [16,] NA  1.552
+ [17,] NA -0.385
+ [18,] NA  1.995
+ [19,] NA -0.224
+ [20,] NA -0.401
+ [21,] NA  0.202
+ [22,] NA -0.517
+ [23,] NA  0.144
+ [24,] NA -0.198
+ [25,] NA -0.291
+ [26,] NA  1.323
+ [27,] NA -0.086
+ [28,] NA -0.532
+ [29,] NA  0.304
+ [30,] NA  0.486
+ [31,] NA -0.428
+ [32,] NA -0.491
+ [33,] NA -0.021
+ [34,] NA -0.041
+ [35,] NA -0.104
+ [36,] NA -0.236
+ [37,] NA -0.346
+ [38,] NA -0.545
+ [39,] NA -0.486
+ [40,] NA -0.453
+ [41,] NA -0.230
+ [42,] NA -0.519
+ [43,] NA  0.505
+ [44,] NA  2.546
+ [45,] NA  0.412
+ [46,] NA  0.282
+ [47,] NA -0.441
+ [48,] NA -0.405
+ [49,] NA -0.148
+ [50,] NA -0.543
+ [51,] NA -0.506
+ [52,] NA -0.547
+ [53,] NA -0.547
+ [54,] NA  0.684
+ [55,] NA -0.514
+ [56,] NA  0.964
+ [57,] NA  1.029
+ [58,] NA -0.323
+ [59,] NA -0.538
+ [60,] NA -0.517
+ [61,] NA -0.453
+ [62,] NA -0.382
+ [63,] NA -0.475
+ [64,] NA  0.134
+ [65,] NA  0.208
+ [66,] NA -0.487
+ [67,] NA -0.416
+ [68,] NA -0.546
+ [69,] NA  0.012
+ [70,] NA  2.216
+ [71,] NA -0.389
+ [72,] NA  2.959
+ [73,] NA  0.117
+ [74,] NA -0.217
+ [75,] NA -0.237
+ [76,] NA  0.144
+ [77,] NA -0.494
+ [78,] NA  0.432
+ [79,] NA -0.526
+ [80,] NA -0.535
+ [81,] NA -0.548
+ [82,] NA -0.450
+ [83,] NA -0.457
+ [84,] NA -0.275
+ [85,] NA -0.516
+ [86,] NA -0.475
+ [87,] NA  0.243
+ [88,] NA -0.423
+ [89,] NA -0.478
+ [90,] NA  0.320
+ [91,] NA  0.101
+ [92,] NA -0.350
+ [93,] NA -0.510
+ [94,] NA -0.289
+ [95,] NA  0.670
+ [96,] NA -0.311
+ [97,] NA  2.598
+ [98,] NA  0.997
+ [99,] NA -0.511
+[100,] NA  0.145
+> 
+> # with analytical gradients and Hessians
+> mlghFix <- maxLik( llf, gf, hf, start = startValFix, activePar = !isFixed )
+> all.equal( mlgFix, mlghFix, tolerance = 1e-3 )
+[1] TRUE
+> mlgFix[[4]]
+      mu  sigma
+mu    NA     NA
+sigma NA -60.02
+> mlghFix[[4]]
+      mu  sigma
+mu    NA     NA
+sigma NA -60.02
+> 
+> ## BHHH method with fixed parameters
+> mlFixBHHH <- maxLik( llfInd, start = startValFix, activePar = !isFixed,
++    method = "BHHH" )
+> mlFixBHHH1 <- maxLik( llfInd, start = startValFix, activePar = 2,
++    method = "BHHH" )
+> all.equal( mlFixBHHH, mlFixBHHH1, tolerance = 1e-3 )
+[1] TRUE
+> mlFixBHHH2 <- maxLik( llfInd, start = startValFix, fixed = isFixed,
++    method = "BHHH" )
+> all.equal( mlFixBHHH, mlFixBHHH2, tolerance = 1e-3 )
+[1] TRUE
+> mlFixBHHH3 <- maxLik( llfInd, start = startValFix, fixed = "mu",
++    method = "BHHH" )
+> all.equal( mlFixBHHH, mlFixBHHH3, tolerance = 1e-3 )
+[1] TRUE
+> mlFixBHHH4 <- maxLik( llfInd, start = startValFix, fixed = 1,
++    method = "BHHH" )
+> all.equal( mlFixBHHH, mlFixBHHH4, tolerance = 1e-3 )
+[1] TRUE
+> print( mlFixBHHH )
+Maximum Likelihood estimation
+BHHH maximisation, 10 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -202.1 (1 free parameter(s))
+Estimate(s): 1 1.825 
+> print( summary( mlFixBHHH ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BHHH maximisation, 10 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -202.1 
+1  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> activePar( mlFixBHHH )
+   mu sigma 
+FALSE  TRUE 
+> AIC( mlFixBHHH )
+[1] 406.2
+> coef( mlFixBHHH )
+   mu sigma 
+1.000 1.825 
+> condiNumber( mlFixBHHH, digits = 3 )
+sigma 	 1 
+> round( hessian( mlFixBHHH ), 1 )
+      mu sigma
+mu    NA    NA
+sigma NA   -56
+attr(,"type")
+[1] "BHHH"
+> logLik( mlFixBHHH )
+[1] -202.1
+> maximType( mlFixBHHH )
+[1] "BHHH maximisation"
+> nIter( mlFixBHHH )
+[1] 10
+> nParam( mlFixBHHH )
+[1] 2
+> returnCode( mlFixBHHH )
+[1] 2
+> returnMessage( mlFixBHHH )
+[1] "successive function values within tolerance limit"
+> round( vcov( mlFixBHHH ), 3 )
+      mu sigma
+mu     0 0.000
+sigma  0 0.018
+> logLik( summary( mlFixBHHH ) )
+[1] -202.1
+> all.equal( mlFix[ -c( 4, 5, 6, 9, 10 ) ], mlFixBHHH[ -c( 4, 5, 6, 9, 10, 11 ) ],
++    tolerance = 1e-3 )
+[1] TRUE
+> round( mlFixBHHH[[ 11 ]], 3 )
+       mu  sigma
+  [1,] NA -0.341
+  [2,] NA -0.513
+  [3,] NA  1.050
+  [4,] NA -0.545
+  [5,] NA -0.537
+  [6,] NA  1.386
+  [7,] NA -0.408
+  [8,] NA  0.505
+  [9,] NA -0.238
+ [10,] NA -0.417
+ [11,] NA  0.437
+ [12,] NA -0.463
+ [13,] NA -0.442
+ [14,] NA -0.540
+ [15,] NA -0.345
+ [16,] NA  1.552
+ [17,] NA -0.385
+ [18,] NA  1.995
+ [19,] NA -0.224
+ [20,] NA -0.401
+ [21,] NA  0.202
+ [22,] NA -0.517
+ [23,] NA  0.144
+ [24,] NA -0.198
+ [25,] NA -0.291
+ [26,] NA  1.323
+ [27,] NA -0.086
+ [28,] NA -0.532
+ [29,] NA  0.304
+ [30,] NA  0.486
+ [31,] NA -0.428
+ [32,] NA -0.491
+ [33,] NA -0.021
+ [34,] NA -0.041
+ [35,] NA -0.104
+ [36,] NA -0.236
+ [37,] NA -0.346
+ [38,] NA -0.545
+ [39,] NA -0.486
+ [40,] NA -0.453
+ [41,] NA -0.230
+ [42,] NA -0.519
+ [43,] NA  0.505
+ [44,] NA  2.546
+ [45,] NA  0.412
+ [46,] NA  0.282
+ [47,] NA -0.441
+ [48,] NA -0.405
+ [49,] NA -0.148
+ [50,] NA -0.543
+ [51,] NA -0.506
+ [52,] NA -0.547
+ [53,] NA -0.547
+ [54,] NA  0.684
+ [55,] NA -0.514
+ [56,] NA  0.964
+ [57,] NA  1.029
+ [58,] NA -0.323
+ [59,] NA -0.538
+ [60,] NA -0.517
+ [61,] NA -0.453
+ [62,] NA -0.382
+ [63,] NA -0.475
+ [64,] NA  0.134
+ [65,] NA  0.208
+ [66,] NA -0.487
+ [67,] NA -0.416
+ [68,] NA -0.546
+ [69,] NA  0.012
+ [70,] NA  2.216
+ [71,] NA -0.389
+ [72,] NA  2.959
+ [73,] NA  0.117
+ [74,] NA -0.217
+ [75,] NA -0.237
+ [76,] NA  0.144
+ [77,] NA -0.494
+ [78,] NA  0.432
+ [79,] NA -0.526
+ [80,] NA -0.535
+ [81,] NA -0.548
+ [82,] NA -0.450
+ [83,] NA -0.457
+ [84,] NA -0.275
+ [85,] NA -0.516
+ [86,] NA -0.475
+ [87,] NA  0.243
+ [88,] NA -0.423
+ [89,] NA -0.478
+ [90,] NA  0.320
+ [91,] NA  0.101
+ [92,] NA -0.350
+ [93,] NA -0.510
+ [94,] NA -0.289
+ [95,] NA  0.670
+ [96,] NA -0.311
+ [97,] NA  2.598
+ [98,] NA  0.997
+ [99,] NA -0.511
+[100,] NA  0.145
+> nObs( mlFixBHHH )
+[1] 100
+> 
+> # with analytical gradients
+> mlgFixBHHH <- maxLik( llfInd, gfInd, start = startValFix, activePar = !isFixed,
++    method = "BHHH" )
+> mlgFixBHHH1 <- maxLik( llfInd, gfInd, start = startValFix, activePar = 2,
++    method = "BHHH" )
+> all.equal( mlgFixBHHH, mlgFixBHHH1, tolerance = 1e-3 )
+[1] TRUE
+> mlgFixBHHH2 <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
++    method = "BHHH" )
+> all.equal( mlgFixBHHH, mlgFixBHHH2, tolerance = 1e-3 )
+[1] TRUE
+> mlgFixBHHH3 <- maxLik( llfInd, gfInd, start = startValFix, fixed = "mu",
++    method = "BHHH" )
+> all.equal( mlgFixBHHH, mlgFixBHHH3, tolerance = 1e-3 )
+[1] TRUE
+> mlgFixBHHH4 <- maxLik( llfInd, gfInd, start = startValFix, fixed = 1,
++    method = "BHHH" )
+> all.equal( mlgFixBHHH, mlgFixBHHH4, tolerance = 1e-3 )
+[1] TRUE
+> print( summary( mlgFixBHHH ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BHHH maximisation, 10 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -202.1 
+1  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( mlFixBHHH, mlgFixBHHH, tolerance = 1e-3 )
+[1] TRUE
+> mlgFixBHHH2 <- maxLik( llf, gfInd, start = startValFix, activePar = !isFixed,
++    method = "BHHH")
+> all.equal( mlgFixBHHH, mlgFixBHHH2, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with unused Hessians
+> mlghFixBHHH <- maxLik( llfInd, gfInd, hf, start = startValFix, activePar = !isFixed,
++    method = "BHHH" )
+> all.equal( mlgFixBHHH, mlghFixBHHH, tolerance = 1e-3 )
+[1] TRUE
+> 
+> ## BFGS method with fixed parameters
+> mlFixBfgs <- maxLik( llf, start = startValFix, fixed = isFixed,
++    method = "BFGS" )
+> mlFixBfgs3 <- maxLik( llf, start = startValFix, fixed = "mu",
++    method = "BFGS" )
+> all.equal( mlFixBfgs, mlFixBfgs3, tolerance = 1e-3 )
+[1] TRUE
+> mlFixBfgs4 <- maxLik( llf, start = startValFix, fixed = 1,
++    method = "BFGS" )
+> all.equal( mlFixBfgs, mlFixBfgs4, tolerance = 1e-3 )
+[1] TRUE
+> print( mlFixBfgs )
+Maximum Likelihood estimation
+BFGS maximisation, 27 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -202.1 (1 free parameter(s))
+Estimate(s): 1 1.825 
+> print( summary( mlFixBfgs ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS maximisation, 27 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -202.1 
+1  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> activePar( mlFixBfgs )
+   mu sigma 
+FALSE  TRUE 
+> AIC( mlFixBfgs )
+[1] 406.2
+> coef( mlFixBfgs )
+   mu sigma 
+1.000 1.825 
+> condiNumber( mlFixBfgs, digits = 3 )
+sigma 	 1 
+> round( hessian( mlFixBfgs ), 1 )
+         mu sigma
+mu    -30.0  -5.9
+sigma  -5.9 -60.0
+> logLik( mlFixBfgs )
+[1] -202.1
+> maximType( mlFixBfgs )
+[1] "BFGS maximisation"
+> nIter( mlFixBfgs )
+function 
+      27 
+> nParam( mlFixBfgs )
+[1] 2
+> returnCode( mlFixBfgs )
+[1] 0
+> returnMessage( mlFixBfgs )
+[1] "successful convergence "
+> round( vcov( mlFixBfgs ), 3 )
+      mu sigma
+mu     0 0.000
+sigma  0 0.017
+> logLik( summary( mlFixBfgs ) )
+[1] -202.1
+> all.equal( mlghFix[ -c( 5, 6, 9, 10 ) ], mlFixBfgs[ -c( 5, 6, 9, 10, 11 ) ],
++    tolerance = 1e-3 )
+[1] "Component \"gradient\": 'is.NA' value mismatch: 0 in current 1 in target"
+[2] "Component \"hessian\": 'is.NA' value mismatch: 0 in current 3 in target" 
+> mlIndFixBfgs <- maxLik( llfInd, start = startValFix, fixed = isFixed,
++    method = "BFGS" )
+> all.equal( mlFixBfgs[-c(4,9)], mlIndFixBfgs[ -c(4,9,12) ], tolerance = 1e-3 )
+[1] TRUE
+> print(formatC(mlIndFixBfgs$gradientObs, format="f", digits=4, width=7), quote=FALSE)
+       mu      sigma  
+  [1,] -0.3364 -0.3412
+  [2,] -0.1381 -0.5130
+  [3,]  0.9355  1.0498
+  [4,]  0.0423 -0.5445
+  [5,]  0.0776 -0.5368
+  [6,]  1.0294  1.3864
+  [7,]  0.2766 -0.4081
+  [8,] -0.7593  0.5046
+  [9,] -0.4122 -0.2376
+ [10,] -0.2675 -0.4172
+ [11,]  0.7347  0.4375
+ [12,]  0.2160 -0.4627
+ [13,]  0.2405 -0.4422
+ [14,]  0.0664 -0.5398
+ [15,] -0.3336 -0.3446
+ [16,]  1.0725  1.5519
+ [17,]  0.2988 -0.3848
+ [18,] -1.1803  1.9954
+ [19,]  0.4209 -0.2243
+ [20,] -0.2838 -0.4008
+ [21,] -0.6409  0.2020
+ [22,] -0.1308 -0.5166
+ [23,] -0.6158  0.1444
+ [24,] -0.4375 -0.1985
+ [25,] -0.3751 -0.2909
+ [26,] -1.0123  1.3229
+ [27,]  0.5028 -0.0863
+ [28,]  0.0921 -0.5323
+ [29,] -0.6831  0.3040
+ [30,]  0.7525  0.4859
+ [31,]  0.2560 -0.4282
+ [32,] -0.1771 -0.4906
+ [33,]  0.5372 -0.0209
+ [34,]  0.5270 -0.0407
+ [35,]  0.4931 -0.1039
+ [36,]  0.4133 -0.2360
+ [37,]  0.3325 -0.3460
+ [38,] -0.0372 -0.5453
+ [39,] -0.1836 -0.4863
+ [40,] -0.2284 -0.4526
+ [41,] -0.4170 -0.2305
+ [42,] -0.1248 -0.5194
+ [43,] -0.7595  0.5051
+ [44,]  1.3018  2.5457
+ [45,]  0.7250  0.4117
+ [46,] -0.6741  0.2816
+ [47,] -0.2418 -0.4411
+ [48,] -0.2801 -0.4046
+ [49,]  0.4681 -0.1478
+ [50,] -0.0500 -0.5432
+ [51,]  0.1520 -0.5056
+ [52,] -0.0171 -0.5473
+ [53,] -0.0257 -0.5466
+ [54,]  0.8214  0.6839
+ [55,] -0.1355 -0.5143
+ [56,]  0.9102  0.9644
+ [57,] -0.9295  1.0295
+ [58,]  0.3509 -0.3231
+ [59,]  0.0743 -0.5377
+ [60,]  0.1296 -0.5171
+ [61,]  0.2279 -0.4530
+ [62,] -0.3015 -0.3819
+ [63,] -0.2000 -0.4748
+ [64,] -0.6113  0.1344
+ [65,] -0.6433  0.2076
+ [66,]  0.1822 -0.4872
+ [67,]  0.2690 -0.4157
+ [68,]  0.0318 -0.5460
+ [69,]  0.5535  0.0115
+ [70,]  1.2304  2.2159
+ [71,] -0.2947 -0.3893
+ [72,] -1.3859  2.9585
+ [73,]  0.6036  0.1173
+ [74,] -0.4257 -0.2171
+ [75,] -0.4129 -0.2365
+ [76,]  0.6155  0.1438
+ [77,] -0.1709 -0.4945
+ [78,] -0.7327  0.4321
+ [79,]  0.1088 -0.5262
+ [80,] -0.0834 -0.5351
+ [81,]  0.0035 -0.5478
+ [82,]  0.2312 -0.4502
+ [83,] -0.2225 -0.4575
+ [84,]  0.3867 -0.2748
+ [85,] -0.1323 -0.5158
+ [86,]  0.1991 -0.4754
+ [87,]  0.6583  0.2433
+ [88,]  0.2612 -0.4233
+ [89,] -0.1956 -0.4780
+ [90,]  0.6895  0.3200
+ [91,]  0.5963  0.1013
+ [92,]  0.3291 -0.3500
+ [93,]  0.1433 -0.5103
+ [94,] -0.3769 -0.2885
+ [95,]  0.8166  0.6696
+ [96,] -0.3603 -0.3109
+ [97,]  1.3128  2.5983
+ [98,]  0.9199  0.9968
+ [99,] -0.1415 -0.5113
+[100,] -0.6160  0.1450
+>                            # print fradient, only 4 digits to avoid clutter in R CMD tests
+> mlIndFixBfgs3 <- maxLik( llfInd, start = startValFix, fixed = "mu",
++    method = "BFGS" )
+> all.equal( mlIndFixBfgs, mlIndFixBfgs3, tolerance = 1e-3 )
+[1] TRUE
+> mlIndFixBfgs4 <- maxLik( llfInd, start = startValFix, fixed = 1,
++    method = "BFGS" )
+> all.equal( mlIndFixBfgs, mlIndFixBfgs4, tolerance = 1e-3 )
+[1] TRUE
+> nObs( mlIndFixBfgs )
+[1] 100
+> 
+> # with analytical gradients
+> mlgFixBfgs <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
++    method = "BFGS" )
+> mlgFixBfgs3 <- maxLik( llf, gf, start = startValFix, fixed = "mu",
++    method = "BFGS" )
+> all.equal( mlgFixBfgs, mlgFixBfgs3, tolerance = 1e-3 )
+[1] TRUE
+> mlgFixBfgs4 <- maxLik( llf, gf, start = startValFix, fixed = 1,
++    method = "BFGS" )
+> all.equal( mlgFixBfgs, mlgFixBfgs4, tolerance = 1e-3 )
+[1] TRUE
+> print( summary( mlgFixBfgs ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS maximisation, 27 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -202.1 
+1  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( mlFixBfgs[ -9 ], mlgFixBfgs[ -9 ], tolerance = 1e-3 )
+[1] TRUE
+> mlgIndFixBfgs <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
++    method = "BFGS")
+> all.equal( mlgFixBfgs[ ], mlgIndFixBfgs[ -12 ], tolerance = 1e-3 )
+[1] TRUE
+> round( mlgIndFixBfgs[[ 12 ]], 3 )
+           mu  sigma
+  [1,] -0.336 -0.341
+  [2,] -0.138 -0.513
+  [3,]  0.936  1.050
+  [4,]  0.042 -0.545
+  [5,]  0.078 -0.537
+  [6,]  1.029  1.386
+  [7,]  0.277 -0.408
+  [8,] -0.759  0.505
+  [9,] -0.412 -0.238
+ [10,] -0.267 -0.417
+ [11,]  0.735  0.437
+ [12,]  0.216 -0.463
+ [13,]  0.241 -0.442
+ [14,]  0.066 -0.540
+ [15,] -0.334 -0.345
+ [16,]  1.072  1.552
+ [17,]  0.299 -0.385
+ [18,] -1.180  1.995
+ [19,]  0.421 -0.224
+ [20,] -0.284 -0.401
+ [21,] -0.641  0.202
+ [22,] -0.131 -0.517
+ [23,] -0.616  0.144
+ [24,] -0.437 -0.198
+ [25,] -0.375 -0.291
+ [26,] -1.012  1.323
+ [27,]  0.503 -0.086
+ [28,]  0.092 -0.532
+ [29,] -0.683  0.304
+ [30,]  0.753  0.486
+ [31,]  0.256 -0.428
+ [32,] -0.177 -0.491
+ [33,]  0.537 -0.021
+ [34,]  0.527 -0.041
+ [35,]  0.493 -0.104
+ [36,]  0.413 -0.236
+ [37,]  0.332 -0.346
+ [38,] -0.037 -0.545
+ [39,] -0.184 -0.486
+ [40,] -0.228 -0.453
+ [41,] -0.417 -0.230
+ [42,] -0.125 -0.519
+ [43,] -0.759  0.505
+ [44,]  1.302  2.546
+ [45,]  0.725  0.412
+ [46,] -0.674  0.282
+ [47,] -0.242 -0.441
+ [48,] -0.280 -0.405
+ [49,]  0.468 -0.148
+ [50,] -0.050 -0.543
+ [51,]  0.152 -0.506
+ [52,] -0.017 -0.547
+ [53,] -0.026 -0.547
+ [54,]  0.821  0.684
+ [55,] -0.136 -0.514
+ [56,]  0.910  0.964
+ [57,] -0.930  1.029
+ [58,]  0.351 -0.323
+ [59,]  0.074 -0.538
+ [60,]  0.130 -0.517
+ [61,]  0.228 -0.453
+ [62,] -0.301 -0.382
+ [63,] -0.200 -0.475
+ [64,] -0.611  0.134
+ [65,] -0.643  0.208
+ [66,]  0.182 -0.487
+ [67,]  0.269 -0.416
+ [68,]  0.032 -0.546
+ [69,]  0.554  0.012
+ [70,]  1.230  2.216
+ [71,] -0.295 -0.389
+ [72,] -1.386  2.959
+ [73,]  0.604  0.117
+ [74,] -0.426 -0.217
+ [75,] -0.413 -0.237
+ [76,]  0.616  0.144
+ [77,] -0.171 -0.494
+ [78,] -0.733  0.432
+ [79,]  0.109 -0.526
+ [80,] -0.083 -0.535
+ [81,]  0.003 -0.548
+ [82,]  0.231 -0.450
+ [83,] -0.222 -0.457
+ [84,]  0.387 -0.275
+ [85,] -0.132 -0.516
+ [86,]  0.199 -0.475
+ [87,]  0.658  0.243
+ [88,]  0.261 -0.423
+ [89,] -0.196 -0.478
+ [90,]  0.689  0.320
+ [91,]  0.596  0.101
+ [92,]  0.329 -0.350
+ [93,]  0.143 -0.510
+ [94,] -0.377 -0.289
+ [95,]  0.817  0.670
+ [96,] -0.360 -0.311
+ [97,]  1.313  2.598
+ [98,]  0.920  0.997
+ [99,] -0.141 -0.511
+[100,] -0.616  0.145
+> mlgIndFixBfgs3 <- maxLik( llfInd, gfInd, start = startValFix, fixed = "mu",
++    method = "BFGS" )
+> all.equal( mlgIndFixBfgs, mlgIndFixBfgs3, tolerance = 1e-3 )
+[1] TRUE
+> mlgIndFixBfgs4 <- maxLik( llfInd, gfInd, start = startValFix, fixed = 1,
++    method = "BFGS" )
+> all.equal( mlgIndFixBfgs, mlgIndFixBfgs4, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with unused Hessians
+> mlghFixBfgs <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
++    method = "BFGS" )
+> all.equal( mlgFixBfgs, mlghFixBfgs, tolerance = 1e-3 )
+[1] TRUE
+> mlghFixBfgs3 <- maxLik( llf, gf, hf, start = startValFix, fixed = "mu",
++    method = "BFGS" )
+> all.equal( mlghFixBfgs, mlghFixBfgs3, tolerance = 1e-3 )
+[1] TRUE
+> mlghFixBfgs4 <- maxLik( llf, gf, hf, start = startValFix, fixed = 1,
++    method = "BFGS" )
+> all.equal( mlghFixBfgs, mlghFixBfgs4, tolerance = 1e-3 )
+[1] TRUE
+> 
+> ## NM method with fixed parameters
+> mlFixNm <- maxLik( llf, start = startValFix, fixed = isFixed,
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-dimensional optimization by Nelder-Mead is unreliable:
+use "Brent" or optimize() directly
+> mlFixNm3 <- maxLik( llf, start = startValFix, fixed = "mu",
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-dimensional optimization by Nelder-Mead is unreliable:
+use "Brent" or optimize() directly
+> all.equal( mlFixNm, mlFixNm3, tolerance = 1e-3 )
+[1] TRUE
+> mlFixNm4 <- maxLik( llf, start = startValFix, fixed = 1,
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-dimensional optimization by Nelder-Mead is unreliable:
+use "Brent" or optimize() directly
+> all.equal( mlFixNm, mlFixNm4, tolerance = 1e-3 )
+[1] TRUE
+> print( mlFixNm )
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 28 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -202.1 (1 free parameter(s))
+Estimate(s): 1 1.825 
+> print( summary( mlFixNm ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 28 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -202.1 
+1  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> activePar( mlFixNm )
+   mu sigma 
+FALSE  TRUE 
+> AIC( mlFixNm )
+[1] 406.2
+> coef( mlFixNm )
+   mu sigma 
+1.000 1.825 
+> condiNumber( mlFixNm, digits = 3 )
+sigma 	 1 
+> round( hessian( mlFixNm ), 1 )
+         mu sigma
+mu    -30.0  -5.9
+sigma  -5.9 -60.1
+> logLik( mlFixNm )
+[1] -202.1
+> maximType( mlFixNm )
+[1] "Nelder-Mead maximisation"
+> nIter( mlFixNm )
+function 
+      28 
+> nParam( mlFixNm )
+[1] 2
+> returnCode( mlFixNm )
+[1] 0
+> returnMessage( mlFixNm )
+[1] "successful convergence "
+> round( vcov( mlFixNm ), 3 )
+      mu sigma
+mu     0 0.000
+sigma  0 0.017
+> logLik( summary( mlFixNm ) )
+[1] -202.1
+> all.equal( mlFixBfgs[ -c(4,9,10) ], mlFixNm[ -c(4,9,10) ], tolerance = 1e-3 )
+[1] TRUE
+> mlIndFixNm <- maxLik( llfInd, start = startValFix, fixed = isFixed,
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-dimensional optimization by Nelder-Mead is unreliable:
+use "Brent" or optimize() directly
+> all.equal( mlFixNm[-4], mlIndFixNm[-c(4,12)], tolerance = 1e-3 )
+[1] TRUE
+> round( mlIndFixNm[[ 12 ]], 3 )
+           mu  sigma
+  [1,] -0.336 -0.341
+  [2,] -0.138 -0.513
+  [3,]  0.936  1.050
+  [4,]  0.042 -0.545
+  [5,]  0.078 -0.537
+  [6,]  1.029  1.387
+  [7,]  0.277 -0.408
+  [8,] -0.759  0.505
+  [9,] -0.412 -0.238
+ [10,] -0.268 -0.417
+ [11,]  0.735  0.438
+ [12,]  0.216 -0.463
+ [13,]  0.241 -0.442
+ [14,]  0.066 -0.540
+ [15,] -0.334 -0.345
+ [16,]  1.073  1.552
+ [17,]  0.299 -0.385
+ [18,] -1.180  1.996
+ [19,]  0.421 -0.224
+ [20,] -0.284 -0.401
+ [21,] -0.641  0.202
+ [22,] -0.131 -0.517
+ [23,] -0.616  0.144
+ [24,] -0.438 -0.198
+ [25,] -0.375 -0.291
+ [26,] -1.012  1.323
+ [27,]  0.503 -0.086
+ [28,]  0.092 -0.532
+ [29,] -0.683  0.304
+ [30,]  0.753  0.486
+ [31,]  0.256 -0.428
+ [32,] -0.177 -0.491
+ [33,]  0.537 -0.021
+ [34,]  0.527 -0.041
+ [35,]  0.493 -0.104
+ [36,]  0.413 -0.236
+ [37,]  0.332 -0.346
+ [38,] -0.037 -0.545
+ [39,] -0.184 -0.486
+ [40,] -0.228 -0.453
+ [41,] -0.417 -0.230
+ [42,] -0.125 -0.519
+ [43,] -0.760  0.505
+ [44,]  1.302  2.546
+ [45,]  0.725  0.412
+ [46,] -0.674  0.282
+ [47,] -0.242 -0.441
+ [48,] -0.280 -0.405
+ [49,]  0.468 -0.148
+ [50,] -0.050 -0.543
+ [51,]  0.152 -0.506
+ [52,] -0.017 -0.547
+ [53,] -0.026 -0.547
+ [54,]  0.821  0.684
+ [55,] -0.136 -0.514
+ [56,]  0.910  0.965
+ [57,] -0.930  1.030
+ [58,]  0.351 -0.323
+ [59,]  0.074 -0.538
+ [60,]  0.130 -0.517
+ [61,]  0.228 -0.453
+ [62,] -0.302 -0.382
+ [63,] -0.200 -0.475
+ [64,] -0.611  0.134
+ [65,] -0.643  0.208
+ [66,]  0.182 -0.487
+ [67,]  0.269 -0.416
+ [68,]  0.032 -0.546
+ [69,]  0.554  0.012
+ [70,]  1.231  2.216
+ [71,] -0.295 -0.389
+ [72,] -1.386  2.959
+ [73,]  0.604  0.117
+ [74,] -0.426 -0.217
+ [75,] -0.413 -0.237
+ [76,]  0.616  0.144
+ [77,] -0.171 -0.494
+ [78,] -0.733  0.432
+ [79,]  0.109 -0.526
+ [80,] -0.083 -0.535
+ [81,]  0.003 -0.548
+ [82,]  0.231 -0.450
+ [83,] -0.222 -0.457
+ [84,]  0.387 -0.275
+ [85,] -0.132 -0.516
+ [86,]  0.199 -0.475
+ [87,]  0.658  0.243
+ [88,]  0.261 -0.423
+ [89,] -0.196 -0.478
+ [90,]  0.690  0.320
+ [91,]  0.596  0.101
+ [92,]  0.329 -0.350
+ [93,]  0.143 -0.510
+ [94,] -0.377 -0.289
+ [95,]  0.817  0.670
+ [96,] -0.360 -0.311
+ [97,]  1.313  2.599
+ [98,]  0.920  0.997
+ [99,] -0.141 -0.511
+[100,] -0.616  0.145
+> mlIndFixNm3 <- maxLik( llfInd, start = startValFix, fixed = "mu",
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-dimensional optimization by Nelder-Mead is unreliable:
+use "Brent" or optimize() directly
+> all.equal( mlIndFixNm, mlIndFixNm3, tolerance = 1e-3 )
+[1] TRUE
+> mlIndFixNm4 <- maxLik( llfInd, start = startValFix, fixed = 1,
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-dimensional optimization by Nelder-Mead is unreliable:
+use "Brent" or optimize() directly
+> all.equal( mlIndFixNm, mlIndFixNm4, tolerance = 1e-3 )
+[1] TRUE
+> nObs( mlIndFixNm )
+[1] 100
+> 
+> # with analytical gradients
+> mlgFixNm <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-dimensional optimization by Nelder-Mead is unreliable:
+use "Brent" or optimize() directly
+> mlgFixNm3 <- maxLik( llf, gf, start = startValFix, fixed = "mu",
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-dimensional optimization by Nelder-Mead is unreliable:
+use "Brent" or optimize() directly
+> all.equal( mlgFixNm, mlgFixNm3, tolerance = 1e-3 )
+[1] TRUE
+> mlgFixNm4 <- maxLik( llf, gf, start = startValFix, fixed = 1,
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-dimensional optimization by Nelder-Mead is unreliable:
+use "Brent" or optimize() directly
+> all.equal( mlgFixNm, mlgFixNm4, tolerance = 1e-3 )
+[1] TRUE
+> print( summary( mlgFixNm ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 28 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -202.1 
+1  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( mlFixNm, mlgFixNm, tolerance = 1e-3 )
+[1] TRUE
+> mlgIndFixNm <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
++    method = "NM")
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-dimensional optimization by Nelder-Mead is unreliable:
+use "Brent" or optimize() directly
+> all.equal( mlgFixNm[ ], mlgIndFixNm[ -12 ], tolerance = 1e-3 )
+[1] TRUE
+> round( mlgIndFixNm[[ 12 ]], 3 )
+           mu  sigma
+  [1,] -0.336 -0.341
+  [2,] -0.138 -0.513
+  [3,]  0.936  1.050
+  [4,]  0.042 -0.545
+  [5,]  0.078 -0.537
+  [6,]  1.029  1.387
+  [7,]  0.277 -0.408
+  [8,] -0.759  0.505
+  [9,] -0.412 -0.238
+ [10,] -0.268 -0.417
+ [11,]  0.735  0.438
+ [12,]  0.216 -0.463
+ [13,]  0.241 -0.442
+ [14,]  0.066 -0.540
+ [15,] -0.334 -0.345
+ [16,]  1.073  1.552
+ [17,]  0.299 -0.385
+ [18,] -1.180  1.996
+ [19,]  0.421 -0.224
+ [20,] -0.284 -0.401
+ [21,] -0.641  0.202
+ [22,] -0.131 -0.517
+ [23,] -0.616  0.144
+ [24,] -0.438 -0.198
+ [25,] -0.375 -0.291
+ [26,] -1.012  1.323
+ [27,]  0.503 -0.086
+ [28,]  0.092 -0.532
+ [29,] -0.683  0.304
+ [30,]  0.753  0.486
+ [31,]  0.256 -0.428
+ [32,] -0.177 -0.491
+ [33,]  0.537 -0.021
+ [34,]  0.527 -0.041
+ [35,]  0.493 -0.104
+ [36,]  0.413 -0.236
+ [37,]  0.332 -0.346
+ [38,] -0.037 -0.545
+ [39,] -0.184 -0.486
+ [40,] -0.228 -0.453
+ [41,] -0.417 -0.230
+ [42,] -0.125 -0.519
+ [43,] -0.760  0.505
+ [44,]  1.302  2.546
+ [45,]  0.725  0.412
+ [46,] -0.674  0.282
+ [47,] -0.242 -0.441
+ [48,] -0.280 -0.405
+ [49,]  0.468 -0.148
+ [50,] -0.050 -0.543
+ [51,]  0.152 -0.506
+ [52,] -0.017 -0.547
+ [53,] -0.026 -0.547
+ [54,]  0.821  0.684
+ [55,] -0.136 -0.514
+ [56,]  0.910  0.965
+ [57,] -0.930  1.030
+ [58,]  0.351 -0.323
+ [59,]  0.074 -0.538
+ [60,]  0.130 -0.517
+ [61,]  0.228 -0.453
+ [62,] -0.302 -0.382
+ [63,] -0.200 -0.475
+ [64,] -0.611  0.134
+ [65,] -0.643  0.208
+ [66,]  0.182 -0.487
+ [67,]  0.269 -0.416
+ [68,]  0.032 -0.546
+ [69,]  0.554  0.012
+ [70,]  1.231  2.216
+ [71,] -0.295 -0.389
+ [72,] -1.386  2.959
+ [73,]  0.604  0.117
+ [74,] -0.426 -0.217
+ [75,] -0.413 -0.237
+ [76,]  0.616  0.144
+ [77,] -0.171 -0.494
+ [78,] -0.733  0.432
+ [79,]  0.109 -0.526
+ [80,] -0.083 -0.535
+ [81,]  0.003 -0.548
+ [82,]  0.231 -0.450
+ [83,] -0.222 -0.457
+ [84,]  0.387 -0.275
+ [85,] -0.132 -0.516
+ [86,]  0.199 -0.475
+ [87,]  0.658  0.243
+ [88,]  0.261 -0.423
+ [89,] -0.196 -0.478
+ [90,]  0.690  0.320
+ [91,]  0.596  0.101
+ [92,]  0.329 -0.350
+ [93,]  0.143 -0.510
+ [94,] -0.377 -0.289
+ [95,]  0.817  0.670
+ [96,] -0.360 -0.311
+ [97,]  1.313  2.599
+ [98,]  0.920  0.997
+ [99,] -0.141 -0.511
+[100,] -0.616  0.145
+> 
+> # with unused Hessians
+> mlghFixNm <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-dimensional optimization by Nelder-Mead is unreliable:
+use "Brent" or optimize() directly
+> all.equal( mlgFixNm, mlghFixNm, tolerance = 1e-3 )
+[1] TRUE
+> mlghFixNm3 <- maxLik( llf, gf, hf, start = startValFix, fixed = "mu",
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-dimensional optimization by Nelder-Mead is unreliable:
+use "Brent" or optimize() directly
+> all.equal( mlghFixNm, mlghFixNm3, tolerance = 1e-3 )
+[1] TRUE
+> mlghFixNm4 <- maxLik( llf, gf, hf, start = startValFix, fixed = 1,
++    method = "NM" )
+Warning message:
+In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+  one-dimensional optimization by Nelder-Mead is unreliable:
+use "Brent" or optimize() directly
+> all.equal( mlghFixNm, mlghFixNm4, tolerance = 1e-3 )
+[1] TRUE
+> 
+> ## SANN method with fixed parameters
+> mlFixSann <- maxLik( llf, start = startValFix, fixed = isFixed,
++    method = "SANN" )
+> mlFixSann3 <- maxLik( llf, start = startValFix, fixed = "mu",
++    method = "SANN" )
+> all.equal( mlFixSann, mlFixSann3, tolerance = 1e-3 )
+[1] TRUE
+> mlFixSann4 <- maxLik( llf, start = startValFix, fixed = 1,
++    method = "SANN" )
+> all.equal( mlFixSann, mlFixSann4, tolerance = 1e-3 )
+[1] TRUE
+> print( mlFixSann )
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -202.1 (1 free parameter(s))
+Estimate(s): 1 1.825 
+> print( summary( mlFixSann ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -202.1 
+1  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> activePar( mlFixSann )
+   mu sigma 
+FALSE  TRUE 
+> AIC( mlFixSann )
+[1] 406.2
+> coef( mlFixSann )
+   mu sigma 
+1.000 1.825 
+> condiNumber( mlFixSann, digits = 3 )
+sigma 	 1 
+> round( hessian( mlFixSann ), 1 )
+         mu sigma
+mu    -30.0  -5.9
+sigma  -5.9 -60.0
+> logLik( mlFixSann )
+[1] -202.1
+> maximType( mlFixSann )
+[1] "SANN maximisation"
+> nIter( mlFixSann )
+function 
+   10000 
+> nParam( mlFixSann )
+[1] 2
+> returnCode( mlFixSann )
+[1] 0
+> returnMessage( mlFixSann )
+[1] "successful convergence "
+> round( vcov( mlFixSann ), 3 )
+      mu sigma
+mu     0 0.000
+sigma  0 0.017
+> logLik( summary( mlFixSann ) )
+[1] -202.1
+> all.equal( mlFixBfgs[ -c(4,9,10) ], mlFixSann[ -c(4,9,10) ], 
++    tolerance = 1e-3 )
+[1] TRUE
+> mlIndFixSann <- maxLik( llfInd, start = startValFix, fixed = isFixed,
++    method = "SANN" )
+> all.equal( mlFixSann[ ], mlIndFixSann[ -12 ], tolerance = 1e-2 )
+[1] TRUE
+> round( mlIndFixSann[[ 12 ]], 3 )
+           mu  sigma
+  [1,] -0.336 -0.341
+  [2,] -0.138 -0.513
+  [3,]  0.936  1.050
+  [4,]  0.042 -0.545
+  [5,]  0.078 -0.537
+  [6,]  1.029  1.386
+  [7,]  0.277 -0.408
+  [8,] -0.759  0.505
+  [9,] -0.412 -0.238
+ [10,] -0.267 -0.417
+ [11,]  0.735  0.438
+ [12,]  0.216 -0.463
+ [13,]  0.241 -0.442
+ [14,]  0.066 -0.540
+ [15,] -0.334 -0.345
+ [16,]  1.073  1.552
+ [17,]  0.299 -0.385
+ [18,] -1.180  1.995
+ [19,]  0.421 -0.224
+ [20,] -0.284 -0.401
+ [21,] -0.641  0.202
+ [22,] -0.131 -0.517
+ [23,] -0.616  0.144
+ [24,] -0.437 -0.198
+ [25,] -0.375 -0.291
+ [26,] -1.012  1.323
+ [27,]  0.503 -0.086
+ [28,]  0.092 -0.532
+ [29,] -0.683  0.304
+ [30,]  0.753  0.486
+ [31,]  0.256 -0.428
+ [32,] -0.177 -0.491
+ [33,]  0.537 -0.021
+ [34,]  0.527 -0.041
+ [35,]  0.493 -0.104
+ [36,]  0.413 -0.236
+ [37,]  0.332 -0.346
+ [38,] -0.037 -0.545
+ [39,] -0.184 -0.486
+ [40,] -0.228 -0.453
+ [41,] -0.417 -0.230
+ [42,] -0.125 -0.519
+ [43,] -0.759  0.505
+ [44,]  1.302  2.546
+ [45,]  0.725  0.412
+ [46,] -0.674  0.282
+ [47,] -0.242 -0.441
+ [48,] -0.280 -0.405
+ [49,]  0.468 -0.148
+ [50,] -0.050 -0.543
+ [51,]  0.152 -0.506
+ [52,] -0.017 -0.547
+ [53,] -0.026 -0.547
+ [54,]  0.821  0.684
+ [55,] -0.136 -0.514
+ [56,]  0.910  0.964
+ [57,] -0.930  1.030
+ [58,]  0.351 -0.323
+ [59,]  0.074 -0.538
+ [60,]  0.130 -0.517
+ [61,]  0.228 -0.453
+ [62,] -0.301 -0.382
+ [63,] -0.200 -0.475
+ [64,] -0.611  0.134
+ [65,] -0.643  0.208
+ [66,]  0.182 -0.487
+ [67,]  0.269 -0.416
+ [68,]  0.032 -0.546
+ [69,]  0.554  0.012
+ [70,]  1.230  2.216
+ [71,] -0.295 -0.389
+ [72,] -1.386  2.959
+ [73,]  0.604  0.117
+ [74,] -0.426 -0.217
+ [75,] -0.413 -0.237
+ [76,]  0.616  0.144
+ [77,] -0.171 -0.494
+ [78,] -0.733  0.432
+ [79,]  0.109 -0.526
+ [80,] -0.083 -0.535
+ [81,]  0.003 -0.548
+ [82,]  0.231 -0.450
+ [83,] -0.222 -0.457
+ [84,]  0.387 -0.275
+ [85,] -0.132 -0.516
+ [86,]  0.199 -0.475
+ [87,]  0.658  0.243
+ [88,]  0.261 -0.423
+ [89,] -0.196 -0.478
+ [90,]  0.690  0.320
+ [91,]  0.596  0.101
+ [92,]  0.329 -0.350
+ [93,]  0.143 -0.510
+ [94,] -0.377 -0.289
+ [95,]  0.817  0.670
+ [96,] -0.360 -0.311
+ [97,]  1.313  2.598
+ [98,]  0.920  0.997
+ [99,] -0.141 -0.511
+[100,] -0.616  0.145
+> nObs( mlIndFixSann )
+[1] 100
+> 
+> # with analytical gradients
+> mlgFixSann <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
++    method = "SANN" )
+> print( summary( mlgFixSann ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -202.1 
+1  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.00       0.00      NA      NA    
+sigma     1.83       0.13      14  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> all.equal( mlFixSann[-4], mlgFixSann[-4], tolerance = 1e-3 )
+[1] TRUE
+> mlgIndFixSann <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
++    method = "SANN")
+> all.equal( mlgFixSann[ ], mlgIndFixSann[ -12 ], tolerance = 1e-3 )
+[1] TRUE
+> round( mlgIndFixSann[[ 12 ]], 3 )
+           mu  sigma
+  [1,] -0.336 -0.341
+  [2,] -0.138 -0.513
+  [3,]  0.936  1.050
+  [4,]  0.042 -0.545
+  [5,]  0.078 -0.537
+  [6,]  1.029  1.386
+  [7,]  0.277 -0.408
+  [8,] -0.759  0.505
+  [9,] -0.412 -0.238
+ [10,] -0.267 -0.417
+ [11,]  0.735  0.438
+ [12,]  0.216 -0.463
+ [13,]  0.241 -0.442
+ [14,]  0.066 -0.540
+ [15,] -0.334 -0.345
+ [16,]  1.073  1.552
+ [17,]  0.299 -0.385
+ [18,] -1.180  1.995
+ [19,]  0.421 -0.224
+ [20,] -0.284 -0.401
+ [21,] -0.641  0.202
+ [22,] -0.131 -0.517
+ [23,] -0.616  0.144
+ [24,] -0.437 -0.198
+ [25,] -0.375 -0.291
+ [26,] -1.012  1.323
+ [27,]  0.503 -0.086
+ [28,]  0.092 -0.532
+ [29,] -0.683  0.304
+ [30,]  0.753  0.486
+ [31,]  0.256 -0.428
+ [32,] -0.177 -0.491
+ [33,]  0.537 -0.021
+ [34,]  0.527 -0.041
+ [35,]  0.493 -0.104
+ [36,]  0.413 -0.236
+ [37,]  0.332 -0.346
+ [38,] -0.037 -0.545
+ [39,] -0.184 -0.486
+ [40,] -0.228 -0.453
+ [41,] -0.417 -0.230
+ [42,] -0.125 -0.519
+ [43,] -0.759  0.505
+ [44,]  1.302  2.546
+ [45,]  0.725  0.412
+ [46,] -0.674  0.282
+ [47,] -0.242 -0.441
+ [48,] -0.280 -0.405
+ [49,]  0.468 -0.148
+ [50,] -0.050 -0.543
+ [51,]  0.152 -0.506
+ [52,] -0.017 -0.547
+ [53,] -0.026 -0.547
+ [54,]  0.821  0.684
+ [55,] -0.136 -0.514
+ [56,]  0.910  0.964
+ [57,] -0.930  1.030
+ [58,]  0.351 -0.323
+ [59,]  0.074 -0.538
+ [60,]  0.130 -0.517
+ [61,]  0.228 -0.453
+ [62,] -0.301 -0.382
+ [63,] -0.200 -0.475
+ [64,] -0.611  0.134
+ [65,] -0.643  0.208
+ [66,]  0.182 -0.487
+ [67,]  0.269 -0.416
+ [68,]  0.032 -0.546
+ [69,]  0.554  0.012
+ [70,]  1.230  2.216
+ [71,] -0.295 -0.389
+ [72,] -1.386  2.959
+ [73,]  0.604  0.117
+ [74,] -0.426 -0.217
+ [75,] -0.413 -0.237
+ [76,]  0.616  0.144
+ [77,] -0.171 -0.494
+ [78,] -0.733  0.432
+ [79,]  0.109 -0.526
+ [80,] -0.083 -0.535
+ [81,]  0.003 -0.548
+ [82,]  0.231 -0.450
+ [83,] -0.222 -0.457
+ [84,]  0.387 -0.275
+ [85,] -0.132 -0.516
+ [86,]  0.199 -0.475
+ [87,]  0.658  0.243
+ [88,]  0.261 -0.423
+ [89,] -0.196 -0.478
+ [90,]  0.690  0.320
+ [91,]  0.596  0.101
+ [92,]  0.329 -0.350
+ [93,]  0.143 -0.510
+ [94,] -0.377 -0.289
+ [95,]  0.817  0.670
+ [96,] -0.360 -0.311
+ [97,]  1.313  2.598
+ [98,]  0.920  0.997
+ [99,] -0.141 -0.511
+[100,] -0.616  0.145
+> 
+> # with unused Hessians
+> mlghFixSann <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
++    method = "SANN" )
+> all.equal( mlgFixSann, mlghFixSann, tolerance = 1e-3 )
+[1] TRUE
+> 
+> 
+> ############### with parameter constraints ###############
+> A <- matrix( -1, nrow = 1, ncol = 2 )
+> 
+> 
+> ############### inequality constraints ###############
+> inEq <- list( ineqA = A, ineqB = 2.5 )
+> 
+> ## NR method with inequality constraints
+> try( maxLik( llf, start = startVal, constraints = inEq, method = "NR" ) )
+Error in maxRoutine(fn = logLik, grad = grad, hess = hess, start = start,  : 
+  Inequality constraints not implemented for maxNR
+> 
+> ## BHHH method with inequality constraints
+> try( maxLik( llf, start = startVal, constraints = inEq, method = "BHHH" ) )
+Error in maxNR(fn = fn, grad = grad, hess = hess, start = start, iterlim = iterlim,  : 
+  Inequality constraints not implemented for maxNR
+> 
+> ## BFGS method with inequality constraints
+> mlBfgsInEq <- maxLik( llf, start = startVal, constraints = inEq,
++    method = "BFGS" )
+> print( mlBfgsInEq )
+Maximum Likelihood estimation
+BFGS maximisation, 130 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5 (2 free parameter(s))
+Estimate(s): 0.8197 1.68 
+> print( summary( mlBfgsInEq ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS maximisation, 130 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -0.00145 
+--------------------------------------------
+> activePar( mlBfgsInEq )
+   mu sigma 
+ TRUE  TRUE 
+> AIC( mlBfgsInEq )
+[1] 413.1
+> coef( mlBfgsInEq )
+    mu  sigma 
+0.8197 1.6803 
+> condiNumber( mlBfgsInEq, digits = 3 )
+mu 	 1 
+sigma 	 3.61 
+> round( hessian( mlBfgsInEq ), 1 )
+         mu sigma
+mu    -35.4 -15.2
+sigma -15.2 -93.7
+> logLik( mlBfgsInEq )
+[1] -204.5
+> maximType( mlBfgsInEq )
+[1] "BFGS maximisation"
+> nIter( mlBfgsInEq )
+function 
+     130 
+> nParam( mlBfgsInEq )
+[1] 2
+> returnCode( mlBfgsInEq )
+[1] 0
+> returnMessage( mlBfgsInEq )
+[1] "successful convergence "
+> round( vcov( mlBfgsInEq ), 3 )
+          mu  sigma
+mu     0.030 -0.005
+sigma -0.005  0.011
+> logLik( summary( mlBfgsInEq ) )
+[1] -204.5
+> mlBfgsInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
++    method = "BFGS" )
+> print( summary( mlBfgsInEqInd ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS maximisation, 130 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -0.00145 
+--------------------------------------------
+> all.equal( mlBfgsInEq[ ], mlBfgsInEqInd[ -12 ], tolerance = 1e-3 )
+[1] TRUE
+> round( mlBfgsInEqInd[[ 12 ]], 3 )
+           mu  sigma
+  [1,] -0.333 -0.409
+  [2,] -0.099 -0.579
+  [3,]  1.168  1.697
+  [4,]  0.114 -0.573
+  [5,]  0.155 -0.555
+  [6,]  1.279  2.153
+  [7,]  0.390 -0.339
+  [8,] -0.832  0.569
+  [9,] -0.423 -0.295
+ [10,] -0.252 -0.489
+ [11,]  0.931  0.861
+ [12,]  0.319 -0.424
+ [13,]  0.348 -0.392
+ [14,]  0.142 -0.561
+ [15,] -0.330 -0.412
+ [16,]  1.330  2.376
+ [17,]  0.417 -0.304
+ [18,] -1.329  2.374
+ [19,]  0.561 -0.067
+ [20,] -0.271 -0.472
+ [21,] -0.693  0.211
+ [22,] -0.091 -0.581
+ [23,] -0.663  0.143
+ [24,] -0.452 -0.251
+ [25,] -0.379 -0.354
+ [26,] -1.131  1.554
+ [27,]  0.657  0.131
+ [28,]  0.173 -0.545
+ [29,] -0.742  0.331
+ [30,]  0.952  0.928
+ [31,]  0.366 -0.370
+ [32,] -0.145 -0.560
+ [33,]  0.698  0.223
+ [34,]  0.686  0.195
+ [35,]  0.646  0.106
+ [36,]  0.552 -0.084
+ [37,]  0.456 -0.245
+ [38,]  0.020 -0.594
+ [39,] -0.153 -0.556
+ [40,] -0.206 -0.524
+ [41,] -0.428 -0.287
+ [42,] -0.083 -0.583
+ [43,] -0.833  0.569
+ [44,]  1.600  3.708
+ [45,]  0.920  0.826
+ [46,] -0.732  0.305
+ [47,] -0.222 -0.513
+ [48,] -0.267 -0.476
+ [49,]  0.616  0.043
+ [50,]  0.005 -0.595
+ [51,]  0.243 -0.496
+ [52,]  0.044 -0.592
+ [53,]  0.033 -0.593
+ [54,]  1.033  1.199
+ [55,] -0.096 -0.580
+ [56,]  1.138  1.581
+ [57,] -1.033  1.199
+ [58,]  0.478 -0.211
+ [59,]  0.152 -0.557
+ [60,]  0.217 -0.516
+ [61,]  0.333 -0.409
+ [62,] -0.292 -0.452
+ [63,] -0.172 -0.545
+ [64,] -0.658  0.132
+ [65,] -0.695  0.217
+ [66,]  0.279 -0.464
+ [67,]  0.381 -0.351
+ [68,]  0.101 -0.578
+ [69,]  0.717  0.269
+ [70,]  1.516  3.267
+ [71,] -0.284 -0.460
+ [72,] -1.572  3.557
+ [73,]  0.776  0.417
+ [74,] -0.439 -0.272
+ [75,] -0.424 -0.294
+ [76,]  0.790  0.454
+ [77,] -0.138 -0.563
+ [78,] -0.801  0.483
+ [79,]  0.192 -0.533
+ [80,] -0.035 -0.593
+ [81,]  0.068 -0.587
+ [82,]  0.337 -0.405
+ [83,] -0.199 -0.529
+ [84,]  0.520 -0.140
+ [85,] -0.092 -0.581
+ [86,]  0.299 -0.445
+ [87,]  0.841  0.593
+ [88,]  0.372 -0.362
+ [89,] -0.167 -0.548
+ [90,]  0.878  0.699
+ [91,]  0.768  0.395
+ [92,]  0.452 -0.251
+ [93,]  0.233 -0.504
+ [94,] -0.381 -0.351
+ [95,]  1.028  1.180
+ [96,] -0.361 -0.376
+ [97,]  1.613  3.778
+ [98,]  1.150  1.625
+ [99,] -0.103 -0.577
+[100,] -0.663  0.144
+> nObs( mlBfgsInEqInd )
+[1] 100
+> 
+> # with analytical gradients
+> mlgBfgsInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
++    method = "BFGS" )
+> all.equal( mlBfgsInEq, mlgBfgsInEq, tolerance = 1e-3 )
+[1] TRUE
+> mlgBfgsInEqInd <- maxLik( llfInd, gfInd, start = startVal, constraints = inEq,
++    method = "BFGS" )
+> all.equal( mlgBfgsInEqInd[ -12 ], mlgBfgsInEq[ ], tolerance = 1e-3 )
+[1] TRUE
+> round( mlgBfgsInEqInd[[ 12 ]], 3 )
+           mu  sigma
+  [1,] -0.333 -0.409
+  [2,] -0.099 -0.579
+  [3,]  1.168  1.697
+  [4,]  0.114 -0.573
+  [5,]  0.155 -0.555
+  [6,]  1.279  2.153
+  [7,]  0.390 -0.339
+  [8,] -0.832  0.569
+  [9,] -0.423 -0.295
+ [10,] -0.252 -0.489
+ [11,]  0.931  0.861
+ [12,]  0.319 -0.424
+ [13,]  0.348 -0.392
+ [14,]  0.142 -0.561
+ [15,] -0.330 -0.412
+ [16,]  1.330  2.376
+ [17,]  0.417 -0.304
+ [18,] -1.329  2.374
+ [19,]  0.561 -0.067
+ [20,] -0.271 -0.472
+ [21,] -0.693  0.211
+ [22,] -0.091 -0.581
+ [23,] -0.663  0.143
+ [24,] -0.452 -0.251
+ [25,] -0.379 -0.354
+ [26,] -1.131  1.554
+ [27,]  0.657  0.131
+ [28,]  0.173 -0.545
+ [29,] -0.742  0.331
+ [30,]  0.952  0.928
+ [31,]  0.366 -0.370
+ [32,] -0.145 -0.560
+ [33,]  0.698  0.223
+ [34,]  0.686  0.195
+ [35,]  0.646  0.106
+ [36,]  0.552 -0.084
+ [37,]  0.456 -0.245
+ [38,]  0.020 -0.594
+ [39,] -0.153 -0.556
+ [40,] -0.206 -0.524
+ [41,] -0.428 -0.287
+ [42,] -0.083 -0.583
+ [43,] -0.833  0.569
+ [44,]  1.600  3.708
+ [45,]  0.920  0.826
+ [46,] -0.732  0.305
+ [47,] -0.222 -0.513
+ [48,] -0.267 -0.476
+ [49,]  0.616  0.043
+ [50,]  0.005 -0.595
+ [51,]  0.243 -0.496
+ [52,]  0.044 -0.592
+ [53,]  0.033 -0.593
+ [54,]  1.033  1.199
+ [55,] -0.096 -0.580
+ [56,]  1.138  1.581
+ [57,] -1.033  1.199
+ [58,]  0.478 -0.211
+ [59,]  0.152 -0.557
+ [60,]  0.217 -0.516
+ [61,]  0.333 -0.409
+ [62,] -0.292 -0.452
+ [63,] -0.172 -0.545
+ [64,] -0.658  0.132
+ [65,] -0.695  0.217
+ [66,]  0.279 -0.464
+ [67,]  0.381 -0.351
+ [68,]  0.101 -0.578
+ [69,]  0.717  0.269
+ [70,]  1.516  3.267
+ [71,] -0.284 -0.460
+ [72,] -1.572  3.557
+ [73,]  0.776  0.417
+ [74,] -0.439 -0.272
+ [75,] -0.424 -0.294
+ [76,]  0.790  0.454
+ [77,] -0.138 -0.563
+ [78,] -0.801  0.483
+ [79,]  0.192 -0.533
+ [80,] -0.035 -0.593
+ [81,]  0.068 -0.587
+ [82,]  0.337 -0.405
+ [83,] -0.199 -0.529
+ [84,]  0.520 -0.140
+ [85,] -0.092 -0.581
+ [86,]  0.299 -0.445
+ [87,]  0.841  0.593
+ [88,]  0.372 -0.362
+ [89,] -0.167 -0.548
+ [90,]  0.878  0.699
+ [91,]  0.768  0.395
+ [92,]  0.452 -0.251
+ [93,]  0.233 -0.504
+ [94,] -0.381 -0.351
+ [95,]  1.028  1.180
+ [96,] -0.361 -0.376
+ [97,]  1.613  3.778
+ [98,]  1.150  1.625
+ [99,] -0.103 -0.577
+[100,] -0.663  0.144
+> mlgBfgsInEqInd2 <- maxLik( llf, gfInd, start = startVal, constraints = inEq,
++    method = "BFGS" )
+> all.equal( mlgBfgsInEqInd, mlgBfgsInEqInd2, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with unused Hessian
+> mlghBfgsInEq <- maxLik( llf, gf, hf, start = startVal, constraints = inEq,
++    method = "BFGS" )
+> all.equal( mlgBfgsInEq, mlghBfgsInEq, tolerance = 1e-3 )
+[1] TRUE
+> 
+> ## NM method with inequality constraints
+> mlNmInEq <- maxLik( llf, start = startVal, constraints = inEq, method = "NM" )
+> print( mlNmInEq )
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 103 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5 (2 free parameter(s))
+Estimate(s): 0.8197 1.68 
+> print( summary( mlNmInEq ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 103 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -0.001468 
+--------------------------------------------
+> activePar( mlNmInEq )
+   mu sigma 
+ TRUE  TRUE 
+> AIC( mlNmInEq )
+[1] 413.1
+> coef( mlNmInEq )
+    mu  sigma 
+0.8197 1.6803 
+> condiNumber( mlNmInEq, digits = 3 )
+mu 	 1 
+sigma 	 3.61 
+> round( hessian( mlNmInEq ), 1 )
+         mu sigma
+mu    -35.4 -15.2
+sigma -15.2 -93.7
+> logLik( mlNmInEq )
+[1] -204.5
+> maximType( mlNmInEq )
+[1] "Nelder-Mead maximisation"
+> nIter( mlNmInEq )
+function 
+     103 
+> nParam( mlNmInEq )
+[1] 2
+> returnCode( mlNmInEq )
+[1] 0
+> returnMessage( mlNmInEq )
+[1] "successful convergence "
+> round( vcov( mlNmInEq ), 3 )
+          mu  sigma
+mu     0.030 -0.005
+sigma -0.005  0.011
+> logLik( summary( mlNmInEq ) )
+[1] -204.5
+> all.equal( mlBfgsInEq[-c(9,10,11)], mlNmInEq[-c(9,10,11)], tolerance = 1e-3 )
+[1] TRUE
+> mlNmInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
++    method = "NM" )
+> print( summary( mlNmInEqInd ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 103 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -0.001468 
+--------------------------------------------
+> all.equal( mlNmInEq[-4], mlNmInEqInd[-c(4,12)], tolerance = 1e-3 )
+[1] TRUE
+> round( mlNmInEqInd[[ 12 ]], 3 )
+           mu  sigma
+  [1,] -0.333 -0.409
+  [2,] -0.099 -0.579
+  [3,]  1.168  1.697
+  [4,]  0.114 -0.573
+  [5,]  0.155 -0.555
+  [6,]  1.279  2.153
+  [7,]  0.390 -0.339
+  [8,] -0.832  0.569
+  [9,] -0.423 -0.295
+ [10,] -0.252 -0.489
+ [11,]  0.931  0.861
+ [12,]  0.319 -0.424
+ [13,]  0.348 -0.392
+ [14,]  0.142 -0.561
+ [15,] -0.330 -0.412
+ [16,]  1.330  2.376
+ [17,]  0.417 -0.304
+ [18,] -1.329  2.374
+ [19,]  0.561 -0.067
+ [20,] -0.271 -0.472
+ [21,] -0.693  0.211
+ [22,] -0.091 -0.581
+ [23,] -0.663  0.143
+ [24,] -0.452 -0.251
+ [25,] -0.379 -0.354
+ [26,] -1.131  1.554
+ [27,]  0.657  0.131
+ [28,]  0.173 -0.545
+ [29,] -0.742  0.331
+ [30,]  0.952  0.928
+ [31,]  0.366 -0.370
+ [32,] -0.145 -0.560
+ [33,]  0.698  0.223
+ [34,]  0.686  0.195
+ [35,]  0.646  0.106
+ [36,]  0.552 -0.084
+ [37,]  0.456 -0.245
+ [38,]  0.020 -0.594
+ [39,] -0.153 -0.556
+ [40,] -0.206 -0.524
+ [41,] -0.428 -0.287
+ [42,] -0.083 -0.583
+ [43,] -0.833  0.569
+ [44,]  1.600  3.708
+ [45,]  0.920  0.826
+ [46,] -0.732  0.305
+ [47,] -0.222 -0.513
+ [48,] -0.267 -0.476
+ [49,]  0.616  0.043
+ [50,]  0.005 -0.595
+ [51,]  0.243 -0.496
+ [52,]  0.044 -0.592
+ [53,]  0.033 -0.593
+ [54,]  1.033  1.199
+ [55,] -0.096 -0.580
+ [56,]  1.138  1.581
+ [57,] -1.033  1.199
+ [58,]  0.478 -0.211
+ [59,]  0.152 -0.557
+ [60,]  0.217 -0.516
+ [61,]  0.333 -0.409
+ [62,] -0.292 -0.452
+ [63,] -0.172 -0.545
+ [64,] -0.658  0.132
+ [65,] -0.695  0.217
+ [66,]  0.279 -0.464
+ [67,]  0.381 -0.351
+ [68,]  0.101 -0.578
+ [69,]  0.717  0.269
+ [70,]  1.516  3.267
+ [71,] -0.284 -0.460
+ [72,] -1.572  3.557
+ [73,]  0.776  0.417
+ [74,] -0.439 -0.272
+ [75,] -0.424 -0.294
+ [76,]  0.790  0.454
+ [77,] -0.138 -0.563
+ [78,] -0.801  0.483
+ [79,]  0.192 -0.533
+ [80,] -0.035 -0.593
+ [81,]  0.068 -0.587
+ [82,]  0.337 -0.405
+ [83,] -0.199 -0.529
+ [84,]  0.520 -0.140
+ [85,] -0.092 -0.581
+ [86,]  0.299 -0.445
+ [87,]  0.841  0.593
+ [88,]  0.372 -0.362
+ [89,] -0.167 -0.548
+ [90,]  0.878  0.699
+ [91,]  0.768  0.395
+ [92,]  0.452 -0.251
+ [93,]  0.233 -0.504
+ [94,] -0.381 -0.351
+ [95,]  1.028  1.180
+ [96,] -0.361 -0.376
+ [97,]  1.613  3.778
+ [98,]  1.150  1.625
+ [99,] -0.103 -0.577
+[100,] -0.663  0.144
+> nObs( mlNmInEqInd )
+[1] 100
+> 
+> # with unused analytical gradients
+> mlgNmInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
++    method = "NM" )
+> all.equal( mlNmInEq, mlgNmInEq, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with unused analytical gradients and Hessians
+> mlghNmInEq <- maxLik( llf, gf, hf, start = startVal, constraints = inEq,
++    method = "NM" )
+> all.equal( mlgNmInEq, mlghNmInEq, tolerance = 1e-3 )
+[1] TRUE
+> 
+> ## SANN method with inequality constraints
+> mlSannInEq <- maxLik( llf, start = startVal, constraints = inEq,
++    method = "SANN" )
+> print( mlSannInEq )
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5 (2 free parameter(s))
+Estimate(s): 0.8297 1.67 
+> print( summary( mlSannInEq ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        0.83       0.17     4.8   2e-06 ***
+sigma     1.67       0.11    15.8  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -0.001043 
+--------------------------------------------
+> activePar( mlSannInEq )
+   mu sigma 
+ TRUE  TRUE 
+> AIC( mlSannInEq )
+[1] 413.1
+> coef( mlSannInEq )
+    mu  sigma 
+0.8297 1.6702 
+> condiNumber( mlSannInEq, digits = 3 )
+mu 	 1 
+sigma 	 3.6 
+> round( hessian( mlSannInEq ), 1 )
+         mu sigma
+mu    -35.8 -15.1
+sigma -15.1 -96.1
+> logLik( mlSannInEq )
+[1] -204.5
+> maximType( mlSannInEq )
+[1] "SANN maximisation"
+> nIter( mlSannInEq )
+function 
+   10000 
+> nParam( mlSannInEq )
+[1] 2
+> returnCode( mlSannInEq )
+[1] 0
+> returnMessage( mlSannInEq )
+[1] "successful convergence "
+> round( vcov( mlSannInEq ), 3 )
+          mu  sigma
+mu     0.030 -0.005
+sigma -0.005  0.011
+> logLik( summary( mlSannInEq ) )
+[1] -204.5
+> all.equal( mlBfgsInEq[-c(2,3,4,9,10,11)], mlSannInEq[-c(2,3,4,9,10,11)], 
++    tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlBfgsInEq[-c(3,4,9,10,11)], mlSannInEq[-c(3,4,9,10,11)], 
++    tolerance = 1e-2 )
+[1] TRUE
+> # with unused analytical gradients
+> mlgSannInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
++    method = "SANN" )
+> all.equal( mlSannInEq, mlgSannInEq, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with a user-specified function to generate a new candidate point
+> mlSannInEqCand <- maxLik( llf, start = startVal, constraints = inEq,
++    method = "SANN", cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
+> print( summary( mlSannInEqCand ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        0.81       0.17     4.6   3e-06 ***
+sigma     1.68       0.11    15.6  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -0.0005163 
+--------------------------------------------
+> all.equal( mlSannInEqCand[-c(2,3,4)], mlSannInEq[-c(2,3,4)], tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlSannInEqCand, mlSannInEq, tolerance = 1e-1 )
+[1] TRUE
+> 
+> ############### equality constraints ###############
+> eqCon <- list( eqA = A, eqB = 2.5 )
+> 
+> ## NR method with equality constraints
+> mlCon <- maxLik( llf, start = startVal, constraints = eqCon )
+> print( mlCon )
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 2 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -204.5 (2 free parameter(s))
+Estimate(s): 0.8198 1.68 
+> print( summary( mlCon ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 2 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -204.5 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+Return code: 1 
+penalty close to zero 
+10  outer iterations, barrier value 2.07e-10 
+--------------------------------------------
+> activePar( mlCon )
+   mu sigma 
+ TRUE  TRUE 
+> AIC( mlCon )
+[1] 413.1
+> coef( mlCon )
+    mu  sigma 
+0.8198 1.6803 
+> condiNumber( mlCon, digits = 3 )
+mu 	 1 
+sigma 	 3.61 
+> round( hessian( mlCon ), 1 )
+         mu sigma
+mu    -35.4 -15.3
+sigma -15.3 -93.7
+> logLik( mlCon )
+[1] -204.5
+> maximType( mlCon )
+[1] "Newton-Raphson maximisation"
+> nIter( mlCon )
+[1] 2
+> nParam( mlCon )
+[1] 2
+> returnCode( mlCon )
+[1] 1
+> returnMessage( mlCon )
+[1] "gradient close to zero"
+> round( vcov( mlCon ), 3 )
+          mu  sigma
+mu     0.030 -0.005
+sigma -0.005  0.011
+> logLik( summary( mlCon ) )
+[1] -204.5
+> mlConInd <- maxLik( llfInd, start = startVal, constraints = eqCon )
+> print( summary( mlConInd ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 2 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -204.5 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+Return code: 1 
+penalty close to zero 
+10  outer iterations, barrier value 2.07e-10 
+--------------------------------------------
+> all.equal( mlCon[-4], mlConInd[-c(4,11)], tolerance = 1e-3 )
+[1] TRUE
+> mlConInd[11]
+$gradientObs
+              mu    sigma
+  [1,] -0.333193 -0.40861
+  [2,] -0.099212 -0.57861
+  [3,]  1.168023  1.69720
+  [4,]  0.113792 -0.57339
+  [5,]  0.155431 -0.55455
+  [6,]  1.278785  2.15258
+  [7,]  0.390354 -0.33911
+  [8,] -0.832318  0.56886
+  [9,] -0.422718 -0.29490
+ [10,] -0.251860 -0.48856
+ [11,]  0.930976  0.86117
+ [12,]  0.318734 -0.42444
+ [13,]  0.347748 -0.39195
+ [14,]  0.142251 -0.56114
+ [15,] -0.329910 -0.41226
+ [16,]  1.329682  2.37565
+ [17,]  0.416518 -0.30364
+ [18,] -1.329295  2.37393
+ [19,]  0.560680 -0.06693
+ [20,] -0.271079 -0.47167
+ [21,] -0.692596  0.21086
+ [22,] -0.090568 -0.58136
+ [23,] -0.662971  0.14338
+ [24,] -0.452498 -0.25110
+ [25,] -0.378930 -0.35388
+ [26,] -1.130999  1.55418
+ [27,]  0.657327  0.13086
+ [28,]  0.172493 -0.54515
+ [29,] -0.742405  0.33096
+ [30,]  0.952039  0.92781
+ [31,]  0.365949 -0.37013
+ [32,] -0.145183 -0.55973
+ [33,]  0.697945  0.22336
+ [34,]  0.685908  0.19537
+ [35,]  0.645847  0.10572
+ [36,]  0.551672 -0.08377
+ [37,]  0.456236 -0.24540
+ [38,]  0.019986 -0.59447
+ [39,] -0.152898 -0.55586
+ [40,] -0.205679 -0.52406
+ [41,] -0.428282 -0.28694
+ [42,] -0.083443 -0.58345
+ [43,] -0.832555  0.56953
+ [44,]  1.600319  3.70805
+ [45,]  0.919557  0.82566
+ [46,] -0.731759  0.30459
+ [47,] -0.221557 -0.51266
+ [48,] -0.266732 -0.47560
+ [49,]  0.616366  0.04320
+ [50,]  0.004786 -0.59511
+ [51,]  0.243293 -0.49569
+ [52,]  0.043622 -0.59195
+ [53,]  0.033475 -0.59326
+ [54,]  1.033353  1.19907
+ [55,] -0.096091 -0.57963
+ [56,]  1.138102  1.58126
+ [57,] -1.033283  1.19883
+ [58,]  0.477981 -0.21126
+ [59,]  0.151582 -0.55654
+ [60,]  0.216816 -0.51616
+ [61,]  0.332778 -0.40907
+ [62,] -0.291999 -0.45188
+ [63,] -0.172198 -0.54532
+ [64,] -0.657709  0.13171
+ [65,] -0.695406  0.21741
+ [66,]  0.278862 -0.46448
+ [67,]  0.381353 -0.35078
+ [68,]  0.101392 -0.57787
+ [69,]  0.717173  0.26908
+ [70,]  1.516111  3.26710
+ [71,] -0.283999 -0.45962
+ [72,] -1.571957  3.55687
+ [73,]  0.776303  0.41746
+ [74,] -0.438549 -0.27199
+ [75,] -0.423537 -0.29373
+ [76,]  0.790352  0.45444
+ [77,] -0.137887 -0.56320
+ [78,] -0.800905  0.48266
+ [79,]  0.192278 -0.53302
+ [80,] -0.034546 -0.59314
+ [81,]  0.067927 -0.58739
+ [82,]  0.336774 -0.40457
+ [83,] -0.198729 -0.52879
+ [84,]  0.520316 -0.14025
+ [85,] -0.092347 -0.58082
+ [86,]  0.298876 -0.44505
+ [87,]  0.840838  0.59282
+ [88,]  0.372124 -0.36247
+ [89,] -0.167044 -0.54826
+ [90,]  0.877652  0.69912
+ [91,]  0.767636  0.39498
+ [92,]  0.452325 -0.25137
+ [93,]  0.232960 -0.50396
+ [94,] -0.380961 -0.35129
+ [95,]  1.027722  1.17957
+ [96,] -0.361376 -0.37571
+ [97,]  1.613337  3.77834
+ [98,]  1.149536  1.62521
+ [99,] -0.103125 -0.57728
+[100,] -0.663266  0.14404
+
+> nObs( mlConInd )
+[1] 100
+> 
+> # with analytical gradients
+> mlgCon <- maxLik( llf, gf, start = startVal, constraints = eqCon )
+> print( summary( mlgCon ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 1 iterations
+Return code 3: Last step could not find a value above the current.
+Boundary of parameter space?  
+Consider switching to a more robust optimisation method temporarily.
+Log-Likelihood: -204.5 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        0.84       0.17     4.9   1e-06 ***
+sigma     1.67       0.11    15.8  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+Return code: 2 
+successive function values within tolerance limit 
+7  outer iterations, barrier value 0.0001299 
+--------------------------------------------
+> all.equal( mlCon[ -c(2,3,4,5,6,7,9,11) ], mlgCon[ -c(2,3,4,5,6,7,9,11) ], 
++    tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlCon[ -c( 5, 6, 7, 9, 11 ) ], mlgCon[ -c( 5, 6, 7, 9, 11 ) ], 
++    tolerance = 1e-1 )
+[1] TRUE
+> mlgConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon )
+> all.equal( mlConInd[ -c(2,3,4,5,6,7,9,11,12) ], mlgConInd[ -c(2,3,4,5,6,7,9,11,12) ],
++    tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlConInd[ -c(5,6,7,9,12) ], mlgConInd[ -c(5,6,7,9,12) ],
++    tolerance = 1e-1 )
+[1] TRUE
+> all.equal( mlgCon[], mlgConInd[-11], tolerance = 1e-3 )
+[1] TRUE
+> mlgConInd[11]
+$gradientObs
+              mu    sigma
+  [1,] -0.345249 -0.39986
+  [2,] -0.108315 -0.57930
+  [3,]  1.174915  1.70609
+  [4,]  0.107378 -0.57964
+  [5,]  0.149542 -0.56155
+  [6,]  1.287075  2.16717
+  [7,]  0.387431 -0.34825
+  [8,] -0.850673  0.60942
+  [9,] -0.435904 -0.28161
+ [10,] -0.262889 -0.48349
+ [11,]  0.934876  0.86047
+ [12,]  0.314907 -0.43330
+ [13,]  0.344287 -0.40097
+ [14,]  0.136196 -0.56792
+ [15,] -0.341925 -0.40367
+ [16,]  1.338615  2.39314
+ [17,]  0.413925 -0.31280
+ [18,] -1.353923  2.46196
+ [19,]  0.559907 -0.07543
+ [20,] -0.282350 -0.46577
+ [21,] -0.709187  0.24091
+ [22,] -0.099561 -0.58234
+ [23,] -0.679189  0.17137
+ [24,] -0.466059 -0.23620
+ [25,] -0.391563 -0.34288
+ [26,] -1.153124  1.62138
+ [27,]  0.657773  0.12356
+ [28,]  0.166819 -0.55242
+ [29,] -0.759626  0.36461
+ [30,]  0.956205  0.92782
+ [31,]  0.362717 -0.37921
+ [32,] -0.154865 -0.55884
+ [33,]  0.698904  0.21673
+ [34,]  0.686715  0.18853
+ [35,]  0.646148  0.09825
+ [36,]  0.550785 -0.09234
+ [37,]  0.454144 -0.25451
+ [38,]  0.012388 -0.59863
+ [39,] -0.162678 -0.55470
+ [40,] -0.216125 -0.52089
+ [41,] -0.441538 -0.27336
+ [42,] -0.092347 -0.58465
+ [43,] -0.850913  0.61011
+ [44,]  1.612667  3.74365
+ [45,]  0.923313  0.82459
+ [46,] -0.748845  0.33746
+ [47,] -0.232204 -0.50886
+ [48,] -0.277948 -0.46989
+ [49,]  0.616296  0.03532
+ [50,] -0.003004 -0.59887
+ [51,]  0.238514 -0.50390
+ [52,]  0.036322 -0.59669
+ [53,]  0.026047 -0.59776
+ [54,]  1.038546  1.20208
+ [55,] -0.105154 -0.58043
+ [56,]  1.144617  1.58874
+ [57,] -1.054175  1.25669
+ [58,]  0.476163 -0.22030
+ [59,]  0.145645 -0.56347
+ [60,]  0.211702 -0.52405
+ [61,]  0.329128 -0.41801
+ [62,] -0.303534 -0.44505
+ [63,] -0.182222 -0.54344
+ [64,] -0.673860  0.15933
+ [65,] -0.712033  0.24767
+ [66,]  0.274531 -0.47304
+ [67,]  0.378316 -0.35991
+ [68,]  0.094821 -0.58388
+ [69,]  0.718374  0.26281
+ [70,]  1.527397  3.29656
+ [71,] -0.295434 -0.45315
+ [72,] -1.599648  3.67381
+ [73,]  0.778251  0.41244
+ [74,] -0.451935 -0.25785
+ [75,] -0.436733 -0.28041
+ [76,]  0.792478  0.44976
+ [77,] -0.147478 -0.56257
+ [78,] -0.818864  0.52075
+ [79,]  0.186855 -0.54059
+ [80,] -0.042832 -0.59583
+ [81,]  0.060934 -0.59269
+ [82,]  0.333175 -0.41354
+ [83,] -0.209088 -0.52589
+ [84,]  0.519033 -0.14906
+ [85,] -0.101363 -0.58173
+ [86,]  0.294798 -0.45378
+ [87,]  0.843600  0.58942
+ [88,]  0.368970 -0.37157
+ [89,] -0.177002 -0.54658
+ [90,]  0.880879  0.69676
+ [91,]  0.769474  0.38976
+ [92,]  0.450184 -0.26049
+ [93,]  0.228050 -0.51205
+ [94,] -0.393619 -0.34018
+ [95,]  1.032843  1.18235
+ [96,] -0.373787 -0.36559
+ [97,]  1.625850  3.81493
+ [98,]  1.156195  1.63322
+ [99,] -0.112276 -0.57784
+[100,] -0.679488  0.17205
+
+> 
+> # with analytical gradients as attribute
+> mlGCon <- maxLik( llfGrad, start = startVal, constraints = eqCon )
+> all.equal( mlGCon, mlgCon, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlGCon[-c(2,3,4,5,6,7,9,11)], mlCon[-c(2,3,4,5,6,7,9,11)], 
++    tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlGCon[-c(5,6,7,9,11)], mlCon[-c(5,6,7,9,11)], 
++    tolerance = 1e-1 )
+[1] TRUE
+> 
+> # with analytical gradients and Hessians
+> mlghCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon )
+> all.equal( mlgCon, mlghCon, tolerance = 1e-3 )
+[1] "Component \"last.step\": Component \"f0\": Attributes: < Component \"hessian\": Attributes: < Length mismatch: comparison on first 1 components > >"
+> 
+> # with analytical gradients and Hessians as attributes
+> mlGHCon <- maxLik( llfGradHess, start = startVal, constraints = eqCon )
+> all.equal( mlGHCon, mlghCon, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlGHCon[-c(2,3,4,5,6,7,9,11)], mlCon[-c(2,3,4,5,6,7,9,11)], 
++    tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlGHCon[-c(5,6,7,9,11)], mlCon[-c(5,6,7,9,11)], 
++    tolerance = 1e-1 )
+[1] TRUE
+> 
+> 
+> ## BHHH method with equality constraints
+> mlBhhhCon <- maxLik( llfInd, start = startVal, constraints = eqCon,
++    method = "BHHH" )
+> print( mlBhhhCon )
+Maximum Likelihood estimation
+BHHH maximisation, 8 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -204.5 (2 free parameter(s))
+Estimate(s): 0.8199 1.68 
+> print( summary( mlBhhhCon ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BHHH maximisation, 8 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -204.5 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+Return code: 1 
+penalty close to zero 
+10  outer iterations, barrier value 2.085e-10 
+--------------------------------------------
+> activePar( mlBhhhCon )
+   mu sigma 
+ TRUE  TRUE 
+> AIC( mlBhhhCon )
+[1] 413.1
+> coef( mlBhhhCon )
+    mu  sigma 
+0.8199 1.6801 
+> condiNumber( mlBhhhCon, digits = 3 )
+mu 	 1 
+sigma 	 3.61 
+> round( hessian( mlBhhhCon ), 1 )
+         mu sigma
+mu    -35.4 -15.2
+sigma -15.2 -93.7
+> logLik( mlBhhhCon )
+[1] -204.5
+> maximType( mlBhhhCon )
+[1] "BHHH maximisation"
+> nIter( mlBhhhCon )
+[1] 8
+> nParam( mlBhhhCon )
+[1] 2
+> returnCode( mlBhhhCon )
+[1] 2
+> returnMessage( mlBhhhCon )
+[1] "successive function values within tolerance limit"
+> round( vcov( mlBhhhCon ), 3 )
+          mu  sigma
+mu     0.030 -0.005
+sigma -0.005  0.011
+> logLik( summary( mlBhhhCon ) )
+[1] -204.5
+> all.equal( mlCon[ -c( 5, 6, 7, 9, 10 ) ], mlBhhhCon[ -c( 5, 6, 7, 9, 10, 11 ) ],
++    tolerance = 5e-3 )
+[1] TRUE
+> mlBhhhCon[11]
+$gradientObs
+              mu    sigma
+  [1,] -0.333308 -0.40855
+  [2,] -0.099285 -0.57864
+  [3,]  1.168182  1.69756
+  [4,]  0.113758 -0.57346
+  [5,]  0.155405 -0.55462
+  [6,]  1.278964  2.15304
+  [7,]  0.390371 -0.33917
+  [8,] -0.832523  0.56928
+  [9,] -0.422849 -0.29479
+ [10,] -0.251960 -0.48854
+ [11,]  0.931091  0.86134
+ [12,]  0.318738 -0.42451
+ [13,]  0.347757 -0.39201
+ [14,]  0.142223 -0.56121
+ [15,] -0.330025 -0.41221
+ [16,]  1.329870  2.37617
+ [17,]  0.416540 -0.30369
+ [18,] -1.329591  2.37493
+ [19,]  0.560728 -0.06694
+ [20,] -0.271182 -0.47164
+ [21,] -0.692776  0.21115
+ [22,] -0.090639 -0.58140
+ [23,] -0.663146  0.14365
+ [24,] -0.452635 -0.25098
+ [25,] -0.379053 -0.35380
+ [26,] -1.131259  1.55492
+ [27,]  0.657393  0.13089
+ [28,]  0.172470 -0.54522
+ [29,] -0.742594  0.33129
+ [30,]  0.952158  0.92800
+ [31,]  0.365961 -0.37019
+ [32,] -0.145263 -0.55975
+ [33,]  0.698018  0.22340
+ [34,]  0.685979  0.19541
+ [35,]  0.645910  0.10574
+ [36,]  0.551719 -0.08378
+ [37,]  0.456265 -0.24544
+ [38,]  0.019936 -0.59453
+ [39,] -0.152980 -0.55588
+ [40,] -0.205771 -0.52406
+ [41,] -0.428414 -0.28683
+ [42,] -0.083513 -0.58348
+ [43,] -0.832761  0.56994
+ [44,]  1.600556  3.70888
+ [45,]  0.919670  0.82583
+ [46,] -0.731946  0.30491
+ [47,] -0.221652 -0.51266
+ [48,] -0.266834 -0.47557
+ [49,]  0.616424  0.04321
+ [50,]  0.004733 -0.59516
+ [51,]  0.243283 -0.49576
+ [52,]  0.043575 -0.59201
+ [53,]  0.033427 -0.59332
+ [54,]  1.033487  1.19932
+ [55,] -0.096162 -0.57966
+ [56,]  1.138255  1.58160
+ [57,] -1.033525  1.19945
+ [58,]  0.478014 -0.21130
+ [59,]  0.151555 -0.55661
+ [60,]  0.216801 -0.51623
+ [61,]  0.332785 -0.40913
+ [62,] -0.292106 -0.45184
+ [63,] -0.172284 -0.54533
+ [64,] -0.657882  0.13197
+ [65,] -0.695587  0.21771
+ [66,]  0.278858 -0.46455
+ [67,]  0.381368 -0.35084
+ [68,]  0.101356 -0.57794
+ [69,]  0.717249  0.26913
+ [70,]  1.516333  3.26782
+ [71,] -0.284105 -0.45959
+ [72,] -1.572297  3.55824
+ [73,]  0.776390  0.41754
+ [74,] -0.438683 -0.27187
+ [75,] -0.423668 -0.29363
+ [76,]  0.790442  0.45453
+ [77,] -0.137967 -0.56322
+ [78,] -0.801105  0.48304
+ [79,]  0.192259 -0.53310
+ [80,] -0.034606 -0.59319
+ [81,]  0.067885 -0.58746
+ [82,]  0.336781 -0.40464
+ [83,] -0.198820 -0.52879
+ [84,]  0.520357 -0.14027
+ [85,] -0.092418 -0.58085
+ [86,]  0.298876 -0.44512
+ [87,]  0.840937  0.59293
+ [88,]  0.372137 -0.36253
+ [89,] -0.167128 -0.54827
+ [90,]  0.877758  0.69926
+ [91,]  0.767721  0.39505
+ [92,]  0.452353 -0.25141
+ [93,]  0.232948 -0.50403
+ [94,] -0.381084 -0.35120
+ [95,]  1.027855  1.17981
+ [96,] -0.361496 -0.37564
+ [97,]  1.613577  3.77919
+ [98,]  1.149691  1.62555
+ [99,] -0.103198 -0.57731
+[100,] -0.663441  0.14431
+
+> nObs( mlBhhhCon )
+[1] 100
+> 
+> # with analytical gradients
+> mlgBhhhCon <- maxLik( llf, gfInd, start = startVal, constraints = eqCon,
++    method = "BHHH" )
+> print( summary( mlgBhhhCon ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BHHH maximisation, 7 iterations
+Return code 3: Last step could not find a value above the current.
+Boundary of parameter space?  
+Consider switching to a more robust optimisation method temporarily.
+Log-Likelihood: -204.5 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        0.83       0.17     4.8   1e-06 ***
+sigma     1.67       0.10    15.9  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+Return code: 1 
+penalty close to zero 
+9  outer iterations, barrier value 1.178e-08 
+--------------------------------------------
+> all.equal( mlBhhhCon[-c(2,3,4,5,6,7,9,11,12)], mlgBhhhCon[-c(2,3,4,5,6,7,9,11,12)],
++    tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlBhhhCon[-c(5,6,7,9,12)], mlgBhhhCon[-c(5,6,7,9,12)],
++    tolerance = 1e-1 )
+[1] TRUE
+> mlgBhhhConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon,
++    method = "BHHH" )
+> all.equal( mlgBhhhCon, mlgBhhhConInd, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with analytical gradients as attribute
+> mlGBhhhCon <- maxLik( llfGradInd, start = startVal, constraints = eqCon,
++    method = "BHHH" )
+> print( summary( mlGBhhhCon ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BHHH maximisation, 7 iterations
+Return code 3: Last step could not find a value above the current.
+Boundary of parameter space?  
+Consider switching to a more robust optimisation method temporarily.
+Log-Likelihood: -204.5 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        0.83       0.17     4.8   1e-06 ***
+sigma     1.67       0.10    15.9  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+Return code: 1 
+penalty close to zero 
+9  outer iterations, barrier value 1.178e-08 
+--------------------------------------------
+> all.equal( mlGBhhhCon, mlgBhhhCon, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlGBhhhCon[-c(2,3,4,5,6,7,9,11,12)], mlBhhhCon[-c(2,3,4,5,6,7,9,11,12)],
++    tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlGBhhhCon[-c(5,6,7,9,12)], mlBhhhCon[-c(5,6,7,9,12)],
++    tolerance = 1e-1 )
+[1] TRUE
+> 
+> # with analytical gradients and unused Hessians
+> mlghBhhhCon <- maxLik( llf, gfInd, hf, start = startVal, constraints = eqCon,
++    method = "BHHH" )
+> all.equal( mlgBhhhCon, mlghBhhhCon, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with analytical gradients and unused Hessians as attributes
+> mlGHBhhhCon <- maxLik( llfGradHessInd, start = startVal, constraints = eqCon,
++    method = "BHHH" )
+> all.equal( mlGHBhhhCon, mlghBhhhCon, tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlGHBhhhCon, mlGBhhhCon, tolerance = 1e-3 )
+[1] TRUE
+> 
+> 
+> ## BFGS method with equality constraints
+> mlBfgsCon <- maxLik( llf, start = startVal, constraints = eqCon,
++    method = "BFGS" )
+> print( mlBfgsCon )
+Maximum Likelihood estimation
+BFGS maximisation, 31 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5 (2 free parameter(s))
+Estimate(s): 0.8198 1.68 
+> print( summary( mlBfgsCon ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS maximisation, 31 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+Return code: 1 
+penalty close to zero 
+10  outer iterations, barrier value 2.07e-10 
+--------------------------------------------
+> activePar( mlBfgsCon )
+   mu sigma 
+ TRUE  TRUE 
+> AIC( mlBfgsCon )
+[1] 413.1
+> coef( mlBfgsCon )
+    mu  sigma 
+0.8198 1.6803 
+> condiNumber( mlBfgsCon, digits = 3 )
+mu 	 1 
+sigma 	 3.61 
+> round( hessian( mlBfgsCon ), 1 )
+         mu sigma
+mu    -35.4 -15.2
+sigma -15.2 -93.6
+> logLik( mlBfgsCon )
+[1] -204.5
+> maximType( mlBfgsCon )
+[1] "BFGS maximisation"
+> nIter( mlBfgsCon )
+function 
+      31 
+> nParam( mlBfgsCon )
+[1] 2
+> returnCode( mlBfgsCon )
+[1] 0
+> returnMessage( mlBfgsCon )
+[1] "successful convergence "
+> round( vcov( mlBfgsCon ), 3 )
+          mu  sigma
+mu     0.030 -0.005
+sigma -0.005  0.011
+> logLik( summary( mlBfgsCon ) )
+[1] -204.5
+> all.equal( mlBfgsCon[ -c( 4, 5, 6, 9, 10 ) ], mlCon[ -c( 4, 5, 6, 9, 10 ) ],
++    tolerance = 1e-3 )
+[1] TRUE
+> mlBfgsConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
++    method = "BFGS" )
+> print( summary( mlBfgsConInd ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS maximisation, 31 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+Return code: 1 
+penalty close to zero 
+10  outer iterations, barrier value 2.07e-10 
+--------------------------------------------
+> all.equal( mlBfgsCon[-c(4,9)], mlBfgsConInd[-c(4,9,12)], tolerance = 1e-3 )
+[1] TRUE
+> mlBfgsConInd[12]
+$gradientObs
+              mu    sigma
+  [1,] -0.333193 -0.40861
+  [2,] -0.099212 -0.57861
+  [3,]  1.168023  1.69720
+  [4,]  0.113792 -0.57339
+  [5,]  0.155431 -0.55455
+  [6,]  1.278785  2.15258
+  [7,]  0.390354 -0.33911
+  [8,] -0.832318  0.56886
+  [9,] -0.422718 -0.29490
+ [10,] -0.251860 -0.48856
+ [11,]  0.930976  0.86117
+ [12,]  0.318734 -0.42444
+ [13,]  0.347748 -0.39195
+ [14,]  0.142251 -0.56114
+ [15,] -0.329910 -0.41226
+ [16,]  1.329682  2.37565
+ [17,]  0.416518 -0.30364
+ [18,] -1.329295  2.37393
+ [19,]  0.560680 -0.06693
+ [20,] -0.271079 -0.47167
+ [21,] -0.692596  0.21086
+ [22,] -0.090568 -0.58136
+ [23,] -0.662971  0.14338
+ [24,] -0.452498 -0.25110
+ [25,] -0.378930 -0.35388
+ [26,] -1.130999  1.55418
+ [27,]  0.657327  0.13086
+ [28,]  0.172493 -0.54515
+ [29,] -0.742405  0.33096
+ [30,]  0.952039  0.92781
+ [31,]  0.365949 -0.37013
+ [32,] -0.145183 -0.55973
+ [33,]  0.697945  0.22336
+ [34,]  0.685908  0.19537
+ [35,]  0.645847  0.10572
+ [36,]  0.551672 -0.08377
+ [37,]  0.456236 -0.24540
+ [38,]  0.019986 -0.59447
+ [39,] -0.152898 -0.55586
+ [40,] -0.205679 -0.52406
+ [41,] -0.428282 -0.28694
+ [42,] -0.083443 -0.58345
+ [43,] -0.832555  0.56953
+ [44,]  1.600319  3.70805
+ [45,]  0.919557  0.82566
+ [46,] -0.731759  0.30459
+ [47,] -0.221557 -0.51266
+ [48,] -0.266732 -0.47560
+ [49,]  0.616366  0.04320
+ [50,]  0.004786 -0.59511
+ [51,]  0.243293 -0.49569
+ [52,]  0.043622 -0.59195
+ [53,]  0.033475 -0.59326
+ [54,]  1.033353  1.19907
+ [55,] -0.096091 -0.57963
+ [56,]  1.138102  1.58126
+ [57,] -1.033283  1.19883
+ [58,]  0.477981 -0.21126
+ [59,]  0.151582 -0.55654
+ [60,]  0.216816 -0.51616
+ [61,]  0.332778 -0.40907
+ [62,] -0.291999 -0.45188
+ [63,] -0.172198 -0.54532
+ [64,] -0.657709  0.13171
+ [65,] -0.695406  0.21741
+ [66,]  0.278862 -0.46448
+ [67,]  0.381353 -0.35078
+ [68,]  0.101392 -0.57787
+ [69,]  0.717173  0.26908
+ [70,]  1.516111  3.26710
+ [71,] -0.283999 -0.45962
+ [72,] -1.571957  3.55687
+ [73,]  0.776303  0.41746
+ [74,] -0.438549 -0.27199
+ [75,] -0.423537 -0.29373
+ [76,]  0.790352  0.45444
+ [77,] -0.137887 -0.56320
+ [78,] -0.800905  0.48266
+ [79,]  0.192278 -0.53302
+ [80,] -0.034546 -0.59314
+ [81,]  0.067927 -0.58739
+ [82,]  0.336774 -0.40457
+ [83,] -0.198729 -0.52879
+ [84,]  0.520316 -0.14025
+ [85,] -0.092347 -0.58082
+ [86,]  0.298876 -0.44505
+ [87,]  0.840838  0.59282
+ [88,]  0.372124 -0.36247
+ [89,] -0.167044 -0.54826
+ [90,]  0.877652  0.69912
+ [91,]  0.767636  0.39498
+ [92,]  0.452325 -0.25137
+ [93,]  0.232960 -0.50396
+ [94,] -0.380961 -0.35129
+ [95,]  1.027722  1.17957
+ [96,] -0.361376 -0.37571
+ [97,]  1.613337  3.77834
+ [98,]  1.149536  1.62521
+ [99,] -0.103125 -0.57728
+[100,] -0.663266  0.14404
+
+> nObs( mlBfgsConInd )
+[1] 100
+> 
+> # with analytical gradients
+> mlgBfgsCon <- maxLik( llf, gf, start = startVal, constraints = eqCon,
++    method = "BFGS" )
+> print( summary( mlgBfgsCon ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+BFGS maximisation, 30 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.9 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        0.81       0.17     4.7   3e-06 ***
+sigma     1.67       0.11    15.8  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+Return code: 2 
+successive function values within tolerance limit 
+7  outer iterations, barrier value 0.0002481 
+--------------------------------------------
+> all.equal( mlBfgsCon[-c(3,4,9,11)], mlgBfgsCon[-c(3,4,9,11)], tolerance = 1e-2 )
+[1] TRUE
+> mlgBfgsConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon,
++    method = "BFGS" )
+> all.equal( mlgBfgsCon[], mlgBfgsConInd[-12], tolerance = 1e-3 )
+[1] TRUE
+> mlgBfgsConInd[12]
+$gradientObs
+              mu    sigma
+  [1,] -0.335092 -0.41114
+  [2,] -0.098314 -0.58255
+  [3,]  1.184065  1.74311
+  [4,]  0.117235 -0.57573
+  [5,]  0.159372 -0.55627
+  [6,]  1.296151  2.20745
+  [7,]  0.397103 -0.33530
+  [8,] -0.840181  0.58039
+  [9,] -0.425686 -0.29601
+ [10,] -0.252786 -0.49196
+ [11,]  0.944185  0.89037
+ [12,]  0.324627 -0.42267
+ [13,]  0.353987 -0.38939
+ [14,]  0.146035 -0.56307
+ [15,] -0.331769 -0.41484
+ [16,]  1.347656  2.43490
+ [17,]  0.423579 -0.29900
+ [18,] -1.343098  2.41441
+ [19,]  0.569464 -0.05702
+ [20,] -0.272234 -0.47490
+ [21,] -0.698789  0.21693
+ [22,] -0.089567 -0.58529
+ [23,] -0.668810  0.14845
+ [24,] -0.455822 -0.25164
+ [25,] -0.381375 -0.35575
+ [26,] -1.142431  1.58132
+ [27,]  0.667266  0.14501
+ [28,]  0.176638 -0.54657
+ [29,] -0.749194  0.33884
+ [30,]  0.965500  0.95836
+ [31,]  0.372406 -0.36704
+ [32,] -0.144834 -0.56365
+ [33,]  0.708370  0.23945
+ [34,]  0.696189  0.21088
+ [35,]  0.655649  0.11934
+ [36,]  0.560349 -0.07423
+ [37,]  0.463772 -0.23943
+ [38,]  0.022309 -0.59786
+ [39,] -0.152642 -0.55977
+ [40,] -0.206054 -0.52777
+ [41,] -0.431317 -0.28795
+ [42,] -0.082357 -0.58736
+ [43,] -0.840421  0.58106
+ [44,]  1.621527  3.79315
+ [45,]  0.932630  0.85415
+ [46,] -0.738420  0.31207
+ [47,] -0.222121 -0.51628
+ [48,] -0.267836 -0.47887
+ [49,]  0.625816  0.05548
+ [50,]  0.006927 -0.59861
+ [51,]  0.248284 -0.49572
+ [52,]  0.046227 -0.59512
+ [53,]  0.035959 -0.59653
+ [54,]  1.047786  1.23507
+ [55,] -0.095155 -0.58357
+ [56,]  1.153787  1.62487
+ [57,] -1.043548  1.22027
+ [58,]  0.485777 -0.20453
+ [59,]  0.155477 -0.55831
+ [60,]  0.221490 -0.51675
+ [61,]  0.338839 -0.40692
+ [62,] -0.293405 -0.45490
+ [63,] -0.172172 -0.54918
+ [64,] -0.663485  0.13660
+ [65,] -0.701633  0.22359
+ [66,]  0.284278 -0.46371
+ [67,]  0.387994 -0.34724
+ [68,]  0.104687 -0.58038
+ [69,]  0.727827  0.28613
+ [70,]  1.536313  3.34368
+ [71,] -0.285310 -0.46272
+ [72,] -1.588659  3.61691
+ [73,]  0.787664  0.43760
+ [74,] -0.441707 -0.27280
+ [75,] -0.426515 -0.29484
+ [76,]  0.801881  0.47534
+ [77,] -0.137452 -0.56713
+ [78,] -0.808392  0.49286
+ [79,]  0.196660 -0.53409
+ [80,] -0.032875 -0.59688
+ [81,]  0.070823 -0.59031
+ [82,]  0.342883 -0.40231
+ [83,] -0.199021 -0.53253
+ [84,]  0.528618 -0.13194
+ [85,] -0.091367 -0.58475
+ [86,]  0.304532 -0.44379
+ [87,]  0.852970  0.61656
+ [88,]  0.378655 -0.35920
+ [89,] -0.166957 -0.55213
+ [90,]  0.890224  0.72503
+ [91,]  0.778893  0.41465
+ [92,]  0.459814 -0.24554
+ [93,]  0.237828 -0.50421
+ [94,] -0.383430 -0.35312
+ [95,]  1.042087  1.21518
+ [96,] -0.363611 -0.37785
+ [97,]  1.634701  3.86480
+ [98,]  1.165357  1.66969
+ [99,] -0.102273 -0.58122
+[100,] -0.669109  0.14912
+
+> 
+> # with analytical gradients and unused Hessians
+> mlghBfgsCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon,
++    method = "BFGS" )
+> all.equal( mlgBfgsCon, mlghBfgsCon, tolerance = 1e-3 )
+[1] TRUE
+> 
+> ## NM method with equality constraints
+> mlNmCon <- maxLik( llf, start = startVal, constraints = eqCon, method = "NM", SUMTTol=0)
+> print( mlNmCon )
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 57 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5 (2 free parameter(s))
+Estimate(s): 0.8197 1.68 
+> print( summary( mlNmCon ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 57 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+Return code: 1 
+penalty close to zero 
+10  outer iterations, barrier value 2.418e-10 
+--------------------------------------------
+> activePar( mlNmCon )
+   mu sigma 
+ TRUE  TRUE 
+> AIC( mlNmCon )
+[1] 413.1
+> coef( mlNmCon )
+    mu  sigma 
+0.8197 1.6803 
+> condiNumber( mlNmCon, digits = 3 )
+mu 	 1 
+sigma 	 3.61 
+> round( hessian( mlNmCon ), 1 )
+         mu sigma
+mu    -35.4 -15.2
+sigma -15.2 -93.6
+> logLik( mlNmCon )
+[1] -204.5
+> maximType( mlNmCon )
+[1] "Nelder-Mead maximisation"
+> nIter( mlNmCon )
+function 
+      57 
+> nParam( mlNmCon )
+[1] 2
+> returnCode( mlNmCon )
+[1] 0
+> returnMessage( mlNmCon )
+[1] "successful convergence "
+> round( vcov( mlNmCon ), 3 )
+          mu  sigma
+mu     0.030 -0.005
+sigma -0.005  0.011
+> logLik( summary( mlNmCon ) )
+[1] -204.5
+> all.equal( mlNmCon[ -c( 4, 5, 6, 9, 10 ) ], mlCon[ -c( 4, 5, 6, 9, 10 ) ],
++    tolerance = 1e-3 )
+[1] TRUE
+> mlNmConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
++    method = "NM", SUMTTol=0)
+> print( summary( mlNmConInd ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+Nelder-Mead maximisation, 57 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.7  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+Return code: 1 
+penalty close to zero 
+10  outer iterations, barrier value 2.418e-10 
+--------------------------------------------
+> all.equal( mlNmCon[], mlNmConInd[-12], tolerance = 1e-3 )
+[1] TRUE
+> mlNmConInd[12]
+$gradientObs
+              mu    sigma
+  [1,] -0.333153 -0.40862
+  [2,] -0.099187 -0.57859
+  [3,]  1.167967  1.69707
+  [4,]  0.113803 -0.57336
+  [5,]  0.155439 -0.55453
+  [6,]  1.278722  2.15241
+  [7,]  0.390348 -0.33909
+  [8,] -0.832245  0.56872
+  [9,] -0.422672 -0.29493
+ [10,] -0.251825 -0.48857
+ [11,]  0.930935  0.86110
+ [12,]  0.318732 -0.42442
+ [13,]  0.347744 -0.39193
+ [14,]  0.142261 -0.56112
+ [15,] -0.329870 -0.41228
+ [16,]  1.329615  2.37547
+ [17,]  0.416510 -0.30362
+ [18,] -1.329191  2.37357
+ [19,]  0.560663 -0.06693
+ [20,] -0.271042 -0.47168
+ [21,] -0.692532  0.21076
+ [22,] -0.090543 -0.58135
+ [23,] -0.662910  0.14329
+ [24,] -0.452450 -0.25115
+ [25,] -0.378887 -0.35391
+ [26,] -1.130907  1.55392
+ [27,]  0.657303  0.13085
+ [28,]  0.172500 -0.54513
+ [29,] -0.742338  0.33084
+ [30,]  0.951996  0.92774
+ [31,]  0.365944 -0.37011
+ [32,] -0.145155 -0.55972
+ [33,]  0.697919  0.22334
+ [34,]  0.685883  0.19536
+ [35,]  0.645824  0.10572
+ [36,]  0.551656 -0.08376
+ [37,]  0.456225 -0.24538
+ [38,]  0.020004 -0.59445
+ [39,] -0.152869 -0.55586
+ [40,] -0.205647 -0.52406
+ [41,] -0.428236 -0.28698
+ [42,] -0.083419 -0.58343
+ [43,] -0.832482  0.56938
+ [44,]  1.600234  3.70775
+ [45,]  0.919516  0.82560
+ [46,] -0.731693  0.30447
+ [47,] -0.221524 -0.51267
+ [48,] -0.266696 -0.47561
+ [49,]  0.616345  0.04320
+ [50,]  0.004804 -0.59509
+ [51,]  0.243296 -0.49566
+ [52,]  0.043638 -0.59193
+ [53,]  0.033491 -0.59324
+ [54,]  1.033305  1.19898
+ [55,] -0.096066 -0.57962
+ [56,]  1.138048  1.58114
+ [57,] -1.033197  1.19861
+ [58,]  0.477969 -0.21125
+ [59,]  0.151591 -0.55651
+ [60,]  0.216820 -0.51613
+ [61,]  0.332776 -0.40905
+ [62,] -0.291961 -0.45189
+ [63,] -0.172168 -0.54532
+ [64,] -0.657647  0.13161
+ [65,] -0.695343  0.21731
+ [66,]  0.278863 -0.46446
+ [67,]  0.381347 -0.35076
+ [68,]  0.101404 -0.57785
+ [69,]  0.717145  0.26906
+ [70,]  1.516032  3.26684
+ [71,] -0.283962 -0.45963
+ [72,] -1.571837  3.55639
+ [73,]  0.776272  0.41743
+ [74,] -0.438502 -0.27203
+ [75,] -0.423491 -0.29377
+ [76,]  0.790320  0.45441
+ [77,] -0.137860 -0.56319
+ [78,] -0.800834  0.48252
+ [79,]  0.192285 -0.53300
+ [80,] -0.034525 -0.59312
+ [81,]  0.067942 -0.58737
+ [82,]  0.336771 -0.40455
+ [83,] -0.198698 -0.52878
+ [84,]  0.520302 -0.14024
+ [85,] -0.092323 -0.58080
+ [86,]  0.298876 -0.44503
+ [87,]  0.840802  0.59277
+ [88,]  0.372119 -0.36245
+ [89,] -0.167014 -0.54825
+ [90,]  0.877614  0.69907
+ [91,]  0.767605  0.39495
+ [92,]  0.452315 -0.25135
+ [93,]  0.232964 -0.50393
+ [94,] -0.380917 -0.35131
+ [95,]  1.027674  1.17948
+ [96,] -0.361334 -0.37574
+ [97,]  1.613252  3.77804
+ [98,]  1.149480  1.62509
+ [99,] -0.103099 -0.57726
+[100,] -0.663205  0.14395
+
+> nObs( mlNmConInd )
+[1] 100
+> 
+> # with unused analytical gradients
+> mlgNmCon <- maxLik( llf, gf, start = startVal, constraints = eqCon,
++    method = "NM", SUMTTol=0)
+> all.equal( mlNmCon, mlgNmCon, tolerance = 1e-3 )
+[1] TRUE
+> mlgNmConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon,
++    method = "NM", SUMTTol=0)
+> all.equal( mlgNmCon[], mlgNmConInd[-12], tolerance = 1e-3 )
+[1] TRUE
+> mlgNmConInd[12]
+$gradientObs
+              mu    sigma
+  [1,] -0.333153 -0.40862
+  [2,] -0.099187 -0.57859
+  [3,]  1.167967  1.69707
+  [4,]  0.113803 -0.57336
+  [5,]  0.155439 -0.55453
+  [6,]  1.278722  2.15241
+  [7,]  0.390348 -0.33909
+  [8,] -0.832245  0.56872
+  [9,] -0.422672 -0.29493
+ [10,] -0.251825 -0.48857
+ [11,]  0.930935  0.86110
+ [12,]  0.318732 -0.42442
+ [13,]  0.347744 -0.39193
+ [14,]  0.142261 -0.56112
+ [15,] -0.329870 -0.41228
+ [16,]  1.329615  2.37547
+ [17,]  0.416510 -0.30362
+ [18,] -1.329191  2.37357
+ [19,]  0.560663 -0.06693
+ [20,] -0.271042 -0.47168
+ [21,] -0.692532  0.21076
+ [22,] -0.090543 -0.58135
+ [23,] -0.662910  0.14329
+ [24,] -0.452450 -0.25115
+ [25,] -0.378887 -0.35391
+ [26,] -1.130907  1.55392
+ [27,]  0.657303  0.13085
+ [28,]  0.172500 -0.54513
+ [29,] -0.742338  0.33084
+ [30,]  0.951996  0.92774
+ [31,]  0.365944 -0.37011
+ [32,] -0.145155 -0.55972
+ [33,]  0.697919  0.22334
+ [34,]  0.685883  0.19536
+ [35,]  0.645824  0.10572
+ [36,]  0.551656 -0.08376
+ [37,]  0.456225 -0.24538
+ [38,]  0.020004 -0.59445
+ [39,] -0.152869 -0.55586
+ [40,] -0.205647 -0.52406
+ [41,] -0.428236 -0.28698
+ [42,] -0.083419 -0.58343
+ [43,] -0.832482  0.56938
+ [44,]  1.600234  3.70775
+ [45,]  0.919516  0.82560
+ [46,] -0.731693  0.30447
+ [47,] -0.221524 -0.51267
+ [48,] -0.266696 -0.47561
+ [49,]  0.616345  0.04320
+ [50,]  0.004804 -0.59509
+ [51,]  0.243296 -0.49566
+ [52,]  0.043638 -0.59193
+ [53,]  0.033491 -0.59324
+ [54,]  1.033305  1.19898
+ [55,] -0.096066 -0.57962
+ [56,]  1.138048  1.58114
+ [57,] -1.033197  1.19861
+ [58,]  0.477969 -0.21125
+ [59,]  0.151591 -0.55651
+ [60,]  0.216820 -0.51613
+ [61,]  0.332776 -0.40905
+ [62,] -0.291961 -0.45189
+ [63,] -0.172168 -0.54532
+ [64,] -0.657647  0.13161
+ [65,] -0.695343  0.21731
+ [66,]  0.278863 -0.46446
+ [67,]  0.381347 -0.35076
+ [68,]  0.101404 -0.57785
+ [69,]  0.717145  0.26906
+ [70,]  1.516032  3.26684
+ [71,] -0.283962 -0.45963
+ [72,] -1.571837  3.55639
+ [73,]  0.776272  0.41743
+ [74,] -0.438502 -0.27203
+ [75,] -0.423491 -0.29377
+ [76,]  0.790320  0.45441
+ [77,] -0.137860 -0.56319
+ [78,] -0.800834  0.48252
+ [79,]  0.192285 -0.53300
+ [80,] -0.034525 -0.59312
+ [81,]  0.067942 -0.58737
+ [82,]  0.336771 -0.40455
+ [83,] -0.198698 -0.52878
+ [84,]  0.520302 -0.14024
+ [85,] -0.092323 -0.58080
+ [86,]  0.298876 -0.44503
+ [87,]  0.840802  0.59277
+ [88,]  0.372119 -0.36245
+ [89,] -0.167014 -0.54825
+ [90,]  0.877614  0.69907
+ [91,]  0.767605  0.39495
+ [92,]  0.452315 -0.25135
+ [93,]  0.232964 -0.50393
+ [94,] -0.380917 -0.35131
+ [95,]  1.027674  1.17948
+ [96,] -0.361334 -0.37574
+ [97,]  1.613252  3.77804
+ [98,]  1.149480  1.62509
+ [99,] -0.103099 -0.57726
+[100,] -0.663205  0.14395
+
+> 
+> # with unused analytical gradients and Hessians
+> mlghNmCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon,
++    method = "NM", SUMTTol=0)
+> all.equal( mlgNmCon, mlghNmCon, tolerance = 1e-3 )
+[1] TRUE
+> 
+> ## SANN method with equality constraints
+> mlSannCon <- maxLik( llf, start = startVal, constraints = eqCon,
++    method = "SANN", SUMTTol=0)
+> print( mlSannCon )
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5 (2 free parameter(s))
+Estimate(s): 0.816 1.684 
+> print( summary( mlSannCon ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -204.5 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        0.82       0.17     4.7   3e-06 ***
+sigma     1.68       0.11    15.6  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+Return code: 1 
+penalty close to zero 
+9  outer iterations, barrier value 1.234e-09 
+--------------------------------------------
+> activePar( mlSannCon )
+   mu sigma 
+ TRUE  TRUE 
+> AIC( mlSannCon )
+[1] 413.1
+> coef( mlSannCon )
+   mu sigma 
+0.816 1.684 
+> condiNumber( mlSannCon, digits = 3 )
+mu 	 1 
+sigma 	 3.62 
+> round( hessian( mlSannCon ), 1 )
+         mu sigma
+mu    -35.3 -15.3
+sigma -15.3 -92.8
+> logLik( mlSannCon )
+[1] -204.5
+> maximType( mlSannCon )
+[1] "SANN maximisation"
+> nIter( mlSannCon )
+function 
+   10000 
+> nParam( mlSannCon )
+[1] 2
+> returnCode( mlSannCon )
+[1] 0
+> returnMessage( mlSannCon )
+[1] "successful convergence "
+> round( vcov( mlSannCon ), 3 )
+          mu  sigma
+mu     0.031 -0.005
+sigma -0.005  0.012
+> logLik( summary( mlSannCon ) )
+[1] -204.5
+> all.equal( mlSannCon[ -c(2,3,4,5,6,9,10,11) ], mlBfgsCon[ -c(2,3,4,5,6,9,10,11) ],
++    tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlSannCon[ -c(3,4,5,6,9,10,11) ], mlBfgsCon[ -c(3,4,5,6,9,10,11) ],
++    tolerance = 1e-2 )
+[1] TRUE
+> 
+> # with unused analytical gradients
+> mlgSannCon <- maxLik( llf, gf, start = startVal, constraints = eqCon,
++    method = "SANN", SUMTTol=0)
+> all.equal( mlSannCon, mlgSannCon, tolerance = 1e-3 )
+[1] TRUE
+> 
+> # with a user-specified function to generate a new candidate point
+> mlSannConCand <- maxLik( llf, start = startVal, constraints = eqCon,
++    method = "SANN", cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
+Warning message:
+In (function (fn, grad = NULL, hess = NULL, start, maxRoutine, constraints,  :
+  problem in imposing equality constraints: the constraints are not satisfied (barrier value = 0.254780368286163). Try setting 'SUMTTol' to 0
+> print( summary( mlSannConCand ), digits = 2 )
+--------------------------------------------
+Maximum Likelihood estimation
+SANN maximisation, 10000 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu        1.18       0.18     6.5   8e-11 ***
+sigma     1.82       0.13    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+Return code: 2 
+successive function values within tolerance limit 
+2  outer iterations, barrier value 0.2548 
+--------------------------------------------
+> all.equal( mlSannConCand[-c(1,2,3,4,11)], mlSannCon[-c(1,2,3,4,11)], 
++    tolerance = 1e-3 )
+[1] TRUE
+> all.equal( mlSannConCand[-c(2,3,4,11)], mlSannCon[-c(2,3,4,11)], 
++    tolerance = 1e-1 )
+[1] TRUE
+> 
+> 
+> ## test for method "estfun"
+> library( sandwich )
+> try( estfun( ml ) )
+Error in estfun.maxLik(ml) : 
+  cannot return the gradients of the log-likelihood function evaluated at each observation: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
+> estfun( mlInd )[ 1:5, ]
+           mu   sigma
+[1,] -0.39452 -0.2678
+[2,] -0.19432 -0.4819
+[3,]  0.88999  0.8883
+[4,] -0.01206 -0.5503
+[5,]  0.02357 -0.5495
+> estfun( mlgInd )[ 1:5, ]
+           mu   sigma
+[1,] -0.39452 -0.2678
+[2,] -0.19432 -0.4819
+[3,]  0.88999  0.8883
+[4,] -0.01206 -0.5503
+[5,]  0.02357 -0.5495
+> estfun( mlBHHH )[ 1:5, ]
+           mu   sigma
+[1,] -0.39452 -0.2678
+[2,] -0.19432 -0.4819
+[3,]  0.88999  0.8883
+[4,] -0.01206 -0.5503
+[5,]  0.02357 -0.5495
+> estfun( mlgBHHH )[ 1:5, ]
+           mu   sigma
+[1,] -0.39452 -0.2678
+[2,] -0.19432 -0.4819
+[3,]  0.88999  0.8883
+[4,] -0.01206 -0.5503
+[5,]  0.02357 -0.5495
+> estfun( mlIndBFGS )[ 1:5, ]
+           mu   sigma
+[1,] -0.39452 -0.2678
+[2,] -0.19432 -0.4819
+[3,]  0.88999  0.8883
+[4,] -0.01206 -0.5503
+[5,]  0.02357 -0.5495
+> estfun( mlgIndBFGS )[ 1:5, ]
+           mu   sigma
+[1,] -0.39452 -0.2678
+[2,] -0.19432 -0.4819
+[3,]  0.88999  0.8883
+[4,] -0.01206 -0.5503
+[5,]  0.02357 -0.5495
+> estfun( mlIndNM )[ 1:5, ]
+           mu   sigma
+[1,] -0.39439 -0.2679
+[2,] -0.19422 -0.4819
+[3,]  0.88990  0.8882
+[4,] -0.01200 -0.5502
+[5,]  0.02363 -0.5495
+> estfun( mlgIndNM )[ 1:5, ]
+           mu   sigma
+[1,] -0.39439 -0.2679
+[2,] -0.19422 -0.4819
+[3,]  0.88990  0.8882
+[4,] -0.01200 -0.5502
+[5,]  0.02363 -0.5495
+> estfun( mlIndSANN )[ 1:5, ]
+           mu   sigma
+[1,] -0.39480 -0.2674
+[2,] -0.19460 -0.4817
+[3,]  0.88966  0.8873
+[4,] -0.01235 -0.5502
+[5,]  0.02327 -0.5495
+> estfun( mlgIndSANN )[ 1:5, ]
+           mu   sigma
+[1,] -0.39480 -0.2674
+[2,] -0.19460 -0.4817
+[3,]  0.88966  0.8873
+[4,] -0.01235 -0.5502
+[5,]  0.02327 -0.5495
+> estfun( mlIndFix )[ 1:5, ]
+     mu   sigma
+[1,] NA -0.3412
+[2,] NA -0.5130
+[3,] NA  1.0498
+[4,] NA -0.5445
+[5,] NA -0.5368
+> estfun( mlgIndFix )[ 1:5, ]
+     mu   sigma
+[1,] NA -0.3412
+[2,] NA -0.5130
+[3,] NA  1.0498
+[4,] NA -0.5445
+[5,] NA -0.5368
+> estfun( mlFixBHHH )[ 1:5, ]
+     mu   sigma
+[1,] NA -0.3412
+[2,] NA -0.5130
+[3,] NA  1.0498
+[4,] NA -0.5445
+[5,] NA -0.5368
+> estfun( mlgFixBHHH )[ 1:5, ]
+     mu   sigma
+[1,] NA -0.3412
+[2,] NA -0.5130
+[3,] NA  1.0498
+[4,] NA -0.5445
+[5,] NA -0.5368
+> estfun( mlIndFixBfgs )[ 1:5, ]
+           mu   sigma
+[1,] -0.33639 -0.3412
+[2,] -0.13815 -0.5130
+[3,]  0.93552  1.0498
+[4,]  0.04232 -0.5445
+[5,]  0.07760 -0.5368
+> estfun( mlgIndFixBfgs )[ 1:5, ]
+           mu   sigma
+[1,] -0.33639 -0.3412
+[2,] -0.13815 -0.5130
+[3,]  0.93552  1.0498
+[4,]  0.04232 -0.5445
+[5,]  0.07760 -0.5368
+> estfun( mlIndFixNm )[ 1:5, ]
+           mu   sigma
+[1,] -0.33641 -0.3412
+[2,] -0.13816 -0.5130
+[3,]  0.93558  1.0500
+[4,]  0.04232 -0.5446
+[5,]  0.07760 -0.5368
+> estfun( mlgIndFixNm )[ 1:5, ]
+           mu   sigma
+[1,] -0.33641 -0.3412
+[2,] -0.13816 -0.5130
+[3,]  0.93558  1.0500
+[4,]  0.04232 -0.5446
+[5,]  0.07760 -0.5368
+> estfun( mlIndFixSann )[ 1:5, ]
+           mu   sigma
+[1,] -0.33640 -0.3412
+[2,] -0.13815 -0.5130
+[3,]  0.93553  1.0499
+[4,]  0.04232 -0.5445
+[5,]  0.07760 -0.5368
+> estfun( mlgIndFixSann )[ 1:5, ]
+           mu   sigma
+[1,] -0.33640 -0.3412
+[2,] -0.13815 -0.5130
+[3,]  0.93553  1.0499
+[4,]  0.04232 -0.5445
+[5,]  0.07760 -0.5368
+> estfun( mlBfgsInEqInd )[ 1:5, ]
+          mu   sigma
+[1,] -0.3332 -0.4086
+[2,] -0.0992 -0.5786
+[3,]  1.1680  1.6972
+[4,]  0.1138 -0.5734
+[5,]  0.1554 -0.5545
+> estfun( mlgBfgsInEqInd )[ 1:5, ]
+          mu   sigma
+[1,] -0.3332 -0.4086
+[2,] -0.0992 -0.5786
+[3,]  1.1680  1.6972
+[4,]  0.1138 -0.5734
+[5,]  0.1554 -0.5545
+> estfun( mlNmInEqInd )[ 1:5, ]
+          mu   sigma
+[1,] -0.3332 -0.4086
+[2,] -0.0992 -0.5786
+[3,]  1.1680  1.6972
+[4,]  0.1138 -0.5734
+[5,]  0.1554 -0.5545
+> estfun( mlConInd )[ 1:5, ]
+           mu   sigma
+[1,] -0.33319 -0.4086
+[2,] -0.09921 -0.5786
+[3,]  1.16802  1.6972
+[4,]  0.11379 -0.5734
+[5,]  0.15543 -0.5546
+> estfun( mlgConInd )[ 1:5, ]
+          mu   sigma
+[1,] -0.3452 -0.3999
+[2,] -0.1083 -0.5793
+[3,]  1.1749  1.7061
+[4,]  0.1074 -0.5796
+[5,]  0.1495 -0.5615
+> estfun( mlBhhhCon )[ 1:5, ]
+           mu   sigma
+[1,] -0.33331 -0.4085
+[2,] -0.09928 -0.5786
+[3,]  1.16818  1.6976
+[4,]  0.11376 -0.5735
+[5,]  0.15540 -0.5546
+> estfun( mlgBhhhCon )[ 1:5, ]
+          mu   sigma
+[1,] -0.3440 -0.4030
+[2,] -0.1060 -0.5815
+[3,]  1.1828  1.7307
+[4,]  0.1106 -0.5798
+[5,]  0.1530 -0.5612
+> estfun( mlBfgsConInd )[ 1:5, ]
+           mu   sigma
+[1,] -0.33319 -0.4086
+[2,] -0.09921 -0.5786
+[3,]  1.16802  1.6972
+[4,]  0.11379 -0.5734
+[5,]  0.15543 -0.5546
+> estfun( mlgBfgsConInd )[ 1:5, ]
+           mu   sigma
+[1,] -0.33509 -0.4111
+[2,] -0.09831 -0.5825
+[3,]  1.18407  1.7431
+[4,]  0.11724 -0.5757
+[5,]  0.15937 -0.5563
+> estfun( mlNmConInd )[ 1:5, ]
+           mu   sigma
+[1,] -0.33315 -0.4086
+[2,] -0.09919 -0.5786
+[3,]  1.16797  1.6971
+[4,]  0.11380 -0.5734
+[5,]  0.15544 -0.5545
+> estfun( mlgNmConInd )[ 1:5, ]
+           mu   sigma
+[1,] -0.33315 -0.4086
+[2,] -0.09919 -0.5786
+[3,]  1.16797  1.6971
+[4,]  0.11380 -0.5734
+[5,]  0.15544 -0.5545
+> 
+> 
+> ## test for method "bread"
+> try( bread( ml ) )
+Error in nObs.maxLik(x) : 
+  cannot return the number of observations: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
+> round( bread( mlInd ), 2 )
+       mu sigma
+mu    3.3  0.00
+sigma 0.0  1.65
+> round( bread( mlgInd ), 2 )
+       mu sigma
+mu    3.3  0.00
+sigma 0.0  1.65
+> round( bread( mlBHHH ), 2 )
+         mu sigma
+mu     3.31 -0.11
+sigma -0.11  1.80
+> round( bread( mlgBHHH ), 2 )
+         mu sigma
+mu     3.31 -0.11
+sigma -0.11  1.80
+> round( bread( mlIndBFGS ), 2 )
+       mu sigma
+mu    3.3  0.00
+sigma 0.0  1.65
+> round( bread( mlgIndBFGS ), 2 )
+       mu sigma
+mu    3.3  0.00
+sigma 0.0  1.65
+> round( bread( mlIndNM ), 2 )
+       mu sigma
+mu    3.3  0.00
+sigma 0.0  1.65
+> round( bread( mlgIndNM ), 2 )
+       mu sigma
+mu    3.3  0.00
+sigma 0.0  1.65
+> round( bread( mlIndSANN ), 2 )
+       mu sigma
+mu    3.3  0.00
+sigma 0.0  1.65
+> round( bread( mlgIndSANN ), 2 )
+       mu sigma
+mu    3.3  0.00
+sigma 0.0  1.65
+> round( bread( mlIndFix ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.67
+> round( bread( mlgIndFix ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.67
+> round( bread( mlFixBHHH ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.79
+> round( bread( mlgFixBHHH ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.79
+> round( bread( mlIndFixBfgs ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.67
+> round( bread( mlgIndFixBfgs ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.67
+> round( bread( mlIndFixNm ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.67
+> round( bread( mlgIndFixNm ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.67
+> round( bread( mlIndFixSann ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.67
+> round( bread( mlgIndFixSann ), 2 )
+      mu sigma
+mu     0  0.00
+sigma  0  1.67
+> round( bread( mlBfgsInEqInd ), 2 )
+         mu sigma
+mu     3.04 -0.49
+sigma -0.49  1.15
+> round( bread( mlgBfgsInEqInd ), 2 )
+         mu sigma
+mu     3.04 -0.49
+sigma -0.49  1.15
+> round( bread( mlNmInEqInd ), 2 )
+         mu sigma
+mu     3.03 -0.49
+sigma -0.49  1.15
+> round( bread( mlConInd ), 2 )
+         mu sigma
+mu     3.03 -0.49
+sigma -0.49  1.15
+> round( bread( mlgConInd ), 2 )
+         mu sigma
+mu     2.97 -0.45
+sigma -0.45  1.11
+> round( bread( mlBhhhCon ), 2 )
+         mu sigma
+mu     3.03 -0.49
+sigma -0.49  1.15
+> round( bread( mlgBhhhCon ), 2 )
+         mu sigma
+mu     2.97 -0.46
+sigma -0.46  1.10
+> round( bread( mlBfgsConInd ), 2 )
+         mu sigma
+mu     3.04 -0.49
+sigma -0.49  1.15
+> round( bread( mlgBfgsConInd ), 2 )
+         mu sigma
+mu     3.01 -0.49
+sigma -0.49  1.12
+> round( bread( mlNmConInd ), 2 )
+         mu sigma
+mu     3.04 -0.49
+sigma -0.49  1.15
+> round( bread( mlgNmConInd ), 2 )
+         mu sigma
+mu     3.04 -0.49
+sigma -0.49  1.15
+> 
+> 
+> ## test for method "sandwich"
+> try( sandwich( ml ) )
+Error in nObs.maxLik(x) : 
+  cannot return the number of observations: please re-run 'maxLik' and provide a gradient function using argument 'grad' or (if no gradient function is specified) a log-likelihood function using argument 'logLik' that return the gradients or log-likelihood values, respectively, at each observation
+> printSandwich <- function( x ) {
++    print( round( sandwich( x ), 2 ) )
++    tmp <- all.equal( sandwich( x ), vcov( x ) )
++    if( isTRUE( tmp ) ) {
++       print( tmp )
++    }
++ }
+> printSandwich( mlInd )
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
+> printSandwich( mlgInd )
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
+> printSandwich( mlBHHH )
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
+[1] TRUE
+> printSandwich( mlgBHHH )
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
+[1] TRUE
+> printSandwich( mlIndBFGS )
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
+> printSandwich( mlgIndBFGS )
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
+> printSandwich( mlIndNM )
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
+> printSandwich( mlgIndNM )
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
+> printSandwich( mlIndSANN )
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
+> printSandwich( mlgIndSANN )
+        mu sigma
+mu    0.03  0.00
+sigma 0.00  0.02
+> printSandwich( mlIndFix )
+      mu sigma
+mu    NA    NA
+sigma NA    NA
+> printSandwich( mlgIndFix )
+      mu sigma
+mu    NA    NA
+sigma NA    NA
+> printSandwich( mlFixBHHH )
+      mu sigma
+mu    NA    NA
+sigma NA    NA
+> printSandwich( mlgFixBHHH )
+      mu sigma
+mu    NA    NA
+sigma NA    NA
+> printSandwich( mlIndFixBfgs )
+      mu sigma
+mu     0  0.00
+sigma  0  0.02
+> printSandwich( mlgIndFixBfgs )
+      mu sigma
+mu     0  0.00
+sigma  0  0.02
+> printSandwich( mlIndFixNm )
+      mu sigma
+mu     0  0.00
+sigma  0  0.02
+> printSandwich( mlgIndFixNm )
+      mu sigma
+mu     0  0.00
+sigma  0  0.02
+> printSandwich( mlIndFixSann )
+      mu sigma
+mu     0  0.00
+sigma  0  0.02
+> printSandwich( mlgIndFixSann )
+      mu sigma
+mu     0  0.00
+sigma  0  0.02
+> printSandwich( mlBfgsInEqInd )
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
+> printSandwich( mlgBfgsInEqInd )
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
+> printSandwich( mlNmInEqInd )
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
+> printSandwich( mlConInd )
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
+> printSandwich( mlgConInd )
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
+> printSandwich( mlBhhhCon )
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
+> printSandwich( mlgBhhhCon )
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
+> printSandwich( mlBfgsConInd )
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
+> printSandwich( mlgBfgsConInd )
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
+> printSandwich( mlNmConInd )
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
+> printSandwich( mlgNmConInd )
+        mu sigma
+mu    0.04  0.00
+sigma 0.00  0.01
+> 
+> proc.time()
+   user  system elapsed 
+ 25.600   2.565  25.344 
