@@ -108,7 +108,7 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
           '"Nelder-Mead"' method. 'alpha' is the reflection factor
           (default 1.0), 'beta' the contraction factor (0.5) and
           'gamma' the expansion factor (2.0). (see
-    \code{\link{optim}})}
+    \code{\link{optim}} and Nelder \& Mead (1965))}
   \item{\dots}{further arguments for \code{fn} and \code{grad}.}
 }
 
@@ -155,6 +155,11 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
 
 \seealso{\code{\link{optim}}, \code{\link{nlm}}, \code{\link{maxNR}},
   \code{\link{maxBHHH}}, \code{\link{maxBFGSR}}.}
+
+\references{
+  Nelder, J. A. & Mead, R. A, Simplex Method for Function
+  Minimization, The Computer Journal, 1965, 7, 308-313
+}
 
 \examples{
 # Maximum Likelihood estimation of the parameter of Poissonian distribution
