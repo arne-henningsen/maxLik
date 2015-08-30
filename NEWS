@@ -4,12 +4,14 @@ Please note that only the most significant changes are reported here.
 A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
-      CHANGES IN VERSION 1.2-5 (2015-08-14)
+      CHANGES IN VERSION 1.2-5 (2015-08-30)
      
 * maxNR & friends now support argument 'guessCorrection' that allows to choose 
   the behavior if the next guess performes worse than the previous one.  This
   includes the original step halving while keeping direction, and now also 
   Marquardt (1963) shift toward steepest gradient.
+
+* stdEr method for 'maxLik' now in namespace
 
 
       CHANGES IN VERSION 1.2-4 (2014-12-31)
