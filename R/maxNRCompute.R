@@ -10,7 +10,7 @@ maxNRCompute <- function(fn,
                            # maximum lambda for Marquardt (1963)
                          lambdatol=1e-6,
                   qrtol=1e-10,
-                         guessCorrection="stephalving",
+                         qac="stephalving",
                   iterlim=150,
                          finalHessian=TRUE,
                   bhhhHessian = FALSE,
@@ -33,9 +33,9 @@ maxNRCompute <- function(fn,
    ## maxLambda     largest possible lambda (if exceeded will give step error)
    ## lambdatol   - max lowest eigenvalue when forcing pos. definite H
    ## qrtol       - tolerance for qr decomposition
-   ## guessCorrection   How the case where new function value is smaller than the
-   ##                   original one:
-   ##                   "stephalving"   smaller step in the same direction in taken
+   ## qac           How to handle the case where new function value is
+   ##               smaller than the original one:
+   ##                   "stephalving"   smaller step in the same direction
    ##                   "marquardt"     Marquardt (1963) approach
    ## The stopping criteria
    ## tol         - maximum allowed absolute difference between sequential values
@@ -91,9 +91,9 @@ maxNRCompute <- function(fn,
    ## -------------------------------------------------
    ## Determine the guess correction type
    corrs <- c("stephalving", "marquardt")
-   gCorr <- pmatch(tolower(guessCorrection), corrs)
+   gCorr <- pmatch(tolower(qac), corrs)
    if(is.na(gCorr)) {
-      stop("'guessCorrection' must be either 'stephalving' or 'marquardt'\n",
+      stop("'qac' must be either 'stephalving' or 'marquardt'\n",
            "partial matching allowed")
    }
    if(corrs[gCorr] == "marquardt")

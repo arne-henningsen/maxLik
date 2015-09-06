@@ -168,7 +168,7 @@ mlInd[[11]][sample(nrow(mlInd[[11]]), 10),]
                            # just print a sample of 10
 nObs( mlInd )
 ## Marquardt (1963) correction
-mlM <- maxLik( llf, start = startVal, guessCorrection="marquardt")
+mlM <- maxLik( llf, start = startVal, qac="marquardt")
 print(coef(mlM))
 print(returnMessage(mlM))
                            # coefficients should be the same as above
@@ -246,7 +246,7 @@ all.equal( mlBhhhH[-4], mlBHHH[-4], tolerance = 1e-3 )
 round( hessian( mlBhhhH ), 1 )
 print( summary( mlBhhhH ) , digits = 2 )
 ## Marquardt (1963) correction
-mlBHHHM <- maxLik( llfInd, start = startVal, method = "BHHH", guessCorrect="marquardt")
+mlBHHHM <- maxLik( llfInd, start = startVal, method = "BHHH", qac="marquardt")
 print(coef(mlBHHHM))
 print(returnMessage(mlBHHHM))
 

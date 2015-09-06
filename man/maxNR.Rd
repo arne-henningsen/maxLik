@@ -19,7 +19,7 @@ maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
       lambdaStep=2,
       maxLambda=1e12,
       lambdatol = 1e-06, qrtol = 1e-10,
-      guessCorrection="stephalving",
+      qac="stephalving",
       iterlim = 150,
       constraints = NULL, finalHessian = TRUE, bhhhHessian=FALSE,
       fixed = NULL, activePar = NULL, ... )
@@ -101,13 +101,14 @@ maxBHHH(fn, grad = NULL, hess = NULL, start, print.level = 0,
     Hessian (quadratic hill-climbing) in order to enforce nagetive
     definiteness.}
   \item{qrtol}{QR-decomposition tolerance}
-  \item{guessCorrection}{character, the type of behavior when the new
-    guess was worse than the initial one.  "stephalving" decreases the
-    step length while keeping the quadratic approximation direction,
+  \item{qac}{character, Qadratic Approximation Correction.  When the new
+    guess is worse than the initial one, program attemts to correct it:
+    "stephalving" decreases the
+    step but keeps the direction,
     "marquardt" uses
-    Marquardt (1963) method by simultaneously decresing step and
-    moving closer to the sole gradient direction.  May be faster and
-    more robust in areas where quadratic approximation behaves poorly.}
+    Marquardt (1963) method by decreasing the step length while also
+    moving closer to the pure gradient direction.  It may be faster and
+    more robust choice in areas where quadratic approximation behaves poorly.}
   \item{iterlim}{stopping condition.  Stop if more than \code{iterlim}
     iterations, return \code{code=4}.}
   \item{constraints}{either \code{NULL} for unconstrained optimization
