@@ -1,5 +1,5 @@
 maxNRCompute <- function(fn,
-                         start, print.level=0,
+                         start, 
                            # maximum lambda for Marquardt (1963)
                          finalHessian=TRUE,
                   bhhhHessian = FALSE,
@@ -102,7 +102,7 @@ maxNRCompute <- function(fn,
    returnHessian <- ifelse( bhhhHessian, "BHHH", TRUE )
    f1 <- fn(start1, fixed = fixed, sumObs = TRUE,
       returnHessian = returnHessian, ...)
-   if(print.level > 2) {
+   if(slot(control, "printLevel") > 2) {
       cat("Initial function value:", f1, "\n")
    }
    if(any(is.na( f1))) {
@@ -129,7 +129,7 @@ maxNRCompute <- function(fn,
          " as argument 'hess': ignoring argument 'hess'" )
    }
    G1 <- attr( f1, "gradient" )
-   if(print.level > 2) {
+   if(slot(control, "printLevel") > 2) {
       cat("Initial gradient value:\n")
       print(G1)
    }
@@ -144,7 +144,7 @@ maxNRCompute <- function(fn,
          ") not equal to the no. of parameters (", nParam, ")" )
    }
    H1 <- attr( f1, "hessian" )
-   if(print.level > 3) {
+   if(slot(control, "printLevel") > 3) {
       cat("Initial Hessian value:\n")
       print(H1)
    }
@@ -161,7 +161,7 @@ maxNRCompute <- function(fn,
    if(any(is.infinite(H1))) {
       stop("Infinite initial Hessian")
    }
-   if( print.level > 1) {
+   if( slot(control, "printLevel") > 1) {
       cat( "----- Initial parameters: -----\n")
       cat( "fcn value:",
       as.vector(f1), "\n")
@@ -171,7 +171,7 @@ maxNRCompute <- function(fn,
       print(a)
       cat( "Condition number of the (active) hessian:",
           kappa( H1[!fixed, !fixed]), "\n")
-      if( print.level > 3) {
+      if( slot(control, "printLevel") > 3) {
          print( H1)
       }
    }
@@ -264,8 +264,8 @@ maxNRCompute <- function(fn,
                step <- step/2
             }
             start1 <- start0 - step*amount
-            if(print.level > 2) {
-               if(print.level > 3) {
+            if(slot(control, "printLevel") > 2) {
+               if(slot(control, "printLevel") > 3) {
                   cat("Try new parameters:\n")
                   print(start1)
                }
@@ -314,7 +314,7 @@ maxNRCompute <- function(fn,
          ## Note, this may result in a lower function value,
          ## hence we do not check f1 > f0
          start1[newVal$index] <- newVal$val
-         if( print.level > 0 ) {
+         if( slot(control, "printLevel") > 0 ) {
             cat( "Keeping parameter(s) ",
                paste( newVal$index, collapse = ", " ),
                " at the fixed values ",
@@ -336,20 +336,20 @@ maxNRCompute <- function(fn,
          code <- 6; break;
       }
       H1 <- attr( f1, "hessian" )
-      if( print.level > 1) {
+      if( slot(control, "printLevel") > 1) {
         cat( "-----Iteration", iter, "-----\n")
       }
       if(any(is.infinite(H1))) {
          code <- 7; break
       }
-      if(print.level > 2) {
+      if(slot(control, "printLevel") > 2) {
          cat( "lambda ", lambda1, " step", step, " fcn value:",
             formatC(as.vector(f1), digits=8, format="f"),  "\n")
          a <- cbind(amount, start1, G1, as.integer(!fixed))
          dimnames(a) <- list(names(start0), c("amount", "new param",
                                              "new gradient", "active"))
          print(a)
-         if( print.level > 3) {
+         if( slot(control, "printLevel") > 3) {
             cat("Hessian\n")
             print( H1)
          }
@@ -380,7 +380,7 @@ maxNRCompute <- function(fn,
          code <- 5; break
       }
    }
-   if( print.level > 0) {
+   if( slot(control, "printLevel") > 0) {
       cat( "--------------\n")
       cat( maximMessage( code), "\n")
       cat( iter, " iterations\n")

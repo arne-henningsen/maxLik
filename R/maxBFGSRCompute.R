@@ -1,12 +1,8 @@
 maxBFGSRCompute <- function(fn,
-                         start, print.level=0,
-                  tol=1e-6, reltol=sqrt(.Machine$double.eps),
-                  gradtol=1e-6, steptol=1e-10,
-                            lambdatol=1e-6,
-                            qrtol=1e-10,
-                  iterlim=150,
-                             finalHessian=TRUE,
+                         start, 
+                            finalHessian=TRUE,
                   fixed=NULL,
+                            control=maxControl(),
                   ...) {
    ## This function is originally developed by Yves Croissant (and placed in 'mlogit' package).
    ## Fitted for 'maxLik' by Ott Toomet, and revised by Arne Henningsen
@@ -20,18 +16,31 @@ maxBFGSRCompute <- function(fn,
    ##               (and also attribute 'hessian' if it should be returned)
    ##               fn must have an argument sumObs
    ## start       - initial parameter vector (eventually w/names)
-   ## steptol     - minimum step size
-   ## ...         - extra arguments for fn()
-   ## The stopping criteria
-   ## tol         - maximum allowed absolute difference between sequential values
-   ## reltol      - maximum allowed reltive difference (stops if < reltol*(abs(fn) + reltol)
-   ## gradtol     - maximum allowed norm of gradient vector
-   ## iterlim     - maximum # of iterations
    ## finalHessian  include final Hessian?  As computing final hessian does not carry any extra penalty for NR method, this option is
    ##               mostly for compatibility reasons with other maxXXX functions.
    ##               TRUE/something else  include
    ##               FALSE                do not include
    ## fixed       - a logical vector -- which parameters are taken as fixed.
+   ## control       MaxControl object:
+   ##     steptol     - minimum step size
+   ##     lambda0       initial Hessian corrector (see Marquardt, 1963, p 438)
+   ##     lambdaStep    how much Hessian corrector lambda is changed between
+   ##                   two lambda trials
+   ##                  (nu in Marquardt (1963, p 438)
+   ##     maxLambda     largest possible lambda (if exceeded will give step error)
+   ##     lambdatol   - max lowest eigenvalue when forcing pos. definite H
+   ##     qrtol       - tolerance for qr decomposition
+   ##     qac           How to handle the case where new function value is
+   ##               smaller than the original one:
+   ##                  "stephalving"   smaller step in the same direction
+   ##                  "marquardt"     Marquardt (1963) approach
+   ##     The stopping criteria
+   ##     tol         - maximum allowed absolute difference between sequential values
+   ##     reltol      - maximum allowed reltive difference (stops if < reltol*(abs(fn) + reltol)
+   ##     gradtol     - maximum allowed norm of gradient vector
+   ## 
+   ##     iterlim     - maximum # of iterations
+   ##     
    ##               Other paramters are treated as variable (free).
    ##
    ## RESULTS:
@@ -76,7 +85,7 @@ maxBFGSRCompute <- function(fn,
   x <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE,
       returnHessian = FALSE, ... ) )
             # sum of log-likelihood value but not sum of gradients
-   if (print.level > 0)
+   if (slot(control, "printLevel") > 0)
     cat( "Initial value of the function :", x, "\n" )
    if(is.na(x)) {
       result <- list(code=100, message=maximMessage("100"),
@@ -106,7 +115,7 @@ maxBFGSRCompute <- function(fn,
    ## If not supplied by observations, we use the summed gradient.
    gri <- attr( x, "gradient" )
    gr <- sumGradients( gri, nParam = length( param ) )
-   if(print.level > 2) {
+   if(slot(control, "printLevel") > 2) {
       cat("Initial gradient value:\n")
       print(gr)
    }
@@ -124,9 +133,9 @@ maxBFGSRCompute <- function(fn,
    if(observationGradient(gri, length(param))) {
       invHess <- -solve(crossprod(gri[,!fixed]))
                            # initial approximation of inverse Hessian (as in BHHH), if possible
-      if(print.level > 3) {
+      if(slot(control, "printLevel") > 3) {
          cat("Initial inverse Hessian by gradient crossproduct\n")
-         if(print.level > 4) {
+         if(slot(control, "printLevel") > 4) {
             print(invHess)
          }
       }
@@ -134,14 +143,14 @@ maxBFGSRCompute <- function(fn,
    else {
       invHess <- -1e-5*diag(1, nrow=length(gr[!fixed]))
                            # ... if not possible (Is this OK?).  Note we make this negative definite.
-      if(print.level > 3) {
+      if(slot(control, "printLevel") > 3) {
          cat("Initial inverse Hessian is diagonal\n")
-         if(print.level > 4) {
+         if(slot(control, "printLevel") > 4) {
             print(invHess)
          }
       }
    }
-   if( print.level > 1) {
+   if( slot(control, "printLevel") > 1) {
       cat("-------- Initial parameters: -------\n")
       cat( "fcn value:",
       as.vector(x), "\n")
@@ -158,7 +167,7 @@ maxBFGSRCompute <- function(fn,
    ## ----------- Main loop ---------------
    repeat {
       iter <- iter + 1
-      if( iter > iterlim) {
+      if( iter > slot(control, "iterlim")) {
          code <- 4; break
       }
       if(any(is.na(invHess))) {
@@ -166,12 +175,12 @@ maxBFGSRCompute <- function(fn,
          print(invHess)
          stop("NA in Hessian")
       }
-      if(print.level > 0) {
+      if(slot(control, "printLevel") > 0) {
          cat("Iteration ", iter, "\n")
-         if(print.level > 3) {
+         if(slot(control, "printLevel") > 3) {
             cat("Eigenvalues of approximated inverse Hessian:\n")         
             print(eigen(invHess, only.values=TRUE)$values)
-            if(print.level > 4) {
+            if(slot(control, "printLevel") > 4) {
                cat("inverse Hessian:\n")
                print(invHess)
             }
@@ -183,19 +192,19 @@ maxBFGSRCompute <- function(fn,
       ## This procedure seems to work, but unfortunately I have little idea what I am doing :-(
       approxHess <- invHess
                            # approxHess is used for computing climbing direction, invHess for next approximation
-      while((me <- max.eigen( approxHess)) >= -lambdatol |
-         (qRank <- qr(approxHess, tol=qrtol)$rank) < sum(!fixed)) {
+      while((me <- max.eigen( approxHess)) >= -slot(control, "lambdatol") |
+         (qRank <- qr(approxHess, tol=slot(control, "qrtol"))$rank) < sum(!fixed)) {
                                         # maximum eigenvalue -> negative definite
                                         # qr()$rank -> singularity
-         lambda <- abs(me) + lambdatol + min(abs(diag(approxHess)))/1e7
+         lambda <- abs(me) + slot(control, "lambdatol") + min(abs(diag(approxHess)))/1e7
                            # The third term corrects numeric singularity.  If diag(H) only contains
                            # large values, (H - (a small number)*I) == H because of finite precision
          approxHess <- approxHess - lambda*I
-         if(print.level > 4) {
+         if(slot(control, "printLevel") > 4) {
             cat("Not negative definite.  Subtracting", lambda, "* I\n")
             cat("Eigenvalues of new approximation:\n")         
             print(eigen(approxHess, only.values=TRUE)$values)
-            if(print.level > 5) {
+            if(slot(control, "printLevel") > 5) {
                cat("new Hessian approximation:\n")
                print(approxHess)
             }
@@ -213,11 +222,11 @@ maxBFGSRCompute <- function(fn,
       returnHessian = FALSE, ... ) )
                            # sum of log-likelihood value but not sum of gradients
       ## did we end up with a larger value?
-      while((is.na(x) | x < oldx) & step > steptol) {
+      while((is.na(x) | x < oldx) & step > slot(control, "steptol")) {
          step <- step/2
-         if(print.level > 2) {
+         if(slot(control, "printLevel") > 2) {
             cat("Function decreased. Function values: old ", oldx, ", new ", x, ", difference ", x - oldx, "\n")
-            if(print.level > 3) {
+            if(slot(control, "printLevel") > 3) {
                resdet <- cbind(param = param, gradient = gr, direction=direction, active=!fixed)
                cat("Attempted parameters:\n")
                print(resdet)
@@ -229,7 +238,7 @@ maxBFGSRCompute <- function(fn,
          returnHessian = FALSE, ... ) )
             # sum of log-likelihood value but not sum of gradients
     }
-    if(step < steptol) {
+    if(step < slot(control, "steptol")) {
                            # we did not find a better place to go...
        samm <- list(theta0=oldparam, f0=oldx, climb=direction)
     }
@@ -252,32 +261,32 @@ maxBFGSRCompute <- function(fn,
       invHess <- invHess - update
       ##
       chi2 <- -  crossprod(direction[!fixed], oldgr[!fixed])
-    if (print.level > 0){
+    if (slot(control, "printLevel") > 0){
        cat("step = ",step, ", lnL = ", x,", chi2 = ",
            chi2, ", function increment = ", x - oldx, "\n",sep="")
-       if (print.level > 1){
+       if (slot(control, "printLevel") > 1){
           resdet <- cbind(param = param, gradient = gr, direction=direction, active=!fixed)
           print(resdet)
           cat("--------------------------------------------\n")
        }
     }
-      if( step < steptol) {
+      if( step < slot(control, "steptol")) {
          code <- 3; break
       }
-      if( sqrt( crossprod( gr[!fixed] ) ) < gradtol ) {
+      if( sqrt( crossprod( gr[!fixed] ) ) < slot(control, "gradtol") ) {
          code <-1; break
       }
-      if(x - oldx < tol) {
+      if(x - oldx < slot(control, "tol")) {
          code <- 2; break
       }
-      if(x - oldx < reltol*(x + reltol)) {
+      if(x - oldx < slot(control, "reltol")*(x + slot(control, "reltol"))) {
          code <- 8; break
       }
       if(is.infinite(x) & x > 0) {
          code <- 5; break
       }
    }
-   if( print.level > 0) {
+   if( slot(control, "printLevel") > 0) {
       cat( "--------------\n")
       cat( maximMessage( code), "\n")
       cat( iter, " iterations\n")

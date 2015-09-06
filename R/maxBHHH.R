@@ -1,7 +1,5 @@
 maxBHHH <- function(fn, grad=NULL, hess=NULL,
                     start,
-                    print.level=0,
-                    iterlim=100,
                     finalHessian="BHHH",
                     ...) {
    ## hess:   Hessian, not used, for compatibility with the other methods
@@ -18,8 +16,6 @@ maxBHHH <- function(fn, grad=NULL, hess=NULL,
 
    ## using the Newton-Raphson algorithm with BHHH method for Hessian
    a <- maxNR( fn=fn, grad = grad, hess = hess, start=start,
-              iterlim=iterlim,
-              print.level=print.level,
               finalHessian = finalHessian,
               bhhhHessian = TRUE,
                ...)

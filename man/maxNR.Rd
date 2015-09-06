@@ -12,17 +12,14 @@
   are available.
 }
 \usage{
-maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
+maxNR(fn, grad = NULL, hess = NULL, start,
       constraints = NULL, finalHessian = TRUE, bhhhHessian=FALSE,
       fixed = NULL, activePar = NULL, control=maxControl(), ... )
-maxBFGSR(fn, grad = NULL, hess = NULL, start, print.level = 0,
-      tol = 1e-8, reltol=sqrt(.Machine$double.eps), gradtol = 1e-6,
-      steptol = 1e-10, lambdatol=1e-6, qrtol=1e-10,
-      iterlim = 150,
+maxBFGSR(fn, grad = NULL, hess = NULL, start,
       constraints = NULL, finalHessian = TRUE,
-      fixed = NULL, activePar = NULL, ... )
-maxBHHH(fn, grad = NULL, hess = NULL, start, print.level = 0,
-      iterlim = 100, finalHessian = "BHHH", ... )
+      fixed = NULL, activePar = NULL, control=maxControl(), ... )
+maxBHHH(fn, grad = NULL, hess = NULL, start, 
+      finalHessian = "BHHH", ... )
 }
 \arguments{
   \item{fn}{function to be maximized.
@@ -59,13 +56,6 @@ maxBHHH(fn, grad = NULL, hess = NULL, start, print.level = 0,
     Hessians are used for maximizations with the Newton-Raphson method
     but not for maximizations with the BFGS or BHHH method.}
   \item{start}{initial value for the parameter vector.}
-  \item{print.level}{this argument determines the level of
-    printing which is done during the minimization process. The default
-    value of 0 means that no printing occurs, a value of 1 means that
-    initial and final details are printed and a value of 2 means that
-    full tracing information for every iteration is printed.  Higher
-    values will result in even more details.
-  }
   \item{constraints}{either \code{NULL} for unconstrained optimization
     or a list with two components.  The components may be either
     \code{eqA} and \code{eqB} for equality-constrained optimization
@@ -140,20 +130,27 @@ maxBHHH(fn, grad = NULL, hess = NULL, start, print.level = 0,
 	more robust choice in areas where quadratic approximation behaves poorly.}
       \item{iterlim}{stopping condition.  Stop if more than \code{iterlim}
 	iterations, return \code{code=4}.}
+      \item{printLevel}{this argument determines the level of
+	printing which is done during the optimization process. The default
+	value of 0 means that no printing occurs, a value of 1 means that
+	initial and final details are printed and a value of 2 means that
+	main tracing information for every iteration is printed.  Higher
+	values will result in even more details.
       }
     }
-    \item{\dots}{further arguments to \code{fn}, \code{grad} and
-      \code{hess}.
-      Further arguments to \code{maxBHHH} are also passed to
-      \code{maxNR}.
-      To maintain compatibility with the earlier versions, \dots also passes a
+  }
+  \item{\dots}{further arguments to \code{fn}, \code{grad} and
+    \code{hess}.
+    Further arguments to \code{maxBHHH} are also passed to
+    \code{maxNR}.
+    To maintain compatibility with the earlier versions, \dots also passes a
     number of control options (\code{tol}, \code{reltol},
     \code{gradtol}, \code{steptol},
     \code{lambdatol},  \code{rtol}, \code{iterlim}) to the optimizers.
     }
   }
   \details{
-The idea of the Newton method is to approximate the function in a given
+    The idea of the Newton method is to approximate the function in a given
     location with a multidimensional parabola, and use the estimated
     maximum as the initial value for the next iteration.  Such an
     approximation requires knowledge of both gradient and Hessian, the
@@ -161,7 +158,7 @@ The idea of the Newton method is to approximate the function in a given
     approximating Hessian exist, including BFGS and BHHH.
 
 The BHHH method
-(\code{maxNR} with argument \code{bhhhHessian = TRUE )} or \code{maxBHHH})
+(\code{maxNR} with argument \code{bhhhHessian = TRUE )} or \code{maxBHHH}
 is suitable only for maximizing log-likelihood functions.
 It uses information equality in order to approximate the Hessian
 of the log-likelihood function.

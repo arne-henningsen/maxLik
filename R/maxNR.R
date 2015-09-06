@@ -1,4 +1,4 @@
-maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
+maxNR <- function(fn, grad=NULL, hess=NULL, start, 
                   constraints=NULL,
                   finalHessian=TRUE,
                   bhhhHessian=FALSE,
@@ -81,7 +81,6 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start, print.level=0,
    dddot <- list(...)
    dddot <- dddot[!(names(dddot) %in% openParam(control))]
    cl <- list(start=start,
-              print.level=print.level,
               finalHessian=finalHessian,
               bhhhHessian=bhhhHessian,
               fixed=fixed,

@@ -19,5 +19,6 @@ openParam <- function(object) {
      "lambdaStep",
      "maxLambda",
                            #
-     "iterlim")
+     "iterlim",
+     "printLevel", "print.level")
 }

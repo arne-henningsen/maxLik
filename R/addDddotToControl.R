@@ -7,9 +7,13 @@ addDddotToControl <- function(control, ...) {
       slot(control, "iterlim") <- as.integer(dddot$iterlim)
       dddot$iterlim <- NULL
    }
-   if(any(c("printLevel", "print.level") %in% names(dddot))) {
-      slot(control, "printLevel") <- as.integer(dddot$iterlim)
-      dddot$printLevel <- dddot$print.level <- NULL
+   if("print.level" %in% names(dddot)) {
+      slot(control, "printLevel") <- as.integer(dddot$print.level)
+      dddot$print.level <- NULL
+   }
+   if("printLevel" %in% names(dddot)) {
+      slot(control, "printLevel") <- as.integer(dddot$printLevel)
+      dddot$printLevel <- NULL
    }
    for(p in names(dddot)) {
       slot(control, p) <- dddot[[p]]
