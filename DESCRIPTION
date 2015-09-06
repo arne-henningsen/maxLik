@@ -6,7 +6,7 @@ Author: Ott Toomet <otoomet@gmail.com>,
    Arne Henningsen <arne.henningsen@gmail.com>,
    with contributions from Spencer Graves and Yves Croissant
 Maintainer: Ott Toomet <otoomet@gmail.com>
-Depends: R (>= 2.4.0), miscTools (>= 0.6-8)
+Depends: R (>= 2.4.0), miscTools (>= 0.6-8), methods
 Imports: sandwich
 Description: Function for Maximum Likelihood estimation and non-linear optimization, and related tools.
 License: GPL (>= 2)

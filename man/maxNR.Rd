@@ -13,16 +13,8 @@
 }
 \usage{
 maxNR(fn, grad = NULL, hess = NULL, start, print.level = 0,
-      tol = 1e-08, reltol=sqrt(.Machine$double.eps), gradtol = 1e-06,
-      steptol = 1e-10,
-      lambda0=1e-2,
-      lambdaStep=2,
-      maxLambda=1e12,
-      lambdatol = 1e-06, qrtol = 1e-10,
-      qac="stephalving",
-      iterlim = 150,
       constraints = NULL, finalHessian = TRUE, bhhhHessian=FALSE,
-      fixed = NULL, activePar = NULL, ... )
+      fixed = NULL, activePar = NULL, control=maxControl(), ... )
 maxBFGSR(fn, grad = NULL, hess = NULL, start, print.level = 0,
       tol = 1e-8, reltol=sqrt(.Machine$double.eps), gradtol = 1e-6,
       steptol = 1e-10, lambdatol=1e-6, qrtol=1e-10,
@@ -74,43 +66,6 @@ maxBHHH(fn, grad = NULL, hess = NULL, start, print.level = 0,
     full tracing information for every iteration is printed.  Higher
     values will result in even more details.
   }
-  \item{tol}{stopping condition.  Stop if the absolute difference
-    between successive iterations is less than \code{tol}, return
-    \code{code=2}.}
-  \item{reltol}{Relative convergence tolerance.  The algorithm stops if
-          it is unable to increase the value by a factor of 'reltol *
-          (abs(val) + reltol)' at a step.  Defaults to
-          'sqrt(.Machine\$double.eps)', typically about '1e-8'.}
-  \item{gradtol}{stopping condition.  Stop if the norm of the gradient
-    less than \code{gradtol}, return \code{code=1}.}
-  \item{steptol}{stopping/error condition.  If the quadratic
-    approximation leads to lower function value instead of higher, or
-    \code{NA}, the step length
-    is halved and a new attempt is made.  This procedure is repeated
-    until step < \code{steptol}, thereafter \code{code=3} is returned.}
-  Next three arguments control the Marquardt (1963) correction:
-  \item{lambda0}{positive numeric, initial correction term}
-  \item{lambdaStep}{how much the correction is decreased/increased at
-    successful/unsuccesful step}
-  \item{maxLambda}{maximum allowed correction term.  If exceeded, the
-    algorithm exits with return code 3.}
-  \item{lambdatol}{control whether the Hessian is treated as negative
-    definite.  If the
-    largest of the eigenvalues of the Hessian is larger than
-    \code{-lambdatol}, a suitable diagonal matrix is subtracted from the
-    Hessian (quadratic hill-climbing) in order to enforce nagetive
-    definiteness.}
-  \item{qrtol}{QR-decomposition tolerance}
-  \item{qac}{character, Qadratic Approximation Correction.  When the new
-    guess is worse than the initial one, program attemts to correct it:
-    "stephalving" decreases the
-    step but keeps the direction,
-    "marquardt" uses
-    Marquardt (1963) method by decreasing the step length while also
-    moving closer to the pure gradient direction.  It may be faster and
-    more robust choice in areas where quadratic approximation behaves poorly.}
-  \item{iterlim}{stopping condition.  Stop if more than \code{iterlim}
-    iterations, return \code{code=4}.}
   \item{constraints}{either \code{NULL} for unconstrained optimization
     or a list with two components.  The components may be either
     \code{eqA} and \code{eqB} for equality-constrained optimization
@@ -143,12 +98,61 @@ maxBHHH(fn, grad = NULL, hess = NULL, start, print.level = 0,
       or a vector of character strings indicating the names of the fixed
       parameters (parameter names are taken from argument \code{start}).}
   \item{activePar}{this argument is retained for backward compatibility only;
-      please use argument \code{fixed} instead.}
-  \item{\dots}{further arguments to \code{fn}, \code{grad} and
-    \code{hess}.
-    Further arguments to \code{maxBHHH} are also passed to \code{maxNR}.}
-}
-\details{
+    please use argument \code{fixed} instead.}
+  \item{control}{the control parameter structure, created by
+    \code{\link{maxControl}}.  The control parameters used here are
+    \itemize{
+      \item{tol}{stopping condition.  Stop if the absolute difference
+	between successive iterations is less than \code{tol}, return
+	\code{code=2}.}
+      \item{reltol}{Relative convergence tolerance.  The algorithm stops if
+        it is unable to increase the value by a factor of 'reltol *
+        (abs(val) + reltol)' at a step.  Defaults to
+        'sqrt(.Machine\$double.eps)', typically about '1e-8'.}
+      \item{gradtol}{stopping condition.  Stop if norm of the gradient is
+	less than \code{gradtol}, return \code{code=1}.}
+      \item{steptol}{stopping/error condition.  If \code{qac ==
+	  "stephalving"} and the quadratic
+	approximation leads to a worse instead of a better value, or to
+	\code{NA}, the step length
+	is halved and a new attempt is made.  If necessary, this procedure is repeated
+	until step < \code{steptol}, thereafter \code{code=3} is returned.}
+      Next three arguments control the Marquardt (1963) correction:
+      \item{lambda0}{positive numeric, initial correction term}
+      \item{lambdaStep}{how much the correction is decreased/increased at
+	successful/unsuccesful step}
+      \item{maxLambda}{maximum allowed correction term.  If exceeded, the
+	algorithm exits with return code 3.}
+      \item{lambdatol}{controls whether the Hessian is treated as negative
+	definite.  If the
+	largest of the eigenvalues of the Hessian is larger than
+	\code{-lambdatol}, a suitable diagonal matrix is subtracted from the
+	Hessian (quadratic hill-climbing) in order to enforce nagetive
+	definiteness.}
+      \item{qrtol}{QR-decomposition tolerance}
+      \item{qac}{character, Qadratic Approximation Correction.  When the new
+	guess is worse than the initial one, program attemts to correct it:
+	"stephalving" decreases the
+	step but keeps the direction,
+	"marquardt" uses
+	Marquardt (1963) method by decreasing the step length while also
+	moving closer to the pure gradient direction.  It may be faster and
+	more robust choice in areas where quadratic approximation behaves poorly.}
+      \item{iterlim}{stopping condition.  Stop if more than \code{iterlim}
+	iterations, return \code{code=4}.}
+      }
+    }
+    \item{\dots}{further arguments to \code{fn}, \code{grad} and
+      \code{hess}.
+      Further arguments to \code{maxBHHH} are also passed to
+      \code{maxNR}.
+      To maintain compatibility with the earlier versions, \dots also passes a
+    number of control options (\code{tol}, \code{reltol},
+    \code{gradtol}, \code{steptol},
+    \code{lambdatol},  \code{rtol}, \code{iterlim}) to the optimizers.
+    }
+  }
+  \details{
 The idea of the Newton method is to approximate the function in a given
     location with a multidimensional parabola, and use the estimated
     maximum as the initial value for the next iteration.  Such an

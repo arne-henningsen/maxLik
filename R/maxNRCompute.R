@@ -1,48 +1,40 @@
 maxNRCompute <- function(fn,
                          start, print.level=0,
-                  tol=1e-8, reltol=sqrt(.Machine$double.eps),
-                  gradtol=1e-6,
-                         steptol=1e-10,
-                           # minimum step for stephalving
-                         lambda0=1e-2,
-                         lambdaStep=2,
-                         maxLambda=1e12,
                            # maximum lambda for Marquardt (1963)
-                         lambdatol=1e-6,
-                  qrtol=1e-10,
-                         qac="stephalving",
-                  iterlim=150,
                          finalHessian=TRUE,
                   bhhhHessian = FALSE,
                   fixed=NULL,
+                         control=maxControl(),
                   ...) {
    ## Newton-Raphson maximisation
    ## Parameters:
-   ## fn          - the function to be minimized.  Returns either scalar or
+   ## fn          - the function to be maximized.  Returns either scalar or
    ##               vector value with possible attributes 
    ##               constPar and newVal
    ##               fn must return the value with attributes 'gradient'
    ##               and 'hessian'
    ##               fn must have an argument sumObs
    ## start       - initial parameter vector (eventually w/names)
-   ## steptol     - minimum step size
-   ## lambda0       initial Hessian corrector (see Marquardt, 1963, p 438)
-   ## lambdaStep    how much Hessian corrector lambda is changed between
-   ##               two lambda trials
-   ##               (nu in Marquardt (1963, p 438)
-   ## maxLambda     largest possible lambda (if exceeded will give step error)
-   ## lambdatol   - max lowest eigenvalue when forcing pos. definite H
-   ## qrtol       - tolerance for qr decomposition
-   ## qac           How to handle the case where new function value is
+   ## control       MaxControl object:
+   ##     steptol     - minimum step size
+   ##     lambda0       initial Hessian corrector (see Marquardt, 1963, p 438)
+   ##     lambdaStep    how much Hessian corrector lambda is changed between
+   ##                   two lambda trials
+   ##                  (nu in Marquardt (1963, p 438)
+   ##     maxLambda     largest possible lambda (if exceeded will give step error)
+   ##     lambdatol   - max lowest eigenvalue when forcing pos. definite H
+   ##     qrtol       - tolerance for qr decomposition
+   ##     qac           How to handle the case where new function value is
    ##               smaller than the original one:
-   ##                   "stephalving"   smaller step in the same direction
-   ##                   "marquardt"     Marquardt (1963) approach
-   ## The stopping criteria
-   ## tol         - maximum allowed absolute difference between sequential values
-   ## reltol      - maximum allowed reltive difference (stops if < reltol*(abs(fn) + reltol)
-   ## gradtol     - maximum allowed norm of gradient vector
+   ##                  "stephalving"   smaller step in the same direction
+   ##                  "marquardt"     Marquardt (1963) approach
+   ##     The stopping criteria
+   ##     tol         - maximum allowed absolute difference between sequential values
+   ##     reltol      - maximum allowed reltive difference (stops if < reltol*(abs(fn) + reltol)
+   ##     gradtol     - maximum allowed norm of gradient vector
    ## 
-   ## iterlim     - maximum # of iterations
+   ##     iterlim     - maximum # of iterations
+   ##     
    ## finalHessian  include final Hessian?  As computing final hessian does not carry any extra penalty for NR method, this option is
    ##               mostly for compatibility reasons with other maxXXX functions.
    ##               TRUE/something else  include
@@ -89,14 +81,7 @@ maxNRCompute <- function(fn,
       ## L - eigenvalues in decreasing order, [1] - biggest in abs value
    }
    ## -------------------------------------------------
-   ## Determine the guess correction type
-   corrs <- c("stephalving", "marquardt")
-   gCorr <- pmatch(tolower(qac), corrs)
-   if(is.na(gCorr)) {
-      stop("'qac' must be either 'stephalving' or 'marquardt'\n",
-           "partial matching allowed")
-   }
-   if(corrs[gCorr] == "marquardt")
+   if(slot(control, "qac") == "marquardt")
       marquardt <- TRUE
    else
       marquardt <- FALSE
@@ -190,12 +175,12 @@ maxNRCompute <- function(fn,
          print( H1)
       }
    }
-   lambda1 <- lambda0
+   lambda1 <- slot(control, "lambda0")
    step <- 1
    ## ---------------- Main interation loop ------------------------
    repeat {
       lambda <- lambda1
-      if( iter >= iterlim) {
+      if( iter >= slot(control, "iterlim")) {
          code <- 4; break
       }
       iter <- iter + 1
@@ -214,7 +199,7 @@ maxNRCompute <- function(fn,
          stop("NA in Hessian (at the iteration start)")
       }
       if(marquardt) {
-         lambda1 <- lambda/lambdaStep
+         lambda1 <- lambda/slot(control, "lambdaStep")
                            # initially we try smaller lambda
                            # lambda1: current lambda for calculations
          H <- H0 - lambda1*I
@@ -224,11 +209,11 @@ maxNRCompute <- function(fn,
          H <- H0
       }
       ## check whether hessian is positive definite
-      if((me <- max.eigen( H[!fixed,!fixed,drop=FALSE])) >= -lambdatol |
-                (qRank <- qr(H[!fixed,!fixed], tol=qrtol)$rank) < sum(!fixed)) {
+      if((me <- max.eigen( H[!fixed,!fixed,drop=FALSE])) >= -slot(control, "lambdatol") |
+                (qRank <- qr(H[!fixed,!fixed], tol=slot(control, "qrtol"))$rank) < sum(!fixed)) {
                            # maximum eigenvalue -> negative definite
                            # qr()$rank -> singularity
-         lambda1 <- abs(me) + lambdatol + min(abs(diag(H)[!fixed]))/1e7
+         lambda1 <- abs(me) + slot(control, "lambdatol") + min(abs(diag(H)[!fixed]))/1e7
                            # The third term corrects numeric singularity.  If diag(H) only contains large values,
                            # (H - (a small number)*I) == H because of finite precision
          H <- (H0 - lambda1*I)
@@ -241,7 +226,7 @@ maxNRCompute <- function(fn,
       }
       amount <- vector("numeric", nParam)
       amount[!fixed] <- qr.solve(H[!fixed,!fixed,drop=FALSE],
-                                    G0[!fixed], tol=qrtol)
+                                    G0[!fixed], tol=slot(control, "qrtol"))
       start1 <- start0 - step*amount
                            # note: step is always 1 for Marquardt method
       f1 <- fn(start1, fixed = fixed, sumObs = TRUE,
@@ -261,19 +246,19 @@ maxNRCompute <- function(fn,
       if(is.null(newVal <- attr(f1, "newVal"))) {
          ## no ...
          if(marquardt) {
-            stepOK <- lambda1 <= maxLambda
+            stepOK <- lambda1 <= slot(control, "maxLambda")
          }
          else {
-            stepOK <- step >= steptol
+            stepOK <- step >= slot(control, "steptol")
          }
          while( any(is.na(f1)) || ( ( sum(f1) < sum(f0) ) & stepOK)) {
                                         # We end up in a NA or a higher value.
                                         # try smaller step
             if(marquardt) {
-               lambda1 <- lambda1*lambdaStep
+               lambda1 <- lambda1*slot(control, "lambdaStep")
                H <- (H0 - lambda1*I)
                amount[!fixed] <- qr.solve(H[!fixed,!fixed,drop=FALSE],
-                                          G0[!fixed], tol=qrtol)
+                                          G0[!fixed], tol=slot(control, "qrtol"))
             }
             else {
                step <- step/2
@@ -313,10 +298,10 @@ maxNRCompute <- function(fn,
             }
          }
          if(marquardt) {
-            stepOK <- lambda1 <= maxLambda
+            stepOK <- lambda1 <= slot(control, "maxLambda")
          }
          else {
-            stepOK <- step >= steptol
+            stepOK <- step >= slot(control, "steptol")
          }
          if(!stepOK) {
             # we did not find a better place to go...
@@ -373,21 +358,22 @@ maxNRCompute <- function(fn,
                 kappa(H1[!fixed,!fixed,drop=FALSE]), "\n")
          }
       }
-      if( step < steptol) {
+      if( step < slot(control, "steptol")) {
                            # wrong guess in step halving
          code <- 3; break
       }
-      if(lambda1 > maxLambda) {
+      if(lambda1 > slot(control, "maxLambda")) {
                            # wrong guess in Marquardt method
          code <- 3; break
       }
-      if( sqrt( crossprod( G1[!fixed] ) ) < gradtol ) {
+      if( sqrt( crossprod( G1[!fixed] ) ) < slot(control, "gradtol") ) {
          code <-1; break
       }
-      if(is.null(newVal) && sum(f1) - sum(f0) < tol) {
+      if(is.null(newVal) && sum(f1) - sum(f0) < slot(control, "tol")) {
          code <- 2; break
       }
-      if(is.null(newVal) && sum(f1) - sum(f0) < reltol * ( sum(f1) + reltol)) {
+      if(is.null(newVal) && sum(f1) - sum(f0) <
+         slot(control, "reltol")*( sum(f1) + slot(control, "reltol"))) {
          code <- 2; break
       }
       if(any(is.infinite(f1)) && sum(f1) > 0) {
