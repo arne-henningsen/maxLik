@@ -59,7 +59,7 @@ maxBFGSR <- function(fn, grad=NULL, hess=NULL, start,
    ##
    ## ------------------------------
    ## Add parameters from ... to control
-   control <- addDddotToControl(control, ...)
+   control <- maxControl(control, ...)
    ##
    argNames <- c( "fn", "grad", "hess", "start", "print.level",
                  "activePar", "fixed" )

@@ -57,7 +57,10 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start,
    ##
    ## ------------------------------
    ## Add parameters from ... to control
-   control <- addDddotToControl(control, ...)
+   if(!inherits(control, "MaxControl")) {
+      stop("'control' must be a 'MaxControl' object, created by 'maxControl()'")
+   }
+   control <- maxControl(control, ...)
    ##
    argNames <- c(c("fn", "grad", "hess", "start",
                    "activePar", "fixed", "control"),

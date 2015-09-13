@@ -12,32 +12,32 @@
 }
 \usage{
 maxBFGS(fn, grad = NULL, hess=NULL, start, fixed = NULL,
-   print.level = 0, iterlim = 200, constraints = NULL,
-   tol = 1e-08, reltol=tol,
+   control=NULL,
+   constraints = NULL,
    finalHessian=TRUE,
-   parscale=rep(1, length=length(start)), ... )
+   parscale=rep(1, length=length(start)),
+   ... )
 
 maxCG(fn, grad = NULL, hess = NULL, start, fixed = NULL,
-   print.level = 0, iterlim = 500, constraints = NULL,
-   tol = 1e-08, reltol=tol,
+   control=NULL,
+   constraints = NULL,
    finalHessian=TRUE,
-   parscale = rep(1, length = length(start)),
-   alpha = 1, beta = 0.5, gamma = 2, ...)
+   parscale = rep(1, length = length(start)), ...)
 
 maxSANN(fn, grad = NULL, hess = NULL, start, fixed = NULL,
-   print.level = 0, iterlim = 10000, constraints = NULL,
-   tol = 1e-08, reltol=tol,
+   control=NULL,
+   constraints = NULL,
    finalHessian=TRUE,
    cand = NULL, temp = 10, tmax = 10,
    parscale = rep(1, length = length(start)),
    random.seed = 123, ... )
 
 maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
-   print.level = 0, iterlim = 500, constraints = NULL,
-   tol = 1e-08, reltol=tol,
+   control=NULL,
+   constraints = NULL,
    finalHessian=TRUE,
    parscale = rep(1, length = length(start)),
-   alpha = 1, beta = 0.5, gamma = 2, ...)
+   ...)
 }
 
 \arguments{
@@ -59,9 +59,19 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
       either a logical vector of the same length as argument \code{start},
       a numeric (index) vector indicating the positions of the fixed parameters,
       or a vector of character strings indicating the names of the fixed
-      parameters (parameter names are taken from argument \code{start}).}
+      parameters (parameter names are taken from argument
+      \code{start}).}
+  \item{control}{list of control parameters or a \sQuote{MaxControl}
+    object.  If it is a list, the default values are taken for the
+    non-specified parameters.  
+    The following control
+    parameters are accepted by these functions:
+    \itemize{
+      \item{iterlim}{maximum number of iterations.  Note that
+	\sQuote{iteration} may mean different things for different optimizers.}
+    }
+  }
   \item{print.level}{a larger number prints more working information.}
-  \item{iterlim}{maximum number of iterations.}
   \item{constraints}{either \code{NULL} for unconstrained optimization
     or a list with two components.  The components may be either
     \code{eqA} and \code{eqB} for equality-constrained optimization

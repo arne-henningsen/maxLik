@@ -89,8 +89,8 @@ maxBHHH(fn, grad = NULL, hess = NULL, start,
       parameters (parameter names are taken from argument \code{start}).}
   \item{activePar}{this argument is retained for backward compatibility only;
     please use argument \code{fixed} instead.}
-  \item{control}{the control parameter structure, created by
-    \code{\link{maxControl}}.  The control parameters used here are
+  \item{control}{list of control parameters.  The control parameters
+    used by \code{maxNR} are
     \itemize{
       \item{tol}{stopping condition.  Stop if the absolute difference
 	between successive iterations is less than \code{tol}, return

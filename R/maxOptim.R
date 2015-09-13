@@ -1,12 +1,9 @@
 maxOptim <- function(fn, grad, hess,
                     start, method, fixed,
-                    print.level,
-                    iterlim,
                     constraints,
-                    tol, reltol,
                      finalHessian=TRUE,
                     parscale,
-                    alpha = NULL, beta = NULL, gamma = NULL,
+                     control=maxControl(),
                     temp = NULL, tmax = NULL, random.seed = NULL, cand = NULL,
                     ...) {
    ## Wrapper of optim-based optimization methods
@@ -21,7 +18,13 @@ maxOptim <- function(fn, grad, hess,
    } else {
       maxMethod <- paste( "max", method, sep = "" )
    }
-
+   ##
+   ## Add parameters from ... to control
+   if(!inherits(control, "MaxControl")) {
+      stop("'control' must be a 'MaxControl' object, created by 'maxControl()'")
+   }
+   control <- maxControl(control, ...)
+   ## Any forbidden arguments in fn?
    argNames <- c( "fn", "grad", "hess", "start", "print.level", "iterlim",
       "constraints", "tol", "reltol", "parscale", "alpha", "beta", "gamma",
       "temp", "tmax" )
@@ -50,21 +53,34 @@ maxOptim <- function(fn, grad, hess,
    ## and the corresponding parameter values
    lastFuncGrad <- NULL
    lastFuncParam <- NULL
-
+   ## chop off the control args from '...' and forward the new '...'
+   dddot <- list(...)
+   dddot <- dddot[!(names(dddot) %in% openParam(control))]
+                           # unfortunately now you have to do
+                           # do.call(function, args, dddot) instead of just calling
+                           # func(args, ...)
    ## strip possible SUMT parameters and call the function thereafter
    environment( callWithoutSumt ) <- environment()
-   maximType <- paste( method, "maximisation" )
+   maximType <- paste( method, "maximization" )
    parscale <- rep(parscale, length.out=length(start))
-   control <- list(trace=max(print.level, 0),
+   oControl <- list(trace=max(slot(control, "printLevel"), 0),
                     REPORT=1,
                     fnscale=-1,
-                   reltol=reltol,
-                    maxit=iterlim,
+                   reltol=slot(control, "reltol"),
+                    maxit=slot(control, "iterlim"),
                     parscale=parscale[ !fixed ],
-                    alpha=alpha, beta=beta, gamma=gamma,
+                    alpha=slot(control, "alpha"), beta=slot(control, "beta"),
+                   gamma=slot(control, "gamma"),
                     temp=temp, tmax=tmax )
-   f1 <- callWithoutSumt( start, "logLikFunc", fnOrig = fn, gradOrig = grad,
-      hessOrig = hess, ...)
+   argList <- list(theta=start,
+                   fName="logLikFunc",
+                   fnOrig = fn,
+                   gradOrig = grad,
+                   hessOrig = hess)
+   if(length(dddot) > 0) {
+      argList <- c(argList, dddot)
+   }
+   f1 <- do.call(callWithoutSumt, argList)
    if(is.na( f1)) {
       result <- list(code=100, message=maximMessage("100"),
                      iterations=0,
@@ -72,7 +88,7 @@ maxOptim <- function(fn, grad, hess,
       class(result) <- "maxim"
       return(result)
    }
-   if(print.level > 2) {
+   if(slot(control, "printLevel") > 2) {
       cat("Initial function value:", f1, "\n")
    }
    hasGradAttr <- !is.null( attr( f1, "gradient" ) )
@@ -88,9 +104,16 @@ maxOptim <- function(fn, grad, hess,
          " as argument 'hess': ignoring argument 'hess'" )
    }
    if( method == "BFGS" ) {
-      G1 <- callWithoutSumt( start, "logLikGrad", fnOrig = fn, gradOrig = grad,
-         hessOrig = hess, ...)
-      if(print.level > 2) {
+      argList <- list(theta=start,
+                      fName="logLikGrad",
+                      fnOrig = fn,
+                      gradOrig = grad,
+                      hessOrig = hess)
+      if(length(dddot) > 0) {
+         argList <- c(argList, dddot)
+      }
+      G1 <- do.call(callWithoutSumt, argList)
+      if(slot(control, "printLevel") > 2) {
          cat("Initial gradient value:\n")
          print(G1)
       }
@@ -125,18 +148,28 @@ maxOptim <- function(fn, grad, hess,
    } else {
       stop( "internal error: unknown method '", method, "'" )
    }
-
    ## A note about return value:
    ## We can the return from 'optim' in a object of class 'maxim'.
    ## However, as 'sumt' already returns such an object, we return the
    ## result of 'sumt' directly, without the canning
    if(is.null(constraints)) {
-       result <- optim( par = start[ !fixed ], fn = logLikFunc, control = control,
-                      method = method, gr = gradOptim, fnOrig = fn,
-                      gradOrig = grad, hessOrig = hess,
-                      start = start, fixed = fixed, ... )
-       resultConstraints <- NULL
-    }
+      cl <- list(quote(optim),
+                 par = start[ !fixed ],
+                 fn = logLikFunc,
+                 control = oControl,
+                 method = method,
+                 gr = gradOptim,
+                 fnOrig = fn,
+                 gradOrig = grad,
+                 hessOrig = hess,
+                 start = start,
+                 fixed = fixed)
+      if(length(dddot) > 0) {
+         cl <- c(cl, dddot)
+      }
+      result <- eval(as.call(cl))
+      resultConstraints <- NULL
+   }
    else {
       ## linear equality and inequality constraints
                            # inequality constraints: A %*% beta + B >= 0
@@ -169,14 +202,19 @@ maxOptim <- function(fn, grad, hess,
             stop("Inequality constraints A and B suggest different number ",
                  "of constraints: ", nra, " and ", nrb)
          }
-         result <- constrOptim2( theta = start,
-                          f = logLikFunc, grad = gradOptim,
-                          ineqA=constraints$ineqA,
-                                ineqB=constraints$ineqB,
-                                control=control,
-                          method = method, fnOrig = fn, gradOrig = grad,
-                          hessOrig = hess, fixed = fixed, start=start, ...)
+         cl <- list(quote(constrOptim2),
+                    theta = start,
+                    f = logLikFunc, grad = gradOptim,
+                    ineqA=constraints$ineqA,
+                    ineqB=constraints$ineqB,
+                    control=oControl,
+                    method = method, fnOrig = fn, gradOrig = grad,
+                    hessOrig = hess, fixed = fixed, start=start)
                            # 'start' argument is needed for adding fixed parameters later in the call chain
+         if(length(dddot) > 0) {
+            cl <- c(cl, dddot)
+         }
+         result <- eval(as.call(cl))
          resultConstraints <- list(type="constrOptim",
                                    barrier.value=result$barrier.value,
                                    outer.iterations=result$outer.iterations
@@ -188,13 +226,15 @@ maxOptim <- function(fn, grad, hess,
                         start=start, fixed = fixed,
                         maxRoutine = get( maxMethod ),
                         constraints=constraints,
-                        print.level=print.level,
- iterlim = iterlim,
-                        tol = tol, reltol = reltol, parscale = parscale,
-                        alpha = alpha, beta= beta, gamma = gamma,
+                         parscale = parscale,
                         temp = temp, tmax = tmax, random.seed = random.seed,
                         cand = cand,
-                        ...)
+                         control=control)
+                           # recursive evaluation-> pass original (possibly
+                           # supplemented) control
+         if(length(dddot) > 0) {
+            argList <- c(argList, dddot)
+         }
          result <- do.call( sumt, argList[ !sapply( argList, is.null ) ] )
          return(result)
                            # this is already maxim object
@@ -212,9 +252,12 @@ maxOptim <- function(fn, grad, hess,
    estimate <- start
    estimate[ !fixed ] <- result$par
    ## Calculate the final gradient
-   gradient <- callWithoutSumt( estimate, "logLikGrad",
-                               fnOrig = fn, gradOrig = grad, hessOrig = hess, sumObs = FALSE,
-                               ... )
+   argList <- list(estimate, "logLikGrad",
+              fnOrig = fn, gradOrig = grad, hessOrig = hess, sumObs = FALSE)
+   if(length(dddot) > 0) {
+      argList <- c(argList, dddot)
+   }
+   gradient <- do.call(callWithoutSumt, argList)
    if(observationGradient(gradient, length(start))) {
       gradientObs <- gradient
       gradient <- colSums(as.matrix(gradient ))
@@ -232,8 +275,12 @@ maxOptim <- function(fn, grad, hess,
          warning("For computing the final Hessian by 'BHHH' method, the log-likelihood or gradient must be supplied by observations")
       }
    } else if(finalHessian != FALSE) {
-      hessian <- as.matrix( logLikHess( estimate, fnOrig = fn,  gradOrig = grad,
-                            hessOrig = hess, ... ) )
+      argList <- list( estimate, fnOrig = fn,  gradOrig = grad,
+                            hessOrig = hess)
+      if(length(dddot) > 0) {
+         argList <- c(argList, dddot)
+      }
+      hessian <- as.matrix( do.call(logLikHess, argList) )
    } else {
        hessian <- NULL
    }

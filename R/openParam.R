@@ -18,7 +18,8 @@ openParam <- function(object) {
      "lambda0",
      "lambdaStep",
      "maxLambda",
-                           #
+     ## optim Nelder-Mead
+     "alpha", "beta", "gamma",
      "iterlim",
      "printLevel", "print.level")
 }

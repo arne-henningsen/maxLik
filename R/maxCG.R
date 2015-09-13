@@ -1,14 +1,11 @@
 maxCG <- function(fn, grad=NULL, hess=NULL,
                   start, fixed = NULL,
-                  print.level=0,
-                  iterlim=500,
+                  control=NULL,
                   constraints=NULL,
-                  tol=1e-8, reltol=tol,
                   finalHessian=TRUE,
                   parscale=rep(1, length=length(start)),
-                  alpha=1, beta=0.5, gamma=2,
                   ...) {
-   ## Wrapper of optim-based 'Nelder-Mead' optimization
+   ## Wrapper of optim-based 'Conjugate Gradient' optimization
    ## 
    ## contraints    constraints to be passed to 'constrOptim'
    ## hessian:   how (and if) to calculate the final Hessian:
@@ -18,15 +15,24 @@ maxCG <- function(fn, grad=NULL, hess=NULL,
    ## ... :      further arguments to fn()
    ##
    ## Note: grad and hess are for compatibility only, SANN uses only fn values
-
+   ##
+   if(!inherits(control, "MaxControl")) {
+      mControl <- addControlList(maxControl(iterlim=500), control)
+                           # default values
+   }
+   else {
+      mControl <- control
+   }
+                           # default, user values
+   mControl <- maxControl(mControl, ...)
+                           # open values
    result <- maxOptim( fn = fn, grad = grad, hess = hess,
-      start = start, method = "CG", fixed = fixed,
-      print.level = print.level, iterlim = iterlim, constraints = constraints,
-      tol = tol, reltol = reltol,
+                      start = start, method = "CG", fixed = fixed,
+                      constraints = constraints,
                       finalHessian=finalHessian,
                       parscale = parscale,
-      alpha = alpha, beta = beta, gamma = gamma,
-      ... )
+                      control=mControl,
+                      ... )
 
    return(result)
 }

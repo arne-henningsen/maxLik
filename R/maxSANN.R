@@ -1,9 +1,7 @@
 maxSANN <- function(fn, grad=NULL, hess=NULL,
                     start, fixed = NULL,
-                    print.level=0,
-                    iterlim=10000,
+                    control=NULL,
                     constraints = NULL,
-                    tol=1e-8, reltol=tol,
                     finalHessian=TRUE,
                     cand = NULL,
                     temp=10, tmax=10, parscale=rep(1, length=length(start)),
@@ -19,7 +17,14 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    ## ... : further arguments to fn()
    ##
    ## Note: grad and hess are for compatibility only, SANN uses only fn values
-
+   if(!inherits(control, "MaxControl")) {
+      mControl <- addControlList(maxControl(iterlim=10000L), control)
+                           # default values
+   }
+   else {
+      mControl <- control
+   }
+   mControl <- maxControl(mControl, ...)
    # save seed of the random number generator
    if( exists( ".Random.seed" ) ) {
       savedSeed <- .Random.seed
@@ -38,11 +43,11 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
 
    result <- maxOptim( fn = fn, grad = grad, hess = hess,
       start = start, method = "SANN", fixed = fixed,
-      print.level = print.level, iterlim = iterlim, constraints = constraints,
-      tol = tol, reltol = reltol,
+                      constraints = constraints,
                       finalHessian=finalHessian,
                       parscale = parscale,
       temp = temp, tmax = tmax, random.seed = random.seed, cand = cand,
+                      control=mControl,
       ... )
 
    return(result)
