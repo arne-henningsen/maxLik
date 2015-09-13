@@ -1,4 +1,7 @@
-maxControl <- function(...) {
+
+### Default constructor of MaxControl object:
+### take a list of parameters and overwrite the default values
+maxControl.default <- function(...) {
    ## extract MaxControl arguments and add these to the control list
    ## 
    result <- new("MaxControl")
@@ -23,3 +26,11 @@ maxControl <- function(...) {
    validObject(result)
    return(result)
 }
+
+### Standard method for any arguments
+setGeneric("maxControl",
+           function(x, ...) standardGeneric("maxControl")
+           )
+
+### Method for missing arguments: just default values
+setMethod("maxControl", "missing", maxControl.default)

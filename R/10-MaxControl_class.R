@@ -82,7 +82,11 @@ setClass("MaxControl",
              lambda0="numeric",
              lambdaStep="numeric",
              maxLambda="numeric",
-                           #
+         ## Optim Nelder-Mead:
+         alpha="numeric",
+         beta="numeric",
+         gamma="numeric",
+         ##
              iterlim="integer",
              ##
              printLevel="integer"),
@@ -99,6 +103,10 @@ setClass("MaxControl",
              lambda0=1e-2,
              lambdaStep=2,
              maxLambda=1e12,
+         ## Optim Nelder-Mead
+         alpha=1,
+         beta=0.5,
+         gamma=2,
                            #
              iterlim=150L,
              printLevel=0L),
