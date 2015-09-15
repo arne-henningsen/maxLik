@@ -4,7 +4,7 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start,
                   bhhhHessian=FALSE,
                   fixed=NULL,
                   activePar=NULL,
-                  control=maxControl(),
+                  control=NULL,
                   ...) {
    ## Newton-Raphson maximisation
    ## Parameters:
@@ -58,13 +58,15 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start,
    ## ------------------------------
    ## Add parameters from ... to control
    if(!inherits(control, "MaxControl")) {
-      stop("'control' must be a 'MaxControl' object, created by 'maxControl()'")
+      mControl <- addControlList(maxControl(), control)
    }
-   control <- maxControl(control, ...)
+   else {
+      mControl <- control
+   }
    ##
    argNames <- c(c("fn", "grad", "hess", "start",
                    "activePar", "fixed", "control"),
-                 openParam(control))
+                 openParam(mControl))
                            # Here we allow to submit all parameters outside of the
                            # 'control' list.  May eventually include only a
                            # subset here
@@ -82,12 +84,12 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start,
       fixed = fixed )
    ## chop off the control args from ... and forward the new ...
    dddot <- list(...)
-   dddot <- dddot[!(names(dddot) %in% openParam(control))]
+   dddot <- dddot[!(names(dddot) %in% openParam(mControl))]
    cl <- list(start=start,
               finalHessian=finalHessian,
               bhhhHessian=bhhhHessian,
               fixed=fixed,
-              control=control)
+              control=mControl)
    if(length(dddot) > 0) {
       cl <- c(cl, dddot)
    }
@@ -120,3 +122,4 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start,
    }
    return( result )
 }
+

@@ -14,7 +14,7 @@
 \usage{
 maxNR(fn, grad = NULL, hess = NULL, start,
       constraints = NULL, finalHessian = TRUE, bhhhHessian=FALSE,
-      fixed = NULL, activePar = NULL, control=maxControl(), ... )
+      fixed = NULL, activePar = NULL, control=NULL, ... )
 maxBFGSR(fn, grad = NULL, hess = NULL, start,
       constraints = NULL, finalHessian = TRUE,
       fixed = NULL, activePar = NULL, control=maxControl(), ... )
