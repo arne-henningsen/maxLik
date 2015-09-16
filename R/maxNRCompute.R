@@ -372,8 +372,8 @@ maxNRCompute <- function(fn,
       if(is.null(newVal) && sum(f1) - sum(f0) < slot(control, "tol")) {
          code <- 2; break
       }
-      if(is.null(newVal) && sum(f1) - sum(f0) <
-         slot(control, "reltol")*( sum(f1) + slot(control, "reltol"))) {
+      if(is.null(newVal) && abs(sum(f1) - sum(f0)) <
+         abs(slot(control, "reltol")*( sum(f1) + slot(control, "reltol")))) {
          code <- 2; break
       }
       if(any(is.infinite(f1)) && sum(f1) > 0) {
@@ -425,22 +425,24 @@ maxNRCompute <- function(fn,
    attributes( f1 )$hessBoth <- NULL
    ##
    result <-list(
-                  maximum = unname( drop( f1 ) ),
+       maximum = unname( drop( f1 ) ),
                   estimate=start1,
                   gradient=drop(G1),
                  hessian=hessian,
                   code=code,
-                  message=maximMessage( code),
+       message=maximMessage( code),
                   last.step=samm,
-                                        # only when could not find a
-                                        # lower point
+                           # only when could not find a
+                           # lower point
                   fixed=fixed,
-                  iterations=iter,
+       iterations=iter,
                   type=maximType)
    if( exists( "gradientObs" ) ) {
       result$gradientObs <- gradientObs
    }
-
+   result <- c(result, control=control)
+                           # attach the control parameters
+   ##
    class(result) <- c("maxim", class(result))
    invisible(result)
 }

@@ -86,9 +86,6 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
     to \code{\link{sumt}}, the inequality-constrained case to
     \code{\link{constrOptim2}}.
   }
-  \item{tol, reltol}{the relative convergence tolerance (see
-    \code{\link{optim}}).  \code{tol} is for compatibility with
-    \code{\link{maxNR}}.}
   \item{finalHessian}{how (and if) to calculate the final Hessian.  Either
   \code{FALSE} (not calculate), \code{TRUE} (use analytic/numeric
   Hessian) or \code{"bhhh"}/\code{"BHHH"} for information equality

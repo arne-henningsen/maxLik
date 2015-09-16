@@ -63,6 +63,7 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start,
    else {
       mControl <- control
    }
+   mControl <- maxControl(mControl, ...)
    ##
    argNames <- c(c("fn", "grad", "hess", "start",
                    "activePar", "fixed", "control"),
