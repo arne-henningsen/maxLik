@@ -1,7 +1,7 @@
 
-R version 3.2.0 (2015-04-16) -- "Full of Ingredients"
-Copyright (C) 2015 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+R version 3.1.1 (2014-07-10) -- "Sock it to Me"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -258,7 +258,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > nObs( mlInd )
 [1] 100
 > ## Marquardt (1963) correction
-> mlM <- maxLik( llf, start = startVal, guessCorrection="marquardt")
+> mlM <- maxLik( llf, start = startVal, qac="marquardt")
 > print(coef(mlM))
    mu sigma 
 1.181 1.816 
@@ -412,7 +412,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > # with analytical gradients as argument and attribute
 > mlgG <- maxLik( llfGrad, gf, start = startVal )
 Warning message:
-In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+In maxNRCompute(fn = function (theta, fnOrig, gradOrig = NULL, hessOrig = NULL,  :
   the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
 > all.equal( mlgG, mlg, tolerance = 1e-3 )
 [1] TRUE
@@ -432,9 +432,9 @@ In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess, 
 > # with analytical gradients and Hessian as argument and attribute
 > mlgGhH <- maxLik( llfGradHess, gf, hf, start = startVal )
 Warning messages:
-1: In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+1: In maxNRCompute(fn = function (theta, fnOrig, gradOrig = NULL, hessOrig = NULL,  :
   the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
-2: In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+2: In maxNRCompute(fn = function (theta, fnOrig, gradOrig = NULL, hessOrig = NULL,  :
   the Hessian is provided both as attribute 'hessian' and as argument 'hess': ignoring argument 'hess'
 > all.equal( mlgGhH, mlgh, tolerance = 1e-3 )
 [1] TRUE
@@ -461,14 +461,14 @@ Estimate(s): 0.2158 0.3302
 > mlBHHH <- maxLik( llfInd, start = startVal, method = "BHHH" )
 > print( mlBHHH )
 Maximum Likelihood estimation
-BHHH maximisation, 13 iterations
+BHHH maximisation, 12 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.6 (2 free parameter(s))
 Estimate(s): 1.181 1.816 
 > print( summary( mlBHHH ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-BHHH maximisation, 13 iterations
+BHHH maximisation, 12 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.6 
 2  free parameters
@@ -501,7 +501,7 @@ attr(,"type")
 > maximType( mlBHHH )
 [1] "BHHH maximisation"
 > nIter( mlBHHH )
-[1] 13
+[1] 12
 > nParam( mlBHHH )
 [1] 2
 > returnCode( mlBHHH )
@@ -632,7 +632,7 @@ sigma   0.0 -60.6
 > print( summary( mlBhhhH ) , digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-BHHH maximisation, 13 iterations
+BHHH maximisation, 12 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.6 
 2  free parameters
@@ -644,7 +644,7 @@ sigma     1.82       0.13    14.1  <2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > ## Marquardt (1963) correction
-> mlBHHHM <- maxLik( llfInd, start = startVal, method = "BHHH", guessCorrect="marquardt")
+> mlBHHHM <- maxLik( llfInd, start = startVal, method = "BHHH", qac="marquardt")
 > print(coef(mlBHHHM))
    mu sigma 
 1.181 1.816 
@@ -697,7 +697,7 @@ Estimate(s): 0.2158 0.3302
 > print( summary( mlgBHHH ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-BHHH maximisation, 13 iterations
+BHHH maximisation, 12 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -201.6 
 2  free parameters
@@ -821,7 +821,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > mlgBhhhH <- maxLik( llf, gfInd, start = startVal, method = "BHHH", 
 +    finalHessian = TRUE )
 > all.equal( mlgBhhhH, mlBhhhH, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"hessian\": Mean relative difference: 0.001233"
 > all.equal( mlgBhhhH[-4], mlgBHHH[-4], tolerance = 1e-3 )
 [1] TRUE
 > round( hessian( mlgBhhhH ), 1 )
@@ -882,7 +882,7 @@ Estimate(s): 0.2158 0.3302
 > # with analytical gradients as argument and attribute
 > mlgGBHHH <- maxLik( llfGradInd, gfInd, start = startVal, method = "BHHH" )
 Warning message:
-In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+In maxNRCompute(fn = function (theta, fnOrig, gradOrig = NULL, hessOrig = NULL,  :
   the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
 > all.equal( mlgGBHHH, mlgBHHH, tolerance = 1e-3 )
 [1] TRUE
@@ -914,9 +914,9 @@ In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess, 
 > # with analytical gradients and Hessian as argument and attribute
 > mlgGhHBHHH <- maxLik( llfGradHessInd, gfInd, hf, start = startVal, method = "BHHH" )
 Warning messages:
-1: In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+1: In maxNRCompute(fn = function (theta, fnOrig, gradOrig = NULL, hessOrig = NULL,  :
   the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
-2: In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+2: In maxNRCompute(fn = function (theta, fnOrig, gradOrig = NULL, hessOrig = NULL,  :
   the Hessian is provided both as attribute 'hessian' and as argument 'hess': ignoring argument 'hess'
 > all.equal( mlgGhHBHHH, mlghBHHH, tolerance = 1e-3 )
 [1] TRUE
@@ -1162,13 +1162,13 @@ sigma     1.82       0.13    14.1  <2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlBFGSYC[-4], mlgBFGSYC[-4], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"control\": Attributes: < Component \"printLevel\": Mean absolute difference: 1 >"
 > mlgIndBFGSYC <- maxLik( llfInd, gfInd, start = startVal,
 +    method = "BFGSR" )
 > all.equal( mlIndBFGSYC, mlgIndBFGSYC, tolerance = 1e-3 )
-[1] "Component \"hessian\": Mean relative difference: 0.001516"
-> all.equal( mlgBFGSYC[ -c(3,9) ], mlgIndBFGSYC[ -c(3,9,11) ], tolerance = 1e-3 )
 [1] TRUE
+> all.equal( mlgBFGSYC[ -c(3,9) ], mlgIndBFGSYC[ -c(3,9,11) ], tolerance = 1e-3 )
+[1] "Component \"control\": Attributes: < Component \"printLevel\": Mean relative difference: 1 >"
 > round( mlgIndBFGSYC[[ 11 ]], 3 )
            mu  sigma
   [1,] -0.395 -0.268
@@ -1319,17 +1319,17 @@ Function value: -201.6
 > # with analytical gradients as argument and attribute
 > mlgGBFGSYC <- maxLik( llfGrad, gf, start = startVal, method = "BFGSR" )
 Warning message:
-In maxBFGSRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad,  :
+In maxBFGSRCompute(fn = function (theta, fnOrig, gradOrig = NULL,  :
   the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
 > all.equal( mlgGBFGSYC, mlgBFGSYC, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"control\": Attributes: < Component \"printLevel\": Mean absolute difference: 1 >"
 > all.equal( mlgGBFGSYC, mlGBFGSYC, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"control\": Attributes: < Component \"printLevel\": Mean absolute difference: 1 >"
 > 
 > # with analytical gradients and Hessians
 > mlghBFGSYC <- maxLik( llf, gf, hf, start = startVal, method = "BFGSR" )
 > all.equal( mlgBFGSYC, mlghBFGSYC, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"control\": Attributes: < Component \"printLevel\": Mean relative difference: 1 >"
 > 
 > # with analytical gradients and Hessian as attribute
 > mlGHBFGSYC <- maxLik( llfGradHess, start = startVal, method = "BFGSR" )
@@ -1339,9 +1339,9 @@ In maxBFGSRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad,  :
 > # with analytical gradients and Hessian as argument and attribute
 > mlgGhHBFGSYC <- maxLik( llfGradHess, gf, hf, start = startVal, method = "BFGSR" )
 Warning messages:
-1: In maxBFGSRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad,  :
+1: In maxBFGSRCompute(fn = function (theta, fnOrig, gradOrig = NULL,  :
   the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
-2: In maxBFGSRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad,  :
+2: In maxBFGSRCompute(fn = function (theta, fnOrig, gradOrig = NULL,  :
   the Hessian is provided both as attribute 'hessian' and as argument 'hess': ignoring argument 'hess'
 > all.equal( mlgGhHBFGSYC, mlghBFGSYC, tolerance = 1e-3 )
 [1] TRUE
@@ -1353,14 +1353,14 @@ Warning messages:
 > mlBFGS <- maxLik( llf, start = startVal, method = "BFGS" )
 > print( mlBFGS )
 Maximum Likelihood estimation
-BFGS maximisation, 36 iterations
+BFGS maximization, 36 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 (2 free parameter(s))
 Estimate(s): 1.181 1.816 
 > print( summary( mlBFGS ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 36 iterations
+BFGS maximization, 36 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 
 2  free parameters
@@ -1389,7 +1389,7 @@ sigma   0.0 -60.6
 > logLik( mlBFGS )
 [1] -201.6
 > maximType( mlBFGS )
-[1] "BFGS maximisation"
+[1] "BFGS maximization"
 > nIter( mlBFGS )
 function 
       36 
@@ -1406,13 +1406,13 @@ sigma 0.000 0.016
 > logLik( summary( mlBFGS ) )
 [1] -201.6
 > all.equal( ml[-c(4,5,6,9,10)], mlBFGS[-c(4,5,6,9,10,11)], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"control\": Attributes: < Component \"iterlim\": Mean relative difference: 0.3333 >"
 > # with individual log likelihood values
 > mlIndBFGS <- maxLik( llfInd, start = startVal, method = "BFGS" )
 > print( summary( mlIndBFGS ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 36 iterations
+BFGS maximization, 36 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 
 2  free parameters
@@ -1537,7 +1537,7 @@ $gradientObs
 > print( summary( mlgBFGS ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 36 iterations
+BFGS maximization, 36 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 
 2  free parameters
@@ -1551,7 +1551,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > all.equal( mlBFGS[-4], mlgBFGS[-4], tolerance = 1e-3 )
 [1] TRUE
 > all.equal( mlg[-c(5,6,9,10)], mlgBFGS[-c(5,6,9,10,11)], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"control\": Attributes: < Component \"iterlim\": Mean relative difference: 0.3333 >"
 > mlgIndBFGS <- maxLik( llfInd, gfInd, start = startVal, method = "BFGS" )
 > all.equal( mlgBFGS[], mlgIndBFGS[-12], tolerance = 1e-3 )
 [1] TRUE
@@ -1705,14 +1705,14 @@ Warning messages:
 > mlNM <- maxLik( llf, start = startVal, method = "NM" )
 > print( mlNM )
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 63 iterations
+Nelder-Mead maximization, 63 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 (2 free parameter(s))
 Estimate(s): 1.181 1.817 
 > print( summary( mlNM ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 63 iterations
+Nelder-Mead maximization, 63 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 
 2  free parameters
@@ -1741,7 +1741,7 @@ sigma   0.0 -60.6
 > logLik( mlNM )
 [1] -201.6
 > maximType( mlNM )
-[1] "Nelder-Mead maximisation"
+[1] "Nelder-Mead maximization"
 > nIter( mlNM )
 function 
       63 
@@ -1758,13 +1758,13 @@ sigma 0.000 0.017
 > logLik( summary( mlNM ) )
 [1] -201.6
 > all.equal( ml[-c(3,4,5,6,9,10)], mlNM[-c(3,4,5,6,9,10,11)], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"control\": Attributes: < Component \"iterlim\": Mean relative difference: 2.333 >"
 > # with individual log likelihood values
 > mlIndNM <- maxLik( llfInd, start = startVal, method = "NM" )
 > print( summary( mlIndNM ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 63 iterations
+Nelder-Mead maximization, 63 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 
 2  free parameters
@@ -1889,7 +1889,7 @@ $gradientObs
 > print( summary( mlgNM ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 63 iterations
+Nelder-Mead maximization, 63 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 
 2  free parameters
@@ -1907,7 +1907,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > print( summary( mlgIndNM ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 63 iterations
+Nelder-Mead maximization, 63 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 
 2  free parameters
@@ -2053,14 +2053,14 @@ In maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "Nelder-M
 > mlSANN <- maxLik( llf, start = startVal, method = "SANN" )
 > print( mlSANN )
 Maximum Likelihood estimation
-SANN maximisation, 10000 iterations
+SANN maximization, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 (2 free parameter(s))
 Estimate(s): 1.182 1.817 
 > print( summary( mlSANN ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-SANN maximisation, 10000 iterations
+SANN maximization, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 
 2  free parameters
@@ -2089,7 +2089,7 @@ sigma   0.1 -60.6
 > logLik( mlSANN )
 [1] -201.6
 > maximType( mlSANN )
-[1] "SANN maximisation"
+[1] "SANN maximization"
 > nIter( mlSANN )
 function 
    10000 
@@ -2106,13 +2106,13 @@ sigma 0.000 0.017
 > logLik( summary( mlSANN ) )
 [1] -201.6
 > all.equal( ml[-c(3,4,5,6,9,10)], mlSANN[-c(3,4,5,6,9,10,11)], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"control\": Attributes: < Component \"iterlim\": Mean relative difference: 65.67 >"
 > # with individual log likelihood values
 > mlIndSANN <- maxLik( llfInd, start = startVal, method = "SANN" )
 > print( summary( mlIndSANN ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-SANN maximisation, 10000 iterations
+SANN maximization, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 
 2  free parameters
@@ -2237,7 +2237,7 @@ $gradientObs
 > print( summary( mlgSANN ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-SANN maximisation, 10000 iterations
+SANN maximization, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 
 2  free parameters
@@ -2255,7 +2255,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > print( summary( mlgIndSANN ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-SANN maximisation, 10000 iterations
+SANN maximization, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 
 2  free parameters
@@ -2384,7 +2384,7 @@ $gradientObs
 > print( summary( mlSANNCand ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-SANN maximisation, 10000 iterations
+SANN maximization, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 
 2  free parameters
@@ -2421,15 +2421,15 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] TRUE
 > print( mlFix )
 Maximum Likelihood estimation
-Newton-Raphson maximisation, 7 iterations
-Return code 1: gradient close to zero
+Newton-Raphson maximisation, 6 iterations
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -202.1 (1 free parameter(s))
 Estimate(s): 1 1.825 
 > print( summary( mlFix ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-Newton-Raphson maximisation, 7 iterations
-Return code 1: gradient close to zero
+Newton-Raphson maximisation, 6 iterations
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -202.1 
 1  free parameters
 Estimates:
@@ -2458,13 +2458,13 @@ sigma NA   -60
 > maximType( mlFix )
 [1] "Newton-Raphson maximisation"
 > nIter( mlFix )
-[1] 7
+[1] 6
 > nParam( mlFix )
 [1] 2
 > returnCode( mlFix )
-[1] 1
+[1] 2
 > returnMessage( mlFix )
-[1] "gradient close to zero"
+[1] "successive function values within tolerance limit"
 > round( vcov( mlFix ), 3 )
       mu sigma
 mu     0 0.000
@@ -2487,8 +2487,8 @@ sigma  0 0.017
 > print( summary( mlIndFix ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-Newton-Raphson maximisation, 7 iterations
-Return code 1: gradient close to zero
+Newton-Raphson maximisation, 6 iterations
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -202.1 
 1  free parameters
 Estimates:
@@ -2505,7 +2505,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
    NA     0 
 > round( mlIndFix[[3]], 5 )
    mu sigma 
-   NA     0 
+   NA 1e-05 
 > round( mlIndFix[[ 11 ]], 3 )
        mu  sigma
   [1,] NA -0.341
@@ -2622,8 +2622,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > print( summary( mlgFix ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-Newton-Raphson maximisation, 7 iterations
-Return code 1: gradient close to zero
+Newton-Raphson maximisation, 6 iterations
+Return code 2: successive function values within tolerance limit
 Log-Likelihood: -202.1 
 1  free parameters
 Estimates:
@@ -2775,14 +2775,14 @@ sigma NA -60.02
 [1] TRUE
 > print( mlFixBHHH )
 Maximum Likelihood estimation
-BHHH maximisation, 10 iterations
+BHHH maximisation, 9 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -202.1 (1 free parameter(s))
 Estimate(s): 1 1.825 
 > print( summary( mlFixBHHH ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-BHHH maximisation, 10 iterations
+BHHH maximisation, 9 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -202.1 
 1  free parameters
@@ -2814,7 +2814,7 @@ attr(,"type")
 > maximType( mlFixBHHH )
 [1] "BHHH maximisation"
 > nIter( mlFixBHHH )
-[1] 10
+[1] 9
 > nParam( mlFixBHHH )
 [1] 2
 > returnCode( mlFixBHHH )
@@ -2957,7 +2957,7 @@ sigma  0 0.018
 > print( summary( mlgFixBHHH ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-BHHH maximisation, 10 iterations
+BHHH maximisation, 9 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -202.1 
 1  free parameters
@@ -2994,14 +2994,14 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] TRUE
 > print( mlFixBfgs )
 Maximum Likelihood estimation
-BFGS maximisation, 27 iterations
+BFGS maximization, 27 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -202.1 (1 free parameter(s))
 Estimate(s): 1 1.825 
 > print( summary( mlFixBfgs ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 27 iterations
+BFGS maximization, 27 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -202.1 
 1  free parameters
@@ -3029,7 +3029,7 @@ sigma  -5.9 -60.0
 > logLik( mlFixBfgs )
 [1] -202.1
 > maximType( mlFixBfgs )
-[1] "BFGS maximisation"
+[1] "BFGS maximization"
 > nIter( mlFixBfgs )
 function 
       27 
@@ -3047,8 +3047,9 @@ sigma  0 0.017
 [1] -202.1
 > all.equal( mlghFix[ -c( 5, 6, 9, 10 ) ], mlFixBfgs[ -c( 5, 6, 9, 10, 11 ) ],
 +    tolerance = 1e-3 )
-[1] "Component \"gradient\": 'is.NA' value mismatch: 0 in current 1 in target"
-[2] "Component \"hessian\": 'is.NA' value mismatch: 0 in current 3 in target" 
+[1] "Component \"gradient\": 'is.NA' value mismatch: 0 in current 1 in target"                      
+[2] "Component \"hessian\": 'is.NA' value mismatch: 0 in current 3 in target"                       
+[3] "Component \"control\": Attributes: < Component \"iterlim\": Mean relative difference: 0.3333 >"
 > mlIndFixBfgs <- maxLik( llfInd, start = startValFix, fixed = isFixed,
 +    method = "BFGS" )
 > all.equal( mlFixBfgs[-c(4,9)], mlIndFixBfgs[ -c(4,9,12) ], tolerance = 1e-3 )
@@ -3181,7 +3182,7 @@ sigma  0 0.017
 > print( summary( mlgFixBfgs ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 27 iterations
+BFGS maximization, 27 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -202.1 
 1  free parameters
@@ -3327,13 +3328,13 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > mlFixNm <- maxLik( llf, start = startValFix, fixed = isFixed,
 +    method = "NM" )
 Warning message:
-In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+In optim(par = 1, fn = function (theta, fnOrig, gradOrig, hessOrig,  :
   one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > mlFixNm3 <- maxLik( llf, start = startValFix, fixed = "mu",
 +    method = "NM" )
 Warning message:
-In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+In optim(par = 1, fn = function (theta, fnOrig, gradOrig, hessOrig,  :
   one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlFixNm, mlFixNm3, tolerance = 1e-3 )
@@ -3341,21 +3342,21 @@ use "Brent" or optimize() directly
 > mlFixNm4 <- maxLik( llf, start = startValFix, fixed = 1,
 +    method = "NM" )
 Warning message:
-In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+In optim(par = 1, fn = function (theta, fnOrig, gradOrig, hessOrig,  :
   one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlFixNm, mlFixNm4, tolerance = 1e-3 )
 [1] TRUE
 > print( mlFixNm )
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 28 iterations
+Nelder-Mead maximization, 24 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -202.1 (1 free parameter(s))
-Estimate(s): 1 1.825 
+Estimate(s): 1 1.826 
 > print( summary( mlFixNm ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 28 iterations
+Nelder-Mead maximization, 24 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -202.1 
 1  free parameters
@@ -3373,20 +3374,20 @@ FALSE  TRUE
 [1] 406.2
 > coef( mlFixNm )
    mu sigma 
-1.000 1.825 
+1.000 1.826 
 > condiNumber( mlFixNm, digits = 3 )
 sigma 	 1 
 > round( hessian( mlFixNm ), 1 )
          mu sigma
 mu    -30.0  -5.9
-sigma  -5.9 -60.1
+sigma  -5.9 -60.0
 > logLik( mlFixNm )
 [1] -202.1
 > maximType( mlFixNm )
-[1] "Nelder-Mead maximisation"
+[1] "Nelder-Mead maximization"
 > nIter( mlFixNm )
 function 
-      28 
+      24 
 > nParam( mlFixNm )
 [1] 2
 > returnCode( mlFixNm )
@@ -3400,11 +3401,12 @@ sigma  0 0.017
 > logLik( summary( mlFixNm ) )
 [1] -202.1
 > all.equal( mlFixBfgs[ -c(4,9,10) ], mlFixNm[ -c(4,9,10) ], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"gradient\": Mean relative difference: 0.003935"                                 
+[2] "Component \"control\": Attributes: < Component \"iterlim\": Mean relative difference: 1.5 >"
 > mlIndFixNm <- maxLik( llfInd, start = startValFix, fixed = isFixed,
 +    method = "NM" )
 Warning message:
-In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+In optim(par = 1, fn = function (theta, fnOrig, gradOrig, hessOrig,  :
   one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlFixNm[-4], mlIndFixNm[-c(4,12)], tolerance = 1e-3 )
@@ -3413,36 +3415,36 @@ use "Brent" or optimize() directly
            mu  sigma
   [1,] -0.336 -0.341
   [2,] -0.138 -0.513
-  [3,]  0.936  1.050
-  [4,]  0.042 -0.545
+  [3,]  0.935  1.049
+  [4,]  0.042 -0.544
   [5,]  0.078 -0.537
-  [6,]  1.029  1.387
+  [6,]  1.029  1.385
   [7,]  0.277 -0.408
-  [8,] -0.759  0.505
+  [8,] -0.759  0.504
   [9,] -0.412 -0.238
- [10,] -0.268 -0.417
- [11,]  0.735  0.438
+ [10,] -0.267 -0.417
+ [11,]  0.734  0.437
  [12,]  0.216 -0.463
- [13,]  0.241 -0.442
+ [13,]  0.240 -0.442
  [14,]  0.066 -0.540
- [15,] -0.334 -0.345
- [16,]  1.073  1.552
+ [15,] -0.333 -0.345
+ [16,]  1.072  1.551
  [17,]  0.299 -0.385
- [18,] -1.180  1.996
+ [18,] -1.180  1.994
  [19,]  0.421 -0.224
  [20,] -0.284 -0.401
  [21,] -0.641  0.202
- [22,] -0.131 -0.517
+ [22,] -0.131 -0.516
  [23,] -0.616  0.144
- [24,] -0.438 -0.198
+ [24,] -0.437 -0.199
  [25,] -0.375 -0.291
- [26,] -1.012  1.323
+ [26,] -1.012  1.322
  [27,]  0.503 -0.086
  [28,]  0.092 -0.532
  [29,] -0.683  0.304
- [30,]  0.753  0.486
+ [30,]  0.752  0.485
  [31,]  0.256 -0.428
- [32,] -0.177 -0.491
+ [32,] -0.177 -0.490
  [33,]  0.537 -0.021
  [34,]  0.527 -0.041
  [35,]  0.493 -0.104
@@ -3451,12 +3453,12 @@ use "Brent" or optimize() directly
  [38,] -0.037 -0.545
  [39,] -0.184 -0.486
  [40,] -0.228 -0.453
- [41,] -0.417 -0.230
+ [41,] -0.417 -0.231
  [42,] -0.125 -0.519
- [43,] -0.760  0.505
- [44,]  1.302  2.546
- [45,]  0.725  0.412
- [46,] -0.674  0.282
+ [43,] -0.759  0.505
+ [44,]  1.301  2.544
+ [45,]  0.725  0.411
+ [46,] -0.674  0.281
  [47,] -0.242 -0.441
  [48,] -0.280 -0.405
  [49,]  0.468 -0.148
@@ -3464,31 +3466,31 @@ use "Brent" or optimize() directly
  [51,]  0.152 -0.506
  [52,] -0.017 -0.547
  [53,] -0.026 -0.547
- [54,]  0.821  0.684
- [55,] -0.136 -0.514
- [56,]  0.910  0.965
- [57,] -0.930  1.030
+ [54,]  0.821  0.683
+ [55,] -0.135 -0.514
+ [56,]  0.910  0.964
+ [57,] -0.929  1.029
  [58,]  0.351 -0.323
  [59,]  0.074 -0.538
  [60,]  0.130 -0.517
  [61,]  0.228 -0.453
- [62,] -0.302 -0.382
+ [62,] -0.301 -0.382
  [63,] -0.200 -0.475
  [64,] -0.611  0.134
- [65,] -0.643  0.208
+ [65,] -0.643  0.207
  [66,]  0.182 -0.487
  [67,]  0.269 -0.416
  [68,]  0.032 -0.546
- [69,]  0.554  0.012
- [70,]  1.231  2.216
+ [69,]  0.553  0.011
+ [70,]  1.230  2.215
  [71,] -0.295 -0.389
- [72,] -1.386  2.959
- [73,]  0.604  0.117
+ [72,] -1.385  2.957
+ [73,]  0.603  0.117
  [74,] -0.426 -0.217
  [75,] -0.413 -0.237
- [76,]  0.616  0.144
+ [76,]  0.615  0.144
  [77,] -0.171 -0.494
- [78,] -0.733  0.432
+ [78,] -0.732  0.432
  [79,]  0.109 -0.526
  [80,] -0.083 -0.535
  [81,]  0.003 -0.548
@@ -3500,21 +3502,21 @@ use "Brent" or optimize() directly
  [87,]  0.658  0.243
  [88,]  0.261 -0.423
  [89,] -0.196 -0.478
- [90,]  0.690  0.320
+ [90,]  0.689  0.320
  [91,]  0.596  0.101
  [92,]  0.329 -0.350
  [93,]  0.143 -0.510
  [94,] -0.377 -0.289
- [95,]  0.817  0.670
+ [95,]  0.816  0.669
  [96,] -0.360 -0.311
- [97,]  1.313  2.599
- [98,]  0.920  0.997
+ [97,]  1.312  2.597
+ [98,]  0.920  0.996
  [99,] -0.141 -0.511
 [100,] -0.616  0.145
 > mlIndFixNm3 <- maxLik( llfInd, start = startValFix, fixed = "mu",
 +    method = "NM" )
 Warning message:
-In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+In optim(par = 1, fn = function (theta, fnOrig, gradOrig, hessOrig,  :
   one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlIndFixNm, mlIndFixNm3, tolerance = 1e-3 )
@@ -3522,7 +3524,7 @@ use "Brent" or optimize() directly
 > mlIndFixNm4 <- maxLik( llfInd, start = startValFix, fixed = 1,
 +    method = "NM" )
 Warning message:
-In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+In optim(par = 1, fn = function (theta, fnOrig, gradOrig, hessOrig,  :
   one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlIndFixNm, mlIndFixNm4, tolerance = 1e-3 )
@@ -3534,13 +3536,13 @@ use "Brent" or optimize() directly
 > mlgFixNm <- maxLik( llf, gf, start = startValFix, fixed = isFixed,
 +    method = "NM" )
 Warning message:
-In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+In optim(par = 1, fn = function (theta, fnOrig, gradOrig, hessOrig,  :
   one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > mlgFixNm3 <- maxLik( llf, gf, start = startValFix, fixed = "mu",
 +    method = "NM" )
 Warning message:
-In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+In optim(par = 1, fn = function (theta, fnOrig, gradOrig, hessOrig,  :
   one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlgFixNm, mlgFixNm3, tolerance = 1e-3 )
@@ -3548,7 +3550,7 @@ use "Brent" or optimize() directly
 > mlgFixNm4 <- maxLik( llf, gf, start = startValFix, fixed = 1,
 +    method = "NM" )
 Warning message:
-In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+In optim(par = 1, fn = function (theta, fnOrig, gradOrig, hessOrig,  :
   one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlgFixNm, mlgFixNm4, tolerance = 1e-3 )
@@ -3556,7 +3558,7 @@ use "Brent" or optimize() directly
 > print( summary( mlgFixNm ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 28 iterations
+Nelder-Mead maximization, 24 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -202.1 
 1  free parameters
@@ -3572,7 +3574,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > mlgIndFixNm <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
 +    method = "NM")
 Warning message:
-In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+In optim(par = 1, fn = function (theta, fnOrig, gradOrig, hessOrig,  :
   one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlgFixNm[ ], mlgIndFixNm[ -12 ], tolerance = 1e-3 )
@@ -3581,36 +3583,36 @@ use "Brent" or optimize() directly
            mu  sigma
   [1,] -0.336 -0.341
   [2,] -0.138 -0.513
-  [3,]  0.936  1.050
-  [4,]  0.042 -0.545
+  [3,]  0.935  1.049
+  [4,]  0.042 -0.544
   [5,]  0.078 -0.537
-  [6,]  1.029  1.387
+  [6,]  1.029  1.385
   [7,]  0.277 -0.408
-  [8,] -0.759  0.505
+  [8,] -0.759  0.504
   [9,] -0.412 -0.238
- [10,] -0.268 -0.417
- [11,]  0.735  0.438
+ [10,] -0.267 -0.417
+ [11,]  0.734  0.437
  [12,]  0.216 -0.463
- [13,]  0.241 -0.442
+ [13,]  0.240 -0.442
  [14,]  0.066 -0.540
- [15,] -0.334 -0.345
- [16,]  1.073  1.552
+ [15,] -0.333 -0.345
+ [16,]  1.072  1.551
  [17,]  0.299 -0.385
- [18,] -1.180  1.996
+ [18,] -1.180  1.994
  [19,]  0.421 -0.224
  [20,] -0.284 -0.401
  [21,] -0.641  0.202
- [22,] -0.131 -0.517
+ [22,] -0.131 -0.516
  [23,] -0.616  0.144
- [24,] -0.438 -0.198
+ [24,] -0.437 -0.199
  [25,] -0.375 -0.291
- [26,] -1.012  1.323
+ [26,] -1.012  1.322
  [27,]  0.503 -0.086
  [28,]  0.092 -0.532
  [29,] -0.683  0.304
- [30,]  0.753  0.486
+ [30,]  0.752  0.485
  [31,]  0.256 -0.428
- [32,] -0.177 -0.491
+ [32,] -0.177 -0.490
  [33,]  0.537 -0.021
  [34,]  0.527 -0.041
  [35,]  0.493 -0.104
@@ -3619,12 +3621,12 @@ use "Brent" or optimize() directly
  [38,] -0.037 -0.545
  [39,] -0.184 -0.486
  [40,] -0.228 -0.453
- [41,] -0.417 -0.230
+ [41,] -0.417 -0.231
  [42,] -0.125 -0.519
- [43,] -0.760  0.505
- [44,]  1.302  2.546
- [45,]  0.725  0.412
- [46,] -0.674  0.282
+ [43,] -0.759  0.505
+ [44,]  1.301  2.544
+ [45,]  0.725  0.411
+ [46,] -0.674  0.281
  [47,] -0.242 -0.441
  [48,] -0.280 -0.405
  [49,]  0.468 -0.148
@@ -3632,31 +3634,31 @@ use "Brent" or optimize() directly
  [51,]  0.152 -0.506
  [52,] -0.017 -0.547
  [53,] -0.026 -0.547
- [54,]  0.821  0.684
- [55,] -0.136 -0.514
- [56,]  0.910  0.965
- [57,] -0.930  1.030
+ [54,]  0.821  0.683
+ [55,] -0.135 -0.514
+ [56,]  0.910  0.964
+ [57,] -0.929  1.029
  [58,]  0.351 -0.323
  [59,]  0.074 -0.538
  [60,]  0.130 -0.517
  [61,]  0.228 -0.453
- [62,] -0.302 -0.382
+ [62,] -0.301 -0.382
  [63,] -0.200 -0.475
  [64,] -0.611  0.134
- [65,] -0.643  0.208
+ [65,] -0.643  0.207
  [66,]  0.182 -0.487
  [67,]  0.269 -0.416
  [68,]  0.032 -0.546
- [69,]  0.554  0.012
- [70,]  1.231  2.216
+ [69,]  0.553  0.011
+ [70,]  1.230  2.215
  [71,] -0.295 -0.389
- [72,] -1.386  2.959
- [73,]  0.604  0.117
+ [72,] -1.385  2.957
+ [73,]  0.603  0.117
  [74,] -0.426 -0.217
  [75,] -0.413 -0.237
- [76,]  0.616  0.144
+ [76,]  0.615  0.144
  [77,] -0.171 -0.494
- [78,] -0.733  0.432
+ [78,] -0.732  0.432
  [79,]  0.109 -0.526
  [80,] -0.083 -0.535
  [81,]  0.003 -0.548
@@ -3668,15 +3670,15 @@ use "Brent" or optimize() directly
  [87,]  0.658  0.243
  [88,]  0.261 -0.423
  [89,] -0.196 -0.478
- [90,]  0.690  0.320
+ [90,]  0.689  0.320
  [91,]  0.596  0.101
  [92,]  0.329 -0.350
  [93,]  0.143 -0.510
  [94,] -0.377 -0.289
- [95,]  0.817  0.670
+ [95,]  0.816  0.669
  [96,] -0.360 -0.311
- [97,]  1.313  2.599
- [98,]  0.920  0.997
+ [97,]  1.312  2.597
+ [98,]  0.920  0.996
  [99,] -0.141 -0.511
 [100,] -0.616  0.145
 > 
@@ -3684,7 +3686,7 @@ use "Brent" or optimize() directly
 > mlghFixNm <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
 +    method = "NM" )
 Warning message:
-In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+In optim(par = 1, fn = function (theta, fnOrig, gradOrig, hessOrig,  :
   one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlgFixNm, mlghFixNm, tolerance = 1e-3 )
@@ -3692,7 +3694,7 @@ use "Brent" or optimize() directly
 > mlghFixNm3 <- maxLik( llf, gf, hf, start = startValFix, fixed = "mu",
 +    method = "NM" )
 Warning message:
-In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+In optim(par = 1, fn = function (theta, fnOrig, gradOrig, hessOrig,  :
   one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlghFixNm, mlghFixNm3, tolerance = 1e-3 )
@@ -3700,7 +3702,7 @@ use "Brent" or optimize() directly
 > mlghFixNm4 <- maxLik( llf, gf, hf, start = startValFix, fixed = 1,
 +    method = "NM" )
 Warning message:
-In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+In optim(par = 1, fn = function (theta, fnOrig, gradOrig, hessOrig,  :
   one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlghFixNm, mlghFixNm4, tolerance = 1e-3 )
@@ -3719,14 +3721,14 @@ use "Brent" or optimize() directly
 [1] TRUE
 > print( mlFixSann )
 Maximum Likelihood estimation
-SANN maximisation, 10000 iterations
+SANN maximization, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -202.1 (1 free parameter(s))
 Estimate(s): 1 1.825 
 > print( summary( mlFixSann ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-SANN maximisation, 10000 iterations
+SANN maximization, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -202.1 
 1  free parameters
@@ -3754,7 +3756,7 @@ sigma  -5.9 -60.0
 > logLik( mlFixSann )
 [1] -202.1
 > maximType( mlFixSann )
-[1] "SANN maximisation"
+[1] "SANN maximization"
 > nIter( mlFixSann )
 function 
    10000 
@@ -3772,7 +3774,7 @@ sigma  0 0.017
 [1] -202.1
 > all.equal( mlFixBfgs[ -c(4,9,10) ], mlFixSann[ -c(4,9,10) ], 
 +    tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"control\": Attributes: < Component \"iterlim\": Mean relative difference: 49 >"
 > mlIndFixSann <- maxLik( llfInd, start = startValFix, fixed = isFixed,
 +    method = "SANN" )
 > all.equal( mlFixSann[ ], mlIndFixSann[ -12 ], tolerance = 1e-2 )
@@ -3888,7 +3890,7 @@ sigma  0 0.017
 > print( summary( mlgFixSann ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-SANN maximisation, 10000 iterations
+SANN maximization, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -202.1 
 1  free parameters
@@ -4029,7 +4031,7 @@ Error in maxRoutine(fn = logLik, grad = grad, hess = hess, start = start,  :
 > 
 > ## BHHH method with inequality constraints
 > try( maxLik( llf, start = startVal, constraints = inEq, method = "BHHH" ) )
-Error in maxNR(fn = fn, grad = grad, hess = hess, start = start, iterlim = iterlim,  : 
+Error in maxNR(fn = fn, grad = grad, hess = hess, start = start, finalHessian = finalHessian,  : 
   Inequality constraints not implemented for maxNR
 > 
 > ## BFGS method with inequality constraints
@@ -4037,14 +4039,14 @@ Error in maxNR(fn = fn, grad = grad, hess = hess, start = start, iterlim = iterl
 +    method = "BFGS" )
 > print( mlBfgsInEq )
 Maximum Likelihood estimation
-BFGS maximisation, 130 iterations
+BFGS maximization, 130 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 (2 free parameter(s))
 Estimate(s): 0.8197 1.68 
 > print( summary( mlBfgsInEq ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 130 iterations
+BFGS maximization, 130 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 
 2  free parameters
@@ -4077,7 +4079,7 @@ sigma -15.2 -93.7
 > logLik( mlBfgsInEq )
 [1] -204.5
 > maximType( mlBfgsInEq )
-[1] "BFGS maximisation"
+[1] "BFGS maximization"
 > nIter( mlBfgsInEq )
 function 
      130 
@@ -4098,7 +4100,7 @@ sigma -0.005  0.011
 > print( summary( mlBfgsInEqInd ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 130 iterations
+BFGS maximization, 130 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 
 2  free parameters
@@ -4346,14 +4348,14 @@ Constrained optimization based on constrOptim
 > mlNmInEq <- maxLik( llf, start = startVal, constraints = inEq, method = "NM" )
 > print( mlNmInEq )
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 103 iterations
+Nelder-Mead maximization, 101 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 (2 free parameter(s))
 Estimate(s): 0.8197 1.68 
 > print( summary( mlNmInEq ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 103 iterations
+Nelder-Mead maximization, 101 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 
 2  free parameters
@@ -4386,10 +4388,10 @@ sigma -15.2 -93.7
 > logLik( mlNmInEq )
 [1] -204.5
 > maximType( mlNmInEq )
-[1] "Nelder-Mead maximisation"
+[1] "Nelder-Mead maximization"
 > nIter( mlNmInEq )
 function 
-     103 
+     101 
 > nParam( mlNmInEq )
 [1] 2
 > returnCode( mlNmInEq )
@@ -4403,13 +4405,13 @@ sigma -0.005  0.011
 > logLik( summary( mlNmInEq ) )
 [1] -204.5
 > all.equal( mlBfgsInEq[-c(9,10,11)], mlNmInEq[-c(9,10,11)], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"control\": Attributes: < Component \"iterlim\": Mean relative difference: 1.5 >"
 > mlNmInEqInd <- maxLik( llfInd, start = startVal, constraints = inEq,
 +    method = "NM" )
 > print( summary( mlNmInEqInd ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 103 iterations
+Nelder-Mead maximization, 101 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 
 2  free parameters
@@ -4548,14 +4550,14 @@ Constrained optimization based on constrOptim
 +    method = "SANN" )
 > print( mlSannInEq )
 Maximum Likelihood estimation
-SANN maximisation, 10000 iterations
+SANN maximization, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 (2 free parameter(s))
 Estimate(s): 0.8297 1.67 
 > print( summary( mlSannInEq ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-SANN maximisation, 10000 iterations
+SANN maximization, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 
 2  free parameters
@@ -4588,7 +4590,7 @@ sigma -15.1 -96.1
 > logLik( mlSannInEq )
 [1] -204.5
 > maximType( mlSannInEq )
-[1] "SANN maximisation"
+[1] "SANN maximization"
 > nIter( mlSannInEq )
 function 
    10000 
@@ -4606,10 +4608,10 @@ sigma -0.005  0.011
 [1] -204.5
 > all.equal( mlBfgsInEq[-c(2,3,4,9,10,11)], mlSannInEq[-c(2,3,4,9,10,11)], 
 +    tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"control\": Attributes: < Component \"iterlim\": Mean relative difference: 49 >"
 > all.equal( mlBfgsInEq[-c(3,4,9,10,11)], mlSannInEq[-c(3,4,9,10,11)], 
 +    tolerance = 1e-2 )
-[1] TRUE
+[1] "Component \"control\": Attributes: < Component \"iterlim\": Mean relative difference: 49 >"
 > # with unused analytical gradients
 > mlgSannInEq <- maxLik( llf, gf, start = startVal, constraints = inEq,
 +    method = "SANN" )
@@ -4622,7 +4624,7 @@ sigma -0.005  0.011
 > print( summary( mlSannInEqCand ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-SANN maximisation, 10000 iterations
+SANN maximization, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.6 
 2  free parameters
@@ -4686,8 +4688,8 @@ mu 	 1
 sigma 	 3.61 
 > round( hessian( mlCon ), 1 )
          mu sigma
-mu    -35.4 -15.3
-sigma -15.3 -93.7
+mu    -35.4 -15.2
+sigma -15.2 -93.6
 > logLik( mlCon )
 [1] -204.5
 > maximType( mlCon )
@@ -4862,17 +4864,25 @@ successive function values within tolerance limit
 --------------------------------------------
 > all.equal( mlCon[ -c(2,3,4,5,6,7,9,11) ], mlgCon[ -c(2,3,4,5,6,7,9,11) ], 
 +    tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"constraints\": Component \"code\": Mean relative difference: 1"              
+[2] "Component \"constraints\": Component \"message\": 1 string mismatch"                     
+[3] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.3"
 > all.equal( mlCon[ -c( 5, 6, 7, 9, 11 ) ], mlgCon[ -c( 5, 6, 7, 9, 11 ) ], 
 +    tolerance = 1e-1 )
-[1] TRUE
+[1] "Component \"constraints\": Component \"code\": Mean relative difference: 1"              
+[2] "Component \"constraints\": Component \"message\": 1 string mismatch"                     
+[3] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.3"
 > mlgConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon )
 > all.equal( mlConInd[ -c(2,3,4,5,6,7,9,11,12) ], mlgConInd[ -c(2,3,4,5,6,7,9,11,12) ],
 +    tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"constraints\": Component \"code\": Mean relative difference: 1"              
+[2] "Component \"constraints\": Component \"message\": 1 string mismatch"                     
+[3] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.3"
 > all.equal( mlConInd[ -c(5,6,7,9,12) ], mlgConInd[ -c(5,6,7,9,12) ],
 +    tolerance = 1e-1 )
-[1] TRUE
+[1] "Component \"constraints\": Component \"code\": Mean relative difference: 1"              
+[2] "Component \"constraints\": Component \"message\": 1 string mismatch"                     
+[3] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.3"
 > all.equal( mlgCon[], mlgConInd[-11], tolerance = 1e-3 )
 [1] TRUE
 > mlgConInd[11]
@@ -4986,10 +4996,14 @@ $gradientObs
 [1] TRUE
 > all.equal( mlGCon[-c(2,3,4,5,6,7,9,11)], mlCon[-c(2,3,4,5,6,7,9,11)], 
 +    tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"constraints\": Component \"code\": Mean relative difference: 0.5"               
+[2] "Component \"constraints\": Component \"message\": 1 string mismatch"                        
+[3] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.4286"
 > all.equal( mlGCon[-c(5,6,7,9,11)], mlCon[-c(5,6,7,9,11)], 
 +    tolerance = 1e-1 )
-[1] TRUE
+[1] "Component \"constraints\": Component \"code\": Mean relative difference: 0.5"               
+[2] "Component \"constraints\": Component \"message\": 1 string mismatch"                        
+[3] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.4286"
 > 
 > # with analytical gradients and Hessians
 > mlghCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon )
@@ -5002,10 +5016,14 @@ $gradientObs
 [1] TRUE
 > all.equal( mlGHCon[-c(2,3,4,5,6,7,9,11)], mlCon[-c(2,3,4,5,6,7,9,11)], 
 +    tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"constraints\": Component \"code\": Mean relative difference: 0.5"               
+[2] "Component \"constraints\": Component \"message\": 1 string mismatch"                        
+[3] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.4286"
 > all.equal( mlGHCon[-c(5,6,7,9,11)], mlCon[-c(5,6,7,9,11)], 
 +    tolerance = 1e-1 )
-[1] TRUE
+[1] "Component \"constraints\": Component \"code\": Mean relative difference: 0.5"               
+[2] "Component \"constraints\": Component \"message\": 1 string mismatch"                        
+[3] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.4286"
 > 
 > 
 > ## BHHH method with equality constraints
@@ -5013,20 +5031,20 @@ $gradientObs
 +    method = "BHHH" )
 > print( mlBhhhCon )
 Maximum Likelihood estimation
-BHHH maximisation, 8 iterations
+BHHH maximisation, 4 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -204.5 (2 free parameter(s))
-Estimate(s): 0.8199 1.68 
+Estimate(s): 0.8204 1.68 
 > print( summary( mlBhhhCon ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-BHHH maximisation, 8 iterations
+BHHH maximisation, 4 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -204.5 
 2  free parameters
 Estimates:
       Estimate Std. error t value Pr(> t)    
-mu        0.82       0.17     4.7   3e-06 ***
+mu        0.82       0.17     4.7   2e-06 ***
 sigma     1.68       0.11    15.7  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
@@ -5035,7 +5053,7 @@ Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
 Return code: 1 
 penalty close to zero 
-10  outer iterations, barrier value 2.085e-10 
+10  outer iterations, barrier value 2.414e-10 
 --------------------------------------------
 > activePar( mlBhhhCon )
    mu sigma 
@@ -5044,20 +5062,20 @@ penalty close to zero
 [1] 413.1
 > coef( mlBhhhCon )
     mu  sigma 
-0.8199 1.6801 
+0.8204 1.6797 
 > condiNumber( mlBhhhCon, digits = 3 )
 mu 	 1 
 sigma 	 3.61 
 > round( hessian( mlBhhhCon ), 1 )
          mu sigma
-mu    -35.4 -15.2
-sigma -15.2 -93.7
+mu    -35.5 -15.2
+sigma -15.2 -93.8
 > logLik( mlBhhhCon )
 [1] -204.5
 > maximType( mlBhhhCon )
 [1] "BHHH maximisation"
 > nIter( mlBhhhCon )
-[1] 8
+[1] 4
 > nParam( mlBhhhCon )
 [1] 2
 > returnCode( mlBhhhCon )
@@ -5076,106 +5094,106 @@ sigma -0.005  0.011
 > mlBhhhCon[11]
 $gradientObs
               mu    sigma
-  [1,] -0.333308 -0.40855
-  [2,] -0.099285 -0.57864
-  [3,]  1.168182  1.69756
-  [4,]  0.113758 -0.57346
-  [5,]  0.155405 -0.55462
-  [6,]  1.278964  2.15304
-  [7,]  0.390371 -0.33917
-  [8,] -0.832523  0.56928
-  [9,] -0.422849 -0.29479
- [10,] -0.251960 -0.48854
- [11,]  0.931091  0.86134
- [12,]  0.318738 -0.42451
- [13,]  0.347757 -0.39201
- [14,]  0.142223 -0.56121
- [15,] -0.330025 -0.41221
- [16,]  1.329870  2.37617
- [17,]  0.416540 -0.30369
- [18,] -1.329591  2.37493
- [19,]  0.560728 -0.06694
- [20,] -0.271182 -0.47164
- [21,] -0.692776  0.21115
- [22,] -0.090639 -0.58140
- [23,] -0.663146  0.14365
- [24,] -0.452635 -0.25098
- [25,] -0.379053 -0.35380
- [26,] -1.131259  1.55492
- [27,]  0.657393  0.13089
- [28,]  0.172470 -0.54522
- [29,] -0.742594  0.33129
- [30,]  0.952158  0.92800
- [31,]  0.365961 -0.37019
- [32,] -0.145263 -0.55975
- [33,]  0.698018  0.22340
- [34,]  0.685979  0.19541
- [35,]  0.645910  0.10574
- [36,]  0.551719 -0.08378
- [37,]  0.456265 -0.24544
- [38,]  0.019936 -0.59453
- [39,] -0.152980 -0.55588
- [40,] -0.205771 -0.52406
- [41,] -0.428414 -0.28683
- [42,] -0.083513 -0.58348
- [43,] -0.832761  0.56994
- [44,]  1.600556  3.70888
- [45,]  0.919670  0.82583
- [46,] -0.731946  0.30491
- [47,] -0.221652 -0.51266
- [48,] -0.266834 -0.47557
- [49,]  0.616424  0.04321
- [50,]  0.004733 -0.59516
- [51,]  0.243283 -0.49576
- [52,]  0.043575 -0.59201
- [53,]  0.033427 -0.59332
- [54,]  1.033487  1.19932
- [55,] -0.096162 -0.57966
- [56,]  1.138255  1.58160
- [57,] -1.033525  1.19945
- [58,]  0.478014 -0.21130
- [59,]  0.151555 -0.55661
- [60,]  0.216801 -0.51623
- [61,]  0.332785 -0.40913
- [62,] -0.292106 -0.45184
- [63,] -0.172284 -0.54533
- [64,] -0.657882  0.13197
- [65,] -0.695587  0.21771
- [66,]  0.278858 -0.46455
- [67,]  0.381368 -0.35084
- [68,]  0.101356 -0.57794
- [69,]  0.717249  0.26913
- [70,]  1.516333  3.26782
- [71,] -0.284105 -0.45959
- [72,] -1.572297  3.55824
- [73,]  0.776390  0.41754
- [74,] -0.438683 -0.27187
- [75,] -0.423668 -0.29363
- [76,]  0.790442  0.45453
- [77,] -0.137967 -0.56322
- [78,] -0.801105  0.48304
- [79,]  0.192259 -0.53310
- [80,] -0.034606 -0.59319
- [81,]  0.067885 -0.58746
- [82,]  0.336781 -0.40464
- [83,] -0.198820 -0.52879
- [84,]  0.520357 -0.14027
- [85,] -0.092418 -0.58085
- [86,]  0.298876 -0.44512
- [87,]  0.840937  0.59293
- [88,]  0.372137 -0.36253
- [89,] -0.167128 -0.54827
- [90,]  0.877758  0.69926
- [91,]  0.767721  0.39505
- [92,]  0.452353 -0.25141
- [93,]  0.232948 -0.50403
- [94,] -0.381084 -0.35120
- [95,]  1.027855  1.17981
- [96,] -0.361496 -0.37564
- [97,]  1.613577  3.77919
- [98,]  1.149691  1.62555
- [99,] -0.103198 -0.57731
-[100,] -0.663441  0.14431
+  [1,] -0.333645 -0.40838
+  [2,] -0.099497 -0.57873
+  [3,]  1.168645  1.69861
+  [4,]  0.113660 -0.57366
+  [5,]  0.155329 -0.55483
+  [6,]  1.279487  2.15440
+  [7,]  0.390420 -0.33933
+  [8,] -0.833126  0.57050
+  [9,] -0.423234 -0.29448
+ [10,] -0.252254 -0.48848
+ [11,]  0.931429  0.86185
+ [12,]  0.318749 -0.42470
+ [13,]  0.347783 -0.39220
+ [14,]  0.142139 -0.56142
+ [15,] -0.330360 -0.41204
+ [16,]  1.330420  2.37768
+ [17,]  0.416603 -0.30384
+ [18,] -1.330459  2.37785
+ [19,]  0.560868 -0.06698
+ [20,] -0.271486 -0.47156
+ [21,] -0.693304  0.21201
+ [22,] -0.090846 -0.58149
+ [23,] -0.663659  0.14444
+ [24,] -0.453035 -0.25062
+ [25,] -0.379414 -0.35356
+ [26,] -1.132021  1.55709
+ [27,]  0.657584  0.13096
+ [28,]  0.172403 -0.54543
+ [29,] -0.743149  0.33227
+ [30,]  0.952506  0.92855
+ [31,]  0.365997 -0.37036
+ [32,] -0.145500 -0.55980
+ [33,]  0.698231  0.22352
+ [34,]  0.686186  0.19551
+ [35,]  0.646096  0.10580
+ [36,]  0.551854 -0.08383
+ [37,]  0.456349 -0.24556
+ [38,]  0.019787 -0.59470
+ [39,] -0.153221 -0.55592
+ [40,] -0.206040 -0.52405
+ [41,] -0.428802 -0.28652
+ [42,] -0.083716 -0.58359
+ [43,] -0.833364  0.57116
+ [44,]  1.601250  3.71130
+ [45,]  0.920001  0.82631
+ [46,] -0.732496  0.30587
+ [47,] -0.221929 -0.51263
+ [48,] -0.267136 -0.47549
+ [49,]  0.616594  0.04323
+ [50,]  0.004576 -0.59532
+ [51,]  0.243254 -0.49597
+ [52,]  0.043440 -0.59219
+ [53,]  0.033285 -0.59350
+ [54,]  1.033879  1.20005
+ [55,] -0.096373 -0.57976
+ [56,]  1.138703  1.58257
+ [57,] -1.034235  1.20128
+ [58,]  0.478109 -0.21141
+ [59,]  0.151477 -0.55682
+ [60,]  0.216757 -0.51644
+ [61,]  0.332803 -0.40932
+ [62,] -0.292421 -0.45173
+ [63,] -0.172535 -0.54536
+ [64,] -0.658392  0.13274
+ [65,] -0.696117  0.21857
+ [66,]  0.278848 -0.46475
+ [67,]  0.381412 -0.35101
+ [68,]  0.101251 -0.57814
+ [69,]  0.717472  0.26928
+ [70,]  1.516982  3.26994
+ [71,] -0.284416 -0.45949
+ [72,] -1.573295  3.56224
+ [73,]  0.776645  0.41778
+ [74,] -0.439076 -0.27154
+ [75,] -0.424053 -0.29332
+ [76,]  0.790704  0.45479
+ [77,] -0.138199 -0.56328
+ [78,] -0.801691  0.48418
+ [79,]  0.192202 -0.53331
+ [80,] -0.034784 -0.59332
+ [81,]  0.067763 -0.58764
+ [82,]  0.336802 -0.40482
+ [83,] -0.199085 -0.52878
+ [84,]  0.520475 -0.14035
+ [85,] -0.092627 -0.58095
+ [86,]  0.298877 -0.44532
+ [87,]  0.841226  0.59328
+ [88,]  0.372177 -0.36270
+ [89,] -0.167377 -0.54830
+ [90,]  0.878067  0.69967
+ [91,]  0.767972  0.39528
+ [92,]  0.452435 -0.25153
+ [93,]  0.232913 -0.50424
+ [94,] -0.381447 -0.35096
+ [95,]  1.028244  1.18053
+ [96,] -0.361848 -0.37543
+ [97,]  1.614278  3.78167
+ [98,]  1.150145  1.62656
+ [99,] -0.103412 -0.57739
+[100,] -0.663954  0.14510
 
 > nObs( mlBhhhCon )
 [1] 100
@@ -5203,11 +5221,11 @@ Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
 Return code: 1 
 penalty close to zero 
-9  outer iterations, barrier value 1.178e-08 
+9  outer iterations, barrier value 1.177e-08 
 --------------------------------------------
 > all.equal( mlBhhhCon[-c(2,3,4,5,6,7,9,11,12)], mlgBhhhCon[-c(2,3,4,5,6,7,9,11,12)],
 +    tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.1"
 > all.equal( mlBhhhCon[-c(5,6,7,9,12)], mlgBhhhCon[-c(5,6,7,9,12)],
 +    tolerance = 1e-1 )
 [1] TRUE
@@ -5239,16 +5257,16 @@ Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
 Return code: 1 
 penalty close to zero 
-9  outer iterations, barrier value 1.178e-08 
+9  outer iterations, barrier value 1.177e-08 
 --------------------------------------------
 > all.equal( mlGBhhhCon, mlgBhhhCon, tolerance = 1e-3 )
 [1] TRUE
 > all.equal( mlGBhhhCon[-c(2,3,4,5,6,7,9,11,12)], mlBhhhCon[-c(2,3,4,5,6,7,9,11,12)],
 +    tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.1111"
 > all.equal( mlGBhhhCon[-c(5,6,7,9,12)], mlBhhhCon[-c(5,6,7,9,12)],
 +    tolerance = 1e-1 )
-[1] TRUE
+[1] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.1111"
 > 
 > # with analytical gradients and unused Hessians
 > mlghBhhhCon <- maxLik( llf, gfInd, hf, start = startVal, constraints = eqCon,
@@ -5270,14 +5288,14 @@ penalty close to zero
 +    method = "BFGS" )
 > print( mlBfgsCon )
 Maximum Likelihood estimation
-BFGS maximisation, 31 iterations
+BFGS maximization, 31 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 (2 free parameter(s))
 Estimate(s): 0.8198 1.68 
 > print( summary( mlBfgsCon ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 31 iterations
+BFGS maximization, 31 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 
 2  free parameters
@@ -5312,7 +5330,7 @@ sigma -15.2 -93.6
 > logLik( mlBfgsCon )
 [1] -204.5
 > maximType( mlBfgsCon )
-[1] "BFGS maximisation"
+[1] "BFGS maximization"
 > nIter( mlBfgsCon )
 function 
       31 
@@ -5330,13 +5348,24 @@ sigma -0.005  0.011
 [1] -204.5
 > all.equal( mlBfgsCon[ -c( 4, 5, 6, 9, 10 ) ], mlCon[ -c( 4, 5, 6, 9, 10 ) ],
 +    tolerance = 1e-3 )
-[1] TRUE
+ [1] "Names: 2 string mismatches"                                                    
+ [2] "Component 6: Modes: list, S4"                                                  
+ [3] "Component 6: Lengths: 5, 1"                                                    
+ [4] "Component 6: names for target but not for current"                             
+ [5] "Component 6: Attributes: < names for current but not for target >"             
+ [6] "Component 6: Attributes: < Length mismatch: comparison on first 0 components >"
+ [7] "Component 6: current is not list-like"                                         
+ [8] "Component 7: Modes: S4, list"                                                  
+ [9] "Component 7: Lengths: 1, 5"                                                    
+[10] "Component 7: names for current but not for target"                             
+[11] "Component 7: Attributes: < names for target but not for current >"             
+[12] "Component 7: Attributes: < Length mismatch: comparison on first 0 components >"
 > mlBfgsConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
 +    method = "BFGS" )
 > print( summary( mlBfgsConInd ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 31 iterations
+BFGS maximization, 31 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 
 2  free parameters
@@ -5468,7 +5497,7 @@ $gradientObs
 > print( summary( mlgBfgsCon ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 30 iterations
+BFGS maximization, 30 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.9 
 2  free parameters
@@ -5606,14 +5635,14 @@ $gradientObs
 > mlNmCon <- maxLik( llf, start = startVal, constraints = eqCon, method = "NM", SUMTTol=0)
 > print( mlNmCon )
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 57 iterations
+Nelder-Mead maximization, 57 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 (2 free parameter(s))
-Estimate(s): 0.8197 1.68 
+Estimate(s): 0.8199 1.68 
 > print( summary( mlNmCon ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 57 iterations
+Nelder-Mead maximization, 57 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 
 2  free parameters
@@ -5628,7 +5657,7 @@ Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
 Return code: 1 
 penalty close to zero 
-10  outer iterations, barrier value 2.418e-10 
+10  outer iterations, barrier value 2.152e-10 
 --------------------------------------------
 > activePar( mlNmCon )
    mu sigma 
@@ -5637,18 +5666,18 @@ penalty close to zero
 [1] 413.1
 > coef( mlNmCon )
     mu  sigma 
-0.8197 1.6803 
+0.8199 1.6801 
 > condiNumber( mlNmCon, digits = 3 )
 mu 	 1 
 sigma 	 3.61 
 > round( hessian( mlNmCon ), 1 )
          mu sigma
 mu    -35.4 -15.2
-sigma -15.2 -93.6
+sigma -15.2 -93.7
 > logLik( mlNmCon )
 [1] -204.5
 > maximType( mlNmCon )
-[1] "Nelder-Mead maximisation"
+[1] "Nelder-Mead maximization"
 > nIter( mlNmCon )
 function 
       57 
@@ -5666,13 +5695,24 @@ sigma -0.005  0.011
 [1] -204.5
 > all.equal( mlNmCon[ -c( 4, 5, 6, 9, 10 ) ], mlCon[ -c( 4, 5, 6, 9, 10 ) ],
 +    tolerance = 1e-3 )
-[1] TRUE
+ [1] "Names: 2 string mismatches"                                                    
+ [2] "Component 6: Modes: list, S4"                                                  
+ [3] "Component 6: Lengths: 5, 1"                                                    
+ [4] "Component 6: names for target but not for current"                             
+ [5] "Component 6: Attributes: < names for current but not for target >"             
+ [6] "Component 6: Attributes: < Length mismatch: comparison on first 0 components >"
+ [7] "Component 6: current is not list-like"                                         
+ [8] "Component 7: Modes: S4, list"                                                  
+ [9] "Component 7: Lengths: 1, 5"                                                    
+[10] "Component 7: names for current but not for target"                             
+[11] "Component 7: Attributes: < names for target but not for current >"             
+[12] "Component 7: Attributes: < Length mismatch: comparison on first 0 components >"
 > mlNmConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
 +    method = "NM", SUMTTol=0)
 > print( summary( mlNmConInd ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 57 iterations
+Nelder-Mead maximization, 57 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 
 2  free parameters
@@ -5687,113 +5727,113 @@ Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on SUMT 
 Return code: 1 
 penalty close to zero 
-10  outer iterations, barrier value 2.418e-10 
+10  outer iterations, barrier value 2.152e-10 
 --------------------------------------------
 > all.equal( mlNmCon[], mlNmConInd[-12], tolerance = 1e-3 )
 [1] TRUE
 > mlNmConInd[12]
 $gradientObs
               mu    sigma
-  [1,] -0.333153 -0.40862
-  [2,] -0.099187 -0.57859
-  [3,]  1.167967  1.69707
-  [4,]  0.113803 -0.57336
-  [5,]  0.155439 -0.55453
-  [6,]  1.278722  2.15241
-  [7,]  0.390348 -0.33909
-  [8,] -0.832245  0.56872
-  [9,] -0.422672 -0.29493
- [10,] -0.251825 -0.48857
- [11,]  0.930935  0.86110
- [12,]  0.318732 -0.42442
- [13,]  0.347744 -0.39193
- [14,]  0.142261 -0.56112
- [15,] -0.329870 -0.41228
- [16,]  1.329615  2.37547
- [17,]  0.416510 -0.30362
- [18,] -1.329191  2.37357
- [19,]  0.560663 -0.06693
- [20,] -0.271042 -0.47168
- [21,] -0.692532  0.21076
- [22,] -0.090543 -0.58135
- [23,] -0.662910  0.14329
- [24,] -0.452450 -0.25115
- [25,] -0.378887 -0.35391
- [26,] -1.130907  1.55392
- [27,]  0.657303  0.13085
- [28,]  0.172500 -0.54513
- [29,] -0.742338  0.33084
- [30,]  0.951996  0.92774
- [31,]  0.365944 -0.37011
- [32,] -0.145155 -0.55972
- [33,]  0.697919  0.22334
- [34,]  0.685883  0.19536
- [35,]  0.645824  0.10572
- [36,]  0.551656 -0.08376
- [37,]  0.456225 -0.24538
- [38,]  0.020004 -0.59445
- [39,] -0.152869 -0.55586
- [40,] -0.205647 -0.52406
- [41,] -0.428236 -0.28698
- [42,] -0.083419 -0.58343
- [43,] -0.832482  0.56938
- [44,]  1.600234  3.70775
- [45,]  0.919516  0.82560
- [46,] -0.731693  0.30447
- [47,] -0.221524 -0.51267
- [48,] -0.266696 -0.47561
- [49,]  0.616345  0.04320
- [50,]  0.004804 -0.59509
- [51,]  0.243296 -0.49566
- [52,]  0.043638 -0.59193
- [53,]  0.033491 -0.59324
- [54,]  1.033305  1.19898
- [55,] -0.096066 -0.57962
- [56,]  1.138048  1.58114
- [57,] -1.033197  1.19861
- [58,]  0.477969 -0.21125
- [59,]  0.151591 -0.55651
- [60,]  0.216820 -0.51613
- [61,]  0.332776 -0.40905
- [62,] -0.291961 -0.45189
- [63,] -0.172168 -0.54532
- [64,] -0.657647  0.13161
- [65,] -0.695343  0.21731
- [66,]  0.278863 -0.46446
- [67,]  0.381347 -0.35076
- [68,]  0.101404 -0.57785
- [69,]  0.717145  0.26906
- [70,]  1.516032  3.26684
- [71,] -0.283962 -0.45963
- [72,] -1.571837  3.55639
- [73,]  0.776272  0.41743
- [74,] -0.438502 -0.27203
- [75,] -0.423491 -0.29377
- [76,]  0.790320  0.45441
- [77,] -0.137860 -0.56319
- [78,] -0.800834  0.48252
- [79,]  0.192285 -0.53300
- [80,] -0.034525 -0.59312
- [81,]  0.067942 -0.58737
- [82,]  0.336771 -0.40455
- [83,] -0.198698 -0.52878
- [84,]  0.520302 -0.14024
- [85,] -0.092323 -0.58080
- [86,]  0.298876 -0.44503
- [87,]  0.840802  0.59277
- [88,]  0.372119 -0.36245
- [89,] -0.167014 -0.54825
- [90,]  0.877614  0.69907
- [91,]  0.767605  0.39495
- [92,]  0.452315 -0.25135
- [93,]  0.232964 -0.50393
- [94,] -0.380917 -0.35131
- [95,]  1.027674  1.17948
- [96,] -0.361334 -0.37574
- [97,]  1.613252  3.77804
- [98,]  1.149480  1.62509
- [99,] -0.103099 -0.57726
-[100,] -0.663205  0.14395
+  [1,] -0.333308 -0.40855
+  [2,] -0.099285 -0.57864
+  [3,]  1.168181  1.69756
+  [4,]  0.113758 -0.57346
+  [5,]  0.155405 -0.55462
+  [6,]  1.278964  2.15304
+  [7,]  0.390371 -0.33917
+  [8,] -0.832523  0.56928
+  [9,] -0.422849 -0.29479
+ [10,] -0.251960 -0.48854
+ [11,]  0.931091  0.86134
+ [12,]  0.318738 -0.42451
+ [13,]  0.347757 -0.39201
+ [14,]  0.142223 -0.56121
+ [15,] -0.330025 -0.41221
+ [16,]  1.329870  2.37617
+ [17,]  0.416540 -0.30369
+ [18,] -1.329591  2.37492
+ [19,]  0.560728 -0.06694
+ [20,] -0.271182 -0.47164
+ [21,] -0.692776  0.21115
+ [22,] -0.090639 -0.58140
+ [23,] -0.663146  0.14365
+ [24,] -0.452634 -0.25098
+ [25,] -0.379053 -0.35380
+ [26,] -1.131259  1.55492
+ [27,]  0.657392  0.13089
+ [28,]  0.172470 -0.54522
+ [29,] -0.742594  0.33129
+ [30,]  0.952158  0.92800
+ [31,]  0.365961 -0.37019
+ [32,] -0.145263 -0.55975
+ [33,]  0.698018  0.22340
+ [34,]  0.685979  0.19541
+ [35,]  0.645910  0.10574
+ [36,]  0.551719 -0.08378
+ [37,]  0.456265 -0.24544
+ [38,]  0.019936 -0.59453
+ [39,] -0.152980 -0.55588
+ [40,] -0.205771 -0.52406
+ [41,] -0.428414 -0.28683
+ [42,] -0.083513 -0.58348
+ [43,] -0.832760  0.56994
+ [44,]  1.600556  3.70887
+ [45,]  0.919670  0.82583
+ [46,] -0.731946  0.30491
+ [47,] -0.221652 -0.51266
+ [48,] -0.266834 -0.47557
+ [49,]  0.616424  0.04321
+ [50,]  0.004733 -0.59516
+ [51,]  0.243283 -0.49576
+ [52,]  0.043575 -0.59201
+ [53,]  0.033427 -0.59332
+ [54,]  1.033487  1.19932
+ [55,] -0.096162 -0.57966
+ [56,]  1.138255  1.58160
+ [57,] -1.033525  1.19945
+ [58,]  0.478013 -0.21130
+ [59,]  0.151555 -0.55661
+ [60,]  0.216801 -0.51623
+ [61,]  0.332785 -0.40913
+ [62,] -0.292106 -0.45184
+ [63,] -0.172284 -0.54533
+ [64,] -0.657882  0.13197
+ [65,] -0.695587  0.21771
+ [66,]  0.278858 -0.46455
+ [67,]  0.381368 -0.35084
+ [68,]  0.101356 -0.57794
+ [69,]  0.717249  0.26913
+ [70,]  1.516333  3.26782
+ [71,] -0.284105 -0.45959
+ [72,] -1.572297  3.55823
+ [73,]  0.776390  0.41754
+ [74,] -0.438683 -0.27187
+ [75,] -0.423668 -0.29363
+ [76,]  0.790442  0.45453
+ [77,] -0.137967 -0.56322
+ [78,] -0.801105  0.48304
+ [79,]  0.192259 -0.53310
+ [80,] -0.034606 -0.59319
+ [81,]  0.067885 -0.58746
+ [82,]  0.336781 -0.40464
+ [83,] -0.198820 -0.52879
+ [84,]  0.520357 -0.14027
+ [85,] -0.092418 -0.58085
+ [86,]  0.298876 -0.44512
+ [87,]  0.840937  0.59293
+ [88,]  0.372137 -0.36253
+ [89,] -0.167128 -0.54827
+ [90,]  0.877757  0.69926
+ [91,]  0.767721  0.39505
+ [92,]  0.452353 -0.25141
+ [93,]  0.232948 -0.50403
+ [94,] -0.381084 -0.35120
+ [95,]  1.027854  1.17981
+ [96,] -0.361496 -0.37564
+ [97,]  1.613576  3.77919
+ [98,]  1.149691  1.62555
+ [99,] -0.103198 -0.57731
+[100,] -0.663441  0.14431
 
 > nObs( mlNmConInd )
 [1] 100
@@ -5810,106 +5850,106 @@ $gradientObs
 > mlgNmConInd[12]
 $gradientObs
               mu    sigma
-  [1,] -0.333153 -0.40862
-  [2,] -0.099187 -0.57859
-  [3,]  1.167967  1.69707
-  [4,]  0.113803 -0.57336
-  [5,]  0.155439 -0.55453
-  [6,]  1.278722  2.15241
-  [7,]  0.390348 -0.33909
-  [8,] -0.832245  0.56872
-  [9,] -0.422672 -0.29493
- [10,] -0.251825 -0.48857
- [11,]  0.930935  0.86110
- [12,]  0.318732 -0.42442
- [13,]  0.347744 -0.39193
- [14,]  0.142261 -0.56112
- [15,] -0.329870 -0.41228
- [16,]  1.329615  2.37547
- [17,]  0.416510 -0.30362
- [18,] -1.329191  2.37357
- [19,]  0.560663 -0.06693
- [20,] -0.271042 -0.47168
- [21,] -0.692532  0.21076
- [22,] -0.090543 -0.58135
- [23,] -0.662910  0.14329
- [24,] -0.452450 -0.25115
- [25,] -0.378887 -0.35391
- [26,] -1.130907  1.55392
- [27,]  0.657303  0.13085
- [28,]  0.172500 -0.54513
- [29,] -0.742338  0.33084
- [30,]  0.951996  0.92774
- [31,]  0.365944 -0.37011
- [32,] -0.145155 -0.55972
- [33,]  0.697919  0.22334
- [34,]  0.685883  0.19536
- [35,]  0.645824  0.10572
- [36,]  0.551656 -0.08376
- [37,]  0.456225 -0.24538
- [38,]  0.020004 -0.59445
- [39,] -0.152869 -0.55586
- [40,] -0.205647 -0.52406
- [41,] -0.428236 -0.28698
- [42,] -0.083419 -0.58343
- [43,] -0.832482  0.56938
- [44,]  1.600234  3.70775
- [45,]  0.919516  0.82560
- [46,] -0.731693  0.30447
- [47,] -0.221524 -0.51267
- [48,] -0.266696 -0.47561
- [49,]  0.616345  0.04320
- [50,]  0.004804 -0.59509
- [51,]  0.243296 -0.49566
- [52,]  0.043638 -0.59193
- [53,]  0.033491 -0.59324
- [54,]  1.033305  1.19898
- [55,] -0.096066 -0.57962
- [56,]  1.138048  1.58114
- [57,] -1.033197  1.19861
- [58,]  0.477969 -0.21125
- [59,]  0.151591 -0.55651
- [60,]  0.216820 -0.51613
- [61,]  0.332776 -0.40905
- [62,] -0.291961 -0.45189
- [63,] -0.172168 -0.54532
- [64,] -0.657647  0.13161
- [65,] -0.695343  0.21731
- [66,]  0.278863 -0.46446
- [67,]  0.381347 -0.35076
- [68,]  0.101404 -0.57785
- [69,]  0.717145  0.26906
- [70,]  1.516032  3.26684
- [71,] -0.283962 -0.45963
- [72,] -1.571837  3.55639
- [73,]  0.776272  0.41743
- [74,] -0.438502 -0.27203
- [75,] -0.423491 -0.29377
- [76,]  0.790320  0.45441
- [77,] -0.137860 -0.56319
- [78,] -0.800834  0.48252
- [79,]  0.192285 -0.53300
- [80,] -0.034525 -0.59312
- [81,]  0.067942 -0.58737
- [82,]  0.336771 -0.40455
- [83,] -0.198698 -0.52878
- [84,]  0.520302 -0.14024
- [85,] -0.092323 -0.58080
- [86,]  0.298876 -0.44503
- [87,]  0.840802  0.59277
- [88,]  0.372119 -0.36245
- [89,] -0.167014 -0.54825
- [90,]  0.877614  0.69907
- [91,]  0.767605  0.39495
- [92,]  0.452315 -0.25135
- [93,]  0.232964 -0.50393
- [94,] -0.380917 -0.35131
- [95,]  1.027674  1.17948
- [96,] -0.361334 -0.37574
- [97,]  1.613252  3.77804
- [98,]  1.149480  1.62509
- [99,] -0.103099 -0.57726
-[100,] -0.663205  0.14395
+  [1,] -0.333308 -0.40855
+  [2,] -0.099285 -0.57864
+  [3,]  1.168181  1.69756
+  [4,]  0.113758 -0.57346
+  [5,]  0.155405 -0.55462
+  [6,]  1.278964  2.15304
+  [7,]  0.390371 -0.33917
+  [8,] -0.832523  0.56928
+  [9,] -0.422849 -0.29479
+ [10,] -0.251960 -0.48854
+ [11,]  0.931091  0.86134
+ [12,]  0.318738 -0.42451
+ [13,]  0.347757 -0.39201
+ [14,]  0.142223 -0.56121
+ [15,] -0.330025 -0.41221
+ [16,]  1.329870  2.37617
+ [17,]  0.416540 -0.30369
+ [18,] -1.329591  2.37492
+ [19,]  0.560728 -0.06694
+ [20,] -0.271182 -0.47164
+ [21,] -0.692776  0.21115
+ [22,] -0.090639 -0.58140
+ [23,] -0.663146  0.14365
+ [24,] -0.452634 -0.25098
+ [25,] -0.379053 -0.35380
+ [26,] -1.131259  1.55492
+ [27,]  0.657392  0.13089
+ [28,]  0.172470 -0.54522
+ [29,] -0.742594  0.33129
+ [30,]  0.952158  0.92800
+ [31,]  0.365961 -0.37019
+ [32,] -0.145263 -0.55975
+ [33,]  0.698018  0.22340
+ [34,]  0.685979  0.19541
+ [35,]  0.645910  0.10574
+ [36,]  0.551719 -0.08378
+ [37,]  0.456265 -0.24544
+ [38,]  0.019936 -0.59453
+ [39,] -0.152980 -0.55588
+ [40,] -0.205771 -0.52406
+ [41,] -0.428414 -0.28683
+ [42,] -0.083513 -0.58348
+ [43,] -0.832760  0.56994
+ [44,]  1.600556  3.70887
+ [45,]  0.919670  0.82583
+ [46,] -0.731946  0.30491
+ [47,] -0.221652 -0.51266
+ [48,] -0.266834 -0.47557
+ [49,]  0.616424  0.04321
+ [50,]  0.004733 -0.59516
+ [51,]  0.243283 -0.49576
+ [52,]  0.043575 -0.59201
+ [53,]  0.033427 -0.59332
+ [54,]  1.033487  1.19932
+ [55,] -0.096162 -0.57966
+ [56,]  1.138255  1.58160
+ [57,] -1.033525  1.19945
+ [58,]  0.478013 -0.21130
+ [59,]  0.151555 -0.55661
+ [60,]  0.216801 -0.51623
+ [61,]  0.332785 -0.40913
+ [62,] -0.292106 -0.45184
+ [63,] -0.172284 -0.54533
+ [64,] -0.657882  0.13197
+ [65,] -0.695587  0.21771
+ [66,]  0.278858 -0.46455
+ [67,]  0.381368 -0.35084
+ [68,]  0.101356 -0.57794
+ [69,]  0.717249  0.26913
+ [70,]  1.516333  3.26782
+ [71,] -0.284105 -0.45959
+ [72,] -1.572297  3.55823
+ [73,]  0.776390  0.41754
+ [74,] -0.438683 -0.27187
+ [75,] -0.423668 -0.29363
+ [76,]  0.790442  0.45453
+ [77,] -0.137967 -0.56322
+ [78,] -0.801105  0.48304
+ [79,]  0.192259 -0.53310
+ [80,] -0.034606 -0.59319
+ [81,]  0.067885 -0.58746
+ [82,]  0.336781 -0.40464
+ [83,] -0.198820 -0.52879
+ [84,]  0.520357 -0.14027
+ [85,] -0.092418 -0.58085
+ [86,]  0.298876 -0.44512
+ [87,]  0.840937  0.59293
+ [88,]  0.372137 -0.36253
+ [89,] -0.167128 -0.54827
+ [90,]  0.877757  0.69926
+ [91,]  0.767721  0.39505
+ [92,]  0.452353 -0.25141
+ [93,]  0.232948 -0.50403
+ [94,] -0.381084 -0.35120
+ [95,]  1.027854  1.17981
+ [96,] -0.361496 -0.37564
+ [97,]  1.613576  3.77919
+ [98,]  1.149691  1.62555
+ [99,] -0.103198 -0.57731
+[100,] -0.663441  0.14431
 
 > 
 > # with unused analytical gradients and Hessians
@@ -5923,14 +5963,14 @@ $gradientObs
 +    method = "SANN", SUMTTol=0)
 > print( mlSannCon )
 Maximum Likelihood estimation
-SANN maximisation, 10000 iterations
+SANN maximization, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 (2 free parameter(s))
 Estimate(s): 0.816 1.684 
 > print( summary( mlSannCon ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-SANN maximisation, 10000 iterations
+SANN maximization, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -204.5 
 2  free parameters
@@ -5965,7 +6005,7 @@ sigma -15.3 -92.8
 > logLik( mlSannCon )
 [1] -204.5
 > maximType( mlSannCon )
-[1] "SANN maximisation"
+[1] "SANN maximization"
 > nIter( mlSannCon )
 function 
    10000 
@@ -5983,10 +6023,10 @@ sigma -0.005  0.012
 [1] -204.5
 > all.equal( mlSannCon[ -c(2,3,4,5,6,9,10,11) ], mlBfgsCon[ -c(2,3,4,5,6,9,10,11) ],
 +    tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"control\": Attributes: < Component \"iterlim\": Mean relative difference: 0.98 >"
 > all.equal( mlSannCon[ -c(3,4,5,6,9,10,11) ], mlBfgsCon[ -c(3,4,5,6,9,10,11) ],
 +    tolerance = 1e-2 )
-[1] TRUE
+[1] "Component \"control\": Attributes: < Component \"iterlim\": Mean relative difference: 0.98 >"
 > 
 > # with unused analytical gradients
 > mlgSannCon <- maxLik( llf, gf, start = startVal, constraints = eqCon,
@@ -6003,7 +6043,7 @@ In (function (fn, grad = NULL, hess = NULL, start, maxRoutine, constraints,  :
 > print( summary( mlSannConCand ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-SANN maximisation, 10000 iterations
+SANN maximization, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -201.6 
 2  free parameters
@@ -6050,16 +6090,16 @@ Error in estfun.maxLik(ml) :
 > estfun( mlBHHH )[ 1:5, ]
            mu   sigma
 [1,] -0.39452 -0.2678
-[2,] -0.19432 -0.4819
-[3,]  0.88999  0.8883
-[4,] -0.01206 -0.5503
+[2,] -0.19431 -0.4819
+[3,]  0.88998  0.8883
+[4,] -0.01206 -0.5502
 [5,]  0.02357 -0.5495
 > estfun( mlgBHHH )[ 1:5, ]
            mu   sigma
 [1,] -0.39452 -0.2678
-[2,] -0.19432 -0.4819
-[3,]  0.88999  0.8883
-[4,] -0.01206 -0.5503
+[2,] -0.19431 -0.4819
+[3,]  0.88998  0.8883
+[4,] -0.01206 -0.5502
 [5,]  0.02357 -0.5495
 > estfun( mlIndBFGS )[ 1:5, ]
            mu   sigma
@@ -6147,18 +6187,18 @@ Error in estfun.maxLik(ml) :
 [5,]  0.07760 -0.5368
 > estfun( mlIndFixNm )[ 1:5, ]
            mu   sigma
-[1,] -0.33641 -0.3412
-[2,] -0.13816 -0.5130
-[3,]  0.93558  1.0500
-[4,]  0.04232 -0.5446
-[5,]  0.07760 -0.5368
+[1,] -0.33627 -0.3413
+[2,] -0.13810 -0.5129
+[3,]  0.93518  1.0491
+[4,]  0.04230 -0.5444
+[5,]  0.07757 -0.5367
 > estfun( mlgIndFixNm )[ 1:5, ]
            mu   sigma
-[1,] -0.33641 -0.3412
-[2,] -0.13816 -0.5130
-[3,]  0.93558  1.0500
-[4,]  0.04232 -0.5446
-[5,]  0.07760 -0.5368
+[1,] -0.33627 -0.3413
+[2,] -0.13810 -0.5129
+[3,]  0.93518  1.0491
+[4,]  0.04230 -0.5444
+[5,]  0.07757 -0.5367
 > estfun( mlIndFixSann )[ 1:5, ]
            mu   sigma
 [1,] -0.33640 -0.3412
@@ -6209,12 +6249,12 @@ Error in estfun.maxLik(ml) :
 [4,]  0.1074 -0.5796
 [5,]  0.1495 -0.5615
 > estfun( mlBhhhCon )[ 1:5, ]
-           mu   sigma
-[1,] -0.33331 -0.4085
-[2,] -0.09928 -0.5786
-[3,]  1.16818  1.6976
-[4,]  0.11376 -0.5735
-[5,]  0.15540 -0.5546
+          mu   sigma
+[1,] -0.3336 -0.4084
+[2,] -0.0995 -0.5787
+[3,]  1.1686  1.6986
+[4,]  0.1137 -0.5737
+[5,]  0.1553 -0.5548
 > estfun( mlgBhhhCon )[ 1:5, ]
           mu   sigma
 [1,] -0.3440 -0.4030
@@ -6238,18 +6278,18 @@ Error in estfun.maxLik(ml) :
 [5,]  0.15937 -0.5563
 > estfun( mlNmConInd )[ 1:5, ]
            mu   sigma
-[1,] -0.33315 -0.4086
-[2,] -0.09919 -0.5786
-[3,]  1.16797  1.6971
-[4,]  0.11380 -0.5734
-[5,]  0.15544 -0.5545
+[1,] -0.33331 -0.4085
+[2,] -0.09928 -0.5786
+[3,]  1.16818  1.6976
+[4,]  0.11376 -0.5735
+[5,]  0.15540 -0.5546
 > estfun( mlgNmConInd )[ 1:5, ]
            mu   sigma
-[1,] -0.33315 -0.4086
-[2,] -0.09919 -0.5786
-[3,]  1.16797  1.6971
-[4,]  0.11380 -0.5734
-[5,]  0.15544 -0.5545
+[1,] -0.33331 -0.4085
+[2,] -0.09928 -0.5786
+[3,]  1.16818  1.6976
+[4,]  0.11376 -0.5735
+[5,]  0.15540 -0.5546
 > 
 > 
 > ## test for method "bread"
@@ -6350,7 +6390,7 @@ mu     3.03 -0.49
 sigma -0.49  1.15
 > round( bread( mlConInd ), 2 )
          mu sigma
-mu     3.03 -0.49
+mu     3.04 -0.49
 sigma -0.49  1.15
 > round( bread( mlgConInd ), 2 )
          mu sigma
@@ -6378,7 +6418,7 @@ mu     3.04 -0.49
 sigma -0.49  1.15
 > round( bread( mlgNmConInd ), 2 )
          mu sigma
-mu     3.04 -0.49
+mu     3.03 -0.49
 sigma -0.49  1.15
 > 
 > 
@@ -6522,4 +6562,4 @@ sigma 0.00  0.01
 > 
 > proc.time()
    user  system elapsed 
- 25.600   2.565  25.344 
+ 41.714   0.093  41.849 

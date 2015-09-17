@@ -340,6 +340,8 @@ maxBFGSRCompute <- function(fn,
        colnames( gri ) <- names( param )
        result$gradientObs <- gri
    }
+   result <- c(result, control=control)
+                           # attach the control parameters
    class(result) <- c("maxim", class(result))
    invisible(result)
 }
