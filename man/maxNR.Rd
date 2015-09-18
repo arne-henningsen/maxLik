@@ -17,7 +17,7 @@ maxNR(fn, grad = NULL, hess = NULL, start,
       fixed = NULL, activePar = NULL, control=NULL, ... )
 maxBFGSR(fn, grad = NULL, hess = NULL, start,
       constraints = NULL, finalHessian = TRUE,
-      fixed = NULL, activePar = NULL, control=maxControl(), ... )
+      fixed = NULL, activePar = NULL, control=NULL, ... )
 maxBHHH(fn, grad = NULL, hess = NULL, start, 
       finalHessian = "BHHH", ... )
 }

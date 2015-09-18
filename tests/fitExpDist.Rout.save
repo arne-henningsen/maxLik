@@ -1,7 +1,7 @@
 
-R version 3.1.2 (2014-10-31) -- "Pumpkin Helmet"
+R version 3.1.1 (2014-07-10) -- "Sock it to Me"
 Copyright (C) 2014 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+Platform: x86_64-redhat-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -198,6 +198,24 @@ $gradientObs
  [99,] -0.832596
 [100,]  0.361129
 
+$control
+A 'MaxControl' object with slots:
+tol = 1e-08 
+reltol = 1.49e-08 
+gradtol = 1e-06 
+steptol = 1e-10 
+lambdatol = 1e-06 
+qac = stephalving 
+qrtol = 1e-10 
+lambda0 = 0.01 
+lambdaStep = 2 
+maxLambda = 1e+12 
+alpha = 1 
+beta = 0.5 
+gamma = 2 
+iterlim = 150 
+printLevel = 0 
+
 > class( ml )
 [1] "maxLik" "maxim"  "list"  
 > # log-likelihood value summed over all observations
@@ -227,14 +245,14 @@ $gradientObs
 > mlBhhh <- maxLik( loglik, start = 1, method = "BHHH" )
 > print( mlBhhh )
 Maximum Likelihood estimation
-BHHH maximisation, 5 iterations
+BHHH maximisation, 4 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -25.05 (1 free parameter(s))
 Estimate(s): 2.116 
 > summary( mlBhhh )
 --------------------------------------------
 Maximum Likelihood estimation
-BHHH maximisation, 5 iterations
+BHHH maximisation, 4 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -25.05 
 1  free parameters
@@ -248,7 +266,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] 100
 > all.equal( mlBhhh[ -c( 4, 5, 6, 10 ) ], ml[ -c( 4, 5, 6, 10 ) ], 
 +    check.attributes = FALSE, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"iterations\": Mean relative difference: 0.25"
 > all.equal( mlBhhh[ 4 ], ml[ 4 ],  # hessian
 +    check.attributes = FALSE, tolerance = 5e-2 )
 [1] TRUE
@@ -270,14 +288,14 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > mlBfgs <- maxLik( loglik, start = 1, method = "BFGS" )
 > print( mlBfgs )
 Maximum Likelihood estimation
-BFGS maximisation, 14 iterations
+BFGS maximization, 14 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -25.05 (1 free parameter(s))
 Estimate(s): 2.116 
 > summary( mlBfgs )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 14 iterations
+BFGS maximization, 14 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -25.05 
 1  free parameters
@@ -291,7 +309,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] 100
 > all.equal( mlBfgs[ -c( 5, 6, 9, 10, 11 ) ], ml[ -c( 5, 6, 9, 10 ) ], 
 +    tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"control\": Attributes: < Component \"iterlim\": Mean relative difference: 0.25 >"
 > # log-likelihood value summed over all observations
 > mlSumBfgs <- maxLik( loglikSum, start = 1, method = "BFGS" )
 > all.equal( mlSumBfgs[], mlBfgs[-12], tolerance = 1e-3 )
@@ -318,19 +336,19 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > # Estimate with only function values
 > mlNm <- maxLik( loglik, start = 1, method = "NM" )
 Warning message:
-In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+In optim(par = 1, fn = function (theta, fnOrig, gradOrig, hessOrig,  :
   one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > print( mlNm )
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 28 iterations
+Nelder-Mead maximization, 28 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -25.05 (1 free parameter(s))
 Estimate(s): 2.116 
 > summary( mlNm )
 --------------------------------------------
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 28 iterations
+Nelder-Mead maximization, 28 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -25.05 
 1  free parameters
@@ -344,12 +362,13 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] 100
 > all.equal( mlNm[ -c( 5, 6, 9, 10, 11 ) ], ml[ -c( 5, 6, 9, 10 ) ], 
 +    tolerance = 1e-3 )
-[1] "Component \"gradient\": Mean relative difference: 0.9999"
+[1] "Component \"gradient\": Mean relative difference: 0.9999"                                   
+[2] "Component \"control\": Attributes: < Component \"iterlim\": Mean relative difference: 0.7 >"
 > 
 > # Estimate with analytic gradient (unused during estimation)
 > mlgNm <- maxLik( loglik, gradlik, start = 1, method = "NM" )
 Warning message:
-In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+In optim(par = 1, fn = function (theta, fnOrig, gradOrig, hessOrig,  :
   one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > nObs( mlgNm )
@@ -360,7 +379,7 @@ use "Brent" or optimize() directly
 > # Estimate with analytic gradient and Hessian (both unused during estimation)
 > mlghNm <- maxLik( loglik, gradlik, hesslik, start = 1, method = "NM" )
 Warning message:
-In optim(par = start[!fixed], fn = logLikFunc, control = control,  :
+In optim(par = 1, fn = function (theta, fnOrig, gradOrig, hessOrig,  :
   one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlghNm, mlgNm, tolerance = 1e-3 )
@@ -371,14 +390,14 @@ use "Brent" or optimize() directly
 > mlSann <- maxLik( loglik, start = 1, method = "SANN" )
 > print( mlSann )
 Maximum Likelihood estimation
-SANN maximisation, 10000 iterations
+SANN maximization, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -25.05 (1 free parameter(s))
 Estimate(s): 2.116 
 > summary( mlSann )
 --------------------------------------------
 Maximum Likelihood estimation
-SANN maximisation, 10000 iterations
+SANN maximization, 10000 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -25.05 
 1  free parameters
@@ -392,7 +411,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] 100
 > all.equal( mlSann[ -c( 5, 6, 9, 10, 11 ) ], ml[ -c( 5, 6, 9, 10 ) ], 
 +    tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"control\": Attributes: < Component \"iterlim\": Mean relative difference: 0.985 >"
 > 
 > # Estimate with analytic gradient (unused during estimation)
 > mlgSann <- maxLik( loglik, gradlik, start = 1, method = "SANN" )
@@ -413,7 +432,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > print(summary( mlCg))
 --------------------------------------------
 Maximum Likelihood estimation
-CG maximisation, 33 iterations
+CG maximization, 33 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -25.05 
 1  free parameters
@@ -429,7 +448,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > print(summary( mlgCg))
 --------------------------------------------
 Maximum Likelihood estimation
-CG maximisation, 33 iterations
+CG maximization, 33 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -25.05 
 1  free parameters
@@ -445,7 +464,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > print(summary( mlghCg))
 --------------------------------------------
 Maximum Likelihood estimation
-CG maximisation, 33 iterations
+CG maximization, 33 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -25.05 
 1  free parameters
@@ -621,4 +640,4 @@ Error in nObs.maxLik(x) :
 > 
 > proc.time()
    user  system elapsed 
-  0.968   0.027   0.992 
+  1.572   0.049   1.615 

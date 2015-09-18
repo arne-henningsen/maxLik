@@ -58,7 +58,7 @@ hat3 <- function(param) {
    z <- param[3]
    exp(-(x-2)^2-(y-2)^2-(z-2)^2)
 }
-sv <- c(1,1,1)
+sv <- c(x=1,y=1,z=1)
 ## constraints: x + y + z = 8
 A <- matrix(c(1,1,1), 1, 3)
 B <- -8
@@ -66,4 +66,3 @@ constraints <- list(eqA=A, eqB=B)
 hat3CF <- maxBFGSR(hat3, start=sv, constraints=constraints, fixed=3)
 hat3CF <- roundGradients( hat3CF )
 summary( hat3CF )
-

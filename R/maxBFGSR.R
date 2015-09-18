@@ -4,9 +4,9 @@ maxBFGSR <- function(fn, grad=NULL, hess=NULL, start,
                      finalHessian=TRUE,
                      fixed=NULL,
                      activePar=NULL,
-                     control=maxControl(),
+                     control=NULL,
                      ...) {
-   ## Newton-Raphson maximisation
+   ## Newton-Raphson maximization
    ## Parameters:
    ## fn          - the function to be minimized.  Returns either scalar or
    ##               vector value with possible attributes 
@@ -55,31 +55,38 @@ maxBFGSR <- function(fn, grad=NULL, hess=NULL, start,
    ##             activePar - logical vector, which parameters are active (not constant)
    ## activePar   logical vector, which parameters were treated as free (resp fixed)
    ## iterations  number of iterations
-   ## type        "Newton-Raphson maximisation"
+   ## type        "Newton-Raphson maximization"
    ##
    ## ------------------------------
    ## Add parameters from ... to control
-   control <- maxControl(control, ...)
+   if(!inherits(control, "MaxControl")) {
+      mControl <- addControlList(maxControl(), control)
+   }
+   else {
+      mControl <- control
+   }
+   mControl <- maxControl(mControl, ...)
    ##
-   argNames <- c( "fn", "grad", "hess", "start", "print.level",
-                 "activePar", "fixed" )
-   checkFuncArgs( fn, argNames, "fn", "maxNR" )
+   argNames <- c(c( "fn", "grad", "hess", "start",
+                 "activePar", "fixed", "control"),
+                 openParam(mControl))
+   checkFuncArgs( fn, argNames, "fn", "maxBFGSR" )
    if( !is.null( grad ) ) {
-      checkFuncArgs( grad, argNames, "grad", "maxNR" )
+      checkFuncArgs( grad, argNames, "grad", "maxBFGSR" )
    }
    if( !is.null( hess ) ) {
-      checkFuncArgs( hess, argNames, "hess", "maxNR" )
+      checkFuncArgs( hess, argNames, "hess", "maxBFGSR" )
    }
    ## establish the active parameters.  Internally, we just use 'activePar'
    fixed <- prepareFixed( start = start, activePar = activePar,
       fixed = fixed )
    ## chop off the control args from ... and forward the new ...
    dddot <- list(...)
-   dddot <- dddot[!(names(dddot) %in% openParam(control))]
+   dddot <- dddot[!(names(dddot) %in% openParam(mControl))]
    cl <- list(start=start,
               finalHessian=finalHessian,
               fixed=fixed,
-              control=control)
+              control=mControl)
    if(length(dddot) > 0) {
       cl <- c(cl, dddot)
    }
@@ -91,17 +98,17 @@ maxBFGSR <- function(fn, grad=NULL, hess=NULL, start,
       result <- eval(as.call(cl))
    } else {
       if(identical(names(constraints), c("ineqA", "ineqB"))) {
-         stop("Inequality constraints not implemented for maxNR")
+         stop("Inequality constraints not implemented for maxBFGSR")
       } else if(identical(names(constraints), c("eqA", "eqB"))) {
                            # equality constraints: A %*% beta + B = 0
          cl <- c(quote(sumt),
                  fn=fn, grad=grad, hess=hess,
-                 maxRoutine=maxNR,
+                 maxRoutine=maxBFGSR,
                  constraints=list(constraints),
                  cl)
          result <- eval(as.call(cl))
       } else {
-         stop("maxBFGS only supports the following constraints:\n",
+         stop("maxBFGSR only supports the following constraints:\n",
               "constraints=list(ineqA, ineqB)\n",
               "\tfor A %*% beta + B >= 0 linear inequality constraints\n",
               "current constraints:",

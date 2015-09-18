@@ -69,9 +69,14 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
     \itemize{
       \item{iterlim}{maximum number of iterations.  Note that
 	\sQuote{iteration} may mean different things for different optimizers.}
+      \item{printLevel}{a larger number prints more working
+	information.}
+        \item{alpha, beta, gamma}{Scaling parameters for the
+          '"Nelder-Mead"' method. 'alpha' is the reflection factor
+          (default 1.0), 'beta' the contraction factor (0.5) and
+          'gamma' the expansion factor (2.0). (See Nelder \& Mead, 1965)}
     }
   }
-  \item{print.level}{a larger number prints more working information.}
   \item{constraints}{either \code{NULL} for unconstrained optimization
     or a list with two components.  The components may be either
     \code{eqA} and \code{eqB} for equality-constrained optimization
@@ -111,11 +116,6 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
           be comparable in the sense that a unit change in any element
           produces about a unit change in the scaled value. (see
     \code{\link{optim}})}
-  \item{alpha, beta, gamma}{Scaling parameters for the
-          '"Nelder-Mead"' method. 'alpha' is the reflection factor
-          (default 1.0), 'beta' the contraction factor (0.5) and
-          'gamma' the expansion factor (2.0). (see
-    \code{\link{optim}} and Nelder \& Mead (1965))}
   \item{\dots}{further arguments for \code{fn} and \code{grad}.}
 }
 
