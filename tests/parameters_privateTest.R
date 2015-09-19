@@ -103,6 +103,23 @@ ml2C <- maxLik(llf, start=startVal, method="nm",
                control=list(iterlim=1, printLevel=2))
 print(all.equal(ml2, ml2C))
 
+## what about additional parameters for the loglik function?
+llf1 <- function( param, sigma ) {
+   mu <- param
+   N <- length( x )
+   llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
+      0.5 * sum( ( x - mu )^2 / sigma^2 )
+   return( llValue )
+}
+mls <- maxLik(llf1, start=0, sigma=1)
+print(coef(mls))
+mlsM <- maxLik(llf1, start=0, qac="marquardt", sigma=1)
+mlsCM <- maxLik(llf1, start=0, control=list(qac="marquardt"), sigma=1)
+all.equal(mlsM, mlsCM)
+## And waht about unused parameters?
+try(maxLik(llf1, start=0, control=list(qac="marquardt"), sigma=1, unknownPar=2))
+                           # error
+
 N <- 100
 ## Does this work with constraints?
 x <- c(rnorm(N, mean=-1), rnorm(N, mean=1))

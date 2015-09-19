@@ -311,6 +311,26 @@ Exiting from Nelder Mead minimizer
 > print(all.equal(ml2, ml2C))
 [1] TRUE
 > 
+> ## what about additional parameters for the loglik function?
+> llf1 <- function( param, sigma ) {
++    mu <- param
++    N <- length( x )
++    llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
++       0.5 * sum( ( x - mu )^2 / sigma^2 )
++    return( llValue )
++ }
+> mls <- maxLik(llf1, start=0, sigma=1)
+> print(coef(mls))
+[1] 1.069
+> mlsM <- maxLik(llf1, start=0, qac="marquardt", sigma=1)
+> mlsCM <- maxLik(llf1, start=0, control=list(qac="marquardt"), sigma=1)
+> all.equal(mlsM, mlsCM)
+[1] TRUE
+> ## And waht about unused parameters?
+> try(maxLik(llf1, start=0, control=list(qac="marquardt"), sigma=1, unknownPar=2))
+Error in fnOrig(theta, ...) : unused argument (unknownPar = 2)
+>                            # error
+> 
 > N <- 100
 > ## Does this work with constraints?
 > x <- c(rnorm(N, mean=-1), rnorm(N, mean=1))
@@ -380,4 +400,4 @@ Constrained optimization based on constrOptim
 > 
 > proc.time()
    user  system elapsed 
-  0.779   0.036   0.805 
+  0.793   0.042   0.825 

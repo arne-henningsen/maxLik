@@ -67,14 +67,24 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
     The following control
     parameters are accepted by these functions:
     \itemize{
-      \item{iterlim}{maximum number of iterations.  Note that
-	\sQuote{iteration} may mean different things for different optimizers.}
-      \item{printLevel}{a larger number prints more working
+      \item{\code{reltol}}{sqrt(.Machine$double.eps), stopping
+	condition.  Relative convergence
+	tolerance, the algorithm stops if the relative improvement
+	between iterations is less than \sQuote{reltol}.
+      }
+      \item{\code{iterlim}}{integer, maximum number of iterations.  Note that
+	\sQuote{iteration} may mean different things for different
+	optimizers.  Default values are 200 (for \sQuote{BFGS}), 500
+	(\sQuote{CG} and \sQuote{NM}), and 10000 (\sQuote{SANN}).
+	Default 0, no information.
+      }
+      \item{\code{printLevel}}{integer, larger number prints more working
 	information.}
-        \item{alpha, beta, gamma}{Scaling parameters for the
-          '"Nelder-Mead"' method. 'alpha' is the reflection factor
-          (default 1.0), 'beta' the contraction factor (0.5) and
-          'gamma' the expansion factor (2.0). (See Nelder \& Mead, 1965)}
+      \item{\code{alpha}}{1, Nelder-Mead simplex method reflection
+	coefficient (see Nelder \& Mead, 1965)
+      }
+      \item{\code{beta}}{0.5, Nelder-Mead controction coefficient}
+      \item{\code{gamma}}{2, Nelder-Mead expansion coefficient}
     }
   }
   \item{constraints}{either \code{NULL} for unconstrained optimization
