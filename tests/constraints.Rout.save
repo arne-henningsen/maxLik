@@ -1,7 +1,7 @@
 
-R version 3.1.2 (2014-10-31) -- "Pumpkin Helmet"
+R version 3.1.1 (2014-07-10) -- "Sock it to Me"
 Copyright (C) 2014 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+Platform: x86_64-redhat-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -129,10 +129,10 @@ Test for equality constraints
 +             constraints=list(eqA=A, eqB=B),
 +             SUMTRho0=1) )
 Maximum Likelihood estimation
-BHHH maximisation, 5 iterations
+BHHH maximisation, 6 iterations
 Return code 2: successive function values within tolerance limit
 Log-Likelihood: -339.8 (3 free parameter(s))
-Estimate(s): 0.3425 -1.101 0.5504 
+Estimate(s): 0.3402 -1.103 0.5514 
 > 
 > ### ------------------ Now test extra parameters for the function ----
 > logLikMix2 <- function(param, rho) {
@@ -271,14 +271,14 @@ NR, multiple constraints
 > cat("Error handling: ncol(A) != lengths(start)\n")
 Error handling: ncol(A) != lengths(start)
 > try(a <- maxNR(f, start=c(1, 2, 3), constraints=list(eqA=A, eqB=B)))
-Error in sumt(fn = fn, grad = grad, hess = hess, start = start, maxRoutine = maxNR,  : 
+Error in sumt(fn = function (theta)  : 
   Equality constraint matrix A must have the same number
 of columns as the parameter length (currently 2 and 3)
 >                            # ncol(A) != length(start)
 > A <- matrix(c(1, 1), 1, 2)
 > B <- c(-1, 2)
 > try(a <- maxNR(f, start=c(1, 2), constraints=list(eqA=A, eqB=B)))
-Error in sumt(fn = fn, grad = grad, hess = hess, start = start, maxRoutine = maxNR,  : 
+Error in sumt(fn = function (theta)  : 
   Equality constraint matrix A must have the same number
 of rows as the matrix B (currently 1 and 2)
 >                            # nrow(A) != nrow(B)
@@ -297,7 +297,7 @@ of rows as the matrix B (currently 1 and 2)
 > print( summary( a ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 23 iterations
+BFGS maximization, 23 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -337.6 
 2  free parameters
@@ -320,7 +320,7 @@ Constrained optimization based on constrOptim
 > print( summary( a ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-BFGS maximisation, 23 iterations
+BFGS maximization, 23 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -337.6 
 2  free parameters
@@ -343,20 +343,20 @@ Constrained optimization based on constrOptim
 > print( summary( a ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 61 iterations
+Nelder-Mead maximization, 59 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -337.6 
 2  free parameters
 Estimates:
      Estimate Std. error t value Pr(> t)    
-[1,]    -0.78       0.12    -6.3   4e-10 ***
+[1,]    -0.77       0.12    -6.3   4e-10 ***
 [2,]     0.88       0.13     6.7   2e-11 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Warning: constrained likelihood estimation. Inference is probably wrong
 Constrained optimization based on constrOptim 
-1  outer iterations, barrier value -3.41e-05 
+1  outer iterations, barrier value -3.408e-05 
 --------------------------------------------
 > ## ---------- test vector B for inequality  --------------
 > B1 <- c(1,-2)
@@ -432,7 +432,7 @@ Constraints + fixed parameters
 +                iterlim=10)
 > print(summary(res))
 --------------------------------------------
-BFGS maximisation 
+BFGS maximization 
 Number of iterations: 31 
 Return code: 1 
 iteration limit exceeded  
@@ -449,4 +449,4 @@ Constrained optimization based on constrOptim
 > 
 > proc.time()
    user  system elapsed 
-  2.600   0.051   2.629 
+  1.895   0.032   1.920 

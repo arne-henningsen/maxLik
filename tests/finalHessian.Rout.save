@@ -1,7 +1,7 @@
 
-R version 3.1.2 (2014-10-31) -- "Pumpkin Helmet"
+R version 3.1.1 (2014-07-10) -- "Sock it to Me"
 Copyright (C) 2014 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+Platform: x86_64-redhat-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -161,7 +161,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > b <- maxLik( ll2, gr2, start = c(0,1), method = "NR", finalHessian="bhhh")
 Warning message:
-In maxNRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad, hessOrig = hess,  :
+In maxNRCompute(fn = function (theta, fnOrig, gradOrig = NULL, hessOrig = NULL,  :
   For computing the final Hessian by 'BHHH' method, the log-likelihood or gradient must be supplied by observations
 >                            # should issue a warning as BHHH not possible
 > summary(b )
@@ -251,7 +251,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > b <- maxLik( ll2, gr2, start = c(0,1), method = "BFGSR", finalHessian="bhhh")
 Warning message:
-In maxBFGSRCompute(fn = logLikAttr, fnOrig = fn, gradOrig = grad,  :
+In maxBFGSRCompute(fn = function (theta, fnOrig, gradOrig = NULL,  :
   For computing the final Hessian by 'BHHH' method, the log-likelihood or gradient must be supplied by observations
 >                            # should issue a warning as BHHH not possible
 > summary(b )
@@ -287,7 +287,7 @@ Estimates:
 > summary(b)
 --------------------------------------------
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 63 iterations
+Nelder-Mead maximization, 63 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -212.7524 
 2  free parameters
@@ -308,7 +308,7 @@ In maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "Nelder-M
 > summary(b)
 --------------------------------------------
 Maximum Likelihood estimation
-Nelder-Mead maximisation, 63 iterations
+Nelder-Mead maximization, 63 iterations
 Return code 0: successful convergence 
 Log-Likelihood: -212.7524 
 2  free parameters
@@ -320,4 +320,4 @@ Estimates:
 > 
 > proc.time()
    user  system elapsed 
-  0.386   0.021   0.400 
+  0.689   0.046   0.726 
