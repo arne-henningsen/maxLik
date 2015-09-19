@@ -1,0 +1,383 @@
+
+R version 3.1.1 (2014-07-10) -- "Sock it to Me"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> 
+> ### Test battery for various optimization parameters for different optimizers.
+> ### 
+> library(maxLik)
+Loading required package: miscTools
+
+Please cite the 'maxLik' package as:
+Henningsen, Arne and Toomet, Ott (2011). maxLik: A package for maximum likelihood estimation in R. Computational Statistics 26(3), 443-458. DOI 10.1007/s00180-010-0217-1.
+
+If you have questions, suggestions, or comments regarding the 'maxLik' package, please use a forum or 'tracker' at maxLik's R-Forge site:
+https://r-forge.r-project.org/projects/maxlik/
+> options(digits = 4)
+>                            # just to avoid so many differences when comparing these output files
+> ## data to fit a normal distribution
+> set.seed( 123 )
+> # generate a variable from normally distributed random numbers
+> N <- 50
+> x <- rnorm(N, 1, 2 )
+> 
+> ## log likelihood function
+> llf <- function( param ) {
++    mu <- param[ 1 ]
++    sigma <- param[ 2 ]
++    if(!(sigma > 0))
++        return(NA)
++                            # to avoid warnings in the output
++    N <- length( x )
++    llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
++       0.5 * sum( ( x - mu )^2 / sigma^2 )
++    return( llValue )
++ }
+> 
+> logLikMix <- function(param) {
++    rho <- param[1]
++    if(rho < 0 || rho > 1)
++        return(NA)
++    mu1 <- param[2]
++    mu2 <- param[3]
++    ll <- log(rho*dnorm(x - mu1) + (1 - rho)*dnorm(x - mu2))
++ #   ll <- sum(ll)
++    ll
++ }
+> 
+> # start values
+> startVal <- c( mu = 0, sigma = 1 )
+> 
+> # 
+> ml <- maxLik( llf, start = startVal )
+> print(summary(ml))
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 7 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -101.2 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu       1.069      0.259    4.12 3.7e-05 ***
+sigma    1.833      0.183   10.00 < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> ## tol
+> mlTol <- maxLik( llf, start = startVal, tol=1)
+> print(summary(mlTol))
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 4 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -101.3 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu       1.060      0.253    4.18 2.9e-05 ***
+sigma    1.791      0.173   10.35 < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> mlTolC <- maxLik(llf, start=startVal, control=list(tol=1))
+> print(all.equal(mlTol, mlTolC))
+[1] TRUE
+> try(ml <- maxLik( llf, start = startVal, tol=-1))
+Error in validObject(x) : 
+  invalid class "MaxControl" object: 'tol' must be non-negative, not -1
+> try(ml <- maxLik( llf, start = startVal, tol=c(1,2)))
+Error in validObject(x) : 
+  invalid class "MaxControl" object: 'tol' must be of length 1, not 2
+In addition: Warning message:
+In if (slot(object, "tol") < 0) { :
+  the condition has length > 1 and only the first element will be used
+> try(ml <- maxLik( llf, start = startVal, tol=TRUE))
+Error in checkSlotAssignment(object, name, value) : 
+  assignment of an object of class "logical" is not valid for slot 'tol' in an object of class "MaxControl"; is(value, "numeric") is not TRUE
+> try(ml <- maxLik( llf, start = startVal, control=list(tol=-1)))
+Error in validObject(x) : 
+  invalid class "MaxControl" object: 'tol' must be non-negative, not -1
+> try(ml <- maxLik( llf, start = startVal, control=list(tol=c(1,2))))
+Error in validObject(x) : 
+  invalid class "MaxControl" object: 'tol' must be of length 1, not 2
+In addition: Warning message:
+In if (slot(object, "tol") < 0) { :
+  the condition has length > 1 and only the first element will be used
+> try(ml <- maxLik( llf, start = startVal, control=list(tol=TRUE)))
+Error in checkSlotAssignment(object, name, value) : 
+  assignment of an object of class "logical" is not valid for slot 'tol' in an object of class "MaxControl"; is(value, "numeric") is not TRUE
+> ## reltol
+> mlRelTol <- maxLik( llf, start = startVal, reltol=1)
+> print(summary(mlRelTol))
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 1 iterations
+Return code 2: successive function values within tolerance limit
+Log-Likelihood: -118.3 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu       0.741      0.167    4.43 9.2e-06 ***
+sigma    1.153      0.064   18.02 < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> mlRelTolC <- maxLik(llf, start=startVal, control=list(reltol=1))
+> print(all.equal(mlRelTol, mlRelTolC))
+[1] TRUE
+> try(ml <- maxLik( llf, start = startVal, reltol=-1))
+Error in validObject(x) : 
+  invalid class "MaxControl" object: 'reltol' must be non-negative, not -1
+> try(ml <- maxLik( llf, start = startVal, reltol=c(1,2)))
+Error in validObject(x) : 
+  invalid class "MaxControl" object: 'reltol' must be of length 1, not 2
+In addition: Warning message:
+In if (slot(object, "reltol") < 0) { :
+  the condition has length > 1 and only the first element will be used
+> try(ml <- maxLik( llf, start = startVal, reltol=TRUE))
+Error in checkSlotAssignment(object, name, value) : 
+  assignment of an object of class "logical" is not valid for slot 'reltol' in an object of class "MaxControl"; is(value, "numeric") is not TRUE
+> try(ml <- maxLik( llf, start = startVal, control=list(reltol=-1)))
+Error in validObject(x) : 
+  invalid class "MaxControl" object: 'reltol' must be non-negative, not -1
+> try(ml <- maxLik( llf, start = startVal, control=list(reltol=c(1,2))))
+Error in validObject(x) : 
+  invalid class "MaxControl" object: 'reltol' must be of length 1, not 2
+In addition: Warning message:
+In if (slot(object, "reltol") < 0) { :
+  the condition has length > 1 and only the first element will be used
+> try(ml <- maxLik( llf, start = startVal, control=list(reltol=TRUE)))
+Error in checkSlotAssignment(object, name, value) : 
+  assignment of an object of class "logical" is not valid for slot 'reltol' in an object of class "MaxControl"; is(value, "numeric") is not TRUE
+> ## gradtol
+> mlGradtol <- maxLik( llf, start = startVal, gradtol=1e-2)
+> print(summary(mlGradtol))
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 6 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -101.2 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu       1.069      0.259    4.12 3.7e-05 ***
+sigma    1.833      0.183   10.00 < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> mlGradtolC <- maxLik(llf, start=startVal, control=list(gradtol=1e-2))
+> print(all.equal(mlGradtol, mlGradtolC))
+[1] TRUE
+> try(ml <- maxLik( llf, start = startVal, gradtol=-1))
+Error in validObject(x) : 
+  invalid class "MaxControl" object: 'gradtol' must be non-negative, not -1
+> try(ml <- maxLik( llf, start = startVal, gradtol=c(1,2)))
+Error in validObject(x) : 
+  invalid class "MaxControl" object: 'gradtol' must be of length 1, not 2
+In addition: Warning message:
+In if (slot(object, "gradtol") < 0) { :
+  the condition has length > 1 and only the first element will be used
+> try(ml <- maxLik( llf, start = startVal, gradtol=TRUE))
+Error in checkSlotAssignment(object, name, value) : 
+  assignment of an object of class "logical" is not valid for slot 'gradtol' in an object of class "MaxControl"; is(value, "numeric") is not TRUE
+> try(ml <- maxLik( llf, start = startVal, control=list(gradtol=-1)))
+Error in validObject(x) : 
+  invalid class "MaxControl" object: 'gradtol' must be non-negative, not -1
+> try(ml <- maxLik( llf, start = startVal, control=list(gradtol=c(1,2))))
+Error in validObject(x) : 
+  invalid class "MaxControl" object: 'gradtol' must be of length 1, not 2
+In addition: Warning message:
+In if (slot(object, "gradtol") < 0) { :
+  the condition has length > 1 and only the first element will be used
+> try(ml <- maxLik( llf, start = startVal, control=list(gradtol=TRUE)))
+Error in checkSlotAssignment(object, name, value) : 
+  assignment of an object of class "logical" is not valid for slot 'gradtol' in an object of class "MaxControl"; is(value, "numeric") is not TRUE
+> ## examples with steptol, lambdatol
+> ## qac
+> mlMarq <- maxLik( llf, start = startVal, qac="marquardt")
+> print(summary(mlMarq))
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation with Marquardt (1963) Hessian correction, 7 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -101.2 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu       1.069      0.259    4.12 3.7e-05 ***
+sigma    1.833      0.183   10.00 < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> mlMarqC <- maxLik(llf, start=startVal, control=list(qac="marquardt"))
+> print(all.equal(mlMarq, mlMarqC))
+[1] TRUE
+> try(ml <- maxLik( llf, start = startVal, qac=-1))
+Error in checkSlotAssignment(object, name, value) : 
+  assignment of an object of class "numeric" is not valid for slot 'qac' in an object of class "MaxControl"; is(value, "character") is not TRUE
+> try(ml <- maxLik( llf, start = startVal, qac=c("a", "b")))
+Error in if (!pmatch(slot(object, "qac"), c("stephalving", "marquardt"))) { : 
+  missing value where TRUE/FALSE needed
+In addition: Warning message:
+In if (!pmatch(slot(object, "qac"), c("stephalving", "marquardt"))) { :
+  the condition has length > 1 and only the first element will be used
+> try(ml <- maxLik( llf, start = startVal, qac=TRUE))
+Error in checkSlotAssignment(object, name, value) : 
+  assignment of an object of class "logical" is not valid for slot 'qac' in an object of class "MaxControl"; is(value, "character") is not TRUE
+> try(ml <- maxLik( llf, start = startVal, control=list(qac=-1)))
+Error in checkSlotAssignment(object, name, value) : 
+  assignment of an object of class "numeric" is not valid for slot 'qac' in an object of class "MaxControl"; is(value, "character") is not TRUE
+> try(ml <- maxLik( llf, start = startVal, control=list(qac=c("a", "b"))))
+Error in if (!pmatch(slot(object, "qac"), c("stephalving", "marquardt"))) { : 
+  missing value where TRUE/FALSE needed
+In addition: Warning message:
+In if (!pmatch(slot(object, "qac"), c("stephalving", "marquardt"))) { :
+  the condition has length > 1 and only the first element will be used
+> try(ml <- maxLik( llf, start = startVal, control=list(qac=TRUE)))
+Error in checkSlotAssignment(object, name, value) : 
+  assignment of an object of class "logical" is not valid for slot 'qac' in an object of class "MaxControl"; is(value, "character") is not TRUE
+> mlMarqCl <- a <- maxLik(llf, start = startVal,
++                         control=list(qac="marquardt", lambda0=1000, lambdaStep=4))
+> print(all.equal(coef(mlMarqCl), coef(mlMarq)))
+[1] TRUE
+> ## NM: alpha, beta, gamma
+> mlNM <- maxLik( llf, start = startVal, method="nm")
+> print(summary(mlNM))
+--------------------------------------------
+Maximum Likelihood estimation
+Nelder-Mead maximization, 61 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -101.2 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu       1.069      0.259    4.12 3.8e-05 ***
+sigma    1.833      0.183   10.00 < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> mlNMAlpha <- maxLik(llf, start=startVal, method="nm", beta=0.8)
+> mlNMAlphaC <- maxLik(llf, start=startVal, method="nm", control=list(beta=0.8))
+> print(all.equal(mlNMAlpha, mlNMAlphaC))
+[1] TRUE
+> 
+> ## two parameters at the same time
+> ## iterlim, printLevel
+> ml2 <- maxLik( llf, start=startVal, method="nm", iterlim=1, printLevel=2)
+  Nelder-Mead direct search function minimizer
+function value for initial parameters = 158.514694
+  Scaled convergence tolerance is 2.36205e-06
+Stepsize computed as 0.100000
+BUILD              3 158.514694 143.743648
+Exiting from Nelder Mead minimizer
+    5 function evaluations used
+> print(summary(ml2))
+--------------------------------------------
+Maximum Likelihood estimation
+Nelder-Mead maximization, 5 iterations
+Return code 1: iteration limit exceeded 
+Log-Likelihood: -143.7 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu      0.0000     0.1961     0.0       1    
+sigma   1.1000     0.0615    17.9  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> ml2C <- maxLik(llf, start=startVal, method="nm",
++                control=list(iterlim=1, printLevel=2))
+  Nelder-Mead direct search function minimizer
+function value for initial parameters = 158.514694
+  Scaled convergence tolerance is 2.36205e-06
+Stepsize computed as 0.100000
+BUILD              3 158.514694 143.743648
+Exiting from Nelder Mead minimizer
+    5 function evaluations used
+> print(all.equal(ml2, ml2C))
+[1] TRUE
+> 
+> N <- 100
+> ## Does this work with constraints?
+> x <- c(rnorm(N, mean=-1), rnorm(N, mean=1))
+> ## First test inequality constraints
+> ## Inequality constraints: x + y + z < 0.5
+> A <- matrix(c(-1, 0, 0,
++               0, -1, 0,
++               0, 0, 1), 3, 3, byrow=TRUE)
+> B <- rep(0.5, 3)
+> start <- c(0.4, 0, 0.9)
+> ## analytic gradient
+> cat("Inequality constraints, analytic gradient & Hessian\n")
+Inequality constraints, analytic gradient & Hessian
+> mix <- maxLik(logLikMix, 
++               start=start,
++               constraints=list(ineqA=A, ineqB=B))
+> print(summary(mix))
+--------------------------------------------
+Maximum Likelihood estimation
+Nelder-Mead maximization, 172 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -351.2 
+3  free parameters
+Estimates:
+     Estimate Std. error t value Pr(> t)    
+[1,]    0.484      0.096    5.04 4.8e-07 ***
+[2,]   -1.010      0.214   -4.72 2.4e-06 ***
+[3,]    0.909      0.194    4.70 2.6e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -0.000116 
+--------------------------------------------
+> mixGT <- maxLik(logLikMix, 
++               start=start,
++               constraints=list(ineqA=A, ineqB=B),
++                 gradtol=1e-2)
+> print(summary(mixGT))
+--------------------------------------------
+Maximum Likelihood estimation
+Nelder-Mead maximization, 172 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -351.2 
+3  free parameters
+Estimates:
+     Estimate Std. error t value Pr(> t)    
+[1,]    0.484      0.096    5.04 4.8e-07 ***
+[2,]   -1.010      0.214   -4.72 2.4e-06 ***
+[3,]    0.909      0.194    4.70 2.6e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on constrOptim 
+1  outer iterations, barrier value -0.000116 
+--------------------------------------------
+> mixGTC <- maxLik(logLikMix, 
++                  start=start,
++                  constraints=list(ineqA=A, ineqB=B),
++                  control=list(gradtol=1e-2))
+> print(all.equal(mixGT, mixGTC))
+[1] TRUE
+> 
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  0.779   0.036   0.805 

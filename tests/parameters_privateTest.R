@@ -85,6 +85,9 @@ try(ml <- maxLik( llf, start = startVal, qac=TRUE))
 try(ml <- maxLik( llf, start = startVal, control=list(qac=-1)))
 try(ml <- maxLik( llf, start = startVal, control=list(qac=c("a", "b"))))
 try(ml <- maxLik( llf, start = startVal, control=list(qac=TRUE)))
+mlMarqCl <- a <- maxLik(llf, start = startVal,
+                        control=list(qac="marquardt", lambda0=1000, lambdaStep=4))
+print(all.equal(coef(mlMarqCl), coef(mlMarq)))
 ## NM: alpha, beta, gamma
 mlNM <- maxLik( llf, start = startVal, method="nm")
 print(summary(mlNM))
@@ -94,9 +97,10 @@ print(all.equal(mlNMAlpha, mlNMAlphaC))
 
 ## two parameters at the same time
 ## iterlim, printLevel
-ml2 <- maxLik( llf, start = startVal, method="nm", iterlim=1, printLevel=2)
+ml2 <- maxLik( llf, start=startVal, method="nm", iterlim=1, printLevel=2)
 print(summary(ml2))
-ml2C <- maxLik(llf, start=startVal, control=list(iterlim=1, printLevel=2))
+ml2C <- maxLik(llf, start=startVal, method="nm",
+               control=list(iterlim=1, printLevel=2))
 print(all.equal(ml2, ml2C))
 
 N <- 100
