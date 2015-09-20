@@ -2,9 +2,9 @@
 \alias{compareDerivatives}
 \title{function to compare analytic and numeric derivatives}
 \description{
-  This function compares analytic and numerical derivative and prints a few
-  diagnostics.  It is intended for testing pre-programmed derivative
-  routines
+  This function compares analytic and numerical derivative and prints related
+  diagnostics information.  It is intended for testing and debugging
+  code for analytic derivatives
   for maximisation algorithms.
 }
 \usage{
@@ -46,14 +46,18 @@ compareDerivatives(f, grad, hess=NULL, t0, eps=1e-6, print=TRUE, ...)
   }
 }
 \details{
-  For every component of \code{f}, the parameter value, analytic and
-  numeric derivative and their relative difference
-
-  rel.diff = (analytic - numeric)/(0.5*(analytic+numeric))
-
-  are printed;  if analytic = 0 = numeric, we define rel.diff = 0.  If
+  Analytic derivatives (and Hessian) substantially improve the
+  estimation speed and reliability.  However, those are
+  typically hard to program.  This utility compares the results and
+  analytic and (internally calculated) numeric derivatives.  
+  For every component of \code{f}, it prints the parameter value, analytic and
+  numeric derivative, and their relative difference
+  \deqn{\textrm{rel.diff} = \frac{\textrm{analytic} -
+      \textrm{numeric}}{\frac{1}{2}(\textrm{analytic} + \textrm{numeric})}.}{rel.diff = (analytic -
+    numeric)/(0.5*(analytic + numeric)).}
+  If analytic = 0 = numeric, the rel.diff = 0.  If
   analytic derivatives are correct and the function is sufficiently
-  smooth, expect the relative differences to be less than 1e-7.
+  smooth, expect the relative differences to be less than \eqn{10^{-7}}{1e-7}.
 }
 \value{
   A list with the following components:

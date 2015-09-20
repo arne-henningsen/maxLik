@@ -16,20 +16,19 @@
 \value{
    Matrix, the inverse of the expectation of the second derivative
    (Hessian matrix) of the log-likelihood function
-   with respect to the parameters,
-   usually equal to the variance covariance matrix of the parameters
-   times the number of observations.
+   with respect to the parameters.
+   In case of the simple Maximum Likelihood, it is
+   equal to the variance covariance matrix of the parameters,
+   multiplied by the number of observations.
 }
 \section{Warnings}{
-   The \pkg{sandwich} package must be loaded before this method
-   can be used.
+  The \pkg{sandwich} package is required for this function. 
 
-   This method works only if \code{\link{maxLik}} was called 
-   with argument \code{grad} equal to a gradient function or
-   (if no gradient function is specified)
-   argument \code{logLik} equal to a log-likelihood function
-   that return the gradients or log-likelihood values, respectively,
-   for each observation.
+  This method works only if the observaton-specific gradient information
+  was available for the estimation.  This is the case of the
+  observation-specific gradient was supplied (see the \code{grad}
+  argument for \code{\link{maxLik}}), or the log-likelihood function
+  returns a vector of observation-specific values.
 }
 \author{
    Arne Henningsen

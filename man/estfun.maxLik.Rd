@@ -23,12 +23,11 @@
    The \pkg{sandwich} package must be loaded before this method
    can be used.
 
-   This method works only if \code{\link{maxLik}} was called 
-   with argument \code{grad} equal to a gradient function or
-   (if no gradient function is specified)
-   argument \code{logLik} equal to a log-likelihood function
-   that return the gradients or log-likelihood values, respectively,
-   for each observation.
+   This method works only if the observaton-specific gradient information
+   was available for the estimation.  This is the case of the
+   observation-specific gradient was supplied (see the \code{grad}
+   argument for \code{\link{maxLik}}), or the log-likelihood function
+   returns a vector of observation-specific values.
 }
 \author{
    Arne Henningsen

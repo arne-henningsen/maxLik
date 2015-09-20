@@ -4,7 +4,7 @@
 \title{free parameters under maximisation}
 \description{
   Return a logical vector, indicating which parameters were free under
-  maximisation, as opposed to the fixed parameters, treated as constants.
+  maximisation, as opposed to the fixed parameters that are treated as constants.
 }
 \usage{
 activePar(x, \dots)

@@ -3,9 +3,9 @@
 \alias{hessian.default}
 \title{Hessian matrix}
 \description{
-  This function extracts the Hessian of the M-estimator of 
-  statistical model.  It should be supplied by the underlying
-  optimisation algorithm, possibly using approximations.
+  This function extracts the Hessian of the objective function at optimum.
+  The Hessian information should be supplied by the underlying
+  optimisation algorithm, possibly by using a suitable approximation.
 }
 \usage{
 hessian(x, \dots)
@@ -13,7 +13,7 @@ hessian(x, \dots)
 }
 
 \arguments{
-  \item{x}{a M-estimator based statistical model}
+  \item{x}{an optimization result of class \sQuote{maxim} or \sQuote{maxLik}}
   \item{\dots}{other arguments for methods}
 }
 \value{
@@ -24,13 +24,13 @@ hessian(x, \dots)
   parameters (see \code{\link{activePar}}).
 }
 \author{Ott Toomet, \email{otoomet@econ.au.dk}}
-\seealso{\code{\link{maxLik}}, \code{\link{activePar}}}
+\seealso{\code{\link{maxLik}}, \code{\link{activePar}}, \code{\link{condiNumber}}}
 \examples{
 # log-likelihood for normal density
 # a[1] - mean
 # a[2] - standard deviation
 ll <- function(a) sum(-log(a[2]) - (x - a[1])^2/(2*a[2]^2))
-x <- rnorm(1000) # sample from standard normal
+x <- rnorm(100) # sample from standard normal
 ml <- maxLik(ll, start=c(1,1))
 # ignore eventual warnings "NaNs produced in: log(x)"
 summary(ml) # result should be close to c(0,1)

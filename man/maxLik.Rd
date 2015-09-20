@@ -1,6 +1,5 @@
 \name{maxLik}
 \alias{maxLik}
-\alias{coef.maxLik}
 \alias{print.maxLik}
 
 \title{Maximum likelihood estimation}

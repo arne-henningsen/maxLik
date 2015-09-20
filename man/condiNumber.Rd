@@ -7,7 +7,7 @@
   This function prints the condition number of a matrix while adding
   columns one-by-one.  This is useful for testing multicollinearity and
   other numerical problems.  This is a generic function with default
-  method and method for \code{maxLik} objects.
+  method, and a method for \code{maxLik} objects.
 }
 \usage{
 condiNumber(x, ...)
@@ -33,21 +33,25 @@ condiNumber(x, ...)
 }
 \details{
   Statistical model often fail because of strong correlation between
-  explanatory variables in linear index (multicollinearity)
+  the explanatory variables in the linear index (multicollinearity)
   or because the evaluated maximum of a non-linear model is
   virtually flat.  In both cases, the (near) singularity of the related
-  matrices may give us a hint, how to improve the results.
+  matrices may give us a hint how to improve the results.
 
   \code{condiNumber} allows to inspect the matrices column-by-column and
-  unerstand which variable leads to a huge jump in the condition
-  number.  If the single column does not immediately tell what is the
-  problem, one may try to estimate this column by OLS
-  using the previous columns as explanatory variables.  The columns,
-  which explain virtually all the variation, should have extremely high
-  t-values. 
+  see which variables leads to a jump in the condition
+  number (cause singularity).
+  If the matrix column name does not immediately indicate the
+  problem, one may run an OLS model by estimating this column
+  using all the previous columns as explanatory variables.  Those
+  columns that explain almost all the variation in the current one will
+  have very high
+  \eqn{t}{t}-values. 
 }
 \value{
-  Invisible vector of condition numbers by column.
+  Invisible vector of condition numbers by column.  If the start values
+  for \code{\link{maxLik}} are named, the condition numbers are named
+  accordingly. 
 }
 \references{W. Greene, Advanced Econometrics, p ... }
 \author{Ott Toomet \email{otoomet@ut.ee}}
