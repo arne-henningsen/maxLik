@@ -19,13 +19,17 @@ export( "numericNHessian" )
 export( "returnCode" )
 export( "returnMessage" )
 
-importFrom("methods", "setClass")
+importFrom("methods", "new", "show", "slot", "slot<-", "slotNames",
+           "validObject")
 importFrom( "miscTools", "nObs" )
 importFrom( "miscTools", "nParam" )
 importFrom( "miscTools", "sumKeepAttr" )
 importFrom( "sandwich", "bread" )
 importFrom( "miscTools", "stdEr" )
 importFrom( "sandwich", "estfun" )
+importFrom("stats", "coef", "logLik", "optim", "pnorm", "printCoefmat",
+           "vcov")
+importFrom("utils", "head")
 
 exportClasses("MaxControl")
 exportMethods("maxControl")
