@@ -15,5 +15,6 @@ ll <- function(x) dnorm(x, log=TRUE)
 for(method in c("NR", "BFGS", "BFGSR")) {
    cat("-- method", method, "--\n")
    m <- maxLik(ll, start=0, method=method, control=list(iterlim=1))
+   cat("MaxControl structure:\n")
    show(maxControl(m))
 }

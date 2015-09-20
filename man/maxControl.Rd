@@ -150,6 +150,6 @@ print(summary(res))
 co <- maxControl(co, printLevel=0)
 res <- maxNR(quadForm, start=D, control=co) # no tracing information
 print(summary(res))  # should be the same as above
-
+maxControl(res) # shows the control structure
 }
 \keyword{utilities}

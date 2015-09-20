@@ -35,7 +35,71 @@ https://r-forge.r-project.org/projects/maxlik/
 (Intercept)           x 
   0.3578623   0.5687071 
 > 
+> ## Test maxControl methods:
+> set.seed(9)
+> x <- rnorm(20)
+> ll <- function(x) dnorm(x, log=TRUE)
+> for(method in c("NR", "BFGS", "BFGSR")) {
++    cat("-- method", method, "--\n")
++    m <- maxLik(ll, start=0, method=method, control=list(iterlim=1))
++    cat("MaxControl structure:\n")
++    show(maxControl(m))
++ }
+-- method NR --
+MaxControl structure:
+A 'MaxControl' object with slots:
+tol = 1e-08 
+reltol = 1.490116e-08 
+gradtol = 1e-06 
+steptol = 1e-10 
+lambdatol = 1e-06 
+qac = stephalving 
+qrtol = 1e-10 
+lambda0 = 0.01 
+lambdaStep = 2 
+maxLambda = 1e+12 
+alpha = 1 
+beta = 0.5 
+gamma = 2 
+iterlim = 1 
+printLevel = 0 
+-- method BFGS --
+MaxControl structure:
+A 'MaxControl' object with slots:
+tol = 1e-08 
+reltol = 1.490116e-08 
+gradtol = 1e-06 
+steptol = 1e-10 
+lambdatol = 1e-06 
+qac = stephalving 
+qrtol = 1e-10 
+lambda0 = 0.01 
+lambdaStep = 2 
+maxLambda = 1e+12 
+alpha = 1 
+beta = 0.5 
+gamma = 2 
+iterlim = 1 
+printLevel = 0 
+-- method BFGSR --
+MaxControl structure:
+A 'MaxControl' object with slots:
+tol = 1e-08 
+reltol = 1.490116e-08 
+gradtol = 1e-06 
+steptol = 1e-10 
+lambdatol = 1e-06 
+qac = stephalving 
+qrtol = 1e-10 
+lambda0 = 0.01 
+lambdaStep = 2 
+maxLambda = 1e+12 
+alpha = 1 
+beta = 0.5 
+gamma = 2 
+iterlim = 1 
+printLevel = 0 
 > 
 > proc.time()
    user  system elapsed 
-  0.393   0.033   0.419 
+  0.455   0.037   0.482 
