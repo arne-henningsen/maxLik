@@ -32,5 +32,8 @@ setGeneric("maxControl",
            function(x, ...) standardGeneric("maxControl")
            )
 
+### Method for 'maxim' objects: fetch the stored MaxControl
+setMethod("maxControl", "maxim", function(x, ...) x$control)
+
 ### Method for missing arguments: just default values
 setMethod("maxControl", "missing", maxControl.default)

@@ -2,7 +2,7 @@
 ### shoud move checkMaxControl to a separate file but how to do it?
 
 checkMaxControl <- function(object) {
-   ## check validity of maxControl objects
+   ## check validity of MaxControl objects
    if(!inherits(object, "MaxControl")) {
       stop("'MaxControl' object required.  Currently '",
            class(object), "'")

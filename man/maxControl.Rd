@@ -5,15 +5,17 @@
 \alias{maxControl}
 \alias{maxControl,MaxControl-method}
 \alias{maxControl,missing-method}
+\alias{maxControl,maxim-method}
 \alias{show,MaxControl-method}
 
 \title{Class \code{"MaxControl"}}
 \description{
   This is the structure to hold the optimization control options.
-  \code{maxControl()} is the preferred way to supply these.
   It takes the parameters, performs consistency checks, and returns the
   control structure.  Alternatively, it overwrites the supplied
-  parameters in an existing \code{MaxControl} structure.
+  parameters in an existing \code{MaxControl} structure.  There is also
+  a method to extract the control structure from the estimated
+  \sQuote{maxim}-objects.  
 }
 \section{Slots}{
   The default values and definition of the slots:
@@ -90,6 +92,7 @@
 \section{Methods}{
   \describe{
     \item{maxControl}{\code{signature(x = "MaxControl")}: ... }
+    \item{maxControl}{\code{signature(x = "maxim")}: ... }
     \item{show}{\code{signature(object = "MaxControl")}: ... }
   }
   \describe{
@@ -104,6 +107,14 @@
     }
   }
 }
+\section{Details}{
+  Typically, the control options are supplied in the form of a list, in which
+  case the corresponding default values are overwritten by the
+  user-specified ones.  However, one may also create the control
+  structure by \code{MaxControl(opt1=value1, opt2=value2, ...)} and
+  supply such value directly to the optimizer.  In this case the
+  optimization routine takes all the values from the control object.
+  }
 \references{
   \itemize{
     \item Nelder, J. A. & Mead, R. A (1965) Simplex Method for Function

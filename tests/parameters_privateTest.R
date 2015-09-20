@@ -23,17 +23,6 @@ llf <- function( param ) {
    return( llValue )
 }
 
-logLikMix <- function(param) {
-   rho <- param[1]
-   if(rho < 0 || rho > 1)
-       return(NA)
-   mu1 <- param[2]
-   mu2 <- param[3]
-   ll <- log(rho*dnorm(x - mu1) + (1 - rho)*dnorm(x - mu2))
-#   ll <- sum(ll)
-   ll
-}
-
 # start values
 startVal <- c( mu = 0, sigma = 1 )
 
@@ -95,56 +84,110 @@ mlNMAlpha <- maxLik(llf, start=startVal, method="nm", beta=0.8)
 mlNMAlphaC <- maxLik(llf, start=startVal, method="nm", control=list(beta=0.8))
 print(all.equal(mlNMAlpha, mlNMAlphaC))
 
-## two parameters at the same time
-## iterlim, printLevel
-ml2 <- maxLik( llf, start=startVal, method="nm", iterlim=1, printLevel=2)
-print(summary(ml2))
-ml2C <- maxLik(llf, start=startVal, method="nm",
-               control=list(iterlim=1, printLevel=2))
-print(all.equal(ml2, ml2C))
-
-## what about additional parameters for the loglik function?
+## likelihood function with additional parameter
 llf1 <- function( param, sigma ) {
    mu <- param
    N <- length( x )
    llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
-      0.5 * sum( ( x - mu )^2 / sigma^2 )
+       0.5 * sum( ( x - mu )^2 / sigma^2 )
    return( llValue )
+       }
+
+## log-lik mixture
+logLikMix <- function(param) {
+   rho <- param[1]
+   if(rho < 0 || rho > 1)
+       return(NA)
+   mu1 <- param[2]
+   mu2 <- param[3]
+   ll <- log(rho*dnorm(x - mu1) + (1 - rho)*dnorm(x - mu2))
+   ll
 }
-mls <- maxLik(llf1, start=0, sigma=1)
-print(coef(mls))
-mlsM <- maxLik(llf1, start=0, qac="marquardt", sigma=1)
-mlsCM <- maxLik(llf1, start=0, control=list(qac="marquardt"), sigma=1)
-all.equal(mlsM, mlsCM)
-## And waht about unused parameters?
-try(maxLik(llf1, start=0, control=list(qac="marquardt"), sigma=1, unknownPar=2))
+
+## loglik mixture with additional parameter
+logLikMixA <- function(param, rho) {
+   mu1 <- param[1]
+   mu2 <- param[2]
+   ll <- log(rho*dnorm(x - mu1) + (1 - rho)*dnorm(x - mu2))
+   ll
+}
+
+## Test the following with all the main optimizers:
+for(method in c("NR", "BFGS", "BFGSR")) {
+   ## two parameters at the same time
+   ## iterlim, printLevel
+   cat("-- method", method, "--\n")
+   N <- 100
+   x <- rnorm(N, 1, 2 )
+   startVal <- c(1,2)
+   ml2 <- maxLik( llf, start=startVal, method=method, iterlim=1, printLevel=2)
+   print(summary(ml2))
+   ml2C <- maxLik(llf, start=startVal, method=method,
+                  control=list(iterlim=1, printLevel=2))
+   print(all.equal(ml2, ml2C))
+   ## what about additional parameters for the loglik function?
+   mls <- maxLik(llf1, start=0, method=method, sigma=1)
+   print(coef(mls))
+   mlsM <- maxLik(llf1, start=0, method=method, tol=1, sigma=1)
+   mlsCM <- maxLik(llf1, start=0, method=method, control=list(tol=1), sigma=1)
+   cat("Additional parameters to loglik: open == control()?\n")
+   print(all.equal(mlsM, mlsCM))
+   ## And what about unused parameters?
+   cat("What about unused parameters?\n")
+   try(maxLik(llf1, start=0, method=method, control=list(tol=1),
+              sigma=1, unusedPar=2))
                            # error
-
-N <- 100
-## Does this work with constraints?
-x <- c(rnorm(N, mean=-1), rnorm(N, mean=1))
-## First test inequality constraints
-## Inequality constraints: x + y + z < 0.5
-A <- matrix(c(-1, 0, 0,
-              0, -1, 0,
-              0, 0, 1), 3, 3, byrow=TRUE)
-B <- rep(0.5, 3)
-start <- c(0.4, 0, 0.9)
-## analytic gradient
-cat("Inequality constraints, analytic gradient & Hessian\n")
-mix <- maxLik(logLikMix, 
-              start=start,
-              constraints=list(ineqA=A, ineqB=B))
-print(summary(mix))
-mixGT <- maxLik(logLikMix, 
-              start=start,
-              constraints=list(ineqA=A, ineqB=B),
-                gradtol=1e-2)
-print(summary(mixGT))
-mixGTC <- maxLik(logLikMix, 
-                 start=start,
-                 constraints=list(ineqA=A, ineqB=B),
-                 control=list(gradtol=1e-2))
-print(all.equal(mixGT, mixGTC))
-
-
+   N <- 100
+   ## Does this work with constraints?
+   x <- c(rnorm(N, mean=-1), rnorm(N, mean=1))
+   ## First test inequality constraints
+   ## Inequality constraints: x + y + z < 0.5
+   A <- matrix(c(-1, 0, 0,
+                 0, -1, 0,
+                 0, 0, 1), 3, 3, byrow=TRUE)
+   B <- rep(0.5, 3)
+   start <- c(0.4, 0, 0.9)
+   ## analytic gradient
+   cat("Inequality constraints, analytic gradient & Hessian\n")
+   mix <- try(maxLik(logLikMix, 
+                     start=start, method=method,
+                     constraints=list(ineqA=A, ineqB=B)))
+   if(!inherits(mix, "try-error")) {
+      print(summary(mix))
+   }
+   mixGT <- try(maxLik(logLikMix, 
+                       start=start, method=method,
+                       constraints=list(ineqA=A, ineqB=B),
+                       tol=1))
+   if(!inherits(mixGT, "try-error")) {
+      print(summary(mixGT))
+   }
+   mixGTC <- try(maxLik(logLikMix, 
+                    start=start, method=method,
+                    constraints=list(ineqA=A, ineqB=B),
+                    control=list(tol=1)))
+   if(!inherits(mixGTC, "try-error")) {
+      print(all.equal(mixGT, mixGTC))
+   }
+   ## 2d inequality constraints: x + y < 0.5
+   A2 <- matrix(c(-1, -1), 1, 2, byrow=TRUE)
+   B2 <- 0.5
+   start2 <- c(-0.5, 0.5)
+   cat("Inequality constraints, additional parameters\n")
+   mixA <- try(maxLik(logLikMixA, 
+                      start=start2, method=method,
+                      constraints=list(ineqA=A2, ineqB=B2),
+                      tol=1,
+                      rho=0.5))
+   mixAC <- try(maxLik(logLikMixA, 
+                       start=start2, method=method,
+                       constraints=list(ineqA=A2, ineqB=B2),
+                       control=list(tol=1),
+                       rho=0.5))
+   if(!inherits(mixA, "try-error") & !inherits(mixAC, "try-error")) {
+      cat("Coefficients equal?\n")
+      print(all.equal(coef(mixA), coef(mixAC)))
+      cat("Hessians equal?\n")
+      print(all.equal(hessian(mixA), hessian(mixAC)))
+   }
+}
