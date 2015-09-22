@@ -17,7 +17,7 @@
   \item{...}{additional arguments to methods}
 }
 \value{
-  A single numeric, log likelihood of the estimated model
+  A scalar numeric, log likelihood of the estimated model
 }
 \author{
    Arne Henningsen,

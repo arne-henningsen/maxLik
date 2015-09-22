@@ -23,46 +23,47 @@
     \item{\code{tol}}{1e-8, stopping condition 
       for \code{\link{maxNR}} and related optimizers.
       Stop if the absolute difference
-      between successive iterations is less than \code{tol}, return
-      \code{code=2}.}
+      between successive iterations is less than \code{tol}, returns
+      code 2.}
     \item{\code{reltol}}{sqrt(.Machine$double.eps), relative convergence
-      tolerance
-      for \code{\link{maxNR}} and related optimizers.
+      tolerance (used by \code{\link{maxNR}} related optimizers, and
+      \code{\link{optim}}-based optimizers.
       The algorithm stops if
       it is unable to increase the value by a factor of 'reltol *
-      (abs(val) + reltol)' at a step.}
+      (abs(val) + reltol)' at a step.  Returns code 2.}
     \item{\code{gradtol}}{1e-6, stopping condition
       for \code{\link{maxNR}} and related optimizers.
       Stop if norm of the gradient is
-      less than \code{gradtol}, return \code{code=1}.}
+      less than \code{gradtol}, returns code 1.}
     \item{\code{steptol}}{1e-10, stopping/error condition
       for \code{\link{maxNR}} and related optimizers.
       If \code{qac == "stephalving"} and the quadratic
       approximation leads to a worse instead of a better value, or to
       \code{NA}, the step length
       is halved and a new attempt is made.  If necessary, this procedure is repeated
-      until step < \code{steptol}, thereafter \code{code=3} is returned.}
+      until step < \code{steptol}, thereafter code 3 is returned.}
     %
     \item{\code{lambdatol}}{1e-6, (for \code{\link{maxNR}} related
       optimizers)
       controls whether Hessian is treated as negative
       definite.  If the
       largest of the eigenvalues of the Hessian is larger than
-      \code{-lambdatol}, a suitable diagonal matrix is subtracted from the
-      Hessian (quadratic hill-climbing) in order to enforce nagetive
+      \code{-lambdatol} (Hessian is not negative definite),
+      a suitable diagonal matrix is subtracted from the
+      Hessian (quadratic hill-climbing) in order to enforce negative
       definiteness.}
     %
     \item{\code{qac}}{"stephalving", character, Qadratic Approximation
       Correction for \code{\link{maxNR}} related optimizers.  When the new
-      guess is worse than the initial one, program attemts to correct it:
+      guess is worse than the initial one, program attempts to correct it:
       \code{"stephalving"} decreases the
-      step but keeps the direction,
+      step but keeps the direction.
       \code{"marquardt"} uses
       Marquardt (1963) method by decreasing the step length while also
       moving closer to the pure gradient direction.  It may be faster and
       more robust choice in areas where quadratic approximation behaves poorly.}
     \item{\code{qrtol}}{1e-10, QR-decomposition tolerance
-      for \code{\link{maxNR}} related optimizers.
+      for Hessian inversion in \code{\link{maxNR}} related optimizers.
     }
     \item{\code{lambda0}}{1e-2, a positive numeric, initial correction term
       for \cite{Marquardt (1963)} correction in
@@ -77,23 +78,23 @@
       algorithm exits with return code 3.}
     %
     \item{\code{alpha}}{1, Nelder-Mead simplex method reflection
-      coefficient (see Nelder \& Mead, 1965)}
-    \item{\code{beta}}{0.5, Nelder-Mead controction coefficient}
-    \item{\code{gamma}}{2, Nelder-Mead expansion coefficient}
+      factor (see Nelder \& Mead, 1965)}
+    \item{\code{beta}}{0.5, Nelder-Mead contraction factor}
+    \item{\code{gamma}}{2, Nelder-Mead expansion factor}
     %
-    \item{\code{iterlim}}{150L, stopping condition.  Stop if more than \code{iterlim}
+    \item{\code{iterlim}}{150, stopping condition.  Stop if more than \code{iterlim}
       iterations performed.  Note that \sQuote{iteration} may mean
       different things for different optimzers.}
-    \item{\code{printLevel}}{0L, the level of verbosity.  Larger values print
-      more information.  Depends on the optimizer.  Form
+    \item{\code{printLevel}}{0, the level of verbosity.  Larger values print
+      more information.  Result depends on the optimizer.  Form
       \code{print.level} is also accepted by the methods for compatibility.}
   }
 }
 \section{Methods}{
   \describe{
-    \item{maxControl}{\code{signature(x = "MaxControl")}: ... }
-    \item{maxControl}{\code{signature(x = "maxim")}: ... }
-    \item{show}{\code{signature(object = "MaxControl")}: ... }
+    \S4method{maxControl}{x = "MaxControl"}(x, \dots)
+    \S4method{maxControl}{x = "maxim"}(x)
+    \S4method{show}{object = "MaxControl"}(x)
   }
   \describe{
     \item{\code{x}}{
@@ -102,7 +103,7 @@
     }
     \item{\dots}{
       control options in the form \code{option = value}.  The options
-      should correspond to \code{MaxControl} slotnames.  However, unknown
+      should correspond to \code{MaxControl} slotnames.  Unknown
       options are silently ignored.
     }
   }

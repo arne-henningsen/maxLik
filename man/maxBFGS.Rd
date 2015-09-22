@@ -7,8 +7,7 @@
 \title{BFGS, conjugate gradient, SANN and Nelder-Mead Maximization}
 \description{
   These functions are wrappers for \code{\link{optim}} where the arguments are
-  compatible with \code{\link{maxNR}}.  Note that there is a
-  \code{\link{maxNR}}-based BFGS implementation \code{\link{maxBFGSR}}.
+  homogeneous across all the provided optimizers.
 }
 \usage{
 maxBFGS(fn, grad = NULL, hess=NULL, start, fixed = NULL,
@@ -43,48 +42,47 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
 \arguments{
   \item{fn}{function to be maximised.  Must have the parameter vector as
     the first argument.  In order to use numeric gradient
-    and BHHH method, \code{fn} must return vector of
-    observation-specific likelihood values.  Those are summed by maxNR
-    if necessary.  If the parameters are out of range, \code{fn} should
+    and BHHH method, \code{fn} must return a vector of
+    observation-specific likelihood values.  Those are summed internally where
+    necessary.  If the parameters are out of range, \code{fn} should
     return \code{NA}.  See details for constant parameters.}
-  \item{grad}{gradient of the function.  Must have the parameter vector as
+  \item{grad}{gradient of \code{fn}.  Must have the parameter vector as
     the first argument.  If \code{NULL}, numeric
-    gradient is used (only maxBFGS uses gradient).  Gradient may return
+    gradient is used (\code{maxNM} and \code{maxSANN} do not use
+    gradient).  
+    Gradient may return
     a matrix, where columns correspond to the parameters and rows to the
     observations (useful for maxBHHH).  The columns are summed internally.}
-  \item{hess}{Hessian of the function.  Not used by any of these methods, for
+  \item{hess}{Hessian of \code{fn}.  Not used by any of these methods, included for
     compatibility with \code{\link{maxNR}}.}
-  \item{start}{initial values for the parameters.}
-  \item{fixed}{parameters that should be fixed at their starting values:
-      either a logical vector of the same length as argument \code{start},
-      a numeric (index) vector indicating the positions of the fixed parameters,
-      or a vector of character strings indicating the names of the fixed
-      parameters (parameter names are taken from argument
-      \code{start}).}
+  \item{start}{initial values for the parameters.  Note: if start values
+    are named, those names are also carried over to the results.}
+  \item{fixed}{parameters to be treated as constants at their
+    \code{start} values.  If present, it is treated as an index vector of
+    \code{start} parameters.}
   \item{control}{list of control parameters or a \sQuote{MaxControl}
-    object.  If it is a list, the default values are taken for the
-    non-specified parameters.  
-    The following control
-    parameters are accepted by these functions:
-    \itemize{
-      \item{\code{reltol}}{sqrt(.Machine$double.eps), stopping
+    object.  If it is a list, the default values are used for the
+    parameters, left unspecified by the user.
+    These functions accepted the following parameters:
+    \describe{
+      \item{reltol}{sqrt(.Machine$double.eps), stopping
 	condition.  Relative convergence
-	tolerance, the algorithm stops if the relative improvement
+	tolerance: the algorithm stops if the relative improvement
 	between iterations is less than \sQuote{reltol}.
       }
-      \item{\code{iterlim}}{integer, maximum number of iterations.  Note that
+      \item{iterlim}{integer, maximum number of iterations.  Note that
 	\sQuote{iteration} may mean different things for different
-	optimizers.  Default values are 200 (for \sQuote{BFGS}), 500
+	optimizers.  Default values are 200 for \sQuote{BFGS}, 500
 	(\sQuote{CG} and \sQuote{NM}), and 10000 (\sQuote{SANN}).
 	Default 0, no information.
       }
-      \item{\code{printLevel}}{integer, larger number prints more working
+      \item{printLevel}{integer, larger number prints more working
 	information.}
-      \item{\code{alpha}}{1, Nelder-Mead simplex method reflection
+      \item{alpha}{1, Nelder-Mead simplex method reflection
 	coefficient (see Nelder \& Mead, 1965)
       }
-      \item{\code{beta}}{0.5, Nelder-Mead controction coefficient}
-      \item{\code{gamma}}{2, Nelder-Mead expansion coefficient}
+      \item{beta}{0.5, Nelder-Mead controction coefficient}
+      \item{gamma}{2, Nelder-Mead expansion coefficient}
     }
   }
   \item{constraints}{either \code{NULL} for unconstrained optimization
@@ -130,10 +128,15 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
 }
 
 \details{
+  In order to provide a consistent interface, all these functions also
+  accept arguments that other optimizers use.  For instance,
+  \code{maxNM} accepts the \sQuote{grad} argument despite being a
+  gradient-less method.
+  
    The \sQuote{state} (or \sQuote{seed}) of R's random number generator
    is saved at the beginning of the \code{maxSANN} function
    and restored at the end of this function
-   so that this function does \emph{not} affect the generation of random numbers
+   so this function does \emph{not} affect the generation of random numbers
    although the random seed is set to argument \code{random.seed}
    and the \sQuote{SANN} algorithm uses random numbers.
 }
@@ -161,17 +164,20 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
   \item{type}{character string "BFGS maximisation".}
   \item{constraints}{A list, describing the constrained optimization
     (\code{NULL} if unconstrained).  Includes the following components:
-    \itemize{
+    \describe{
       \item{type}{type of constrained optimization}
       \item{outer.iterations}{number of iterations in the constraints step}
       \item{barrier.value}{value of the barrier function}
     }
   }
+  \item{control}{the optimization control parameters in the form of a
+  \code{\link[maxLik:MaxControl-class]{MaxControl}} object.}
 }
-\author{Ott Toomet \email{otoomet@ut.ee}, Arne Henningsen}
+\author{Ott Toomet \email{otoomet@gmail.com}, Arne Henningsen}
 
 \seealso{\code{\link{optim}}, \code{\link{nlm}}, \code{\link{maxNR}},
-  \code{\link{maxBHHH}}, \code{\link{maxBFGSR}}.}
+  \code{\link{maxBHHH}}, \code{\link{maxBFGSR}} for a
+  \code{\link{maxNR}}-based BFGS implementation.}
 
 \references{
   Nelder, J. A. & Mead, R. A, Simplex Method for Function
@@ -179,7 +185,7 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
 }
 
 \examples{
-# Maximum Likelihood estimation of the parameter of Poissonian distribution
+# Maximum Likelihood estimation of Poissonian distribution
 n <- rpois(100, 3)
 loglik <- function(l) n*log(l) - l - lfactorial(n)
 # we use numeric gradient
