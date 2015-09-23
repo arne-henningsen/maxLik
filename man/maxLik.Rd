@@ -4,10 +4,12 @@
 
 \title{Maximum likelihood estimation}
 \description{
-  This is just a wrapper for maximisation routines which return object
-  of class "maxLik".  Corresponding methods can correctly handle the
-  likelihood-specific properties of the estimate including the fact that
-  inverse of negative hessian is the variance-covariance matrix.
+  This is the main interface for the \pkg{maxLik} package and Maximum
+  Likelihood estimation.  It is a wrapper for different optimizers
+  returning an object
+  of class "maxLik".  Corresponding methods can handle the
+  likelihood-specific properties of the estimates,  including standard
+  errors. 
 }
 \usage{
 maxLik(logLik, grad = NULL, hess = NULL, start, method,
@@ -16,17 +18,18 @@ constraints=NULL, ...)
 \arguments{
   \item{logLik}{log-likelihood function.  Must have the parameter vector
     as the first argument.  Must return either a single log-likelihood
-    value or a numeric vector where each component is log-likelihood
-    corresponding to individual observations.}
+    value, or a numeric vector where each component is log-likelihood
+    of the corresponding individual observation.}
   \item{grad}{gradient of log-likelihood.  Must have the parameter
     vector as the first argument.  Must return either single gradient
     vector with length equal to the number of parameters, or a matrix
-    where each row corresponds to gradient vector of individual
-    observations.  If \code{NULL}, numeric gradient will be used.}
+    where each row is the gradient vector of the corresponding individual
+    observation.  If \code{NULL}, numeric gradient will be used.}
   \item{hess}{hessian of log-likelihood.  Must have the parameter
     vector as the first argument.  Must return a square matrix.  If
-    \code{NULL}, numeric gradient will be used.}
-  \item{start}{numeric vector, initial value of parameters.}
+    \code{NULL}, numeric Hessian will be used.}
+  \item{start}{numeric vector, initial value of parameters.  If it is
+    named, these names will also be used for naming the results.}
   \item{method}{maximisation method, currently either 
    "NR" (for Newton-Raphson),
    "BFGS" (for Broyden-Fletcher-Goldfarb-Shanno), 
@@ -40,32 +43,35 @@ constraints=NULL, ...)
   \item{constraints}{either \code{NULL} for unconstrained maximization
     or a list, specifying the constraints.  See \code{\link{maxBFGS}}.
   }
-  \item{\dots}{further arguments are passed to the selected maximisation routine,
+  \item{\dots}{further arguments, such as \code{control}
+    are passed to the selected maximisation routine,
      i.e. \code{\link{maxNR}}, \code{\link{maxBFGS}}, \code{\link{maxBFGSR}},
      \code{\link{maxBHHH}}, \code{\link{maxSANN}}, \code{\link{maxCG}},
      or \code{\link{maxNM}}
-     (depending on argument \code{method}).}
+     (depending on argument \code{method}).  Arguments not used by the
+     optimizers are forwarded to \code{logLik}, \code{grad} and \code{hess}.}
 }
 \details{
-  \code{maxLik} "support" constrained optimization in the sense that
+  \code{maxLik} supports constrained optimization in the sense that
   constraints are passed further to the underlying optimization
   routines, and suitable default method is selected.  However, no
   attempt is made to correct the resulting variance-covariance matrix.
-  Hence, the inference may be wrong.  A corresponding warning is issued
+  Hence the inference may be wrong.  A corresponding warning is issued
   by the summary method.
 }
 \value{
   object of class 'maxLik' which inherits from class 'maxim'.
-  Components are identical to those of class 'maxim',
-  see \code{\link{maxNR}}.
+  Components are identical to those of class 'maxim'
+  (see \code{\link{maxNR}}) but the standard method differ.
 }
 \section{Warning}{The constrained maximum likelihood estimation should
   be considered as experimental.  In particular, the variance-covariance
   matrix is not corrected for constrained parameter space.
   }
-\author{Ott Toomet \email{otoomet@ut.ee}, Arne Henningsen}
+\author{Ott Toomet, Arne Henningsen}
 \seealso{\code{\link{maxNR}}, \code{\link{nlm}} and \code{\link{optim}}
-  for different non-linear optimisation routines.}
+  for different non-linear optimisation routines, see
+  \code{\link{maxBFGS}} for constrained maximization examples.}
 \examples{
 ## ML estimation of exponential duration model:
 t <- rexp(100, 2)
@@ -74,13 +80,10 @@ gradlik <- function(theta) 1/theta - t
 hesslik <- function(theta) -100/theta^2
 ## Estimate with numeric gradient and hessian
 a <- maxLik(loglik, start=1, print.level=2)
-print( a )
-coef( a )
+summary( a )
 ## Estimate with analytic gradient and hessian
 a <- maxLik(loglik, gradlik, hesslik, start=1)
-print( a )
-coef( a )
-##
+summary( a )
 ##
 ## Next, we give an example with vector argument:  Estimate the mean and
 ## variance of a random normal sample by maximum likelihood
@@ -91,10 +94,9 @@ loglik <- function(param) {
   ll <- -0.5*N*log(2*pi) - N*log(sigma) - sum(0.5*(x - mu)^2/sigma^2)
   ll
 }
-x <- rnorm(1000, 1, 2) # use mean=1, stdd=2
+x <- rnorm(100, 1, 2) # use mean=1, stdd=2
 N <- length(x)
 res <- maxLik(loglik, start=c(0,1)) # use 'wrong' start values
-print( res )
-coef( res )
+summary( res )
 }
 \keyword{optimize}
