@@ -29,8 +29,9 @@
       tolerance (used by \code{\link{maxNR}} related optimizers, and
       \code{\link{optim}}-based optimizers.
       The algorithm stops if
-      it is unable to increase the value by a factor of 'reltol *
-      (abs(val) + reltol)' at a step.  Returns code 2.}
+      it is unable to increase the value by a factor of
+      \code{reltol*(abs(val) + reltol)}
+      at a step.  Returns code 2.}
     \item{\code{gradtol}}{1e-6, stopping condition
       for \code{\link{maxNR}} and related optimizers.
       Stop if norm of the gradient is
@@ -38,7 +39,7 @@
     \item{\code{steptol}}{1e-10, stopping/error condition
       for \code{\link{maxNR}} and related optimizers.
       If \code{qac == "stephalving"} and the quadratic
-      approximation leads to a worse instead of a better value, or to
+      approximation leads to a worse, instead of a better value, or to
       \code{NA}, the step length
       is halved and a new attempt is made.  If necessary, this procedure is repeated
       until step < \code{steptol}, thereafter code 3 is returned.}
@@ -92,27 +93,21 @@
 }
 \section{Methods}{
   \describe{
-    \S4method{maxControl}{x = "MaxControl"}(x, \dots)
-    \S4method{maxControl}{x = "maxim"}(x)
-    \S4method{show}{object = "MaxControl"}(x)
-  }
-  \describe{
-    \item{\code{x}}{
-      a \code{MaxControl} object.  The parameters here are overwritten by
-      \dots (if supplied).
-    }
-    \item{\dots}{
-      control options in the form \code{option = value}.  The options
-      should correspond to \code{MaxControl} slotnames.  Unknown
-      options are silently ignored.
-    }
+    \item{maxControl}{\code{(\dots)} creates a \dQuote{MaxControl} object.  The
+      arguments must be in the form \emph{option1 = value1, option2 =
+	value2, ...}.}
+    \item{maxControl}{\code{(x = "MaxControl", \dots)} overwrites parameters
+      of and existing \dQuote{MaxControl} object}
+    \item{maxControl}{\code{(x = "maxim")} extracts \dQuote{MaxControl}
+      structure from an estimated model}
+    \item{show}{shows the parameter values}
   }
 }
 \section{Details}{
   Typically, the control options are supplied in the form of a list, in which
   case the corresponding default values are overwritten by the
   user-specified ones.  However, one may also create the control
-  structure by \code{MaxControl(opt1=value1, opt2=value2, ...)} and
+  structure by \code{maxControl(opt1=value1, opt2=value2, ...)} and
   supply such value directly to the optimizer.  In this case the
   optimization routine takes all the values from the control object.
   }
@@ -129,7 +124,7 @@
   Ott Toomet \email{otoomet@gmail.com}
 }
 \note{
-  Several of the control parameters can also be supplied directly to the
+  Several control parameters can also be supplied directly to the
   optimization routines.
 }
 \examples{
