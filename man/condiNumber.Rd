@@ -53,7 +53,11 @@ condiNumber(x, ...)
   for \code{\link{maxLik}} are named, the condition numbers are named
   accordingly. 
 }
-\references{W. Greene, Advanced Econometrics, p ... }
+\references{
+  Greene, W. (2012): \emph{Econometrics Analysis}, 7th edition,
+  p. 130.
+}
+
 \author{Ott Toomet \email{otoomet@ut.ee}}
 \seealso{\code{\link{kappa}}}
 \examples{
