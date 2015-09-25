@@ -23,11 +23,6 @@ maxBFGSRCompute <- function(fn,
    ## fixed       - a logical vector -- which parameters are taken as fixed.
    ## control       MaxControl object:
    ##     steptol     - minimum step size
-   ##     lambda0       initial Hessian corrector (see Marquardt, 1963, p 438)
-   ##     lambdaStep    how much Hessian corrector lambda is changed between
-   ##                   two lambda trials
-   ##                  (nu in Marquardt (1963, p 438)
-   ##     maxLambda     largest possible lambda (if exceeded will give step error)
    ##     lambdatol   - max lowest eigenvalue when forcing pos. definite H
    ##     qrtol       - tolerance for qr decomposition
    ##     qac           How to handle the case where new function value is

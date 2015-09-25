@@ -51,11 +51,12 @@ maxBHHH(fn, grad = NULL, hess = NULL, start,
   \item{hess}{Hessian matrix of the function.
     It must have the parameter vector as the first argument and
     it must return the Hessian matrix of the objective function.
-    If missing, finite-difference Hessians, based on \code{gradient},
-    are computed.
-    Hessians are used for maximizations with the Newton-Raphson method
+    If missing, finite-difference Hessian, based on \code{gradient},
+    is computed.
+    Hessian is used for maximizations with the Newton-Raphson method
     but not for maximizations with the BFGS or BHHH method.}
-  \item{start}{initial value for the parameter vector.}
+  \item{start}{initial parameter values.  If start values
+    are named, those names are also carried over to the results.}
   \item{constraints}{either \code{NULL} for unconstrained optimization
     or a list with two components.  The components may be either
     \code{eqA} and \code{eqB} for equality-constrained optimization
@@ -76,66 +77,82 @@ maxBHHH(fn, grad = NULL, hess = NULL, start,
     approach.  The latter approach is only suitable for maximizing
     log-likelihood functions.  It requires the gradient/log-likelihood to
     be supplied by individual observations.
-    Note that computing the (real, not BHHH) final Hessian
+    Note that computing the (actual, not BHHH) final Hessian
     does not carry any extra penalty for the NR method,
-    but for the other methods.}
-  \item{bhhhHessian}{logical. Indicating whether the approximation
-      for the Hessian suggested by Bernd, Hall, Hall, and Hausman (1974)
-      should be used.}
-  \item{fixed}{parameters that should be fixed at their starting values:
-      either a logical vector of the same length as argument \code{start},
-      a numeric (index) vector indicating the positions of the fixed parameters,
-      or a vector of character strings indicating the names of the fixed
-      parameters (parameter names are taken from argument \code{start}).}
+    but does for the other methods.}
+  \item{bhhhHessian}{logical. Indicating whether to use the information
+    equality approximation (Bernd, Hall, Hall, and Hausman, 1974) for
+    the Hessian.  This effectively transforms \code{maxNR} into
+    \code{maxBHHH} and is mainly designed for internal use.}
+  \item{fixed}{parameters to be treated as constants at their
+    \code{start} values.  If present, it is treated as an index vector of
+    \code{start} parameters.}
   \item{activePar}{this argument is retained for backward compatibility only;
     please use argument \code{fixed} instead.}
   \item{control}{list of control parameters.  The control parameters
-    used by \code{maxNR} are
-    \itemize{
-      \item{tol}{stopping condition.  Stop if the absolute difference
-	between successive iterations is less than \code{tol}, return
+    used by these optimizers are
+    \describe{
+      \item{tol}{\eqn{10^{-8}}{1e-8},
+	stopping condition.  Stop if the absolute difference
+	between successive iterations is less than \code{tol}.  Return
 	\code{code=2}.}
-      \item{reltol}{Relative convergence tolerance.  The algorithm stops if
-        it is unable to increase the value by a factor of 'reltol *
-        (abs(val) + reltol)' at a step.  Defaults to
-        'sqrt(.Machine\$double.eps)', typically about '1e-8'.}
+      \item{reltol}{sqrt(.Machine$double.eps), stopping
+	condition.  Relative convergence
+	tolerance: the algorithm stops if the relative improvement
+	between iterations is less than \sQuote{reltol}.  Return code 2.
+      }
       \item{gradtol}{stopping condition.  Stop if norm of the gradient is
-	less than \code{gradtol}, return \code{code=1}.}
-      \item{steptol}{stopping/error condition.  If \code{qac ==
-	  "stephalving"} and the quadratic
-	approximation leads to a worse instead of a better value, or to
+	less than \code{gradtol}.  Return code 1.}
+      \item{steptol}{1e-10, stopping/error condition.
+	If \code{qac == "stephalving"} and the quadratic
+	approximation leads to a worse, instead of a better value, or to
 	\code{NA}, the step length
 	is halved and a new attempt is made.  If necessary, this procedure is repeated
-	until step < \code{steptol}, thereafter \code{code=3} is returned.}
-      Next three arguments control the Marquardt (1963) correction:
-      \item{lambda0}{positive numeric, initial correction term}
-      \item{lambdaStep}{how much the correction is decreased/increased at
-	successful/unsuccesful step}
-      \item{maxLambda}{maximum allowed correction term.  If exceeded, the
-	algorithm exits with return code 3.}
-      \item{lambdatol}{controls whether the Hessian is treated as negative
+	until step < \code{steptol}, thereafter code 3 is returned.}
+      \item{lambdatol}{1e-6, 
+	controls whether Hessian is treated as negative
 	definite.  If the
 	largest of the eigenvalues of the Hessian is larger than
-	\code{-lambdatol}, a suitable diagonal matrix is subtracted from the
-	Hessian (quadratic hill-climbing) in order to enforce nagetive
-	definiteness.}
-      \item{qrtol}{QR-decomposition tolerance}
-      \item{qac}{character, Qadratic Approximation Correction.  When the new
-	guess is worse than the initial one, program attemts to correct it:
+	\code{-lambdatol} (Hessian is not negative definite),
+	a suitable diagonal matrix is subtracted from the
+	Hessian (quadratic hill-climbing) in order to enforce negative
+	definiteness.
+      }
+      \item{qrtol}{\eqn{10^{-10}}{1e-10},
+	QR-decomposition tolerance for the Hessian inversion.
+      }
+      \item{qac}{"stephalving", Qadratic Approximation Correction.  When the new
+	guess is worse than the initial one, the algorithm attemts to correct it:
 	"stephalving" decreases the
 	step but keeps the direction,
 	"marquardt" uses
 	Marquardt (1963) method by decreasing the step length while also
 	moving closer to the pure gradient direction.  It may be faster and
-	more robust choice in areas where quadratic approximation behaves poorly.}
+	more robust choice in areas where quadratic approximation
+	behaves poorly.  \code{maxNR} and \code{maxBHHH} only.
+      }
+      \item{lambda0}{\eqn{10^{-2}}{1e-2},
+	positive numeric, initial correction term for Marquardt (1963)
+	correction.
+      }
+      \item{lambdaStep}{2, how much the Marquardt (1963) correction term is
+	decreased/increased at each
+	successful/unsuccesful step.
+	\code{maxNR} and \code{maxBHHH} only.
+      }
+      \item{maxLambda}{\eqn{10^{12}}{1e12},
+	maximum allowed Marquardt (1963) correction term.  If exceeded, the
+	algorithm exits with return code 3.
+	\code{maxNR} and \code{maxBHHH} only.
+      }
       \item{iterlim}{stopping condition.  Stop if more than \code{iterlim}
 	iterations, return \code{code=4}.}
       \item{printLevel}{this argument determines the level of
 	printing which is done during the optimization process. The default
-	value of 0 means that no printing occurs, a value of 1 means that
-	initial and final details are printed and a value of 2 means that
-	main tracing information for every iteration is printed.  Higher
-	values will result in even more details.
+	value 0 means that no printing occurs, 1 prints the
+	initial and final details, 2 prints all the
+	main tracing information for every iteration.  Higher
+	values will result in even more output.
       }
     }
   }
@@ -146,27 +163,37 @@ maxBHHH(fn, grad = NULL, hess = NULL, start,
     To maintain compatibility with the earlier versions, \dots also passes a
     number of control options (\code{tol}, \code{reltol},
     \code{gradtol}, \code{steptol},
-    \code{lambdatol},  \code{rtol}, \code{iterlim}) to the optimizers.
+    \code{lambdatol},  \code{qrtol}, \code{iterlim}) to the optimizers.
     }
   }
   \details{
     The idea of the Newton method is to approximate the function in a given
-    location with a multidimensional parabola, and use the estimated
-    maximum as the initial value for the next iteration.  Such an
+    location with a multidimensional quadratic function, and use the estimated
+    maximum as the start value for the next iteration.  Such an
     approximation requires knowledge of both gradient and Hessian, the
     latter of which can be quite costly to compute.  Several methods for
     approximating Hessian exist, including BFGS and BHHH.
 
-The BHHH method
-(\code{maxNR} with argument \code{bhhhHessian = TRUE )} or \code{maxBHHH}
-is suitable only for maximizing log-likelihood functions.
-It uses information equality in order to approximate the Hessian
-of the log-likelihood function.
-Hence, the log-likelihood values and its gradients must e calculated
-by individual observations.
+The BHHH (information equality) approximation is only valid for
+log-likelihood functions.
+It requires the score (gradient) values by individual observations and hence
+the corresponding must be returned 
+by individual observations by \code{grad} or \code{fn}.
 The Hessian is approximated as the negative of the sum of the outer products
 of the gradients of individual observations, or, in the matrix form,
-\code{-t(gradient) \%*\% gradient = - crossprod( gradient )}.
+\deqn{
+  \mathsf{H}^{BHHH}
+  =
+  -\frac{1}{N} \sum_{i=1}^N
+   \left[
+    \frac{\partial \ell(\boldsymbol{\vartheta})}
+    {\boldsymbol{\vartheta}}
+    \frac{\partial \ell(\boldsymbol{\vartheta})}
+    {\boldsymbol{\vartheta}'}
+  \right]
+  }{
+    \code{H = -t(gradient) \%*\% gradient = - crossprod( gradient )}.
+    }
 
 The functions \code{maxNR}, \code{maxBFGSR}, and \code{maxBHHH}
 can work with constant parameters and related changes of
@@ -174,29 +201,10 @@ parameter values.  Constant parameters are useful if a parameter value
 is converging toward the boundary of support, or for testing.  
 One way is to put
 \code{fixed} to non-NULL, specifying which parameters should be treated as
-constants.
-
-However, when using \code{maxNR} or \code{maxBHHH},
-parameters can also be fixed in runtime by
-signaling with
-\code{fn}.  This may be useful if an estimation converges toward the
-edge of the parameter space possibly causing problems.  The value of
-\code{fn} may have following attributes (only used by maxNR):
-\itemize{
-\item{constPar}{ index vector.  Which parameters are redefined to
-  constant}
-\item{newVal}{ a list with following components:
-  \itemize{
-  \item{index}{which parameters will have a new value}
-  \item{val}{the new value of parameters}
-  }
-}
-}
-Hence, \code{constVal} specifies which parameters are treated as
-constants.  \code{newVal} allows one to overwrite the existing parameter
-values, possibly the non-constant values as well.  If the attribute
-\code{newVal} is present, the new function value need not to exceed 
-the previous one (maximization is not performed in that step).
+constants.  The
+parameters can also be fixed in runtime (only for \code{maxNR} and \code{maxBHHH}) by
+signaling it with the 
+\code{fn} return value.  See Henningsen & Toomet (2011) for details.
 }
 
 \value{
@@ -234,7 +242,7 @@ the previous one (maximization is not performed in that step).
     \item{100}{ Initial value out of range.}
     }
   }
-  \item{message}{ a short message, describing \code{code}.}
+  \item{message}{ a short message, describing the \code{code}.}
   \item{last.step}{ list describing the last unsuccessful step if
     \code{code=3} with following components:
     \itemize{
@@ -264,7 +272,6 @@ the previous one (maximization is not performed in that step).
     the algorithm may not converge, or converge to a wrong point.
 
     As the BHHH method
-    (\code{maxNR} with argument \code{bhhhHessian = TRUE} or \code{maxBHHH})
     uses the likelihood-specific information equality,
     it is only suitable for maximizing log-likelihood functions!
 
@@ -276,37 +283,40 @@ the previous one (maximization is not performed in that step).
 \references{
    Berndt, E., Hall, B., Hall, R. and Hausman, J. (1974):
    Estimation and Inference in Nonlinear Structural Models,
-   \emph{Annals of Social Measurement} 3, p. 653-665.
+   \emph{Annals of Social Measurement} \bold{3}, 653--665.
 
    Broyden, C.G. (1970):
    The Convergence of a Class of Double-rank Minimization Algorithms,
-   \emph{Journal of the Institute of Mathematics and Its Applications} 6,
-   p. 76-90.
+   \emph{Journal of the Institute of Mathematics and Its Applications} \bold{6},
+   76--90.
 
    Fletcher, R. (1970):
    A New Approach to Variable Metric Algorithms,
-   \emph{Computer Journal} 13, p. 317-322.
+   \emph{Computer Journal} \bold{13}, 317--322.
 
    Goldfeld, S.M. and Quandt, R.E. (1972):
    \emph{Nonlinear Methods in Econometrics}.  Amsterdam: North-Holland.
 
    Goldfarb, D. (1970):
    A Family of Variable Metric Updates Derived by Variational Means,
-   \emph{Mathematics of Computation} 24, p. 23-26.
+   \emph{Mathematics of Computation} \bold{24}, 23--26.
 
    Greene, W.H., (2008), \emph{Econometric Analysis}, 6th edition,
    Prentice Hall.
 
-   Marquardt, D.W., (1963) An Algorithm for LEast-Squares Estimation of
+   Henningsen, A. and Toomet, O. (2011): maxLik: A package for maximum likelihood
+   estimation in R \emph{Computational Statistics} \bold{26}, 443--458
+   
+   Marquardt, D.W., (1963) An Algorithm for Least-Squares Estimation of
    Nonlinear Parameters, \emph{Journal of the Society for Industrial &
-   Applied Mathematics} 11(2), pp 431-441
+   Applied Mathematics} \bold{11}, 2, 431--441
 
    Shanno, D.F. (1970):
    Conditioning of Quasi-Newton Methods for Function Minimization,
-   \emph{Mathematics of Computation} 24, p. 647-656.
+   \emph{Mathematics of Computation} \bold{24}, 647--656.
 }
 
-\author{Ott Toomet \email{otoomet@ut.ee}, Arne Henningsen,
+\author{Ott Toomet, Arne Henningsen,
    function \code{maxBFGSR} was originally developed by Yves Croissant
    (and placed in 'mlogit' package)}
 

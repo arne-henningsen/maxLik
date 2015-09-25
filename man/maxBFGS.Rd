@@ -55,7 +55,7 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
     observations (useful for maxBHHH).  The columns are summed internally.}
   \item{hess}{Hessian of \code{fn}.  Not used by any of these methods, included for
     compatibility with \code{\link{maxNR}}.}
-  \item{start}{initial values for the parameters.  Note: if start values
+  \item{start}{initial values for the parameters.  If start values
     are named, those names are also carried over to the results.}
   \item{fixed}{parameters to be treated as constants at their
     \code{start} values.  If present, it is treated as an index vector of
