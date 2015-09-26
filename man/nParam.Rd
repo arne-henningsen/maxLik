@@ -17,15 +17,15 @@
 }
 \details{
   Free parameters are the parameters with no equality
-  restrictions.  Some parameters may be restricted (e.g. sum of two
-  probabilities may be restricted to equal unity).   In this case the
+  restrictions.  Some parameters may be jointly restricted (e.g. sum of two
+  probabilities may be required to equal unity).   In this case the
   total number of parameters may depend on the
   normalisation. 
 }
 \value{
   Number of parameters in the model
 }
-\author{Ott Toomet, \email{otoomet@econ.au.dk}}
+\author{Ott Toomet}
 \seealso{\code{\link{nObs}} for number of observations}
 \examples{
 ## fit a normal distribution by ML

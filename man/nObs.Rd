@@ -2,8 +2,8 @@
 \alias{nObs.maxLik}
 \title{Number of Observations}
 \description{
-  Returns the number of observations for statistical models
-   estimated by Maximum Likelihood using \code{\link{maxLik}}.
+  Returns the number of observations for statistical models,
+  estimated by Maximum Likelihood using \code{\link{maxLik}}.
 }
 \usage{
 \method{nObs}{maxLik}(x, \dots)
@@ -14,14 +14,9 @@
   \item{\dots}{further arguments (currently ignored).}
 }
 \details{
-   The \code{nObs} method for objects of class \code{"maxLik"}
-   can return the number of observations only
-   if \code{\link{maxLik}} was called
-   with argument \code{grad} equal to a gradient function or
-   (if no gradient function is specified)
-   argument \code{logLik} equal to a log-likelihood function
-   that return the gradients or log-likelihood values, respectively,
-   for each observation.
+   The \code{nObs} method for \dQuote{maxLik} objects
+   can return the number of observations only if log-likelihood function
+   (or the gradient) returns values by individual observation.
 }
 
 \value{

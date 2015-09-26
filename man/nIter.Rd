@@ -11,8 +11,8 @@ nIter(x, \dots)
 \method{nIter}{default}(x, \dots)
 }
 \arguments{
-  \item{x}{a statistical model, or a result of maximisation, such as
-    created by \code{\link{maxLik}} or \code{\link{maxNR}}}
+  \item{x}{a statistical model, or a result of maximisation, created
+    by \code{\link{maxLik}}, \code{\link{maxNR}} or another optimizer.}
   \item{\dots}{further arguments for methods}
 }
 \details{
@@ -20,7 +20,8 @@ nIter(x, \dots)
   \code{x$iterations}.
 }
 \value{
-  numeric, number of iterations
+  numeric, number of iterations.  Note that \sQuote{iteration} may mean
+  different things for different optimizers.
 }
 \author{Ott Toomet, \email{otoomet@econ.au.dk}}
 \seealso{\code{\link{maxLik}}, \code{\link{maxNR}}

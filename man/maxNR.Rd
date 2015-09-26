@@ -379,9 +379,13 @@ x <- rnorm(1000, 1, 2) # use mean=1, stdd=2
 N <- length(x)
 res <- maxNR(loglik, start=c(0,1)) # use 'wrong' start values
 summary(res)
+##
+## The previous example showing parameter names and fixed values
+##
+resFix <- maxNR(loglik, start=c(mu=0, sigma=1), fixed="sigma")
+summary(resFix)  # 'sigma' is exactly 1.000 now.
 ###
-### Now an example of constrained optimization
-### use previous hat function
+### Constrained optimization
 ###
 ## We maximize exp(-x^2 - y^2) where x+y = 1
 hatf <- function(theta) {

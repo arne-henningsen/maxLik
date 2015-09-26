@@ -98,5 +98,10 @@ x <- rnorm(100, 1, 2) # use mean=1, stdd=2
 N <- length(x)
 res <- maxLik(loglik, start=c(0,1)) # use 'wrong' start values
 summary( res )
+##
+## The previous example showing parameter names and fixed values
+##
+resFix <- maxLik(loglik, start=c(mu=0, sigma=1), fixed="sigma")
+summary(resFix)  # 'sigma' is exactly 1.000 now.
 }
 \keyword{optimize}
