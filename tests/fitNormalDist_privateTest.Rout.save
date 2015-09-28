@@ -15,7 +15,12 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> # load the 'maxLik' package
+> ### This code tests all the methods and main parameters.  It includes:
+> ### * analytic gradients/Hessian
+> ### * fixed parameters
+> ### * inequality constraints
+> ### * equality constraints
+> 
 > library(maxLik)
 Loading required package: miscTools
 
@@ -925,7 +930,7 @@ Warning messages:
 > 
 > 
 > 
-> ### BFGS-YC method
+> ### BFGSR method
 > mlBFGSYC <- maxLik( llf, start = startVal, method = "bfgsr" )
 > print( mlBFGSYC )
 Maximum Likelihood estimation
@@ -2397,6 +2402,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlSANNCand[-c(3,4)], mlSANN[-c(3,4)], tolerance = 1e-2 )
 [1] TRUE
+> 
+> 
 > 
 > ############### with fixed parameters ###############
 > # start values
@@ -4017,22 +4024,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] TRUE
 > 
 > 
-> ############### with parameter constraints ###############
-> A <- matrix( -1, nrow = 1, ncol = 2 )
-> 
-> 
 > ############### inequality constraints ###############
+> A <- matrix( -1, nrow = 1, ncol = 2 )
 > inEq <- list( ineqA = A, ineqB = 2.5 )
-> 
-> ## NR method with inequality constraints
-> try( maxLik( llf, start = startVal, constraints = inEq, method = "NR" ) )
-Error in maxRoutine(fn = logLik, grad = grad, hess = hess, start = start,  : 
-  Inequality constraints not implemented for maxNR
-> 
-> ## BHHH method with inequality constraints
-> try( maxLik( llf, start = startVal, constraints = inEq, method = "BHHH" ) )
-Error in maxNR(fn = fn, grad = grad, hess = hess, start = start, finalHessian = finalHessian,  : 
-  Inequality constraints not implemented for maxNR
 > 
 > ## BFGS method with inequality constraints
 > mlBfgsInEq <- maxLik( llf, start = startVal, constraints = inEq,
@@ -4647,383 +4641,24 @@ Constrained optimization based on constrOptim
 > ############### equality constraints ###############
 > eqCon <- list( eqA = A, eqB = 2.5 )
 > 
-> ## NR method with equality constraints
-> mlCon <- maxLik( llf, start = startVal, constraints = eqCon )
-> print( mlCon )
-Maximum Likelihood estimation
-Newton-Raphson maximisation, 2 iterations
-Return code 1: gradient close to zero
-Log-Likelihood: -204.5 (2 free parameter(s))
-Estimate(s): 0.8198 1.68 
-> print( summary( mlCon ), digits = 2 )
---------------------------------------------
-Maximum Likelihood estimation
-Newton-Raphson maximisation, 2 iterations
-Return code 1: gradient close to zero
-Log-Likelihood: -204.5 
-2  free parameters
-Estimates:
-      Estimate Std. error t value Pr(> t)    
-mu        0.82       0.17     4.7   3e-06 ***
-sigma     1.68       0.11    15.7  <2e-16 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Warning: constrained likelihood estimation. Inference is probably wrong
-Constrained optimization based on SUMT 
-Return code: 1 
-penalty close to zero 
-10  outer iterations, barrier value 2.07e-10 
---------------------------------------------
-> activePar( mlCon )
-   mu sigma 
- TRUE  TRUE 
-> AIC( mlCon )
-[1] 413.1
-> coef( mlCon )
-    mu  sigma 
-0.8198 1.6803 
-> condiNumber( mlCon, digits = 3 )
-mu 	 1 
-sigma 	 3.61 
-> round( hessian( mlCon ), 1 )
-         mu sigma
-mu    -35.4 -15.2
-sigma -15.2 -93.6
-> logLik( mlCon )
-[1] -204.5
-> maximType( mlCon )
-[1] "Newton-Raphson maximisation"
-> nIter( mlCon )
-[1] 2
-> nParam( mlCon )
-[1] 2
-> returnCode( mlCon )
-[1] 1
-> returnMessage( mlCon )
-[1] "gradient close to zero"
-> round( vcov( mlCon ), 3 )
-          mu  sigma
-mu     0.030 -0.005
-sigma -0.005  0.011
-> logLik( summary( mlCon ) )
-[1] -204.5
-> mlConInd <- maxLik( llfInd, start = startVal, constraints = eqCon )
-> print( summary( mlConInd ), digits = 2 )
---------------------------------------------
-Maximum Likelihood estimation
-Newton-Raphson maximisation, 2 iterations
-Return code 1: gradient close to zero
-Log-Likelihood: -204.5 
-2  free parameters
-Estimates:
-      Estimate Std. error t value Pr(> t)    
-mu        0.82       0.17     4.7   3e-06 ***
-sigma     1.68       0.11    15.7  <2e-16 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Warning: constrained likelihood estimation. Inference is probably wrong
-Constrained optimization based on SUMT 
-Return code: 1 
-penalty close to zero 
-10  outer iterations, barrier value 2.07e-10 
---------------------------------------------
-> all.equal( mlCon[-4], mlConInd[-c(4,11)], tolerance = 1e-3 )
-[1] TRUE
-> mlConInd[11]
-$gradientObs
-              mu    sigma
-  [1,] -0.333193 -0.40861
-  [2,] -0.099212 -0.57861
-  [3,]  1.168023  1.69720
-  [4,]  0.113792 -0.57339
-  [5,]  0.155431 -0.55455
-  [6,]  1.278785  2.15258
-  [7,]  0.390354 -0.33911
-  [8,] -0.832318  0.56886
-  [9,] -0.422718 -0.29490
- [10,] -0.251860 -0.48856
- [11,]  0.930976  0.86117
- [12,]  0.318734 -0.42444
- [13,]  0.347748 -0.39195
- [14,]  0.142251 -0.56114
- [15,] -0.329910 -0.41226
- [16,]  1.329682  2.37565
- [17,]  0.416518 -0.30364
- [18,] -1.329295  2.37393
- [19,]  0.560680 -0.06693
- [20,] -0.271079 -0.47167
- [21,] -0.692596  0.21086
- [22,] -0.090568 -0.58136
- [23,] -0.662971  0.14338
- [24,] -0.452498 -0.25110
- [25,] -0.378930 -0.35388
- [26,] -1.130999  1.55418
- [27,]  0.657327  0.13086
- [28,]  0.172493 -0.54515
- [29,] -0.742405  0.33096
- [30,]  0.952039  0.92781
- [31,]  0.365949 -0.37013
- [32,] -0.145183 -0.55973
- [33,]  0.697945  0.22336
- [34,]  0.685908  0.19537
- [35,]  0.645847  0.10572
- [36,]  0.551672 -0.08377
- [37,]  0.456236 -0.24540
- [38,]  0.019986 -0.59447
- [39,] -0.152898 -0.55586
- [40,] -0.205679 -0.52406
- [41,] -0.428282 -0.28694
- [42,] -0.083443 -0.58345
- [43,] -0.832555  0.56953
- [44,]  1.600319  3.70805
- [45,]  0.919557  0.82566
- [46,] -0.731759  0.30459
- [47,] -0.221557 -0.51266
- [48,] -0.266732 -0.47560
- [49,]  0.616366  0.04320
- [50,]  0.004786 -0.59511
- [51,]  0.243293 -0.49569
- [52,]  0.043622 -0.59195
- [53,]  0.033475 -0.59326
- [54,]  1.033353  1.19907
- [55,] -0.096091 -0.57963
- [56,]  1.138102  1.58126
- [57,] -1.033283  1.19883
- [58,]  0.477981 -0.21126
- [59,]  0.151582 -0.55654
- [60,]  0.216816 -0.51616
- [61,]  0.332778 -0.40907
- [62,] -0.291999 -0.45188
- [63,] -0.172198 -0.54532
- [64,] -0.657709  0.13171
- [65,] -0.695406  0.21741
- [66,]  0.278862 -0.46448
- [67,]  0.381353 -0.35078
- [68,]  0.101392 -0.57787
- [69,]  0.717173  0.26908
- [70,]  1.516111  3.26710
- [71,] -0.283999 -0.45962
- [72,] -1.571957  3.55687
- [73,]  0.776303  0.41746
- [74,] -0.438549 -0.27199
- [75,] -0.423537 -0.29373
- [76,]  0.790352  0.45444
- [77,] -0.137887 -0.56320
- [78,] -0.800905  0.48266
- [79,]  0.192278 -0.53302
- [80,] -0.034546 -0.59314
- [81,]  0.067927 -0.58739
- [82,]  0.336774 -0.40457
- [83,] -0.198729 -0.52879
- [84,]  0.520316 -0.14025
- [85,] -0.092347 -0.58082
- [86,]  0.298876 -0.44505
- [87,]  0.840838  0.59282
- [88,]  0.372124 -0.36247
- [89,] -0.167044 -0.54826
- [90,]  0.877652  0.69912
- [91,]  0.767636  0.39498
- [92,]  0.452325 -0.25137
- [93,]  0.232960 -0.50396
- [94,] -0.380961 -0.35129
- [95,]  1.027722  1.17957
- [96,] -0.361376 -0.37571
- [97,]  1.613337  3.77834
- [98,]  1.149536  1.62521
- [99,] -0.103125 -0.57728
-[100,] -0.663266  0.14404
-
-> nObs( mlConInd )
-[1] 100
-> 
-> # with analytical gradients
-> mlgCon <- maxLik( llf, gf, start = startVal, constraints = eqCon )
-> print( summary( mlgCon ), digits = 2 )
---------------------------------------------
-Maximum Likelihood estimation
-Newton-Raphson maximisation, 1 iterations
-Return code 3: Last step could not find a value above the current.
-Boundary of parameter space?  
-Consider switching to a more robust optimisation method temporarily.
-Log-Likelihood: -204.5 
-2  free parameters
-Estimates:
-      Estimate Std. error t value Pr(> t)    
-mu        0.84       0.17     4.9   1e-06 ***
-sigma     1.67       0.11    15.8  <2e-16 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Warning: constrained likelihood estimation. Inference is probably wrong
-Constrained optimization based on SUMT 
-Return code: 2 
-successive function values within tolerance limit 
-7  outer iterations, barrier value 0.0001299 
---------------------------------------------
-> all.equal( mlCon[ -c(2,3,4,5,6,7,9,11) ], mlgCon[ -c(2,3,4,5,6,7,9,11) ], 
-+    tolerance = 1e-3 )
-[1] "Component \"constraints\": Component \"code\": Mean relative difference: 1"              
-[2] "Component \"constraints\": Component \"message\": 1 string mismatch"                     
-[3] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.3"
-> all.equal( mlCon[ -c( 5, 6, 7, 9, 11 ) ], mlgCon[ -c( 5, 6, 7, 9, 11 ) ], 
-+    tolerance = 1e-1 )
-[1] "Component \"constraints\": Component \"code\": Mean relative difference: 1"              
-[2] "Component \"constraints\": Component \"message\": 1 string mismatch"                     
-[3] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.3"
-> mlgConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon )
-> all.equal( mlConInd[ -c(2,3,4,5,6,7,9,11,12) ], mlgConInd[ -c(2,3,4,5,6,7,9,11,12) ],
-+    tolerance = 1e-3 )
-[1] "Component \"constraints\": Component \"code\": Mean relative difference: 1"              
-[2] "Component \"constraints\": Component \"message\": 1 string mismatch"                     
-[3] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.3"
-> all.equal( mlConInd[ -c(5,6,7,9,12) ], mlgConInd[ -c(5,6,7,9,12) ],
-+    tolerance = 1e-1 )
-[1] "Component \"constraints\": Component \"code\": Mean relative difference: 1"              
-[2] "Component \"constraints\": Component \"message\": 1 string mismatch"                     
-[3] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.3"
-> all.equal( mlgCon[], mlgConInd[-11], tolerance = 1e-3 )
-[1] TRUE
-> mlgConInd[11]
-$gradientObs
-              mu    sigma
-  [1,] -0.345249 -0.39986
-  [2,] -0.108315 -0.57930
-  [3,]  1.174915  1.70609
-  [4,]  0.107378 -0.57964
-  [5,]  0.149542 -0.56155
-  [6,]  1.287075  2.16717
-  [7,]  0.387431 -0.34825
-  [8,] -0.850673  0.60942
-  [9,] -0.435904 -0.28161
- [10,] -0.262889 -0.48349
- [11,]  0.934876  0.86047
- [12,]  0.314907 -0.43330
- [13,]  0.344287 -0.40097
- [14,]  0.136196 -0.56792
- [15,] -0.341925 -0.40367
- [16,]  1.338615  2.39314
- [17,]  0.413925 -0.31280
- [18,] -1.353923  2.46196
- [19,]  0.559907 -0.07543
- [20,] -0.282350 -0.46577
- [21,] -0.709187  0.24091
- [22,] -0.099561 -0.58234
- [23,] -0.679189  0.17137
- [24,] -0.466059 -0.23620
- [25,] -0.391563 -0.34288
- [26,] -1.153124  1.62138
- [27,]  0.657773  0.12356
- [28,]  0.166819 -0.55242
- [29,] -0.759626  0.36461
- [30,]  0.956205  0.92782
- [31,]  0.362717 -0.37921
- [32,] -0.154865 -0.55884
- [33,]  0.698904  0.21673
- [34,]  0.686715  0.18853
- [35,]  0.646148  0.09825
- [36,]  0.550785 -0.09234
- [37,]  0.454144 -0.25451
- [38,]  0.012388 -0.59863
- [39,] -0.162678 -0.55470
- [40,] -0.216125 -0.52089
- [41,] -0.441538 -0.27336
- [42,] -0.092347 -0.58465
- [43,] -0.850913  0.61011
- [44,]  1.612667  3.74365
- [45,]  0.923313  0.82459
- [46,] -0.748845  0.33746
- [47,] -0.232204 -0.50886
- [48,] -0.277948 -0.46989
- [49,]  0.616296  0.03532
- [50,] -0.003004 -0.59887
- [51,]  0.238514 -0.50390
- [52,]  0.036322 -0.59669
- [53,]  0.026047 -0.59776
- [54,]  1.038546  1.20208
- [55,] -0.105154 -0.58043
- [56,]  1.144617  1.58874
- [57,] -1.054175  1.25669
- [58,]  0.476163 -0.22030
- [59,]  0.145645 -0.56347
- [60,]  0.211702 -0.52405
- [61,]  0.329128 -0.41801
- [62,] -0.303534 -0.44505
- [63,] -0.182222 -0.54344
- [64,] -0.673860  0.15933
- [65,] -0.712033  0.24767
- [66,]  0.274531 -0.47304
- [67,]  0.378316 -0.35991
- [68,]  0.094821 -0.58388
- [69,]  0.718374  0.26281
- [70,]  1.527397  3.29656
- [71,] -0.295434 -0.45315
- [72,] -1.599648  3.67381
- [73,]  0.778251  0.41244
- [74,] -0.451935 -0.25785
- [75,] -0.436733 -0.28041
- [76,]  0.792478  0.44976
- [77,] -0.147478 -0.56257
- [78,] -0.818864  0.52075
- [79,]  0.186855 -0.54059
- [80,] -0.042832 -0.59583
- [81,]  0.060934 -0.59269
- [82,]  0.333175 -0.41354
- [83,] -0.209088 -0.52589
- [84,]  0.519033 -0.14906
- [85,] -0.101363 -0.58173
- [86,]  0.294798 -0.45378
- [87,]  0.843600  0.58942
- [88,]  0.368970 -0.37157
- [89,] -0.177002 -0.54658
- [90,]  0.880879  0.69676
- [91,]  0.769474  0.38976
- [92,]  0.450184 -0.26049
- [93,]  0.228050 -0.51205
- [94,] -0.393619 -0.34018
- [95,]  1.032843  1.18235
- [96,] -0.373787 -0.36559
- [97,]  1.625850  3.81493
- [98,]  1.156195  1.63322
- [99,] -0.112276 -0.57784
-[100,] -0.679488  0.17205
-
-> 
 > # with analytical gradients as attribute
 > mlGCon <- maxLik( llfGrad, start = startVal, constraints = eqCon )
-> all.equal( mlGCon, mlgCon, tolerance = 1e-3 )
-[1] TRUE
-> all.equal( mlGCon[-c(2,3,4,5,6,7,9,11)], mlCon[-c(2,3,4,5,6,7,9,11)], 
-+    tolerance = 1e-3 )
-[1] "Component \"constraints\": Component \"code\": Mean relative difference: 0.5"               
-[2] "Component \"constraints\": Component \"message\": 1 string mismatch"                        
-[3] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.4286"
-> all.equal( mlGCon[-c(5,6,7,9,11)], mlCon[-c(5,6,7,9,11)], 
-+    tolerance = 1e-1 )
-[1] "Component \"constraints\": Component \"code\": Mean relative difference: 0.5"               
-[2] "Component \"constraints\": Component \"message\": 1 string mismatch"                        
-[3] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.4286"
 > 
 > # with analytical gradients and Hessians
 > mlghCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon )
-> all.equal( mlgCon, mlghCon, tolerance = 1e-3 )
+> all.equal( mlGCon, mlghCon, tolerance = 1e-3 )
 [1] "Component \"last.step\": Component \"f0\": Attributes: < Component \"hessian\": Attributes: < Length mismatch: comparison on first 1 components > >"
 > 
 > # with analytical gradients and Hessians as attributes
 > mlGHCon <- maxLik( llfGradHess, start = startVal, constraints = eqCon )
 > all.equal( mlGHCon, mlghCon, tolerance = 1e-3 )
 [1] TRUE
-> all.equal( mlGHCon[-c(2,3,4,5,6,7,9,11)], mlCon[-c(2,3,4,5,6,7,9,11)], 
+> all.equal( mlGHCon[-c(2,3,4,5,6,7,9,11)], mlGCon[-c(2,3,4,5,6,7,9,11)], 
 +    tolerance = 1e-3 )
-[1] "Component \"constraints\": Component \"code\": Mean relative difference: 0.5"               
-[2] "Component \"constraints\": Component \"message\": 1 string mismatch"                        
-[3] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.4286"
-> all.equal( mlGHCon[-c(5,6,7,9,11)], mlCon[-c(5,6,7,9,11)], 
+[1] TRUE
+> all.equal( mlGHCon[-c(5,6,7,9,11)], mlGCon[-c(5,6,7,9,11)], 
 +    tolerance = 1e-1 )
-[1] "Component \"constraints\": Component \"code\": Mean relative difference: 0.5"               
-[2] "Component \"constraints\": Component \"message\": 1 string mismatch"                        
-[3] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.4286"
+[1] TRUE
 > 
 > 
 > ## BHHH method with equality constraints
@@ -5088,9 +4723,14 @@ mu     0.030 -0.005
 sigma -0.005  0.011
 > logLik( summary( mlBhhhCon ) )
 [1] -204.5
-> all.equal( mlCon[ -c( 5, 6, 7, 9, 10 ) ], mlBhhhCon[ -c( 5, 6, 7, 9, 10, 11 ) ],
+> all.equal( mlGCon[ -c( 5, 6, 7, 9, 10 ) ], mlBhhhCon[ -c( 5, 6, 7, 9, 10, 11 ) ],
 +    tolerance = 5e-3 )
-[1] TRUE
+[1] "Component \"estimate\": Mean relative difference: 0.01242"                                  
+[2] "Component \"gradient\": Mean relative difference: 0.04815"                                  
+[3] "Component \"hessian\": Mean relative difference: 0.02354"                                   
+[4] "Component \"constraints\": Component \"code\": Mean relative difference: 0.5"               
+[5] "Component \"constraints\": Component \"message\": 1 string mismatch"                        
+[6] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.4286"
 > mlBhhhCon[11]
 $gradientObs
               mu    sigma
@@ -5346,20 +4986,23 @@ mu     0.030 -0.005
 sigma -0.005  0.011
 > logLik( summary( mlBfgsCon ) )
 [1] -204.5
-> all.equal( mlBfgsCon[ -c( 4, 5, 6, 9, 10 ) ], mlCon[ -c( 4, 5, 6, 9, 10 ) ],
+> all.equal( mlBfgsCon[ -c( 4, 5, 6, 9, 10 ) ], mlGCon[ -c( 4, 5, 6, 9, 10 ) ],
 +    tolerance = 1e-3 )
  [1] "Names: 2 string mismatches"                                                    
- [2] "Component 6: Modes: list, S4"                                                  
- [3] "Component 6: Lengths: 5, 1"                                                    
- [4] "Component 6: names for target but not for current"                             
- [5] "Component 6: Attributes: < names for current but not for target >"             
- [6] "Component 6: Attributes: < Length mismatch: comparison on first 0 components >"
- [7] "Component 6: current is not list-like"                                         
- [8] "Component 7: Modes: S4, list"                                                  
- [9] "Component 7: Lengths: 1, 5"                                                    
-[10] "Component 7: names for current but not for target"                             
-[11] "Component 7: Attributes: < names for target but not for current >"             
-[12] "Component 7: Attributes: < Length mismatch: comparison on first 0 components >"
+ [2] "Component \"estimate\": Mean relative difference: 0.01296"                     
+ [3] "Component \"gradient\": Mean relative difference: 0.05056"                     
+ [4] "Component \"last.step\": target is NULL, current is list"                      
+ [5] "Component 6: Modes: list, S4"                                                  
+ [6] "Component 6: Lengths: 5, 1"                                                    
+ [7] "Component 6: names for target but not for current"                             
+ [8] "Component 6: Attributes: < names for current but not for target >"             
+ [9] "Component 6: Attributes: < Length mismatch: comparison on first 0 components >"
+[10] "Component 6: current is not list-like"                                         
+[11] "Component 7: Modes: S4, list"                                                  
+[12] "Component 7: Lengths: 1, 5"                                                    
+[13] "Component 7: names for current but not for target"                             
+[14] "Component 7: Attributes: < names for target but not for current >"             
+[15] "Component 7: Attributes: < Length mismatch: comparison on first 0 components >"
 > mlBfgsConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
 +    method = "BFGS" )
 > print( summary( mlBfgsConInd ), digits = 2 )
@@ -5693,20 +5336,23 @@ mu     0.030 -0.005
 sigma -0.005  0.011
 > logLik( summary( mlNmCon ) )
 [1] -204.5
-> all.equal( mlNmCon[ -c( 4, 5, 6, 9, 10 ) ], mlCon[ -c( 4, 5, 6, 9, 10 ) ],
+> all.equal( mlNmCon[ -c( 4, 5, 6, 9, 10 ) ], mlGCon[ -c( 4, 5, 6, 9, 10 ) ],
 +    tolerance = 1e-3 )
  [1] "Names: 2 string mismatches"                                                    
- [2] "Component 6: Modes: list, S4"                                                  
- [3] "Component 6: Lengths: 5, 1"                                                    
- [4] "Component 6: names for target but not for current"                             
- [5] "Component 6: Attributes: < names for current but not for target >"             
- [6] "Component 6: Attributes: < Length mismatch: comparison on first 0 components >"
- [7] "Component 6: current is not list-like"                                         
- [8] "Component 7: Modes: S4, list"                                                  
- [9] "Component 7: Lengths: 1, 5"                                                    
-[10] "Component 7: names for current but not for target"                             
-[11] "Component 7: Attributes: < names for target but not for current >"             
-[12] "Component 7: Attributes: < Length mismatch: comparison on first 0 components >"
+ [2] "Component \"estimate\": Mean relative difference: 0.01283"                     
+ [3] "Component \"gradient\": Mean relative difference: 0.04995"                     
+ [4] "Component \"last.step\": target is NULL, current is list"                      
+ [5] "Component 6: Modes: list, S4"                                                  
+ [6] "Component 6: Lengths: 5, 1"                                                    
+ [7] "Component 6: names for target but not for current"                             
+ [8] "Component 6: Attributes: < names for current but not for target >"             
+ [9] "Component 6: Attributes: < Length mismatch: comparison on first 0 components >"
+[10] "Component 6: current is not list-like"                                         
+[11] "Component 7: Modes: S4, list"                                                  
+[12] "Component 7: Lengths: 1, 5"                                                    
+[13] "Component 7: names for current but not for target"                             
+[14] "Component 7: Attributes: < names for target but not for current >"             
+[15] "Component 7: Attributes: < Length mismatch: comparison on first 0 components >"
 > mlNmConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
 +    method = "NM", SUMTTol=0)
 > print( summary( mlNmConInd ), digits = 2 )
@@ -6234,20 +5880,6 @@ Error in estfun.maxLik(ml) :
 [3,]  1.1680  1.6972
 [4,]  0.1138 -0.5734
 [5,]  0.1554 -0.5545
-> estfun( mlConInd )[ 1:5, ]
-           mu   sigma
-[1,] -0.33319 -0.4086
-[2,] -0.09921 -0.5786
-[3,]  1.16802  1.6972
-[4,]  0.11379 -0.5734
-[5,]  0.15543 -0.5546
-> estfun( mlgConInd )[ 1:5, ]
-          mu   sigma
-[1,] -0.3452 -0.3999
-[2,] -0.1083 -0.5793
-[3,]  1.1749  1.7061
-[4,]  0.1074 -0.5796
-[5,]  0.1495 -0.5615
 > estfun( mlBhhhCon )[ 1:5, ]
           mu   sigma
 [1,] -0.3336 -0.4084
@@ -6388,14 +6020,6 @@ sigma -0.49  1.15
          mu sigma
 mu     3.03 -0.49
 sigma -0.49  1.15
-> round( bread( mlConInd ), 2 )
-         mu sigma
-mu     3.04 -0.49
-sigma -0.49  1.15
-> round( bread( mlgConInd ), 2 )
-         mu sigma
-mu     2.97 -0.45
-sigma -0.45  1.11
 > round( bread( mlBhhhCon ), 2 )
          mu sigma
 mu     3.03 -0.49
@@ -6527,14 +6151,6 @@ sigma 0.00  0.01
         mu sigma
 mu    0.04  0.00
 sigma 0.00  0.01
-> printSandwich( mlConInd )
-        mu sigma
-mu    0.04  0.00
-sigma 0.00  0.01
-> printSandwich( mlgConInd )
-        mu sigma
-mu    0.04  0.00
-sigma 0.00  0.01
 > printSandwich( mlBhhhCon )
         mu sigma
 mu    0.04  0.00
@@ -6562,4 +6178,4 @@ sigma 0.00  0.01
 > 
 > proc.time()
    user  system elapsed 
- 41.714   0.093  41.849 
+ 40.964   0.103  41.103 

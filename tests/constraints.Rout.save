@@ -26,7 +26,7 @@ Type 'q()' to quit R.
 +    mu1 <- param[2]
 +    mu2 <- param[3]
 +    ll <- log(rho*dnorm(x - mu1) + (1 - rho)*dnorm(x - mu2))
-+ #   ll <- sum(ll)
++    ll <- sum(ll)
 +    ll
 + }
 > 
@@ -43,7 +43,35 @@ Type 'q()' to quit R.
 +    g[,1] <- (f1 - f2)/L
 +    g[,2] <- rho*(x - mu1)*f1/L
 +    g[,3] <- (1 - rho)*(x - mu2)*f2/L
-+ #   colSums(g)
++    colSums(g)
++    g
++ }
+> 
+> logLikMixInd <- function(param) {
++    rho <- param[1]
++    if(rho < 0 || rho > 1)
++        return(NA)
++    mu1 <- param[2]
++    mu2 <- param[3]
++    ll <- log(rho*dnorm(x - mu1) + (1 - rho)*dnorm(x - mu2))
++    ll <- sum(ll)
++    ll
++ }
+> 
+> gradLikMixInd <- function(param) {
++    rho <- param[1]
++    if(rho < 0 || rho > 1)
++        return(NA)
++    mu1 <- param[2]
++    mu2 <- param[3]
++    f1 <- dnorm(x - mu1)
++    f2 <- dnorm(x - mu2)
++    L <- rho*f1 + (1 - rho)*f2
++    g <- matrix(0, length(x), 3)
++    g[,1] <- (f1 - f2)/L
++    g[,2] <- rho*(x - mu1)*f1/L
++    g[,3] <- (1 - rho)*(x - mu2)*f2/L
++    colSums(g)
 +    g
 + }
 > 
@@ -82,6 +110,7 @@ https://r-forge.r-project.org/projects/maxlik/
 > N <- 100
 > x <- c(rnorm(N, mean=-1), rnorm(N, mean=1))
 > 
+> ## ---------- INEQUALITY CONSTRAINTS -----------
 > ## First test inequality constraints, numeric/analytical gradients
 > ## Inequality constraints: x + y + z < 0.5
 > A <- matrix(c(-1, 0, 0,
@@ -89,12 +118,13 @@ https://r-forge.r-project.org/projects/maxlik/
 +               0, 0, 1), 3, 3, byrow=TRUE)
 > B <- rep(0.5, 3)
 > start <- c(0.4, 0, 0.9)
+> ineqCon <- list(ineqA=A, ineqB=B)
 > ## analytic gradient
 > cat("Inequality constraints, analytic gradient & Hessian\n")
 Inequality constraints, analytic gradient & Hessian
 > a <- maxLik(logLikMix, grad=gradLikMix, hess=hessLikMix,
 +             start=start,
-+             constraints=list(ineqA=A, ineqB=B))
++             constraints=ineqCon)
 > print(coef(a), digits=3)
 [1]  0.500 -0.775  0.876
 > ## No analytic gradient
@@ -102,31 +132,88 @@ Inequality constraints, analytic gradient & Hessian
 Inequality constraints, numeric gradient & Hessian
 > a <- maxLik(logLikMix, 
 +             start=start,
-+             constraints=list(ineqA=A, ineqB=B))
++             constraints=ineqCon)
 > print(coef(a), digits=3)
 [1]  0.50 -0.63  1.23
-> ## Now test for equality constraints, different methods
-> cat("Test for equality constraints\n")
-Test for equality constraints
+> ## NR method with inequality constraints
+> try( maxLik(logLikMix, start = start, constraints = ineqCon, method = "NR" ) )
+Error in maxRoutine(fn = logLik, grad = grad, hess = hess, start = start,  : 
+  Inequality constraints not implemented for maxNR
+> 
+> ## BHHH method with inequality constraints
+> try( maxLik(logLikMix, start = start, constraints = ineqCon, method = "BHHH" ) )
+Error in maxNR(fn = fn, grad = grad, hess = hess, start = start, finalHessian = finalHessian,  : 
+  Inequality constraints not implemented for maxNR
+> 
+> 
+> ## ---------- EQUALITY CONSTRAINTS -----------------
+> cat("Test for equality constraints y + 2z = 0\n")
+Test for equality constraints y + 2z = 0
 > A <- matrix(c(0, 1, 2), 1, 3)
 > B <- 0
+> eqCon <- list( eqA = A, eqB = B )
+> ## default, numeric gradient
+> mlEq <- maxLik(logLikMix, start = start, constraints = eqCon )
+> print(summary(mlEq))
+--------------------------------------------
+Maximum Likelihood estimation
+Newton-Raphson maximisation, 2 iterations
+Return code 1: gradient close to zero
+Log-Likelihood: -339.8 
+3  free parameters
+Estimates:
+     Estimate Std. error t value Pr(> t)    
+[1,]    0.343      0.140    2.45 0.01444 *  
+[2,]   -1.100      0.318   -3.46 0.00054 ***
+[3,]    0.550      0.216    2.55 0.01075 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Warning: constrained likelihood estimation. Inference is probably wrong
+Constrained optimization based on SUMT 
+Return code: 1 
+penalty close to zero 
+9  outer iterations, barrier value 2.999e-09 
+--------------------------------------------
+> ## default, individual likelihood
+> mlEqInd <- maxLik(logLikMixInd, start = start, constraints = eqCon )
+> all.equal(coef(mlEq), coef(mlEqInd))
+[1] TRUE
+> all.equal(stdEr(mlEq), stdEr(mlEqInd))
+[1] TRUE
 > ## default, analytic gradient
-> a <- maxLik(logLikMix, grad=gradLikMix, hess=hessLikMix,
-+             start=start,
-+             constraints=list(eqA=A, eqB=B))
-> print(coef(a))
-[1]  0.3425 -1.0996  0.5498
+> mlEqG <- maxLik(logLikMix, grad=gradLikMix,
++                   start = start, constraints = eqCon )
+> all.equal(coef(mlEq), coef(mlEqG), tolerance=1e-6)
+[1] TRUE
+> ## default, analytic gradient, individual likelihood
+> mlEqGInd <- maxLik(logLikMixInd, grad=gradLikMixInd,
++                      start = start, constraints = eqCon )
+> all.equal(coef(mlEqG), coef(mlEqGInd), tolerance=1e-6)
+[1] TRUE
+> all.equal(stdEr(mlEqGInd), stdEr(mlEqGInd), tolerance=1e-6)
+[1] TRUE
+> ## default, analytic Hessian
+> mlEqH <- maxLik(logLikMix, grad=gradLikMix, hess=hessLikMix,
++                   start=start,
++                   constraints=eqCon)
+> all.equal(coef(mlEqG), coef(mlEqH), toleranec=1e-6)
+[1] TRUE
+> all.equal(stdEr(mlEqG), stdEr(mlEqH))
+[1] TRUE
+> 
+> 
 > ## BFGS, numeric gradient
 > a <- maxLik(logLikMix, 
 +             start=start, method="bfgs",
-+             constraints=list(eqA=A, eqB=B),
++             constraints=eqCon,
 +             SUMTRho0=1)
 > print(coef(a))
 [1]  0.3425 -1.0996  0.5498
 > ## BHHH, analytic gradient (numeric does not converge?)
 > try( maxLik(logLikMix, gradLikMix,
 +             start=start, method="bhhh",
-+             constraints=list(eqA=A, eqB=B),
++             constraints=eqCon,
 +             SUMTRho0=1) )
 Maximum Likelihood estimation
 BHHH maximisation, 6 iterations
@@ -134,7 +221,8 @@ Return code 2: successive function values within tolerance limit
 Log-Likelihood: -339.8 (3 free parameter(s))
 Estimate(s): 0.3402 -1.103 0.5514 
 > 
-> ### ------------------ Now test extra parameters for the function ----
+> 
+> ### ------------------ Now test additional parameters for the function ----
 > logLikMix2 <- function(param, rho) {
 +    mu1 <- param[1]
 +    mu2 <- param[2]
@@ -172,7 +260,7 @@ Estimate(s): 0.3402 -1.103 0.5514
 +    h
 + }
 > 
-> ## ----------
+> ## ---------- Equality constraints & extra parameters ------------
 > A <- matrix(c(1, 2), 1, 2)
 > B <- 0
 > start <- c(0, 1)
@@ -283,7 +371,7 @@ Error in sumt(fn = function (theta)  :
 of rows as the matrix B (currently 1 and 2)
 >                            # nrow(A) != nrow(B)
 > ##                           
-> ## -------------- inequality constraints ----------------
+> ## -------------- inequality constraints & extra paramters ----------------
 > ##
 > A <- matrix(c(-1, 0,
 +               0,  1), 2,2, byrow=TRUE)
@@ -368,7 +456,10 @@ Constrained optimization based on constrOptim
 [1] -0.5894  2.0000
 >                            # components should be larger than
 >                            # (-1, -2)
-> ## ---- Now test error handling: insert wrong A and B forms ----
+> 
+> ##
+> ## ----  ERROR HANDLING: insert wrong A and B forms ----
+> ##
 > A2 <- c(-1, 0, 0, 1)
 > try(maxLik(logLikMix2, gradLikMix2,
 +            start=start, method="bfgs",
@@ -411,7 +502,8 @@ Error in maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BF
   Inequality constraint B must be a vector (or Nx1 matrix).  Currently 2 columns
 >                            # B must be a vector
 > 
-> ## fixed parameters with constrained optimization, BFGS.  Thanks to Bob Loos for finding this error.
+> ## ----  fixed parameters with constrained optimization -----
+> ## Thanks to Bob Loos for finding this error.
 > ## Optimize 3D hat with one parameter fixed (== 2D hat).
 > ## Add an equality constraint on that
 > cat("Constraints + fixed parameters\n")
@@ -429,24 +521,24 @@ Constraints + fixed parameters
 > B <- -2.5
 > constraints <- list(ineqA=A, ineqB=B)
 > res <- maxBFGS(hat3, start=sv, constraints=constraints, fixed=3,
-+                iterlim=10)
++                iterlim=3)
 > print(summary(res))
 --------------------------------------------
 BFGS maximization 
-Number of iterations: 31 
+Number of iterations: 3 
 Return code: 1 
 iteration limit exceeded  
-Function value: 0.1193 
+Function value: 0.1125 
 Estimates:
      estimate gradient
-[1,]   0.7504  -0.1790
-[2,]   0.7504  -0.1790
-[3,]   1.0000  -0.2386
+[1,]   0.7696  -0.1732
+[2,]   0.7696  -0.1732
+[3,]   1.0000  -0.2251
 
 Constrained optimization based on constrOptim 
-1  outer iterations, barrier value -0.0006085 
+1  outer iterations, barrier value -0.0004159 
 --------------------------------------------
 > 
 > proc.time()
    user  system elapsed 
-  1.895   0.032   1.920 
+  2.872   0.046   2.915 

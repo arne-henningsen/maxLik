@@ -1,4 +1,9 @@
-# load the 'maxLik' package
+### This code tests all the methods and main parameters.  It includes:
+### * analytic gradients/Hessian
+### * fixed parameters
+### * inequality constraints
+### * equality constraints
+
 library(maxLik)
 options(digits = 4)
                            # just to avoid so many differences when comparing these output files
@@ -319,7 +324,7 @@ all.equal( mlgGhHBHHH, mlGHBHHH, tolerance = 1e-3 )
 
 
 
-### BFGS-YC method
+### BFGSR method
 mlBFGSYC <- maxLik( llf, start = startVal, method = "bfgsr" )
 print( mlBFGSYC )
 print( summary( mlBFGSYC ), digits = 2 )
@@ -534,6 +539,8 @@ mlSANNCand <- maxLik( llf, start = startVal, method = "SANN",
    cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
 print( summary( mlSANNCand ), digits = 2 )
 all.equal( mlSANNCand[-c(3,4)], mlSANN[-c(3,4)], tolerance = 1e-2 )
+
+
 
 ############### with fixed parameters ###############
 # start values
@@ -846,18 +853,9 @@ mlghFixSann <- maxLik( llf, gf, hf, start = startValFix, fixed = isFixed,
 all.equal( mlgFixSann, mlghFixSann, tolerance = 1e-3 )
 
 
-############### with parameter constraints ###############
-A <- matrix( -1, nrow = 1, ncol = 2 )
-
-
 ############### inequality constraints ###############
+A <- matrix( -1, nrow = 1, ncol = 2 )
 inEq <- list( ineqA = A, ineqB = 2.5 )
-
-## NR method with inequality constraints
-try( maxLik( llf, start = startVal, constraints = inEq, method = "NR" ) )
-
-## BHHH method with inequality constraints
-try( maxLik( llf, start = startVal, constraints = inEq, method = "BHHH" ) )
 
 ## BFGS method with inequality constraints
 mlBfgsInEq <- maxLik( llf, start = startVal, constraints = inEq,
@@ -973,62 +971,19 @@ all.equal( mlSannInEqCand, mlSannInEq, tolerance = 1e-1 )
 ############### equality constraints ###############
 eqCon <- list( eqA = A, eqB = 2.5 )
 
-## NR method with equality constraints
-mlCon <- maxLik( llf, start = startVal, constraints = eqCon )
-print( mlCon )
-print( summary( mlCon ), digits = 2 )
-activePar( mlCon )
-AIC( mlCon )
-coef( mlCon )
-condiNumber( mlCon, digits = 3 )
-round( hessian( mlCon ), 1 )
-logLik( mlCon )
-maximType( mlCon )
-nIter( mlCon )
-nParam( mlCon )
-returnCode( mlCon )
-returnMessage( mlCon )
-round( vcov( mlCon ), 3 )
-logLik( summary( mlCon ) )
-mlConInd <- maxLik( llfInd, start = startVal, constraints = eqCon )
-print( summary( mlConInd ), digits = 2 )
-all.equal( mlCon[-4], mlConInd[-c(4,11)], tolerance = 1e-3 )
-mlConInd[11]
-nObs( mlConInd )
-
-# with analytical gradients
-mlgCon <- maxLik( llf, gf, start = startVal, constraints = eqCon )
-print( summary( mlgCon ), digits = 2 )
-all.equal( mlCon[ -c(2,3,4,5,6,7,9,11) ], mlgCon[ -c(2,3,4,5,6,7,9,11) ], 
-   tolerance = 1e-3 )
-all.equal( mlCon[ -c( 5, 6, 7, 9, 11 ) ], mlgCon[ -c( 5, 6, 7, 9, 11 ) ], 
-   tolerance = 1e-1 )
-mlgConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon )
-all.equal( mlConInd[ -c(2,3,4,5,6,7,9,11,12) ], mlgConInd[ -c(2,3,4,5,6,7,9,11,12) ],
-   tolerance = 1e-3 )
-all.equal( mlConInd[ -c(5,6,7,9,12) ], mlgConInd[ -c(5,6,7,9,12) ],
-   tolerance = 1e-1 )
-all.equal( mlgCon[], mlgConInd[-11], tolerance = 1e-3 )
-mlgConInd[11]
-
 # with analytical gradients as attribute
 mlGCon <- maxLik( llfGrad, start = startVal, constraints = eqCon )
-all.equal( mlGCon, mlgCon, tolerance = 1e-3 )
-all.equal( mlGCon[-c(2,3,4,5,6,7,9,11)], mlCon[-c(2,3,4,5,6,7,9,11)], 
-   tolerance = 1e-3 )
-all.equal( mlGCon[-c(5,6,7,9,11)], mlCon[-c(5,6,7,9,11)], 
-   tolerance = 1e-1 )
 
 # with analytical gradients and Hessians
 mlghCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon )
-all.equal( mlgCon, mlghCon, tolerance = 1e-3 )
+all.equal( mlGCon, mlghCon, tolerance = 1e-3 )
 
 # with analytical gradients and Hessians as attributes
 mlGHCon <- maxLik( llfGradHess, start = startVal, constraints = eqCon )
 all.equal( mlGHCon, mlghCon, tolerance = 1e-3 )
-all.equal( mlGHCon[-c(2,3,4,5,6,7,9,11)], mlCon[-c(2,3,4,5,6,7,9,11)], 
+all.equal( mlGHCon[-c(2,3,4,5,6,7,9,11)], mlGCon[-c(2,3,4,5,6,7,9,11)], 
    tolerance = 1e-3 )
-all.equal( mlGHCon[-c(5,6,7,9,11)], mlCon[-c(5,6,7,9,11)], 
+all.equal( mlGHCon[-c(5,6,7,9,11)], mlGCon[-c(5,6,7,9,11)], 
    tolerance = 1e-1 )
 
 
@@ -1050,7 +1005,7 @@ returnCode( mlBhhhCon )
 returnMessage( mlBhhhCon )
 round( vcov( mlBhhhCon ), 3 )
 logLik( summary( mlBhhhCon ) )
-all.equal( mlCon[ -c( 5, 6, 7, 9, 10 ) ], mlBhhhCon[ -c( 5, 6, 7, 9, 10, 11 ) ],
+all.equal( mlGCon[ -c( 5, 6, 7, 9, 10 ) ], mlBhhhCon[ -c( 5, 6, 7, 9, 10, 11 ) ],
    tolerance = 5e-3 )
 mlBhhhCon[11]
 nObs( mlBhhhCon )
@@ -1107,7 +1062,7 @@ returnCode( mlBfgsCon )
 returnMessage( mlBfgsCon )
 round( vcov( mlBfgsCon ), 3 )
 logLik( summary( mlBfgsCon ) )
-all.equal( mlBfgsCon[ -c( 4, 5, 6, 9, 10 ) ], mlCon[ -c( 4, 5, 6, 9, 10 ) ],
+all.equal( mlBfgsCon[ -c( 4, 5, 6, 9, 10 ) ], mlGCon[ -c( 4, 5, 6, 9, 10 ) ],
    tolerance = 1e-3 )
 mlBfgsConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
    method = "BFGS" )
@@ -1148,7 +1103,7 @@ returnCode( mlNmCon )
 returnMessage( mlNmCon )
 round( vcov( mlNmCon ), 3 )
 logLik( summary( mlNmCon ) )
-all.equal( mlNmCon[ -c( 4, 5, 6, 9, 10 ) ], mlCon[ -c( 4, 5, 6, 9, 10 ) ],
+all.equal( mlNmCon[ -c( 4, 5, 6, 9, 10 ) ], mlGCon[ -c( 4, 5, 6, 9, 10 ) ],
    tolerance = 1e-3 )
 mlNmConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
    method = "NM", SUMTTol=0)
@@ -1235,8 +1190,6 @@ estfun( mlgIndFixSann )[ 1:5, ]
 estfun( mlBfgsInEqInd )[ 1:5, ]
 estfun( mlgBfgsInEqInd )[ 1:5, ]
 estfun( mlNmInEqInd )[ 1:5, ]
-estfun( mlConInd )[ 1:5, ]
-estfun( mlgConInd )[ 1:5, ]
 estfun( mlBhhhCon )[ 1:5, ]
 estfun( mlgBhhhCon )[ 1:5, ]
 estfun( mlBfgsConInd )[ 1:5, ]
@@ -1270,8 +1223,6 @@ round( bread( mlgIndFixSann ), 2 )
 round( bread( mlBfgsInEqInd ), 2 )
 round( bread( mlgBfgsInEqInd ), 2 )
 round( bread( mlNmInEqInd ), 2 )
-round( bread( mlConInd ), 2 )
-round( bread( mlgConInd ), 2 )
 round( bread( mlBhhhCon ), 2 )
 round( bread( mlgBhhhCon ), 2 )
 round( bread( mlBfgsConInd ), 2 )
@@ -1312,8 +1263,6 @@ printSandwich( mlgIndFixSann )
 printSandwich( mlBfgsInEqInd )
 printSandwich( mlgBfgsInEqInd )
 printSandwich( mlNmInEqInd )
-printSandwich( mlConInd )
-printSandwich( mlgConInd )
 printSandwich( mlBhhhCon )
 printSandwich( mlgBhhhCon )
 printSandwich( mlBfgsConInd )
