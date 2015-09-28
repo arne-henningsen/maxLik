@@ -3,21 +3,16 @@
 
 \title{Variance Covariance Matrix of maxLik objects}
 \description{
-   Extract variance-covariance matrices of objects of class \code{\link{maxLik}}.
+   Extract variance-covariance matrices from \code{\link{maxLik}} objects.
 }
 \usage{
    \method{vcov}{maxLik}( object, eigentol=1e-12, ... )
 }
 \arguments{
-   \item{object}{an object of class \code{probit} or \code{maxLik}.}
+   \item{object}{a \sQuote{maxLik} object.}
    \item{eigentol}{
-     nonzero print limit on the range of the absolute values of the
-     hessian.  Specifically, define:
-
-     absEig <- eigen(hessian(object), symmetric=TRUE)[['values']]
-
-     Then compute and print t values, p values, etc. only if min(absEig)
-     > (eigentol * max(absEig)).  
+     eigenvalue tolerance, controlling when the Hessian matrix is
+     treated as numerically singular.
    }
    \item{\dots}{further arguments (currently ignored).}
 }
@@ -25,10 +20,16 @@
    the estimated variance covariance matrix of the coefficients.  In
    case of the estimated Hessian is singular, it's values are
      \code{Inf}.  The values corresponding to fixed parameters are zero.
-}
+   }
+   \details{
+     The \code{eigentol} is used in the following way. Let
+     \preformatted{absEig <- eigen(hessian(object), symmetric=TRUE)[['values']]}
+     Variance-covariance matrix is computed only if
+     \preformatted{min(absEig) > (eigentol * max(absEig))}
+   }
 \author{
    Arne Henningsen,
-   Ott Toomet \email{otoomet@ut.ee}
+   Ott Toomet
 }
 
 \seealso{\code{\link[stats]{vcov}}, \code{\link{maxLik}}.}
