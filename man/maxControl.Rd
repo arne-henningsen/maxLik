@@ -82,6 +82,11 @@
       factor (see Nelder \& Mead, 1965)}
     \item{\code{beta}}{0.5, Nelder-Mead contraction factor}
     \item{\code{gamma}}{2, Nelder-Mead expansion factor}
+    % SANN
+    \item{\code{SANN_cand}}{\code{NULL} or a function for \code{"SANN"} algorithm
+      to generate a new candidate point;
+      if \code{NULL}, Gaussian Markov kernel is used
+      (see argument \code{gr} of \code{\link{optim}}).}
     %
     \item{\code{iterlim}}{150, stopping condition.  Stop if more than \code{iterlim}
       iterations performed.  Note that \sQuote{iteration} may mean

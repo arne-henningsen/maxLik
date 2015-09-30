@@ -1,6 +1,8 @@
 
 ### shoud move checkMaxControl to a separate file but how to do it?
 
+setClassUnion("functionOrNULL", c("function", "NULL"))
+
 checkMaxControl <- function(object) {
    ## check validity of MaxControl objects
    if(!inherits(object, "MaxControl")) {
@@ -9,9 +11,17 @@ checkMaxControl <- function(object) {
    }
    ##
    errors <- character(0)
-   ##
+   ## Check length of componenents
    for(s in slotNames(object)) {
-      if(length(slot(object, s)) != 1) {
+      if(s == "SANN_cand") {
+         if(length(slot(object, s)) > 1) {
+            errors <- c(errors,
+                        paste("'", s, "' must be either 'NULL' or ",
+                              "a function of length 1, not of length ",
+                              length(slot(object, s)), sep=""))
+         }
+      }
+      else if(length(slot(object, s)) != 1) {
          errors <- c(errors,
                      paste("'", s, "' must be of length 1, not ",
                            length(slot(object, s)), sep=""))
@@ -23,8 +33,8 @@ checkMaxControl <- function(object) {
                                 slot(object, "tol"), sep=""))
    }
    if(slot(object, "reltol") < 0) {
-      errors <- c(errors, paste("'reltol' must be non-negative, not",
-                                slot(object, "reltol")))
+      errors <- c(errors, paste("'reltol' must be non-negative, not ",
+                                slot(object, "reltol"), sep=""))
    }
    if(slot(object, "gradtol") < 0) {
       errors <- c(errors, paste("'gradtol' must be non-negative, not",
@@ -58,6 +68,12 @@ checkMaxControl <- function(object) {
       errors <- c(errors, paste("'maxLambda' must be non-negative, not",
                                 slot(object, "maxLambda")))
    }
+   ## SANN
+   if(!inherits(slot(object, "SANN_cand"), c("function", "NULL"))) {
+      errors <- c(errors, paste("'SANN_cand' must be either NULL or a function, not",
+                                slot(object, "SANN_cand")))
+   }
+   ##
    if(slot(object, "iterlim") < 0) {
       errors <- c(errors, paste("'iterlim' must be non-negative, not",
                                 slot(object, "iterlim")))
@@ -86,6 +102,8 @@ setClass("MaxControl",
          alpha="numeric",
          beta="numeric",
          gamma="numeric",
+         ## SANN
+         SANN_cand="functionOrNULL",
          ##
              iterlim="integer",
              ##
@@ -107,7 +125,9 @@ setClass("MaxControl",
          alpha=1,
          beta=0.5,
          gamma=2,
-                           #
+         ## SANN
+         SANN_cand=NULL,
+         ##
              iterlim=150L,
              printLevel=0L),
          validity=checkMaxControl)
