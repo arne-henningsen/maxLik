@@ -27,9 +27,8 @@ maxSANN(fn, grad = NULL, hess = NULL, start, fixed = NULL,
    control=NULL,
    constraints = NULL,
    finalHessian=TRUE,
-   cand = NULL, temp = 10, tmax = 10,
    parscale = rep(1, length = length(start)),
-   random.seed = 123, ... )
+   ... )
 
 maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
    control=NULL,
@@ -62,7 +61,7 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
     \code{start} parameters.}
   \item{control}{list of control parameters or a \sQuote{MaxControl}
     object.  If it is a list, the default values are used for the
-    parameters, left unspecified by the user.
+    parameters that are left unspecified by the user.
     These functions accepted the following parameters:
     \describe{
       \item{reltol}{sqrt(.Machine$double.eps), stopping
@@ -83,8 +82,24 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
       }
       \item{beta}{0.5, Nelder-Mead controction coefficient}
       \item{gamma}{2, Nelder-Mead expansion coefficient}
+      % SANN
+      \item{\code{SANN_cand}}{\code{NULL} or a function for \code{"SANN"} algorithm
+	to generate a new candidate point;
+	if \code{NULL}, Gaussian Markov kernel is used
+	(see argument \code{gr} of \code{\link{optim}}).}
+      \item{\code{SANN_temp}}{10, starting temperature
+	for the \dQuote{SANN} cooling schedule.  See \code{\link{optim}}.}
+      \item{\code{SANN_tmax}}{10, number of function evaluations at each temperature for
+	the \dQuote{SANN} optimizer.  See \code{\link{optim}}.}
+      \item{\code{SANN_randomSeed}}{123, integer to seed random numbers to
+	ensure replicability of \dQuote{SANN} optimization and preserve
+	\code{R} random numbers.  Use
+	options like \code{SANN_randomSeed=Sys.time()} or
+	\code{SANN_randomeSeed=sample(1000,1)} if you want stochastic
+	results.
+	}
+      }
     }
-  }
   \item{constraints}{either \code{NULL} for unconstrained optimization
     or a list with two components.  The components may be either
     \code{eqA} and \code{eqB} for equality-constrained optimization
@@ -107,18 +122,6 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
   be supplied by individual observations, see \code{\link{maxBHHH}} for
   details. 
  }
-  \item{cand}{a function used in the \code{"SANN"} algorithm
-    to generate a new candidate point;
-    if it is \code{NULL}, a default Gaussian Markov kernel is used
-    (see argument \code{gr} of \code{\link{optim}}).}
-  \item{temp}{controls the '"SANN"' method. It is the starting
-          temperature for the cooling schedule. Defaults to '10'.}
-  \item{tmax}{is the number of function evaluations at each temperature
-          for the '"SANN"' method. Defaults to '10'. (see
-    \code{\link{optim}})}
-  \item{random.seed}{an integer used to seed R's random number generator.
-    This is to ensure replicability when the \sQuote{Simulated Annealing}
-    method is used. Defaults to 123.}
   \item{parscale}{A vector of scaling values for the parameters.
           Optimization is performed on 'par/parscale' and these should
           be comparable in the sense that a unit change in any element

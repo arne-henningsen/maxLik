@@ -87,7 +87,17 @@
       to generate a new candidate point;
       if \code{NULL}, Gaussian Markov kernel is used
       (see argument \code{gr} of \code{\link{optim}}).}
-    %
+    \item{\code{SANN_temp}}{10, starting temperature
+      for the \dQuote{SANN} cooling schedule.  See \code{\link{optim}}.}
+    \item{\code{SANN_tmax}}{10, number of function evaluations at each temperature for
+      the \dQuote{SANN} optimizer.  See \code{\link{optim}}.}
+    \item{\code{SANN_randomSeed}}{123, integer to seed random numbers to
+      ensure replicability of \dQuote{SANN} optimization and preserve
+      \code{R} random numbers.  Use
+      options like \code{SANN_randomSeed=Sys.time()} or
+      \code{SANN_randomeSeed=sample(1000,1)} if you want stochastic results.
+    }
+    % General
     \item{\code{iterlim}}{150, stopping condition.  Stop if more than \code{iterlim}
       iterations performed.  Note that \sQuote{iteration} may mean
       different things for different optimzers.}
