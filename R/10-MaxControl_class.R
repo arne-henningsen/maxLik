@@ -92,9 +92,9 @@ setClass("MaxControl",
              steptol="numeric",
                            #
              lambdatol="numeric",
+             qrtol="numeric",
              ## Qadratic Approximation Control
              qac="character",
-             qrtol="numeric",
              lambda0="numeric",
              lambdaStep="numeric",
              maxLambda="numeric",
@@ -104,10 +104,14 @@ setClass("MaxControl",
          gamma="numeric",
          ## SANN
          SANN_cand="functionOrNULL",
+         SANN_temp="numeric",
+         SANN_tmax="numeric",
+         SANN_randomSeed="integer",
          ##
              iterlim="integer",
              ##
              printLevel="integer"),
+         ##
          prototype=prototype(
              tol=1e-8,
              reltol=sqrt(.Machine$double.eps),
@@ -127,6 +131,9 @@ setClass("MaxControl",
          gamma=2,
          ## SANN
          SANN_cand=NULL,
+         SANN_temp=10,
+         SANN_tmax=10,
+         SANN_randomSeed=123L,
          ##
              iterlim=150L,
              printLevel=0L),

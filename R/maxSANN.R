@@ -3,9 +3,8 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
                     control=NULL,
                     constraints = NULL,
                     finalHessian=TRUE,
-                    cand = NULL,
-                    temp=10, tmax=10, parscale=rep(1, length=length(start)),
-                    random.seed = 123, ... ) {
+                    parscale=rep(1, length=length(start)),
+                    ... ) {
    ## Wrapper of optim-based 'SANN' optimization
    ## 
    ## contraints    constraints to be passed to 'constrOptim'
@@ -31,7 +30,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    }
 
    # set seed for the random number generator (used by 'optim( method="SANN" )')
-   set.seed( random.seed )
+   set.seed(slot(mControl, "SANN_randomSeed"))
 
    # restore seed of the random number generator on exit
    # (end of function or error)
@@ -46,10 +45,8 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
                       constraints = constraints,
                       finalHessian=finalHessian,
                       parscale = parscale,
-      temp = temp, tmax = tmax, random.seed = random.seed, cand = cand,
                       control=mControl,
-      ... )
-
+                      ... )
    return(result)
 }
 

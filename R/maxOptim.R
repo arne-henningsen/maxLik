@@ -4,7 +4,6 @@ maxOptim <- function(fn, grad, hess,
                      finalHessian=TRUE,
                     parscale,
                      control=maxControl(),
-                    temp = NULL, tmax = NULL, random.seed = NULL, cand = NULL,
                     ...) {
    ## Wrapper of optim-based optimization methods
    ##
@@ -27,7 +26,7 @@ maxOptim <- function(fn, grad, hess,
    ## Any forbidden arguments in fn?
    argNames <- c( "fn", "grad", "hess", "start", "print.level", "iterlim",
       "constraints", "tol", "reltol", "parscale", "alpha", "beta", "gamma",
-      "temp", "tmax" )
+                 "cand", "temp", "tmax" )
    checkFuncArgs( fn, argNames, "fn", maxMethod )
    if( !is.null( grad ) ) {
       checkFuncArgs( grad, argNames, "grad", maxMethod )
@@ -41,12 +40,12 @@ maxOptim <- function(fn, grad, hess,
 
    message <- function(c) {
       switch(as.character(c),
-               "0" = "successful convergence",
+             "0" = "successful convergence",
              "1" = "iteration limit exceeded",
-               "10" = "degeneracy in Nelder-Mead simplex",
-               "51" = "warning from the 'L-BFGS-B' method; see the corresponding component 'message' for details",
-               "52" = "error from the 'L-BFGS-B' method; see the corresponding component 'message' for details"
-               )
+             "10" = "degeneracy in Nelder-Mead simplex",
+             "51" = "warning from the 'L-BFGS-B' method; see the corresponding component 'message' for details",
+             "52" = "error from the 'L-BFGS-B' method; see the corresponding component 'message' for details"
+             )
    }
 
    ## initialize variables for saving gradients provided as attributes
@@ -66,12 +65,14 @@ maxOptim <- function(fn, grad, hess,
    oControl <- list(trace=max(slot(control, "printLevel"), 0),
                     REPORT=1,
                     fnscale=-1,
-                   reltol=slot(control, "reltol"),
+                    reltol=slot(control, "reltol"),
                     maxit=slot(control, "iterlim"),
                     parscale=parscale[ !fixed ],
                     alpha=slot(control, "alpha"), beta=slot(control, "beta"),
-                   gamma=slot(control, "gamma"),
-                    temp=temp, tmax=tmax )
+                    gamma=slot(control, "gamma"),
+                    temp=slot(control, "SANN_temp"),
+                    tmax=slot(control, "SANN_tmax")
+                    )
    argList <- list(theta=start,
                    fName="logLikFunc",
                    fnOrig = fn,
@@ -95,13 +96,13 @@ maxOptim <- function(fn, grad, hess,
    if( hasGradAttr && !is.null( grad ) ) {
       grad <- NULL
       warning( "the gradient is provided both as attribute 'gradient' and",
-         " as argument 'grad': ignoring argument 'grad'" )
+              " as argument 'grad': ignoring argument 'grad'" )
    }
    hasHessAttr <- !is.null( attr( f1, "hessian" ) )
    if( hasHessAttr && !is.null( hess ) ) {
       hess <- NULL
       warning( "the Hessian is provided both as attribute 'hessian' and",
-         " as argument 'hess': ignoring argument 'hess'" )
+              " as argument 'hess': ignoring argument 'hess'" )
    }
    if( method == "BFGS" ) {
       argList <- list(theta=start,
@@ -125,20 +126,20 @@ maxOptim <- function(fn, grad, hess,
       }
       if(length(G1) != length(start)) {
          stop( "length of gradient (", length(G1),
-            ") not equal to the no. of parameters (", length(start), ")" )
+              ") not equal to the no. of parameters (", length(start), ")" )
       }
    }
 
-   ## function to return the gradients (BFGS) or the new candidate point (SANN)
+   ## function to return the gradients (BFGS, CG) or the new candidate point (SANN)
    if( method == "BFGS" ) {
       gradOptim <- logLikGrad
    } else if( method == "SANN" ) {
-      if( is.null( cand ) ) {
+      if( is.null(slot(control, "SANN_cand") ) ) {
          gradOptim <- NULL
       } else {
          gradOptim <- function( theta, fnOrig, gradOrig, hessOrig,
                start, fixed, ... ) {
-            return( cand( theta, ... ) )
+            return(control@SANN_cand( theta, ... ) )
          }
       }
    } else if( method == "CG" ) {
@@ -227,8 +228,6 @@ maxOptim <- function(fn, grad, hess,
                         maxRoutine = get( maxMethod ),
                         constraints=constraints,
                          parscale = parscale,
-                        temp = temp, tmax = tmax, random.seed = random.seed,
-                        cand = cand,
                          control=control)
                            # recursive evaluation-> pass original (possibly
                            # supplemented) control
