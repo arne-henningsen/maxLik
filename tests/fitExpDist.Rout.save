@@ -210,9 +210,9 @@ qac = stephalving
 lambda0 = 0.01 
 lambdaStep = 2 
 maxLambda = 1e+12 
-alpha = 1 
-beta = 0.5 
-gamma = 2 
+NM_alpha = 1 
+NM_beta = 0.5 
+NM_gamma = 2 
 SANN_cand = <default Gaussian Markov kernel>
 SANN_temp = 10 
 SANN_tmax = 10 
@@ -644,4 +644,4 @@ Error in nObs.maxLik(x) :
 > 
 > proc.time()
    user  system elapsed 
-  1.467   0.050   1.510 
+  1.483   0.035   1.511 

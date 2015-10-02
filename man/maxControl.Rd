@@ -78,10 +78,10 @@
       If exceeded, the
       algorithm exits with return code 3.}
     %
-    \item{\code{alpha}}{1, Nelder-Mead simplex method reflection
+    \item{\code{NM_alpha}}{1, Nelder-Mead simplex method reflection
       factor (see Nelder \& Mead, 1965)}
-    \item{\code{beta}}{0.5, Nelder-Mead contraction factor}
-    \item{\code{gamma}}{2, Nelder-Mead expansion factor}
+    \item{\code{NM_beta}}{0.5, Nelder-Mead contraction factor}
+    \item{\code{NM_gamma}}{2, Nelder-Mead expansion factor}
     % SANN
     \item{\code{SANN_cand}}{\code{NULL} or a function for \code{"SANN"} algorithm
       to generate a new candidate point;

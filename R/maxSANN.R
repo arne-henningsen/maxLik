@@ -17,7 +17,8 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    ##
    ## Note: grad and hess are for compatibility only, SANN uses only fn values
    if(!inherits(control, "MaxControl")) {
-      mControl <- addControlList(maxControl(iterlim=10000L), control)
+      mControl <- maxControl(iterlim=10000L)
+      mControl <- addControlList(mControl, control)
                            # default values
    }
    else {

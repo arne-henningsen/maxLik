@@ -68,8 +68,9 @@ maxOptim <- function(fn, grad, hess,
                     reltol=slot(control, "reltol"),
                     maxit=slot(control, "iterlim"),
                     parscale=parscale[ !fixed ],
-                    alpha=slot(control, "alpha"), beta=slot(control, "beta"),
-                    gamma=slot(control, "gamma"),
+                    alpha=slot(control, "NM_alpha"),
+                    beta=slot(control, "NM_beta"),
+                    gamma=slot(control, "NM_gamma"),
                     temp=slot(control, "SANN_temp"),
                     tmax=slot(control, "SANN_tmax")
                     )

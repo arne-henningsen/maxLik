@@ -536,11 +536,11 @@ all.equal( mlgSANN, mlghSANN, tolerance = 1e-3 )
 
 # with a user-specified function to generate a new candidate point
 mlSANNCand <- maxLik( llf, start = startVal, method = "SANN",
-   cand = function(x)c(rnorm(1,x[1]),rnorm(1,x[2])) )
+   cand = function(x) c(rnorm(1, x[1]), rnorm(1, x[2])) )
 print( summary( mlSANNCand ), digits = 2 )
-all.equal( mlSANNCand[-c(3,4)], mlSANN[-c(3,4)], tolerance = 1e-2 )
-
-
+all.equal(coef(mlSANNCand), coef(mlSANN), tolerance = 1e-2 )
+all.equal(stdEr(mlSANNCand), stdEr(mlSANN), tolerance = 1e-2 )
+all.equal(hessian(mlSANNCand), hessian(mlSANN), tolerance = 1e-2 )
 
 ############### with fixed parameters ###############
 # start values

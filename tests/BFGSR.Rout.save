@@ -1,6 +1,6 @@
 
-R version 3.1.1 (2014-07-10) -- "Sock it to Me"
-Copyright (C) 2014 The R Foundation for Statistical Computing
+R version 3.2.2 (2015-08-14) -- "Fire Safety"
+Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-redhat-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -36,7 +36,6 @@ Type 'q()' to quit R.
 + }
 >                            # 3-dimensional case
 > ## a) test quadratic function t(D) %*% D
-> W <- diag(N)
 > library(maxLik)
 Loading required package: miscTools
 
@@ -45,6 +44,7 @@ Henningsen, Arne and Toomet, Ott (2011). maxLik: A package for maximum likelihoo
 
 If you have questions, suggestions, or comments regarding the 'maxLik' package, please use a forum or 'tracker' at maxLik's R-Forge site:
 https://r-forge.r-project.org/projects/maxlik/
+> W <- diag(N)
 > D <- rep(1/N, N)
 > res <- maxBFGSR(quadForm, start=D)
 > res <- roundGradients( res )
@@ -145,4 +145,4 @@ penalty close to zero
 > 
 > proc.time()
    user  system elapsed 
-  0.674   0.046   0.713 
+  0.610   0.036   0.640 

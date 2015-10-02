@@ -99,9 +99,9 @@ setClass("MaxControl",
              lambdaStep="numeric",
              maxLambda="numeric",
          ## Optim Nelder-Mead:
-         alpha="numeric",
-         beta="numeric",
-         gamma="numeric",
+         NM_alpha="numeric",
+         NM_beta="numeric",
+         NM_gamma="numeric",
          ## SANN
          SANN_cand="functionOrNULL",
          SANN_temp="numeric",
@@ -126,15 +126,16 @@ setClass("MaxControl",
              lambdaStep=2,
              maxLambda=1e12,
          ## Optim Nelder-Mead
-         alpha=1,
-         beta=0.5,
-         gamma=2,
+         NM_alpha=1,
+         NM_beta=0.5,
+         NM_gamma=2,
          ## SANN
          SANN_cand=NULL,
          SANN_temp=10,
          SANN_tmax=10,
          SANN_randomSeed=123L,
          ##
-             iterlim=150L,
-             printLevel=0L),
+         iterlim=150L,
+         printLevel=0L),
+         ##
          validity=checkMaxControl)

@@ -19,8 +19,8 @@ roundGradients <- function( object ) {
 }
                            # 3-dimensional case
 ## a) test quadratic function t(D) %*% D
-W <- diag(N)
 library(maxLik)
+W <- diag(N)
 D <- rep(1/N, N)
 res <- maxBFGSR(quadForm, start=D)
 res <- roundGradients( res )
