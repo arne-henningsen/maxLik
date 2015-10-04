@@ -16,12 +16,22 @@
 \method{stdEr}{maxLik}(x, \dots)
 }
 \arguments{
-  \item{object}{a \sQuote{maxLik} object (also a
+  \item{object}{a \sQuote{maxLik} object (or a
     \sQuote{maxim} object for \code{coef})}
   \item{k}{numeric, the penalty per parameter to be used; the default
     \sQuote{k = 2} is the classical AIC.}
   \item{x}{a \sQuote{maxLik} object}
   \item{\dots}{other arguments for methods}
+}
+\details{
+  \describe{
+    \item{AIC}{calculates Akaike's Information Criterion (and other
+      information criteria).}
+    \item{coef}{extracts the estimated parameters (model's
+      coefficients).}
+    \item{stdEr}{extracts standard errors (using the Hessian matrix).
+    }
+  }
 }
 \examples{
 ## estimate mean and variance of normal random vector
@@ -32,7 +42,7 @@ x <- rnorm(50, 1, 2 )
 llf <- function( param ) {
    mu <- param[ 1 ]
    sigma <- param[ 2 ]
-   return(sum(dnorm(x, mean=mu, sd=sigma)))
+   return(sum(dnorm(x, mean=mu, sd=sigma, log=TRUE)))
 }
 ## Estimate it.  Take standard normal as start values
 ml <- maxLik(llf, start = c(mu=0, sigma=1) )

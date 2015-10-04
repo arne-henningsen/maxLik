@@ -1,14 +1,18 @@
 Package: maxLik
 Version: 1.2-5
-Date: 2015-09-20
-Title: Maximum Likelihood Estimation
+Date: 2015-10-03
+Title: Maximum Likelihood Estimation and Related Tools
 Author: Ott Toomet <otoomet@gmail.com>,
    Arne Henningsen <arne.henningsen@gmail.com>,
    with contributions from Spencer Graves and Yves Croissant
 Maintainer: Ott Toomet <otoomet@gmail.com>
 Depends: R (>= 2.4.0), miscTools (>= 0.6-8), methods
 Imports: sandwich
-Description: Function for Maximum Likelihood estimation and non-linear optimization, and related tools.
+Description: Functions for Maximum Likelihood (ML) estimation and non-linear
+   optimization, and related tools.  It includes a unified way to call a
+   different optimizers, and classes and methods to handle the results from
+   the ML viewpoint.  It also includes a number of convenience tools for testing
+   and developing your own models.
 License: GPL (>= 2)
 ByteCompile: yes
 URL: http://www.maxLik.org

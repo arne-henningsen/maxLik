@@ -5,11 +5,11 @@
 Maximum Likelihood Estimation
 }
 \description{
-  A set of functions and tools to perform Maximum Likelihood (ML)
+  This is a set of functions and tools to perform Maximum Likelihood (ML)
   estimation.  The focus of the package is on the non-linear
-  optimization from the ML viewpoint and several convenience wrappers
+  optimization from the ML viewpoint, and it provides several convenience wrappers
   and tools, like BHHH algorithm and extraction of variance-covariance
-  matrix, are provided.
+  matrix.
 }
 \details{
 \dQuote{maxLik} package is a set of convenience tools and wrappers to perform
@@ -22,22 +22,23 @@ standard errors from the estimates.  Other highlights include a unified
 interface for all included optimizers, tools to check the programmed analytic
 derivatives, and constrained optimization.
 
-The central function in the package is \code{\link{maxLik}}.  In the
+From the user's perspective, the
+central function in the package is \code{\link{maxLik}}.  In the
 simplest form it takes two arguments: the log-likelihood function, and
-a vector of start parameters.  It returns an object of class
+a vector of parameters' start values.  It returns an object of class
 \sQuote{maxLik} with convenient methods such as
 \code{\link[maxLik:summary.maxLik]{summary}},
 \code{\link[maxLik:coef.maxim]{coef}}, and
 \code{\link[maxLik:stdEr.maxLik]{stdEr}}.  It also supports a plethora
-of other arguments, in particular one can provide an analytic gradient and
-Hessian, specify the desired optimizer, and control the optimization in
+of other arguments, for instance one can supply analytic gradient and
+Hessian, select the desired optimizer, and control the optimization in
 different ways.
 
 One of the most useful utility functions in the package is
 \code{\link{compareDerivatives}} that
 allows one to compare the analytic and numeric derivatives for debugging
-the derivative code.  Another useful is \code{\link{condiNumber}} for
-determining analyzing multicollinearity problems in the estimated models.
+the derivative code.  Another useful function is \code{\link{condiNumber}} for
+analyzing multicollinearity problems in the estimated models.
 }
 \author{
 Ott Toomet <otoomet@gmail.com>,
@@ -73,5 +74,5 @@ llf <- function( param ) {
 ## Estimate it.  Take standard normal as start values
 ml <- maxLik( llf, start = c(mu=0, sigma=1) )
 print(summary(ml))
-## Close to c(1,2) :-)
+## Estimates close to c(1,2) :-)
 }
