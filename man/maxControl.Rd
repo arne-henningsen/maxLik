@@ -78,20 +78,20 @@
       If exceeded, the
       algorithm exits with return code 3.}
     %
-    \item{\code{NM_alpha}}{1, Nelder-Mead simplex method reflection
+    \item{\code{nm_alpha}}{1, Nelder-Mead simplex method reflection
       factor (see Nelder \& Mead, 1965)}
-    \item{\code{NM_beta}}{0.5, Nelder-Mead contraction factor}
-    \item{\code{NM_gamma}}{2, Nelder-Mead expansion factor}
+    \item{\code{nm_beta}}{0.5, Nelder-Mead contraction factor}
+    \item{\code{nm_gamma}}{2, Nelder-Mead expansion factor}
     % SANN
-    \item{\code{SANN_cand}}{\code{NULL} or a function for \code{"SANN"} algorithm
+    \item{\code{sann_cand}}{\code{NULL} or a function for \code{"SANN"} algorithm
       to generate a new candidate point;
       if \code{NULL}, Gaussian Markov kernel is used
       (see argument \code{gr} of \code{\link{optim}}).}
-    \item{\code{SANN_temp}}{10, starting temperature
+    \item{\code{sann_temp}}{10, starting temperature
       for the \dQuote{SANN} cooling schedule.  See \code{\link{optim}}.}
-    \item{\code{SANN_tmax}}{10, number of function evaluations at each temperature for
+    \item{\code{sann_tmax}}{10, number of function evaluations at each temperature for
       the \dQuote{SANN} optimizer.  See \code{\link{optim}}.}
-    \item{\code{SANN_randomSeed}}{123, integer to seed random numbers to
+    \item{\code{sann_randomSeed}}{123, integer to seed random numbers to
       ensure replicability of \dQuote{SANN} optimization and preserve
       \code{R} random numbers.  Use
       options like \code{SANN_randomSeed=Sys.time()} or

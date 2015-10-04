@@ -13,7 +13,7 @@ checkMaxControl <- function(object) {
    errors <- character(0)
    ## Check length of componenents
    for(s in slotNames(object)) {
-      if(s == "SANN_cand") {
+      if(s == "sann_cand") {
          if(length(slot(object, s)) > 1) {
             errors <- c(errors,
                         paste("'", s, "' must be either 'NULL' or ",
@@ -68,10 +68,28 @@ checkMaxControl <- function(object) {
       errors <- c(errors, paste("'maxLambda' must be non-negative, not",
                                 slot(object, "maxLambda")))
    }
+   ## NM
+   if(slot(object, "nm_alpha") < 0) {
+      errors <- c(errors, paste("Nelder-Mead reflection factor 'alpha' ",
+                                "must be non-negative, not", slot(object, "nm_alpha")))
+   }
+   if(slot(object, "nm_beta") < 0) {
+      errors <- c(errors, paste("Nelder-Mead contraction factor 'beta' ",
+                                "must be non-negative, not", slot(object, "nm_beta")))
+   }
+   if(slot(object, "nm_gamma") < 0) {
+      errors <- c(errors, paste("Nelder-Mead expansion factor 'gamma' ",
+                                "must be non-negative, not", slot(object, "nm_gamma")))
+   }
    ## SANN
-   if(!inherits(slot(object, "SANN_cand"), c("function", "NULL"))) {
+   if(!inherits(slot(object, "sann_cand"), c("function", "NULL"))) { #
       errors <- c(errors, paste("'SANN_cand' must be either NULL or a function, not",
                                 slot(object, "SANN_cand")))
+   }
+   if(slot(object, "sann_tmax") < 1) {
+      errors <- c(errors, paste("SANN number of calculations at each temperature ",
+                                "'tmax' ",
+                                "must be positive, not", slot(object, "sann_tmax")))
    }
    ##
    if(slot(object, "iterlim") < 0) {
@@ -99,14 +117,14 @@ setClass("MaxControl",
              lambdaStep="numeric",
              maxLambda="numeric",
          ## Optim Nelder-Mead:
-         NM_alpha="numeric",
-         NM_beta="numeric",
-         NM_gamma="numeric",
+         nm_alpha="numeric",
+         nm_beta="numeric",
+         nm_gamma="numeric",
          ## SANN
-         SANN_cand="functionOrNULL",
-         SANN_temp="numeric",
-         SANN_tmax="numeric",
-         SANN_randomSeed="integer",
+         sann_cand="functionOrNULL",
+         sann_temp="numeric",
+         sann_tmax="integer",
+         sann_randomSeed="integer",
          ##
              iterlim="integer",
              ##
@@ -126,14 +144,14 @@ setClass("MaxControl",
              lambdaStep=2,
              maxLambda=1e12,
          ## Optim Nelder-Mead
-         NM_alpha=1,
-         NM_beta=0.5,
-         NM_gamma=2,
+         nm_alpha=1,
+         nm_beta=0.5,
+         nm_gamma=2,
          ## SANN
-         SANN_cand=NULL,
-         SANN_temp=10,
-         SANN_tmax=10,
-         SANN_randomSeed=123L,
+         sann_cand=NULL,
+         sann_temp=10,
+         sann_tmax=10L,
+         sann_randomSeed=123L,
          ##
          iterlim=150L,
          printLevel=0L),

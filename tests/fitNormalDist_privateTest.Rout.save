@@ -1,7 +1,7 @@
 
-R Under development (unstable) (2015-09-30 r69443) -- "Unsuffered Consequences"
+R version 3.2.2 (2015-08-14) -- "Fire Safety"
 Copyright (C) 2015 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+Platform: x86_64-redhat-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -4636,11 +4636,11 @@ Constrained optimization based on constrOptim
 1  outer iterations, barrier value -0.0005163 
 --------------------------------------------
 > all.equal( mlSannInEqCand[-c(2,3,4)], mlSannInEq[-c(2,3,4)], tolerance = 1e-3 )
-[1] "Component \"control\": Attributes: < Component \"SANN_cand\": Modes of target, current: function, name >"  
-[2] "Component \"control\": Attributes: < Component \"SANN_cand\": target, current do not match when deparsed >"
+[1] "Component \"control\": Attributes: < Component \"sann_cand\": Modes of target, current: function, name >"  
+[2] "Component \"control\": Attributes: < Component \"sann_cand\": target, current do not match when deparsed >"
 > all.equal( mlSannInEqCand, mlSannInEq, tolerance = 1e-1 )
-[1] "Component \"control\": Attributes: < Component \"SANN_cand\": Modes of target, current: function, name >"  
-[2] "Component \"control\": Attributes: < Component \"SANN_cand\": target, current do not match when deparsed >"
+[1] "Component \"control\": Attributes: < Component \"sann_cand\": Modes of target, current: function, name >"  
+[2] "Component \"control\": Attributes: < Component \"sann_cand\": target, current do not match when deparsed >"
 > 
 > ############### equality constraints ###############
 > eqCon <- list( eqA = A, eqB = 2.5 )
@@ -5712,12 +5712,12 @@ successive function values within tolerance limit
 --------------------------------------------
 > all.equal( mlSannConCand[-c(1,2,3,4,11)], mlSannCon[-c(1,2,3,4,11)], 
 +    tolerance = 1e-3 )
-[1] "Component \"control\": Attributes: < Component \"SANN_cand\": Modes of target, current: function, name >"  
-[2] "Component \"control\": Attributes: < Component \"SANN_cand\": target, current do not match when deparsed >"
+[1] "Component \"control\": Attributes: < Component \"sann_cand\": Modes of target, current: function, name >"  
+[2] "Component \"control\": Attributes: < Component \"sann_cand\": target, current do not match when deparsed >"
 > all.equal( mlSannConCand[-c(2,3,4,11)], mlSannCon[-c(2,3,4,11)], 
 +    tolerance = 1e-1 )
-[1] "Component \"control\": Attributes: < Component \"SANN_cand\": Modes of target, current: function, name >"  
-[2] "Component \"control\": Attributes: < Component \"SANN_cand\": target, current do not match when deparsed >"
+[1] "Component \"control\": Attributes: < Component \"sann_cand\": Modes of target, current: function, name >"  
+[2] "Component \"control\": Attributes: < Component \"sann_cand\": target, current do not match when deparsed >"
 > 
 > 
 > ## test for method "estfun"
@@ -6184,4 +6184,4 @@ sigma 0.00  0.01
 > 
 > proc.time()
    user  system elapsed 
- 22.349   0.055  22.396 
+ 39.130   0.111  39.276 

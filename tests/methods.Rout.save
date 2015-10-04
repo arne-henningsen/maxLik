@@ -58,13 +58,13 @@ qac = stephalving
 lambda0 = 0.01 
 lambdaStep = 2 
 maxLambda = 1e+12 
-NM_alpha = 1 
-NM_beta = 0.5 
-NM_gamma = 2 
-SANN_cand = <default Gaussian Markov kernel>
-SANN_temp = 10 
-SANN_tmax = 10 
-SANN_randomSeed = 123 
+nm_alpha = 1 
+nm_beta = 0.5 
+nm_gamma = 2 
+sann_cand = <default Gaussian Markov kernel>
+sann_temp = 10 
+sann_tmax = 10 
+sann_randomSeed = 123 
 iterlim = 1 
 printLevel = 0 
 -- method BFGS --
@@ -80,13 +80,13 @@ qac = stephalving
 lambda0 = 0.01 
 lambdaStep = 2 
 maxLambda = 1e+12 
-NM_alpha = 1 
-NM_beta = 0.5 
-NM_gamma = 2 
-SANN_cand = <default Gaussian Markov kernel>
-SANN_temp = 10 
-SANN_tmax = 10 
-SANN_randomSeed = 123 
+nm_alpha = 1 
+nm_beta = 0.5 
+nm_gamma = 2 
+sann_cand = <default Gaussian Markov kernel>
+sann_temp = 10 
+sann_tmax = 10 
+sann_randomSeed = 123 
 iterlim = 1 
 printLevel = 0 
 -- method BFGSR --
@@ -102,16 +102,16 @@ qac = stephalving
 lambda0 = 0.01 
 lambdaStep = 2 
 maxLambda = 1e+12 
-NM_alpha = 1 
-NM_beta = 0.5 
-NM_gamma = 2 
-SANN_cand = <default Gaussian Markov kernel>
-SANN_temp = 10 
-SANN_tmax = 10 
-SANN_randomSeed = 123 
+nm_alpha = 1 
+nm_beta = 0.5 
+nm_gamma = 2 
+sann_cand = <default Gaussian Markov kernel>
+sann_temp = 10 
+sann_tmax = 10 
+sann_randomSeed = 123 
 iterlim = 1 
 printLevel = 0 
 > 
 > proc.time()
    user  system elapsed 
-  0.447   0.035   0.474 
+  0.446   0.034   0.474 

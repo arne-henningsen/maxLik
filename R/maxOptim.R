@@ -68,11 +68,11 @@ maxOptim <- function(fn, grad, hess,
                     reltol=slot(control, "reltol"),
                     maxit=slot(control, "iterlim"),
                     parscale=parscale[ !fixed ],
-                    alpha=slot(control, "NM_alpha"),
-                    beta=slot(control, "NM_beta"),
-                    gamma=slot(control, "NM_gamma"),
-                    temp=slot(control, "SANN_temp"),
-                    tmax=slot(control, "SANN_tmax")
+                    alpha=slot(control, "nm_alpha"),
+                    beta=slot(control, "nm_beta"),
+                    gamma=slot(control, "nm_gamma"),
+                    temp=slot(control, "sann_temp"),
+                    tmax=slot(control, "sann_tmax")
                     )
    argList <- list(theta=start,
                    fName="logLikFunc",
@@ -135,12 +135,12 @@ maxOptim <- function(fn, grad, hess,
    if( method == "BFGS" ) {
       gradOptim <- logLikGrad
    } else if( method == "SANN" ) {
-      if( is.null(slot(control, "SANN_cand") ) ) {
+      if( is.null(slot(control, "sann_cand") ) ) {
          gradOptim <- NULL
       } else {
          gradOptim <- function( theta, fnOrig, gradOrig, hessOrig,
                start, fixed, ... ) {
-            return(control@SANN_cand( theta, ... ) )
+            return(control@sann_cand( theta, ... ) )
          }
       }
    } else if( method == "CG" ) {

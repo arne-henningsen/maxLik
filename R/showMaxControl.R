@@ -2,13 +2,13 @@
 showMaxControl <- function(object) {
    cat("A 'MaxControl' object with slots:\n")
    for(s in slotNames(object)) {
-      if(s == "SANN_cand") {
+      if(s == "sann_cand") {
          ## This is a function or NULL, handle with care:
          if(is.null(slot(object, s))) {
-            cat("SANN_cand = <default Gaussian Markov kernel>\n")
+            cat("sann_cand = <default Gaussian Markov kernel>\n")
          }
          else {
-            cat("SANN_cand =\n")
+            cat("sann_cand =\n")
             print(str(slot(object, s)))
          }            
       }

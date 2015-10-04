@@ -31,7 +31,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    }
 
    # set seed for the random number generator (used by 'optim( method="SANN" )')
-   set.seed(slot(mControl, "SANN_randomSeed"))
+   set.seed(slot(mControl, "sann_randomSeed"))
 
    # restore seed of the random number generator on exit
    # (end of function or error)
