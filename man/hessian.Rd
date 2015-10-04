@@ -5,7 +5,7 @@
 \description{
   This function extracts the Hessian of the objective function at optimum.
   The Hessian information should be supplied by the underlying
-  optimisation algorithm, possibly by using a suitable approximation.
+  optimization algorithm, possibly by an approximation.
 }
 \usage{
 hessian(x, \dots)
@@ -23,7 +23,7 @@ hessian(x, \dots)
   non-singular part of the matrix.  You may also want to fix certain
   parameters (see \code{\link{activePar}}).
 }
-\author{Ott Toomet, \email{otoomet@econ.au.dk}}
+\author{Ott Toomet}
 \seealso{\code{\link{maxLik}}, \code{\link{activePar}}, \code{\link{condiNumber}}}
 \examples{
 # log-likelihood for normal density
@@ -41,7 +41,7 @@ sqrt(-solve(hessian(ml))) # Note: standard deviations are on the diagonal
 mlf <- maxLik(ll, start=c(1,1), activePar=c(TRUE, FALSE))
 summary(mlf) # first parameter close to 0, the second exactly 1.0
 hessian(mlf)
-# Now look at the Hessian.  Note that NA-s are in place of passive
+# Note that now NA-s are in place of passive
 # parameters.
 # now invert only the free parameter part of the Hessian
 sqrt(-solve(hessian(mlf)[activePar(mlf), activePar(mlf)]))

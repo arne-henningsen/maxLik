@@ -21,7 +21,7 @@
 }
 \author{
    Arne Henningsen,
-   Ott Toomet \email{otoomet@ut.ee}
+   Ott Toomet
 }
 \seealso{\code{\link{maxLik}}}
 \examples{

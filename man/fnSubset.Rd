@@ -32,8 +32,9 @@ fnSubset(x, fnFull, xFixed, xFull=c(x, xFixed), ...)
   }
 }
 \details{
-  This function first confirms that \code{length(x) + length(xFixed) ==
-    length(xFull)}.  Next,
+  This function first confirms that
+  \code{length(x) + length(xFixed) == length(xFull)}.
+  Next,
   \itemize{
     \item If \code{xFull} has names, match at least \code{xFixed} by
     name.
@@ -61,13 +62,13 @@ fnSubset(x, fnFull, xFixed, xFull=c(x, xFixed), ...)
 fn <- function(x) (x[2]-2*x[1])^2
 # note: true minimum is 0 on line 2*x[1] == x[2]
 fullEst <- optim(par=c(1,1), method="BFGS", fn=fn)
-fullEst
+fullEst$par
 # par = c(0.6, 1.2) at minimum (not convex)
 
 # Fix the last component to 4 
 est4 <- optim(par=1, fn=fnSubset, method="BFGS", fnFull=fn, xFixed=4)
-est4
-# now there is a single minimun x[1] = 2
+est4$par
+# now there is a unique minimun x[1] = 2
 
 # Fix the first component
 fnSubset(x=1, fnFull=fn, xFixed=c(a=4), xFull=c(a=1, b=2))
@@ -77,8 +78,8 @@ fnSubset(x=1, fnFull=fn, xFixed=c(a=4), xFull=c(a=1, b=2))
 est4. <- optim(par=1, fn=fnSubset, method="BFGS",
                fnFull=fn, xFixed=c(a=4), 
                xFull=c(a=1, b=2))
-est4.
-# At optim: xFull=c(a=4, b=8),
+est4.$par
+# At optimum: xFull=c(a=4, b=8),
 # so fn = (8 - 2*4)^2 = 0
 
 ##
@@ -88,7 +89,7 @@ fn2max <- function(x) -(x[2]-2*x[1])^2
 # -> need to have a maximum
 max4 <- maxLik(fnSubset, start=1, fnFull=fn2max, xFixed=4)
 summary(max4)
-# Same thing using constantPar in maxNR, called by maxLik 
+# Similar result using fixed parameters in maxNR, called by maxLik 
 max4. <- maxLik(fn2max, start=c(1, 4), fixed=2)
 summary(max4.)
 }
