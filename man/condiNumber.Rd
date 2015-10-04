@@ -6,7 +6,7 @@
 \description{
   This function prints the condition number of a matrix while adding
   columns one-by-one.  This is useful for testing multicollinearity and
-  other numerical problems.  This is a generic function with default
+  other numerical problems.  It is a generic function with a default
   method, and a method for \code{maxLik} objects.
 }
 \usage{
@@ -19,7 +19,7 @@ condiNumber(x, ...)
 \arguments{
   \item{x}{numeric matrix, condition numbers of which are to be printed}
   \item{exact}{logical, should condition numbers be exact or
-    approximations (see \code{link{kappa}})}
+    approximations (see \code{\link{kappa}})}
   \item{norm}{logical, whether the columns should be normalised to have
     unit norm}
   \item{print.level}{numeric, positive value will output the numbers
@@ -32,14 +32,14 @@ condiNumber(x, ...)
       are passed to \code{condiNumber.default}.} 
 }
 \details{
-  Statistical model often fail because of strong correlation between
+  Statistical model often fail because of a high correlation between
   the explanatory variables in the linear index (multicollinearity)
   or because the evaluated maximum of a non-linear model is
   virtually flat.  In both cases, the (near) singularity of the related
-  matrices may give us a hint how to improve the results.
+  matrices may help to understand the problem.
 
-  \code{condiNumber} allows to inspect the matrices column-by-column and
-  see which variables leads to a jump in the condition
+  \code{condiNumber} inspects the matrices column-by-column and
+  indicates which variables lead to a jump in the condition
   number (cause singularity).
   If the matrix column name does not immediately indicate the
   problem, one may run an OLS model by estimating this column
@@ -58,23 +58,24 @@ condiNumber(x, ...)
   p. 130.
 }
 
-\author{Ott Toomet \email{otoomet@ut.ee}}
+\author{Ott Toomet}
 \seealso{\code{\link{kappa}}}
 \examples{
    set.seed(0)
-   ## generate a simple multicollinear dataset
+   ## generate a simple nearly multicollinear dataset
    x1 <- runif(100)
    x2 <- runif(100)
    x3 <- x1 + x2 + 0.000001*runif(100) # this is virtually equal to x1 + x2
    x4 <- runif(100)
    y <- x1 + x2 + x3 + x4 + rnorm(100)
    m <- lm(y ~ -1 + x1 + x2 + x3 + x4)
-   print(summary(m)) # note the low t-values while R^2 is 0.88.
-                     # This hints multicollinearity
-   condiNumber(model.matrix(m)) # this _prints_ condition numbers.
-                                # note the values 'explode' with x3
+   print(summary(m)) # note the outlandish estimates and standard errors
+                     # while R^2 is 0.88. This suggests multicollinearity
+   condiNumber(model.matrix(m))   # note the value 'explodes' at x3
    ## we may test the results further:
-   print(summary(lm(x3 ~ -1 + x1 + x2))) # Note the high t-values and R^2
+   print(summary(lm(x3 ~ -1 + x1 + x2)))
+   # Note the extremely high t-values and R^2: x3 is (almost) completely
+   # explained by x1 and x2
 }
 \keyword{math}
 \keyword{utilities}

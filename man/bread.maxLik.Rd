@@ -25,7 +25,7 @@
   The \pkg{sandwich} package is required for this function. 
 
   This method works only if the observaton-specific gradient information
-  was available for the estimation.  This is the case of the
+  was available for the estimation.  This is the case if the
   observation-specific gradient was supplied (see the \code{grad}
   argument for \code{\link{maxLik}}), or the log-likelihood function
   returns a vector of observation-specific values.
