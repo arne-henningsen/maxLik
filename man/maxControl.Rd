@@ -10,8 +10,9 @@
 
 \title{Class \code{"MaxControl"}}
 \description{
-  This is the structure to hold the optimization control options.
-  It takes the parameters, performs consistency checks, and returns the
+  This is the structure that holds the optimization control options.
+  The corresponding constructors take
+  the parameters, perform consistency checks, and return the
   control structure.  Alternatively, it overwrites the supplied
   parameters in an existing \code{MaxControl} structure.  There is also
   a method to extract the control structure from the estimated
@@ -20,31 +21,31 @@
 \section{Slots}{
   The default values and definition of the slots:
   \describe{
-    \item{\code{tol}}{1e-8, stopping condition 
+    \item{tol}{1e-8, stopping condition 
       for \code{\link{maxNR}} and related optimizers.
       Stop if the absolute difference
       between successive iterations is less than \code{tol}, returns
       code 2.}
-    \item{\code{reltol}}{sqrt(.Machine$double.eps), relative convergence
+    \item{reltol}{sqrt(.Machine$double.eps), relative convergence
       tolerance (used by \code{\link{maxNR}} related optimizers, and
       \code{\link{optim}}-based optimizers.
       The algorithm stops if
-      it is unable to increase the value by a factor of
-      \code{reltol*(abs(val) + reltol)}
-      at a step.  Returns code 2.}
-    \item{\code{gradtol}}{1e-6, stopping condition
+      it iteration increases the value by less than a factor of
+      \code{reltol*(abs(val) + reltol)}.
+      Returns code 2.}
+    \item{gradtol}{1e-6, stopping condition
       for \code{\link{maxNR}} and related optimizers.
-      Stop if norm of the gradient is
+      Stops if norm of the gradient is
       less than \code{gradtol}, returns code 1.}
-    \item{\code{steptol}}{1e-10, stopping/error condition
+    \item{steptol}{1e-10, stopping/error condition
       for \code{\link{maxNR}} and related optimizers.
       If \code{qac == "stephalving"} and the quadratic
       approximation leads to a worse, instead of a better value, or to
       \code{NA}, the step length
       is halved and a new attempt is made.  If necessary, this procedure is repeated
-      until step < \code{steptol}, thereafter code 3 is returned.}
+      until \code{step < steptol}, thereafter code 3 is returned.}
     %
-    \item{\code{lambdatol}}{1e-6, (for \code{\link{maxNR}} related
+    \item{lambdatol}{1e-6, (for \code{\link{maxNR}} related
       optimizers)
       controls whether Hessian is treated as negative
       definite.  If the
@@ -54,54 +55,54 @@
       Hessian (quadratic hill-climbing) in order to enforce negative
       definiteness.}
     %
-    \item{\code{qac}}{"stephalving", character, Qadratic Approximation
+    \item{qac}{"stephalving", character, Qadratic Approximation
       Correction for \code{\link{maxNR}} related optimizers.  When the new
       guess is worse than the initial one, program attempts to correct it:
       \code{"stephalving"} decreases the
       step but keeps the direction.
       \code{"marquardt"} uses
-      Marquardt (1963) method by decreasing the step length while also
+      \cite{Marquardt (1963)} method by decreasing the step length while also
       moving closer to the pure gradient direction.  It may be faster and
       more robust choice in areas where quadratic approximation behaves poorly.}
-    \item{\code{qrtol}}{1e-10, QR-decomposition tolerance
+    \item{qrtol}{1e-10, QR-decomposition tolerance
       for Hessian inversion in \code{\link{maxNR}} related optimizers.
     }
-    \item{\code{lambda0}}{1e-2, a positive numeric, initial correction term
+    \item{marquardt_lambda0}{0.01, a positive numeric, initial correction term
       for \cite{Marquardt (1963)} correction in
       \code{\link{maxNR}}-related optimizers}
-    \item{\code{lambdaStep}}{2, how much the \cite{Marquardt (1963)}
+    \item{marquardt_lambdaStep}{2, how much the \cite{Marquardt (1963)}
       correction is decreased/increased at
       successful/unsuccesful step
       for \code{\link{maxNR}} related optimizers}
-    \item{\code{maxLambda}}{1e12, maximum allowed correction term
+    \item{marquardt_maxLambda}{1e12, maximum allowed correction term
       for \code{\link{maxNR}} related optimizers.
       If exceeded, the
       algorithm exits with return code 3.}
     %
-    \item{\code{nm_alpha}}{1, Nelder-Mead simplex method reflection
+    \item{nm_alpha}{1, Nelder-Mead simplex method reflection
       factor (see Nelder \& Mead, 1965)}
-    \item{\code{nm_beta}}{0.5, Nelder-Mead contraction factor}
-    \item{\code{nm_gamma}}{2, Nelder-Mead expansion factor}
+    \item{nm_beta}{0.5, Nelder-Mead contraction factor}
+    \item{nm_gamma}{2, Nelder-Mead expansion factor}
     % SANN
-    \item{\code{sann_cand}}{\code{NULL} or a function for \code{"SANN"} algorithm
+    \item{sann_cand}{\code{NULL} or a function for \code{"SANN"} algorithm
       to generate a new candidate point;
       if \code{NULL}, Gaussian Markov kernel is used
       (see argument \code{gr} of \code{\link{optim}}).}
-    \item{\code{sann_temp}}{10, starting temperature
+    \item{sann_temp}{10, starting temperature
       for the \dQuote{SANN} cooling schedule.  See \code{\link{optim}}.}
-    \item{\code{sann_tmax}}{10, number of function evaluations at each temperature for
+    \item{sann_tmax}{10, number of function evaluations at each temperature for
       the \dQuote{SANN} optimizer.  See \code{\link{optim}}.}
-    \item{\code{sann_randomSeed}}{123, integer to seed random numbers to
+    \item{sann_randomSeed}{123, integer to seed random numbers to
       ensure replicability of \dQuote{SANN} optimization and preserve
       \code{R} random numbers.  Use
       options like \code{SANN_randomSeed=Sys.time()} or
       \code{SANN_randomeSeed=sample(1000,1)} if you want stochastic results.
     }
     % General
-    \item{\code{iterlim}}{150, stopping condition.  Stop if more than \code{iterlim}
+    \item{iterlim}{150, stopping condition.  Stop if more than \code{iterlim}
       iterations performed.  Note that \sQuote{iteration} may mean
       different things for different optimzers.}
-    \item{\code{printLevel}}{0, the level of verbosity.  Larger values print
+    \item{printLevel}{0, the level of verbosity.  Larger values print
       more information.  Result depends on the optimizer.  Form
       \code{print.level} is also accepted by the methods for compatibility.}
   }
@@ -109,10 +110,12 @@
 \section{Methods}{
   \describe{
     \item{maxControl}{\code{(\dots)} creates a \dQuote{MaxControl} object.  The
-      arguments must be in the form \emph{option1 = value1, option2 =
+      arguments must be in the form \code{option1 = value1, option2 =
 	value2, ...}.}
     \item{maxControl}{\code{(x = "MaxControl", \dots)} overwrites parameters
-      of and existing \dQuote{MaxControl} object}
+      of and existing \dQuote{MaxControl} object.  The \sQuote{\dots}
+      argument must be in the form \code{option1 = value1, option2 =
+	value2, ...}.}
     \item{maxControl}{\code{(x = "maxim")} extracts \dQuote{MaxControl}
       structure from an estimated model}
     \item{show}{shows the parameter values}
@@ -136,7 +139,7 @@
   }
 }
 \author{
-  Ott Toomet \email{otoomet@gmail.com}
+  Ott Toomet
 }
 \note{
   Several control parameters can also be supplied directly to the
@@ -154,7 +157,7 @@ D <- rep(1/3, 3)
                         # initial values
 library(maxLik)
 ## create control object and use it for optimization
-co <- maxControl(printLevel=2, qac="marquardt", lambda0=1)
+co <- maxControl(printLevel=2, qac="marquardt", marquardt_lambda0=1)
 res <- maxNR(quadForm, start=D, control=co)
 print(summary(res))
 ## Now perform the same with no trace information

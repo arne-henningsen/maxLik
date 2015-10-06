@@ -38,9 +38,12 @@ addControlList <- function(x, y) {
    setSlot("qrtol")
    ## QAC
    setSlot("qac")
-   setSlot("lambda0")
-   setSlot("lambdaStep")
-   setSlot("maxLambda")
+   setSlot("marquardt_lambda0")
+   setSlot("marquardt_lambdaStep")
+   setSlot("marquardt_maxLambda")
+   setSlot("Marquardt_lambda0")
+   setSlot("Marquardt_lambdaStep")
+   setSlot("Marquardt_maxLambda")
    ## NM
    setSlot("NM_alpha", "nm_alpha")
    setSlot("NM_beta", "nm_beta")

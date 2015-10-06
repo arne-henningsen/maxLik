@@ -56,15 +56,15 @@ checkMaxControl <- function(object) {
       errors <- c(errors, paste("'qrtol' must be non-negative, not",
                                 slot(object, "qrtol")))
    }
-   if(slot(object, "lambda0") < 0) {
+   if(slot(object, "marquardt_lambda0") < 0) {
       errors <- c(errors, paste("'lambda0' must be non-negative, not",
                                 slot(object, "lambda0")))
    }
-   if(slot(object, "lambdaStep") <= 1) {
+   if(slot(object, "marquardt_lambdaStep") <= 1) {
       errors <- c(errors, paste("'lambdaStep' must be > 1, not",
                                 slot(object, "lambdaStep")))
    }
-   if(slot(object, "maxLambda") < 0) {
+   if(slot(object, "marquardt_maxLambda") < 0) {
       errors <- c(errors, paste("'maxLambda' must be non-negative, not",
                                 slot(object, "maxLambda")))
    }
@@ -113,9 +113,9 @@ setClass("MaxControl",
              qrtol="numeric",
              ## Qadratic Approximation Control
              qac="character",
-             lambda0="numeric",
-             lambdaStep="numeric",
-             maxLambda="numeric",
+         marquardt_lambda0="numeric",
+         marquardt_lambdaStep="numeric",
+         marquardt_maxLambda="numeric",
          ## Optim Nelder-Mead:
          nm_alpha="numeric",
          nm_beta="numeric",
@@ -140,9 +140,9 @@ setClass("MaxControl",
                            #
              qac="stephalving",
              qrtol=1e-10,
-             lambda0=1e-2,
-             lambdaStep=2,
-             maxLambda=1e12,
+         marquardt_lambda0=1e-2,
+         marquardt_lambdaStep=2,
+         marquardt_maxLambda=1e12,
          ## Optim Nelder-Mead
          nm_alpha=1,
          nm_beta=0.5,

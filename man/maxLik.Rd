@@ -4,10 +4,11 @@
 
 \title{Maximum likelihood estimation}
 \description{
-  This is the main interface for the \pkg{maxLik} package and Maximum
+  This is the main interface for the \pkg{maxLik} package, and the
+  function that performs Maximum
   Likelihood estimation.  It is a wrapper for different optimizers
   returning an object
-  of class "maxLik".  Corresponding methods can handle the
+  of class "maxLik".  Corresponding methods handle the
   likelihood-specific properties of the estimates,  including standard
   errors. 
 }

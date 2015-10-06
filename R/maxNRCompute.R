@@ -175,7 +175,7 @@ maxNRCompute <- function(fn,
          print( H1)
       }
    }
-   lambda1 <- slot(control, "lambda0")
+   lambda1 <- slot(control, "marquardt_lambda0")
    step <- 1
    ## ---------------- Main interation loop ------------------------
    repeat {
@@ -199,7 +199,7 @@ maxNRCompute <- function(fn,
          stop("NA in Hessian (at the iteration start)")
       }
       if(marquardt) {
-         lambda1 <- lambda/slot(control, "lambdaStep")
+         lambda1 <- lambda/slot(control, "marquardt_lambdaStep")
                            # initially we try smaller lambda
                            # lambda1: current lambda for calculations
          H <- H0 - lambda1*I
@@ -246,7 +246,7 @@ maxNRCompute <- function(fn,
       if(is.null(newVal <- attr(f1, "newVal"))) {
          ## no ...
          if(marquardt) {
-            stepOK <- lambda1 <= slot(control, "maxLambda")
+            stepOK <- lambda1 <= slot(control, "marquardt_maxLambda")
          }
          else {
             stepOK <- step >= slot(control, "steptol")
@@ -255,7 +255,7 @@ maxNRCompute <- function(fn,
                                         # We end up in a NA or a higher value.
                                         # try smaller step
             if(marquardt) {
-               lambda1 <- lambda1*slot(control, "lambdaStep")
+               lambda1 <- lambda1*slot(control, "marquardt_lambdaStep")
                H <- (H0 - lambda1*I)
                amount[!fixed] <- qr.solve(H[!fixed,!fixed,drop=FALSE],
                                           G0[!fixed], tol=slot(control, "qrtol"))
@@ -298,7 +298,7 @@ maxNRCompute <- function(fn,
             }
          }
          if(marquardt) {
-            stepOK <- lambda1 <= slot(control, "maxLambda")
+            stepOK <- lambda1 <= slot(control, "marquardt_maxLambda")
          }
          else {
             stepOK <- step >= slot(control, "steptol")
@@ -362,7 +362,7 @@ maxNRCompute <- function(fn,
                            # wrong guess in step halving
          code <- 3; break
       }
-      if(lambda1 > slot(control, "maxLambda")) {
+      if(lambda1 > slot(control, "marquardt_maxLambda")) {
                            # wrong guess in Marquardt method
          code <- 3; break
       }

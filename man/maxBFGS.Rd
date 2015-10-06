@@ -6,35 +6,35 @@
 
 \title{BFGS, conjugate gradient, SANN and Nelder-Mead Maximization}
 \description{
-  These functions are wrappers for \code{\link{optim}} where the arguments are
-  homogeneous across all the provided optimizers.
+  These functions are wrappers for \code{\link{optim}}, adding
+  constrained optimization and fixed parameters.
 }
 \usage{
-maxBFGS(fn, grad = NULL, hess=NULL, start, fixed = NULL,
+maxBFGS(fn, grad=NULL, hess=NULL, start, fixed=NULL,
    control=NULL,
-   constraints = NULL,
+   constraints=NULL,
    finalHessian=TRUE,
    parscale=rep(1, length=length(start)),
    ... )
 
-maxCG(fn, grad = NULL, hess = NULL, start, fixed = NULL,
+maxCG(fn, grad=NULL, hess=NULL, start, fixed=NULL,
    control=NULL,
-   constraints = NULL,
+   constraints=NULL,
    finalHessian=TRUE,
-   parscale = rep(1, length = length(start)), ...)
+   parscale=rep(1, length=length(start)), ...)
 
-maxSANN(fn, grad = NULL, hess = NULL, start, fixed = NULL,
+maxSANN(fn, grad=NULL, hess=NULL, start, fixed=NULL,
    control=NULL,
-   constraints = NULL,
+   constraints=NULL,
    finalHessian=TRUE,
-   parscale = rep(1, length = length(start)),
+   parscale=rep(1, length=length(start)),
    ... )
 
-maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
+maxNM(fn, grad=NULL, hess=NULL, start, fixed=NULL,
    control=NULL,
-   constraints = NULL,
+   constraints=NULL,
    finalHessian=TRUE,
-   parscale = rep(1, length = length(start)),
+   parscale=rep(1, length=length(start)),
    ...)
 }
 
@@ -62,23 +62,25 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
   \item{control}{list of control parameters or a \sQuote{MaxControl}
     object.  If it is a list, the default values are used for the
     parameters that are left unspecified by the user.
-    These functions accepted the following parameters:
+    These functions accept the following parameters:
     \describe{
       \item{reltol}{sqrt(.Machine$double.eps), stopping
 	condition.  Relative convergence
 	tolerance: the algorithm stops if the relative improvement
 	between iterations is less than \sQuote{reltol}.
       }
-      \item{iterlim}{integer, maximum number of iterations.  Note that
-	\sQuote{iteration} may mean different things for different
-	optimizers.  Default values are 200 for \sQuote{BFGS}, 500
+      \item{iterlim}{integer, maximum number of iterations.
+	Default values are 200 for \sQuote{BFGS}, 500
 	(\sQuote{CG} and \sQuote{NM}), and 10000 (\sQuote{SANN}).
-	Default 0, no information.
+	Note that
+	\sQuote{iteration} may mean different things for different
+	optimizers.
       }
       \item{printLevel}{integer, larger number prints more working
-	information.}
+	information.  Default 0, no information.
+      }
       \item{nm_alpha}{1, Nelder-Mead simplex method reflection
-	coefficient (see Nelder \& Mead, 1965)
+	coefficient (see Nelder & Mead, 1965)
       }
       \item{nm_beta}{0.5, Nelder-Mead controction coefficient}
       \item{nm_gamma}{2, Nelder-Mead expansion coefficient}
@@ -94,8 +96,8 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
       \item{sann_randomSeed}{123, integer to seed random numbers to
 	ensure replicability of \dQuote{SANN} optimization and preserve
 	\code{R} random numbers.  Use
-	options like \code{SANN_randomSeed=Sys.time()} or
-	\code{SANN_randomSeed=sample(1000,1)} if you want stochastic
+	options like \code{sann_randomSeed=Sys.time()} or
+	\code{sann_randomSeed=sample(100,1)} if you want stochastic
 	results.
 	}
       }
@@ -147,7 +149,7 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
 \value{
   Object of class "maxim":
   \item{maximum}{value of \code{fn} at maximum.}
-  \item{estimate}{best set of parameters found.}
+  \item{estimate}{best parameter vector found.}
   \item{gradient}{vector, gradient at parameter value \code{estimate}.}
   \item{gradientObs}{matrix of gradients at parameter value \code{estimate}
       evaluated at each observation (only if \code{grad} returns a matrix
@@ -176,7 +178,7 @@ maxNM(fn, grad = NULL, hess = NULL, start, fixed = NULL,
   \item{control}{the optimization control parameters in the form of a
   \code{\link[maxLik:MaxControl-class]{MaxControl}} object.}
 }
-\author{Ott Toomet \email{otoomet@gmail.com}, Arne Henningsen}
+\author{Ott Toomet, Arne Henningsen}
 
 \seealso{\code{\link{optim}}, \code{\link{nlm}}, \code{\link{maxNR}},
   \code{\link{maxBHHH}}, \code{\link{maxBFGSR}} for a
@@ -202,13 +204,13 @@ f <- function(theta) {
   x <- theta[1]
   y <- theta[2]
   exp(-(x^2 + y^2))
-  ## Note: you may want to use exp(- theta \%*\% theta) instead ;-)
+  ## you may want to use exp(- theta \%*\% theta) instead
 }
 ## use constraints: x + y >= 1
 A <- matrix(c(1, 1), 1, 2)
 B <- -1
 res <- maxNM(f, start=c(1,1), constraints=list(ineqA=A, ineqB=B),
-print.level=1)
+control=list(printLevel=1))
 print(summary(res))
 }
 \keyword{optimize}

@@ -18,7 +18,7 @@
 \value{
   A text message, describing the involved optimisation algorithm
 }
-\author{Ott Toomet, \email{otoomet@ut.ee}}
+\author{Ott Toomet}
 \seealso{\code{\link{maxNR}}}
 \examples{
 ## maximize two-dimensional exponential hat.  True maximum c(2,1):
