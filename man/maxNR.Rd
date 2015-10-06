@@ -22,12 +22,13 @@ maxBHHH(fn, grad = NULL, hess = NULL, start,
       finalHessian = "BHHH", ... )
 }
 \arguments{
-  \item{fn}{function to be maximized.
+  \item{fn}{the function to be maximized.
     It must have the parameter vector as the first argument and
-    it must return either a single number or a numeric vector, which is summed.
+    it must return either a single number, or a numeric vector (this is
+    is summed internally).
     If the BHHH method is used and argument \code{gradient} is not given,
     \code{fn} must return a numeric vector of observation-specific
-    likelihood values.
+    log-likelihood values.
     If the parameters are out of range, \code{fn} should
     return \code{NA}.  See details for constant parameters.
 
@@ -42,8 +43,8 @@ maxBHHH(fn, grad = NULL, hess = NULL, start,
     or a matrix, where \emph{columns} correspond to individual parameters.
     The column sums are treated as gradient components.
     If \code{NULL}, finite-difference gradients are computed.
-    If the BHHH method is used, \code{grad} must return a matrix,
-    where rows corresponds to the gradient vectors of individual
+    If BHHH method is used, \code{grad} must return a matrix,
+    where rows corresponds to the gradient vectors for individual
     observations and the columns to the individual parameters.
     If \code{fn} returns an object with attribute \code{gradient},
     this argument is ignored.
@@ -53,8 +54,8 @@ maxBHHH(fn, grad = NULL, hess = NULL, start,
     it must return the Hessian matrix of the objective function.
     If missing, finite-difference Hessian, based on \code{gradient},
     is computed.
-    Hessian is used for maximizations with the Newton-Raphson method
-    but not for maximizations with the BFGS or BHHH method.}
+    Hessian is used by the Newton-Raphson method only, and eventually by
+    the other methods if \code{finalHessian} is requested.}
   \item{start}{initial parameter values.  If start values
     are named, those names are also carried over to the results.}
   \item{constraints}{either \code{NULL} for unconstrained optimization
@@ -109,7 +110,7 @@ maxBHHH(fn, grad = NULL, hess = NULL, start,
 	\code{NA}, the step length
 	is halved and a new attempt is made.  If necessary, this procedure is repeated
 	until step < \code{steptol}, thereafter code 3 is returned.}
-      \item{lambdatol}{1e-6, 
+      \item{lambdatol}{\eqn{10^{-6}}{1e-6}, 
 	controls whether Hessian is treated as negative
 	definite.  If the
 	largest of the eigenvalues of the Hessian is larger than
@@ -126,22 +127,24 @@ maxBHHH(fn, grad = NULL, hess = NULL, start,
 	"stephalving" decreases the
 	step but keeps the direction,
 	"marquardt" uses
-	Marquardt (1963) method by decreasing the step length while also
+	\cite{Marquardt (1963)} method by decreasing the step length while also
 	moving closer to the pure gradient direction.  It may be faster and
 	more robust choice in areas where quadratic approximation
 	behaves poorly.  \code{maxNR} and \code{maxBHHH} only.
       }
-      \item{lambda0}{\eqn{10^{-2}}{1e-2},
-	positive numeric, initial correction term for Marquardt (1963)
+      \item{marquardt_lambda0}{\eqn{10^{-2}}{1e-2},
+	positive numeric, initial correction term for \cite{Marquardt (1963)}
 	correction.
       }
-      \item{lambdaStep}{2, how much the Marquardt (1963) correction term is
+      \item{marquardt_lambdaStep}{2, how much the \cite{Marquardt
+	  (1963)}
+	correction term is
 	decreased/increased at each
 	successful/unsuccesful step.
 	\code{maxNR} and \code{maxBHHH} only.
       }
-      \item{maxLambda}{\eqn{10^{12}}{1e12},
-	maximum allowed Marquardt (1963) correction term.  If exceeded, the
+      \item{marquardt_maxLambda}{\eqn{10^{12}}{1e12},
+	maximum allowed \cite{Marquardt (1963)} correction term.  If exceeded, the
 	algorithm exits with return code 3.
 	\code{maxNR} and \code{maxBHHH} only.
       }
@@ -167,8 +170,8 @@ maxBHHH(fn, grad = NULL, hess = NULL, start,
     }
   }
   \details{
-    The idea of the Newton method is to approximate the function in a given
-    location with a multidimensional quadratic function, and use the estimated
+    The idea of the Newton method is to approximate the function at a given
+    location by a multidimensional quadratic function, and use the estimated
     maximum as the start value for the next iteration.  Such an
     approximation requires knowledge of both gradient and Hessian, the
     latter of which can be quite costly to compute.  Several methods for
@@ -177,7 +180,7 @@ maxBHHH(fn, grad = NULL, hess = NULL, start,
 The BHHH (information equality) approximation is only valid for
 log-likelihood functions.
 It requires the score (gradient) values by individual observations and hence
-the corresponding must be returned 
+those must be returned 
 by individual observations by \code{grad} or \code{fn}.
 The Hessian is approximated as the negative of the sum of the outer products
 of the gradients of individual observations, or, in the matrix form,
@@ -196,9 +199,8 @@ of the gradients of individual observations, or, in the matrix form,
     }
 
 The functions \code{maxNR}, \code{maxBFGSR}, and \code{maxBHHH}
-can work with constant parameters and related changes of
-parameter values.  Constant parameters are useful if a parameter value
-is converging toward the boundary of support, or for testing.  
+can work with constant parameters, useful if a parameter value
+converges to the boundary of support, or for testing.  
 One way is to put
 \code{fixed} to non-NULL, specifying which parameters should be treated as
 constants.  The
@@ -266,10 +268,10 @@ signaling it with the
 
 \section{Warning}{
     No attempt is made to ensure that user-provided analytic
-    gradient/Hessian correct.  However, the users are
+    gradient/Hessian is correct.  The users are
     encouraged to use \code{\link{compareDerivatives}} function,
     designed for this purpose.  If analytic gradient/Hessian are wrong,
-    the algorithm may not converge, or converge to a wrong point.
+    the algorithm may not converge, or may converge to a wrong point.
 
     As the BHHH method
     uses the likelihood-specific information equality,
@@ -325,21 +327,21 @@ signaling it with the
    \code{\link{maxBHHH}} for maximizations using the Berndt, Hall, Hall,
    Hausman (1974) algorithm (which is a wrapper function to \code{maxNR});
    \code{\link{maxBFGS}} for maximization using the BFGS, Nelder-Mead (NM),
-   and Simulated Annealing (SANN) method (based \code{\link{optim}}),
+   and Simulated Annealing (SANN) method (based on \code{\link{optim}}),
    also supporting inequality constraints;
    \code{\link{nlm}} for Newton-Raphson optimization; and
   \code{\link{optim}} for different gradient-based optimization
   methods.}
 
 \examples{
-## ML estimation of exponential duration model:
+## estimate the exponential distribution parameter by ML
 t <- rexp(100, 2)
 loglik <- function(theta) sum(log(theta) - theta*t)
 ## Note the log-likelihood and gradient are summed over observations
 gradlik <- function(theta) sum(1/theta - t)
 hesslik <- function(theta) -100/theta^2
 ## Estimate with finite-difference gradient and Hessian
-a <- maxNR(loglik, start=1, print.level=2)
+a <- maxNR(loglik, start=1, control=list(printLevel=2))
 summary(a)
 ## You would probably prefer 1/mean(t) instead ;-)
 ## Estimate with analytic gradient and Hessian
@@ -358,7 +360,7 @@ summary(a)
 loglikInd <- function(theta) log(theta) - theta*t
 gradlikInd <- function(theta) 1/theta - t
 ## Estimate with finite-difference gradient
-a <- maxBHHH(loglikInd, start=1, print.level=2)
+a <- maxBHHH(loglikInd, start=1, control=list(printLevel=2))
 summary(a)
 ## Estimate with analytic gradient
 a <- maxBHHH(loglikInd, gradlikInd, start=1)
@@ -375,12 +377,12 @@ loglik <- function(param) {
   ll <- -0.5*N*log(2*pi) - N*log(sigma) - sum(0.5*(x - mu)^2/sigma^2)
   ll
 }
-x <- rnorm(1000, 1, 2) # use mean=1, stdd=2
+x <- rnorm(100, 1, 2) # use mean=1, stdd=2
 N <- length(x)
 res <- maxNR(loglik, start=c(0,1)) # use 'wrong' start values
 summary(res)
 ##
-## The previous example showing parameter names and fixed values
+## The previous example with named parameters and fixed values
 ##
 resFix <- maxNR(loglik, start=c(mu=0, sigma=1), fixed="sigma")
 summary(resFix)  # 'sigma' is exactly 1.000 now.
@@ -392,12 +394,13 @@ hatf <- function(theta) {
   x <- theta[1]
   y <- theta[2]
   exp(-(x^2 + y^2))
-  ## Note: you may want to use exp(- theta \%*\% theta) instead ;-)
+  ## Note: you may prefer exp(- theta \%*\% theta) instead
 }
 ## use constraints: x + y = 1
 A <- matrix(c(1, 1), 1, 2)
 B <- -1
-res <- maxNR(hatf, start=c(0,0), constraints=list(eqA=A, eqB=B), print.level=1)
+res <- maxNR(hatf, start=c(0,0), constraints=list(eqA=A, eqB=B),
+             control=list(printLevel=1))
 print(summary(res))
 }
 \keyword{optimize}

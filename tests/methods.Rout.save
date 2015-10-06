@@ -55,9 +55,9 @@ steptol = 1e-10
 lambdatol = 1e-06 
 qrtol = 1e-10 
 qac = stephalving 
-lambda0 = 0.01 
-lambdaStep = 2 
-maxLambda = 1e+12 
+marquardt_lambda0 = 0.01 
+marquardt_lambdaStep = 2 
+marquardt_maxLambda = 1e+12 
 nm_alpha = 1 
 nm_beta = 0.5 
 nm_gamma = 2 
@@ -77,9 +77,9 @@ steptol = 1e-10
 lambdatol = 1e-06 
 qrtol = 1e-10 
 qac = stephalving 
-lambda0 = 0.01 
-lambdaStep = 2 
-maxLambda = 1e+12 
+marquardt_lambda0 = 0.01 
+marquardt_lambdaStep = 2 
+marquardt_maxLambda = 1e+12 
 nm_alpha = 1 
 nm_beta = 0.5 
 nm_gamma = 2 
@@ -99,9 +99,9 @@ steptol = 1e-10
 lambdatol = 1e-06 
 qrtol = 1e-10 
 qac = stephalving 
-lambda0 = 0.01 
-lambdaStep = 2 
-maxLambda = 1e+12 
+marquardt_lambda0 = 0.01 
+marquardt_lambdaStep = 2 
+marquardt_maxLambda = 1e+12 
 nm_alpha = 1 
 nm_beta = 0.5 
 nm_gamma = 2 
@@ -114,4 +114,4 @@ printLevel = 0
 > 
 > proc.time()
    user  system elapsed 
-  0.446   0.034   0.474 
+  0.450   0.032   0.474 

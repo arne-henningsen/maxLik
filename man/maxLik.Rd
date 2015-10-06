@@ -22,15 +22,15 @@ constraints=NULL, ...)
     value, or a numeric vector where each component is log-likelihood
     of the corresponding individual observation.}
   \item{grad}{gradient of log-likelihood.  Must have the parameter
-    vector as the first argument.  Must return either single gradient
+    vector as the first argument.  Must return either a single gradient
     vector with length equal to the number of parameters, or a matrix
     where each row is the gradient vector of the corresponding individual
     observation.  If \code{NULL}, numeric gradient will be used.}
   \item{hess}{hessian of log-likelihood.  Must have the parameter
     vector as the first argument.  Must return a square matrix.  If
     \code{NULL}, numeric Hessian will be used.}
-  \item{start}{numeric vector, initial value of parameters.  If it is
-    named, these names will also be used for naming the results.}
+  \item{start}{numeric vector, initial value of parameters.  If it has
+    names, these will also be used for naming the results.}
   \item{method}{maximisation method, currently either 
    "NR" (for Newton-Raphson),
    "BFGS" (for Broyden-Fletcher-Goldfarb-Shanno), 
@@ -62,25 +62,25 @@ constraints=NULL, ...)
 }
 \value{
   object of class 'maxLik' which inherits from class 'maxim'.
-  Components are identical to those of class 'maxim'
-  (see \code{\link{maxNR}}) but the standard method differ.
+  The structure is identical to that of the class \dQuote{maxim}
+  (see \code{\link{maxNR}}) but the methods differ.
 }
 \section{Warning}{The constrained maximum likelihood estimation should
-  be considered as experimental.  In particular, the variance-covariance
+  be considered experimental.  In particular, the variance-covariance
   matrix is not corrected for constrained parameter space.
   }
 \author{Ott Toomet, Arne Henningsen}
 \seealso{\code{\link{maxNR}}, \code{\link{nlm}} and \code{\link{optim}}
   for different non-linear optimisation routines, see
-  \code{\link{maxBFGS}} for constrained maximization examples.}
+  \code{\link{maxBFGS}} for the constrained maximization examples.}
 \examples{
-## ML estimation of exponential duration model:
+## Estimate the parameter of exponential distribution
 t <- rexp(100, 2)
 loglik <- function(theta) log(theta) - theta*t
 gradlik <- function(theta) 1/theta - t
 hesslik <- function(theta) -100/theta^2
 ## Estimate with numeric gradient and hessian
-a <- maxLik(loglik, start=1, print.level=2)
+a <- maxLik(loglik, start=1, control=list(printLevel=2))
 summary( a )
 ## Estimate with analytic gradient and hessian
 a <- maxLik(loglik, gradlik, hesslik, start=1)
