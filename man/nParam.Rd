@@ -18,9 +18,9 @@
 \details{
   Free parameters are the parameters with no equality
   restrictions.  Some parameters may be jointly restricted (e.g. sum of two
-  probabilities may be required to equal unity).   In this case the
+  probabilities equals unity).   In this case the
   total number of parameters may depend on the
-  normalisation. 
+  normalization. 
 }
 \value{
   Number of parameters in the model

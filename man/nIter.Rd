@@ -23,11 +23,11 @@ nIter(x, \dots)
   numeric, number of iterations.  Note that \sQuote{iteration} may mean
   different things for different optimizers.
 }
-\author{Ott Toomet, \email{otoomet@econ.au.dk}}
+\author{Ott Toomet}
 \seealso{\code{\link{maxLik}}, \code{\link{maxNR}}
   }
 \examples{
-## ML estimation of exponential duration model:
+## Estimate the exponential distribution parameter:
 t <- rexp(100, 2)
 loglik <- function(theta) sum(log(theta) - theta*t)
 ## Estimate with numeric gradient and numeric Hessian

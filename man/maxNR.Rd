@@ -351,23 +351,17 @@ summary(a)
 ## BFGS estimation with finite-difference gradient
 a <- maxBFGSR( loglik, start=1 )
 summary(a)
-## BFGS estimation with analytic gradient
-a <- maxBFGSR( loglik, gradlik, start=1 )
-summary(a)
 
 ## For the BHHH method we need likelihood values and gradients
 ## of individual observations
 loglikInd <- function(theta) log(theta) - theta*t
 gradlikInd <- function(theta) 1/theta - t
-## Estimate with finite-difference gradient
-a <- maxBHHH(loglikInd, start=1, control=list(printLevel=2))
-summary(a)
 ## Estimate with analytic gradient
 a <- maxBHHH(loglikInd, gradlikInd, start=1)
 summary(a)
 
 ##
-## Next, we give an example with vector argument:  Estimate the mean and
+## Example with a vector argument:  Estimate the mean and
 ## variance of a random normal sample by maximum likelihood
 ## Note: you might want to use maxLik instead
 ##

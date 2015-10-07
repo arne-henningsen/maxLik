@@ -5,8 +5,8 @@
 
 \title{Functions to Calculate Numeric Derivatives}
 \description{
-  Calculate (central) numeric gradient and Hessian.
-  \code{numericGradient} accepts vector-valued functions.
+  Calculate (central) numeric gradient and Hessian, including of
+  vector-valued functions.
 }
 \usage{
 numericGradient(f, t0, eps=1e-06, fixed, \dots)
@@ -33,8 +33,11 @@ numericNHessian(f, t0, eps=1e-6, fixed, \dots)
 \details{
   \code{numericGradient} numerically differentiates a (vector valued)
   function with respect to it's (vector valued) argument.  If the
-  functions value is a \code{NVal * 1} vector and the argument is
-  \code{NPar * 1} vector, the resulting gradient is a \code{NVal * NPar}
+  functions value is a \eqn{N_{val} \times 1}{\code{N_val * 1}}
+  vector and the argument is
+  \eqn{N_{par} \times 1}{\code{N_par * 1}} vector, the resulting
+  gradient
+  is a \eqn{N_{val} \times N_{par}}{\code{NVal * NPar}}
   matrix. 
 
   \code{numericHessian} checks whether a gradient function is present.
