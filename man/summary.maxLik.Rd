@@ -18,49 +18,44 @@
     Maximum-Likelihood estimation.
   }
   \item{eigentol}{
-    nonzero print limit on the range of the absolute values of the
-    hessian.  Specifically, define:
-
-    absEig <- eigen(hessian(object), symmetric=TRUE)[['values']]
-
-    Then compute and print t values, p values, etc. only if min(absEig)
-    > (eigentol * max(absEig)).  
+    The standard errors are only calculated if the ration of the smallest
+    and largest eigenvalue of the Hessian matrix is less than
+    \dQuote{eigentol}.  Otherwise the Hessian is treated as singular.
   }
   \item{\ldots}{currently not used.}
 }
 \value{
-  \code{summary.maxLik} returns an
-  object of class 'summary.maxLik' with following components:
-  \item{type}{type of maximisation.}
-  \item{iterations}{number of iterations.}
-  \item{code}{code of success.}
-  \item{message}{a short message describing the code.}
-  \item{loglik}{the loglik value in the maximum.}
-  \item{estimate}{numeric matrix, the first column contains the parameter
-    estimates, the second the standard errors, third t-values and fourth
-    corresponding probabilities.}
-  \item{fixed}{logical vector, which parameters are treated as constants.}
-  \item{NActivePar}{number of free parameters.}
-  \item{constraints}{information about the constrained optimization.
-    Passed directly further from \code{maxim}-object.  \code{NULL} if
-    unconstrained maximization.
+  An object of class 'summary.maxLik' with following components:
+  \describe{
+    \item{type}{type of maximisation.}
+    \item{iterations}{number of iterations.}
+    \item{code}{code of success.}
+    \item{message}{a short message describing the code.}
+    \item{loglik}{the loglik value in the maximum.}
+    \item{estimate}{numeric matrix, the first column contains the parameter
+      estimates, the second the standard errors, third t-values and fourth
+      corresponding probabilities.}
+    \item{fixed}{logical vector, which parameters are treated as constants.}
+    \item{NActivePar}{number of free parameters.}
+    \item{constraints}{information about the constrained optimization.
+      Passed directly further from \code{maxim}-object.  \code{NULL} if
+      unconstrained maximization.
+    }
   }
-  \code{coef.summary.maxLik} returns the matrix of estimated values,
-    standard errors, and \eqn{$t$}{t}- and \eqn{$p$}{p}-values.
 }
 \author{Ott Toomet, Arne Henningsen}
 \seealso{\code{\link{maxLik}}}
 \examples{
-## ML estimation of exponential duration model:
+## ML estimation of exponential distribution:
 t <- rexp(100, 2)
 loglik <- function(theta) log(theta) - theta*t
 gradlik <- function(theta) 1/theta - t
 hesslik <- function(theta) -100/theta^2
 ## Estimate with numeric gradient and hessian
-a <- maxLik(loglik, start=1, print.level=2)
+a <- maxLik(loglik, start=1, control=list(printLevel=2))
 summary(a)
 ## Estimate with analytic gradient and hessian
-a <- maxLik(loglik, gradlik, hesslik, start=1)
+a <- maxLik(loglik, gradlik, hesslik, start=1, control=list(printLevel=2))
 summary(a)
 }
 \keyword{models}

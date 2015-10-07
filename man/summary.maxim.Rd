@@ -21,7 +21,9 @@
   \item{type}{type of maximization.}
   \item{iterations}{number of iterations.}
   \item{code}{exit code (see \code{\link{returnCode}}.)}
-  \item{message}{a brief message, explaining code.}
+  \item{message}{a brief message, explaining the outcome (see
+    \code{\link{returnMessage}}).
+  }
   \item{unsucc.step}{description of last unsuccessful step, only if
     requested and \code{code} == 3}
   \item{maximum}{function value at maximum}

@@ -13,7 +13,7 @@
 \usage{
 \method{AIC}{maxLik}(object, \dots, k=2)
 \method{coef}{maxim}(object, \dots)
-\method{stdEr}{maxLik}(x, \dots)
+\method{stdEr}{maxLik}(x, eigentol=1e-12, \dots)
 }
 \arguments{
   \item{object}{a \sQuote{maxLik} object (or a
@@ -21,6 +21,11 @@
   \item{k}{numeric, the penalty per parameter to be used; the default
     \sQuote{k = 2} is the classical AIC.}
   \item{x}{a \sQuote{maxLik} object}
+  \item{eigentol}{
+    The standard errors are only calculated if the ration of the smallest
+    and largest eigenvalue of the Hessian matrix is less than
+    \dQuote{eigentol}.  Otherwise the Hessian is treated as singular.
+  }
   \item{\dots}{other arguments for methods}
 }
 \details{

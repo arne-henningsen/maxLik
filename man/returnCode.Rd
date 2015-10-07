@@ -1,6 +1,7 @@
 \name{returnCode}
 \alias{returnCode}
 \alias{returnCode.default}
+\alias{returnCode.maxLik}
 \alias{returnMessage}
 \alias{returnMessage.default}
 \alias{returnMessage.maxim}
@@ -12,30 +13,30 @@
   brief description about the success or
   failure of the optimization, and point to the problems occured (see
   documentation for the
-  corresponding function).
+  corresponding functions).
 }
 \usage{
 returnCode(x, ...)
 \method{returnCode}{default}(x, ...)
+\method{returnCode}{maxLik}(x, ...)
 returnMessage(x, ...)
 \method{returnMessage}{maxim}(x, ...)
 \method{returnMessage}{maxLik}(x, ...)
 }
 \arguments{
-  \item{x}{object, usually an estimator, achieved by optimization}
+  \item{x}{object, usually an optimization result}
   \item{...}{further arguments for other methods}
 }
 \details{
-  \code{returnMessage} is a generic function, with methods
+  \code{returnMessage} and \code{returnCode} are a generic functions, with methods
   for various optimisation algorithms.
-  The default methods returns component \code{returnCode}.
   The message should either describe
-  the convergence,
+  the convergence (stopping condition),
   or the problem.  
 }
 \value{
-  Integer, the success code of optimization procedure.  However,
-  different optimization routines may define it in a different way.
+  Integer for \code{returnCode}, character for \code{returnMessage}.
+  Different optimization routines may define it in a different way.
 }
 \author{Ott Toomet}
 \seealso{\code{\link{maxNR}}, \code{\link{maxBFGS}}}
