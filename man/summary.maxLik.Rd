@@ -18,7 +18,7 @@
     Maximum-Likelihood estimation.
   }
   \item{eigentol}{
-    The standard errors are only calculated if the ration of the smallest
+    The standard errors are only calculated if the ratio of the smallest
     and largest eigenvalue of the Hessian matrix is less than
     \dQuote{eigentol}.  Otherwise the Hessian is treated as singular.
   }
@@ -27,7 +27,7 @@
 \value{
   An object of class 'summary.maxLik' with following components:
   \describe{
-    \item{type}{type of maximisation.}
+    \item{type}{type of maximization.}
     \item{iterations}{number of iterations.}
     \item{code}{code of success.}
     \item{message}{a short message describing the code.}

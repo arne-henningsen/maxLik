@@ -18,6 +18,7 @@ export( "numericHessian" )
 export( "numericNHessian" )
 export( "returnCode" )
 export( "returnMessage" )
+export("sumt")
 
 importFrom("methods", "new", "show", "slot", "slot<-", "slotNames",
            "validObject")

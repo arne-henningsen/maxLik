@@ -74,7 +74,7 @@ print.level = 0, SUMTMaxIter = 100, ...)
     One should consider supplying \code{SUMTRho0} in case where the
     unconstrained problem does not have a maximum, or the maximum is too
     far from the constrained value.  Otherwise the authomatically selected
-    value may not lead to a convergence.
+    value may not lead to convergence.
     }
   \item{print.level}{
     Integer, debugging information.  Larger number print more details.
@@ -105,10 +105,12 @@ print.level = 0, SUMTMaxIter = 100, ...)
      found.  Standard practice recommends to use the best solution
      found in \dQuote{sufficiently many} replications.
 
-     The unconstrained maximization is performed by any of
+     Any of
      the maximization algorithms in the \pkg{maxLik}, such as
-     \code{\link{maxNR}}.  If provided, analytic gradient and hessian
-     are used.
+     \code{\link{maxNR}}, can be used for the unconstrained step.
+
+     Analytic gradient and hessian
+     are used if provided.
 }
 \value{
   Object of class 'maxim'.  In addition, a component
@@ -125,15 +127,30 @@ print.level = 0, SUMTMaxIter = 100, ...)
 }
 \section{Note}{
   In case of equality constraints, it
-  may be a lot more efficient to enclose the function
+  may be more efficient to enclose the function
   in a wrapper function.  The wrapper calculates full set of parameters
-  based on a smaller set of parameters and the
+  based on a smaller set of parameters, and the
   constraints.
 }
 \author{
   Ott Toomet, Arne Henningsen
 }
 \seealso{
-  \code{\link[clue]{sumt}}
+  \code{\link[clue]{sumt}} in package \pkg{clue}.
+}
+\examples{
+## We maximize exp(-x^2 - y^2) where x+y = 1
+hatf <- function(theta) {
+   x <- theta[1]
+   y <- theta[2]
+   exp(-(x^2 + y^2))
+   ## Note: you may prefer exp(- theta \%*\% theta) instead
+}
+## use constraints: x + y = 1
+A <- matrix(c(1, 1), 1, 2)
+B <- -1
+res <- sumt(hatf, start=c(0,0), maxRoutine=maxNR,
+            constraints=list(eqA=A, eqB=B))
+print(summary(res))
 }
 \keyword{optimize}
