@@ -25,14 +25,13 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
       mControl <- control
    }
    mControl <- maxControl(mControl, ...)
-   # save seed of the random number generator
+   ## save seed of the random number generator
    if( exists( ".Random.seed" ) ) {
       savedSeed <- .Random.seed
    }
 
    # set seed for the random number generator (used by 'optim( method="SANN" )')
    set.seed(slot(mControl, "sann_randomSeed"))
-
    # restore seed of the random number generator on exit
    # (end of function or error)
    if( exists( "savedSeed" ) ) {
