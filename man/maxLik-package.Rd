@@ -65,9 +65,7 @@ x <- rnorm(50, 1, 2 )
 llf <- function( param ) {
    mu <- param[ 1 ]
    sigma <- param[ 2 ]
-   N <- length( x )
-   llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
-      0.5 * sum( ( x - mu )^2 / sigma^2 )
+   llValue <- dnorm(x, mean=mu, sd=sigma, log=TRUE)
    return(sum(llValue))
 }
 
@@ -75,4 +73,25 @@ llf <- function( param ) {
 ml <- maxLik( llf, start = c(mu=0, sigma=1) )
 print(summary(ml))
 ## Estimates close to c(1,2) :-)
+
+## Example how to use maxLik in your own function and allow users
+## to override the default parameters
+##
+## 'estimate': user contructed estimation routine
+## Note: it accepts both 'control' and '...'
+estimate <- function(control=NULL, ...) {
+   return(maxLik(llf, start=c(1,1),
+                 control=c(list(iterlim=100), control),
+                           # user-supplied 'control' overrides default
+                           # 'iterlim=100'
+                 ...))
+}
+m <- estimate(control=list(iterlim=1), fixed=2)
+                           # user can override default 'iterlim' and
+                           # supply additional parameters ('fixed')
+show(maxControl(m))
+                           # iterlim should be 1
+print(coef(m))
+                           # sigma should be 1.000
+
 }

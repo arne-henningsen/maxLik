@@ -191,3 +191,15 @@ for(method in c("NR", "BFGS", "BFGSR")) {
       print(all.equal(hessian(mixA), hessian(mixAC)))
    }
 }
+
+### Test adding both default and user-specified parameters through control list
+estimate <- function(control=NULL, ...) {
+   return(maxLik(llf, start=c(1,1),
+                 control=c(list(iterlim=100), control),
+                 ...))
+}
+m <- estimate(control=list(iterlim=1), fixed=2)
+show(maxControl(m))
+                           # iterlim should be 1
+print(coef(m))
+                           # sigma should be 1.000

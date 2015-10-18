@@ -30,7 +30,7 @@ importFrom( "miscTools", "stdEr" )
 importFrom( "sandwich", "estfun" )
 importFrom("stats", "coef", "logLik", "optim", "pnorm", "printCoefmat",
            "vcov")
-importFrom("utils", "head", "str")
+importFrom("utils", "head", "str", "tail")
 
 exportClasses("MaxControl")
 exportMethods("maxControl")

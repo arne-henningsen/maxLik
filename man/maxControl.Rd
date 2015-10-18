@@ -111,11 +111,19 @@
   \describe{
     \item{maxControl}{\code{(\dots)} creates a \dQuote{MaxControl} object.  The
       arguments must be in the form \code{option1 = value1, option2 =
-	value2, ...}.}
+	value2, ...}.  In case there are more than one option with
+      similar name, only the last one is taken into account.  This
+      allows the user to override default parameters in the control
+      list.  See example in \link{maxLik-package}.
+    }
     \item{maxControl}{\code{(x = "MaxControl", \dots)} overwrites parameters
-      of and existing \dQuote{MaxControl} object.  The \sQuote{\dots}
+      of an existing \dQuote{MaxControl} object.  The \sQuote{\dots}
       argument must be in the form \code{option1 = value1, option2 =
-	value2, ...}.}
+	value2, ...}.  In case there are more than one option with
+      similar name, only the last one is taken into account.  This
+      allows the user to override default parameters in the control
+      list. See example in \link{maxLik-package}.
+    }
     \item{maxControl}{\code{(x = "maxim")} extracts \dQuote{MaxControl}
       structure from an estimated model}
     \item{show}{shows the parameter values}

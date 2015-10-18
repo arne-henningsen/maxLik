@@ -10,7 +10,9 @@ addControlList <- function(x, y) {
                        convert=function(x) x
                        ) {
       if(!is.null(y[[openName]])) {
-         slot(x, slotName) <- convert(y[[openName]])
+         i <- tail(which(names(y) %in% openName), 1)
+                           # pick the last occurrence: allow user to overwrite defaults
+         slot(x, slotName) <- convert(y[[i]])
       }
       assign("x", x, envir=parent.frame())
                            # save modified x into parent frame

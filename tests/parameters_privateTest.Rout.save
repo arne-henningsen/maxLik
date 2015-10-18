@@ -1,6 +1,6 @@
 
-R version 3.1.1 (2014-07-10) -- "Sock it to Me"
-Copyright (C) 2014 The R Foundation for Statistical Computing
+R version 3.2.2 (2015-08-14) -- "Fire Safety"
+Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-redhat-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -567,6 +567,39 @@ Error in maxRoutine(fn = logLik, grad = grad, hess = hess, start = start,  :
 Error in maxRoutine(fn = logLik, grad = grad, hess = hess, start = start,  : 
   Inequality constraints not implemented for maxBFGSR
 > 
+> ### Test adding both default and user-specified parameters through control list
+> estimate <- function(control=NULL, ...) {
++    return(maxLik(llf, start=c(1,1),
++                  control=c(list(iterlim=100), control),
++                  ...))
++ }
+> m <- estimate(control=list(iterlim=1), fixed=2)
+> show(maxControl(m))
+A 'MaxControl' object with slots:
+tol = 1e-08 
+reltol = 1.49e-08 
+gradtol = 1e-06 
+steptol = 1e-10 
+lambdatol = 1e-06 
+qrtol = 1e-10 
+qac = stephalving 
+marquardt_lambda0 = 0.01 
+marquardt_lambdaStep = 2 
+marquardt_maxLambda = 1e+12 
+nm_alpha = 1 
+nm_beta = 0.5 
+nm_gamma = 2 
+sann_cand = <default Gaussian Markov kernel>
+sann_temp = 10 
+sann_tmax = 10 
+sann_randomSeed = 123 
+iterlim = 1 
+printLevel = 0 
+>                            # iterlim should be 1
+> print(coef(m))
+[1] 0.07158 1.00000
+>                            # sigma should be 1.000
+> 
 > proc.time()
    user  system elapsed 
-  1.002   0.046   1.039 
+  0.966   0.049   1.006 
