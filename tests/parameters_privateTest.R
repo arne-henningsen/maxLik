@@ -203,3 +203,10 @@ show(maxControl(m))
                            # iterlim should be 1
 print(coef(m))
                            # sigma should be 1.000
+## Does print.level overwrite 'printLevel'?
+m <- estimate(control=list(printLevel=2, print.level=1))
+show(maxControl(m))
+
+## Does open parameters override everything?
+m <- estimate(control=list(printLevel=2, print.level=1), print.level=0)
+show(maxControl(m))

@@ -599,7 +599,59 @@ printLevel = 0
 > print(coef(m))
 [1] 0.07158 1.00000
 >                            # sigma should be 1.000
+> ## Does print.level overwrite 'printLevel'?
+> m <- estimate(control=list(printLevel=2, print.level=1))
+--------------
+successive function values within tolerance limit 
+6  iterations
+estimate: 0.07169 1.477 
+Function value: -361.8 
+> show(maxControl(m))
+A 'MaxControl' object with slots:
+tol = 1e-08 
+reltol = 1.49e-08 
+gradtol = 1e-06 
+steptol = 1e-10 
+lambdatol = 1e-06 
+qrtol = 1e-10 
+qac = stephalving 
+marquardt_lambda0 = 0.01 
+marquardt_lambdaStep = 2 
+marquardt_maxLambda = 1e+12 
+nm_alpha = 1 
+nm_beta = 0.5 
+nm_gamma = 2 
+sann_cand = <default Gaussian Markov kernel>
+sann_temp = 10 
+sann_tmax = 10 
+sann_randomSeed = 123 
+iterlim = 100 
+printLevel = 1 
+> 
+> ## Does open parameters override everything?
+> m <- estimate(control=list(printLevel=2, print.level=1), print.level=0)
+> show(maxControl(m))
+A 'MaxControl' object with slots:
+tol = 1e-08 
+reltol = 1.49e-08 
+gradtol = 1e-06 
+steptol = 1e-10 
+lambdatol = 1e-06 
+qrtol = 1e-10 
+qac = stephalving 
+marquardt_lambda0 = 0.01 
+marquardt_lambdaStep = 2 
+marquardt_maxLambda = 1e+12 
+nm_alpha = 1 
+nm_beta = 0.5 
+nm_gamma = 2 
+sann_cand = <default Gaussian Markov kernel>
+sann_temp = 10 
+sann_tmax = 10 
+sann_randomSeed = 123 
+iterlim = 100 
+printLevel = 0 
 > 
 > proc.time()
    user  system elapsed 
-  0.966   0.049   1.006 
+  0.978   0.041   1.011 

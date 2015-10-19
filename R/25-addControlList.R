@@ -6,14 +6,21 @@
 addControlList <- function(x, y) {
    ## add list y to the control
    setSlot <- function(openName,
-                       slotName=openName,
+                       slotName=openName[1],
                        convert=function(x) x
                        ) {
-      if(!is.null(y[[openName]])) {
-         i <- tail(which(names(y) %in% openName), 1)
-                           # pick the last occurrence: allow user to overwrite defaults
-         slot(x, slotName) <- convert(y[[i]])
+      ## Store potentially differently named value in slot
+      ## 
+      ## openName    vector of accepted name forms
+      ## slotName    corresponding actual slot name
+      ## convert     how to convert the value
+      ## 
+      if(!any(openName %in% names(y))) {
+         return(NULL)
       }
+      i <- tail(which(names(y) %in% openName), 1)
+                           # pick the last occurrence: allow user to overwrite defaults
+      slot(x, slotName) <- convert(y[[i]])
       assign("x", x, envir=parent.frame())
                            # save modified x into parent frame
    }
@@ -39,41 +46,23 @@ addControlList <- function(x, y) {
    setSlot("lambdatol")
    setSlot("qrtol")
    ## QAC
-   setSlot("QAC", "qac")
-   setSlot("qac")
-   setSlot("Marquardt_lambda0")
-   setSlot("Marquardt_lambdaStep")
-   setSlot("Marquardt_maxLambda")
-   setSlot("marquardt_lambda0")
-   setSlot("marquardt_lambdaStep")
-   setSlot("marquardt_maxLambda")
+   setSlot(c("qac", "QAC"), "qac")
+   setSlot(c("marquardt_lambda0", "Marquardt_lambda0"))
+   setSlot(c("marquardt_lambdaStep", "Marquardt_lambdaStep"))
+   setSlot(c("marquardt_maxLambda", "Marquardt_maxLambda"))
    ## NM
-   setSlot("NM_alpha", "nm_alpha")
-   setSlot("NM_beta", "nm_beta")
-   setSlot("NM_gamma", "nm_gamma")
-   setSlot("nm_alpha", "nm_alpha")
-   setSlot("nm_beta", "nm_beta")
-   setSlot("nm_gamma", "nm_gamma")
-   setSlot("alpha", "nm_alpha")
-   setSlot("beta", "nm_beta")
-   setSlot("gamma", "nm_gamma")
+   setSlot(c("nm_alpha", "NM_alpha", "alpha"))
+   setSlot(c("nm_beta", "NM_beta", "beta"))
+   setSlot(c("nm_gamma", "NM_gamma", "gamma"))
    ## SANN
-   setSlot("SANN_cand", "sann_cand")
-   setSlot("SANN_temp", "sann_temp")
-   setSlot("SANN_tmax", "sann_tmax", as.integer)
-   setSlot("SANN_randomSeed", "sann_randomSeed", as.integer)
-   setSlot("sann_cand")
-   setSlot("sann_temp")
-   setSlot("sann_tmax", convert=as.integer)
-   setSlot("sann_randomSeed", "sann_randomSeed", as.integer)
-   setSlot("cand", "sann_cand")
-   setSlot("temp", "sann_temp")
-   setSlot("tmax", "sann_tmax", as.integer)
-   setSlot("random.seed", "sann_randomSeed", as.integer)
+   setSlot(c("sann_cand", "SANN_cand", "cand"))
+   setSlot(c("sann_temp", "SANN_temp", "temp"))
+   setSlot(c("sann_tmax", "SANN_tmax", "tmax"), convert=as.integer)
+   setSlot(c("sann_randomSeed", "SANN_randomSeed", "random.seed"),
+           convert=as.integer)
    ##
    setSlot("iterlim", convert=as.integer)
-   setSlot("print.level", "printLevel", as.integer)
-   setSlot("printLevel", convert=as.integer)
+   setSlot(c("printLevel", "print.level"), convert=as.integer)
    ##
    validObject(x)
    return(x)
