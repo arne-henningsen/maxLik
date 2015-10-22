@@ -8,15 +8,15 @@ on R-Forge.
      
 * maxNR & friends now support argument 'qac' (quadratic approximation
   correction) option that allows to choose the behavior if the next
-  guess performes worse than the previous one.  This includes the
+  guess performs worse than the previous one.  This includes the
   original step halving while keeping direction, and now also
-  Marquardt (1963) shift toward the steepest gradient.
+  Marquardt's (1963) shift toward the steepest gradient.
 
-* all max** function now take control options in the form as
+* all max** functions now take control options in the form as
   'control=list(...)', analogously as 'optim'.  The former method of
   directly supplying options is preserved for compatibility reasons.
 
-* sumt, and stdEr method for 'maxLik' now in namespace
+* sumt, and stdEr method for 'maxLik' are now in namespace
 
 * the preferred way to specify the amount of debugging information is
   now 'printLevel', not 'print.level'.
