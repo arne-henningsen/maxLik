@@ -542,6 +542,29 @@ all.equal(coef(mlSANNCand), coef(mlSANN), tolerance = 1e-2 )
 all.equal(stdEr(mlSANNCand), stdEr(mlSANN), tolerance = 1e-2 )
 all.equal(hessian(mlSANNCand), hessian(mlSANN), tolerance = 1e-2 )
 
+
+## CG method
+# Estimate with only function values (aggregated)
+mlCg <- maxLik( llf, start = startVal, method = "CG" )
+print(summary( mlCg))
+# Estimate with analytic gradient (aggregated)
+mlgCg <- maxLik( llf, gf, start = startVal, method = "CG" )
+print(summary( mlgCg))
+# Estimate with analytic gradient (aggregated) and Hessian (not used for estimation)
+mlghCg <- maxLik( llf, gf, hf, start = startVal, method = "CG" )
+print(summary( mlghCg))
+## 
+# Estimate with only function values (individual)
+mlCg <- maxLik( llf, start = startVal, method = "CG" )
+print(summary( mlCg))
+# Estimate with analytic gradient (individual)
+mlgCg <- maxLik( llf, gf, start = startVal, method = "CG" )
+print(summary( mlgCg))
+# Estimate with analytic gradient (individual) and Hessian (not used for estimation)
+mlghCg <- maxLik( llfInd, gfInd, hf, start = startVal, method = "CG" )
+print(summary( mlghCg))
+
+
 ############### with fixed parameters ###############
 # start values
 startValFix <- c( mu = 1, sigma = 1 )

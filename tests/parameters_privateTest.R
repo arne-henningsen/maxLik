@@ -210,3 +210,9 @@ show(maxControl(m))
 ## Does open parameters override everything?
 m <- estimate(control=list(printLevel=2, print.level=1), print.level=0)
 show(maxControl(m))
+
+### does both printLevel, print.level work for condiNumber?
+condiNumber(hessian(m), print.level=0) # no output
+condiNumber(hessian(m), printLevel=0)  # no output
+condiNumber(hessian(m), printLevel=0, print.level=1) # no output
+

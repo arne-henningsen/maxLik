@@ -652,6 +652,12 @@ sann_randomSeed = 123
 iterlim = 100 
 printLevel = 0 
 > 
+> ### does both printLevel, print.level work for condiNumber?
+> condiNumber(hessian(m), print.level=0) # no output
+> condiNumber(hessian(m), printLevel=0)  # no output
+> condiNumber(hessian(m), printLevel=0, print.level=1) # no output
+> 
+> 
 > proc.time()
    user  system elapsed 
-  0.978   0.041   1.011 
+  0.981   0.039   1.014 

@@ -2407,6 +2407,107 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > all.equal(hessian(mlSANNCand), hessian(mlSANN), tolerance = 1e-2 )
 [1] "Mean relative difference: 0.0214"
 > 
+> 
+> ## CG method
+> # Estimate with only function values (aggregated)
+> mlCg <- maxLik( llf, start = startVal, method = "CG" )
+> print(summary( mlCg))
+--------------------------------------------
+Maximum Likelihood estimation
+CG maximization, 75 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu       1.181      0.182     6.5 8.1e-11 ***
+sigma    1.816      0.128    14.2 < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> # Estimate with analytic gradient (aggregated)
+> mlgCg <- maxLik( llf, gf, start = startVal, method = "CG" )
+> print(summary( mlgCg))
+--------------------------------------------
+Maximum Likelihood estimation
+CG maximization, 75 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu       1.181      0.182     6.5   8e-11 ***
+sigma    1.816      0.128    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> # Estimate with analytic gradient (aggregated) and Hessian (not used for estimation)
+> mlghCg <- maxLik( llf, gf, hf, start = startVal, method = "CG" )
+> print(summary( mlghCg))
+--------------------------------------------
+Maximum Likelihood estimation
+CG maximization, 75 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu       1.181      0.182     6.5   8e-11 ***
+sigma    1.816      0.128    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> ## 
+> # Estimate with only function values (individual)
+> mlCg <- maxLik( llf, start = startVal, method = "CG" )
+> print(summary( mlCg))
+--------------------------------------------
+Maximum Likelihood estimation
+CG maximization, 75 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu       1.181      0.182     6.5 8.1e-11 ***
+sigma    1.816      0.128    14.2 < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> # Estimate with analytic gradient (individual)
+> mlgCg <- maxLik( llf, gf, start = startVal, method = "CG" )
+> print(summary( mlgCg))
+--------------------------------------------
+Maximum Likelihood estimation
+CG maximization, 75 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu       1.181      0.182     6.5   8e-11 ***
+sigma    1.816      0.128    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> # Estimate with analytic gradient (individual) and Hessian (not used for estimation)
+> mlghCg <- maxLik( llfInd, gfInd, hf, start = startVal, method = "CG" )
+> print(summary( mlghCg))
+--------------------------------------------
+Maximum Likelihood estimation
+CG maximization, 75 iterations
+Return code 0: successful convergence 
+Log-Likelihood: -201.6 
+2  free parameters
+Estimates:
+      Estimate Std. error t value Pr(> t)    
+mu       1.181      0.182     6.5   8e-11 ***
+sigma    1.816      0.128    14.1  <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+--------------------------------------------
+> 
+> 
 > ############### with fixed parameters ###############
 > # start values
 > startValFix <- c( mu = 1, sigma = 1 )
@@ -6184,4 +6285,4 @@ sigma 0.00  0.01
 > 
 > proc.time()
    user  system elapsed 
- 39.130   0.111  39.276 
+  39.23    0.11   39.37 
