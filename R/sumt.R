@@ -11,7 +11,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
                            # maximum allowed penalty
                  SUMTQ = 10,
                  SUMTRho0 = NULL,
-                 print.level=0,
+                 printLevel=print.level, print.level=0,
                  SUMTMaxIter=100,
                  ...) {
    ## constraints    list w/components eqA and eqB.  Maximization will
@@ -115,13 +115,13 @@ sumt <- function(fn, grad=NULL, hess=NULL,
       rho <- 0
       result <- maxRoutine(fn=Phi, grad=gradPhi, hess=hessPhi,
                            start=start,
-                           print.level=max(print.level - 1, 0),
+                           printLevel=max(printLevel - 1, 0),
                            ...)
       theta <- coef(result)
                            # Note: this may be a bad idea,
                            # if unconstrained function is unbounded
                            # from above.  In that case rather specify SUMTRho0.
-      if(print.level > 0) {
+      if(printLevel > 0) {
          cat("SUMT initial: rho = ", rho,
              ", function = ",
              callWithoutMaxArgs( theta, "logLikFunc",
@@ -147,10 +147,10 @@ sumt <- function(fn, grad=NULL, hess=NULL,
       thetaOld <- theta
       result <- maxRoutine(fn=Phi, grad=gradPhi, hess=hessPhi,
                       start=thetaOld,
-                      print.level=max(print.level - 1, 0),
+                      printLevel=max(printLevel - 1, 0),
                       ...)
       theta <- coef(result)
-      if(print.level > 0) {
+      if(printLevel > 0) {
          cat("SUMT iteration ", iter,
              ": rho = ", rho, ", function = ", callWithoutMaxArgs( theta,
              "logLikFunc", fnOrig = fn, gradOrig = grad, hessOrig = hess, ... ),

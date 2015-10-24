@@ -19,7 +19,7 @@ SUMTTol = sqrt(.Machine$double.eps),
 SUMTPenaltyTol = sqrt(.Machine$double.eps),
 SUMTQ = 10,
 SUMTRho0 = NULL,
-print.level = 0, SUMTMaxIter = 100, ...)
+printLevel=print.level, print.level = 0, SUMTMaxIter = 100, ...)
 }
 \arguments{
   \item{fn}{
@@ -76,9 +76,11 @@ print.level = 0, SUMTMaxIter = 100, ...)
     far from the constrained value.  Otherwise the authomatically selected
     value may not lead to convergence.
     }
-  \item{print.level}{
-    Integer, debugging information.  Larger number print more details.
+  \item{printLevel}{
+    Integer, debugging information.  Larger number prints more details.
   }
+  \item{print.level}{same as \sQuote{printLevel}, for backward
+    compatibility} 
   \item{SUMTMaxIter}{
     Maximum SUMT iterations
   }

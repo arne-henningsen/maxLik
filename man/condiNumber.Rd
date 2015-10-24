@@ -12,7 +12,7 @@
 \usage{
 condiNumber(x, ...)
 \method{condiNumber}{default}(x, exact = FALSE, norm = FALSE,
-   print.level=1, digits = getOption( "digits" ), ... )
+   printLevel=print.level, print.level=1, digits = getOption( "digits" ), ... )
 \method{condiNumber}{maxLik}(x, ...)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -22,8 +22,10 @@ condiNumber(x, ...)
     approximations (see \code{\link{kappa}})}
   \item{norm}{logical, whether the columns should be normalised to have
     unit norm}
-  \item{print.level}{numeric, positive value will output the numbers
+  \item{printLevel}{numeric, positive value will output the numbers
     during the calculations.  Useful for interactive work.}
+  \item{print.level}{same as \sQuote{printLevel}, for backward
+    compatibility} 
   \item{digits}{minimal number of significant digits to print
       (only relevant if argument \code{print.level} is larger than zero).}
   \item{\dots}{Further arguments to \code{condiNumber.default}
