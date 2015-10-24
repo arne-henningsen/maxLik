@@ -4,7 +4,7 @@ Please note that only the most significant changes are reported here.
 A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
-      CHANGES IN VERSION 1.2-5 (2015-10-24)
+      CHANGES IN VERSION 1.3-0 (2015-10-24)
      
 * maxNR & friends now support argument 'qac' (quadratic approximation
   correction) option that allows to choose the behavior if the next
