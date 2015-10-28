@@ -3,8 +3,13 @@
 ## parameters supplied in a single list.
 ## We do not make it to a method: the signature would be indistinguishable
 ## from add(maxControl, ...) where ... is a single list
-addControlList <- function(x, y) {
+addControlList <- function(x, y, check=TRUE) {
    ## add list y to the control
+   ## 
+   ## check    only accept known control options.
+   ##          useful if attaching known control list
+   ##          if false, no checks performed and can add arbitrary list
+   ##          
    setSlot <- function(openName,
                        slotName=openName[1],
                        convert=function(x) x
@@ -33,11 +38,13 @@ addControlList <- function(x, y) {
    if(!inherits(y, "list")) {
       stop("Control arguments to 'maxControl' must be supplied in the form of a list")
    }
-   knownNames <- union(openParam(x), slotNames(x))
-   if(any(uNames <- !(names(y) %in% knownNames))) {
-      cat("Unknown control options:\n")
-      print(names(y)[uNames])
-      stop("Unknown options not accepted")
+   if(check) {
+      knownNames <- union(openParam(x), slotNames(x))
+      if(any(uNames <- !(names(y) %in% knownNames))) {
+         cat("Unknown control options:\n")
+         print(names(y)[uNames])
+         stop("Unknown options not accepted")
+      }
    }
    ##
    setSlot("tol")

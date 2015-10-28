@@ -24,7 +24,7 @@ maxCG <- function(fn, grad=NULL, hess=NULL,
       mControl <- control
    }
                            # default, user values
-   mControl <- maxControl(mControl, ...)
+   mControl <- addControlList(mControl, list(...), check=FALSE)
                            # open values
    result <- maxOptim( fn = fn, grad = grad, hess = hess,
                       start = start, method = "CG", fixed = fixed,

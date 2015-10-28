@@ -24,7 +24,7 @@ maxSANN <- function(fn, grad=NULL, hess=NULL,
    else {
       mControl <- control
    }
-   mControl <- maxControl(mControl, ...)
+   mControl <- addControlList(mControl, list(...), check=FALSE)
    ## save seed of the random number generator
    if( exists( ".Random.seed" ) ) {
       savedSeed <- .Random.seed

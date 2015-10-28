@@ -22,7 +22,7 @@ maxBFGS <- function(fn, grad=NULL, hess=NULL,
    else {
       mControl <- control
    }
-   mControl <- maxControl(mControl, ...)
+   mControl <- addControlList(mControl, list(...), check=FALSE)
    result <- maxOptim( fn = fn, grad = grad, hess = hess,
       start = start, method = "BFGS", fixed = fixed,
                       constraints = constraints,

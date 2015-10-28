@@ -22,7 +22,7 @@ maxOptim <- function(fn, grad, hess,
    if(!inherits(control, "MaxControl")) {
       stop("'control' must be a 'MaxControl' object, created by 'maxControl()'")
    }
-   control <- maxControl(control, ...)
+   control <- addControlList(control, list(...), check=FALSE)
    ## Any forbidden arguments in fn?
    argNames <- c( "fn", "grad", "hess", "start", "print.level", "iterlim",
       "constraints", "tol", "reltol", "parscale", "alpha", "beta", "gamma",
