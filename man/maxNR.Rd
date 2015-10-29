@@ -122,7 +122,7 @@ maxBHHH(fn, grad = NULL, hess = NULL, start,
       \item{qrtol}{\eqn{10^{-10}}{1e-10},
 	QR-decomposition tolerance for the Hessian inversion.
       }
-      \item{qac}{"stephalving", Qadratic Approximation Correction.  When the new
+      \item{qac}{"stephalving", Quadratic Approximation Correction.  When the new
 	guess is worse than the initial one, the algorithm attemts to correct it:
 	"stephalving" decreases the
 	step but keeps the direction,
