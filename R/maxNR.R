@@ -18,11 +18,6 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start,
    ##                 rows are simply summed (useful for maxBHHH).
    ## hess        - hessian function (numeric used if missing)
    ## start       - initial parameter vector (eventually w/names)
-   ## steptol     - minimum step size
-   ## lambdaStep    how much Hessian corrector lambda is changed between
-   ##               two lambda trials
-   ##               (nu in Marquardt (1963, p 438)
-   ## qrtol       - tolerance for qr decomposition
    ## ...         - extra arguments for fn()
    ## finalHessian  include final Hessian?  As computing final hessian does not carry any extra penalty for NR method, this option is
    ##               mostly for compatibility reasons with other maxXXX functions.

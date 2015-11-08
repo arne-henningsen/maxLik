@@ -209,14 +209,16 @@ maxNRCompute <- function(fn,
          H <- H0
       }
       ## check whether hessian is positive definite
-      if((me <- max.eigen( H[!fixed,!fixed,drop=FALSE])) >= -slot(control, "lambdatol") |
-                (qRank <- qr(H[!fixed,!fixed], tol=slot(control, "qrtol"))$rank) < sum(!fixed)) {
+      while((me <-
+         max.eigen( H[!fixed,!fixed,drop=FALSE])) >= -slot(control, "lambdatol") |
+         (qRank <- qr(H[!fixed,!fixed], tol=slot(control, "qrtol"))$rank) < sum(!fixed)) {
                            # maximum eigenvalue -> negative definite
                            # qr()$rank -> singularity
-         lambda1 <- abs(me) + slot(control, "lambdatol") + min(abs(diag(H)[!fixed]))/1e7
+         lambda1 <- abs(me) + slot(control, "lambdatol") +
+             min(abs(diag(H)[!fixed]))/1e7
                            # The third term corrects numeric singularity.  If diag(H) only contains large values,
                            # (H - (a small number)*I) == H because of finite precision
-         H <- (H0 - lambda1*I)
+         H <- (H - lambda1*I)
                            # could we multiply it with something like (for stephalving)
                            #     *abs(me)*lambdatol
                            # -lambda*I makes the Hessian (barely)
