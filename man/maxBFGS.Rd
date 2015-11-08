@@ -67,7 +67,9 @@ maxNM(fn, grad=NULL, hess=NULL, start, fixed=NULL,
       \item{reltol}{sqrt(.Machine$double.eps), stopping
 	condition.  Relative convergence
 	tolerance: the algorithm stops if the relative improvement
-	between iterations is less than \sQuote{reltol}.
+	between iterations is less than \sQuote{reltol}.  Note: for
+	compatibility reason \sQuote{tol} is equivalent to
+	\sQuote{reltol} for optim-based optimizers.
       }
       \item{iterlim}{integer, maximum number of iterations.
 	Default values are 200 for \sQuote{BFGS}, 500

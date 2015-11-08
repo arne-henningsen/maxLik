@@ -65,7 +65,7 @@ maxOptim <- function(fn, grad, hess,
    oControl <- list(trace=max(slot(control, "printLevel"), 0),
                     REPORT=1,
                     fnscale=-1,
-                    reltol=slot(control, "reltol"),
+                    reltol=slot(control, "tol"),
                     maxit=slot(control, "iterlim"),
                     parscale=parscale[ !fixed ],
                     alpha=slot(control, "nm_alpha"),
@@ -74,6 +74,7 @@ maxOptim <- function(fn, grad, hess,
                     temp=slot(control, "sann_temp"),
                     tmax=slot(control, "sann_tmax")
                     )
+   oControl$reltol <- slot(control, "reltol")
    argList <- list(theta=start,
                    fName="logLikFunc",
                    fnOrig = fn,
