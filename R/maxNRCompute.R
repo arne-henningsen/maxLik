@@ -234,6 +234,7 @@ maxNRCompute <- function(fn,
                            # the same as it was before -lambda*I
          aCount <- aCount + 1
          if(aCount > 100) {
+                           # should be enough even in the worst case
             break
          }
       }
