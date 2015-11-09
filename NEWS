@@ -4,6 +4,9 @@ Please note that only the most significant changes are reported here.
 A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
+      CHANGES IN VERSION 1.3-6 (2015-11-08)
+
+
       CHANGES IN VERSION 1.3-4 (2015-11-08)
 
 * If Hessian is not negative definite in maxNRCompute, the program now
