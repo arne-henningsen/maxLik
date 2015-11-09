@@ -179,13 +179,12 @@ maxNRCompute <- function(fn,
    step <- 1
    ## ---------------- Main interation loop ------------------------
    repeat {
-      lambda <- lambda1
       if( iter >= slot(control, "iterlim")) {
          code <- 4; break
       }
       iter <- iter + 1
       if(!marquardt) {
-         lambda <- 0
+         lambda1 <- 0
                            # assume the function is concave at start0
       }
       start0 <- start1
@@ -199,7 +198,7 @@ maxNRCompute <- function(fn,
          stop("NA in Hessian (at the iteration start)")
       }
       if(marquardt) {
-         lambda1 <- lambda/slot(control, "marquardt_lambdaStep")
+         lambda1 <- lambda1/slot(control, "marquardt_lambdaStep")
                            # initially we try smaller lambda
                            # lambda1: current lambda for calculations
          H <- H0 - lambda1*I
@@ -209,15 +208,23 @@ maxNRCompute <- function(fn,
          H <- H0
       }
       ## check whether hessian is positive definite
+      aCount <- 0
+                           # avoid inifinite number of attempts because of
+                           # numerical problems
       while((me <-
          max.eigen( H[!fixed,!fixed,drop=FALSE])) >= -slot(control, "lambdatol") |
          (qRank <- qr(H[!fixed,!fixed], tol=slot(control, "qrtol"))$rank) < sum(!fixed)) {
                            # maximum eigenvalue -> negative definite
                            # qr()$rank -> singularity
-         lambda1 <- abs(me) + slot(control, "lambdatol") +
-             min(abs(diag(H)[!fixed]))/1e7
+         if(marquardt) {
+            lambda1 <- lambda1*slot(control, "marquardt_lambdaStep")
+         }
+         else {
+            lambda1 <- abs(me) + slot(control, "lambdatol") +
+                min(abs(diag(H)[!fixed]))/1e7
                            # The third term corrects numeric singularity.  If diag(H) only contains large values,
                            # (H - (a small number)*I) == H because of finite precision
+         }
          H <- (H - lambda1*I)
                            # could we multiply it with something like (for stephalving)
                            #     *abs(me)*lambdatol
@@ -225,10 +232,21 @@ maxNRCompute <- function(fn,
                            # negative definite.
                            # *me*lambdatol keeps the scale roughly
                            # the same as it was before -lambda*I
+         aCount <- aCount + 1
+         if(aCount > 100) {
+            break
+         }
       }
       amount <- vector("numeric", nParam)
-      amount[!fixed] <- qr.solve(H[!fixed,!fixed,drop=FALSE],
-                                    G0[!fixed], tol=slot(control, "qrtol"))
+      inv <- try(qr.solve(H[!fixed,!fixed,drop=FALSE],
+                          G0[!fixed], tol=slot(control, "qrtol")))
+      if(inherits(inv, "try-error")) {
+                           # could not get the Hessian to negative definite
+         samm <- list(theta0=start0, f0=f0, climb=amount)
+         code <- 3
+         break
+      }
+      amount[!fixed] <- inv
       start1 <- start0 - step*amount
                            # note: step is always 1 for Marquardt method
       f1 <- fn(start1, fixed = fixed, sumObs = TRUE,

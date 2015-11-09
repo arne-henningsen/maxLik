@@ -56,7 +56,7 @@ summary.maxLik <- function(object, eigentol=1e-12,... ) {
        t[!activePar(object)] <- NA
        p[!activePar(object)] <- NA
        results <- cbind("Estimate"=coef.maxLik(object),
-                        "Std. error"=stdEr.maxLik(object),
+                        "Std. error"=stdEr.maxLik(object, eigentol=eigentol),
                         "t value"=t, "Pr(> t)"=p)
    } else {
      results <- NULL
