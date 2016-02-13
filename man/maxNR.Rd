@@ -210,18 +210,18 @@ signaling it with the
 }
 
 \value{
-  list of class "maxim" with following components:
-  \item{maximum}{\code{fn} value at maximum (the last calculated value
+  object of class "maxim".  It supports the following methods:
+  \item{maxValue}{\code{fn} value at maximum (the last calculated value
     if not converged).}
-  \item{estimate}{estimated parameter value.}
+  \item{coef}{estimated parameter value.}
   \item{gradient}{vector, last gradient value which was calculated.  Should be
-    close to 0 if normal convergence.}
-  \item{gradientObs}{matrix of gradients at parameter value \code{estimate}
+    close to 0 if normal convergence. NOT YET IMPLEMENTED!}
+  \item{estfun}{matrix of gradients at parameter value \code{estimate}
       evaluated at each observation (only if \code{grad} returns a matrix
       or \code{grad} is not specified and \code{fn} returns a vector).}
   \item{hessian}{Hessian at the maximum (the last calculated value if
     not converged).}
-  \item{code}{return code:
+  \item{returnCode}{return code:
     \itemize{
     \item{1}{ gradient close to zero (normal convergence).}
     \item{2}{ successive function values within tolerance limit (normal
@@ -244,7 +244,12 @@ signaling it with the
     \item{100}{ Initial value out of range.}
     }
   }
-  \item{message}{ a short message, describing the \code{code}.}
+  \item{returnMessage}{ a short message, describing the \code{code}.}
+  \item{fixed}{logical vector, which parameters are constants.}
+  \item{nIter}{number of iterations.}
+  \item{maximType}{character string, type of maximization.}
+
+  The following components can only be extracted directly (with \code{\$}):
   \item{last.step}{ list describing the last unsuccessful step if
     \code{code=3} with following components:
     \itemize{
@@ -253,9 +258,6 @@ signaling it with the
     \item{climb}{ the movement vector to the maximum of the quadratic approximation}
     }
   }
-  \item{fixed}{logical vector, which parameters are constants.}
-  \item{iterations}{number of iterations.}
-  \item{type}{character string, type of maximization.}
   \item{constraints}{A list, describing the constrained optimization
     (\code{NULL} if unconstrained).  Includes the following components:
     \itemize{
