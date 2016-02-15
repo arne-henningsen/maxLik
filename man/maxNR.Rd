@@ -212,7 +212,7 @@ signaling it with the
 \value{
   object of class "maxim".  It supports the following methods:
   \item{maxValue}{\code{fn} value at maximum (the last calculated value
-    if not converged).}
+    if not converged.)}
   \item{coef}{estimated parameter value.}
   \item{gradient}{vector, last gradient value which was calculated.  Should be
     close to 0 if normal convergence. NOT YET IMPLEMENTED!}
@@ -244,13 +244,13 @@ signaling it with the
     \item{100}{ Initial value out of range.}
     }
   }
-  \item{returnMessage}{ a short message, describing the \code{code}.}
+  \item{returnMessage}{ a short message, describing the return code.}
   \item{fixed}{logical vector, which parameters are constants.}
   \item{nIter}{number of iterations.}
   \item{maximType}{character string, type of maximization.}
 
   The following components can only be extracted directly (with \code{\$}):
-  \item{last.step}{ list describing the last unsuccessful step if
+  \item{last.step}{a list describing the last unsuccessful step if
     \code{code=3} with following components:
     \itemize{
     \item{theta0}{ previous parameter value}
