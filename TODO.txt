@@ -1,4 +1,12 @@
 
-* method to extract the objective function
+* method to extract the objective function logLikFun()?
 
-* method to assign data to the environment of the function
+* a way to assign data to the environment of the function
+
+* lastStep() method
+
+* constraints() method
+
+--- long-term ---
+
+* use numDeriv() for numeric gradients
