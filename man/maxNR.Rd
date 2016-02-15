@@ -210,12 +210,13 @@ signaling it with the
 }
 
 \value{
-  object of class "maxim".  It supports the following methods:
+  object of class "maxim".  Data can be extracted through the following
+  functions: 
   \item{maxValue}{\code{fn} value at maximum (the last calculated value
     if not converged.)}
   \item{coef}{estimated parameter value.}
-  \item{gradient}{vector, last gradient value which was calculated.  Should be
-    close to 0 if normal convergence. NOT YET IMPLEMENTED!}
+  \item{gradient}{vector, last calculated gradient value.  Should be
+    close to 0 in case of normal convergence.}
   \item{estfun}{matrix of gradients at parameter value \code{estimate}
       evaluated at each observation (only if \code{grad} returns a matrix
       or \code{grad} is not specified and \code{fn} returns a vector).}
@@ -245,9 +246,12 @@ signaling it with the
     }
   }
   \item{returnMessage}{ a short message, describing the return code.}
-  \item{fixed}{logical vector, which parameters are constants.}
+  \item{activePar}{logical vector, which parameters are optimized over.
+    Contains only \code{TRUE}-s if no parameters are fixed.}
   \item{nIter}{number of iterations.}
   \item{maximType}{character string, type of maximization.}
+  \item{maxControl}{the optimization control parameters in the form of a
+    \code{\link[maxLik:MaxControl-class]{MaxControl}} object.}
 
   The following components can only be extracted directly (with \code{\$}):
   \item{last.step}{a list describing the last unsuccessful step if

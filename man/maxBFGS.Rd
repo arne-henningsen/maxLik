@@ -149,26 +149,33 @@ maxNM(fn, grad=NULL, hess=NULL, start, fixed=NULL,
 }
 
 \value{
-  Object of class "maxim":
-  \item{maximum}{value of \code{fn} at maximum.}
-  \item{estimate}{best parameter vector found.}
-  \item{gradient}{vector, gradient at parameter value \code{estimate}.}
-  \item{gradientObs}{matrix of gradients at parameter value \code{estimate}
+  object of class "maxim".  Data can be extracted through the following
+  functions: 
+  \item{maxValue}{\code{fn} value at maximum (the last calculated value
+    if not converged.)}
+  \item{coef}{estimated parameter value.}
+  \item{gradient}{vector, last calculated gradient value.  Should be
+    close to 0 in case of normal convergence.}
+  \item{estfun}{matrix of gradients at parameter value \code{estimate}
       evaluated at each observation (only if \code{grad} returns a matrix
       or \code{grad} is not specified and \code{fn} returns a vector).}
-  \item{hessian}{value of Hessian at optimum.}
-  \item{code}{integer. Success code, 0 is success (see
+  \item{hessian}{Hessian at the maximum (the last calculated value if
+    not converged).}
+  \item{returnCode}{integer. Success code, 0 is success (see
     \code{\link{optim}}).}
-  \item{message}{character string giving any additional information
-    returned by the optimizer, or NULL.}
-  \item{fixed}{logical vector indicating which parameters are treated
-    as constants.}
-  \item{iterations}{two-element integer vector giving the number of
+  \item{returnMessage}{ a short message, describing the return code.}
+  \item{activePar}{logical vector, which parameters are optimized over.
+    Contains only \code{TRUE}-s if no parameters are fixed.}
+  \item{nIter}{number of iterations.  Two-element integer vector giving the number of
     calls to \code{fn} and \code{gr}, respectively.
     This excludes those calls needed to
     compute the Hessian, if requested, and any calls to \code{fn} to compute a
     finite-difference approximation to the gradient.}
-  \item{type}{character string "BFGS maximisation".}
+  \item{maximType}{character string, type of maximization.}
+  \item{maxControl}{the optimization control parameters in the form of a
+    \code{\link[maxLik:MaxControl-class]{MaxControl}} object.}
+
+  The following components can only be extracted directly (with \code{\$}):
   \item{constraints}{A list, describing the constrained optimization
     (\code{NULL} if unconstrained).  Includes the following components:
     \describe{
@@ -177,8 +184,6 @@ maxNM(fn, grad=NULL, hess=NULL, start, fixed=NULL,
       \item{barrier.value}{value of the barrier function}
     }
   }
-  \item{control}{the optimization control parameters in the form of a
-  \code{\link[maxLik:MaxControl-class]{MaxControl}} object.}
 }
 \author{Ott Toomet, Arne Henningsen}
 

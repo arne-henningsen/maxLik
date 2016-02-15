@@ -1,0 +1,4 @@
+
+* method to extract the objective function
+
+* method to assign data to the environment of the function

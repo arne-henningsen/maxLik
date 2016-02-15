@@ -17,7 +17,8 @@
   \item{...}{additional arguments to methods}
 }
 \value{
-  A scalar numeric, log likelihood of the estimated model
+  A scalar numeric, log likelihood of the estimated model.  It has
+  attribute \dQuote{df}, number of free parameters.
 }
 \author{
    Arne Henningsen,
