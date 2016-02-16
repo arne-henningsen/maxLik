@@ -116,6 +116,8 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start,
               paste(names(constraints), collapse=" "))
       }
    }
+   ## Save the objective function
+   result$objectiveFn <- fn
+   ##
    return( result )
 }
-

@@ -306,7 +306,7 @@ maxOptim <- function(fn, grad, hess,
    if( exists( "gradientObs" ) ) {
       result$gradientObs <- gradientObs
    }
-   result <- c(result, control=control)
+   result <- c(result, control=control, objectiveFn=fn)
                            # attach the control parameters
    class(result) <- "maxim"
    return(result)

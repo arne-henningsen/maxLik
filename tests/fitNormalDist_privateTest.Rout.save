@@ -250,9 +250,6 @@ sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
-> all.equal( ml[-c(3,4,5,6)], mlInd[ -c(3,4,5,6,11) ], tolerance = 1e-3 )
-[1] TRUE
->                            # 3  gradient, should be close to 0, but may vary enormously in relative terms
 > mlInd[[11]][sample(nrow(mlInd[[11]]), 10),]
             mu   sigma
  [1,] -0.49660 -0.1025
@@ -299,7 +296,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > all.equal( mlInd, mlgInd, tolerance = 1e-3 )
 [1] TRUE
 > all.equal( mlg[ ], mlgInd[ -11 ], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > round( mlgInd[[ 11 ]], 3 )
            mu  sigma
   [1,] -0.395 -0.268
@@ -406,13 +403,13 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > # with analytical gradients as attribute
 > mlG <- maxLik( llfGrad, start = startVal )
 > all.equal( mlG, mlg, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > all.equal( mlG$gradient, gf( coef( mlG ) ), check.attributes = FALSE,
 +    tolerance = 1e-3 )
 [1] TRUE
 > mlGInd <- maxLik( llfGradInd, start = startVal )
 > all.equal( mlGInd, mlgInd, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > all.equal( mlGInd$gradient, colSums( gfInd( coef( mlGInd ) ) ),
 +    check.attributes = FALSE, tolerance = 1e-3 )
 [1] TRUE
@@ -426,7 +423,7 @@ Warning message:
 In maxNRCompute(fn = function (theta, fnOrig, gradOrig = NULL, hessOrig = NULL,  :
   the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
 > all.equal( mlgG, mlg, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > all.equal( mlgG, mlG, tolerance = 1e-3 )
 [1] TRUE
 > 
@@ -438,7 +435,7 @@ In maxNRCompute(fn = function (theta, fnOrig, gradOrig = NULL, hessOrig = NULL, 
 > # with analytical gradients and Hessian as attribute
 > mlGH <- maxLik( llfGradHess, start = startVal )
 > all.equal( mlGH, mlgh, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > 
 > # with analytical gradients and Hessian as argument and attribute
 > mlgGhH <- maxLik( llfGradHess, gf, hf, start = startVal )
@@ -448,7 +445,7 @@ Warning messages:
 2: In maxNRCompute(fn = function (theta, fnOrig, gradOrig = NULL, hessOrig = NULL,  :
   the Hessian is provided both as attribute 'hessian' and as argument 'hess': ignoring argument 'hess'
 > all.equal( mlgGhH, mlgh, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > all.equal( mlgGhH, mlGH, tolerance = 1e-3 )
 [1] TRUE
 > 
@@ -532,7 +529,7 @@ sigma -0.001  0.018
 attr(,"df")
 [1] 2
 > all.equal( ml[-c(4,5,6,9,10) ], mlBHHH[ -c(4,5,6,9,10,11) ], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > round( mlBHHH[[ 11 ]], 3 )
            mu  sigma
   [1,] -0.395 -0.268
@@ -728,7 +725,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > all.equal( mlBHHH, mlgBHHH, tolerance = 1e-3 )
 [1] TRUE
 > all.equal( mlg[-c(4,5,6,9,10)], mlgBHHH[-c(4,5,6,9,10,11)], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > round( mlgBHHH[[ 11 ]], 3 )
            mu  sigma
   [1,] -0.395 -0.268
@@ -833,14 +830,15 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [100,] -0.677  0.282
 > mlgBHHH2 <- maxLik( llf, gfInd, start = startVal, method = "BHHH" )
 > all.equal( mlgBHHH, mlgBHHH2, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > # final Hessian = usual Hessian
 > mlgBhhhH <- maxLik( llf, gfInd, start = startVal, method = "BHHH", 
 +    finalHessian = TRUE )
 > all.equal( mlgBhhhH, mlBhhhH, tolerance = 1e-3 )
-[1] "Component \"hessian\": Mean relative difference: 0.001233"
+[1] "Component \"hessian\": Mean relative difference: 0.001233"            
+[2] "Component \"objectiveFn\": target, current do not match when deparsed"
 > all.equal( mlgBhhhH[-4], mlgBHHH[-4], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > round( hessian( mlgBhhhH ), 1 )
          mu sigma
 mu    -30.3   0.0
@@ -889,12 +887,12 @@ Estimate(s): 0.2158 0.3302
 > x <- xSaved
 > mlGBHHH <- maxLik( llfGradInd, start = startVal, method = "BHHH" )
 > all.equal( mlGBHHH, mlgBHHH, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > # final Hessian = usual Hessian
 > mlGBhhhH <- maxLik( llfGradInd, start = startVal, method = "BHHH", 
 +    finalHessian = TRUE )
 > all.equal( mlGBhhhH, mlgBhhhH, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > 
 > # with analytical gradients as argument and attribute
 > mlgGBHHH <- maxLik( llfGradInd, gfInd, start = startVal, method = "BHHH" )
@@ -902,7 +900,7 @@ Warning message:
 In maxNRCompute(fn = function (theta, fnOrig, gradOrig = NULL, hessOrig = NULL,  :
   the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
 > all.equal( mlgGBHHH, mlgBHHH, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > all.equal( mlgGBHHH, mlGBHHH, tolerance = 1e-3 )
 [1] TRUE
 > 
@@ -916,17 +914,17 @@ In maxNRCompute(fn = function (theta, fnOrig, gradOrig = NULL, hessOrig = NULL, 
 > all.equal( mlghBhhhH[-4], mlghBHHH[-4], tolerance = 1e-3 )
 [1] TRUE
 > all.equal( mlghBhhhH, mlgBhhhH, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > 
 > # with unused Hessian as attribute
 > mlGHBHHH <- maxLik( llfGradHessInd, start = startVal, method = "BHHH" )
 > all.equal( mlGHBHHH, mlghBHHH, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > # final Hessian = usual Hessian
 > mlGHBhhhH <- maxLik( llfGradHessInd, start = startVal, method = "BHHH", 
 +    finalHessian = TRUE )
 > all.equal( mlGHBhhhH, mlghBhhhH, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > 
 > # with analytical gradients and Hessian as argument and attribute
 > mlgGhHBHHH <- maxLik( llfGradHessInd, gfInd, hf, start = startVal, method = "BHHH" )
@@ -936,7 +934,7 @@ Warning messages:
 2: In maxNRCompute(fn = function (theta, fnOrig, gradOrig = NULL, hessOrig = NULL,  :
   the Hessian is provided both as attribute 'hessian' and as argument 'hess': ignoring argument 'hess'
 > all.equal( mlgGhHBHHH, mlghBHHH, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > all.equal( mlgGhHBHHH, mlGHBHHH, tolerance = 1e-3 )
 [1] TRUE
 > 
@@ -1026,7 +1024,7 @@ sigma     1.82       0.13    14.1  <2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlBFGSYC[-c(3,4,9)], mlIndBFGSYC[ -c(3,4,9,11) ], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > round( mlIndBFGSYC[[ 11 ]], 3 )
            mu  sigma
   [1,] -0.395 -0.268
@@ -1192,6 +1190,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] TRUE
 > all.equal( mlgBFGSYC[ -c(3,9) ], mlgIndBFGSYC[ -c(3,9,11) ], tolerance = 1e-3 )
 [1] "Component \"control\": Attributes: < Component \"printLevel\": Mean relative difference: 1 >"
+[2] "Component \"objectiveFn\": target, current do not match when deparsed"                       
 > round( mlgIndBFGSYC[[ 11 ]], 3 )
            mu  sigma
   [1,] -0.395 -0.268
@@ -1334,10 +1333,10 @@ successive function values within tolerance limit
 estimate: 1.181 1.816 
 Function value: -201.6 
 > all.equal( mlGBFGSYC, mlgBFGSYC, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > mlGIndBFGSYC <- maxLik( llfGradInd, start = startVal, method = "BFGSR" )
 > all.equal( mlGIndBFGSYC, mlgIndBFGSYC, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > 
 > # with analytical gradients as argument and attribute
 > mlgGBFGSYC <- maxLik( llfGrad, gf, start = startVal, method = "BFGSR" )
@@ -1346,6 +1345,7 @@ In maxBFGSRCompute(fn = function (theta, fnOrig, gradOrig = NULL,  :
   the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
 > all.equal( mlgGBFGSYC, mlgBFGSYC, tolerance = 1e-3 )
 [1] "Component \"control\": Attributes: < Component \"printLevel\": Mean absolute difference: 1 >"
+[2] "Component \"objectiveFn\": target, current do not match when deparsed"                       
 > all.equal( mlgGBFGSYC, mlGBFGSYC, tolerance = 1e-3 )
 [1] "Component \"control\": Attributes: < Component \"printLevel\": Mean absolute difference: 1 >"
 > 
@@ -1357,7 +1357,7 @@ In maxBFGSRCompute(fn = function (theta, fnOrig, gradOrig = NULL,  :
 > # with analytical gradients and Hessian as attribute
 > mlGHBFGSYC <- maxLik( llfGradHess, start = startVal, method = "BFGSR" )
 > all.equal( mlGHBFGSYC, mlghBFGSYC, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > 
 > # with analytical gradients and Hessian as argument and attribute
 > mlgGhHBFGSYC <- maxLik( llfGradHess, gf, hf, start = startVal, method = "BFGSR" )
@@ -1367,7 +1367,7 @@ Warning messages:
 2: In maxBFGSRCompute(fn = function (theta, fnOrig, gradOrig = NULL,  :
   the Hessian is provided both as attribute 'hessian' and as argument 'hess': ignoring argument 'hess'
 > all.equal( mlgGhHBFGSYC, mlghBFGSYC, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > all.equal( mlgGhHBFGSYC, mlGHBFGSYC, tolerance = 1e-3 )
 [1] TRUE
 > 
@@ -1453,7 +1453,7 @@ sigma     1.82       0.13    14.1  <2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlBFGS[-4], mlIndBFGS[-c(4,12)], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > mlIndBFGS[12]
 $gradientObs
              mu     sigma
@@ -1583,7 +1583,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 [1] "Component \"control\": Attributes: < Component \"iterlim\": Mean relative difference: 0.3333 >"
 > mlgIndBFGS <- maxLik( llfInd, gfInd, start = startVal, method = "BFGS" )
 > all.equal( mlgBFGS[], mlgIndBFGS[-12], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > mlgIndBFGS[12]
 $gradientObs
              mu     sigma
@@ -1692,10 +1692,10 @@ $gradientObs
 > # with analytical gradients as attribute
 > mlGBFGS <- maxLik( llfGrad, start = startVal, method = "BFGS" )
 > all.equal( mlGBFGS, mlgBFGS, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > mlGIndBFGS <- maxLik( llfGradInd, start = startVal, method = "BFGS" )
 > all.equal( mlGIndBFGS, mlgIndBFGS, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > 
 > # with analytical gradients as argument and attribute
 > mlgGBFGS <- maxLik( llfGrad, gf, start = startVal, method = "BFGS" )
@@ -1703,7 +1703,7 @@ Warning message:
 In maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  :
   the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
 > all.equal( mlgGBFGS, mlgBFGS, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > all.equal( mlgGBFGS, mlGBFGS, tolerance = 1e-3 )
 [1] TRUE
 > 
@@ -1715,7 +1715,7 @@ In maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  
 > # with analytical gradients and Hessian as attribute
 > mlGHBFGS <- maxLik( llfGradHess, start = startVal, method = "BFGS" )
 > all.equal( mlGHBFGS, mlghBFGS, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > 
 > # with analytical gradients and Hessian as argument and attribute
 > mlgGhHBFGS <- maxLik( llfGradHess, gf, hf, start = startVal, method = "BFGS" )
@@ -1725,7 +1725,7 @@ Warning messages:
 2: In maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "BFGS",  :
   the Hessian is provided both as attribute 'hessian' and as argument 'hess': ignoring argument 'hess'
 > all.equal( mlgGhHBFGS, mlghBFGS, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > all.equal( mlgGhHBFGS, mlGHBFGS, tolerance = 1e-3 )
 [1] TRUE
 > 
@@ -1811,7 +1811,7 @@ sigma     1.82       0.13    14.1  <2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlNM[-4], mlIndNM[-c(4,12)], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > mlIndNM[12]
 $gradientObs
              mu     sigma
@@ -1954,7 +1954,7 @@ sigma     1.82       0.13    14.1  <2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlgNM[], mlgIndNM[-12], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > mlgIndNM[12]
 $gradientObs
              mu     sigma
@@ -2063,10 +2063,10 @@ $gradientObs
 > # with (unused) analytical gradients as attribute
 > mlGNM <- maxLik( llfGrad, start = startVal, method = "NM" )
 > all.equal( mlGNM, mlgNM, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > mlGIndNM <- maxLik( llfGradInd, start = startVal, method = "NM" )
 > all.equal( mlGIndNM, mlgIndNM, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > 
 > # with analytical gradients as argument and attribute
 > mlgGNM <- maxLik( llfGrad, gf, start = startVal, method = "NM" )
@@ -2074,7 +2074,7 @@ Warning message:
 In maxOptim(fn = fn, grad = grad, hess = hess, start = start, method = "Nelder-Mead",  :
   the gradient is provided both as attribute 'gradient' and as argument 'grad': ignoring argument 'grad'
 > all.equal( mlgGNM, mlgNM, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > all.equal( mlgGNM, mlGNM, tolerance = 1e-3 )
 [1] TRUE
 > 
@@ -2165,7 +2165,7 @@ sigma     1.82       0.13    14.1  <2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlSANN[-4], mlIndSANN[-c(4,12)], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > mlIndSANN[12]
 $gradientObs
              mu     sigma
@@ -2308,7 +2308,7 @@ sigma     1.82       0.13    14.1  <2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlgSANN[], mlgIndSANN[-12], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > mlgIndSANN[12]
 $gradientObs
              mu     sigma
@@ -2651,7 +2651,7 @@ sigma     1.83       0.13      14  <2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > all.equal( mlFix[ ], mlIndFix[ -11 ], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > round( mlFix[[3]], 5 )
    mu sigma 
    NA     0 
@@ -2789,7 +2789,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > all.equal( mlIndFix, mlgIndFix, tolerance = 1e-3 )
 [1] TRUE
 > all.equal( mlgFix[ ], mlgIndFix[ -11 ], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > round( mlgIndFix[[ 11 ]], 3 )
        mu  sigma
   [1,] NA -0.341
@@ -2987,7 +2987,7 @@ attr(,"df")
 [1] 1
 > all.equal( mlFix[ -c( 4, 5, 6, 9, 10 ) ], mlFixBHHH[ -c( 4, 5, 6, 9, 10, 11 ) ],
 +    tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > round( mlFixBHHH[[ 11 ]], 3 )
        mu  sigma
   [1,] NA -0.341
@@ -3131,7 +3131,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > mlgFixBHHH2 <- maxLik( llf, gfInd, start = startValFix, activePar = !isFixed,
 +    method = "BHHH")
 > all.equal( mlgFixBHHH, mlgFixBHHH2, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > 
 > # with unused Hessians
 > mlghFixBHHH <- maxLik( llfInd, gfInd, hf, start = startValFix, activePar = !isFixed,
@@ -3217,7 +3217,7 @@ attr(,"df")
 > mlIndFixBfgs <- maxLik( llfInd, start = startValFix, fixed = isFixed,
 +    method = "BFGS" )
 > all.equal( mlFixBfgs[-c(4,9)], mlIndFixBfgs[ -c(4,9,12) ], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > print(formatC(mlIndFixBfgs$gradientObs, format="f", digits=4, width=7), quote=FALSE)
        mu      sigma  
   [1,] -0.3364 -0.3412
@@ -3362,7 +3362,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > mlgIndFixBfgs <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
 +    method = "BFGS")
 > all.equal( mlgFixBfgs[ ], mlgIndFixBfgs[ -12 ], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > round( mlgIndFixBfgs[[ 12 ]], 3 )
            mu  sigma
   [1,] -0.336 -0.341
@@ -3580,7 +3580,7 @@ In optim(par = 1, fn = function (theta, fnOrig, gradOrig, hessOrig,  :
   one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlFixNm[-4], mlIndFixNm[-c(4,12)], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > round( mlIndFixNm[[ 12 ]], 3 )
            mu  sigma
   [1,] -0.336 -0.341
@@ -3748,7 +3748,7 @@ In optim(par = 1, fn = function (theta, fnOrig, gradOrig, hessOrig,  :
   one-dimensional optimization by Nelder-Mead is unreliable:
 use "Brent" or optimize() directly
 > all.equal( mlgFixNm[ ], mlgIndFixNm[ -12 ], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > round( mlgIndFixNm[[ 12 ]], 3 )
            mu  sigma
   [1,] -0.336 -0.341
@@ -3954,7 +3954,7 @@ attr(,"df")
 > mlIndFixSann <- maxLik( llfInd, start = startValFix, fixed = isFixed,
 +    method = "SANN" )
 > all.equal( mlFixSann[ ], mlIndFixSann[ -12 ], tolerance = 1e-2 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > round( mlIndFixSann[[ 12 ]], 3 )
            mu  sigma
   [1,] -0.336 -0.341
@@ -4082,7 +4082,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > mlgIndFixSann <- maxLik( llfInd, gfInd, start = startValFix, fixed = isFixed,
 +    method = "SANN")
 > all.equal( mlgFixSann[ ], mlgIndFixSann[ -12 ], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > round( mlgIndFixSann[[ 12 ]], 3 )
            mu  sigma
   [1,] -0.336 -0.341
@@ -4285,7 +4285,7 @@ Constrained optimization based on constrOptim
 1  outer iterations, barrier value -0.00145 
 --------------------------------------------
 > all.equal( mlBfgsInEq[ ], mlBfgsInEqInd[ -12 ], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > round( mlBfgsInEqInd[[ 12 ]], 3 )
            mu  sigma
   [1,] -0.333 -0.409
@@ -4399,7 +4399,7 @@ Constrained optimization based on constrOptim
 > mlgBfgsInEqInd <- maxLik( llfInd, gfInd, start = startVal, constraints = inEq,
 +    method = "BFGS" )
 > all.equal( mlgBfgsInEqInd[ -12 ], mlgBfgsInEq[ ], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > round( mlgBfgsInEqInd[[ 12 ]], 3 )
            mu  sigma
   [1,] -0.333 -0.409
@@ -4505,7 +4505,7 @@ Constrained optimization based on constrOptim
 > mlgBfgsInEqInd2 <- maxLik( llf, gfInd, start = startVal, constraints = inEq,
 +    method = "BFGS" )
 > all.equal( mlgBfgsInEqInd, mlgBfgsInEqInd2, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > 
 > # with unused Hessian
 > mlghBfgsInEq <- maxLik( llf, gf, hf, start = startVal, constraints = inEq,
@@ -4602,7 +4602,7 @@ Constrained optimization based on constrOptim
 1  outer iterations, barrier value -0.001468 
 --------------------------------------------
 > all.equal( mlNmInEq[-4], mlNmInEqInd[-c(4,12)], tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > round( mlNmInEqInd[[ 12 ]], 3 )
            mu  sigma
   [1,] -0.333 -0.409
@@ -4837,17 +4837,18 @@ Constrained optimization based on constrOptim
 > mlghCon <- maxLik( llf, gf, hf, start = startVal, constraints = eqCon )
 > all.equal( mlGCon, mlghCon, tolerance = 1e-3 )
 [1] "Component \"last.step\": Component \"f0\": Attributes: < Component \"hessian\": Attributes: < Length mismatch: comparison on first 1 components > >"
+[2] "Component \"objectiveFn\": target, current do not match when deparsed"                                                                              
 > 
 > # with analytical gradients and Hessians as attributes
 > mlGHCon <- maxLik( llfGradHess, start = startVal, constraints = eqCon )
 > all.equal( mlGHCon, mlghCon, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > all.equal( mlGHCon[-c(2,3,4,5,6,7,9,11)], mlGCon[-c(2,3,4,5,6,7,9,11)], 
 +    tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > all.equal( mlGHCon[-c(5,6,7,9,11)], mlGCon[-c(5,6,7,9,11)], 
 +    tolerance = 1e-1 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > 
 > 
 > ## BHHH method with equality constraints
@@ -4923,9 +4924,10 @@ attr(,"df")
 [1] "Component \"estimate\": Mean relative difference: 0.01242"                                  
 [2] "Component \"gradient\": Mean relative difference: 0.04815"                                  
 [3] "Component \"hessian\": Mean relative difference: 0.02354"                                   
-[4] "Component \"constraints\": Component \"code\": Mean relative difference: 0.5"               
-[5] "Component \"constraints\": Component \"message\": 1 string mismatch"                        
-[6] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.4286"
+[4] "Component \"objectiveFn\": target, current do not match when deparsed"                      
+[5] "Component \"constraints\": Component \"code\": Mean relative difference: 0.5"               
+[6] "Component \"constraints\": Component \"message\": 1 string mismatch"                        
+[7] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.4286"
 > mlBhhhCon[11]
 $gradientObs
               mu    sigma
@@ -5060,14 +5062,15 @@ penalty close to zero
 --------------------------------------------
 > all.equal( mlBhhhCon[-c(2,3,4,5,6,7,9,11,12)], mlgBhhhCon[-c(2,3,4,5,6,7,9,11,12)],
 +    tolerance = 1e-3 )
-[1] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.1"
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"                   
+[2] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.1"
 > all.equal( mlBhhhCon[-c(5,6,7,9,12)], mlgBhhhCon[-c(5,6,7,9,12)],
 +    tolerance = 1e-1 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > mlgBhhhConInd <- maxLik( llfInd, gfInd, start = startVal, constraints = eqCon,
 +    method = "BHHH" )
 > all.equal( mlgBhhhCon, mlgBhhhConInd, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > 
 > # with analytical gradients as attribute
 > mlGBhhhCon <- maxLik( llfGradInd, start = startVal, constraints = eqCon,
@@ -5095,13 +5098,15 @@ penalty close to zero
 9  outer iterations, barrier value 1.177e-08 
 --------------------------------------------
 > all.equal( mlGBhhhCon, mlgBhhhCon, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > all.equal( mlGBhhhCon[-c(2,3,4,5,6,7,9,11,12)], mlBhhhCon[-c(2,3,4,5,6,7,9,11,12)],
 +    tolerance = 1e-3 )
-[1] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.1111"
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"                      
+[2] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.1111"
 > all.equal( mlGBhhhCon[-c(5,6,7,9,12)], mlBhhhCon[-c(5,6,7,9,12)],
 +    tolerance = 1e-1 )
-[1] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.1111"
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"                      
+[2] "Component \"constraints\": Component \"outer.iterations\": Mean relative difference: 0.1111"
 > 
 > # with analytical gradients and unused Hessians
 > mlghBhhhCon <- maxLik( llf, gfInd, hf, start = startVal, constraints = eqCon,
@@ -5113,9 +5118,9 @@ penalty close to zero
 > mlGHBhhhCon <- maxLik( llfGradHessInd, start = startVal, constraints = eqCon,
 +    method = "BHHH" )
 > all.equal( mlGHBhhhCon, mlghBhhhCon, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > all.equal( mlGHBhhhCon, mlGBhhhCon, tolerance = 1e-3 )
-[1] TRUE
+[1] "Component \"objectiveFn\": target, current do not match when deparsed"
 > 
 > 
 > ## BFGS method with equality constraints
@@ -5189,7 +5194,7 @@ attr(,"df")
 [1] 2
 > all.equal( mlBfgsCon[ -c( 4, 5, 6, 9, 10 ) ], mlGCon[ -c( 4, 5, 6, 9, 10 ) ],
 +    tolerance = 1e-3 )
- [1] "Names: 2 string mismatches"                                                    
+ [1] "Names: 3 string mismatches"                                                    
  [2] "Component \"estimate\": Mean relative difference: 0.01296"                     
  [3] "Component \"gradient\": Mean relative difference: 0.05056"                     
  [4] "Component \"last.step\": target is NULL, current is list"                      
@@ -5199,11 +5204,13 @@ attr(,"df")
  [8] "Component 6: Attributes: < names for current but not for target >"             
  [9] "Component 6: Attributes: < Length mismatch: comparison on first 0 components >"
 [10] "Component 6: current is not list-like"                                         
-[11] "Component 7: Modes: S4, list"                                                  
-[12] "Component 7: Lengths: 1, 5"                                                    
-[13] "Component 7: names for current but not for target"                             
+[11] "Component 7: Modes: S4, function"                                              
+[12] "Component 7: Attributes: < Modes: list, NULL >"                                
+[13] "Component 7: Attributes: < Lengths: 20, 0 >"                                   
 [14] "Component 7: Attributes: < names for target but not for current >"             
-[15] "Component 7: Attributes: < Length mismatch: comparison on first 0 components >"
+[15] "Component 7: Attributes: < current is not list-like >"                         
+[16] "Component 8: Modes of target, current: function, list"                         
+[17] "Component 8: target, current do not match when deparsed"                       
 > mlBfgsConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
 +    method = "BFGS" )
 > print( summary( mlBfgsConInd ), digits = 2 )
@@ -5545,7 +5552,7 @@ attr(,"df")
 [1] 2
 > all.equal( mlNmCon[ -c( 4, 5, 6, 9, 10 ) ], mlGCon[ -c( 4, 5, 6, 9, 10 ) ],
 +    tolerance = 1e-3 )
- [1] "Names: 2 string mismatches"                                                    
+ [1] "Names: 3 string mismatches"                                                    
  [2] "Component \"estimate\": Mean relative difference: 0.01283"                     
  [3] "Component \"gradient\": Mean relative difference: 0.04995"                     
  [4] "Component \"last.step\": target is NULL, current is list"                      
@@ -5555,11 +5562,13 @@ attr(,"df")
  [8] "Component 6: Attributes: < names for current but not for target >"             
  [9] "Component 6: Attributes: < Length mismatch: comparison on first 0 components >"
 [10] "Component 6: current is not list-like"                                         
-[11] "Component 7: Modes: S4, list"                                                  
-[12] "Component 7: Lengths: 1, 5"                                                    
-[13] "Component 7: names for current but not for target"                             
+[11] "Component 7: Modes: S4, function"                                              
+[12] "Component 7: Attributes: < Modes: list, NULL >"                                
+[13] "Component 7: Attributes: < Lengths: 20, 0 >"                                   
 [14] "Component 7: Attributes: < names for target but not for current >"             
-[15] "Component 7: Attributes: < Length mismatch: comparison on first 0 components >"
+[15] "Component 7: Attributes: < current is not list-like >"                         
+[16] "Component 8: Modes of target, current: function, list"                         
+[17] "Component 8: target, current do not match when deparsed"                       
 > mlNmConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
 +    method = "NM", SUMTTol=0)
 > print( summary( mlNmConInd ), digits = 2 )
@@ -6393,4 +6402,4 @@ sigma 0.00  0.01
 > 
 > proc.time()
    user  system elapsed 
- 38.975   0.098  39.106 
+ 39.300   0.101  39.435 

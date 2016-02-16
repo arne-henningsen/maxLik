@@ -115,5 +115,6 @@ maxBFGSR <- function(fn, grad=NULL, hess=NULL, start,
               paste(names(constraints), collapse=" "))
       }
    }
+   result$objectiveFn <- fn
    return( result )
 }

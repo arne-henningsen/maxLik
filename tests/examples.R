@@ -27,7 +27,6 @@ f <- function(a) exp(-(a[1]-2)^2 - (a[2]-4)^2)
 #
 # maximize wrt. both parameters 
 free <- maxNR(f, start=1:2)
-printRounded( free )
 free <- roundGradients( free )
 summary(free)  # results should be close to (2,4)
 activePar(free)
@@ -329,22 +328,3 @@ x <- runif(N)
 x <- cbind(x, x - runif(N), x - runif(N))
 y <- x[,1] + 2*x[,2] - x[,3] + rnorm(N) > 0
 summary(maxLik(loglikProbit, start=c(0,0,0), method="bhhh"))
-
-
-
-### vcov.maxLik
-set.seed( 17 )
-## ML estimation of exponential duration model:
-t <- rexp(100, 2)
-## Estimate with numeric gradient and hessian
-a <- maxLik(loglik, start=1, print.level=2)
-printRounded( a )
-print( a )
-round( vcov( a ), 3 )
-## Estimate with analytic gradient and hessian
-a <- maxLik(loglik, gradlik, hesslik, start=1)
-printRounded( a )
-print( a )
-round( vcov( a ), 3 )
-print(stdEr(a))
-                           # test single stdEr

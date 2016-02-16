@@ -167,8 +167,6 @@ round( vcov( ml ), 3 )
 logLik( summary( ml ) )
 mlInd <- maxLik( llfInd, start = startVal )
 print( summary( mlInd ), digits = 2 )
-all.equal( ml[-c(3,4,5,6)], mlInd[ -c(3,4,5,6,11) ], tolerance = 1e-3 )
-                           # 3  gradient, should be close to 0, but may vary enormously in relative terms
 mlInd[[11]][sample(nrow(mlInd[[11]]), 10),]
                            # just print a sample of 10
 nObs( mlInd )

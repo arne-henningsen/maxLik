@@ -212,7 +212,7 @@ signaling it with the
 \value{
   object of class "maxim".  Data can be extracted through the following
   functions: 
-  \item{maxValue}{\code{fn} value at maximum (the last calculated value
+  \item{\code{\link{maxValue}}}{\code{fn} value at maximum (the last calculated value
     if not converged.)}
   \item{coef}{estimated parameter value.}
   \item{gradient}{vector, last calculated gradient value.  Should be

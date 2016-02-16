@@ -51,63 +51,6 @@ https://r-forge.r-project.org/projects/maxlik/
 > #
 > # maximize wrt. both parameters 
 > free <- maxNR(f, start=1:2)
-> printRounded( free )
-$maximum
-[1] 1
-
-$estimate
-[1] 2 4
-
-$gradient
-[1] 0 0
-
-$hessian
-     [,1] [,2]
-[1,]   -2    0
-[2,]    0   -2
-
-$code
-[1] 1
-
-$message
-[1] "gradient close to zero"
-
-$last.step
-NULL
-
-$fixed
-[1] FALSE FALSE
-
-$iterations
-[1] 7
-
-$type
-[1] "Newton-Raphson maximisation"
-
-$control
-A 'MaxControl' object with slots:
-tol = 1e-08 
-reltol = 1.49e-08 
-gradtol = 1e-06 
-steptol = 1e-10 
-lambdatol = 1e-06 
-qrtol = 1e-10 
-qac = stephalving 
-marquardt_lambda0 = 0.01 
-marquardt_lambdaStep = 2 
-marquardt_maxLambda = 1e+12 
-nm_alpha = 1 
-nm_beta = 0.5 
-nm_gamma = 2 
-sann_cand = <default Gaussian Markov kernel>
-sann_temp = 10 
-sann_tmax = 10 
-sann_randomSeed = 123 
-iterlim = 150 
-printLevel = 0 
-
-attr(,"class")
-[1] "maxim" "list" 
 > free <- roundGradients( free )
 > summary(free)  # results should be close to (2,4)
 --------------------------------------------
@@ -179,6 +122,10 @@ sann_tmax = 10
 sann_randomSeed = 123 
 iterlim = 150 
 printLevel = 0 
+
+$objectiveFn
+function (a) 
+exp(-(a[1] - 2)^2 - (a[2] - 4)^2)
 
 attr(,"class")
 [1] "maxim" "list" 
@@ -336,6 +283,10 @@ sann_randomSeed = 123
 iterlim = 150 
 printLevel = 0 
 
+$objectiveFn
+function (a) 
+sum(-log(a[2]) - (x - a[1])^2/(2 * a[2]^2))
+
 attr(,"class")
 [1] "maxLik" "maxim"  "list"  
 > print( ml )
@@ -426,6 +377,10 @@ sann_tmax = 10
 sann_randomSeed = 123 
 iterlim = 150 
 printLevel = 0 
+
+$objectiveFn
+function (a) 
+sum(-log(a[2]) - (x - a[1])^2/(2 * a[2]^2))
 
 attr(,"class")
 [1] "maxLik" "maxim"  "list"  
@@ -626,6 +581,10 @@ sann_randomSeed = 123
 iterlim = 200 
 printLevel = 0 
 
+$objectiveFn
+function (l) 
+n * log(l) - l - lfactorial(n)
+
 > class( a )
 [1] "maxim"
 > a <- roundGradients( a )
@@ -809,6 +768,10 @@ sann_tmax = 10
 sann_randomSeed = 123 
 iterlim = 150 
 printLevel = 0 
+
+$objectiveFn
+function (theta) 
+log(theta) - theta * t
 
 attr(,"class")
 [1] "maxLik" "maxim"  "list"  
@@ -1008,6 +971,10 @@ sann_randomSeed = 123
 iterlim = 150 
 printLevel = 2 
 
+$objectiveFn
+function (theta) 
+log(theta) - theta * t
+
 attr(,"class")
 [1] "maxim" "list" 
 > a <- roundGradients( a )
@@ -1182,6 +1149,10 @@ sann_tmax = 10
 sann_randomSeed = 123 
 iterlim = 150 
 printLevel = 0 
+
+$objectiveFn
+function (theta) 
+log(theta) - theta * t
 
 attr(,"class")
 [1] "maxim" "list" 
@@ -1377,6 +1348,10 @@ sann_randomSeed = 123
 iterlim = 150 
 printLevel = 2 
 
+$objectiveFn
+function (theta) 
+log(theta) - theta * t
+
 attr(,"class")
 [1] "maxLik" "maxim"  "list"  
 > print( a )
@@ -1557,6 +1532,10 @@ sann_randomSeed = 123
 iterlim = 150 
 printLevel = 0 
 
+$objectiveFn
+function (theta) 
+log(theta) - theta * t
+
 attr(,"class")
 [1] "maxLik" "maxim"  "list"  
 > print( a )
@@ -1659,6 +1638,10 @@ sann_randomSeed = 123
 iterlim = 150 
 printLevel = 2 
 
+$objectiveFn
+function (theta) 
+sum(log(theta) - theta * t)
+
 attr(,"class")
 [1] "maxim" "list" 
 > summary(a)
@@ -1729,6 +1712,10 @@ sann_tmax = 10
 sann_randomSeed = 123 
 iterlim = 150 
 printLevel = 0 
+
+$objectiveFn
+function (theta) 
+sum(log(theta) - theta * t)
 
 attr(,"class")
 [1] "maxim" "list" 
@@ -1804,6 +1791,10 @@ sann_tmax = 10
 sann_randomSeed = 123 
 iterlim = 150 
 printLevel = 0 
+
+$objectiveFn
+function (a) 
+exp(-(a[1] - 2)^2 - (a[2] - 1)^2)
 
 attr(,"class")
 [1] "maxim" "list" 
@@ -1882,6 +1873,10 @@ sann_tmax = 10
 sann_randomSeed = 123 
 iterlim = 200 
 printLevel = 0 
+
+$objectiveFn
+function (a) 
+exp(-(a[1] - 2)^2 - (a[2] - 1)^2)
 
 attr(,"class")
 [1] "maxim"
@@ -2061,6 +2056,10 @@ sann_randomSeed = 123
 iterlim = 150 
 printLevel = 0 
 
+$objectiveFn
+function (x) 
+exp(-x^2)
+
 attr(,"class")
 [1] "maxim" "list" 
 > returnCode(a) # should be success (1 or 2)
@@ -2129,6 +2128,10 @@ sann_tmax = 10
 sann_randomSeed = 123 
 iterlim = 150 
 printLevel = 0 
+
+$objectiveFn
+function (x) 
+exp(-x^2)
 
 attr(,"class")
 [1] "maxim" "list" 
@@ -2322,6 +2325,10 @@ sann_randomSeed = 123
 iterlim = 150 
 printLevel = 2 
 
+$objectiveFn
+function (theta) 
+log(theta) - theta * t
+
 attr(,"class")
 [1] "maxLik" "maxim"  "list"  
 > print( a )
@@ -2502,6 +2509,10 @@ sann_randomSeed = 123
 iterlim = 150 
 printLevel = 0 
 
+$objectiveFn
+function (theta) 
+log(theta) - theta * t
+
 attr(,"class")
 [1] "maxLik" "maxim"  "list"  
 > print( a )
@@ -2592,6 +2603,17 @@ sann_randomSeed = 123
 iterlim = 150 
 printLevel = 0 
 
+$objectiveFn
+function (b) 
+{
+    x <- b[1]
+    y <- b[2]
+    val <- (x - 2)^2 + (y - 3)^2
+    attr(val, "gradient") <- c(2 * x - 4, 2 * y - 6)
+    attr(val, "hessian") <- matrix(c(2, 0, 0, 2), 2, 2)
+    val
+}
+
 attr(,"class")
 [1] "maxim" "list" 
 > summary( result1 )
@@ -2662,6 +2684,17 @@ sann_tmax = 10
 sann_randomSeed = 123 
 iterlim = 150 
 printLevel = 0 
+
+$objectiveFn
+function (b) 
+{
+    x <- b[1]
+    y <- b[2]
+    val <- (x - 2)^2 + (y - 3)^2
+    attr(val, "gradient") <- c(2 * x - 4, 2 * y - 6)
+    attr(val, "hessian") <- matrix(c(2, 0, 0, 2), 2, 2)
+    val
+}
 
 attr(,"class")
 [1] "maxim" "list" 
@@ -2734,371 +2767,6 @@ Estimates:
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > 
-> 
-> 
-> ### vcov.maxLik
-> set.seed( 17 )
-> ## ML estimation of exponential duration model:
-> t <- rexp(100, 2)
-> ## Estimate with numeric gradient and hessian
-> a <- maxLik(loglik, start=1, print.level=2)
------ Initial parameters: -----
-fcn value: -53.67 
-     parameter initial gradient free
-[1,]         1            46.33    1
-Condition number of the (active) hessian: 1 
------Iteration 1 -----
------Iteration 2 -----
------Iteration 3 -----
------Iteration 4 -----
------Iteration 5 -----
---------------
-gradient close to zero 
-5  iterations
-estimate: 1.863 
-Function value: -37.76 
-> printRounded( a )
-$maximum
-[1] -37.76
-
-$estimate
-[1] 1.863
-
-$gradient
-[1] 0
-
-$hessian
-       [,1]
-[1,] -28.79
-
-$code
-[1] 1
-
-$message
-[1] "gradient close to zero"
-
-$last.step
-NULL
-
-$fixed
-[1] FALSE
-
-$iterations
-[1] 5
-
-$type
-[1] "Newton-Raphson maximisation"
-
-$gradientObs
-         [,1]
-  [1,] -0.277
-  [2,]  0.395
-  [3,]  0.498
-  [4,] -0.484
-  [5,] -0.405
-  [6,]  0.257
-  [7,] -0.432
-  [8,]  0.189
-  [9,]  0.207
- [10,]  0.328
- [11,]  0.166
- [12,]  0.394
- [13,]  0.510
- [14,]  0.326
- [15,]  0.234
- [16,]  0.505
- [17,]  0.461
- [18,]  0.461
- [19,] -1.064
- [20,]  0.238
- [21,] -0.046
- [22,]  0.473
- [23,] -0.400
- [24,]  0.235
- [25,]  0.285
- [26,]  0.403
- [27,] -0.238
- [28,]  0.441
- [29,]  0.482
- [30,]  0.495
- [31,] -0.365
- [32,]  0.388
- [33,] -0.407
- [34,] -0.181
- [35,]  0.419
- [36,] -0.330
- [37,] -0.240
- [38,] -0.415
- [39,]  0.461
- [40,] -3.893
- [41,]  0.033
- [42,] -0.629
- [43,]  0.432
- [44,]  0.036
- [45,]  0.246
- [46,] -0.227
- [47,]  0.531
- [48,]  0.516
- [49,] -0.677
- [50,]  0.153
- [51,]  0.222
- [52,]  0.436
- [53,] -1.563
- [54,] -0.050
- [55,]  0.312
- [56,] -0.146
- [57,] -0.357
- [58,]  0.481
- [59,]  0.399
- [60,]  0.423
- [61,]  0.330
- [62,]  0.353
- [63,] -0.302
- [64,]  0.471
- [65,]  0.291
- [66,]  0.120
- [67,]  0.507
- [68,] -0.250
- [69,] -0.050
- [70,]  0.280
- [71,]  0.526
- [72,] -0.374
- [73,]  0.024
- [74,] -0.413
- [75,] -0.359
- [76,]  0.477
- [77,]  0.242
- [78,] -0.041
- [79,] -1.348
- [80,] -0.257
- [81,]  0.324
- [82,]  0.345
- [83,] -0.934
- [84,]  0.332
- [85,] -0.850
- [86,]  0.316
- [87,]  0.475
- [88,]  0.373
- [89,] -0.025
- [90,]  0.377
- [91,] -2.108
- [92,] -0.450
- [93,]  0.168
- [94,]  0.351
- [95,]  0.525
- [96,] -0.066
- [97,]  0.388
- [98,]  0.253
- [99,] -0.797
-[100,]  0.133
-
-$control
-A 'MaxControl' object with slots:
-tol = 1e-08 
-reltol = 1.49e-08 
-gradtol = 1e-06 
-steptol = 1e-10 
-lambdatol = 1e-06 
-qrtol = 1e-10 
-qac = stephalving 
-marquardt_lambda0 = 0.01 
-marquardt_lambdaStep = 2 
-marquardt_maxLambda = 1e+12 
-nm_alpha = 1 
-nm_beta = 0.5 
-nm_gamma = 2 
-sann_cand = <default Gaussian Markov kernel>
-sann_temp = 10 
-sann_tmax = 10 
-sann_randomSeed = 123 
-iterlim = 150 
-printLevel = 2 
-
-attr(,"class")
-[1] "maxLik" "maxim"  "list"  
-> print( a )
-Maximum Likelihood estimation
-Newton-Raphson maximisation, 5 iterations
-Return code 1: gradient close to zero
-Log-Likelihood: -37.76 (1 free parameter(s))
-Estimate(s): 1.863 
-> round( vcov( a ), 3 )
-      [,1]
-[1,] 0.035
-> ## Estimate with analytic gradient and hessian
-> a <- maxLik(loglik, gradlik, hesslik, start=1)
-> printRounded( a )
-$maximum
-[1] -37.76
-
-$estimate
-[1] 1.863
-
-$gradient
-[1] 0
-
-$hessian
-      [,1]
-[1,] -28.8
-
-$code
-[1] 1
-
-$message
-[1] "gradient close to zero"
-
-$last.step
-NULL
-
-$fixed
-[1] FALSE
-
-$iterations
-[1] 5
-
-$type
-[1] "Newton-Raphson maximisation"
-
-$gradientObs
-         [,1]
-  [1,] -0.277
-  [2,]  0.395
-  [3,]  0.498
-  [4,] -0.484
-  [5,] -0.405
-  [6,]  0.257
-  [7,] -0.432
-  [8,]  0.189
-  [9,]  0.207
- [10,]  0.328
- [11,]  0.166
- [12,]  0.394
- [13,]  0.510
- [14,]  0.326
- [15,]  0.234
- [16,]  0.505
- [17,]  0.461
- [18,]  0.461
- [19,] -1.064
- [20,]  0.238
- [21,] -0.046
- [22,]  0.473
- [23,] -0.400
- [24,]  0.235
- [25,]  0.285
- [26,]  0.403
- [27,] -0.238
- [28,]  0.441
- [29,]  0.482
- [30,]  0.495
- [31,] -0.365
- [32,]  0.388
- [33,] -0.407
- [34,] -0.181
- [35,]  0.419
- [36,] -0.330
- [37,] -0.240
- [38,] -0.415
- [39,]  0.461
- [40,] -3.893
- [41,]  0.033
- [42,] -0.629
- [43,]  0.432
- [44,]  0.036
- [45,]  0.246
- [46,] -0.227
- [47,]  0.531
- [48,]  0.516
- [49,] -0.677
- [50,]  0.153
- [51,]  0.222
- [52,]  0.436
- [53,] -1.563
- [54,] -0.050
- [55,]  0.312
- [56,] -0.146
- [57,] -0.357
- [58,]  0.481
- [59,]  0.399
- [60,]  0.423
- [61,]  0.330
- [62,]  0.353
- [63,] -0.302
- [64,]  0.471
- [65,]  0.291
- [66,]  0.120
- [67,]  0.507
- [68,] -0.250
- [69,] -0.050
- [70,]  0.280
- [71,]  0.526
- [72,] -0.374
- [73,]  0.024
- [74,] -0.413
- [75,] -0.359
- [76,]  0.477
- [77,]  0.242
- [78,] -0.041
- [79,] -1.348
- [80,] -0.257
- [81,]  0.324
- [82,]  0.345
- [83,] -0.934
- [84,]  0.332
- [85,] -0.850
- [86,]  0.316
- [87,]  0.475
- [88,]  0.373
- [89,] -0.025
- [90,]  0.377
- [91,] -2.108
- [92,] -0.450
- [93,]  0.168
- [94,]  0.351
- [95,]  0.525
- [96,] -0.066
- [97,]  0.388
- [98,]  0.253
- [99,] -0.797
-[100,]  0.133
-
-$control
-A 'MaxControl' object with slots:
-tol = 1e-08 
-reltol = 1.49e-08 
-gradtol = 1e-06 
-steptol = 1e-10 
-lambdatol = 1e-06 
-qrtol = 1e-10 
-qac = stephalving 
-marquardt_lambda0 = 0.01 
-marquardt_lambdaStep = 2 
-marquardt_maxLambda = 1e+12 
-nm_alpha = 1 
-nm_beta = 0.5 
-nm_gamma = 2 
-sann_cand = <default Gaussian Markov kernel>
-sann_temp = 10 
-sann_tmax = 10 
-sann_randomSeed = 123 
-iterlim = 150 
-printLevel = 0 
-
-attr(,"class")
-[1] "maxLik" "maxim"  "list"  
-> print( a )
-Maximum Likelihood estimation
-Newton-Raphson maximisation, 5 iterations
-Return code 1: gradient close to zero
-Log-Likelihood: -37.76 (1 free parameter(s))
-Estimate(s): 1.863 
-> round( vcov( a ), 3 )
-      [,1]
-[1,] 0.035
-> print(stdEr(a))
-[1] 0.1863
->                            # test single stdEr
-> 
 > proc.time()
    user  system elapsed 
-  0.922   0.057   0.972 
+  0.902   0.064   0.958 

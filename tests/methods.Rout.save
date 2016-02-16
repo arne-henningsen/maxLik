@@ -15,6 +15,9 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
+> ## Test methods.  Note: only test if methods work in terms of dim, length, etc,
+> ## not in terms of values here
+> 
 > library(maxLik)
 Loading required package: miscTools
 
@@ -42,10 +45,11 @@ Loading required package: sandwich
 > ## Test maxControl methods:
 > set.seed(9)
 > x <- rnorm(20, sd=2)
-> ll <- function(par) dnorm(x, mean=par[1], sd=par[2], log=TRUE)
+> ll1 <- function(par) dnorm(x, mean=par, sd=1, log=TRUE)
+> ll2 <- function(par) dnorm(x, mean=par[1], sd=par[2], log=TRUE)
 > for(method in c("NR", "BFGS", "BFGSR")) {
 +    cat("-- method", method, "--\n")
-+    m <- maxLik(ll, start=c(0, 2), method=method, control=list(iterlim=1))
++    m <- maxLik(ll2, start=c(0, 2), method=method, control=list(iterlim=1))
 +    expect_equal(maxValue(m), -41.35, tolerance=0.01)
 +    expect_true(is.vector(gradient(m)), info="'gradient' returns a vector")
 +    expect_equal(length(gradient(m)), 2, info="'gradient(m)' is of length 2")
@@ -121,6 +125,31 @@ sann_randomSeed = 123
 iterlim = 1 
 printLevel = 0 
 > 
+> ## Test methods for non-likelihood optimization
+> hatf <- function(theta) exp(- theta %*% theta)
+> for(optimizer in c(maxNR, maxBFGSR, maxBFGS, maxNM, maxSANN, maxCG)) {
++    name <- as.character(quote(optimizer))
++    res <- optimizer(hatf, start=c(1,1))
++    if(name %in% c("maxNR", "maxBFGS", "maxNM", "maxCG")) {
++       expect_equal(coef(res), c(0,0), tol=1e-5,
++                    info=paste0(name, ": result (0,0)"))
++    }
++    expect_equal(objectiveFn(res), hatf, info=paste0(name, ": objectiveFn correct"))
++ }
+> 
+> ## Test maxLik vcov related methods
+> set.seed( 15 )
+> t <- rexp(20, 2)
+> loglik <- function(theta) log(theta) - theta*t
+> gradlik <- function(theta) 1/theta - t
+> hesslik <- function(theta) -100/theta^2
+> a <- maxLik(loglik, start=1)
+> expect_equal(dim(vcov(a)), c(1,1), info="vcov 1D numeric correct")
+> expect_equal(length(stdEr(a)), 1, info="stdEr 1D numeric correct")
+> a <- maxLik(loglik, gradlik, hesslik, start=1)
+> expect_equal(dim(vcov(a)), c(1,1), info="vcov 1D analytic correct")
+> expect_equal(length(stdEr(a)), 1, info="stdEr 1D analytic correct")
+> 
 > proc.time()
    user  system elapsed 
-  0.509   0.051   0.551 
+  1.128   0.036   1.157 
