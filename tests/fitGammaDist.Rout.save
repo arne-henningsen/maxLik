@@ -1,6 +1,6 @@
 
-R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -244,7 +244,7 @@ NR_gradHess           4.961       2.021
 > 
 > 100*round(r_NRn$hessian/100,0)
        [,1]   [,2]
-[1,] -54900 -49600
+[1,] -55000 -49600
 [2,] -49600 -49600
 > round(solve(-r_NRn$hessian),5)
          [,1]     [,2]
@@ -295,4 +295,4 @@ NR_gradHess           1.014       1.015
 > 
 > proc.time()
    user  system elapsed 
- 15.268   0.036  15.308 
+  7.272   0.012   7.283 
