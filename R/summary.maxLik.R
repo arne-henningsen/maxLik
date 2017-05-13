@@ -51,13 +51,13 @@ summary.maxLik <- function(object, eigentol=1e-12,... ) {
    activePar <- activePar( object )
    if((object$code < 100) & !is.null(coef.maxLik(object))) {
                            # in case of infinity at initial values, the coefs are not provided
-       t <- coef.maxLik(object)/stdEr.maxLik(object, eigentol=eigentol)
+       t <- coef( object ) / stdEr( object, eigentol = eigentol )
        p <- 2*pnorm( -abs( t))
        t[!activePar(object)] <- NA
        p[!activePar(object)] <- NA
-       results <- cbind("Estimate"=coef.maxLik(object),
-                        "Std. error"=stdEr.maxLik(object, eigentol=eigentol),
-                        "t value"=t, "Pr(> t)"=p)
+       results <- cbind("Estimate" = coef( object ),
+                        "Std. error" = stdEr( object, eigentol = eigentol ),
+                        "t value" = t, "Pr(> t)" = p )
    } else {
      results <- NULL
    }
