@@ -84,7 +84,7 @@ maxNM(fn, grad=NULL, hess=NULL, start, fixed=NULL,
       \item{nm_alpha}{1, Nelder-Mead simplex method reflection
 	coefficient (see Nelder & Mead, 1965)
       }
-      \item{nm_beta}{0.5, Nelder-Mead controction coefficient}
+      \item{nm_beta}{0.5, Nelder-Mead contraction coefficient}
       \item{nm_gamma}{2, Nelder-Mead expansion coefficient}
       % SANN
       \item{sann_cand}{\code{NULL} or a function for \code{"SANN"} algorithm
