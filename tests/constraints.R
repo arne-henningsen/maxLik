@@ -139,8 +139,8 @@ all.equal(stdEr(mlEqGInd), stdEr(mlEqGInd), tolerance=1e-6)
 mlEqH <- maxLik(logLikMix, grad=gradLikMix, hess=hessLikMix,
                   start=start,
                   constraints=eqCon)
-all.equal(coef(mlEqG), coef(mlEqH), toleranec=1e-6)
-all.equal(stdEr(mlEqG), stdEr(mlEqH))
+all.equal(coef(mlEqG), coef(mlEqH), tolerance=1e-6)
+all.equal(stdEr(mlEqG), stdEr(mlEqH), tolerance=1e-6)
 
 
 ## BFGS, numeric gradient
