@@ -153,7 +153,8 @@ Test for equality constraints y + 2z = 0
 > B <- 0
 > eqCon <- list( eqA = A, eqB = B )
 > ## default, numeric gradient
-> mlEq <- maxLik(logLikMix, start = start, constraints = eqCon )
+> mlEq <- maxLik(logLikMix, start = start, constraints = eqCon, tol=0)
+>                            # only rely on gradient stopping condition
 > print(summary(mlEq))
 --------------------------------------------
 Maximum Likelihood estimation
@@ -176,7 +177,8 @@ penalty close to zero
 9  outer iterations, barrier value 2.999e-09 
 --------------------------------------------
 > ## default, individual likelihood
-> mlEqInd <- maxLik(logLikMixInd, start = start, constraints = eqCon )
+> mlEqInd <- maxLik(logLikMixInd, start = start, constraints = eqCon, tol=0)
+>                            # only rely on gradient stopping condition
 > all.equal(coef(mlEq), coef(mlEqInd))
 [1] TRUE
 > all.equal(stdEr(mlEq), stdEr(mlEqInd))
@@ -541,4 +543,4 @@ Constrained optimization based on constrOptim
 > 
 > proc.time()
    user  system elapsed 
-  1.947   0.830   1.714 
+  1.891   0.750   1.618 

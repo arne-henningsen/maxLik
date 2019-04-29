@@ -1,6 +1,6 @@
 
-R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R version 3.5.3 (2019-03-11) -- "Great Truth"
+Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -66,15 +66,15 @@ Estimates:
 > W <- diag(N) + matrix(runif(N*N), N, N)
 >                            # diagonal weight matrix with some noise
 > D <- rep(1/N, N)
-> res <- maxBFGSR(quadForm, start=D, tol = 1e-10 )
+> res <- maxBFGSR(quadForm, start=D, tol = 1e-10, reltol=0)
 > res <- roundGradients( res )
 > summary(res)
 --------------------------------------------
 BFGSR maximization 
-Number of iterations: 40 
+Number of iterations: 36 
 Return code: 2 
 successive function values within tolerance limit 
-Function value: -3.4e-10 
+Function value: -2.14e-09 
 Estimates:
      estimate gradient
 [1,]        1        0
@@ -145,4 +145,4 @@ penalty close to zero
 > 
 > proc.time()
    user  system elapsed 
-  0.428   0.028   0.451 
+  0.581   0.439   0.467 

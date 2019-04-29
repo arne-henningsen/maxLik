@@ -30,7 +30,7 @@ summary(res)
 W <- diag(N) + matrix(runif(N*N), N, N)
                            # diagonal weight matrix with some noise
 D <- rep(1/N, N)
-res <- maxBFGSR(quadForm, start=D, tol = 1e-10 )
+res <- maxBFGSR(quadForm, start=D, tol = 1e-10, reltol=0)
 res <- roundGradients( res )
 summary(res)
 

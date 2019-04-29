@@ -120,10 +120,12 @@ A <- matrix(c(0, 1, 2), 1, 3)
 B <- 0
 eqCon <- list( eqA = A, eqB = B )
 ## default, numeric gradient
-mlEq <- maxLik(logLikMix, start = start, constraints = eqCon )
+mlEq <- maxLik(logLikMix, start = start, constraints = eqCon, tol=0)
+                           # only rely on gradient stopping condition
 print(summary(mlEq))
 ## default, individual likelihood
-mlEqInd <- maxLik(logLikMixInd, start = start, constraints = eqCon )
+mlEqInd <- maxLik(logLikMixInd, start = start, constraints = eqCon, tol=0)
+                           # only rely on gradient stopping condition
 all.equal(coef(mlEq), coef(mlEqInd))
 all.equal(stdEr(mlEq), stdEr(mlEqInd))
 ## default, analytic gradient
