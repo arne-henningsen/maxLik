@@ -34,7 +34,11 @@ logLikAttr <- function(theta, fnOrig, gradOrig=NULL, hessOrig=NULL,
             }
          }
          ## if there are NA-s in active gradient, do not compute Hessian
-         if(is.matrix(gr)) {
+   if(is.matrix(gr)) {
+      if(ncol(gr) != length(theta)) {
+         stop(paste0("if gradient is a matrix, it must have length(parameter) colums (currently ", length(theta),
+                     "), not ", ncol(gr)))
+         }
             activeGr <- gr[,!fixed]
          }
          else {

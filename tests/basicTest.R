@@ -103,9 +103,12 @@ f <- function(x) {
    hess <- 2*W
    grad <- 2*W %*% (x - c)
    val <- t(x - c) %*% W %*% (x - c)
-   attr(val, "gradient") <- grad
+   attr(val, "gradient") <- as.vector(grad)
+                           # gradient matrices only work for BHHH-type problems
    attr(val, "hessian") <- hess
    val
 }
-## r <- maxNR(f, start=start)
-## summary(r)
+res <- maxNR(f, start=start)
+expect_equal(coef(res), c, tolerance=mTol)
+expect_equal(sqrt(sum(gradient(res)^2)), 0, tolerance=mTol)
+expect_equal(maxValue(res), 0, tolerance=mTol)
