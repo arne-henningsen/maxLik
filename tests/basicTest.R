@@ -5,8 +5,8 @@
 ### 3. analytic gradient, Hessian
 ###
 ### a) maxLik(, method="NR")
-### b) maxLik(, method="BHHH")
 ### c) maxLik(, method="BFGS")
+### b) maxLik(, method="BHHH")
 ###
 ### i) maxNR()
 ### ii) maxBFGS()
@@ -94,3 +94,18 @@ expect_equal(coef(rLLG), coef(rLL), tolerance=mTol)
 expect_equal(class(logLik(rLL)), "numeric")
 expect_equal(class(gradient(rLL)), "numeric")
 expect_equal(class(hessian(rLL)), "matrix")
+
+## test maxNR with gradient and hessian as attributes
+W <- matrix(-c(4,1,2,4), 2, 2)
+c <- c(1,2)
+start <- c(0,0)
+f <- function(x) {
+   hess <- 2*W
+   grad <- 2*W %*% (x - c)
+   val <- t(x - c) %*% W %*% (x - c)
+   attr(val, "gradient") <- grad
+   attr(val, "hessian") <- hess
+   val
+}
+## r <- maxNR(f, start=start)
+## summary(r)
