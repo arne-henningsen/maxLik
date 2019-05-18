@@ -1,6 +1,6 @@
 
-R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
+Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -15,8 +15,18 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> ## the idea and most commands were provided by Marco J. Maier, Institute for
-> ## Statistics and Mathematics, Vienna University of Economics and Business
+> ### general optimization tests for the functions of various forms
+> ### test for:
+> ### 1. numeric gradient, Hessian
+> ### 2. analytic gradient, numeric Hessian
+> ### 3. analytic gradient, Hessian
+> ###
+> ### a) maxLik(, method="NR")
+> ### b) maxLik(, method="BHHH")
+> ### c) maxLik(, method="BFGS")
+> ###
+> ### i) maxNR()
+> ### ii) maxBFGS()
 > 
 > library(maxLik)
 Loading required package: miscTools
@@ -26,273 +36,90 @@ Henningsen, Arne and Toomet, Ott (2011). maxLik: A package for maximum likelihoo
 
 If you have questions, suggestions, or comments regarding the 'maxLik' package, please use a forum or 'tracker' at maxLik's R-Forge site:
 https://r-forge.r-project.org/projects/maxlik/
-> options(warn = -1, digits = 4 )
-> set.seed(5)
-> some_data <- rgamma(1e4, shape = 5, scale = 2)
+> library(testthat)
 > 
 > # log-likelihood function(s)
 > logLL <- function(x, X)   # per observation for maxLik
-+    dgamma(x = X, shape = exp(x[1]), scale = exp(x[2]), log = TRUE)
-> logLL_sum <- function(x, X)   # negative sum for nlm()
-+    -sum(dgamma(x = X, shape = exp(x[1]), scale = exp(x[2]), log = TRUE))
-> 
-> sum(logLL(log(c(5,2)),some_data))
-[1] -28528
-> logLL_sum(log(c(5,2)),some_data)
-[1] 28528
-> all.equal( sum(logLL(log(c(5,2)),some_data)), -logLL_sum(log(c(5,2)),some_data))
-[1] TRUE
++    dgamma(x = X, shape = x[1], scale = x[2], log = TRUE)
+> logLLSum <- function(x, X)
++    sum(logLL(x, X))
 > 
 > # gradient of log-likelihood function
-> d_logLL <- function(x, X){   # analytic 1. derivatives
-+    cbind(shape=exp(x[1])*(-x[2]-psigamma(exp(x[1]),0)+log(X)),
-+          scale= X / exp(x[2]) - exp(x[1]))
+> d.logLL <- function(x, X){   # analytic 1. derivatives
++    shape <- x[1]
++    scale <- x[2]
++    cbind(shape= log(X) - log(scale) - psigamma(shape, 0),
++          scale= (X/scale - shape)/scale
++          )
++ }
+> d.logLLSum <- function(x, X) {
++    ## analytic 1. derivatives, summed
++    colSums(d.logLL(x, X))
 + }
 > 
-> d_logLLNum <- function(x, X){
-+    numericGradient( logLL, x, X = X )
-+ }
-> 
-> colSums(d_logLL(log(c(5,2)),some_data))
- shape  scale 
- 92.95 135.27 
-> colSums(d_logLLNum(log(c(5,2)),some_data))
-[1]  92.95 135.27
-> 
-> all.equal( d_logLL(log(c(5,2)),some_data), d_logLLNum(log(c(5,2)),some_data),
-+    check.attributes=FALSE)
-[1] TRUE
-> 
-> # Hessian of log-likelihood function
-> dd_logLL <- function(x, X){   # analytic 2. derivatives
-+    grad <- d_logLL( x, X )
+> ## Hessian of log-likelihood function
+> dd.logLL <- function(x, X){   # analytic 2. derivatives
++    shape <- x[1]
++    scale <- x[2]
 +    hessian <- matrix(0, 2, 2)
-+    hessian[1,1] <- sum( grad[,1] - exp(x[1])^2 * psigamma(exp(x[1]), 1) )
-+    hessian[2,2] <- - sum( X / exp(x[2]) )
-+    hessian[cbind(c(2,1), c(1,2))] <- -exp(x[1]) * length(X)
++    hessian[1,1] <- -psigamma(shape, 1)*length(X)
++    hessian[2,2] <- (shape*length(X) - 2*sum(X)/scale)/scale^2
++    hessian[cbind(c(2,1), c(1,2))] <- -length(X)/scale
 +    return(hessian)
 + }
 > 
-> dd_logLLNum <- function(x, X){
-+    numericHessian( function(x,X) sum(logLL(x,X)), t0=x, X = X )
+> ## create data
+> ## sample size 1000 should give precision 0.1 or better
+> param <- c(1.5, 2)
+> set.seed(100)
+> someData <- rgamma(1000, shape=param[1], scale=param[2])
+> start <- c(1,1)
+> mTol <- .Machine$double.eps^0.25
+> 
+> ## estimation with maxLik() / NR
+> doTests <- function(method="NR") {
++    suppressWarnings(rLLSum <- maxLik( logLLSum, start=start, method=method, X=someData ))
++    stdDev <- stdEr(rLLSum)
++    tol <- 2*max(stdDev)
++    expect_equal(coef(rLLSum), param, tolerance=tol,
++                 info=paste("coefficient values should be close to the true values", paste(param, collapse=", ")))
++                            # should equal to param, but as N is small, it may be way off
++    ##
++    rLL <- suppressWarnings(maxLik( logLL, start = start, method=method, X=someData ))
++    expect_equal(coef(rLL), coef(rLLSum), tolerance=mTol)
++    ##
++    rLLSumGSum <- suppressWarnings(maxLik( logLLSum, grad=d.logLLSum, start = start, method=method, X=someData ))
++    expect_equal(coef(rLLSumGSum), coef(rLLSum), tolerance=mTol)
++    rLLG <- suppressWarnings(maxLik( logLL, grad=d.logLL, start = start, method=method, X=someData ))
++    expect_equal(coef(rLLG), coef(rLLSum), tolerance=mTol)
++    rLLGH <- suppressWarnings(maxLik( logLL, grad=d.logLL, hess=dd.logLL, start = start, method=method, X=someData ))
++    expect_equal(coef(rLLGH), coef(rLLSum), tolerance=mTol)
 + }
-> dd_logLLNumGrad <- function(x, X){
-+    numericHessian( function(x,X) sum(logLL(x,X)), 
-+       grad = function(x,X) colSums(d_logLL(x,X)), x, X = X )
-+ }
 > 
-> dd_logLL(log(c(5,2)),some_data)
-       [,1]   [,2]
-[1,] -55238 -50000
-[2,] -50000 -50135
-> dd_logLLNum(log(c(5,2)),some_data)
-       [,1]   [,2]
-[1,] -55235 -50000
-[2,] -50000 -50135
-> all.equal(dd_logLL(log(c(5,2)),some_data), dd_logLLNum(log(c(5,2)),some_data))
-[1] "Mean relative difference: 1.655e-05"
-> dd_logLLNumGrad(log(c(5,2)),some_data)
-        [,1]   [,2]
-shape -55238 -50000
-scale -50000 -50135
-> all.equal(dd_logLL(log(c(5,2)),some_data), dd_logLLNumGrad(log(c(5,2)),some_data),
-+    check.attributes=FALSE)
-[1] TRUE
+> doTests("NR")
+> doTests("BFGS")
+> ## maxBHHH: cannot run the same tests
+> method <- "BHHH"
+> tryCatch(maxLik( logLLSum, start=start, method=method, X=someData ),
++          error = function(e) cat(as.character(e))
++                            # should output error about gradient size
++          )
+Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f, : if the gradients (argument 'grad') are not provided by the user, the BHHH method requires that the log-likelihood function (argument 'fn') returns a numeric vector, where each element must be the log-likelihood value corresponding to an individual (independent) observation
+> rLL <- suppressWarnings(maxLik( logLL, start = start, method=method, X=someData ))
+> stdDev <- stdEr(rLL)
+> tol <- 2*max(stdDev)
+> expect_equal(coef(rLL), param, tolerance=tol,
++              info=paste("coefficient values should be close to the true values", paste(param, collapse=", ")))
+>                            # should equal to param, but as N is small, it may be way off
+> ##
+> rLLG <- suppressWarnings(maxLik( logLL, grad=d.logLL, start = start, method=method, X=someData ))
+> expect_equal(coef(rLLG), coef(rLL), tolerance=mTol)
 > 
-> # estimation with nlm()
-> t_nlm <- system.time( r_nlm  <- nlm(logLL_sum, c(0,0), X=some_data, hessian=TRUE) )
-> 
-> # estimation with nlm() and gradients
-> logLL_grad <- function(x, X) {
-+    result <- logLL_sum( x, X )
-+    attr( result, "gradient" ) <- - colSums( d_logLL( x, X ) )
-+    return( result )
-+ }
-> t_nlmg <- system.time( r_nlmg  <- nlm(logLL_grad, c(0,0), X=some_data, hessian=TRUE) )
-> 
-> # estimation with nlm() and gradients and Hessian
-> logLL_hess <- function(x, X) {
-+    result <- logLL_sum( x, X )
-+    attr( result, "gradient" ) <- - colSums( d_logLL( x, X ) )
-+    attr( result, "hessian" ) <- - dd_logLL( x, X )
-+    return( result )
-+ }
-> t_nlmgh <- system.time( r_nlmgh  <- nlm(logLL_hess, c(0,0), X=some_data, hessian=TRUE) )
-> 
-> # estimation with optim() / BFGS
-> t_bfgs <- system.time( r_bfgs <- optim(c(0,0), logLL_sum, X=some_data, 
-+    method="BFGS", hessian=TRUE) )
-> 
-> # estimation with maxLik() / BFGS
-> t_bfgsM <- system.time( r_bfgsM <- maxLik( logLL, start = c(0,0), 
-+    method="BFGS", X=some_data ) )
-> 
-> # estimation with maxLik() / BFGS with gradients
-> t_bfgsMg <- system.time( r_bfgsMg <- maxLik( logLL, d_logLL, start = c(0,0), 
-+    method="BFGS", X=some_data ) )
-> 
-> # estimation with maxLik() / BHHH
-> t_bhhh <- system.time( r_bhhh <- maxLik( logLL, start = c(0,0), 
-+    method="BHHH", X=some_data ) )
-> 
-> # estimation with maxLik() / BHHH with gradients
-> t_bhhhg <- system.time( r_bhhhg <- maxLik( logLL, d_logLL, start = c(0,0), 
-+    method="BHHH", X=some_data ) )
-> 
-> # estimation with maxLik() / NR
-> t_NRn <- system.time( r_NRn <- maxLik( logLL, start = c(0,0), 
-+    method="NR", X=some_data ) )
-> 
-> # estimation with maxLik() / NR with gradients
-> t_NRg <- system.time( r_NRg <- maxLik( logLL, d_logLL, start = c(0,0), 
-+    method="NR", X=some_data ) )
-> 
-> # estimation with maxLik() / NR with gradients and Hessian
-> t_NRgh <- system.time( r_NRgh <- maxLik( logLL, d_logLL, dd_logLL, start = c(0,0), 
-+    method="NR", X=some_data ) )
-> 
-> # log likelihood values
-> rbind(NLM=-r_nlm$minimum, 
-+       NLM_grad=-r_nlmg$minimum,
-+       NLM_gradHess=-r_nlmgh$minimum,
-+       BFGS=-r_bfgs$value,
-+       maxLikBfgs = logLik( r_bfgsM ),
-+       maxLikBfgs_grad = logLik( r_bfgsMg ),
-+       BHHH = logLik( r_bhhh ),
-+       BHHH_grad = logLik( r_bhhhg ),
-+       NR_numeric= logLik( r_NRn ),
-+       NR_grad= logLik( r_NRg ),
-+       NR_gradHess= logLik( r_NRgh ) )
-                  [,1]
-NLM             -28528
-NLM_grad        -28528
-NLM_gradHess    -28528
-BFGS            -28528
-maxLikBfgs      -28528
-maxLikBfgs_grad -28528
-BHHH            -28528
-BHHH_grad       -28528
-NR_numeric      -28528
-NR_grad         -28528
-NR_gradHess     -28528
->       
-> 
-> # estimated coefficients
-> pp <- exp(rbind(NLM=r_nlm$estimate, 
-+                 NLM_grad=r_nlmg$estimate,
-+                 NLM_gradHess=r_nlmgh$estimate,
-+                 BFGS=r_bfgs$par,
-+                 maxLikBfgs = coef( r_bfgsM ),
-+                 maxLikBfgs_grad = coef( r_bfgsMg ),
-+                 BHHH = coef( r_bhhh ),
-+                 BHHH_grad = coef( r_bhhhg ),
-+                 NR_numeric= coef( r_NRn ),
-+                 NR_grad= coef( r_NRg ),
-+                 NR_gradHess= coef( r_NRgh ) ))
-> colnames(pp) <- c("shape_alpha", "scale_theta")
-> pp
-                shape_alpha scale_theta
-NLM                   4.961       2.021
-NLM_grad              4.961       2.021
-NLM_gradHess          4.961       2.021
-BFGS                  4.961       2.021
-maxLikBfgs            4.961       2.021
-maxLikBfgs_grad       4.961       2.021
-BHHH                  4.961       2.021
-BHHH_grad             4.961       2.021
-NR_numeric            4.961       2.021
-NR_grad               4.961       2.021
-NR_gradHess           4.961       2.021
-> 
-> 
-> # some Hessians
-> -100*round(r_nlm$hessian/100,0)
-       [,1]   [,2]
-[1,] -55000 -49600
-[2,] -49600 -49600
-> round(solve(r_nlm$hessian),5)
-         [,1]     [,2]
-[1,]  0.00019 -0.00019
-[2,] -0.00019  0.00021
-> 
-> -100*round(r_nlmg$hessian/100,0)
-       [,1]   [,2]
-[1,] -55000 -49600
-[2,] -49600 -49600
-> round(solve(r_nlmg$hessian),5)
-         [,1]     [,2]
-[1,]  0.00019 -0.00019
-[2,] -0.00019  0.00021
-> 
-> -100*round(r_nlmgh$hessian/100,0)
-       [,1]   [,2]
-[1,] -55000 -49600
-[2,] -49600 -49600
-> round(solve(r_nlmgh$hessian),5)
-         [,1]     [,2]
-[1,]  0.00019 -0.00019
-[2,] -0.00019  0.00021
-> 
-> -100*round(r_bfgs$hessian/100,0)
-       [,1]   [,2]
-[1,] -54900 -49600
-[2,] -49600 -49600
-> round(solve(r_bfgs$hessian),5)
-         [,1]     [,2]
-[1,]  0.00019 -0.00019
-[2,] -0.00019  0.00021
-> 
-> 100*round(r_NRn$hessian/100,0)
-       [,1]   [,2]
-[1,] -55000 -49600
-[2,] -49600 -49600
-> round(solve(-r_NRn$hessian),5)
-         [,1]     [,2]
-[1,]  0.00019 -0.00019
-[2,] -0.00019  0.00021
-> 
-> 100*round(r_NRg$hessian/100,0)
-       [,1]   [,2]
-[1,] -54900 -49600
-[2,] -49600 -49600
-> round(solve(-r_NRg$hessian),5)
-         [,1]     [,2]
-[1,]  0.00019 -0.00019
-[2,] -0.00019  0.00021
-> 
-> 
-> # standard errors
-> se <- exp(rbind(NLM=sqrt(diag( solve(r_nlm$hessian) )), 
-+                 NLM_grad=sqrt(diag( solve(r_nlmg$hessian) )),
-+                 NLM_gradHess=sqrt(diag( solve(r_nlmgh$hessian) )),
-+                 BFGS=sqrt(diag( solve(r_bfgs$hessian) )),
-+                 maxLikBfgs = stdEr( r_bfgsM ),
-+                 maxLikBfgs_grad = stdEr( r_bfgsMg ),
-+                 BHHH = stdEr( r_bhhh ),
-+                 BHHH_grad = stdEr( r_bhhhg ),
-+                 NR_numeric= stdEr( r_NRn ),
-+                 NR_grad= stdEr( r_NRg ),
-+                 NR_gradHess= stdEr( r_NRgh ) ))
-> colnames(se) <- c("shape_alpha", "scale_theta")
-> se
-                shape_alpha scale_theta
-NLM                   1.014       1.015
-NLM_grad              1.014       1.015
-NLM_gradHess          1.014       1.015
-BFGS                  1.014       1.015
-maxLikBfgs            1.014       1.015
-maxLikBfgs_grad       1.014       1.015
-BHHH                  1.014       1.015
-BHHH_grad             1.014       1.015
-NR_numeric            1.014       1.015
-NR_grad               1.014       1.015
-NR_gradHess           1.014       1.015
-> 
-> # execution times
-> tt <- rbind(t_nlm, t_nlmg, t_nlmgh, t_bfgs, t_bfgsM, t_bfgsMg, 
-+             t_bhhh, t_bhhhg, t_NRn, t_NRg, t_NRgh )
-> # tt
+> ## Do the other basic functions work?
+> expect_equal(class(logLik(rLL)), "numeric")
+> expect_equal(class(gradient(rLL)), "numeric")
+> expect_equal(class(hessian(rLL)), "matrix")
 > 
 > proc.time()
    user  system elapsed 
-  7.272   0.012   7.283 
+  0.803   0.690   0.602 
