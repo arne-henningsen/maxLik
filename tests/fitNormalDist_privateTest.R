@@ -5,13 +5,16 @@
 ### * equality constraints
 
 library(maxLik)
+library(testthat)
 options(digits = 4)
                            # just to avoid so many differences when comparing these output files
 ## data to fit a normal distribution
 # set seed for pseudo random numbers
 set.seed( 123 )
-# generate a variable from normally distributed random numbers
-x <- rnorm( 100, 1, 2 )
+tol <- .Machine$double.eps^0.25
+## generate a variable from normally distributed random numbers
+truePar <- c(mu=1, sigma=2)
+x <- rnorm( 100, truePar[1], truePar[2] )
 xSaved <- x
 
 ## log likelihood function
@@ -21,10 +24,7 @@ llf <- function( param ) {
    if(!(sigma > 0))
        return(NA)
                            # to avoid warnings in the output
-   N <- length( x )
-   llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
-      0.5 * sum( ( x - mu )^2 / sigma^2 )
-   return( llValue )
+   sum(dnorm(x, mu, sigma, log=TRUE))
 }
 
 ## log likelihood function (individual observations)
@@ -147,8 +147,9 @@ llfGradHessInd <- function( param ) {
 # start values
 startVal <- c( mu = 0, sigma = 1 )
 
-## NR method
+## basic NR: test if all methods work
 ml <- maxLik( llf, start = startVal )
+expect_equal(coef(ml), truePar, tol=2*max(stdEr(ml)))
 print( ml )
 print( summary( ml ), digits = 2 )
 activePar( ml )
@@ -172,7 +173,7 @@ mlInd[[11]][sample(nrow(mlInd[[11]]), 10),]
 nObs( mlInd )
 ## Marquardt (1963) correction
 mlM <- maxLik( llf, start = startVal, qac="marquardt")
-print(coef(mlM))
+expect_equal(coef(mlM), coef(ml), tol=tol)
 print(returnMessage(mlM))
                            # coefficients should be the same as above
 
