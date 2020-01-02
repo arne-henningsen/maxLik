@@ -93,7 +93,8 @@ expect_equal(coef(rLLG), coef(rLL), tolerance=mTol)
 ## Do the other basic functions work?
 expect_equal(class(logLik(rLL)), "numeric")
 expect_equal(class(gradient(rLL)), "numeric")
-expect_equal(class(hessian(rLL)), "matrix")
+expect_true(inherits(hessian(rLL), "matrix"),
+            info="Hessian must inherit from matrix class")
 
 ## test maxNR with gradient and hessian as attributes
 W <- matrix(-c(4,1,2,4), 2, 2)

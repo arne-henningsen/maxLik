@@ -1,5 +1,5 @@
 
-R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
+R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -118,7 +118,8 @@ Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f, : if 
 > ## Do the other basic functions work?
 > expect_equal(class(logLik(rLL)), "numeric")
 > expect_equal(class(gradient(rLL)), "numeric")
-> expect_equal(class(hessian(rLL)), "matrix")
+> expect_true(inherits(hessian(rLL), "matrix"),
++             info="Hessian must inherit from matrix class")
 > 
 > ## test maxNR with gradient and hessian as attributes
 > W <- matrix(-c(4,1,2,4), 2, 2)
@@ -140,4 +141,4 @@ Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f, : if 
 > 
 > proc.time()
    user  system elapsed 
-  0.823   0.665   0.604 
+  0.983   0.589   0.683 
