@@ -111,8 +111,11 @@
   \describe{
     \item{maxControl}{\code{(\dots)} creates a \dQuote{MaxControl} object.  The
       arguments must be in the form \code{option1 = value1, option2 =
-	value2, ...}.  In case there are more than one option with
-      similar name, only the last one is taken into account.  This
+	value2, ...}.  The options should be slot names, but the method
+      also supports selected other parameter forms for compatibility reasons
+      e.g. \dQuote{print.level} instead of \dQuote{printLevel}.
+      In case there are more than one option with
+      similar name, the last one overwrites the previous values.  This
       allows the user to override default parameters in the control
       list.  See example in \link{maxLik-package}.
     }
@@ -154,6 +157,10 @@
   optimization routines.
 }
 \examples{
+library(maxLik)
+## Create a 'maxControl' object:
+maxControl(tol=1e-4, sann_tmax=7, printLevel=2)
+
 ## Optimize quadratic form t(D) %*% W %*% D with p.d. weight matrix,
 ## s.t. constraints sum(D) = 1
 quadForm <- function(D) {
@@ -163,7 +170,6 @@ eps <- 0.1
 W <- diag(3) + matrix(runif(9), 3, 3)*eps
 D <- rep(1/3, 3)
                         # initial values
-library(maxLik)
 ## create control object and use it for optimization
 co <- maxControl(printLevel=2, qac="marquardt", marquardt_lambda0=1)
 res <- maxNR(quadForm, start=D, control=co)

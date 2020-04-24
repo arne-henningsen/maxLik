@@ -1,0 +1,60 @@
+
+R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
+Copyright (C) 2019 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ### Does maxControl stuff behave?
+> ### test for:
+> ### 1. create maxControl object
+> 
+> library(maxLik)
+Loading required package: miscTools
+
+Please cite the 'maxLik' package as:
+Henningsen, Arne and Toomet, Ott (2011). maxLik: A package for maximum likelihood estimation in R. Computational Statistics 26(3), 443-458. DOI 10.1007/s00180-010-0217-1.
+
+If you have questions, suggestions, or comments regarding the 'maxLik' package, please use a forum or 'tracker' at maxLik's R-Forge site:
+https://r-forge.r-project.org/projects/maxlik/
+> library(testthat)
+> 
+> maxControl(tol=1e-4, lambdatol=1e-5, qrtol=1e-6, qac="marquardt",
++            marquardt_lambda0=0.1, marquardt_lambdaStep=3, marquardt_maxLambda=1e10,
++            nm_alpha=2, nm_beta=1, nm_gamma=4,
++            sann_temp=5, sann_tmax=100, sann_randomSeed=1,
++            iterlim=10, printLevel=3)
+A 'MaxControl' object with slots:
+tol = 1e-04 
+reltol = 1.490116e-08 
+gradtol = 1e-06 
+steptol = 1e-10 
+lambdatol = 1e-05 
+qrtol = 1e-06 
+qac = marquardt 
+marquardt_lambda0 = 0.1 
+marquardt_lambdaStep = 3 
+marquardt_maxLambda = 1e+10 
+nm_alpha = 2 
+nm_beta = 1 
+nm_gamma = 4 
+sann_cand = <default Gaussian Markov kernel>
+sann_temp = 5 
+sann_tmax = 100 
+sann_randomSeed = 1 
+iterlim = 10 
+printLevel = 3 
+> 
+> proc.time()
+   user  system elapsed 
+  0.318   0.218   0.251 
