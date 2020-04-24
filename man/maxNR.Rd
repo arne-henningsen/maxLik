@@ -302,15 +302,9 @@ signaling it with the
    A New Approach to Variable Metric Algorithms,
    \emph{Computer Journal} \bold{13}, 317--322.
 
-   Goldfeld, S.M. and Quandt, R.E. (1972):
-   \emph{Nonlinear Methods in Econometrics}.  Amsterdam: North-Holland.
-
    Goldfarb, D. (1970):
    A Family of Variable Metric Updates Derived by Variational Means,
    \emph{Mathematics of Computation} \bold{24}, 23--26.
-
-   Greene, W.H., (2008), \emph{Econometric Analysis}, 6th edition,
-   Prentice Hall.
 
    Henningsen, A. and Toomet, O. (2011): maxLik: A package for maximum likelihood
    estimation in R \emph{Computational Statistics} \bold{26}, 443--458
