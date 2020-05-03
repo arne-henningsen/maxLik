@@ -350,6 +350,7 @@ maxNRCompute <- function(fn,
          cat("Iteration", iter, "\n")
          cat("Parameter:\n")
          print(start1)
+         cat("Gradient (first 30 components):\n")
          print(head(G1, n=30))
          stop("NA in gradient")
       }
