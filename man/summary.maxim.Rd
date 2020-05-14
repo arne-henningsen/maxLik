@@ -1,11 +1,16 @@
 \name{summary.maxim}
 \alias{summary.maxim}
+\alias{print.summary.maxim}
 \title{Summary method for maximization}
 \description{
   Summarizes the maximization results
 }
 \usage{
 \method{summary}{maxim}( object, hessian=FALSE, unsucc.step=FALSE, ... )
+\method{print}{summary.maxim}(x,
+                              max.rows=getOption("max.rows", 20),
+                              max.cols=getOption("max.cols", 7),
+                              ... )
 }
 \arguments{
   \item{object}{optimization result, object of class
@@ -13,6 +18,16 @@
   \item{hessian}{logical, whether to display Hessian matrix.}
   \item{unsucc.step}{logical, whether to describe last unsuccesful step
     if \code{code} == 3}
+  \item{x}{object of class \code{summary.maxim}, summary of maximization
+    result.
+  }
+  \item{max.rows}{maximum number of rows to be printed.  This applies to
+    the resulting coefficients (as those are printed as a matrix where
+    the other column is the gradient), and to the Hessian if requested.
+  }
+  \item{max.cols}{maximum number of columns to be printed.  Only Hessian
+    output, if requested, uses this argument.
+  }
   \item{\ldots}{currently not used.}
 }
 \value{

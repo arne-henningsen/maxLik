@@ -1,4 +1,4 @@
-.onAttach <- function( lib, pkg ) {
+.onAttach <- function( libname, pkgname ) {
    packageStartupMessage(
       paste0( "\nPlease cite the 'maxLik' package as:\n",
          "Henningsen, Arne and Toomet, Ott (2011). ",
@@ -10,4 +10,15 @@
          "please use a forum or 'tracker' at maxLik's R-Forge site:\n",
          "https://r-forge.r-project.org/projects/maxlik/"),
       domain = NULL,  appendLF = TRUE )
+}
+
+.onLoad <- function(libname, pkgname) {
+   ## max rows and columns to output when printing matrices/vectors
+   options(max.rows = 20,
+           max.cols = 7)
+}
+
+.onUnload <- function(libpath) {
+   .Options$max.rows <- NULL
+   .Options$max.cols <- NULL
 }

@@ -1,4 +1,7 @@
-print.summary.maxim <- function( x, ... ) {
+print.summary.maxim <- function( x,
+                                max.rows=getOption("max.rows", 20),
+                                max.cols=getOption("max.cols", 7),
+                                ... ) {
    summary <- x
    cat("--------------------------------------------\n")
    cat(summary$type, "\n")
@@ -13,10 +16,10 @@ print.summary.maxim <- function( x, ... ) {
    if(!is.null(summary$estimate)) {
       cat("Function value:", summary$maximum, "\n")
       cat("Estimates:\n")
-      print(summary$estimate)
+      printRowColLimits(summary$estimate, max.rows, max.cols, ...)
       if(!is.null(summary$hessian)) {
          cat("Hessian:\n")
-         print(summary$hessian)
+         printRowColLimits(summary$hessian, max.rows, max.cols, ...)
       }
    }
    if(!is.null(summary$constraints)) {

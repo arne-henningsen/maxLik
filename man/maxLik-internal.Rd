@@ -4,7 +4,6 @@
 \alias{maximMessage}
 \alias{maxNRCompute}
 \alias{observationGradient}
-\alias{print.summary.maxim}
 \alias{print.summary.maxLik}
 \alias{returnCode.maxim}
 % Document the following:

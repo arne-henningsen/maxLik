@@ -1,5 +1,7 @@
 
 ### Test battery for various optimization parameters for different optimizers.
+###
+### ...
 ### 
 library(maxLik)
 options(digits = 4)
@@ -215,4 +217,3 @@ show(maxControl(m))
 condiNumber(hessian(m), print.level=0) # no output
 condiNumber(hessian(m), printLevel=0)  # no output
 condiNumber(hessian(m), printLevel=0, print.level=1) # no output
-

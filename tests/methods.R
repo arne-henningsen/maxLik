@@ -1,5 +1,8 @@
 ## Test methods.  Note: only test if methods work in terms of dim, length, etc,
 ## not in terms of values here
+##
+## ...
+## * printing summary with max.columns, max.rows
 
 library(maxLik)
 require(testthat)
@@ -54,3 +57,23 @@ expect_equal(length(stdEr(a)), 1, info="stdEr 1D numeric correct")
 a <- maxLik(loglik, gradlik, hesslik, start=1)
 expect_equal(dim(vcov(a)), c(1,1), info="vcov 1D analytic correct")
 expect_equal(length(stdEr(a)), 1, info="stdEr 1D analytic correct")
+
+### ---------- printing ----------
+### ---------- max.columns, max.rows ----------
+loglik <- function(beta) {
+   e <- y - X %*% beta
+   -crossprod(e)
+}
+gradlik <- function(beta) {
+   e <- y - X %*% beta
+   l <- crossprod(e)
+   g <- t(-2*t(X) %*% e)
+   -g
+}
+## linear regression with many columns
+X <- matrix(rnorm(20*15), 20, 15)
+beta <- rep(1, ncol(X))
+y <- X %*% beta + rnorm(20, sd=0.3)
+m <- maxNR(loglik, gradlik, start=rep(1, ncol(X)), iterlim=1)
+options(digits=2)
+print(summary(m, hessian=TRUE), max.rows=4, max.cols=2)

@@ -8,7 +8,10 @@
   for maximization algorithms.
 }
 \usage{
-compareDerivatives(f, grad, hess=NULL, t0, eps=1e-6, print=TRUE, ...)
+compareDerivatives(f, grad, hess=NULL, t0, eps=1e-6, print=TRUE,
+                   max.rows=getOption("max.rows", 20),
+                   max.cols=getOption("max.cols", 7),
+                   ...)
 }
 \arguments{
   \item{f}{
@@ -43,6 +46,10 @@ compareDerivatives(f, grad, hess=NULL, t0, eps=1e-6, print=TRUE, ...)
   \item{print}{
     logical:  TRUE to print a summary, FALSE to return the comparison
     only (invisibly).
+  }
+  \item{max.rows}{maximum number of matrix rows to be printed.
+  }
+  \item{max.cols}{maximum number of columns to be printed.  
   }
   \item{\dots}{
     further arguments to \code{f}, \code{grad} and \code{hess}.
@@ -89,7 +96,7 @@ compareDerivatives(f, grad, hess=NULL, t0, eps=1e-6, print=TRUE, ...)
 
 \examples{
 ## A simple example with sin(x)' = cos(x)
-f <- function(x)c(sin=sin(x))
+f <- function(x) c(sin=sin(x))
 Dsin <- compareDerivatives(f, cos, t0=c(angle=1))
 ##
 ## Example of normal log-likelihood.  Two-parameter
