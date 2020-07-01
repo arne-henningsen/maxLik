@@ -1,6 +1,6 @@
 ## gradient function:
 ## sum over possible individual gradients
-logLikGrad <- function(theta, fnOrig, gradOrig, hessOrig,
+logLikGrad <- function(theta, fnOrig, gradOrig=NULL, hessOrig=NULL,
                        start = NULL, fixed = NULL, sumObs = TRUE,
                        gradAttr = NULL,
                        ...) {
@@ -11,7 +11,6 @@ logLikGrad <- function(theta, fnOrig, gradOrig, hessOrig,
    #    - TRUE  if the gradient is provided as attribute of the log-lik value
    #    - NULL  if this is not known
    theta <- addFixedPar( theta = theta, start = start, fixed = fixed, ...)
-
    if(!is.null(gradOrig)) {
       g <- gradOrig(theta, ...)
    } else if( isTRUE( gradAttr ) || is.null( gradAttr ) ) {

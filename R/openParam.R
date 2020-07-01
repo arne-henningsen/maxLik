@@ -22,6 +22,8 @@ openParam <- function(object) {
      "alpha", "beta", "gamma",
      ## SANN (open versions)
      "cand", "temp", "tmax", "random.seed",
+     ## SGA
+     ## - none
      ##
      "iterlim",
      "printLevel", "print.level")

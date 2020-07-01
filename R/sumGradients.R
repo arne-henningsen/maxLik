@@ -1,3 +1,4 @@
+### Sum the observation-wise gradient
 sumGradients <- function( gr, nParam ) {
 
    if( !is.null(dim(gr))) {

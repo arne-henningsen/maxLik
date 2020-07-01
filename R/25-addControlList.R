@@ -4,7 +4,10 @@
 ## We do not make it to a method: the signature would be indistinguishable
 ## from add(maxControl, ...) where ... is a single list
 addControlList <- function(x, y, check=TRUE) {
-   ## add list y to the control
+   ## add list y to the control x
+   ##
+   ## x: a maxcontrol object
+   ## y: a named list of additional maxControl parameters
    ## 
    ## check    only accept known control options.
    ##          useful if attaching known control list
@@ -19,7 +22,7 @@ addControlList <- function(x, y, check=TRUE) {
       ## openName    vector of accepted name forms
       ## slotName    corresponding actual slot name
       ## convert     how to convert the value
-      ## 
+      ##
       if(!any(openName %in% names(y))) {
          return(NULL)
       }
@@ -67,9 +70,24 @@ addControlList <- function(x, y, check=TRUE) {
    setSlot(c("sann_tmax", "SANN_tmax", "tmax"), convert=as.integer)
    setSlot(c("sann_randomSeed", "SANN_randomSeed", "random.seed"),
            convert=as.integer)
+   ## SGA
+   setSlot("SGA_momentum")
+   ## Adam
+   setSlot("Adam_momentum1", convert=as.numeric)
+   setSlot("Adam_momentum2", convert=as.numeric)
+   ## SG general
+   setSlot("SG_learningRate")
+   setSlot("SG_batchSize", convert=as.integer)
+   setSlot("SG_clip", convert=as.numeric)
+   setSlot("SG_patience", convert=as.integer)
+   setSlot("SG_patienceStep", convert=as.integer)
    ##
    setSlot("iterlim", convert=as.integer)
+   setSlot("max.rows", convert=as.integer)
+   setSlot("max.cols", convert=as.integer)
    setSlot(c("printLevel", "print.level"), convert=as.integer)
+   setSlot("storeValues", convert=as.logical)
+   setSlot("storeParameters", convert=as.logical)
    ##
    validObject(x)
    return(x)

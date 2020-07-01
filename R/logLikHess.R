@@ -1,5 +1,5 @@
 ## Calculate the Hessian of the function, either by analytic or numeric method
-logLikHess <- function( theta, fnOrig, gradOrig, hessOrig,
+logLikHess <- function( theta, fnOrig, gradOrig=NULL, hessOrig=NULL,
       start = NULL, fixed = NULL, gradAttr = NULL, hessAttr = NULL, ... ) {
 
    # argument "gradAttr" should be

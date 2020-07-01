@@ -1,13 +1,13 @@
+### this function returns the log-likelihood value with gradient and Hessian as
+### attributes. If the log-likelihood function provided by the user does not add
+### these attributes, this functions uses the functions provided by the user
+### as arguments "grad" and "hess" or (if they are not provided) uses the
+### finite-difference method to obtain the gradient and Hessian
 logLikAttr <- function(theta, fnOrig, gradOrig=NULL, hessOrig=NULL,
                        fixed,
          sumObs = FALSE, returnHessian = TRUE, ...) {
    ## fixed:    logical, which parameters to keep fixed
    ## 
-   ## this function returns the log-likelihood value with gradient and Hessian as
-   ## attributes. If the log-likelihood function provided by the user does not add
-   ## these attributes, this functions uses the functions provided by the user
-   ## as arguments "grad" and "hess" or (if they are not provided) uses the
-   ## finite-difference method to obtain the gradient and Hessian
 
          # large initial indentation to be able to diff to previous version
          # that was defined in maxNR() / maxNR.R.

@@ -32,7 +32,35 @@ returnMessage(x, ...)
   for various optimisation algorithms.
   The message should either describe
   the convergence (stopping condition),
-  or the problem.  
+  or the problem.
+
+  The known codes and the related messages are:
+  \itemize{
+    \item{1}{ gradient close to zero (normal convergence).}
+    \item{2}{ successive function values within tolerance limit (normal
+      convergence).}
+    \item{3}{ last step could not find higher value (probably not
+      converged).  This is related to line search step getting too
+      small, usually because hitting the boundary of the parameter
+      space.  It may also be related to attempts to move to a wrong
+      direction because of numerical errors.  In some cases it can be
+      helped by changing \code{steptol}.}
+    \item{4}{ iteration limit exceeded.}
+    \item{5}{ Infinite value.}
+    \item{6}{ Infinite gradient.}
+    \item{7}{ Infinite Hessian.}
+    \item{8}{ Successive function values withing relative tolerance
+      limit (normal convergence).}
+    \item{9}{ (BFGS) Hessian approximation cannot be improved because of
+      gradient did not change.  May be related to numerical
+      approximation problems or wrong analytic gradient.
+    }
+    \item{10}{
+      Lost patience: the optimizer has hit an inferior value too many
+      times (see \code{\link{maxSGA}} for more information)
+    }
+    \item{100}{ Initial value out of range.}
+    }
 }
 \value{
   Integer for \code{returnCode}, character for \code{returnMessage}.

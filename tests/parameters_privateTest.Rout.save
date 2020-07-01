@@ -595,8 +595,20 @@ sann_cand = <default Gaussian Markov kernel>
 sann_temp = 10 
 sann_tmax = 10 
 sann_randomSeed = 123 
+SGA_momentum = 0 
+Adam_momentum1 = 0.9 
+Adam_momentum2 = 0.999 
+SG_patience = 
+SG_patienceStep = 1 
+SG_learningRate = 0.1 
+SG_batchSize = 
+SG_clip = 
 iterlim = 1 
+max.rows = 20 
+max.cols = 7 
 printLevel = 0 
+storeValues = FALSE 
+storeParameters = FALSE 
 >                            # iterlim should be 1
 > print(coef(m))
 [1] 0.07158 1.00000
@@ -627,8 +639,20 @@ sann_cand = <default Gaussian Markov kernel>
 sann_temp = 10 
 sann_tmax = 10 
 sann_randomSeed = 123 
+SGA_momentum = 0 
+Adam_momentum1 = 0.9 
+Adam_momentum2 = 0.999 
+SG_patience = 
+SG_patienceStep = 1 
+SG_learningRate = 0.1 
+SG_batchSize = 
+SG_clip = 
 iterlim = 100 
+max.rows = 20 
+max.cols = 7 
 printLevel = 1 
+storeValues = FALSE 
+storeParameters = FALSE 
 > 
 > ## Does open parameters override everything?
 > m <- estimate(control=list(printLevel=2, print.level=1), print.level=0)
@@ -651,8 +675,20 @@ sann_cand = <default Gaussian Markov kernel>
 sann_temp = 10 
 sann_tmax = 10 
 sann_randomSeed = 123 
+SGA_momentum = 0 
+Adam_momentum1 = 0.9 
+Adam_momentum2 = 0.999 
+SG_patience = 
+SG_patienceStep = 1 
+SG_learningRate = 0.1 
+SG_batchSize = 
+SG_clip = 
 iterlim = 100 
+max.rows = 20 
+max.cols = 7 
 printLevel = 0 
+storeValues = FALSE 
+storeParameters = FALSE 
 > 
 > ### does both printLevel, print.level work for condiNumber?
 > condiNumber(hessian(m), print.level=0) # no output
@@ -661,4 +697,4 @@ printLevel = 0
 > 
 > proc.time()
    user  system elapsed 
-  1.177   0.786   0.683 
+  1.254   0.760   0.751 

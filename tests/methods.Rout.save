@@ -1,6 +1,6 @@
 
-R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -81,8 +81,20 @@ sann_cand = <default Gaussian Markov kernel>
 sann_temp = 10 
 sann_tmax = 10 
 sann_randomSeed = 123 
+SGA_momentum = 0 
+Adam_momentum1 = 0.9 
+Adam_momentum2 = 0.999 
+SG_patience = 
+SG_patienceStep = 1 
+SG_learningRate = 0.1 
+SG_batchSize = 
+SG_clip = 
 iterlim = 1 
+max.rows = 20 
+max.cols = 7 
 printLevel = 0 
+storeValues = FALSE 
+storeParameters = FALSE 
 -- method BFGS --
 MaxControl structure:
 A 'MaxControl' object with slots:
@@ -103,8 +115,20 @@ sann_cand = <default Gaussian Markov kernel>
 sann_temp = 10 
 sann_tmax = 10 
 sann_randomSeed = 123 
+SGA_momentum = 0 
+Adam_momentum1 = 0.9 
+Adam_momentum2 = 0.999 
+SG_patience = 
+SG_patienceStep = 1 
+SG_learningRate = 0.1 
+SG_batchSize = 
+SG_clip = 
 iterlim = 1 
+max.rows = 20 
+max.cols = 7 
 printLevel = 0 
+storeValues = FALSE 
+storeParameters = FALSE 
 -- method BFGSR --
 MaxControl structure:
 A 'MaxControl' object with slots:
@@ -125,8 +149,20 @@ sann_cand = <default Gaussian Markov kernel>
 sann_temp = 10 
 sann_tmax = 10 
 sann_randomSeed = 123 
+SGA_momentum = 0 
+Adam_momentum1 = 0.9 
+Adam_momentum2 = 0.999 
+SG_patience = 
+SG_patienceStep = 1 
+SG_learningRate = 0.1 
+SG_batchSize = 
+SG_clip = 
 iterlim = 1 
+max.rows = 20 
+max.cols = 7 
 printLevel = 0 
+storeValues = FALSE 
+storeParameters = FALSE 
 > 
 > ## Test methods for non-likelihood optimization
 > hatf <- function(theta) exp(- theta %*% theta)
@@ -184,7 +220,7 @@ Estimates:
 [2,]     0.95  4.8e-10
 [3,]     1.00  1.7e-09
 [4,]     1.05 -6.9e-10
-reached getOption("max.rows") -- omitted 11 rows
+ reached getOption("max.rows") -- omitted 11 rows
 Hessian:
       [,1]  [,2]
 [1,] -54.0  12.7
@@ -197,4 +233,4 @@ Hessian:
 > 
 > proc.time()
    user  system elapsed 
-   0.96    0.54    0.66 
+   1.22    0.59    0.96 

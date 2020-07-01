@@ -1,5 +1,5 @@
 
-R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
+R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -5192,25 +5192,6 @@ sigma -0.005  0.011
 [1] -204.5
 attr(,"df")
 [1] 2
-> all.equal( mlBfgsCon[ -c( 4, 5, 6, 9, 10 ) ], mlGCon[ -c( 4, 5, 6, 9, 10 ) ],
-+    tolerance = 1e-3 )
- [1] "Names: 3 string mismatches"                                                    
- [2] "Component \"estimate\": Mean relative difference: 0.01296"                     
- [3] "Component \"gradient\": Mean relative difference: 0.05056"                     
- [4] "Component \"last.step\": target is NULL, current is list"                      
- [5] "Component 6: Modes: list, S4"                                                  
- [6] "Component 6: Lengths: 5, 1"                                                    
- [7] "Component 6: names for target but not for current"                             
- [8] "Component 6: Attributes: < names for current but not for target >"             
- [9] "Component 6: Attributes: < Length mismatch: comparison on first 0 components >"
-[10] "Component 6: current is not list-like"                                         
-[11] "Component 7: Modes: S4, function"                                              
-[12] "Component 7: Attributes: < Modes: list, NULL >"                                
-[13] "Component 7: Attributes: < Lengths: 20, 0 >"                                   
-[14] "Component 7: Attributes: < names for target but not for current >"             
-[15] "Component 7: Attributes: < current is not list-like >"                         
-[16] "Component 8: Modes of target, current: function, list"                         
-[17] "Component 8: target, current do not match when deparsed"                       
 > mlBfgsConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
 +    method = "BFGS" )
 > print( summary( mlBfgsConInd ), digits = 2 )
@@ -5550,25 +5531,6 @@ sigma -0.005  0.011
 [1] -204.5
 attr(,"df")
 [1] 2
-> all.equal( mlNmCon[ -c( 4, 5, 6, 9, 10 ) ], mlGCon[ -c( 4, 5, 6, 9, 10 ) ],
-+    tolerance = 1e-3 )
- [1] "Names: 3 string mismatches"                                                    
- [2] "Component \"estimate\": Mean relative difference: 0.01283"                     
- [3] "Component \"gradient\": Mean relative difference: 0.04995"                     
- [4] "Component \"last.step\": target is NULL, current is list"                      
- [5] "Component 6: Modes: list, S4"                                                  
- [6] "Component 6: Lengths: 5, 1"                                                    
- [7] "Component 6: names for target but not for current"                             
- [8] "Component 6: Attributes: < names for current but not for target >"             
- [9] "Component 6: Attributes: < Length mismatch: comparison on first 0 components >"
-[10] "Component 6: current is not list-like"                                         
-[11] "Component 7: Modes: S4, function"                                              
-[12] "Component 7: Attributes: < Modes: list, NULL >"                                
-[13] "Component 7: Attributes: < Lengths: 20, 0 >"                                   
-[14] "Component 7: Attributes: < names for target but not for current >"             
-[15] "Component 7: Attributes: < current is not list-like >"                         
-[16] "Component 8: Modes of target, current: function, list"                         
-[17] "Component 8: target, current do not match when deparsed"                       
 > mlNmConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
 +    method = "NM", SUMTTol=0)
 > print( summary( mlNmConInd ), digits = 2 )
@@ -6402,4 +6364,4 @@ sigma 0.00  0.01
 > 
 > proc.time()
    user  system elapsed 
- 20.727   1.947  19.910 
+ 22.826   1.691  21.605 

@@ -101,7 +101,7 @@ maxNRCompute <- function(fn,
    iter <- 0
    returnHessian <- ifelse( bhhhHessian, "BHHH", TRUE )
    f1 <- fn(start1, fixed = fixed, sumObs = TRUE,
-      returnHessian = returnHessian, ...)
+            returnHessian = returnHessian, ...)
    if(slot(control, "printLevel") > 2) {
       cat("Initial function value:", f1, "\n")
    }

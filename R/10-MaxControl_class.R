@@ -1,13 +1,15 @@
 
-### shoud move checkMaxControl to a separate file but how to do it?
+### should move checkMaxControl to a separate file but how to do it?
 
 setClassUnion("functionOrNULL", c("function", "NULL"))
+setClassUnion("integerOrNULL", c("integer", "NULL"))
+setClassUnion("numericOrNULL", c("numeric", "NULL"))
 
 checkMaxControl <- function(object) {
    ## check validity of MaxControl objects
    if(!inherits(object, "MaxControl")) {
       stop("'MaxControl' object required.  Currently '",
-           class(object), "'")
+           paste(class(object), sep=", "), "'")
    }
    ##
    errors <- character(0)
@@ -21,10 +23,32 @@ checkMaxControl <- function(object) {
                               length(slot(object, s)), sep=""))
          }
       }
+      else if(s %in% c("SG_batchSize", "SG_clip", "SG_patience")) {
+                           # integerOrNULL
+         if(length(slot(object, s)) > 1) {
+            errors <- c(errors,
+                        paste("'", s, "' must be either 'NULL' or ",
+                              "of length 1, not of length ",
+                              length(slot(object, s)), sep=""))
+         }
+      }
       else if(length(slot(object, s)) != 1) {
+                           # length 1
          errors <- c(errors,
                      paste("'", s, "' must be of length 1, not ",
                            length(slot(object, s)), sep=""))
+      }
+   }
+   ## check missings
+   for(s in slotNames(object)) {
+      if(is.vector(slot(object, s)) && any(is.na(slot(object, s)))) {
+                           # is.na only works for vectors
+         errors <- c(errors,
+                     paste0("NA in '", s, "'")
+                     )
+         return(errors)
+                           # return errors here as otherwise NA-s will interfere the
+                           # block of if-s below
       }
    }
    ##
@@ -91,10 +115,53 @@ checkMaxControl <- function(object) {
                                 "'tmax' ",
                                 "must be positive, not", slot(object, "sann_tmax")))
    }
-   ##
+   ## SGA
+   if(slot(object, "SGA_momentum") < 0 || slot(object, "SGA_momentum") > 1) {
+      errors <- c(errors, paste("SGA momentum parameter must be in [0,1], not",
+                                slot(object, "SGA_momentum")))
+   }
+   ## Adam
+   if(slot(object, "Adam_momentum1") < 0 || slot(object, "Adam_momentum1") > 1) {
+      errors <- c(errors, paste("Adam momentum1 parameter must be in [0,1], not",
+                                slot(object, "Adam_momentum1")))
+   }
+   if(slot(object, "Adam_momentum2") < 0 || slot(object, "Adam_momentum2") > 1) {
+      errors <- c(errors, paste("Adam momentum2 parameter must be in [0,1], not",
+                                slot(object, "Adam_momentum2")))
+   }
+   ## SG general
+   if(slot(object, "SG_learningRate") <= 0) {
+      errors <- c(errors, paste("learning rate for SGA must be positive, not",
+                                slot(object, "SG_learningRate")))
+   }
+   if(length(slot(object, "SG_batchSize")) > 0 && slot(object, "SG_batchSize") <= 0L) {
+      errors <- c(errors, paste("SGA batch size must be positive, not",
+                                slot(object, "SG_batchSize")))
+   }
+   if(length(slot(object, "SG_clip")) > 0 && slot(object, "SG_clip") <= 0L) {
+      errors <- c(errors, paste("SGA gradient clip norm threshold must be positive, not",
+                                slot(object, "SG_clip")))
+   }
+   if(length(slot(object, "SG_patience")) > 0 && slot(object, "SG_patience") <= 0L) {
+      errors <- c(errors, paste("SG patience must be positive (or NULL), not",
+                                slot(object, "SG_patience")))
+   }
+   if(slot(object, "SG_patienceStep") <= 0L) {
+      errors <- c(errors, paste("SG patience step must be positive, not",
+                                slot(object, "SG_patienceStep")))
+   }
+   ## general
    if(slot(object, "iterlim") < 0) {
       errors <- c(errors, paste("'iterlim' must be non-negative, not",
                                 slot(object, "iterlim")))
+   }
+   if(slot(object, "max.rows") < 0) {
+      errors <- c(errors, paste("'max.rows' must be non-negative, not",
+                                slot(object, "max.rows")))
+   }
+   if(slot(object, "max.cols") < 0) {
+      errors <- c(errors, paste("'max.cols' must be non-negative, not",
+                                slot(object, "max.cols")))
    }
    if(length(errors) > 0)
       return(errors)
@@ -125,10 +192,24 @@ setClass("MaxControl",
          sann_temp="numeric",
          sann_tmax="integer",
          sann_randomSeed="integer",
+         ## SGA
+         SGA_momentum = "numeric",
+         ## Adam
+         Adam_momentum1 = "numeric",
+         Adam_momentum2 = "numeric",
+         ## SG general
+         SG_patience = "integerOrNULL",  # NULL: don't care about patience
+         SG_patienceStep = "integer",  # check patience at every epoch
+         SG_learningRate="numeric",
+         SG_batchSize = "integerOrNULL",  # NULL: full batch
+         SG_clip="numericOrNULL",  # NULL: do not clip
          ##
-             iterlim="integer",
-             ##
-             printLevel="integer"),
+         iterlim="integer",
+         max.rows="integer",
+         max.cols="integer",
+         printLevel="integer",
+         storeValues="logical", storeParameters="logical"
+         ),
          ##
          prototype=prototype(
              tol=1e-8,
@@ -140,7 +221,7 @@ setClass("MaxControl",
                            #
              qac="stephalving",
              qrtol=1e-10,
-         marquardt_lambda0=1e-2,
+            marquardt_lambda0=1e-2,
          marquardt_lambdaStep=2,
          marquardt_maxLambda=1e12,
          ## Optim Nelder-Mead
@@ -152,8 +233,23 @@ setClass("MaxControl",
          sann_temp=10,
          sann_tmax=10L,
          sann_randomSeed=123L,
+         ## SGA
+         SGA_momentum = 0,
+         ## Adam
+         Adam_momentum1 = 0.9,
+         Adam_momentum2 = 0.999,
+         ##
+         SG_learningRate=0.1,
+         SG_batchSize=NULL,
+         SG_clip=NULL,
+         SG_patience = NULL,
+         SG_patienceStep = 1L,
          ##
          iterlim=150L,
-         printLevel=0L),
+         max.rows=as.integer(getOption("max.rows", 20L)),
+         max.cols=as.integer(getOption("max.cols", 7L)),
+         printLevel=0L,
+         storeValues=FALSE, storeParameters=FALSE),
          ##
-         validity=checkMaxControl)
+         validity=checkMaxControl
+         )

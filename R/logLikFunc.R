@@ -4,12 +4,16 @@ if( getRversion() >= "2.15.1" ) {
 
 ## objective function:
 ## sum over possible individual likelihoods
-logLikFunc <- function(theta, fnOrig, gradOrig, hessOrig,
-      start = NULL, fixed = NULL, sumObs = TRUE, ...) {
-
-   # Arguments "gradOrig" and "hessOrig" are just for compatibility with
-   #    logLikGrad() and logLikHess()
-
+logLikFunc <- function(theta,
+                       fnOrig,  # the original user-supplied function we wrap here
+                       gradOrig,
+                       hessOrig,
+                           # Arguments "gradOrig" and "hessOrig" are just for compatibility with
+                           # logLikGrad() and logLikHess()
+                       start = NULL, fixed = NULL, sumObs = TRUE, ...) {
+   if(missing(fnOrig)) {
+      stop("Cannot compute the objective function value: no objective function supplied")
+   }
    theta <- addFixedPar( theta = theta, start = start, fixed = fixed, ...)
    result <- fnOrig( theta, ... )
 

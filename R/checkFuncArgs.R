@@ -1,3 +1,6 @@
+### check of any of the args to the function that calls 'func'
+### match arguments of 'func'
+### 
 checkFuncArgs <- function( func, checkArgs, argName, funcName ) {
    ## is the 'func' a function?
    if( !is.function( func ) ) {

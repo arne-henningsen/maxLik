@@ -1084,8 +1084,6 @@ returnCode( mlBfgsCon )
 returnMessage( mlBfgsCon )
 round( vcov( mlBfgsCon ), 3 )
 logLik( summary( mlBfgsCon ) )
-all.equal( mlBfgsCon[ -c( 4, 5, 6, 9, 10 ) ], mlGCon[ -c( 4, 5, 6, 9, 10 ) ],
-   tolerance = 1e-3 )
 mlBfgsConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
    method = "BFGS" )
 print( summary( mlBfgsConInd ), digits = 2 )
@@ -1125,8 +1123,6 @@ returnCode( mlNmCon )
 returnMessage( mlNmCon )
 round( vcov( mlNmCon ), 3 )
 logLik( summary( mlNmCon ) )
-all.equal( mlNmCon[ -c( 4, 5, 6, 9, 10 ) ], mlGCon[ -c( 4, 5, 6, 9, 10 ) ],
-   tolerance = 1e-3 )
 mlNmConInd <- maxLik( llfInd, start = startVal, constraints = eqCon,
    method = "NM", SUMTTol=0)
 print( summary( mlNmConInd ), digits = 2 )

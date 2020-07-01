@@ -14,8 +14,8 @@
 
 .onLoad <- function(libname, pkgname) {
    ## max rows and columns to output when printing matrices/vectors
-   options(max.rows = 20,
-           max.cols = 7)
+   options(max.rows = 20L,
+           max.cols = 7L)
 }
 
 .onUnload <- function(libpath) {

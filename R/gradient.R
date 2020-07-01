@@ -1,4 +1,4 @@
-## Return Hessian of an object
+## Return gradient of an object
 
 gradient <- function(x, ...)
     UseMethod("gradient")
