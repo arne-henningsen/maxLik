@@ -173,7 +173,7 @@ maxNM(fn, grad=NULL, hess=NULL, start, fixed=NULL,
     finite-difference approximation to the gradient.}
   \item{maximType}{character string, type of maximization.}
   \item{maxControl}{the optimization control parameters in the form of a
-    \code{\link[maxLik:MaxControl-class]{MaxControl}} object.}
+    \code{\linkS4class{MaxControl}} object.}
 
   The following components can only be extracted directly (with \code{\$}):
   \item{constraints}{A list, describing the constrained optimization

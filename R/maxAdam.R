@@ -1,4 +1,3 @@
-library(magrittr)
 
 maxAdam <- function(fn=NULL, grad=NULL, hess=NULL, start,
                     nObs,

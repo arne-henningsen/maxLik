@@ -233,7 +233,7 @@ maxAdam(fn = NULL, grad = NULL, hess = NULL, start,
   \item{\code{\link{nIter}}}{number of iterations.}
   \item{\code{\link{maximType}}}{character string, type of maximization.}
   \item{\code{\link{maxControl}}}{the optimization control parameters in the form of a
-    \code{\link[maxLik:MaxControl-class]{MaxControl}} object.}
+    \code{\linkS4class{MaxControl}} object.}
 
   The following components can only be extracted directly (with \code{\$}):
   \item{last.step}{a list describing the last unsuccessful step if

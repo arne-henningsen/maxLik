@@ -755,7 +755,6 @@ the package, not to solve a linear regression exercise.
 We believe every \emph{R}-savy user can adapt the
 method to their needs.
 
-
 \bibliographystyle{apecon}
 \bibliography{sga}
 

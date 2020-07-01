@@ -251,7 +251,7 @@ signaling it with the
   \item{nIter}{number of iterations.}
   \item{maximType}{character string, type of maximization.}
   \item{maxControl}{the optimization control parameters in the form of a
-    \code{\link[maxLik:MaxControl-class]{MaxControl}} object.}
+    \code{\linkS4class{MaxControl}} object.}
 
   The following components can only be extracted directly (with \code{\$}):
   \item{last.step}{a list describing the last unsuccessful step if

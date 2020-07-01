@@ -12,7 +12,7 @@ Suggests: testthat, MASS
 Description: Functions for Maximum Likelihood (ML) estimation, non-linear
    optimization, and related tools.  It includes a unified way to call
    different optimizers, and classes and methods to handle the results from
-   the Maximum Likelihod viewpoint.  It also includes a number of convenience tools for testing
+   the Maximum Likelihood viewpoint.  It also includes a number of convenience tools for testing
    and developing your own models.
 License: GPL (>= 2)
 ByteCompile: yes

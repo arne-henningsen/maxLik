@@ -36,8 +36,8 @@ simplest form it takes two arguments: the log-likelihood function, and
 a vector of parameters' start values.  It returns an object of class
 \sQuote{maxLik} with convenient methods such as
 \code{\link[maxLik:summary.maxLik]{summary}},
-\code{\link[maxLik:coef.maxim]{coef}}, and
-\code{\link[maxLik:stdEr.maxLik]{stdEr}}.  It also supports a plethora
+\code{\link[maxLik:maxLik-methods]{coef}}, and
+\code{\link[maxLik:maxLik-methods]{stdEr}}.  It also supports a plethora
 of other arguments, for instance one can supply analytic gradient and
 Hessian, select the desired optimizer, and control the optimization in
 different ways.

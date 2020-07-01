@@ -1,6 +1,6 @@
 
-R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -16,8 +16,14 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > ### Does maxControl stuff behave?
+> ### no need to test it on CRAN, hence private test
+> ### 
 > ### test for:
 > ### 1. create maxControl object
+> ### 2. SGA_batchSize NULL
+> ### 3. negative batch size
+> ### 4. more than 1 batch size
+> ### SG_clip: NULL, negative, more than one
 > 
 > library(maxLik)
 Loading required package: miscTools
@@ -29,10 +35,14 @@ If you have questions, suggestions, or comments regarding the 'maxLik' package, 
 https://r-forge.r-project.org/projects/maxlik/
 > library(testthat)
 > 
+> ### ---------- create maxControl object
 > maxControl(tol=1e-4, lambdatol=1e-5, qrtol=1e-6, qac="marquardt",
 +            marquardt_lambda0=0.1, marquardt_lambdaStep=3, marquardt_maxLambda=1e10,
 +            nm_alpha=2, nm_beta=1, nm_gamma=4,
 +            sann_temp=5, sann_tmax=100, sann_randomSeed=1,
++            SGA_momentum=0.9, Adam_momentum1=0.5, Adam_momentum2=0.55,
++            SG_learningRate=0.5, SG_batchSize=10, SG_clip=1000, 
++            SG_patience=7, SG_patienceStep=10,
 +            iterlim=10, printLevel=3)
 A 'MaxControl' object with slots:
 tol = 1e-04 
@@ -52,9 +62,106 @@ sann_cand = <default Gaussian Markov kernel>
 sann_temp = 5 
 sann_tmax = 100 
 sann_randomSeed = 1 
+SGA_momentum = 0.9 
+Adam_momentum1 = 0.5 
+Adam_momentum2 = 0.55 
+SG_patience = 7 
+SG_patienceStep = 10 
+SG_learningRate = 0.5 
+SG_batchSize = 10 
+SG_clip = 1000 
 iterlim = 10 
+max.rows = 20 
+max.cols = 7 
 printLevel = 3 
+storeValues = FALSE 
+storeParameters = FALSE 
+> 
+> ### ---------- SG_batchSize
+> maxControl(SG_batchSize=NULL)  # should work
+A 'MaxControl' object with slots:
+tol = 1e-08 
+reltol = 1.490116e-08 
+gradtol = 1e-06 
+steptol = 1e-10 
+lambdatol = 1e-06 
+qrtol = 1e-10 
+qac = stephalving 
+marquardt_lambda0 = 0.01 
+marquardt_lambdaStep = 2 
+marquardt_maxLambda = 1e+12 
+nm_alpha = 1 
+nm_beta = 0.5 
+nm_gamma = 2 
+sann_cand = <default Gaussian Markov kernel>
+sann_temp = 10 
+sann_tmax = 10 
+sann_randomSeed = 123 
+SGA_momentum = 0 
+Adam_momentum1 = 0.9 
+Adam_momentum2 = 0.999 
+SG_patience = 
+SG_patienceStep = 1 
+SG_learningRate = 0.1 
+SG_batchSize =  
+SG_clip = 
+iterlim = 150 
+max.rows = 20 
+max.cols = 7 
+printLevel = 0 
+storeValues = FALSE 
+storeParameters = FALSE 
+> try(maxControl(SG_batchSize=-1))  # should fail
+Error in validObject(x) : 
+  invalid class "MaxControl" object: SGA batch size must be positive, not -1
+> try(maxControl(SG_batchSize=2:3))  # should fail
+Error in validObject(x) : 
+  invalid class "MaxControl" object: 'SG_batchSize' must be either 'NULL' or of length 1, not of length 2
+> 
+> maxControl(SG_clip=NULL)  # works
+A 'MaxControl' object with slots:
+tol = 1e-08 
+reltol = 1.490116e-08 
+gradtol = 1e-06 
+steptol = 1e-10 
+lambdatol = 1e-06 
+qrtol = 1e-10 
+qac = stephalving 
+marquardt_lambda0 = 0.01 
+marquardt_lambdaStep = 2 
+marquardt_maxLambda = 1e+12 
+nm_alpha = 1 
+nm_beta = 0.5 
+nm_gamma = 2 
+sann_cand = <default Gaussian Markov kernel>
+sann_temp = 10 
+sann_tmax = 10 
+sann_randomSeed = 123 
+SGA_momentum = 0 
+Adam_momentum1 = 0.9 
+Adam_momentum2 = 0.999 
+SG_patience = 
+SG_patienceStep = 1 
+SG_learningRate = 0.1 
+SG_batchSize = 
+SG_clip =  
+iterlim = 150 
+max.rows = 20 
+max.cols = 7 
+printLevel = 0 
+storeValues = FALSE 
+storeParameters = FALSE 
+> try(maxControl(SG_clip=-1))  # fails
+Error in validObject(x) : 
+  invalid class "MaxControl" object: SGA gradient clip norm threshold must be positive, not -1
+> try(maxControl(SG_clip=2:3))  # fails
+Error in validObject(x) : 
+  invalid class "MaxControl" object: 'SG_clip' must be either 'NULL' or of length 1, not of length 2
+> 
+> try(maxControl(Adam_momentum1=NA))  # should fail w/'NA in Adam_momentum'
+Error in validObject(x) : 
+  invalid class "MaxControl" object: NA in 'Adam_momentum1'
 > 
 > proc.time()
    user  system elapsed 
-  0.318   0.218   0.251 
+  0.323   0.187   0.289 
