@@ -160,6 +160,12 @@ res <- maxSGA(grad=gradlikO, start=start,
               nObs=length(yTrain))
 expect_equal(coef(res), b0, tolerance=tol)
 
+## ---------- 0 observations
+res <- maxSGA(grad=gradlik, start=start,
+              control=list(iterlim=0),
+              nObs=length(yTrain))
+expect_equal(coef(res), start)
+                           # should return start values exactly
 
 ### -------------------- create unequally scaled data
 set.seed(1)

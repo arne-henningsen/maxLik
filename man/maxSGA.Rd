@@ -37,14 +37,14 @@ maxAdam(fn = NULL, grad = NULL, hess = NULL, start,
     have an argument \code{index} to specify the integer index of selected
     observations.
     It must return either a gradient vector of the objective function,
-    or a matrix, where \emph{columns} correspond to individual parameters.
+    or a matrix, where columns correspond to individual parameters.
     The column sums are treated as gradient components.
     If \code{NULL}, finite-difference gradients are computed.
     If \code{fn} returns an object with attribute \code{gradient},
     this argument is ignored.
 
-    If \code{grad} is not supplied, it is derived by finite-difference
-    method from \code{fn}.  However, this is only adviseable for
+    If \code{grad} is not supplied, it is computed by finite-difference
+    method using \code{fn}.  However, this is only adviseable for
     small-scale tests, not for any production run.  Obviously, \code{fn}
     must be correctly defined in that case.
   }
@@ -57,12 +57,12 @@ maxAdam(fn = NULL, grad = NULL, hess = NULL, start,
     \code{gradient} or BHHH approach
     is computed if asked to do so.
   }
-  \item{start}{initial parameter values.  If start values
-    are named, those names are also used for results.}
+  \item{start}{initial parameter values.  If these have names, the
+    names are also used for results.}
   \item{nObs}{number of observations.  This is used to partition the data
     into individual batches.  The resulting batch
     indices are forwarded to the \code{grad} function through the
-    arument \code{index}.}
+    argument \code{index}.}
   \item{constraints}{either \code{NULL} for unconstrained optimization
     or a list with two components.  The components may be either
     \code{eqA} and \code{eqB} for equality-constrained optimization
@@ -80,8 +80,8 @@ maxAdam(fn = NULL, grad = NULL, hess = NULL, start,
   \item{finalHessian}{how (and if) to calculate the final Hessian.  Either
     \code{FALSE} (do not calculate), \code{TRUE} (use analytic/finite-difference
     Hessian) or \code{"bhhh"}/\code{"BHHH"} for the information equality
-    approach.  The latter approach is only suitable for maximizing
-    log-likelihood functions and it requires the gradient/log-likelihood to
+    approach.  The latter approach is only suitable when working with a
+    log-likelihood function, and it requires the gradient/log-likelihood to
     be supplied by individual observations.
 
     Hessian matrix is not often used for optimization problems where one
@@ -93,25 +93,30 @@ maxAdam(fn = NULL, grad = NULL, hess = NULL, start,
   \item{fixed}{parameters to be treated as constants at their
     \code{start} values.  If present, it is treated as an index vector of
     \code{start} parameters.}
-  \item{control}{list of control parameters.  The control parameters
+  \item{control}{list of control parameters.  The ones
     used by these optimizers are
     \describe{
       \item{SGA_momentum}{0, numeric momentum parameter for SGA.  Must lie
 	in interval \eqn{[0,1]}{[0,1]}.  See details.
       }
       Adam-specific parameters
-      \item{Adam_momentum1}{0.9, numeric in \eqn{(0,1)}{(0,1)}, the first moment momentum}
-      \item{Adam_momentum2}{0.999, numeric in \eqn{(0,1)}{(0,1)}, the second moment momentum}
+      \item{Adam_momentum1}{0.9, numeric in interval \eqn{(0,1)}{(0,1)}, the first moment momentum}
+      \item{Adam_momentum2}{0.999, numeric in interval \eqn{(0,1)}{(0,1)}, the second moment momentum}
       General stochastic gradient parameters:
       \item{SG_learningRate}{step size the SGA algorithm takes in the
-	gradient direction.  If 1, it steps by the gradient value.  A
-	good value is typically 0.01--0.3}
-      \item{SG_batchSize}{SGA batch size, a positive
-	integer.  If \code{NULL}, full batch is taken.}
-      \item{SG_clip}{\code{NULL}, gradient clipping threshold.  This is
-	the largest allowed squared Euclidean norm of the gradient.  If the
-	actual norm of the gradient exceeds (square root of) this
-	threshold, the gradient will be scaled back accordingly while
+	gradient direction.  If 1, the step equals to the gradient value.  A
+	good value is often 0.01--0.3}
+      \item{SG_batchSize}{SGA batch size, an integer between 1 and
+	\code{nObs}.
+	If \code{NULL} (default), the full batch gradient is computed.
+      }
+      \item{SG_clip}{\code{NULL}, gradient clipping threshold.  The
+	algorithm ensures that \eqn{||g(\theta)||_2^2 \le
+	  \kappa}{norm(gradient)^2 <= kappa} where \eqn{\kappa}{kappa} is
+	the \code{SG_clip} value.  If the
+	actual norm of the gradient exceeds (square root of)
+	\eqn{\kappa}{kappa},
+	the gradient will be scaled back accordingly while
 	preserving its direction.  \code{NULL} means no clipping.
       }
       Stopping conditions:
@@ -125,27 +130,29 @@ maxAdam(fn = NULL, grad = NULL, hess = NULL, start,
       }
       \item{SG_patience}{\code{NULL}, or integer.  Stopping condition:
 	the algorithm counts how many times
-	the objective function has beeb worse than its best value so
+	the objective function has been worse than its best value so
 	far, and if this exceeds \code{SG_patience}, the algorithm stops.
       }
       \item{SG_patienceStep}{1L, integer.  After how many epochs to check
-	the patience value.  \code{1} means to check (and hence to compute the
-	objective function) at each epoch.
+	the patience value.  \code{1} means to check at each epoch, and hence to compute the
+	objective function.  This may be undesirable if the objective
+	function is costly to compute.
       }
       \item{iterlim}{stopping condition.  Stop if more than \code{iterlim}
-	iterations, return \code{code=4}.
+	epochs, return \code{code=4}.
 	Epoch is a set of iterations that cycles through all
 	observations.  In case of full batch, iterations and epochs are
-	equivalent. 
+	equivalent.  If \code{iterlim = 0}, does not do any learning and
+	returns the initial values unchanged.
       }
       \item{printLevel}{this argument determines the level of
 	printing which is done during the optimization process. The default
 	value 0 means that no printing occurs, 1 prints the
 	initial and final details, 2 prints all the
-	main tracing information for every iteration.  Higher
+	main tracing information for every epoch.  Higher
 	values will result in even more output.
       }
-      \item{storeParameters}{\code{FALSE}, whether to store and return the
+      \item{storeParameters}{logical, whether to store and return the
 	parameter
 	values at each epoch.  If \code{TRUE}, the stored values
 	can be retrieved with \code{\link{storedParameters}}-method.  The
@@ -153,61 +160,67 @@ maxAdam(fn = NULL, grad = NULL, hess = NULL, start,
 	epochs and columns to the parameter components.  There are
 	\code{iterlim} + 1 rows, where the first one corresponds to the
 	initial parameters.
+
+	Default \code{FALSE}.
       }
-      \item{storeValues}{\code{FALSE}, whether to store and return the objective
+      \item{storeValues}{logical, whether to store and return the objective
 	function values at each epoch.  If \code{TRUE}, the stored values
 	can be retrieved with \code{\link{storedValues}}-method.  There are
 	\code{iterlim} + 1 values, where the first one corresponds to
 	the value at the
 	initial parameters.
+	
+	Default \code{FALSE}.
       }
     }
     See \code{\link{maxControl}} for more information.
   }
   \item{\dots}{further arguments to \code{fn}, \code{grad} and
     \code{hess}.
-    To maintain compatibility with the earlier versions, \dots also passes a
-    number of control options (\code{tol}, \code{reltol},
-    \code{gradtol}, \code{steptol},
-    \code{lambdatol},  \code{qrtol}, \code{iterlim}) to the optimizers.
-    }
+    To maintain compatibility with the earlier versions, \dots also
+    passes certain control options to the optimizers.
   }
-  \details{
-    Gradient Ascent (GA) is a optimization method where the algorithm
-    repeatedly takes small steps in the gradient's direction.
-    In case of Stochastic GA (SGA), the gradient is not computed on the
-    full set of observations but on a random subset, \emph{batch},
-    potentially a single observation only.  This converges much faster
-    than when using all observation in certain circumstances (see
-    \cite{Bottou et al, 2018}).
+}
 
-    If \code{SGA_momentum} is positive, the SGA algorithm updates the parameters
-    \eqn{\theta}{theta} in two steps.  First, the momentum is used to update
-    the \dQuote{velocity} \eqn{v}{v} as
-    \eqn{v \leftarrow \mathrm{momentum}\cdot v + \mathrm{learning
-	rate}\cdot \nabla f(\theta)}{v <- momentum*v + learning
-      rate* gradient f(theta)}, and thereafter the parameter
-    \eqn{\theta}{theta} is updates as
-    \eqn{\theta \leftarrow \theta + v}{theta <- theta + v}.  Initial
-    velocity is set to 0.
-
-    The Adam algorithm is more complex and uses first and second moments
-    of stochastic gradients to automatically adjust the learning rate.
-    See \cite{Goodfellow et al, 2016, page 301}.
+\details{
+  Gradient Ascent (GA) is a optimization method where the algorithm
+  repeatedly takes small steps in the gradient's direction, the
+  parameter vector \eqn{\theta}{theta} is updated as \eqn{\theta
+    \leftarrow theta + \mathrm{learning rate}\cdot \nabla
+    f(\theta)}{theta <- learning rate * gradient f(theta)}.
+  In case of Stochastic GA (SGA), the gradient is not computed on the
+  full set of observations but on a small subset, \emph{batch},
+  potentially a single observation only.  In certain circumstances
+  this converges much faster
+  than when using all observation (see
+  \cite{Bottou et al, 2018}).
+  
+  If \code{SGA_momentum} is positive, the SGA algorithm updates the parameters
+  \eqn{\theta}{theta} in two steps.  First, the momentum is used to update
+  the \dQuote{velocity} \eqn{v}{v} as
+  \eqn{v \leftarrow \mathrm{momentum}\cdot v + \mathrm{learning
+      rate}\cdot \nabla f(\theta)}{v <- momentum*v + learning
+    rate* gradient f(theta)}, and thereafter the parameter
+  \eqn{\theta}{theta} is updates as
+  \eqn{\theta \leftarrow \theta + v}{theta <- theta + v}.  Initial
+  velocity is set to 0.
+  
+  The Adam algorithm is more complex and uses first and second moments
+  of stochastic gradients to automatically adjust the learning rate.
+  See \cite{Goodfellow et al, 2016, page 301}.
     
-    The function \code{fn} is not directly used for optimization, only
-    for printing or eventually as a stopping condition.  In this sense
-    it is up to the user to decide what the function
-    returns, if anything.  For instance, it may be useful for \code{fn} to compute the
-    objective function on either full training data, or on validation data,
-    and just ignore the \code{index} argument.  The latter is useful if
-    using \emph{patience}-based stopping.
-    However, one may also
-    choose to select the observations determined by the index to
-    compute the objective function on the current data batch.
-
-    % Does it support contraints?
-  }
+  The function \code{fn} is not directly used for optimization, only
+  for printing or as a stopping condition.  In this sense
+  it is up to the user to decide what the function
+  returns, if anything.  For instance, it may be useful for \code{fn} to compute the
+  objective function on either full training data, or on validation data,
+  and just ignore the \code{index} argument.  The latter is useful if
+  using \emph{patience}-based stopping.
+  However, one may also
+  choose to select the observations determined by the index to
+  compute the objective function on the current data batch.
+  % Does it support contraints?
+}
 
 \value{
   object of class "maxim".  Data can be extracted through the following
@@ -215,7 +228,7 @@ maxAdam(fn = NULL, grad = NULL, hess = NULL, start,
   \item{\code{\link{maxValue}}}{\code{fn} value at maximum (the last calculated value
     if not converged.)}
   \item{\code{\link{coef}}}{estimated parameter value.}
-  \item{gradient}{vector, last calculated gradient value.  Should be
+  \item{\code{\link{gradient}}}{vector, last calculated gradient value.  Should be
     close to 0 in case of normal convergence.}
   \item{estfun}{matrix of gradients at parameter value \code{estimate}
       evaluated at each observation (only if \code{grad} returns a matrix
@@ -234,24 +247,6 @@ maxAdam(fn = NULL, grad = NULL, hess = NULL, start,
   \item{\code{\link{maximType}}}{character string, type of maximization.}
   \item{\code{\link{maxControl}}}{the optimization control parameters in the form of a
     \code{\linkS4class{MaxControl}} object.}
-
-  The following components can only be extracted directly (with \code{\$}):
-  \item{last.step}{a list describing the last unsuccessful step if
-    \code{code=3} with following components:
-    \itemize{
-    \item{theta0}{ previous parameter value}
-    \item{f0}{ \code{fn} value at \code{theta0}}
-    \item{climb}{ the movement vector to the maximum of the quadratic approximation}
-    }
-  }
-  \item{constraints}{A list, describing the constrained optimization
-    (\code{NULL} if unconstrained).  Includes the following components:
-    \itemize{
-      \item{type}{ type of constrained optimization}
-      \item{outer.iterations}{ number of iterations in the constraints step}
-      \item{barrier.value}{ value of the barrier function}
-    }
-  }
 }
 
 \references{
@@ -277,7 +272,7 @@ maxAdam(fn = NULL, grad = NULL, hess = NULL, start,
   The other related functions are
    \code{\link{maxNR}} for Newton-Raphson, a popular Hessian-based maximization;
    \code{\link{maxBFGS}} for maximization using the BFGS, Nelder-Mead (NM),
-   and Simulated Annealing (SANN) method (based on \code{\link{optim}}),
+   and Simulated Annealing (SANN) method (based on \code{\link[stats]{optim}}),
    also supporting inequality constraints;
    \code{\link{maxLik}} for a general framework for maximum likelihood
    estimation (MLE);
@@ -301,7 +296,7 @@ summary(a)
 ##
 ## demonstrate the usage of index, and using
 ## fn for computing the objective function on validation data.
-## create a linear model where variables are very unequally scaled
+## Create a linear model where variables are very unequally scaled
 ##
 ## OLS loglik function: compute the function value on validation data only
 loglik <- function(beta, index) {
@@ -309,6 +304,7 @@ loglik <- function(beta, index) {
    -crossprod(e)/length(y)
 }
 ## OLS gradient: compute it on training data only
+## Use 'index' to select the subset corresponding to the minibatch
 gradlik <- function(beta, index)  {
    e <- yTrain[index] - XTrain[index,,drop=FALSE] \%*\% beta
    g <- t(-2*t(XTrain[index,,drop=FALSE]) \%*\% e)
@@ -332,7 +328,7 @@ a <- maxSGA(loglik, gradlik, start=c(10,10),
            control=list(printLevel=1, iterlim=50,
                         SG_batchSize=30, SG_learningRate=0.0001, SGA_momentum=0
                         ), nObs=length(yTrain))
-print(summary(a))  # the first component is off, the second close to the true value
+print(summary(a))  # the first component is off, the second one is close to the true value
 ## do with momentum 0.99
 cat("  Momentum 0.99:\n")
 a <- maxSGA(loglik, gradlik, start=c(10,10),
