@@ -1,5 +1,5 @@
 
-R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+R version 4.0.2 (2020-06-22) -- "Taking Off Again"
 Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -207,6 +207,9 @@ storeParameters = FALSE
 > y <- X %*% beta + rnorm(20, sd=0.3)
 > m <- maxNR(loglik, gradlik, start=rep(1, ncol(X)), iterlim=1)
 > options(digits=2)
+> # rounding of the gradients so that minor difference in different computers
+> # do not result in differences in the output
+> m$gradient <- round( m$gradient, 6 )
 > print(summary(m, hessian=TRUE), max.rows=4, max.cols=2)
 --------------------------------------------
 Newton-Raphson maximisation 
@@ -216,10 +219,10 @@ gradient close to zero
 Function value: -0.72 
 Estimates:
      estimate gradient
-[1,]     1.10  1.2e-09
-[2,]     0.95  4.8e-10
-[3,]     1.00  1.7e-09
-[4,]     1.05 -6.9e-10
+[1,]     1.10        0
+[2,]     0.95        0
+[3,]     1.00        0
+[4,]     1.05        0
  reached getOption("max.rows") -- omitted 11 rows
 Hessian:
       [,1]  [,2]
@@ -233,4 +236,4 @@ Hessian:
 > 
 > proc.time()
    user  system elapsed 
-   1.22    0.59    0.96 
+  0.456   0.028   0.477 
