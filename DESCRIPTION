@@ -8,7 +8,7 @@ Author: Ott Toomet <otoomet@gmail.com>,
 Maintainer: Ott Toomet <otoomet@gmail.com>
 Depends: R (>= 2.4.0), miscTools (>= 0.6-8), methods
 Imports: sandwich
-Suggests: testthat, MASS
+Suggests: testthat, MASS, clue, dlm
 Description: Functions for Maximum Likelihood (ML) estimation, non-linear
    optimization, and related tools.  It includes a unified way to call
    different optimizers, and classes and methods to handle the results from
