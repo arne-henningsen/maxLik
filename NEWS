@@ -4,9 +4,13 @@ Please note that only the most significant changes are reported here.
 A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
-      CHANGES IN VERSION 1.4-0 (2020-05-15)
+     CHANGES IN VERSION 1.4-2 (2020-07-08)
 
-* includes stochastig gradient ascent and Adam optimizer
+* fixed CRAN test issues
+
+      CHANGES IN VERSION 1.4-0 (2020-07-07)
+
+* includes stochastic gradient ascent and Adam optimizer
 
       CHANGES IN VERSION 1.3-10 (2020-05-13)
 
@@ -19,9 +23,6 @@ on R-Forge.
       CHANGES IN VERSION 1.3-8 (2019-05-18)
 
 * better handling of matrix class
-
-* print.summary.maxim accepts parameters max.rows and max.cols,
-  and only prints this many columns/rows of output matrices
 
       CHANGES IN VERSION 1.3-8 (2020-01-01)
 

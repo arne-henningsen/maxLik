@@ -206,34 +206,31 @@ storeParameters = FALSE
 > beta <- rep(1, ncol(X))
 > y <- X %*% beta + rnorm(20, sd=0.3)
 > m <- maxNR(loglik, gradlik, start=rep(1, ncol(X)), iterlim=1)
-> options(digits=2)
-> # rounding of the gradients so that minor difference in different computers
-> # do not result in differences in the output
-> m$gradient <- round( m$gradient, 6 )
-> print(summary(m, hessian=TRUE), max.rows=4, max.cols=2)
+> print(summary(m, hessian=TRUE), max.rows=4, max.cols=2, digits=1)
 --------------------------------------------
 Newton-Raphson maximisation 
 Number of iterations: 1 
 Return code: 1 
 gradient close to zero 
-Function value: -0.72 
+Function value: -0.7178788 
 Estimates:
      estimate gradient
-[1,]     1.10        0
-[2,]     0.95        0
-[3,]     1.00        0
-[4,]     1.05        0
+[1,]        1    1e-09
+[2,]        1    5e-10
+[3,]        1    2e-09
+[4,]        1   -7e-10
  reached getOption("max.rows") -- omitted 11 rows
 Hessian:
-      [,1]  [,2]
-[1,] -54.0  12.7
-[2,]  12.7 -43.8
-[3,]   2.7   4.9
-[4,]   3.1   8.1
+     [,1] [,2]
+[1,]  -54   13
+[2,]   13  -44
+[3,]    3    5
+[4,]    3    8
  reached getOption("max.cols") -- omitted 13 columns
  reached getOption("max.rows") -- omitted 11 rows
 --------------------------------------------
+>                            # digits=1: very crude rounding but we want just to test the lines
 > 
 > proc.time()
    user  system elapsed 
-  0.456   0.028   0.477 
+  0.508   0.024   0.525 

@@ -75,8 +75,5 @@ X <- matrix(rnorm(20*15), 20, 15)
 beta <- rep(1, ncol(X))
 y <- X %*% beta + rnorm(20, sd=0.3)
 m <- maxNR(loglik, gradlik, start=rep(1, ncol(X)), iterlim=1)
-options(digits=2)
-# rounding of the gradients so that minor difference in different computers
-# do not result in differences in the output
-m$gradient <- round( m$gradient, 6 )
-print(summary(m, hessian=TRUE), max.rows=4, max.cols=2)
+print(summary(m, hessian=TRUE), max.rows=4, max.cols=2, digits=1)
+                           # digits=1: very crude rounding but we want just to test the lines
