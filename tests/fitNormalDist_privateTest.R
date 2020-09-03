@@ -246,8 +246,9 @@ round( mlBHHH[[ 11 ]], 3 )
 nObs( mlBHHH )
 # final Hessian = usual Hessian
 mlBhhhH <- maxLik( llfInd, start = startVal, method = "BHHH", 
-   finalHessian = TRUE )
-all.equal(hessian(mlBhhhH), hessian(mlBHHH), tolerance = 1e-3 )
+                  finalHessian = TRUE )
+                           # do not test Hessian equality--BHHH may be imprecise, at least
+                           # for diagonal elements
 round( hessian( mlBhhhH ), 1 )
 print( summary( mlBhhhH ) , digits = 2 )
 ## Marquardt (1963) correction

@@ -1,6 +1,6 @@
 
-R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 4.0.2 (2020-06-22) -- "Taking Off Again"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -289,8 +289,10 @@ sigma     1.82       0.13    14.1  <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
-> all.equal( ml[-c(5,6)], mlg[-c(5,6)], tolerance = 1e-3 )
-[1] "Component \"hessian\": Mean relative difference: 0.001239"
+> all.equal(coef(ml), coef(mlg), tolerance = 1e-3 )
+[1] TRUE
+> all.equal(hessian(ml), hessian(mlg), tolerance = 1e-3 )
+[1] TRUE
 > mlgInd <- maxLik( llfInd, gfInd, start = startVal )
 > all.equal( mlInd, mlgInd, tolerance = 1e-3 )
 [1] TRUE
@@ -635,13 +637,13 @@ attr(,"df")
 [1] 100
 > # final Hessian = usual Hessian
 > mlBhhhH <- maxLik( llfInd, start = startVal, method = "BHHH", 
-+    finalHessian = TRUE )
-> all.equal( mlBhhhH[-4], mlBHHH[-4], tolerance = 1e-3 )
-[1] TRUE
++                   finalHessian = TRUE )
+>                            # do not test Hessian equality--BHHH may be imprecise, at least
+>                            # for diagonal elements
 > round( hessian( mlBhhhH ), 1 )
          mu sigma
 mu    -30.3   0.0
-sigma   0.0 -60.6
+sigma   0.0 -60.7
 > print( summary( mlBhhhH ) , digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
@@ -834,7 +836,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > mlgBhhhH <- maxLik( llf, gfInd, start = startVal, method = "BHHH", 
 +    finalHessian = TRUE )
 > all.equal( mlgBhhhH, mlBhhhH, tolerance = 1e-3 )
-[1] "Component \"hessian\": Mean relative difference: 0.001233"            
+[1] "Component \"hessian\": Mean relative difference: 0.001268"            
 [2] "Component \"objectiveFn\": target, current do not match when deparsed"
 > all.equal( mlgBhhhH[-4], mlgBHHH[-4], tolerance = 1e-3 )
 [1] "Component \"objectiveFn\": target, current do not match when deparsed"
@@ -1186,7 +1188,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > mlgIndBFGSYC <- maxLik( llfInd, gfInd, start = startVal,
 +    method = "BFGSR" )
 > all.equal( mlIndBFGSYC, mlgIndBFGSYC, tolerance = 1e-3 )
-[1] "Component \"hessian\": Mean relative difference: 0.001516"
+[1] TRUE
 > all.equal( mlgBFGSYC[ -c(3,9) ], mlgIndBFGSYC[ -c(3,9,11) ], tolerance = 1e-3 )
 [1] "Component \"control\": Attributes: < Component \"printLevel\": Mean relative difference: 1 >"
 [2] "Component \"objectiveFn\": target, current do not match when deparsed"                       
@@ -4895,7 +4897,7 @@ mu 	 1
 sigma 	 3.61 
 > round( hessian( mlBhhhCon ), 1 )
          mu sigma
-mu    -35.5 -15.2
+mu    -35.4 -15.2
 sigma -15.2 -93.8
 > logLik( mlBhhhCon )
 [1] -204.5
@@ -6364,4 +6366,4 @@ sigma 0.00  0.01
 > 
 > proc.time()
    user  system elapsed 
- 22.826   1.691  21.605 
+ 13.099   0.049  13.143 
