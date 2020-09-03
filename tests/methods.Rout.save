@@ -189,48 +189,6 @@ storeParameters = FALSE
 > expect_equal(dim(vcov(a)), c(1,1), info="vcov 1D analytic correct")
 > expect_equal(length(stdEr(a)), 1, info="stdEr 1D analytic correct")
 > 
-> ### ---------- printing ----------
-> ### ---------- max.columns, max.rows ----------
-> loglik <- function(beta) {
-+    e <- y - X %*% beta
-+    -crossprod(e)
-+ }
-> gradlik <- function(beta) {
-+    e <- y - X %*% beta
-+    l <- crossprod(e)
-+    g <- t(-2*t(X) %*% e)
-+    -g
-+ }
-> ## linear regression with many columns
-> X <- matrix(rnorm(20*15), 20, 15)
-> beta <- rep(1, ncol(X))
-> y <- X %*% beta + rnorm(20, sd=0.3)
-> m <- maxNR(loglik, gradlik, start=rep(1, ncol(X)), iterlim=1)
-> print(summary(m, hessian=TRUE), max.rows=4, max.cols=2, digits=1)
---------------------------------------------
-Newton-Raphson maximisation 
-Number of iterations: 1 
-Return code: 1 
-gradient close to zero 
-Function value: -0.7178788 
-Estimates:
-     estimate gradient
-[1,]        1    1e-09
-[2,]        1    5e-10
-[3,]        1    2e-09
-[4,]        1   -7e-10
- reached getOption("max.rows") -- omitted 11 rows
-Hessian:
-     [,1] [,2]
-[1,]  -54   13
-[2,]   13  -44
-[3,]    3    5
-[4,]    3    8
- reached getOption("max.cols") -- omitted 13 columns
- reached getOption("max.rows") -- omitted 11 rows
---------------------------------------------
->                            # digits=1: very crude rounding but we want just to test the lines
-> 
 > proc.time()
    user  system elapsed 
-  0.508   0.024   0.525 
+  0.406   0.043   0.443 

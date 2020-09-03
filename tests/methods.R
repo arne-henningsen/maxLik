@@ -57,23 +57,3 @@ expect_equal(length(stdEr(a)), 1, info="stdEr 1D numeric correct")
 a <- maxLik(loglik, gradlik, hesslik, start=1)
 expect_equal(dim(vcov(a)), c(1,1), info="vcov 1D analytic correct")
 expect_equal(length(stdEr(a)), 1, info="stdEr 1D analytic correct")
-
-### ---------- printing ----------
-### ---------- max.columns, max.rows ----------
-loglik <- function(beta) {
-   e <- y - X %*% beta
-   -crossprod(e)
-}
-gradlik <- function(beta) {
-   e <- y - X %*% beta
-   l <- crossprod(e)
-   g <- t(-2*t(X) %*% e)
-   -g
-}
-## linear regression with many columns
-X <- matrix(rnorm(20*15), 20, 15)
-beta <- rep(1, ncol(X))
-y <- X %*% beta + rnorm(20, sd=0.3)
-m <- maxNR(loglik, gradlik, start=rep(1, ncol(X)), iterlim=1)
-print(summary(m, hessian=TRUE), max.rows=4, max.cols=2, digits=1)
-                           # digits=1: very crude rounding but we want just to test the lines

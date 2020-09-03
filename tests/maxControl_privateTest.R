@@ -7,9 +7,13 @@
 ### 3. negative batch size
 ### 4. more than 1 batch size
 ### SG_clip: NULL, negative, more than one
+###
+### printing:
+### * #of cols, rows
 
 library(maxLik)
 library(testthat)
+set.seed(3)
 
 ### ---------- create maxControl object
 maxControl(tol=1e-4, lambdatol=1e-5, qrtol=1e-6, qac="marquardt",
@@ -31,3 +35,24 @@ try(maxControl(SG_clip=-1))  # fails
 try(maxControl(SG_clip=2:3))  # fails
 
 try(maxControl(Adam_momentum1=NA))  # should fail w/'NA in Adam_momentum'
+
+
+### ---------- printing ----------
+### ---------- max.columns, max.rows ----------
+loglik <- function(beta) {
+   e <- y - X %*% beta
+   -crossprod(e)
+}
+gradlik <- function(beta) {
+   e <- y - X %*% beta
+   l <- crossprod(e)
+   g <- t(-2*t(X) %*% e)
+   -g
+}
+## linear regression with many columns
+X <- matrix(rnorm(20*15), 20, 15)
+beta <- rep(1, ncol(X))
+y <- X %*% beta + rnorm(20, sd=0.3)
+m <- maxNR(loglik, gradlik, start=rep(1, ncol(X)), iterlim=1)
+print(summary(m, hessian=TRUE), max.rows=4, max.cols=2, digits=3)
+                           # we only care about the lines/cols, not the values

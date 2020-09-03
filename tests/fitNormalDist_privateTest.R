@@ -180,7 +180,8 @@ print(returnMessage(mlM))
 # with analytical gradients
 mlg <- maxLik( llf, gf, start = startVal )
 print( summary( mlg ), digits = 2 )
-all.equal( ml[-c(5,6)], mlg[-c(5,6)], tolerance = 1e-3 )
+all.equal(coef(ml), coef(mlg), tolerance = 1e-3 )
+all.equal(hessian(ml), hessian(mlg), tolerance = 1e-3 )
 mlgInd <- maxLik( llfInd, gfInd, start = startVal )
 all.equal( mlInd, mlgInd, tolerance = 1e-3 )
 all.equal( mlg[ ], mlgInd[ -11 ], tolerance = 1e-3 )
@@ -246,7 +247,7 @@ nObs( mlBHHH )
 # final Hessian = usual Hessian
 mlBhhhH <- maxLik( llfInd, start = startVal, method = "BHHH", 
    finalHessian = TRUE )
-all.equal( mlBhhhH[-4], mlBHHH[-4], tolerance = 1e-3 )
+all.equal(hessian(mlBhhhH), hessian(mlBHHH), tolerance = 1e-3 )
 round( hessian( mlBhhhH ), 1 )
 print( summary( mlBhhhH ) , digits = 2 )
 ## Marquardt (1963) correction
