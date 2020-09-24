@@ -183,7 +183,7 @@ maxSGACompute <- function(fn, grad, hess,
          if(any(is.na(G1[!fixed])) || any(is.infinite(G1[!fixed]))) {
             cat("Iteration", iter, "\n")
             cat("Parameter:\n")
-            print(head...(start1, max.cols), quote=FALSE)
+            print(headDots(start1, max.cols), quote=FALSE)
             cat("Gradient:\n")
             printRowColLimits(G1, max.rows, max.cols)
             stop("NA/Inf in gradient")
@@ -258,7 +258,7 @@ maxSGACompute <- function(fn, grad, hess,
       cat( "--------------\n")
       cat( maximMessage( code), "\n")
       cat( iter, " iterations\n")
-      cat( "estimate:", head...(start1, max.cols), "\n")
+      cat( "estimate:", headDots(start1, max.cols), "\n")
       if(is.null(f1)) {
          f1 <- fn(start1, fixed = fixed, sumObs = TRUE, index=index, ...)
       }
