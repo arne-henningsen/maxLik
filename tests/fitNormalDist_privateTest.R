@@ -566,7 +566,7 @@ mlghCg <- maxLik( llfInd, gfInd, hf, start = startVal, method = "CG" )
 print(summary( mlghCg))
 
 
-############### with fixed parameters ###############
+### ---------- with fixed parameters ----------
 # start values
 startValFix <- c( mu = 1, sigma = 1 )
 
@@ -1289,3 +1289,14 @@ printSandwich( mlBfgsConInd )
 printSandwich( mlgBfgsConInd )
 printSandwich( mlNmConInd )
 printSandwich( mlgNmConInd )
+
+### ---------- convergence tolerance parameters ----------
+a <- maxNR(llf, gf, hf, start=startVal, tol=1e-3, reltol=0, gradtol=0, iterlim=10)
+returnMessage(a)  # should stop with code 2: tolerance
+a <- maxNR(llf, gf, hf, start=startVal, tol=0, reltol=1e-3, gradtol=0, iterlim=10)
+returnMessage(a)  # 8: relative tolerance
+a <- maxNR(llf, gf, hf, start=startVal, tol=0, reltol=0, gradtol=1e-3, iterlim=10)
+returnMessage(a)  # 1: gradient
+a <- maxNR(llf, gf, hf, start=startVal, tol=0, reltol=0, gradtol=0, iterlim=10)
+returnMessage(a)  # 4: iteration limit
+

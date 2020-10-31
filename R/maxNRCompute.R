@@ -51,15 +51,7 @@ maxNRCompute <- function(fn,
    ## estimate    the parameter value at maximum
    ## gradient        gradient
    ## hessian         Hessian
-   ## code        integer code of success:
-   ##             1 - gradient close to zero
-   ##             2 - successive values within tolerance limit
-   ##             3 - could not find a higher point (step error)
-   ##             4 - iteration limit exceeded
-   ##             5 - infinite function value
-   ##             6  infinite gradient
-   ##             7  infinite Hessian
-   ##             100 - initial value out of range
+   ## code        integer code of success, see maximMessage
    ## message     character message describing the code
    ## last.step   only present if code == 3 (step error).  A list with following components:
    ##             theta0    - parameter value which led to the error

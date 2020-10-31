@@ -1,5 +1,5 @@
 
-R version 4.0.2 (2020-06-22) -- "Taking Off Again"
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
 Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -189,7 +189,7 @@ Error in validObject(x) :
 Newton-Raphson maximisation 
 Number of iterations: 1 
 Return code: 1 
-gradient close to zero 
+gradient close to zero (gradtol) 
 Function value: -0.1237213 
 Estimates:
      estimate  gradient
@@ -211,4 +211,4 @@ Hessian:
 > 
 > proc.time()
    user  system elapsed 
-  0.224   0.011   0.230 
+  0.317   0.024   0.334 

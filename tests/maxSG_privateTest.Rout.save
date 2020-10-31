@@ -1,5 +1,5 @@
 
-R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
 Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -161,7 +161,7 @@ Error in maxSGA(start = start, control = list(printLevel = 0, iterlim = 10,  :
 +               finalHessian=TRUE)
 Initial function value: -34.64061 
 --------------
-Iteration limit exceeded. 
+Iteration limit exceeded (iterlim) 
 2  iterations
 estimate: 6.83044305069514, 6.61130329662377 
 Function value: -14.086 
@@ -236,4 +236,4 @@ Error in maxSGACompute(fn = function (theta, fnOrig, gradOrig, hessOrig,  :
 > 
 > proc.time()
    user  system elapsed 
-  2.207   0.555   1.889 
+  1.929   0.060   1.995 

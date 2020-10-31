@@ -1,5 +1,5 @@
 
-R version 4.0.2 (2020-06-22) -- "Taking Off Again"
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
 Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -177,14 +177,14 @@ https://r-forge.r-project.org/projects/maxlik/
 > print( ml )
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
-Return code 1: gradient close to zero
+Return code 1: gradient close to zero (gradtol)
 Log-Likelihood: -201.6 (2 free parameter(s))
 Estimate(s): 1.181 1.816 
 > print( summary( ml ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
-Return code 1: gradient close to zero
+Return code 1: gradient close to zero (gradtol)
 Log-Likelihood: -201.6 
 2  free parameters
 Estimates:
@@ -227,7 +227,7 @@ Error in nObs.maxLik(ml) :
 > returnCode( ml )
 [1] 1
 > returnMessage( ml )
-[1] "gradient close to zero"
+[1] "gradient close to zero (gradtol)"
 > round( vcov( ml ), 3 )
          mu sigma
 mu    0.033 0.000
@@ -241,7 +241,7 @@ attr(,"df")
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
-Return code 1: gradient close to zero
+Return code 1: gradient close to zero (gradtol)
 Log-Likelihood: -201.6 
 2  free parameters
 Estimates:
@@ -270,7 +270,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > mlM <- maxLik( llf, start = startVal, qac="marquardt")
 > expect_equal(coef(mlM), coef(ml), tol=tol)
 > print(returnMessage(mlM))
-[1] "gradient close to zero"
+[1] "gradient close to zero (gradtol)"
 >                            # coefficients should be the same as above
 > 
 > # with analytical gradients
@@ -279,7 +279,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 7 iterations
-Return code 1: gradient close to zero
+Return code 1: gradient close to zero (gradtol)
 Log-Likelihood: -201.6 
 2  free parameters
 Estimates:
@@ -463,7 +463,7 @@ Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  :
 > try( maxLik( llfInd, start = startVal, method = "BHHH" ) )
 Maximum Likelihood estimation
 BHHH maximisation, 8 iterations
-Return code 2: successive function values within tolerance limit
+Return code 2: successive function values within tolerance limit (tol)
 Log-Likelihood: -0.6227 (2 free parameter(s))
 Estimate(s): 0.2158 0.3302 
 > x <- xSaved
@@ -471,14 +471,14 @@ Estimate(s): 0.2158 0.3302
 > print( mlBHHH )
 Maximum Likelihood estimation
 BHHH maximisation, 12 iterations
-Return code 2: successive function values within tolerance limit
+Return code 8: successive function values within relative tolerance limit (reltol)
 Log-Likelihood: -201.6 (2 free parameter(s))
 Estimate(s): 1.181 1.816 
 > print( summary( mlBHHH ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 12 iterations
-Return code 2: successive function values within tolerance limit
+Return code 8: successive function values within relative tolerance limit (reltol)
 Log-Likelihood: -201.6 
 2  free parameters
 Estimates:
@@ -518,9 +518,9 @@ attr(,"df")
 > nParam( mlBHHH )
 [1] 2
 > returnCode( mlBHHH )
-[1] 2
+[1] 8
 > returnMessage( mlBHHH )
-[1] "successive function values within tolerance limit"
+[1] "successive function values within relative tolerance limit (reltol)"
 > round( vcov( mlBHHH ), 3 )
           mu  sigma
 mu     0.033 -0.001
@@ -643,12 +643,12 @@ attr(,"df")
 > round( hessian( mlBhhhH ), 1 )
          mu sigma
 mu    -30.3   0.0
-sigma   0.0 -60.7
+sigma   0.0 -60.6
 > print( summary( mlBhhhH ) , digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 12 iterations
-Return code 2: successive function values within tolerance limit
+Return code 8: successive function values within relative tolerance limit (reltol)
 Log-Likelihood: -201.6 
 2  free parameters
 Estimates:
@@ -664,7 +664,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
    mu sigma 
 1.181 1.816 
 > print(returnMessage(mlBHHHM))
-[1] "successive function values within tolerance limit"
+[1] "successive function values within relative tolerance limit (reltol)"
 > 
 > # with analytical gradients
 > mlgBHHH <- try( maxLik( llf, gf, start = startVal, method = "BHHH" ) )
@@ -698,13 +698,13 @@ Error in checkBhhhGrad(g = gr, theta = theta, analytic = (!is.null(attr(f,  :
 > try( maxLik( llf, gfInd, start = startVal, method = "BHHH" ) )
 Maximum Likelihood estimation
 BHHH maximisation, 8 iterations
-Return code 2: successive function values within tolerance limit
+Return code 2: successive function values within tolerance limit (tol)
 Log-Likelihood: -0.6227 (2 free parameter(s))
 Estimate(s): 0.2158 0.3302 
 > try( maxLik( llfInd, gfInd, start = startVal, method = "BHHH" ) )
 Maximum Likelihood estimation
 BHHH maximisation, 8 iterations
-Return code 2: successive function values within tolerance limit
+Return code 2: successive function values within tolerance limit (tol)
 Log-Likelihood: -0.6227 (2 free parameter(s))
 Estimate(s): 0.2158 0.3302 
 > x <- xSaved
@@ -713,7 +713,7 @@ Estimate(s): 0.2158 0.3302
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 12 iterations
-Return code 2: successive function values within tolerance limit
+Return code 8: successive function values within relative tolerance limit (reltol)
 Log-Likelihood: -201.6 
 2  free parameters
 Estimates:
@@ -836,7 +836,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > mlgBhhhH <- maxLik( llf, gfInd, start = startVal, method = "BHHH", 
 +    finalHessian = TRUE )
 > all.equal( mlgBhhhH, mlBhhhH, tolerance = 1e-3 )
-[1] "Component \"hessian\": Mean relative difference: 0.001268"            
+[1] "Component \"hessian\": Mean relative difference: 0.001233"            
 [2] "Component \"objectiveFn\": target, current do not match when deparsed"
 > all.equal( mlgBhhhH[-4], mlgBHHH[-4], tolerance = 1e-3 )
 [1] "Component \"objectiveFn\": target, current do not match when deparsed"
@@ -882,7 +882,7 @@ correspond to a parameter
 > try( maxLik( llfGradInd, start = startVal, method = "BHHH" ) )
 Maximum Likelihood estimation
 BHHH maximisation, 8 iterations
-Return code 2: successive function values within tolerance limit
+Return code 2: successive function values within tolerance limit (tol)
 Log-Likelihood: -0.6227 (2 free parameter(s))
 Estimate(s): 0.2158 0.3302 
 > x <- xSaved
@@ -946,14 +946,14 @@ Warning messages:
 > print( mlBFGSYC )
 Maximum Likelihood estimation
 BFGSR maximization, 15 iterations
-Return code 2: successive function values within tolerance limit
+Return code 2: successive function values within tolerance limit (tol)
 Log-Likelihood: -201.6 (2 free parameter(s))
 Estimate(s): 1.181 1.816 
 > print( summary( mlBFGSYC ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BFGSR maximization, 15 iterations
-Return code 2: successive function values within tolerance limit
+Return code 2: successive function values within tolerance limit (tol)
 Log-Likelihood: -201.6 
 2  free parameters
 Estimates:
@@ -996,7 +996,7 @@ Error in nObs.maxLik(mlBFGSYC) :
 > returnCode( mlBFGSYC )
 [1] 2
 > returnMessage( mlBFGSYC )
-[1] "successive function values within tolerance limit"
+[1] "successive function values within tolerance limit (tol)"
 > round( vcov( mlBFGSYC ), 3 )
          mu sigma
 mu    0.033 0.000
@@ -1014,7 +1014,7 @@ attr(,"df")
 --------------------------------------------
 Maximum Likelihood estimation
 BFGSR maximization, 34 iterations
-Return code 2: successive function values within tolerance limit
+Return code 2: successive function values within tolerance limit (tol)
 Log-Likelihood: -201.6 
 2  free parameters
 Estimates:
@@ -1165,7 +1165,7 @@ step = 0.03125, lnL = -201.6, chi2 = 1.782e-05, function increment = 2.54e-07
 Iteration  15 
 step = 0.01562, lnL = -201.6, chi2 = 5.203e-08, function increment = 2.604e-10
 --------------
-successive function values within tolerance limit 
+successive function values within tolerance limit (tol) 
 15  iterations
 estimate: 1.181 1.816 
 Function value: -201.6 
@@ -1173,7 +1173,7 @@ Function value: -201.6
 --------------------------------------------
 Maximum Likelihood estimation
 BFGSR maximization, 15 iterations
-Return code 2: successive function values within tolerance limit
+Return code 2: successive function values within tolerance limit (tol)
 Log-Likelihood: -201.6 
 2  free parameters
 Estimates:
@@ -1329,7 +1329,7 @@ step = 0.03125, lnL = -201.6, chi2 = 1.782e-05, function increment = 2.54e-07
 Iteration  15 
 step = 0.01562, lnL = -201.6, chi2 = 5.203e-08, function increment = 2.604e-10
 --------------
-successive function values within tolerance limit 
+successive function values within tolerance limit (tol) 
 15  iterations
 estimate: 1.181 1.816 
 Function value: -201.6 
@@ -2545,7 +2545,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 > 
 > 
-> ############### with fixed parameters ###############
+> ### ---------- with fixed parameters ----------
 > # start values
 > startValFix <- c( mu = 1, sigma = 1 )
 > 
@@ -2569,14 +2569,14 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > print( mlFix )
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 6 iterations
-Return code 2: successive function values within tolerance limit
+Return code 8: successive function values within relative tolerance limit (reltol)
 Log-Likelihood: -202.1 (1 free parameter(s))
 Estimate(s): 1 1.825 
 > print( summary( mlFix ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 6 iterations
-Return code 2: successive function values within tolerance limit
+Return code 8: successive function values within relative tolerance limit (reltol)
 Log-Likelihood: -202.1 
 1  free parameters
 Estimates:
@@ -2613,9 +2613,9 @@ attr(,"df")
 > nParam( mlFix )
 [1] 2
 > returnCode( mlFix )
-[1] 2
+[1] 8
 > returnMessage( mlFix )
-[1] "successive function values within tolerance limit"
+[1] "successive function values within relative tolerance limit (reltol)"
 > round( vcov( mlFix ), 3 )
       mu sigma
 mu     0 0.000
@@ -2641,7 +2641,7 @@ attr(,"df")
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 6 iterations
-Return code 2: successive function values within tolerance limit
+Return code 8: successive function values within relative tolerance limit (reltol)
 Log-Likelihood: -202.1 
 1  free parameters
 Estimates:
@@ -2776,7 +2776,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 --------------------------------------------
 Maximum Likelihood estimation
 Newton-Raphson maximisation, 6 iterations
-Return code 2: successive function values within tolerance limit
+Return code 8: successive function values within relative tolerance limit (reltol)
 Log-Likelihood: -202.1 
 1  free parameters
 Estimates:
@@ -2929,14 +2929,14 @@ sigma NA -60.02
 > print( mlFixBHHH )
 Maximum Likelihood estimation
 BHHH maximisation, 9 iterations
-Return code 2: successive function values within tolerance limit
+Return code 8: successive function values within relative tolerance limit (reltol)
 Log-Likelihood: -202.1 (1 free parameter(s))
 Estimate(s): 1 1.825 
 > print( summary( mlFixBHHH ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 9 iterations
-Return code 2: successive function values within tolerance limit
+Return code 8: successive function values within relative tolerance limit (reltol)
 Log-Likelihood: -202.1 
 1  free parameters
 Estimates:
@@ -2975,9 +2975,9 @@ attr(,"df")
 > nParam( mlFixBHHH )
 [1] 2
 > returnCode( mlFixBHHH )
-[1] 2
+[1] 8
 > returnMessage( mlFixBHHH )
-[1] "successive function values within tolerance limit"
+[1] "successive function values within relative tolerance limit (reltol)"
 > round( vcov( mlFixBHHH ), 3 )
       mu sigma
 mu     0 0.000
@@ -3117,7 +3117,7 @@ attr(,"df")
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 9 iterations
-Return code 2: successive function values within tolerance limit
+Return code 8: successive function values within relative tolerance limit (reltol)
 Log-Likelihood: -202.1 
 1  free parameters
 Estimates:
@@ -4859,14 +4859,14 @@ Constrained optimization based on constrOptim
 > print( mlBhhhCon )
 Maximum Likelihood estimation
 BHHH maximisation, 4 iterations
-Return code 2: successive function values within tolerance limit
+Return code 8: successive function values within relative tolerance limit (reltol)
 Log-Likelihood: -204.5 (2 free parameter(s))
 Estimate(s): 0.8204 1.68 
 > print( summary( mlBhhhCon ), digits = 2 )
 --------------------------------------------
 Maximum Likelihood estimation
 BHHH maximisation, 4 iterations
-Return code 2: successive function values within tolerance limit
+Return code 8: successive function values within relative tolerance limit (reltol)
 Log-Likelihood: -204.5 
 2  free parameters
 Estimates:
@@ -4897,7 +4897,7 @@ mu 	 1
 sigma 	 3.61 
 > round( hessian( mlBhhhCon ), 1 )
          mu sigma
-mu    -35.4 -15.2
+mu    -35.5 -15.2
 sigma -15.2 -93.8
 > logLik( mlBhhhCon )
 [1] -204.5
@@ -4910,9 +4910,9 @@ attr(,"df")
 > nParam( mlBhhhCon )
 [1] 2
 > returnCode( mlBhhhCon )
-[1] 2
+[1] 8
 > returnMessage( mlBhhhCon )
-[1] "successive function values within tolerance limit"
+[1] "successive function values within relative tolerance limit (reltol)"
 > round( vcov( mlBhhhCon ), 3 )
           mu  sigma
 mu     0.030 -0.005
@@ -6364,6 +6364,21 @@ sigma 0.00  0.01
 mu    0.04  0.00
 sigma 0.00  0.01
 > 
+> ### ---------- convergence tolerance parameters ----------
+> a <- maxNR(llf, gf, hf, start=startVal, tol=1e-3, reltol=0, gradtol=0, iterlim=10)
+> returnMessage(a)  # should stop with code 2: tolerance
+[1] "successive function values within tolerance limit (tol)"
+> a <- maxNR(llf, gf, hf, start=startVal, tol=0, reltol=1e-3, gradtol=0, iterlim=10)
+> returnMessage(a)  # 8: relative tolerance
+[1] "successive function values within relative tolerance limit (reltol)"
+> a <- maxNR(llf, gf, hf, start=startVal, tol=0, reltol=0, gradtol=1e-3, iterlim=10)
+> returnMessage(a)  # 1: gradient
+[1] "gradient close to zero (gradtol)"
+> a <- maxNR(llf, gf, hf, start=startVal, tol=0, reltol=0, gradtol=0, iterlim=10)
+> returnMessage(a)  # 4: iteration limit
+[1] "Iteration limit exceeded (iterlim)"
+> 
+> 
 > proc.time()
    user  system elapsed 
- 13.099   0.049  13.143 
+ 24.112   0.109  24.298 
