@@ -49,7 +49,7 @@ returnMessage(x, ...)
     \item{5}{ Infinite value.}
     \item{6}{ Infinite gradient.}
     \item{7}{ Infinite Hessian.}
-    \item{8}{ Successive function values withing relative tolerance
+    \item{8}{Successive function values withing relative tolerance
       limit (normal convergence).}
     \item{9}{ (BFGS) Hessian approximation cannot be improved because of
       gradient did not change.  May be related to numerical

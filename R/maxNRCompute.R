@@ -389,14 +389,14 @@ maxNRCompute <- function(fn,
          code <- 3; break
       }
       if( sqrt( crossprod( G1[!fixed] ) ) < slot(control, "gradtol") ) {
-         code <-1; break
+         code <- 1; break
       }
-      if(is.null(newVal) && sum(f1) - sum(f0) < slot(control, "tol")) {
-         code <- 2; break
+      if(is.null(newVal) && ((sum(f1) - sum(f0)) < slot(control, "tol"))) {
+         code <- 2; break  #
       }
       if(is.null(newVal) && abs(sum(f1) - sum(f0)) <
          abs(slot(control, "reltol")*( sum(f1) + slot(control, "reltol")))) {
-         code <- 2; break
+         code <- 8; break
       }
       if(any(is.infinite(f1)) && sum(f1) > 0) {
          code <- 5; break
@@ -417,8 +417,7 @@ maxNRCompute <- function(fn,
       gradientObs <- G1
       colnames( gradientObs ) <- nimed 
       G1 <- colSums(as.matrix(G1 ))
-   }
-   else {
+   } else {
       gradientObs <- NULL
    }
    names( G1 ) <- nimed
@@ -452,13 +451,13 @@ maxNRCompute <- function(fn,
                   gradient=drop(G1),
                  hessian=hessian,
                   code=code,
-       message=maximMessage( code),
+                 message=maximMessage( code),
                   last.step=samm,
                            # only when could not find a
                            # lower point
                   fixed=fixed,
        iterations=iter,
-                  type=maximType)
+      type=maximType)
    if( exists( "gradientObs" ) ) {
       result$gradientObs <- gradientObs
    }
@@ -468,6 +467,3 @@ maxNRCompute <- function(fn,
    class(result) <- c("maxim", class(result))
    invisible(result)
 }
-
-returnCode.maxim <- function(x, ...)
-    x$code

@@ -269,7 +269,7 @@ maxBFGSRCompute <- function(fn,
          code <- 3; break
       }
       if( sqrt( crossprod( gr[!fixed] ) ) < slot(control, "gradtol") ) {
-         code <-1; break
+         code <- 1; break
       }
       if(x - oldx < slot(control, "tol")) {
          code <- 2; break
