@@ -104,10 +104,12 @@ maxBHHH(fn, grad = NULL, hess = NULL, start,
       \item{reltol}{sqrt(.Machine$double.eps), stopping
 	condition.  Relative convergence
 	tolerance: the algorithm stops if the relative improvement
-	between iterations is less than \sQuote{reltol}.  Return code 8.
+	between iterations is less than \sQuote{reltol}.  Return code
+	8.  Negative value disables condition.
       }
       \item{gradtol}{stopping condition.  Stop if norm of the gradient is
-	less than \code{gradtol}.  Return code 1.}
+	less than \code{gradtol}.  Return code 1.  Negative value
+	disables condition.}
       \item{steptol}{1e-10, stopping/error condition.
 	If \code{qac == "stephalving"} and the quadratic
 	approximation leads to a worse, instead of a better value, or to

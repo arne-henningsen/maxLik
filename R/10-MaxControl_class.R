@@ -52,18 +52,6 @@ checkMaxControl <- function(object) {
       }
    }
    ##
-   if(slot(object, "tol") < 0) {
-      errors <- c(errors, paste("'tol' must be non-negative, not ",
-                                slot(object, "tol"), sep=""))
-   }
-   if(slot(object, "reltol") < 0) {
-      errors <- c(errors, paste("'reltol' must be non-negative, not ",
-                                slot(object, "reltol"), sep=""))
-   }
-   if(slot(object, "gradtol") < 0) {
-      errors <- c(errors, paste("'gradtol' must be non-negative, not",
-                                slot(object, "gradtol")))
-   }
    if(slot(object, "steptol") < 0) {
       errors <- c(errors, paste("'steptol' must be non-negative, not",
                                 slot(object, "steptol")))
@@ -72,7 +60,9 @@ checkMaxControl <- function(object) {
       errors <- c(errors, paste("'lambdatol' must be non-negative, not",
                                 slot(object, "lambdatol")))
    }
-   if(!pmatch(slot(object, "qac"), c("stephalving", "marquardt"))) {
+   ## qac valid values--only check if length 1
+   if(length(slot(object, "qac")) == 1 &&
+      !pmatch(slot(object, "qac"), c("stephalving", "marquardt"))) {
       errors <- c(errors, paste("'qac' must be 'stephalving' or 'marquadt', not",
                                 slot(object, "qac")))
    }

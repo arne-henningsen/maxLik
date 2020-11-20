@@ -88,26 +88,16 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > print(all.equal(mlTol, mlTolC))
 [1] TRUE
 > try(ml <- maxLik( llf, start = startVal, tol=-1))
-Error in validObject(x) : 
-  invalid class "MaxControl" object: 'tol' must be non-negative, not -1
 > try(ml <- maxLik( llf, start = startVal, tol=c(1,2)))
 Error in validObject(x) : 
   invalid class "MaxControl" object: 'tol' must be of length 1, not 2
-In addition: Warning message:
-In if (slot(object, "tol") < 0) { :
-  the condition has length > 1 and only the first element will be used
 > try(ml <- maxLik( llf, start = startVal, tol=TRUE))
 Error in checkSlotAssignment(object, name, value) : 
   assignment of an object of class "logical" is not valid for slot 'tol' in an object of class "MaxControl"; is(value, "numeric") is not TRUE
 > try(ml <- maxLik( llf, start = startVal, control=list(tol=-1)))
-Error in validObject(x) : 
-  invalid class "MaxControl" object: 'tol' must be non-negative, not -1
 > try(ml <- maxLik( llf, start = startVal, control=list(tol=c(1,2))))
 Error in validObject(x) : 
   invalid class "MaxControl" object: 'tol' must be of length 1, not 2
-In addition: Warning message:
-In if (slot(object, "tol") < 0) { :
-  the condition has length > 1 and only the first element will be used
 > try(ml <- maxLik( llf, start = startVal, control=list(tol=TRUE)))
 Error in checkSlotAssignment(object, name, value) : 
   assignment of an object of class "logical" is not valid for slot 'tol' in an object of class "MaxControl"; is(value, "numeric") is not TRUE
@@ -131,26 +121,16 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > print(all.equal(mlRelTol, mlRelTolC))
 [1] TRUE
 > try(ml <- maxLik( llf, start = startVal, reltol=-1))
-Error in validObject(x) : 
-  invalid class "MaxControl" object: 'reltol' must be non-negative, not -1
 > try(ml <- maxLik( llf, start = startVal, reltol=c(1,2)))
 Error in validObject(x) : 
   invalid class "MaxControl" object: 'reltol' must be of length 1, not 2
-In addition: Warning message:
-In if (slot(object, "reltol") < 0) { :
-  the condition has length > 1 and only the first element will be used
 > try(ml <- maxLik( llf, start = startVal, reltol=TRUE))
 Error in checkSlotAssignment(object, name, value) : 
   assignment of an object of class "logical" is not valid for slot 'reltol' in an object of class "MaxControl"; is(value, "numeric") is not TRUE
 > try(ml <- maxLik( llf, start = startVal, control=list(reltol=-1)))
-Error in validObject(x) : 
-  invalid class "MaxControl" object: 'reltol' must be non-negative, not -1
 > try(ml <- maxLik( llf, start = startVal, control=list(reltol=c(1,2))))
 Error in validObject(x) : 
   invalid class "MaxControl" object: 'reltol' must be of length 1, not 2
-In addition: Warning message:
-In if (slot(object, "reltol") < 0) { :
-  the condition has length > 1 and only the first element will be used
 > try(ml <- maxLik( llf, start = startVal, control=list(reltol=TRUE)))
 Error in checkSlotAssignment(object, name, value) : 
   assignment of an object of class "logical" is not valid for slot 'reltol' in an object of class "MaxControl"; is(value, "numeric") is not TRUE
@@ -174,26 +154,16 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > print(all.equal(mlGradtol, mlGradtolC))
 [1] TRUE
 > try(ml <- maxLik( llf, start = startVal, gradtol=-1))
-Error in validObject(x) : 
-  invalid class "MaxControl" object: 'gradtol' must be non-negative, not -1
 > try(ml <- maxLik( llf, start = startVal, gradtol=c(1,2)))
 Error in validObject(x) : 
   invalid class "MaxControl" object: 'gradtol' must be of length 1, not 2
-In addition: Warning message:
-In if (slot(object, "gradtol") < 0) { :
-  the condition has length > 1 and only the first element will be used
 > try(ml <- maxLik( llf, start = startVal, gradtol=TRUE))
 Error in checkSlotAssignment(object, name, value) : 
   assignment of an object of class "logical" is not valid for slot 'gradtol' in an object of class "MaxControl"; is(value, "numeric") is not TRUE
 > try(ml <- maxLik( llf, start = startVal, control=list(gradtol=-1)))
-Error in validObject(x) : 
-  invalid class "MaxControl" object: 'gradtol' must be non-negative, not -1
 > try(ml <- maxLik( llf, start = startVal, control=list(gradtol=c(1,2))))
 Error in validObject(x) : 
   invalid class "MaxControl" object: 'gradtol' must be of length 1, not 2
-In addition: Warning message:
-In if (slot(object, "gradtol") < 0) { :
-  the condition has length > 1 and only the first element will be used
 > try(ml <- maxLik( llf, start = startVal, control=list(gradtol=TRUE)))
 Error in checkSlotAssignment(object, name, value) : 
   assignment of an object of class "logical" is not valid for slot 'gradtol' in an object of class "MaxControl"; is(value, "numeric") is not TRUE
@@ -220,12 +190,10 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > try(ml <- maxLik( llf, start = startVal, qac=-1))
 Error in checkSlotAssignment(object, name, value) : 
   assignment of an object of class "numeric" is not valid for slot 'qac' in an object of class "MaxControl"; is(value, "character") is not TRUE
+>                            # qac should be "stephalving" or "marquardt"
 > try(ml <- maxLik( llf, start = startVal, qac=c("a", "b")))
-Error in if (!pmatch(slot(object, "qac"), c("stephalving", "marquardt"))) { : 
-  missing value where TRUE/FALSE needed
-In addition: Warning message:
-In if (!pmatch(slot(object, "qac"), c("stephalving", "marquardt"))) { :
-  the condition has length > 1 and only the first element will be used
+Error in validObject(x) : 
+  invalid class "MaxControl" object: 'qac' must be of length 1, not 2
 > try(ml <- maxLik( llf, start = startVal, qac=TRUE))
 Error in checkSlotAssignment(object, name, value) : 
   assignment of an object of class "logical" is not valid for slot 'qac' in an object of class "MaxControl"; is(value, "character") is not TRUE
@@ -233,11 +201,8 @@ Error in checkSlotAssignment(object, name, value) :
 Error in checkSlotAssignment(object, name, value) : 
   assignment of an object of class "numeric" is not valid for slot 'qac' in an object of class "MaxControl"; is(value, "character") is not TRUE
 > try(ml <- maxLik( llf, start = startVal, control=list(qac=c("a", "b"))))
-Error in if (!pmatch(slot(object, "qac"), c("stephalving", "marquardt"))) { : 
-  missing value where TRUE/FALSE needed
-In addition: Warning message:
-In if (!pmatch(slot(object, "qac"), c("stephalving", "marquardt"))) { :
-  the condition has length > 1 and only the first element will be used
+Error in validObject(x) : 
+  invalid class "MaxControl" object: 'qac' must be of length 1, not 2
 > try(ml <- maxLik( llf, start = startVal, control=list(qac=TRUE)))
 Error in checkSlotAssignment(object, name, value) : 
   assignment of an object of class "logical" is not valid for slot 'qac' in an object of class "MaxControl"; is(value, "character") is not TRUE
@@ -697,4 +662,4 @@ storeParameters = FALSE
 > 
 > proc.time()
    user  system elapsed 
-  0.815   0.037   0.843 
+  0.785   0.041   0.819 

@@ -71,6 +71,7 @@ print(summary(mlMarq))
 mlMarqC <- maxLik(llf, start=startVal, control=list(qac="marquardt"))
 print(all.equal(mlMarq, mlMarqC))
 try(ml <- maxLik( llf, start = startVal, qac=-1))
+                           # qac should be "stephalving" or "marquardt"
 try(ml <- maxLik( llf, start = startVal, qac=c("a", "b")))
 try(ml <- maxLik( llf, start = startVal, qac=TRUE))
 try(ml <- maxLik( llf, start = startVal, control=list(qac=-1)))
