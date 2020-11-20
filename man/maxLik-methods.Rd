@@ -13,6 +13,7 @@
 \usage{
 \method{AIC}{maxLik}(object, \dots, k=2)
 \method{coef}{maxim}(object, \dots)
+\method{coef}{maxLik}(object, \dots)
 \method{stdEr}{maxLik}(x, eigentol=1e-12, \dots)
 }
 \arguments{

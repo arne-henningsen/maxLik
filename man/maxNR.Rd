@@ -96,11 +96,15 @@ maxBHHH(fn, grad = NULL, hess = NULL, start,
       \item{tol}{\eqn{10^{-8}}{1e-8},
 	stopping condition.  Stop if the absolute difference
 	between successive iterations is less than \code{tol}.  Return
-	\code{code=2}.}
+	\code{code=2}.
+
+	If set to a negative value, the criterion is never fulfilled,
+	and hence disabled.
+      }
       \item{reltol}{sqrt(.Machine$double.eps), stopping
 	condition.  Relative convergence
 	tolerance: the algorithm stops if the relative improvement
-	between iterations is less than \sQuote{reltol}.  Return code 2.
+	between iterations is less than \sQuote{reltol}.  Return code 8.
       }
       \item{gradtol}{stopping condition.  Stop if norm of the gradient is
 	less than \code{gradtol}.  Return code 1.}
@@ -211,10 +215,10 @@ signaling it with the
 
 \value{
   object of class "maxim".  Data can be extracted through the following
-  functions: 
+  methods: 
   \item{\code{\link{maxValue}}}{\code{fn} value at maximum (the last calculated value
     if not converged.)}
-  \item{coef}{estimated parameter value.}
+  \item{\code{\link[=coef.maxim]{coef}}}{estimated parameter value.}
   \item{gradient}{vector, last calculated gradient value.  Should be
     close to 0 in case of normal convergence.}
   \item{estfun}{matrix of gradients at parameter value \code{estimate}
@@ -234,12 +238,12 @@ signaling it with the
       direction because of numerical errors.  In some cases it can be
       helped by changing \code{steptol}.}
     \item{4}{ iteration limit exceeded.}
-    \item{5}{ Infinite value.}
-    \item{6}{ Infinite gradient.}
-    \item{7}{ Infinite Hessian.}
-    \item{8}{ Successive function values withing relative tolerance
+    \item{5}{infinite value.}
+    \item{6}{infinite gradient.}
+    \item{7}{infinite Hessian.}
+    \item{8}{successive function values within relative tolerance
       limit (normal convergence).}
-    \item{9}{ (BFGS) Hessian approximation cannot be improved because of
+    \item{9}{(BFGS) Hessian approximation cannot be improved because of
       gradient did not change.  May be related to numerical
       approximation problems or wrong analytic gradient.}
     \item{100}{ Initial value out of range.}
@@ -334,8 +338,8 @@ signaling it with the
   methods.}
 
 \examples{
-## estimate the exponential distribution parameter by ML
-t <- rexp(100, 2)
+## Fit exponential distribution by ML
+t <- rexp(100, 2)  # create data with parameter 2
 loglik <- function(theta) sum(log(theta) - theta*t)
 ## Note the log-likelihood and gradient are summed over observations
 gradlik <- function(theta) sum(1/theta - t)
@@ -344,7 +348,8 @@ hesslik <- function(theta) -100/theta^2
 a <- maxNR(loglik, start=1, control=list(printLevel=2))
 summary(a)
 ## You would probably prefer 1/mean(t) instead ;-)
-## Estimate with analytic gradient and Hessian
+
+## The same example with analytic gradient and Hessian
 a <- maxNR(loglik, gradlik, hesslik, start=1)
 summary(a)
 
@@ -353,34 +358,32 @@ a <- maxBFGSR( loglik, start=1 )
 summary(a)
 
 ## For the BHHH method we need likelihood values and gradients
-## of individual observations
+## of individual observations, not the sum of those
 loglikInd <- function(theta) log(theta) - theta*t
 gradlikInd <- function(theta) 1/theta - t
 ## Estimate with analytic gradient
 a <- maxBHHH(loglikInd, gradlikInd, start=1)
 summary(a)
 
-##
 ## Example with a vector argument:  Estimate the mean and
 ## variance of a random normal sample by maximum likelihood
 ## Note: you might want to use maxLik instead
-##
 loglik <- function(param) {
+                           # param is a 2-vector of c(mean, sd)
   mu <- param[1]
   sigma <- param[2]
   ll <- -0.5*N*log(2*pi) - N*log(sigma) - sum(0.5*(x - mu)^2/sigma^2)
   ll
 }
-x <- rnorm(100, 1, 2) # use mean=1, stdd=2
+x <- rnorm(100, 1, 2) # use mean=1, sd=2
 N <- length(x)
 res <- maxNR(loglik, start=c(0,1)) # use 'wrong' start values
 summary(res)
-##
-## The previous example with named parameters and fixed values
-##
+
+## The previous example with named parameters and a fixed value
 resFix <- maxNR(loglik, start=c(mu=0, sigma=1), fixed="sigma")
 summary(resFix)  # 'sigma' is exactly 1.000 now.
-###
+
 ### Constrained optimization
 ###
 ## We maximize exp(-x^2 - y^2) where x+y = 1

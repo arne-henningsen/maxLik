@@ -40,17 +40,27 @@ constraints=NULL, ...)
    "CG" (for Conjugate Gradients), 
    or "NM" (for Nelder-Mead).  
    Lower-case letters (such as "nr" for Newton-Raphson) are allowed.
-   If missing, a suitable method is selected automatically.}
+   The default method is "NR" for unconstrained problems, and "NM" or
+   "BFGS" for constrained problems, depending on if the \code{grad}
+   argument was provided.  "BHHH" is a good alternative given the
+   likelihood is returned observation-wise (see \code{\link{maxBHHH}}).
+
+   Note that stochastic gradient ascent (SGA) is currently not supported
+   as this method seems to be rarely used for maximum likelihood estimation.
+ }
   \item{constraints}{either \code{NULL} for unconstrained maximization
     or a list, specifying the constraints.  See \code{\link{maxBFGS}}.
   }
-  \item{\dots}{further arguments, such as \code{control}
+  \item{\dots}{further arguments, such as \code{control},
+    \code{iterlim}, or \code{tol},
     are passed to the selected maximisation routine,
-     i.e. \code{\link{maxNR}}, \code{\link{maxBFGS}}, \code{\link{maxBFGSR}},
-     \code{\link{maxBHHH}}, \code{\link{maxSANN}}, \code{\link{maxCG}},
-     or \code{\link{maxNM}}
-     (depending on argument \code{method}).  Arguments not used by the
-     optimizers are forwarded to \code{logLik}, \code{grad} and \code{hess}.}
+    i.e. \code{\link{maxNR}}, \code{\link{maxBFGS}}, \code{\link{maxBFGSR}},
+    \code{\link{maxBHHH}}, \code{\link{maxSANN}}, \code{\link{maxCG}},
+    or \code{\link{maxNM}}
+    (depending on argument \code{method}).  Arguments not used by the
+    optimizers are forwarded to \code{logLik}, \code{grad} and
+    \code{hess}.
+   }
 }
 \details{
   \code{maxLik} supports constrained optimization in the sense that
@@ -62,8 +72,18 @@ constraints=NULL, ...)
 }
 \value{
   object of class 'maxLik' which inherits from class 'maxim'.
-  The structure is identical to that of the class \dQuote{maxim}
-  (see \code{\link{maxNR}}) but the methods differ.
+  Useful methods
+  include
+  \itemize{
+    \item \code{\link[=AIC.maxLik]{AIC}}: estimated parameter value
+    \item \code{\link[=coef.maxLik]{coef}}: estimated parameter value
+    \item \code{\link[=logLik.maxLik]{logLik}}: log-likelihood value
+    \item \code{\link{nIter}}: number of iterations
+    \item \code{\link[=stdEr.maxLik]{stdEr}}: standard errors
+    \item \code{\link[=summary.maxLik]{summary}}: print summary table
+    with estimates, standard errors, p, and z-values.
+    \item \code{\link[=vcov.maxLik]{vcov}}: variance-covariance matrix
+  }
 }
 \section{Warning}{The constrained maximum likelihood estimation should
   be considered experimental.  In particular, the variance-covariance
@@ -82,25 +102,32 @@ hesslik <- function(theta) -100/theta^2
 ## Estimate with numeric gradient and hessian
 a <- maxLik(loglik, start=1, control=list(printLevel=2))
 summary( a )
-## Estimate with analytic gradient and hessian
-a <- maxLik(loglik, gradlik, hesslik, start=1)
+##
+## Estimate with analytic gradient and hessian.
+## require much smaller tolerance
+## setting 'tol=0' or negative essentially disables this stopping criterion
+a <- maxLik(loglik, gradlik, hesslik, start=1,
+            control=list(tol=-1, reltol=1e-12, gradtol=1e-12))
 summary( a )
 ##
-## Next, we give an example with vector argument:  Estimate the mean and
-## variance of a random normal sample by maximum likelihood
+## Next, we give an example with vector argument:
+## fit normal distribution by estimating mean and standard deviation
+## by maximum likelihood
 ##
 loglik <- function(param) {
-  mu <- param[1]
-  sigma <- param[2]
-  ll <- -0.5*N*log(2*pi) - N*log(sigma) - sum(0.5*(x - mu)^2/sigma^2)
-  ll
+                           # param: vector of 2, c(mean, standard deviation)
+   mu <- param[1]
+   sigma <- param[2]
+   ll <- -0.5*N*log(2*pi) - N*log(sigma) - sum(0.5*(x - mu)^2/sigma^2)
+                           # can use dnorm(x, mu, sigma, log=TRUE) instead
+   ll
 }
 x <- rnorm(100, 1, 2) # use mean=1, stdd=2
 N <- length(x)
 res <- maxLik(loglik, start=c(0,1)) # use 'wrong' start values
-summary( res )
+summary(res)
 ##
-## The previous example showing parameter names and fixed values
+## Same example, but now with named parameters and a fixed value
 ##
 resFix <- maxLik(loglik, start=c(mu=0, sigma=1), fixed="sigma")
 summary(resFix)  # 'sigma' is exactly 1.000 now.

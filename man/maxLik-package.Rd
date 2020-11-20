@@ -33,7 +33,7 @@ Henningsen \& Toomet (2011), and the provided vignette
 From the user's perspective, the
 central function in the package is \code{\link{maxLik}}.  In the
 simplest form it takes two arguments: the log-likelihood function, and
-a vector of parameters' start values.  It returns an object of class
+a vector of initial parameter values.  It returns an object of class
 \sQuote{maxLik} with convenient methods such as
 \code{\link[maxLik:summary.maxLik]{summary}},
 \code{\link[maxLik:maxLik-methods]{coef}}, and
@@ -45,11 +45,12 @@ different ways.
 One of the most useful utility functions in the package is
 \code{\link{compareDerivatives}} that
 allows one to compare the analytic and numeric derivatives for debugging
-the derivative code.  Another useful function is \code{\link{condiNumber}} for
+purposes.
+Another useful function is \code{\link{condiNumber}} for
 analyzing multicollinearity problems in the estimated models.
 
 In the interest of providing a unified user interface, all the
-optimizers are implemented as maximizers in this package.  This include
+optimizers are implemented as maximizers in this package.  This includes
 the \code{\link{optim}}-based methods, such as \code{\link{maxBFGS}} and
 \code{\link{maxSGA}}, the maximizer version of popular Stochastic
 Gradient Descent.
@@ -75,7 +76,7 @@ Maintainer: Ott Toomet <otoomet@gmail.com>
 %% }
 \examples{
 ## estimate mean and variance of normal random vector
-set.seed( 123 )
+set.seed(123)
 x <- rnorm(50, 1, 2 )
 
 ## log likelihood function.
@@ -98,11 +99,12 @@ print(summary(ml))
 ## 'estimate': user contructed estimation routine
 ## Note: it accepts both 'control' and '...'
 estimate <- function(control=NULL, ...) {
-   return(maxLik(llf, start=c(1,1),
+   res <- maxLik(llf, start=c(mu=1, sigma=1),
                  control=c(list(iterlim=100), control),
                            # user-supplied 'control' overrides default
                            # 'iterlim=100'
-                 ...))
+                 ...)
+   res			  
 }
 m <- estimate(control=list(iterlim=1), fixed=2)
                            # user can override default 'iterlim' and
