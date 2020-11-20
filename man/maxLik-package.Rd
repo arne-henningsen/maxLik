@@ -27,8 +27,11 @@ interface for all included optimizers, tools to check the programmed analytic
 derivatives, and constrained optimization.
 
 A good starting point to learn about the usage of \pkg{maxLik} are
-Henningsen \& Toomet (2011), and the provided vignette
-\dQuote{Stochastic Gradient Ascent in maxLik}.
+Henningsen & Toomet (2011), and the included vignette
+\dQuote{Stochastic Gradient Ascent in maxLik}.  Use
+\code{vignette(package="maxLik")} to see the available vignettes, and
+\code{vignette("stochastic-gradient-maxLik")} to read the stochastic
+gradient ascent vignette.
 
 From the user's perspective, the
 central function in the package is \code{\link{maxLik}}.  In the

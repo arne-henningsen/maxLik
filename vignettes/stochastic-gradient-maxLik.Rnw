@@ -14,7 +14,7 @@
 %\newcommand{\transpose}{\intercal}
 \renewcommand*{\vec}[1]{\boldsymbol{#1}}
 
-% \VignetteIndexEntry{SGA Example}
+% \VignetteIndexEntry{SGA introduction: the basic usage of maxSGA}
 
 \begin{document}
 <<foo,include=FALSE,echo=FALSE>>=
