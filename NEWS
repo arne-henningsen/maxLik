@@ -4,10 +4,14 @@ Please note that only the most significant changes are reported here.
 A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
-     CHANGES IN VERSION 1.4-6 (2020-09-23)
+     CHANGES IN VERSION 1.4-6 (2020-11-23)
 
 * changed the name of internal function head... to headDots to avoid issues
   with perforce VCS
+
+* maxNR and friends now correctly return code 8 if reltol stopping condition invoked
+
+* documentation fixes and clean-ups
 
      CHANGES IN VERSION 1.4-4 (2020-07-08)
 

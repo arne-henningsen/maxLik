@@ -17,13 +17,13 @@
 \method{stdEr}{maxLik}(x, eigentol=1e-12, \dots)
 }
 \arguments{
-  \item{object}{a \sQuote{maxLik} object (or a
-    \sQuote{maxim} object for \code{coef})}
+  \item{object}{a \sQuote{maxLik} object (\code{coef} can also handle
+    \sQuote{maxim} objects)}
   \item{k}{numeric, the penalty per parameter to be used; the default
     \sQuote{k = 2} is the classical AIC.}
   \item{x}{a \sQuote{maxLik} object}
   \item{eigentol}{
-    The standard errors are only calculated if the ration of the smallest
+    The standard errors are only calculated if the ratio of the smallest
     and largest eigenvalue of the Hessian matrix is less than
     \dQuote{eigentol}.  Otherwise the Hessian is treated as singular.
   }
@@ -41,8 +41,9 @@
 }
 \examples{
 ## estimate mean and variance of normal random vector
-set.seed( 123 )
-x <- rnorm(50, 1, 2 )
+set.seed(123)
+x <- rnorm(50, 1, 2)
+
 ## log likelihood function.
 ## Note: 'param' is a vector
 llf <- function( param ) {
@@ -50,6 +51,7 @@ llf <- function( param ) {
    sigma <- param[ 2 ]
    return(sum(dnorm(x, mean=mu, sd=sigma, log=TRUE)))
 }
+
 ## Estimate it.  Take standard normal as start values
 ml <- maxLik(llf, start = c(mu=0, sigma=1) )
 

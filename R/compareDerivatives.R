@@ -1,5 +1,6 @@
 compareDerivatives <- function(f, grad, hess=NULL, t0, eps=1e-6,
-                               print=TRUE,
+                               printLevel=1,
+                               print=printLevel > 0,
                                max.rows=getOption("max.rows", 20),
                                max.cols=getOption("max.cols", 7),
                                ...) {
@@ -76,11 +77,11 @@ compareDerivatives <- function(f, grad, hess=NULL, t0, eps=1e-6,
 ## Hessian?
 ##  
   if(!is.null(hess)) {
-    if(print)cat("Comparing hessians: relative dfference\n")
+     if(print)
+        cat("Comparing hessians: relative dfference\n")
     anHess <- hess(t0, ...)
     numHess <- numericGradient(grad, t0, eps, ...)
-    rDifHess <- ((anHess-numHess) /
-                 (0.5*(abs(anHess)+abs(numHess))) )
+    rDifHess <- (anHess-numHess) / (0.5*(abs(anHess)+abs(numHess)))
     rDifHess[(anHess==0) & (numHess==0)] <- 0 
     rDifHess. <- max(abs(rDifHess), na.rm=TRUE)       
     if(print)
@@ -90,6 +91,7 @@ compareDerivatives <- function(f, grad, hess=NULL, t0, eps=1e-6,
                               rel.diff = rDifHess)
     out$maxRelDiffHess = rDifHess.
   }
-  if(print)cat("-------- END of compare derivatives -------- \n")
+   if(print)
+      cat("-------- END of compare derivatives -------- \n")
   invisible(out)
 }

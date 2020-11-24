@@ -8,7 +8,8 @@
   for maximization algorithms.
 }
 \usage{
-compareDerivatives(f, grad, hess=NULL, t0, eps=1e-6, print=TRUE,
+compareDerivatives(f, grad, hess=NULL, t0, eps=1e-6,
+                   printLevel=1, print=printLevel > 0,
                    max.rows=getOption("max.rows", 20),
                    max.cols=getOption("max.cols", 7),
                    ...)
@@ -43,9 +44,12 @@ compareDerivatives(f, grad, hess=NULL, t0, eps=1e-6, print=TRUE,
     numeric. Step size for numeric differentiation. Central derivative
     is used.
   }
+  \item{printLevel}{
+    numeric: a positive number prints summary of the comparison.  0 does
+    not do any printing, only returns the comparison results (invisibly).
+  }
   \item{print}{
-    logical:  TRUE to print a summary, FALSE to return the comparison
-    only (invisibly).
+    deprecated (for backward compatibility only).
   }
   \item{max.rows}{maximum number of matrix rows to be printed.
   }
@@ -63,9 +67,11 @@ compareDerivatives(f, grad, hess=NULL, t0, eps=1e-6, print=TRUE,
   For every component of \code{f}, it prints the parameter value, analytic and
   numeric derivative, and their relative difference
   \deqn{\textrm{rel.diff} = \frac{\textrm{analytic} -
-      \textrm{numeric}}{\frac{1}{2}(\textrm{analytic} + \textrm{numeric})}.}{rel.diff = (analytic -
-    numeric)/(0.5*(analytic + numeric)).}
-  If analytic = 0 = numeric, the rel.diff = 0.  If
+      \textrm{numeric}}{\frac{1}{2}(|\textrm{analytic}| + |\textrm{numeric}|)}.}{rel.diff = (analytic -
+    numeric)/(0.5*(abs(analytic) + abs(numeric))).}
+  If \eqn{\textrm{analytic} = 0}{analytic == 0} and
+  \eqn{\textrm{numeric} = 0}{numeric == 0}, then rel.diff is also set to
+  0.  If
   analytic derivatives are correct and the function is sufficiently
   smooth, expect the relative differences to be less than \eqn{10^{-7}}{1e-7}.
 }
