@@ -4,6 +4,8 @@ Please note that only the most significant changes are reported here.
 A full ChangeLog is available in the log messages of the SVN repository
 on R-Forge.
 
+     CHANGES IN VERSION 1.4-7 (2020-11-24)
+
      CHANGES IN VERSION 1.4-6 (2020-11-24)
 
 * changed the name of internal function head... to headDots to avoid issues
