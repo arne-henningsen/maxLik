@@ -71,14 +71,10 @@ Maintainer: Ott Toomet <otoomet@gmail.com>
   Henningsen A, Toomet O (2011). \dQuote{maxLik: A package for maximum
     likelihood estimation in R.}
   Computational Statistics, 26(3), 443-458. doi:
-  \href{http://dx.doi.org/10.1007/s00180-010-0217-1}{10.1007/s00180-010-0217-1}.
+  \doi{10.1007/s00180-010-0217-1}.
 }
 \keyword{Basics|package}
 \keyword{Mathematics|optimize}
-%% \seealso{
-%% ~~ Optional links to other man pages, e.g. ~~
-%% ~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
-%% }
 \examples{
 ### estimate mean and variance of normal random vector
 

@@ -756,6 +756,6 @@ We believe every \emph{R}-savy user can adapt the
 method to their needs.
 
 \bibliographystyle{apecon}
-\bibliography{sga}
+\bibliography{maxlik}
 
 \end{document}

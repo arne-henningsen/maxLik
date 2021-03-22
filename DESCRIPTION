@@ -1,6 +1,6 @@
 Package: maxLik
-Version: 1.4-7
-Date: 2020-11-24
+Version: 1.4-8
+Date: 2021-03-22
 Title: Maximum Likelihood Estimation and Related Tools
 Author: Ott Toomet <otoomet@gmail.com>,
    Arne Henningsen <arne.henningsen@gmail.com>,
@@ -8,7 +8,7 @@ Author: Ott Toomet <otoomet@gmail.com>,
 Maintainer: Ott Toomet <otoomet@gmail.com>
 Depends: R (>= 2.4.0), miscTools (>= 0.6-8), methods
 Imports: sandwich
-Suggests: testthat, MASS, clue, dlm
+Suggests: testthat, MASS, clue, dlm, plot3D
 Description: Functions for Maximum Likelihood (ML) estimation, non-linear
    optimization, and related tools.  It includes a unified way to call
    different optimizers, and classes and methods to handle the results from

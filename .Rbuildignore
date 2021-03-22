@@ -3,3 +3,5 @@
 ^.*_privateTest\.R$
 ^TODO\.txt$
 ^vignettes/Rplots.pdf$
+^vignettes/Makefile
+.*\.prv
