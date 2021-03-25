@@ -1,6 +1,6 @@
 
-R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
-Copyright (C) 2020 The R Foundation for Statistical Computing
+R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -28,6 +28,7 @@ Henningsen, Arne and Toomet, Ott (2011). maxLik: A package for maximum likelihoo
 
 If you have questions, suggestions, or comments regarding the 'maxLik' package, please use a forum or 'tracker' at maxLik's R-Forge site:
 https://r-forge.r-project.org/projects/maxlik/
+> library(testthat)
 > options(digits = 4)
 >                            # just to avoid so many differences when comparing these output files
 > ## data to fit a normal distribution
@@ -101,7 +102,8 @@ Error in validObject(x) :
 > try(ml <- maxLik( llf, start = startVal, control=list(tol=TRUE)))
 Error in checkSlotAssignment(object, name, value) : 
   assignment of an object of class "logical" is not valid for slot 'tol' in an object of class "MaxControl"; is(value, "numeric") is not TRUE
-> ## reltol
+> 
+> ## ----- reltol: play w/reltol, leave other tolerances at default value -----
 > mlRelTol <- maxLik( llf, start = startVal, reltol=1)
 > print(summary(mlRelTol))
 --------------------------------------------
@@ -120,7 +122,14 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 > mlRelTolC <- maxLik(llf, start=startVal, control=list(reltol=1))
 > print(all.equal(mlRelTol, mlRelTolC))
 [1] TRUE
-> try(ml <- maxLik( llf, start = startVal, reltol=-1))
+> try(ml0 <- maxLik( llf, start = startVal, reltol=0))
+> test_that("Switching off reltol makes more iterations",
++           expect_gt(nIter(ml0), nIter(mlRelTol))
++           )          
+> try(ml1 <- maxLik( llf, start = startVal, reltol=-1))
+> test_that("reltol < 0 equivalent to reltol = 0",
++           expect_equal(nIter(ml0), nIter(ml1))
++           )
 > try(ml <- maxLik( llf, start = startVal, reltol=c(1,2)))
 Error in validObject(x) : 
   invalid class "MaxControl" object: 'reltol' must be of length 1, not 2
@@ -662,4 +671,4 @@ storeParameters = FALSE
 > 
 > proc.time()
    user  system elapsed 
-  0.785   0.041   0.819 
+  1.000   0.046   1.035 

@@ -4,6 +4,7 @@
 ### ...
 ### 
 library(maxLik)
+library(testthat)
 options(digits = 4)
                            # just to avoid so many differences when comparing these output files
 ## data to fit a normal distribution
@@ -42,12 +43,20 @@ try(ml <- maxLik( llf, start = startVal, tol=TRUE))
 try(ml <- maxLik( llf, start = startVal, control=list(tol=-1)))
 try(ml <- maxLik( llf, start = startVal, control=list(tol=c(1,2))))
 try(ml <- maxLik( llf, start = startVal, control=list(tol=TRUE)))
-## reltol
+
+## ----- reltol: play w/reltol, leave other tolerances at default value -----
 mlRelTol <- maxLik( llf, start = startVal, reltol=1)
 print(summary(mlRelTol))
 mlRelTolC <- maxLik(llf, start=startVal, control=list(reltol=1))
 print(all.equal(mlRelTol, mlRelTolC))
-try(ml <- maxLik( llf, start = startVal, reltol=-1))
+try(ml0 <- maxLik( llf, start = startVal, reltol=0))
+test_that("Switching off reltol makes more iterations",
+          expect_gt(nIter(ml0), nIter(mlRelTol))
+          )          
+try(ml1 <- maxLik( llf, start = startVal, reltol=-1))
+test_that("reltol < 0 equivalent to reltol = 0",
+          expect_equal(nIter(ml0), nIter(ml1))
+          )
 try(ml <- maxLik( llf, start = startVal, reltol=c(1,2)))
 try(ml <- maxLik( llf, start = startVal, reltol=TRUE))
 try(ml <- maxLik( llf, start = startVal, control=list(reltol=-1)))

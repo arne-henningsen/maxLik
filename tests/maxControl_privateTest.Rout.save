@@ -1,6 +1,6 @@
 
-R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
-Copyright (C) 2020 The R Foundation for Statistical Computing
+R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -184,6 +184,9 @@ Error in validObject(x) :
 > beta <- rep(1, ncol(X))
 > y <- X %*% beta + rnorm(20, sd=0.3)
 > m <- maxNR(loglik, gradlik, start=rep(1, ncol(X)), iterlim=1)
+> ## print estimates + gradient, and hessian
+> ## should print only 4 rows for estimates, 4 rows + 2 cols for Hessia
+> ## should give message "reached getOption("max.cols") -- omitted 13 columns" etc
 > print(summary(m, hessian=TRUE), max.rows=4, max.cols=2, digits=3)
 --------------------------------------------
 Newton-Raphson maximisation 
@@ -211,4 +214,4 @@ Hessian:
 > 
 > proc.time()
    user  system elapsed 
-  0.317   0.024   0.334 
+  0.311   0.021   0.324 

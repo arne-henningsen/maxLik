@@ -54,5 +54,8 @@ X <- matrix(rnorm(20*15), 20, 15)
 beta <- rep(1, ncol(X))
 y <- X %*% beta + rnorm(20, sd=0.3)
 m <- maxNR(loglik, gradlik, start=rep(1, ncol(X)), iterlim=1)
+## print estimates + gradient, and hessian
+## should print only 4 rows for estimates, 4 rows + 2 cols for Hessia
+## should give message "reached getOption("max.cols") -- omitted 13 columns" etc
 print(summary(m, hessian=TRUE), max.rows=4, max.cols=2, digits=3)
                            # we only care about the lines/cols, not the values

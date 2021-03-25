@@ -28,10 +28,6 @@ maxNRCompute <- function(fn,
    ##               smaller than the original one:
    ##                  "stephalving"   smaller step in the same direction
    ##                  "marquardt"     Marquardt (1963) approach
-   ##     The stopping criteria
-   ##     tol         - maximum allowed absolute difference between sequential values
-   ##     reltol      - maximum allowed reltive difference (stops if < reltol*(abs(fn) + reltol)
-   ##     gradtol     - maximum allowed norm of gradient vector
    ## 
    ## finalHessian  include final Hessian?  As computing final hessian does not carry any extra penalty for NR method, this option is
    ##               mostly for compatibility reasons with other maxXXX functions.
@@ -384,8 +380,11 @@ maxNRCompute <- function(fn,
       if(is.null(newVal) && ((sum(f1) - sum(f0)) < slot(control, "tol"))) {
          code <- 2; break  #
       }
-      if(is.null(newVal) && abs(sum(f1) - sum(f0)) <
-         abs(slot(control, "reltol")*( sum(f1) + slot(control, "reltol")))) {
+      if(is.null(newVal) &&
+         (sum(f1) - sum(f0) < slot(control, "reltol")*abs(sum(f1) + slot(control, "reltol")))
+                           # We need abs(f1) to ensure RHS is positive
+                           # (as long as reltol is positive)
+         ) {
          code <- 8; break
       }
       if(any(is.infinite(f1)) && sum(f1) > 0) {
