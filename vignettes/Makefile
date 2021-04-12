@@ -10,6 +10,6 @@ all: $(FINALS)
 intro-to-maximum-likelihood.pdf: probability-density.pdf
 
 %.pdf: %.Rnw
-	echo $HOSTNAME && Sweave.sh -ld $<
+	echo $(HOSTNAME) && Sweave.sh -ld $<
 
 .PHONY: all
