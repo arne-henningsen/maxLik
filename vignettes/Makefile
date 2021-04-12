@@ -9,7 +9,10 @@ all: $(FINALS)
 
 intro-to-maximum-likelihood.pdf: probability-density.pdf
 
+# on r-forge Sweave.sh does not work...
+ifneq ($(HOSTNAME),)
 %.pdf: %.Rnw
-	echo $(HOSTNAME) && Sweave.sh -ld $<
+	Sweave.sh -ld $<
+endif
 
 .PHONY: all
