@@ -1,5 +1,6 @@
 SOURCES = $(wildcard *.Rnw)
 FINALS = $(patsubst %.Rnw, %.pdf, $(SOURCES))
+$(info Running on $(HOSTNAME))
 
 all: $(FINALS)
 
@@ -9,6 +10,6 @@ all: $(FINALS)
 intro-to-maximum-likelihood.pdf: probability-density.pdf
 
 %.pdf: %.Rnw
-	Sweave.sh -ld $<
+	pwd && Sweave.sh -ld $<
 
 .PHONY: all
