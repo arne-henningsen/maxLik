@@ -9,10 +9,8 @@ importFrom("stats", "coef", "logLik", "optim", "pnorm", "printCoefmat",
 importFrom("utils", "head", "str", "tail")
 
 export( "activePar" )
-export("bread")
 export( "compareDerivatives" )
 export( "condiNumber" )
-export("estfun")
 export( "fnSubset" )
 export( "glance" )
 export( "gradient" )
