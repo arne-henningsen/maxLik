@@ -137,7 +137,7 @@ maxSGACompute <- function(fn, grad, hess,
       printRowColLimits(a, max.rows, max.cols)
    }
    ## ---------------- Main interation loop ------------------------
-   iter <- 0
+   iter <- 0L
    ## we do not need to compute the function itself here, except for
    ## printing
    repeat {
@@ -150,7 +150,7 @@ maxSGACompute <- function(fn, grad, hess,
       if( iter >= slot(control, "iterlim")) {
          code <- 4; break
       }
-      iter <- iter + 1
+      iter <- iter + 1L
       if(printLevel > 1) {
          cat( "----- epoch", iter, "-----\n")
       }
@@ -212,12 +212,12 @@ maxSGACompute <- function(fn, grad, hess,
          if(is.null(f1)) {
             f1 <- fn(start1, fixed = fixed, sumObs = TRUE, index=index, ...)
          }
-         valueStore[iter + 1] <- c(f1)
+         valueStore[iter + 1L] <- c(f1)
                            # c removes dimensions and attributes
       }
       if(storeParameters) {
          ## store last value of the epoch
-         parameterStore[iter + 1,] <- c(start1)
+         parameterStore[iter + 1L,] <- c(start1)
                            # c removes dimensions and attributes
       }
       if(slot(control, "printLevel") > 2) {

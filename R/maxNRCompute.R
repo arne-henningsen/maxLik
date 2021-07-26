@@ -84,7 +84,7 @@ maxNRCompute <- function(fn,
    I <- diag(rep(1, nParam))
                            # I is unit matrix
    start1 <- start
-   iter <- 0
+   iter <- 0L
    returnHessian <- ifelse( bhhhHessian, "BHHH", TRUE )
    f1 <- fn(start1, fixed = fixed, sumObs = TRUE,
             returnHessian = returnHessian, ...)
@@ -168,7 +168,7 @@ maxNRCompute <- function(fn,
       if( iter >= slot(control, "iterlim")) {
          code <- 4; break
       }
-      iter <- iter + 1
+      iter <- iter + 1L
       if(!marquardt) {
          lambda1 <- 0
                            # assume the function is concave at start0
@@ -413,7 +413,7 @@ maxNRCompute <- function(fn,
    ## calculate (final) Hessian
    if(tolower(finalHessian) == "bhhh") {
       if(!is.null(gradientObs)) {
-         hessian <- - crossprod( gradientObs )
+         hessian <- -crossprod( gradientObs )
          attr(hessian, "type") <- "BHHH"
       } else {
          hessian <- NULL

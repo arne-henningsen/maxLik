@@ -1,14 +1,19 @@
 THIS IS THE CHANGELOG OF THE "maxLik" PACKAGE
 
-Please note that only the most significant changes are reported here.
-A full ChangeLog is available in the log messages of the SVN repository
-on R-Forge.
+Please note that only the most significant user visible changes are
+reported here.  A full ChangeLog is available in the log messages of
+the SVN repository on R-Forge.
+
+* maxLik methods for 'tidy' and 'glance' generics (by David Hugh-Jones)
+
+* maxLik method for 'confint' (by Luca Scrucca)
 
 
      CHANGES IN VERSION 1.4-8 (2020-03-22)
 
 * added two vignettes: "Getting started with maximum likelihood and maxLik" and
    "maximum likelihood estimation with maxLik"
+
 
      CHANGES IN VERSION 1.4-6 (2020-11-24)
 
@@ -19,17 +24,21 @@ on R-Forge.
 
 * documentation fixes and clean-ups
 
+
      CHANGES IN VERSION 1.4-4 (2020-07-08)
 
 * fixed another issue with CRAN tests on ATLAS
+
 
      CHANGES IN VERSION 1.4-2 (2020-07-08)
 
 * fixed CRAN test issues
 
+
       CHANGES IN VERSION 1.4-0 (2020-07-07)
 
 * includes stochastic gradient ascent and Adam optimizer
+
 
       CHANGES IN VERSION 1.3-10 (2020-05-13)
 
@@ -39,18 +48,22 @@ on R-Forge.
 * print.summary.maxim accepts parameters max.rows and max.cols,
   and only prints this many columns/rows of output matrices
 
+
       CHANGES IN VERSION 1.3-8 (2019-05-18)
 
 * better handling of matrix class
+
 
       CHANGES IN VERSION 1.3-8 (2020-01-01)
 
 * better handling of matrix class
 
+
       CHANGES IN VERSION 1.3-6 (2019-05-18)
 
 * 'maxim' objects now support 'maxValue' and 'gradient' methods.
 * tests cleaned and give fewer notes on check
+
 
       CHANGES IN VERSION 1.3-4 (2015-11-08)
 

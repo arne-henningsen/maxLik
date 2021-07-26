@@ -10,11 +10,14 @@
 ###
 ### i) maxNR()
 ### ii) maxBFGS()
-
+if(!requireNamespace("tinytest", quietly = TRUE)) {
+   cat("These tests require 'tinytest' package\n")
+   q("no")
+}
 library(maxLik)
-library(testthat)
 
-# log-likelihood function(s)
+## ---------- define log-likelihood functions ----------
+## log-likelihood function(s)
 logLL <- function(x, X)   # per observation for maxLik
    dgamma(x = X, shape = x[1], scale = x[2], log = TRUE)
 logLLSum <- function(x, X)
@@ -44,31 +47,31 @@ dd.logLL <- function(x, X){   # analytic 2. derivatives
    return(hessian)
 }
 
-## create data
+## ---------- create data ----------
 ## sample size 1000 should give precision 0.1 or better
 param <- c(1.5, 2)
 set.seed(100)
-someData <- rgamma(1000, shape=param[1], scale=param[2])
+testData <- rgamma(1000, shape=param[1], scale=param[2])
 start <- c(1,1)
 mTol <- .Machine$double.eps^0.25
 
 ## estimation with maxLik() / NR
 doTests <- function(method="NR") {
-   suppressWarnings(rLLSum <- maxLik( logLLSum, start=start, method=method, X=someData ))
+   suppressWarnings(rLLSum <- maxLik( logLLSum, start=start, method=method, X=testData ))
    stdDev <- stdEr(rLLSum)
    tol <- 2*max(stdDev)
    expect_equal(coef(rLLSum), param, tolerance=tol,
                 info=paste("coefficient values should be close to the true values", paste(param, collapse=", ")))
                            # should equal to param, but as N is small, it may be way off
    ##
-   rLL <- suppressWarnings(maxLik( logLL, start = start, method=method, X=someData ))
+   rLL <- suppressWarnings(maxLik( logLL, start = start, method=method, X=testData ))
    expect_equal(coef(rLL), coef(rLLSum), tolerance=mTol)
    ##
-   rLLSumGSum <- suppressWarnings(maxLik( logLLSum, grad=d.logLLSum, start = start, method=method, X=someData ))
+   rLLSumGSum <- suppressWarnings(maxLik( logLLSum, grad=d.logLLSum, start = start, method=method, X=testData ))
    expect_equal(coef(rLLSumGSum), coef(rLLSum), tolerance=mTol)
-   rLLG <- suppressWarnings(maxLik( logLL, grad=d.logLL, start = start, method=method, X=someData ))
+   rLLG <- suppressWarnings(maxLik( logLL, grad=d.logLL, start = start, method=method, X=testData ))
    expect_equal(coef(rLLG), coef(rLLSum), tolerance=mTol)
-   rLLGH <- suppressWarnings(maxLik( logLL, grad=d.logLL, hess=dd.logLL, start = start, method=method, X=someData ))
+   rLLGH <- suppressWarnings(maxLik( logLL, grad=d.logLL, hess=dd.logLL, start = start, method=method, X=testData ))
    expect_equal(coef(rLLGH), coef(rLLSum), tolerance=mTol)
 }
 
@@ -76,18 +79,18 @@ doTests("NR")
 doTests("BFGS")
 ## maxBHHH: cannot run the same tests
 method <- "BHHH"
-tryCatch(maxLik( logLLSum, start=start, method=method, X=someData ),
-         error = function(e) cat(as.character(e))
-                           # should output error about gradient size
-         )
-rLL <- suppressWarnings(maxLik( logLL, start = start, method=method, X=someData ))
+expect_error(
+   maxLik( logLLSum, start=start, method=method, X=testData),
+   pattern = "not provided by .* returns a numeric vector"
+)
+rLL <- suppressWarnings(maxLik( logLL, start = start, method=method, X=testData ))
 stdDev <- stdEr(rLL)
 tol <- 2*max(stdDev)
 expect_equal(coef(rLL), param, tolerance=tol,
              info=paste("coefficient values should be close to the true values", paste(param, collapse=", ")))
                            # should equal to param, but as N is small, it may be way off
 ##
-rLLG <- suppressWarnings(maxLik( logLL, grad=d.logLL, start = start, method=method, X=someData ))
+rLLG <- suppressWarnings(maxLik( logLL, grad=d.logLL, start = start, method=method, X=testData ))
 expect_equal(coef(rLLG), coef(rLL), tolerance=mTol)
 
 ## Do the other basic functions work?

@@ -75,7 +75,7 @@ maxBFGSRCompute <- function(fn,
    nParam <- length(param)
    ##
   chi2 <- 1E+10
-  iter <- 0
+  iter <- 0L
   # eval a first time the function, the gradient and the hessian
   x <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE,
       returnHessian = FALSE, ... ) )
@@ -161,7 +161,7 @@ maxBFGSRCompute <- function(fn,
   direction <- rep(0, nParam)
    ## ----------- Main loop ---------------
    repeat {
-      iter <- iter + 1
+      iter <- iter + 1L
       if( iter > slot(control, "iterlim")) {
          code <- 4; break
       }

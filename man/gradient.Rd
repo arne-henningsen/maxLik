@@ -1,6 +1,7 @@
 \name{gradient}
 \alias{gradient}
 \alias{gradient.maxim}
+\alias{estfun}
 \alias{estfun.maxLik}
 
 \title{Extract Gradients Evaluated at each Observation}

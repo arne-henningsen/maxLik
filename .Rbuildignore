@@ -1,6 +1,5 @@
 ^\.Rproj\.user$
 ^.*\.Rproj$
-^.*_privateTest\.R$
 ^TODO\.txt$
 ^vignettes/Rplots.pdf$
 ^vignettes/Makefile

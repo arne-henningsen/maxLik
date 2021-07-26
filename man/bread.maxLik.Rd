@@ -1,4 +1,5 @@
 \name{bread.maxLik}
+\alias{bread}
 \alias{bread.maxLik}
 
 \title{Bread for Sandwich Estimator}

@@ -28,7 +28,6 @@
 options(keep.source = TRUE, width = 60,
         try.outFile=stdout()  # make try to produce error messages
         )
-library(plot3D)
 set.seed(34)
 @
 
@@ -837,32 +836,38 @@ colors <- colorRampPalette(c("Blue", "White"))(30)
 par(mar=c(0,0,0,0),
     mgp=2:0)
 ## Perspective plot
-persp3D(mu, sigma, ll, 
-               xlab=expression(mu),
-               ylab=expression(sigma),
-               zlab=expression(log-likelihood),
-               theta=40, phi=30,
-               colkey=FALSE,
-               col=colors, alpha=0.5, facets=TRUE,
-               shade=1,
-               lighting="ambient", lphi=60, ltheta=0,
-               image=TRUE,
-               bty="b2",
-               contour=list(col="gray", side=c("z"), levels=levels)
-               )
-## add the dot for maximum
-scatter3D(rep(coef(m)[1], 2), rep(coef(m)[2], 2), c(maxValue(m), min(ll)),
-          col="red", pch=16, facets=FALSE,
-          bty="n", add=TRUE)
-## line from max on persp to max at bottom surface
-segments3D(coef(m)[1], coef(m)[2], maxValue(m),
-          coef(m)[1], coef(m)[2], min(ll),
-          col="red", lty=2,
-          bty="n", add=TRUE)
-## contours for the bottom image
-contour3D(mu, sigma, z=min(ll) + 0.1, colvar=ll, col="black",
-          levels=levels,
-          add=TRUE)
+if(require(plot3D)) {
+   persp3D(mu, sigma, ll, 
+           xlab=expression(mu),
+           ylab=expression(sigma),
+           zlab=expression(log-likelihood),
+           theta=40, phi=30,
+           colkey=FALSE,
+           col=colors, alpha=0.5, facets=TRUE,
+           shade=1,
+           lighting="ambient", lphi=60, ltheta=0,
+           image=TRUE,
+           bty="b2",
+           contour=list(col="gray", side=c("z"), levels=levels)
+           )
+   ## add the dot for maximum
+   scatter3D(rep(coef(m)[1], 2), rep(coef(m)[2], 2), c(maxValue(m), min(ll)),
+             col="red", pch=16, facets=FALSE,
+             bty="n", add=TRUE)
+   ## line from max on persp to max at bottom surface
+   segments3D(coef(m)[1], coef(m)[2], maxValue(m),
+              coef(m)[1], coef(m)[2], min(ll),
+              col="red", lty=2,
+              bty="n", add=TRUE)
+   ## contours for the bottom image
+   contour3D(mu, sigma, z=min(ll) + 0.1, colvar=ll, col="black",
+             levels=levels,
+             add=TRUE)
+} else {
+   plot(1:2, type="n")
+   text(1.5, 1.5, "This figure requires 'plot3D' package",
+        cex=1.5)
+}
 @
 \caption{Log-likelihood surface as a function of $\mu$ and $\sigma$.
   The optimum, denoted as the red dot, is at

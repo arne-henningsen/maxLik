@@ -6,7 +6,7 @@ Maximum Likelihood Estimation
 }
 \description{
   This package contains a set of functions and tools for Maximum Likelihood (ML)
-  estimation.  The focus of the package is on the non-linear
+  estimation.  The focus of the package is on non-linear
   optimization from the ML viewpoint, and it provides several convenience wrappers
   and tools, like BHHH algorithm, variance-covariance
   matrix and standard errors.
@@ -26,13 +26,15 @@ standard errors from the estimates.  Other highlights include a unified
 interface for all included optimizers, tools to test user-provided analytic
 derivatives, and constrained optimization.
 
-A good starting point to learn about the usage of \pkg{maxLik} are
-Henningsen & Toomet (2011), an introductory paper to the package,
-and the included vignette
-\dQuote{Stochastic Gradient Ascent in maxLik}.  Use
+A good starting point to learn about the usage of \pkg{maxLik} are the
+included vignettes \dQuote{Introduction: what is maximum likelihood},
+\dQuote{Maximum likelihood estimation with maxLik} and
+\dQuote{Stochastic Gradient Ascent in maxLik}.  Another good
+source is
+Henningsen & Toomet (2011), an introductory paper to the package.
+Use
 \code{vignette(package="maxLik")} to see the available vignettes, and
-\code{vignette("stochastic-gradient-maxLik")} to read the stochastic
-gradient ascent vignette.
+\code{vignette("using-maxlik")} to read the usage vignette.
 
 From the user's perspective, the
 central function in the package is \code{\link{maxLik}}.  In its
@@ -63,7 +65,8 @@ Gradient Descent.
 \author{
 Ott Toomet <otoomet@gmail.com>,
 Arne Henningsen <arne.henningsen@gmail.com>,
-with contributions from Spencer Graves and Yves Croissant
+with contributions from Spencer Graves, Yves Croissant and David
+Hugh-Jones. 
 
 Maintainer: Ott Toomet <otoomet@gmail.com>
 }

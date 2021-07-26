@@ -44,7 +44,12 @@
   }
 }
 \author{Ott Toomet, Arne Henningsen}
-\seealso{\code{\link{maxLik}}}
+\seealso{
+  \code{\link{maxLik}} for maximum likelihood estimation,
+  \code{\link{confint}} for confidence intervals, and \code{\link{tidy}}
+  and \code{\link{glance}} for alternative quick summaries of the ML
+  results. 
+}
 \examples{
 ## ML estimation of exponential distribution:
 t <- rexp(100, 2)
