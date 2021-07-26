@@ -4,9 +4,16 @@ Please note that only the most significant user visible changes are
 reported here.  A full ChangeLog is available in the log messages of
 the SVN repository on R-Forge.
 
+
+     CHANGES IN VERSION 1.5-0 (2020-07-26)
+
 * maxLik methods for 'tidy' and 'glance' generics (by David Hugh-Jones)
 
 * maxLik method for 'confint' (by Luca Scrucca)
+
+* most tests moved to 'tinytest' package
+
+* fixed an issue with negative reltol values
 
 
      CHANGES IN VERSION 1.4-8 (2020-03-22)
