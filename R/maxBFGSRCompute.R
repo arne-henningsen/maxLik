@@ -301,7 +301,7 @@ maxBFGSRCompute <- function(fn,
           attr(hessian, "type") <- "BHHH"
       } else {
          hessian <- NULL
-         warning("For computing the final Hessian by 'BHHH' method, the log-likelihood or gradient must be supplied by observations")
+         warning("For computing the final Hessian using 'BHHH' method, the log-likelihood or gradient must be supplied by observations")
       }
    } else if(finalHessian) {
       hessian <- attr( fn( param, fixed = fixed, returnHessian = TRUE, ... ) ,

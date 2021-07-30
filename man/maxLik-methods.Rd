@@ -39,6 +39,17 @@
     }
   }
 }
+\value{
+  \itemize{
+    \item for \code{AIC}, a number with attribute \sQuote{df} for
+    degrees of freedom.
+    \item for \code{coef} a numeric vector of estimated coefficients.  It may be
+    named if the names are supplied to the model.
+    \item for \code{stdEr} a numeric vector of standard errors of the
+    estimates.  In case standard errors cannot be computed it is a
+    vector of \code{NA}-s of correct length.
+  }
+}
 \examples{
 ## estimate mean and variance of normal random vector
 set.seed(123)

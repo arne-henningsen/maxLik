@@ -1,5 +1,5 @@
 ## Test methods.  Note: only test if methods work in terms of dim, length, etc,
-## not in terms of values here
+## not in terms of values
 ##
 ## ...
 ## * printing summary with max.columns, max.rows
@@ -70,6 +70,10 @@ expect_equal(length(stdEr(a)), 1, info="stdEr 1D numeric correct")
 a <- maxLik(loglik, gradlik, hesslik, start=1)
 expect_equal(dim(vcov(a)), c(1,1), info="vcov 1D analytic correct")
 expect_equal(length(stdEr(a)), 1, info="stdEr 1D analytic correct")
+## if hessian missing, vcov and stdEr should be NA-s
+a$hessian <- NULL
+expect_equivalent(vcov(a), matrix(NA_real_, 1, 1))
+expect_equivalent(stdEr(a), c(NA_real_))
 
 ## ---------- both individual and aggregated likelihood ----------
 NOBS <- 100

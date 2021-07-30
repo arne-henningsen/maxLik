@@ -22,6 +22,8 @@ hessian(x, \dots)
   is singular.  In that case you may want to invert only the
   non-singular part of the matrix.  You may also want to fix certain
   parameters (see \code{\link{activePar}}).
+
+  If for some reason Hessian is not available, then it returns \code{NULL}.
 }
 \author{Ott Toomet}
 \seealso{\code{\link{maxLik}}, \code{\link{activePar}}, \code{\link{condiNumber}}}

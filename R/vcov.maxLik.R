@@ -1,4 +1,6 @@
-## maxLik
+### Return variance-covariance matrix.
+### If Hessian does not exist, return matrix of NA-s
+### 
 vcov.maxLik <- function(object, eigentol=1e-12, ...) {
    ## if exists $varcovar, take it
    if(!is.null(object$varcovar))
@@ -23,6 +25,8 @@ vcov.maxLik <- function(object, eigentol=1e-12, ...) {
       }
       return(varcovar)
    }
-   else
-       return(NULL)
+   else {
+      K <- nParam(object)
+      matrix(NA_real_, K, K)
+   }
 }

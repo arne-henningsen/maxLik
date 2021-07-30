@@ -273,7 +273,7 @@ maxOptim <- function(fn, grad, hess,
          attr(hessian, "type") <- "BHHH"
       } else {
          hessian <- NULL
-         warning("For computing the final Hessian by 'BHHH' method, the log-likelihood or gradient must be supplied by observations")
+         warning("For computing the final Hessian using 'BHHH' method, the log-likelihood or gradient must be supplied by observations")
       }
    } else if(finalHessian != FALSE) {
       argList <- list( estimate, fnOrig = fn,  gradOrig = grad,

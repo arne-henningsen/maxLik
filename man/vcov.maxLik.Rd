@@ -20,6 +20,10 @@
   the estimated variance covariance matrix of the coefficients.  In
   case of the estimated Hessian is singular, it's values are
   \code{Inf}.  The values corresponding to fixed parameters are zero.
+
+  If unable to compute the matrix (e.g. Hessian was not computed by the
+  model), then it returns a matrix of \code{NA}-s of
+  correct size.
 }
 \details{
   The standard errors are only calculated if the ratio of the smallest
