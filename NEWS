@@ -9,6 +9,9 @@ the SVN repository on R-Forge.
 
 * stdEr returns NA-vector when Hessian missing
 
+* the preferred way to query number of obs is 'stats4::nobs',
+  not 'miscTools::nObs'
+
 
      CHANGES IN VERSION 1.5-2 (2020-07-26)
 
