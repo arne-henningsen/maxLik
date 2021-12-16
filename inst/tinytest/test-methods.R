@@ -19,10 +19,6 @@ x <- runif(20)
 y <- x + rnorm(20)
 m <- lm(y ~ x)
 expect_equal(
-   nObs(m), length(y),
-   info = "nObs.lm must be correct"
-)
-expect_equal(
    stdEr(m),
    c(`(Intercept)` = 0.357862322670879, x = 0.568707094458801)
 )

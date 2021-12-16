@@ -6,6 +6,7 @@ importFrom( "miscTools", "stdEr" )
 importFrom("sandwich", "bread", "estfun", "sandwich")
 importFrom("stats", "coef", "logLik", "optim", "pnorm", "printCoefmat",
            "vcov", "AIC", "qnorm")
+importFrom("stats4", "nobs")
 importFrom("utils", "head", "str", "tail")
 
 export( "activePar" )
@@ -40,6 +41,7 @@ export( "tidy" )
 exportClasses("MaxControl")
 exportMethods("maxControl")
 exportMethods("show")
+exportMethods("nobs")
 
 S3method( "activePar", "default" )
 S3method( "AIC", "maxLik" )
