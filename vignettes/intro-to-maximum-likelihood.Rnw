@@ -4,9 +4,12 @@
 \usepackage{amssymb}
 \usepackage[font={small,sl}]{caption}
 \usepackage[inline]{enumitem}
+\usepackage[lmargin=25mm, rmargin=50mm, marginparwidth=45mm]{geometry}
 \usepackage{indentfirst}
 \usepackage[utf8]{inputenc}
+\usepackage{marginnote}
 \usepackage{natbib}
+\usepackage{relsize}
 \usepackage{siunitx}
 \usepackage{xspace}
 % \SweaveUTF8
@@ -17,6 +20,7 @@
 \newcommand{\loglik}{\ell}% log likelihood
 \newcommand{\maxlik}{\texttt{maxLik}\xspace}
 \newcommand{\me}{\mathrm{e}} % Konstant e=2,71828
+\newcommand{\mnote}[1]{\marginnote{\smaller\flushleft #1}}
 \newcommand{\R}{\texttt{R}\xspace}
 \newcommand*{\transpose}{^{\mkern-1.5mu\mathsf{T}}}
 \renewcommand*{\vec}[1]{\boldsymbol{#1}}
@@ -175,11 +179,12 @@ and tail can turn up while still resulting $N_{H}$ heads and
 $N_{T}$ tails.  In the previous example $N=2$, $N_{H} = 1$ and
 there were just two possible
 combinations as $\displaystyle\binom{2}{1} = 2$.  The probability depends on both the parameter $p$ and
-data--the corresponding counts $N_{H}$ and $N_{T}$.
+data, data currently means the corresponding counts $N_{H}$ and $N_{T}$.
 Equation~\eqref{eq:general-cointoss-probability} is essentially
-likelihood--probability to observe data.  We are interested how does
-it depend on $p$ and stress this by writing $p$ in the first position
-followed by semicolon and data as we care less about the dependency on
+likelihood--probability to observe data.  We are interested in how
+does this probability depend on $p$ and we stress this by writing $p$
+in the first position
+followed by semicolon and data, as we care less about the dependency on
 data:
 \begin{equation}
   \label{eq:general-cointoss-likelihood}
@@ -189,9 +194,10 @@ data:
 \end{equation}
 
 Technically, it is easier to work with log-likelihood instead of
-likelihood (as log is monotonic function, maximum of likelihood and
-maximum of log-likelihood occur at the same parameter value).
-We denote log-likelihood by $\loglik$ and write
+likelihood.  As log is monotonic function, maximum of likelihood and
+maximum of log-likelihood occur at exactly the same parameter value.
+We denote log-likelihood by $\loglik$ and take logarithm
+of~\eqref{eq:general-cointoss-likelihood}:
 \begin{equation}
   \label{eq:general-cointoss-loglik}
   \loglik(p; N_{H}, N_{T}) =
@@ -219,8 +225,11 @@ log-likelihood as
 \end{equation}
 It is easy to check that the solution, the value of $p$ that maximizes
 log-likelihood~\eqref{eq:general-cointoss-partial-loglik}
-is\footnote{Just differentiate $\loglik(p)$ with respect to $p$, set
-  the result to zero, and isolate $p$.}
+is\footnote{
+  Just differentiate $\loglik(p; N_{H}, N_{T})$
+  in~\eqref{eq:general-cointoss-partial-loglik} with respect to $p$, set
+  the result to zero, and isolate $p$.
+}
 \begin{equation}
   \label{eq:general-cointoss-solution}
   p^{*} =
@@ -302,13 +311,15 @@ that only produces
 numbers between 0 and 1).  So probability 0-events may be
 possible and they may also be impossible.  And to make matter worse, they may also be
 more likely and less likely.  For instance, in case of standard normal
-random numbers (these numbers are distributed according to ``bell curve'') the
-values near $0$ are much more likely than values around $-2$, despite of
+random numbers (these numbers are distributed according to ``bell curve'') 
+values near $0$ are much more likely than values around $-1.7$, despite of
 the probability to receive any particular number still being 0
 (see Figure~\ref{fig:standard-normal-intervals}).
 
-The solution is to look not at the individual numbers
-but narrow interval near these numbers.  Consider
+This is why we need the concept of probability
+density function for continuous random variables.
+Instead of looking at the
+individual numbers, we look at a narrow interval near these numbers.  Consider
 the number of interest $x_{1}$, and compute the
 probability that the random outcome $X$ falls into the narrow interval
 of width
@@ -325,12 +336,12 @@ limit which we denote by $f(x_{1})$:
   \lim_{\delta\to0}
   \frac{\Pr(X \in [x_{1} - \delta/2,\, x_{1} + \delta/2])}{\delta}.
 \end{equation}
-In the example on the Figure the values around $x_{1}$ are less likely
-than around $x_{2}$ and hence $f(x_{1}) < f(x_{2})$.
 The result, $f(x)$, is called \emph{probability density function},
 often abbreviated as \emph{pdf}.  In
 case of continuous random variables, we have to work with pdf-s
 instead of probabilities.
+In the example on the Figure, the values around $x_{1}$ are less likely
+than around $x_{2}$ and hence $f(x_{1}) < f(x_{2})$.
 
 \begin{figure}[ht]
   \centering
@@ -341,7 +352,7 @@ instead of probabilities.
     random number in the narrow interval of width $\delta$ around $x_{1}$ is
     positive.  In this example, the probability to get a random number
     in the interval around $x_{2}$ is four times larger
-    than for the interval around $x_{1}$.
+    than in the interval around $x_{1}$.
   }
   \label{fig:standard-normal-intervals}
 \end{figure}
@@ -642,13 +653,21 @@ and sums over all observations, not just over two observations.
 
 As our parameter vector now
 contains two components, the start vector must also be of length two.
+In such a simple example, the choice of start values does not matter
+much--the algorithm can still find the optimum no matter where it
+starts.  But it would not hurt to pick values close to the correct
+ones.  The histogram above suggest that the sample mean is around $30$
+and half-width of it is approximately $20$, so if it were a bell curve we
+expect its standard deviation to be $10$.  Se we can
 Based on the figure we guess that a good starting value might be
-$\mu=30$ and $\sigma=10$:
+$\mu_0=30$ and $\sigma_0=10$:
 <<>>=
 m <- maxLik(loglik, start=c(mu=30, sigma=10))
 summary(m)
 @ 
-Indeed, our guess was close.  
+So the best way to describe the distribution as normal distribution is
+to use mean $\mu=\Sexpr{round(coef(m)[["mu"]], 3)}$ and
+$\sigma=\Sexpr{round(coef(m)[["sigma"]], 3)}$.
 
 
 \section{Final Example: Linear Regression}
@@ -670,9 +689,24 @@ In order to turn this regression model into a ML
 problem, we need a probability model.  Assume that
 the disturbance term $\epsilon$ is normally distributed with mean 0
 and (unknown) variance $\sigma^{2}$ (this is a standard assumption in
-linear regression).  Now we can
-follow~\eqref{eq:two-normal-loglik} and write log of pdf for a single
-observation as
+linear regression).
+\mnote{
+  \eqref{eq:normal-pdf}:
+  \begin{math}
+    f(x; \mu, \sigma) =
+    \frac{1}{\sqrt{2\pi}}
+    \frac{1}{\sigma}
+    \,
+    \me^{
+      -\displaystyle\frac{1}{2}
+      \frac{(x - \mu)^{2}}{\sigma^{2}}
+    }
+  \end{math}
+}
+Now we can take the normal probability density
+function~\eqref{eq:normal-pdf}, replace $x$ with $\epsilon$, and
+remember that $\mu=0$.  Hence log-likelihood for a single value of
+$\epsilon$ is
 \begin{equation}
   \label{eq:co2-epsilon-loglik}
   \loglik(\sigma; \epsilon_{i})
@@ -687,7 +721,7 @@ $\epsilon_{i}$.  As the expected value $\mu=0$ by assumption, we do not include
 $\mu$ in~\eqref{eq:co2-epsilon-loglik} and hence we drop it also from
 the argument list of $\loglik$.   
 We do not know $\epsilon_{i}$ but
-we can express it using linear regression model~\eqref{eq:co2-regression}:
+we can compute it using linear regression model~\eqref{eq:co2-regression}:
 \begin{equation}
   \label{eq:co2-epsilon}
   \epsilon_{i} =
@@ -696,7 +730,8 @@ we can express it using linear regression model~\eqref{eq:co2-regression}:
 \end{equation}
 This expression depends on two additional unknown parameters,
 $\beta_{0}$ and $\beta_{1}$.  These are the linear regression
-coefficients we want to find.
+coefficients we want to find.  It also depends on data, in this uptake
+and concentration for the observation $i$.
 
 Now we plug this into~\eqref{eq:co2-epsilon-loglik}:
 \begin{multline}
@@ -746,7 +781,8 @@ optimization.  Let us repeat what we have done:
   equation in~\eqref{eq:co2-single-loglik}.
 \end{itemize}
 Finally, we combine the three parameters into a single vector
-$\vec{\theta}$, suppress dependency on data in the notation, and write
+$\vec{\theta} = (\beta_{0}, \beta_{1}, \sigma)$,
+suppress dependency on data in the notation, and write
 \begin{equation}
   \label{eq:co2-loglik-simplified}
   \loglik(\vec{\theta})
@@ -763,7 +799,8 @@ This is the definition we can easily code and estimate.  We guess
 start values $\beta_{0} = 30$ (close to the mean), $\beta_{1} = 0$
 (uptake does not depend on concentration) and $\sigma=10$ (close to
 sample standard deviation).  We can
-convert~\eqref{eq:co2-loglik-simplified} into code almost verbatim,
+convert~\eqref{eq:co2-loglik-simplified} into computer
+code almost verbatim,
 below we choose to compute the expected uptake $\mu$ as an auxiliary
 variable:
 <<>>=
@@ -872,7 +909,7 @@ if(require(plot3D)) {
 \caption{Log-likelihood surface as a function of $\mu$ and $\sigma$.
   The optimum, denoted as the red dot, is at
   $\mu=\Sexpr{round(coef(m)[1], 3)}$ and
-  $\sigma=\Sexpr{round(coef(m)[2], 3)}$.  The corresponding countour
+  $\sigma=\Sexpr{round(coef(m)[2], 3)}$.  The corresponding contour
   plot is shown at the bottom of the figure box.
 }
 \label{fig:mu-sigma-plot}
@@ -914,8 +951,9 @@ value?  There are two ways:
 The first option is superior, in high dimensions it is much faster and
 much less error prone.  But computing and coding gradient
 can easily be days of work.  The second approach, numeric gradient,
-forces the computer to do more work and hence it is slower.  Unfortunately
-importantly, it may also unreliable for more complex cases.  In
+forces the computer to do the work instead and hence it is slower.
+Unfortunately,
+it may also be unreliable in more complex cases.  In
 practice you may notice how the algorithm refuses to converge for
 thousands of iterations.  But numeric gradient works very well in
 simple cases we demonstrated here.
@@ -925,9 +963,8 @@ closer we start to our final destination, the less work the computer
 has to do.  And while we may not care too much about a few seconds of
 computer's work, we also help the algorithm to find the correct
 maximum.  The less the algorithm has to work, the less
-likely it is that it gets stuck in a wrong place or just keeps
-wandering around in a 
-clueless manner.  If this is the case, you may see how the algorithm
+likely it is that it gets stuck in a wrong place or that it just keeps
+wandering cluelessly around.  If this is the case, you may see how the algorithm
 gets slow, does not converge (returns the ``maximum number of
 iterations exceeded'' message), how the results look weird, or
 standard errors are extremely large.
