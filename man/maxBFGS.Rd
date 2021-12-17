@@ -6,7 +6,7 @@
 
 \title{BFGS, conjugate gradient, SANN and Nelder-Mead Maximization}
 \description{
-  These functions are wrappers for \code{\link{optim}}, adding
+  These functions are wrappers for \code{\link[stats]{optim}}, adding
   constrained optimization and fixed parameters.
 }
 \usage{
@@ -40,18 +40,22 @@ maxNM(fn, grad=NULL, hess=NULL, start, fixed=NULL,
 
 \arguments{
   \item{fn}{function to be maximised.  Must have the parameter vector as
-    the first argument.  In order to use numeric gradient
-    and BHHH method, \code{fn} must return a vector of
-    observation-specific likelihood values.  Those are summed internally where
+    the first argument.  In order to stay compatible with BHHH method
+    (this is only applicable for maximizing log-likelihood),
+    \code{fn} may return a vector of
+    observation-specific function values.  Those are summed internally where
     necessary.  If the parameters are out of range, \code{fn} should
-    return \code{NA}.  See details for constant parameters.}
+    return \code{NA}.  See details for constant parameters.
+  }
   \item{grad}{gradient of \code{fn}.  Must have the parameter vector as
     the first argument.  If \code{NULL}, numeric
     gradient is used (\code{maxNM} and \code{maxSANN} do not use
     gradient).  
     Gradient may return
     a matrix, where columns correspond to the parameters and rows to the
-    observations (useful for maxBHHH).  The columns are summed internally.}
+    observations (useful for \code{\link{maxBHHH}}).
+    The columns are summed internally.
+  }
   \item{hess}{Hessian of \code{fn}.  Not used by any of these methods, included for
     compatibility with \code{\link{maxNR}}.}
   \item{start}{initial values for the parameters.  If start values
@@ -78,8 +82,12 @@ maxNM(fn, grad=NULL, hess=NULL, start, fixed=NULL,
 	\sQuote{iteration} may mean different things for different
 	optimizers.
       }
-      \item{printLevel}{integer, larger number prints more working
+      \item{printLevel}{integer, a larger number prints more working
 	information.  Default 0, no information.
+
+	Because these are wrappers to \code{\link[stats]{optim}}, the
+	working information is printed by \code{optim}.  In particular,
+	it prints \strong{negative values of the objective function}!
       }
       \item{nm_alpha}{1, Nelder-Mead simplex method reflection
 	coefficient (see Nelder & Mead, 1965)
@@ -90,11 +98,14 @@ maxNM(fn, grad=NULL, hess=NULL, start, fixed=NULL,
       \item{sann_cand}{\code{NULL} or a function for \code{"SANN"} algorithm
 	to generate a new candidate point;
 	if \code{NULL}, Gaussian Markov kernel is used
-	(see argument \code{gr} of \code{\link{optim}}).}
+	(see argument \code{gr} of \code{\link[stats]{optim}}).}
       \item{sann_temp}{10, starting temperature
-	for the \dQuote{SANN} cooling schedule.  See \code{\link{optim}}.}
+	for the \dQuote{SANN} cooling schedule.  See
+	\code{\link[stats]{optim}}.
+      }
       \item{sann_tmax}{10, number of function evaluations at each temperature for
-	the \dQuote{SANN} optimizer.  See \code{\link{optim}}.}
+	the \dQuote{SANN} optimizer.  See \code{\link[stats]{optim}}.
+      }
       \item{sann_randomSeed}{123, integer to seed random numbers to
 	ensure replicability of \dQuote{SANN} optimization and preserve
 	\code{R} random numbers.  Use
@@ -119,7 +130,7 @@ maxNM(fn, grad=NULL, hess=NULL, start, fixed=NULL,
     \code{\link{constrOptim2}}.
   }
   \item{finalHessian}{how (and if) to calculate the final Hessian.  Either
-  \code{FALSE} (not calculate), \code{TRUE} (use analytic/numeric
+    \code{FALSE} (do not calculate), \code{TRUE} (use analytic/numeric
   Hessian) or \code{"bhhh"}/\code{"BHHH"} for information equality
   approach.  The latter approach is only suitable for maximizing
   log-likelihood function.  It requires the gradient/log-likelihood to
@@ -130,7 +141,8 @@ maxNM(fn, grad=NULL, hess=NULL, start, fixed=NULL,
           Optimization is performed on 'par/parscale' and these should
           be comparable in the sense that a unit change in any element
           produces about a unit change in the scaled value. (see
-    \code{\link{optim}})}
+	  \code{\link[stats]{optim}}).
+	}
   \item{\dots}{further arguments for \code{fn} and \code{grad}.}
 }
 
@@ -150,7 +162,7 @@ maxNM(fn, grad=NULL, hess=NULL, start, fixed=NULL,
 
 \value{
   object of class "maxim".  Data can be extracted through the following
-  functions: 
+  methods: 
   \item{maxValue}{\code{fn} value at maximum (the last calculated value
     if not converged.)}
   \item{coef}{estimated parameter value.}
@@ -162,7 +174,8 @@ maxNM(fn, grad=NULL, hess=NULL, start, fixed=NULL,
   \item{hessian}{Hessian at the maximum (the last calculated value if
     not converged).}
   \item{returnCode}{integer. Success code, 0 is success (see
-    \code{\link{optim}}).}
+    \code{\link[stats]{optim}}).
+  }
   \item{returnMessage}{ a short message, describing the return code.}
   \item{activePar}{logical vector, which parameters are optimized over.
     Contains only \code{TRUE}-s if no parameters are fixed.}
@@ -175,7 +188,7 @@ maxNM(fn, grad=NULL, hess=NULL, start, fixed=NULL,
   \item{maxControl}{the optimization control parameters in the form of a
     \code{\linkS4class{MaxControl}} object.}
 
-  The following components can only be extracted directly (with \code{\$}):
+  The following components can only be extracted directly (with \code{$}):
   \item{constraints}{A list, describing the constrained optimization
     (\code{NULL} if unconstrained).  Includes the following components:
     \describe{
@@ -187,7 +200,7 @@ maxNM(fn, grad=NULL, hess=NULL, start, fixed=NULL,
 }
 \author{Ott Toomet, Arne Henningsen}
 
-\seealso{\code{\link{optim}}, \code{\link{nlm}}, \code{\link{maxNR}},
+\seealso{\code{\link[stats]{optim}}, \code{\link{nlm}}, \code{\link{maxNR}},
   \code{\link{maxBHHH}}, \code{\link{maxBFGSR}} for a
   \code{\link{maxNR}}-based BFGS implementation.}
 
@@ -197,9 +210,10 @@ maxNM(fn, grad=NULL, hess=NULL, start, fixed=NULL,
 }
 
 \examples{
-# Maximum Likelihood estimation of Poissonian distribution
+## Maximum Likelihood estimation of Poissonian distribution
 n <- rpois(100, 3)
-loglik <- function(l) n*log(l) - l - lfactorial(n)
+## sum of individual likelihoods 
+loglik <- function(l) sum(n*log(l) - l - lfactorial(n))
 # we use numeric gradient
 summary(maxBFGS(loglik, start=1))
 # you would probably prefer mean(n) instead of that ;-)

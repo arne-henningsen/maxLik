@@ -12,6 +12,9 @@ the SVN repository on R-Forge.
 * the preferred way to query number of obs is 'stats4::nobs',
   not 'miscTools::nObs'
 
+* maxBFGS and other optim-based methods: documentation mentions that
+  the function value output is negative when requesting with printLevel
+
 
      CHANGES IN VERSION 1.5-2 (2020-07-26)
 
