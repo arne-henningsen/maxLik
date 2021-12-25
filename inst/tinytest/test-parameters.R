@@ -237,3 +237,9 @@ expect_stdout(show(maxControl(m)),
 expect_silent(condiNumber(hessian(m), print.level=0))
 expect_silent(condiNumber(hessian(m), printLevel=0))
 expect_silent(condiNumber(hessian(m), printLevel=0, print.level=1))
+
+### Initial values out of range
+### llf: simple normal log-likelihood w/both mu, sigma in the param
+expect_error(maxLik(llf, start=c(0,-1)))
+expect_error(maxLik(llf, start=c(0,-1), method="BFGS"))
+expect_error(maxLik(llf, start=c(0,-1), method="BFGSR"))

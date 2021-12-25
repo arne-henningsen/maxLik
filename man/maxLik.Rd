@@ -29,8 +29,12 @@ constraints=NULL, ...)
   \item{hess}{hessian of log-likelihood.  Must have the parameter
     vector as the first argument.  Must return a square matrix.  If
     \code{NULL}, numeric Hessian will be used.}
-  \item{start}{numeric vector, initial value of parameters.  If it has
-    names, these will also be used for naming the results.}
+  \item{start}{
+    numeric vector, initial value of parameters.  If it has
+    names, these will also be used for naming the results. \code{start}
+    must be within the valid domain of \code{logLik},
+    i.e. \code{logLik(start)} must nor return \code{NA}.
+  }
   \item{method}{maximisation method, currently either 
    "NR" (for Newton-Raphson),
    "BFGS" (for Broyden-Fletcher-Goldfarb-Shanno), 

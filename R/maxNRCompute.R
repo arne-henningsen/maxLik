@@ -92,11 +92,7 @@ maxNRCompute <- function(fn,
       cat("Initial function value:", f1, "\n")
    }
    if(any(is.na( f1))) {
-      result <- list(code=100, message=maximMessage("100"),
-                     iterations=0,
-                     type=maximType)
-      class(result) <- "maxim"
-      return(result)
+      stop("Missings in the initial value computed at 'start'")
    }
    if(any(is.infinite( f1)) && sum(f1) > 0) {
                                         # we stop at +Inf but not at -Inf

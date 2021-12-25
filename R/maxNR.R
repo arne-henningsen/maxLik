@@ -39,7 +39,6 @@ maxNR <- function(fn, grad=NULL, hess=NULL, start,
    ##             2 - successive values within tolerance limit
    ##             3 - could not find a higher point (step error)
    ##             4 - iteration limit exceeded
-   ##             100 - initial value out of range
    ## message     character message describing the code
    ## last.step   only present if code == 3 (step error).  A list with following components:
    ##             theta0    - parameter value which led to the error

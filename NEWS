@@ -15,6 +15,9 @@ the SVN repository on R-Forge.
 * maxBFGS and other optim-based methods: documentation mentions that
   the function value output is negative when requesting with printLevel
 
+* missings in the initial value results in error, not the special return
+  code.
+
 
      CHANGES IN VERSION 1.5-2 (2020-07-26)
 

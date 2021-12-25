@@ -49,7 +49,6 @@ maxBFGSRCompute <- function(fn,
    ##             2 - successive values within tolerance limit
    ##             3 - could not find a higher point (step error)
    ##             4 - iteration limit exceeded
-   ##             100 - initial value out of range
    ## message     character message describing the code
    ## last.step   only present if code == 3 (step error).  A list with following components:
    ##             theta0    - parameter value which led to the error
@@ -83,11 +82,7 @@ maxBFGSRCompute <- function(fn,
    if (slot(control, "printLevel") > 0)
     cat( "Initial value of the function :", x, "\n" )
    if(is.na(x)) {
-      result <- list(code=100, message=maximMessage("100"),
-                     iterations=0,
-                     type=maxim.type)
-      class(result) <- "maxim"
-      return(result)
+      stop("Missings in the initial value, computed at 'start'")
    }
    if(is.infinite(x) & (x > 0)) {
                                         # we stop at +Inf but not at -Inf

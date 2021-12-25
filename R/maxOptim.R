@@ -85,11 +85,7 @@ maxOptim <- function(fn, grad, hess,
    }
    f1 <- do.call(callWithoutSumt, argList)
    if(is.na( f1)) {
-      result <- list(code=100, message=maximMessage("100"),
-                     iterations=0,
-                     type=maximType)
-      class(result) <- "maxim"
-      return(result)
+      stop("Missings in the initial value computed at 'start'")
    }
    if(slot(control, "printLevel") > 2) {
       cat("Initial function value:", f1, "\n")

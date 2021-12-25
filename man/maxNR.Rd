@@ -57,7 +57,10 @@ maxBHHH(fn, grad = NULL, hess = NULL, start,
     Hessian is used by the Newton-Raphson method only, and eventually by
     the other methods if \code{finalHessian} is requested.}
   \item{start}{initial parameter values.  If start values
-    are named, those names are also carried over to the results.}
+    are named, those names are also carried over to the results.
+    \code{start} must be a valid value for \code{fn},
+    i.e. \code{fn(start)} must return a numeric vector, not \code{NA}.
+  }
   \item{constraints}{either \code{NULL} for unconstrained optimization
     or a list with two components.  The components may be either
     \code{eqA} and \code{eqB} for equality-constrained optimization
@@ -240,15 +243,14 @@ signaling it with the
       direction because of numerical errors.  In some cases it can be
       helped by changing \code{steptol}.}
     \item{4}{ iteration limit exceeded.}
-    \item{5}{infinite value.}
-    \item{6}{infinite gradient.}
-    \item{7}{infinite Hessian.}
-    \item{8}{successive function values within relative tolerance
+    \item{5}{ infinite value.}
+    \item{6}{ infinite gradient.}
+    \item{7}{ infinite Hessian.}
+    \item{8}{ successive function values within relative tolerance
       limit (normal convergence).}
-    \item{9}{(BFGS) Hessian approximation cannot be improved because of
+    \item{9}{ (BFGS) Hessian approximation cannot be improved because of
       gradient did not change.  May be related to numerical
       approximation problems or wrong analytic gradient.}
-    \item{100}{ Initial value out of range.}
     }
   }
   \item{returnMessage}{ a short message, describing the return code.}

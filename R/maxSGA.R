@@ -36,7 +36,6 @@ maxSGA <- function(fn=NULL, grad=NULL, hess=NULL, start,
    ##             2 - successive values within tolerance limit
    ##             3 - could not find a higher point (step error)
    ##             4 - iteration limit exceeded
-   ##             100 - initial value out of range
    ## message     character message describing the code
    ## iterations  number of iterations
    ## type        "Newton-Raphson maximisation"

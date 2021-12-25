@@ -156,7 +156,7 @@ stdEr(m)
   return the convergence code and message respectively, and \verb|AIC|
   to return Akaike's information criterion.  See the respective
   documentation for more information.
-\item One can also query the number of observations with \verb|nObs|,
+\item One can also query the number of observations with \verb|nobs|,
   but this requires likelihood values to be supplied by observation (see
   the BHHH method in Section~\ref{sec:different-optimizers} below).
 \end{itemize}
@@ -390,11 +390,13 @@ In a similar fashion, one can simply drop in most other provided optimizers.
 
 One method that is very popular for ML estimation is
 BHHH.  We discuss it here at length because that method requires both
-log-likelihood and gradient function to return a somewhat different
-value.  The essence of BHHH is information equality, the fact that in
-case of log-likelihood function $\loglik(\theta)$, the expected value
-of Hessian at the true parameter value $\vec{\theta}_{0}$ can be
-expressed through the expected value of the outer product of the
+log-likelihood and gradient function to return the value in a somewhat
+different form.
+BHHH is based on information equality, the fact that the
+expected value
+of Hessian of log-likelihood
+at the true parameter value $\vec{\theta}_{0}$ equals to the negative of
+the expected value of the outer product of the
 gradient: 
 \begin{equation}
   \label{eq:information-equality}
@@ -418,17 +420,18 @@ gradient:
   \right].
 \end{equation}
 Hence we can approximate Hessian by the average outer product of the
-gradient.  Obviously, this is only an approximation, and it is less
+gradient.  Obviously, on a finite sample
+this is only an approximation, and it is less
 correct when we are far from the true value $\vec{\theta}_{0}$.  Note
 also that when approximating expected value with average we rely
 on the assumption that the
 observations are independent.  This may not be true for certain type
-of data, such as time
-series.
+of problems, such as time
+series data.
 
 However, in order to compute the average outer product, we need to
-compute gradient \emph{by observation}.  Hence it is not enough to
-just return a single gradient vector, we have to compute a matrix
+compute gradient \emph{by observation}.  Hence it is not enough just
+to return a single gradient vector, we have to compute a matrix
 where rows correspond to individual data points and columns to the
 gradient components.  
 
@@ -466,7 +469,7 @@ and its gradient
     \pderiv{\sigma} \loglik(\mu, \sigma; x)
     &=
     -\frac{1}{\sigma} +
-    \frac{1}{\sigma^{2}}(x - \mu)^{2}.
+    \frac{1}{\sigma^{3}}(x - \mu)^{2}.
   \end{split}
 \end{equation}
 We can code these two functions as
@@ -525,15 +528,16 @@ m <- maxLik(loglikB, start=c(mu=1, sigma=2),
 summary(m)
 @
 
-Besides of relying on information equality, BHHH is
-essentially the same algorithm as NR.  As the Hessian is just
-approximated, its is converging at a slower pace than NR with analytic
+Besides of employing information equality, BHHH is
+essentially the same algorithm as NR.  As its Hessian is just
+approximated, its is typically
+converging at a slower pace than NR with analytic
 Hessian.  But when relying on numeric derivatives only, BHHH may be more
 reliable. 
 
 For convenience, the other methods also support
 observation-wise gradients and log-likelihood values, those numbers
-are just summed internally.  So one can just code the problem in an 
+are summed internally.  So one can just code the problem in an 
 BHHH-compatible manner and use it for all supported optimizers.
 
 \maxlik package also includes stochastic gradient ascent optimizer.
