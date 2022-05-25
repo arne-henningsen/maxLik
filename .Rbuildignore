@@ -4,3 +4,4 @@
 ^vignettes/Rplots.pdf$
 ^vignettes/Makefile
 .*\.prv
+^readme.md$
