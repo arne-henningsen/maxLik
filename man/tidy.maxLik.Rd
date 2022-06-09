@@ -1,23 +1,31 @@
 \name{tidy.maxLik}
+\alias{tidy.maxim}
 \alias{tidy.maxLik}
+\alias{glance.maxim}
 \alias{glance.maxLik}
 \title{tidy and glance methods for maxLik objects}
 \description{
-  These methods return summary information about the estimated model.
+  These methods return quick
+  summary information about the estimated model, either one parameter
+  per row (tibble), or on a single row (glance).
   Both require the \pkg{tibble} package to be installed.
 }
 \usage{
+\method{tidy}{maxim}(x,  ...)
 \method{tidy}{maxLik}(x,  ...)
+\method{glance}{maxim}(x, ...)
 \method{glance}{maxLik}(x, ...)
 }
 \arguments{
   \item{x}{
-    object of class 'maxLik'.
+    object of class 'maxLik' or 'maxim'.
   }
   \item{\ldots}{Not used.}
 }
 \value{
-  For \code{tidy()}, a tibble with columns:
+  \code{tidy()} for 'maxLik' objects returns a tibble
+  (data frame) with one row per
+  parameter, and with the following columns:
   \describe{
     \item{term}{The name of the estimated parameter (parameters are
       sequentially numbered if names missing).}
@@ -28,13 +36,36 @@
   }
   This is essentially the same table as \code{summary}-method prints,
   just in form of a tibble (data frame).
+
+  For 'maxim' objects, the corresponding tibble contains
+  \describe{
+    \item{term}{The name of the estimated parameter (parameters are
+      sequentially numbered if names missing).}
+    \item{estimate}{The estimated parameter.}
+    \item{gradient}{The corresponding gradient value.}
+  }
   
-  For \code{glance()}, a one-row tibble with columns:
+  \code{glance()} for 'maxLik' objects returns an
+  one-row tibble with columns:
     \describe{
       \item{df}{The degrees of freedom of the model.}
       \item{logLik}{The log-likelihood of the model.}
       \item{AIC}{Akaike's Information Criterion for the model.}
       \item{nobs}{The number of observations, if this is available, otherwise \code{NA}.}
+    }
+
+    For 'maxim' objects the tibble contains
+    \describe{
+      \item{value}{The function value at optimum.}
+      \item{iterations}{The number of iterations spent (what exactly is
+	\dQuote{iteration} depends on the optimizer).
+      }
+      \item{gradient}{
+	Norm of gradient at the optimum.
+      }
+      \item{code}{
+	optimizer return code (see \code{\link{returnCode}}).
+      }
     }
 }
 \seealso{

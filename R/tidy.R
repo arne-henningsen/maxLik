@@ -15,3 +15,14 @@ tidy.maxLik <- function (x,  ...) {
   
   ret
 }
+
+tidy.maxim <- function(x, ...) {
+   coefs <- coef(x)
+   term <- names(coefs)
+   if(is.null(term))
+      term <- seq(along=coefs)
+   tibble::tibble(term,
+                  estimate=coefs,
+                  gradient=gradient(x)
+                  )
+}

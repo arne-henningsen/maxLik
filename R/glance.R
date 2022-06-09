@@ -13,3 +13,12 @@ glance.maxLik <- function (x, ...) {
   
   ret
 }
+
+glance.maxim <- function(x, ...) {
+   tibble::tibble(
+              value=maxValue(x),
+              iterations=nIter(x),
+              gradient=sqrt(crossprod(gradient(x)))[1],
+              code=returnCode(x)
+           )
+}
