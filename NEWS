@@ -1,8 +1,8 @@
 THIS IS THE CHANGELOG OF THE "maxLik" PACKAGE
 
 Please note that only the most significant user visible changes are
-reported here.  A full ChangeLog is available in the log messages of
-the SVN repository on R-Forge.
+reported here.  A full ChangeLog is available in the github log at
+https://github.com/arne-henningsen/maxLik
 
 
      CHANGES IN VERSION 1.5-3 (2020-07-26)

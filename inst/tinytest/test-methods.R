@@ -104,6 +104,7 @@ expect_stdout(
    show(confint(ml)),
    pattern = "2.5 % +97.5 %\nmu +[[:digit:] .]+\n"
 )
+## No nobs -> should give NA for nobs
 expect_stdout(
    show(glance(ml)),
    pattern = "df logLik   AIC +nobs.*1     2  -140.  284. NA"

@@ -31,8 +31,11 @@ maxControl(tol=1e-4, lambdatol=1e-5, qrtol=1e-6, qac="marquardt",
 
 ### ---------- SG_batchSize
 expect_silent(maxControl(SG_batchSize=NULL))
-expect_error(maxControl(SG_batchSize=-1))  # should fail
-expect_error(maxControl(SG_batchSize=2:3))  # should fail
+                           # default batch size
+expect_error(maxControl(SG_batchSize=-1))
+                           # batch size must be positive
+expect_error(maxControl(SG_batchSize=2:3))
+                           # batch size must be a single number
 
 expect_silent(maxControl(SG_clip=NULL))
 expect_error(maxControl(SG_clip=-1))  # fails
