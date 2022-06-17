@@ -1,6 +1,9 @@
 \name{summary.maxim}
 \alias{summary.maxim}
+\alias{print.maxim}
 \alias{print.summary.maxim}
+\alias{show,maxim-method}
+
 \title{Summary method for maximization}
 \description{
   Summarizes the general maximization results in a way that does not

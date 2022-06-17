@@ -1,6 +1,7 @@
 \name{maxLik}
 \alias{maxLik}
 \alias{print.maxLik}
+\alias{show,maxLik-method}
 
 \title{Maximum likelihood estimation}
 \description{
