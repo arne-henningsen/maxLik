@@ -1,6 +1,6 @@
 Package: maxLik
 Version: 1.5-3
-Date: 2022-06-07
+Date: 2022-06-17
 Title: Maximum Likelihood Estimation and Related Tools
 Authors@R: c(person("Ott", "Toomet", role=c("aut", "cre"), email="otoomet@gmail.com"),
              person("Arne", "Henningsen", role=c("aut"), email="arne.henningsen@gmail.com"),
@@ -11,6 +11,8 @@ Authors@R: c(person("Ott", "Toomet", role=c("aut", "cre"), email="otoomet@gmail.
 	   )
 Depends: R (>= 2.4.0), miscTools (>= 0.6-8), methods
 Imports: sandwich, generics, stats4
+URL: https://github.com/arne-henningsen/maxLik
+BugReports: https://github.com/arne-henningsen/maxLik/issues
 Suggests: MASS, clue, dlm, plot3D, tibble, tinytest
 Description: Functions for Maximum Likelihood (ML) estimation, non-linear
    optimization, and related tools.  It includes a unified way to call
