@@ -1,6 +1,6 @@
 ### Returns return code of maxim objects
-### This is tells either error, or other cause the iterations ended,
-### such as the result converged
+### This signals the reason the iterations ended,
+### such as successful convergence, or an error
 
 returnCode <- function(x, ...)
     UseMethod("returnCode")
