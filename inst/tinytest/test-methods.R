@@ -98,6 +98,8 @@ startVal <- c(mu=2, sigma=1)
 ml <- maxLik( llf, start = startVal)
 mlInd <- maxLik( llfInd, start = startVal)
 
+mx <- maxNR(llf, start=startVal)
+
 ## ---------- Various summary methods ----------
 ## These should work and produce consistent results
 expect_stdout(
@@ -117,6 +119,16 @@ expect_stdout(
    show(tidy(ml)),
    pattern = "term.*estimate std.error statistic.*p.value"
 )
+## For maxim methods
+expect_stdout(
+   show(glance(mx)),
+   pattern = "value iterations     gradient  code.*1 -140.          4 0.0000[[:digit:]]+     1"
+)
+expect_stdout(
+   show(tidy(mx)),
+   pattern = "term  estimate     gradient.*1 mu       2.19  0.00"
+)
+
 
 
 ### ---------- estfun, bread, sandwich ----------

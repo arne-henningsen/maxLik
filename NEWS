@@ -5,7 +5,9 @@ reported here.  A full ChangeLog is available in the github log at
 https://github.com/arne-henningsen/maxLik
 
 
-     CHANGES IN VERSION 1.5-3 (2020-07-26)
+     CHANGES IN VERSION 1.5-3 (2022-06-17)
+
+* 'tidy' and 'glance' methods for 'maxim' objects
 
 * 'print' and 'show' methods for 'maxim' objects
 
