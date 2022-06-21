@@ -108,6 +108,14 @@ expect_stdout(
 )
 ## No nobs -> should give NA for nobs
 expect_stdout(
+   show(ml),
+   pattern = "Maximum Likelihood estimation
+Newton-Raphson maximisation, 4 iterations
+Return code 1: gradient close to zero \\(gradtol\\)
+Log-Likelihood:.* \\(2 free parameter\\(s\\)\\)
+Estimate\\(s\\): 2.* "
+)
+expect_stdout(
    show(glance(ml)),
    pattern = "df logLik   AIC +nobs.*1     2  -140.  284. NA"
 )
@@ -120,6 +128,20 @@ expect_stdout(
    pattern = "term.*estimate std.error statistic.*p.value"
 )
 ## For maxim methods
+expect_stdout(
+   show(mx),
+   pattern = "Newton-Raphson maximisation, 4 iterations
+Return code 1: gradient close to zero \\(gradtol\\)
+Value:.* \\(2 free parameter\\(s\\)\\)
+Estimate\\(s\\): 2.* "
+)
+expect_stdout(
+   print(mx),
+   pattern = "Newton-Raphson maximisation, 4 iterations
+Return code 1: gradient close to zero \\(gradtol\\)
+Value:.* \\(2 free parameter\\(s\\)\\)
+Estimate\\(s\\): 2.* "
+)
 expect_stdout(
    show(glance(mx)),
    pattern = "value iterations     gradient  code.*1 -140.          4 0.0000[[:digit:]]+     1"
