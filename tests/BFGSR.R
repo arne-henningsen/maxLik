@@ -1,25 +1,21 @@
 ### BFGSR-related tests
 
-## 1. Test maximization algorithm for convex regions
-## 
-## Optimize quadratic form t(D) %*% W %*% D with p.d. weight matrix
+## minimize quadratic form t(D) %*% W %*% D with p.d. weight matrix
 ## (ie unbounded problems).
-## All solutions should go to large values with a message about successful convergence
 set.seed(0)
 options(digits=4)
 quadForm <- function(D) {
-   C <- seq(1, N)
-   return( - t(D - C) %*% W %*% ( D - C) )
+   C <- c(1, 2, 3)  # 3-dimensional case
+   return( - t(D - C) %*% W %*% (D - C) )
 }
-N <- 3
-                           # 3-dimensional case
 ## a) test quadratic function t(D) %*% D
 library(maxLik)
-W <- diag(N)
-D <- rep(1/N, N)
+W <- diag(3)
+D <- rep(1/3, 3)
 res <- maxBFGSR(quadForm, start=D)
-all.equal(coef(res), 1:3, tolerance=1e-4)
-all.equal(gradient(res), rep(0,3), tolerance=1e-3)
+coef(res)
+all.equal(coef(res), c(1, 2, 3), tolerance=1e-4)
+all.equal(gradient(res), rep(0, 3), tolerance=1e-3)
 all.equal(nIter(res) < 100, TRUE)
 all.equal(returnCode(res) < 4, TRUE)
 
@@ -48,7 +44,8 @@ hat3 <- function(param) {
    exp(-(x-2)^2-(y-2)^2-(z-2)^2)
 }
 sv <- c(x=1,y=1,z=1)
-## constraints: x + y + z = 8
+## constraints: x + y + z = 8, z = 1
+## solution: x = 3.5, y = 3.5, z = 1
 A <- matrix(c(1,1,1), 1, 3)
 B <- -8
 constraints <- list(eqA=A, eqB=B)

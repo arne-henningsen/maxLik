@@ -8,7 +8,7 @@ library(tinytest)
 
 tol <- .Machine$double.eps^(0.25)
 set.seed( 123 )
-# generate a variable from normally distributed random numbers
+                           # generate a variable from normally distributed random numbers
 N <- 50
 x <- rnorm(N, 1, 2 )
 
@@ -17,7 +17,7 @@ llf <- function( param ) {
    mu <- param[ 1 ]
    sigma <- param[ 2 ]
    if(!(sigma > 0))
-       return(NA)
+      return(NA)
                            # to avoid warnings in the output
    N <- length( x )
    llValue <- -0.5 * N * log( 2 * pi ) - N * log( sigma ) -
@@ -25,10 +25,10 @@ llf <- function( param ) {
    return( llValue )
 }
 
-# start values
+                           # start values
 startVal <- c( mu = 0, sigma = 1 )
 
-# 
+                           # 
 expect_silent(ml <- maxLik( llf, start = startVal ))
 expect_equivalent(coef(ml), c(1.069, 1.833), tolerance=tol)
 ## tol
@@ -102,7 +102,7 @@ expect_error(ml <- maxLik( llf, start = startVal, qac=c("a", "b")),
 expect_error(ml <- maxLik( llf, start = startVal, qac=TRUE),
              pattern = "assignment of an object of class \"logical\" is not valid for slot 'qac'")
 mlMarqCl <- maxLik(llf, start = startVal,
-                        control=list(qac="marquardt", lambda0=1000, lambdaStep=4))
+                   control=list(qac="marquardt", lambda0=1000, lambdaStep=4))
 expect_equal(coef(mlMarqCl), coef(mlMarq))
 ## NM: alpha, beta, gamma
 expect_silent(mlNMAlpha <- maxLik(llf, start=startVal, method="nm", beta=0.8))
@@ -122,7 +122,7 @@ llf1 <- function( param, sigma ) {
 logLikMix <- function(param) {
    rho <- param[1]
    if(rho < 0 || rho > 1)
-       return(NA)
+      return(NA)
    mu1 <- param[2]
    mu2 <- param[3]
    ll <- log(rho*dnorm(x - mu1) + (1 - rho)*dnorm(x - mu2))

@@ -1,4 +1,6 @@
 
+* load message should point to GH
+
 * method to extract the objective function logLikFun()?
 
 * a way to assign data to the environment of the function

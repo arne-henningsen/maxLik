@@ -1,6 +1,6 @@
 
-R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 4.3.3 (2024-02-29) -- "Angel Food Cake"
+Copyright (C) 2024 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -17,19 +17,14 @@ Type 'q()' to quit R.
 
 > ### BFGSR-related tests
 > 
-> ## 1. Test maximization algorithm for convex regions
-> ## 
-> ## Optimize quadratic form t(D) %*% W %*% D with p.d. weight matrix
+> ## minimize quadratic form t(D) %*% W %*% D with p.d. weight matrix
 > ## (ie unbounded problems).
-> ## All solutions should go to large values with a message about successful convergence
 > set.seed(0)
 > options(digits=4)
 > quadForm <- function(D) {
-+    C <- seq(1, N)
-+    return( - t(D - C) %*% W %*% ( D - C) )
++    C <- c(1, 2, 3)  # 3-dimensional case
++    return( - t(D - C) %*% W %*% (D - C) )
 + }
-> N <- 3
->                            # 3-dimensional case
 > ## a) test quadratic function t(D) %*% D
 > library(maxLik)
 Loading required package: miscTools
@@ -37,14 +32,16 @@ Loading required package: miscTools
 Please cite the 'maxLik' package as:
 Henningsen, Arne and Toomet, Ott (2011). maxLik: A package for maximum likelihood estimation in R. Computational Statistics 26(3), 443-458. DOI 10.1007/s00180-010-0217-1.
 
-If you have questions, suggestions, or comments regarding the 'maxLik' package, please use a forum or 'tracker' at maxLik's R-Forge site:
-https://r-forge.r-project.org/projects/maxlik/
-> W <- diag(N)
-> D <- rep(1/N, N)
+If you have questions, suggestions, or comments regarding the 'maxLik' package, please use its GitHub page and the issues there:
+https://github.com/arne-henningsen/maxLik
+> W <- diag(3)
+> D <- rep(1/3, 3)
 > res <- maxBFGSR(quadForm, start=D)
-> all.equal(coef(res), 1:3, tolerance=1e-4)
+> coef(res)
+[1] 1 2 3
+> all.equal(coef(res), c(1, 2, 3), tolerance=1e-4)
 [1] TRUE
-> all.equal(gradient(res), rep(0,3), tolerance=1e-3)
+> all.equal(gradient(res), rep(0, 3), tolerance=1e-3)
 [1] TRUE
 > all.equal(nIter(res) < 100, TRUE)
 [1] TRUE
@@ -80,7 +77,8 @@ https://r-forge.r-project.org/projects/maxlik/
 +    exp(-(x-2)^2-(y-2)^2-(z-2)^2)
 + }
 > sv <- c(x=1,y=1,z=1)
-> ## constraints: x + y + z = 8
+> ## constraints: x + y + z = 8, z = 1
+> ## solution: x = 3.5, y = 3.5, z = 1
 > A <- matrix(c(1,1,1), 1, 3)
 > B <- -8
 > constraints <- list(eqA=A, eqB=B)
@@ -96,4 +94,4 @@ https://r-forge.r-project.org/projects/maxlik/
 > 
 > proc.time()
    user  system elapsed 
-  0.562   0.560   0.338 
+  2.657   0.541   2.281 

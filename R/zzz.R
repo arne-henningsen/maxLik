@@ -7,8 +7,8 @@
          "DOI 10.1007/s00180-010-0217-1.\n\n",
          "If you have questions, suggestions, or comments ",
          "regarding the 'maxLik' package, ",
-         "please use a forum or 'tracker' at maxLik's R-Forge site:\n",
-         "https://r-forge.r-project.org/projects/maxlik/"),
+         "please use its GitHub page and the issues there:
+https://github.com/arne-henningsen/maxLik"),
       domain = NULL,  appendLF = TRUE )
 }
 

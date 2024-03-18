@@ -47,22 +47,16 @@ maxBFGSR <- function(fn, grad=NULL, hess=NULL, start,
    ##             3 - could not find a higher point (step error)
    ##             4 - iteration limit exceeded
    ## message     character message describing the code
-   ## last.step   only present if code == 3 (step error).  A list with following components:
-   ##             theta0    - parameter value which led to the error
-   ##             f0        - function value at these parameter values
-   ##             climb     - the difference between theta0 and the new approximated parameter value (theta1)
-   ##             activePar - logical vector, which parameters are active (not constant)
    ## activePar   logical vector, which parameters were treated as free (resp fixed)
    ## iterations  number of iterations
    ## type        "Newton-Raphson maximization"
    ##
    ## ------------------------------
-   ## Add parameters from ... to control
-   if(!inherits(control, "MaxControl")) {
-      mControl <- addControlList(maxControl(), control)
-   }
-   else {
-      mControl <- control
+   ## Default options
+   mControl <- maxControl(tol = 0, reltol = 0)
+   ## Collect the control parameters
+   if(!is.null(control)) {
+      mControl <- addControlList(mControl, control)
    }
    mControl <- addControlList(mControl, list(...), check=FALSE)
    ##

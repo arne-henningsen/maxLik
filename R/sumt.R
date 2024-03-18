@@ -9,10 +9,10 @@ sumt <- function(fn, grad=NULL, hess=NULL,
                            # difference between estimates for successive outer iterations
                  SUMTPenaltyTol = sqrt(.Machine$double.eps),
                            # maximum allowed penalty
-                 SUMTQ = 10,
+                 SUMTQ = 5,
                  SUMTRho0 = NULL,
-                 printLevel=print.level, print.level=0,
                  SUMTMaxIter=100,
+                 control = NULL,
                  ...) {
    ## constraints    list w/components eqA and eqB.  Maximization will
    ##                be performed wrt to the constraint
@@ -70,6 +70,13 @@ sumt <- function(fn, grad=NULL, hess=NULL,
       }
       return( llVal )
    }
+   ## ---------- main code ----------
+   ## Default options
+   mControl <- maxControl()
+   ## Collect the control parameters
+   if(!is.null(control)) {
+      mControl <- addControlList(mControl, control)
+   }
    ## gradient of the penalized objective function
    if(!is.null(grad)) {
       gradPhi<- function(theta, ...) {
@@ -115,21 +122,23 @@ sumt <- function(fn, grad=NULL, hess=NULL,
       rho <- 0
       result <- maxRoutine(fn=Phi, grad=gradPhi, hess=hessPhi,
                            start=start,
-                           printLevel=max(printLevel - 1, 0),
+                           control = mControl,
+                           printLevel=max(slot(mControl, "printLevel") - 1, 0),
                            ...)
       theta <- coef(result)
                            # Note: this may be a bad idea,
                            # if unconstrained function is unbounded
                            # from above.  In that case rather specify SUMTRho0.
-      if(printLevel > 0) {
+      if(slot(mControl, "printLevel") > 0) {
          cat("SUMT initial: rho = ", rho,
              ", function = ",
              callWithoutMaxArgs( theta, "logLikFunc",
                                 fnOrig = fn, gradOrig = grad,
                                 hessOrig = hess, ... ),
              ", penalty = ", penalty(theta), "\n")
-         cat("Estimate:")
+         cat("Estimate:\n")
          print(theta)
+         cat("--\n")
       }
       ## Better upper/lower bounds for rho?
       rho <- max( callWithoutMaxArgs( theta, "logLikFunc", fnOrig = fn,
@@ -146,17 +155,19 @@ sumt <- function(fn, grad=NULL, hess=NULL,
    repeat {
       thetaOld <- theta
       result <- maxRoutine(fn=Phi, grad=gradPhi, hess=hessPhi,
-                      start=thetaOld,
-                      printLevel=max(printLevel - 1, 0),
+                           start=thetaOld,
+                           control = control,
+                           printLevel=max(slot(mControl, "printLevel") - 1, 0),
                       ...)
       theta <- coef(result)
-      if(printLevel > 0) {
+      if(mControl@printLevel > 0) {
          cat("SUMT iteration ", iter,
              ": rho = ", rho, ", function = ", callWithoutMaxArgs( theta,
              "logLikFunc", fnOrig = fn, gradOrig = grad, hessOrig = hess, ... ),
              ", penalty = ", penalty(theta), "\n", sep="")
-         cat("Estimate:")
+         cat("Estimate:\n")
          print(theta)
+         cat("--\n")
       }
       if(max(abs(thetaOld - theta)) < SUMTTol) {
          SUMTCode <- 2

@@ -23,12 +23,20 @@ addControlList <- function(x, y, check=TRUE) {
       ## slotName    corresponding actual slot name
       ## convert     how to convert the value
       ##
-      if(!any(openName %in% names(y))) {
-         return(NULL)
-      }
-      i <- tail(which(names(y) %in% openName), 1)
+      if(is(y, "list")) {
+         ## add control options from a list
+         if(!any(openName %in% names(y))) {
+            return(NULL)
+         }
+         i <- tail(which(names(y) %in% openName), 1)
                            # pick the last occurrence: allow user to overwrite defaults
-      slot(x, slotName) <- convert(y[[i]])
+         slot(x, slotName) <- convert(y[[i]])
+      } else {
+         if(!inherits(y, "MaxControl")) {
+            stop("Can only add options from a list, or from a 'MaxControl' object")
+         }
+         slot(x, slotName) <- slot(y, slotName)
+      }
       assign("x", x, envir=parent.frame())
                            # save modified x into parent frame
    }
@@ -38,8 +46,9 @@ addControlList <- function(x, y, check=TRUE) {
    if(is.null(y)) {
       return(x)
    }
-   if(!inherits(y, "list")) {
-      stop("Control arguments to 'maxControl' must be supplied in the form of a list")
+   if(!inherits(y, "list") & !inherits(y, "MaxControl")) {
+      stop("Control arguments to 'maxControl' must be supplied in the form of a list
+or another 'MaxControl' object")
    }
    if(check) {
       knownNames <- union(openParam(x), slotNames(x))

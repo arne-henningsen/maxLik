@@ -206,8 +206,8 @@ setClass("MaxControl",
          ),
          ##
          prototype=prototype(
-             tol=1e-8,
-             reltol=sqrt(.Machine$double.eps),
+            tol= 1e-8,
+            reltol= 1e-8,
              gradtol=1e-6,
              steptol=1e-10,
                            #

@@ -17,9 +17,10 @@ start,
 maxRoutine, constraints,
 SUMTTol = sqrt(.Machine$double.eps),
 SUMTPenaltyTol = sqrt(.Machine$double.eps),
-SUMTQ = 10,
+SUMTQ = 5,
 SUMTRho0 = NULL,
-printLevel=print.level, print.level = 0, SUMTMaxIter = 100, ...)
+SUMTMaxIter = 100,
+control = NULL, ...)
 }
 \arguments{
   \item{fn}{
@@ -64,7 +65,9 @@ printLevel=print.level, print.level = 0, SUMTMaxIter = 100, ...)
   }
   \item{SUMTQ}{
     a double greater than one, controlling the growth of the \code{rho}
-    as described in Details. Defaults to 10.
+    as described in Details. Defaults to 5.  Larger numbers achieve
+    faster convergence but may
+    throw the inner optimizer off.
   }
   \item{SUMTRho0}{
     Initial value for \code{rho}.  If not specified, a (possibly)
@@ -76,13 +79,13 @@ printLevel=print.level, print.level = 0, SUMTMaxIter = 100, ...)
     far from the constrained value.  Otherwise the authomatically selected
     value may not lead to convergence.
     }
-  \item{printLevel}{
-    Integer, debugging information.  Larger number prints more details.
-  }
-  \item{print.level}{same as \sQuote{printLevel}, for backward
-    compatibility} 
   \item{SUMTMaxIter}{
     Maximum SUMT iterations
+  }
+  \item{control}{
+    either a list of control parameters, or a `MaxControl` object to
+    specify the parameters for the inner unconstrained optimizer.
+    See \code{\link{maxNR}} for details.
   }
   \item{\dots}{
     Other arguments to \code{maxRoutine} and \code{fn}.

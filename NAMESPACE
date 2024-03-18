@@ -1,6 +1,6 @@
 importFrom("generics", "glance", "tidy")
 importFrom("methods", "new", "show", "slot", "slot<-", "slotNames",
-           "validObject")
+           "validObject", "is")
 importFrom("miscTools", "nObs", "nParam", "sumKeepAttr")
 importFrom( "miscTools", "stdEr" )
 importFrom("sandwich", "bread", "estfun", "sandwich")

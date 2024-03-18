@@ -80,7 +80,7 @@
       algorithm exits with return code 3.}
     %
     \item{nm_alpha}{1, Nelder-Mead simplex method reflection
-      factor (see Nelder \& Mead, 1965)}
+      factor (see Nelder & Mead, 1965)}
     \item{nm_beta}{0.5, Nelder-Mead contraction factor}
     \item{nm_gamma}{2, Nelder-Mead expansion factor}
     % SANN

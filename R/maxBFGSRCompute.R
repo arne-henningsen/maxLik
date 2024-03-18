@@ -1,5 +1,5 @@
 maxBFGSRCompute <- function(fn,
-                         start, 
+                            start, 
                             finalHessian=TRUE,
                   fixed=NULL,
                             control=maxControl(),
@@ -75,16 +75,16 @@ maxBFGSRCompute <- function(fn,
    ##
   chi2 <- 1E+10
   iter <- 0L
-  # eval a first time the function, the gradient and the hessian
-  x <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE,
-      returnHessian = FALSE, ... ) )
-            # sum of log-likelihood value but not sum of gradients
+   ## eval the function for the first time
+   y <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE,
+                        returnHessian = FALSE, ... ) )
+                           # sum of individual log-likelihoods
    if (slot(control, "printLevel") > 0)
-    cat( "Initial value of the function :", x, "\n" )
-   if(is.na(x)) {
+    cat( "Initial value of the function :", y, "\n" )
+   if(is.na(y)) {
       stop("Missings in the initial value, computed at 'start'")
    }
-   if(is.infinite(x) & (x > 0)) {
+   if(is.infinite(y) & (y > 0)) {
                                         # we stop at +Inf but not at -Inf
       result <- list(code=5, message=maximMessage("5"),
                      iterations=0,
@@ -92,18 +92,18 @@ maxBFGSRCompute <- function(fn,
       class(result) <- "maxim"
       return(result)
    }
-   if( isTRUE( attr( x, "gradBoth" ) ) ) {
+   if( isTRUE( attr( y, "gradBoth" ) ) ) {
       warning( "the gradient is provided both as attribute 'gradient' and",
          " as argument 'grad': ignoring argument 'grad'" )
    }
-   if( isTRUE( attr( x, "hessBoth" ) ) ) {
+   if( isTRUE( attr( y, "hessBoth" ) ) ) {
       warning( "the Hessian is provided both as attribute 'hessian' and",
          " as argument 'hess': ignoring argument 'hess'" )
    }
    ##
    ## gradient by individual observations, used for BHHH approximation of initial Hessian.
    ## If not supplied by observations, we use the summed gradient.
-   gri <- attr( x, "gradient" )
+   gri <- attr( y, "gradient" )
    gr <- sumGradients( gri, nParam = length( param ) )
    if(slot(control, "printLevel") > 2) {
       cat("Initial gradient value:\n")
@@ -131,8 +131,14 @@ maxBFGSRCompute <- function(fn,
       }
    }
    else {
-      invHess <- -1e-5*diag(1, nrow=length(gr[!fixed]))
-                           # ... if not possible (Is this OK?).  Note we make this negative definite.
+      ## No observation-specific gradients: compute numeric Hessian
+      approximateHessian <- attr(
+         fn(param, fixed = fixed, sumObs = FALSE,
+            returnHessian = TRUE, ...),
+         "hessian")[!fixed,!fixed]
+      ## approximated inverse hessian.
+      ## Only active components, no lines for fixed ones
+      invHess <- solve(approximateHessian)
       if(slot(control, "printLevel") > 3) {
          cat("Initial inverse Hessian is diagonal\n")
          if(slot(control, "printLevel") > 4) {
@@ -143,7 +149,7 @@ maxBFGSRCompute <- function(fn,
    if( slot(control, "printLevel") > 1) {
       cat("-------- Initial parameters: -------\n")
       cat( "fcn value:",
-      as.vector(x), "\n")
+      as.vector(y), "\n")
       a <- cbind(start, gr, as.integer(!fixed))
       dimnames(a) <- list(nimed, c("parameter", "initial gradient",
                                           "free"))
@@ -176,19 +182,24 @@ maxBFGSRCompute <- function(fn,
             }
          }
       }
-      ## Next, ensure that the approximated inverse Hessian is negative definite for computing
-      ## the new climbing direction.  However, retain the original, potentially not negative definite
-      ## for computing the following approximation.
-      ## This procedure seems to work, but unfortunately I have little idea what I am doing :-(
+      ## Next, ensure that the approximated inverse Hessian is negative definite for
+      ## computing the new climbing direction.  However, retain the original,
+      ## potentially not negative definite for computing the following approximation.
+      ## This procedure seems to work, but unfortunately I have little idea what I am
+      ## doing :-(
       approxHess <- invHess
-                           # approxHess is used for computing climbing direction, invHess for next approximation
-      while((me <- max.eigen( approxHess)) >= -slot(control, "lambdatol") |
-         (qRank <- qr(approxHess, tol=slot(control, "qrtol"))$rank) < sum(!fixed)) {
-                                        # maximum eigenvalue -> negative definite
-                                        # qr()$rank -> singularity
+                           # approxHess is used for computing climbing direction,
+                           # invHess for next approximation
+      ## Ensure we have negative definite non-singular hessian
+      while((me <- max.eigen(approxHess)) >= -slot(control, "lambdatol") |
+            (qRank <- qr(approxHess, tol=slot(control, "qrtol"))$rank) < sum(!fixed))
+      {
+                                        # maximum eigenvalue -> not negative definite
+                                        # qr()$rank -> singular
          lambda <- abs(me) + slot(control, "lambdatol") + min(abs(diag(approxHess)))/1e7
-                           # The third term corrects numeric singularity.  If diag(H) only contains
-                           # large values, (H - (a small number)*I) == H because of finite precision
+                           # The third term corrects numeric singularity.  If diag(H)
+                           # only contains large values, (H - (a small number)*I) ==
+                           # H because of finite precision
          approxHess <- approxHess - lambda*I
          if(slot(control, "printLevel") > 4) {
             cat("Not negative definite.  Subtracting", lambda, "* I\n")
@@ -200,60 +211,61 @@ maxBFGSRCompute <- function(fn,
             }
          }
                            # how to make it better?
-      }
+      }  # now we have negative definite, non-singular Hessian
       ## next, take a step of suitable length to the suggested direction
       step <- 1
       direction[!fixed] <- as.vector(approxHess %*% gr[!fixed])
-    oldx <- x
-     oldgr <- gr
-    oldparam <- param
+      oldy <- y  # store previous function value
+      oldgr <- gr
+      oldparam <- param
     param[!fixed] <- oldparam[!fixed] - step * direction[!fixed]
-    x <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE,
+    y <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE,
       returnHessian = FALSE, ... ) )
                            # sum of log-likelihood value but not sum of gradients
       ## did we end up with a larger value?
-      while((is.na(x) | x < oldx) & step > slot(control, "steptol")) {
+      while((is.na(y) | y < oldy) & step > slot(control, "steptol")) {
          step <- step/2
          if(slot(control, "printLevel") > 2) {
-            cat("Function decreased. Function values: old ", oldx, ", new ", x, ", difference ", x - oldx, "\n")
+            cat("Function decreased. Function values: old ", oldy, ", new ", y, ", difference ", y - oldy, "\n")
             if(slot(control, "printLevel") > 3) {
                resdet <- cbind(param = param, gradient = gr, direction=direction, active=!fixed)
                cat("Attempted parameters:\n")
                print(resdet)
             }
             cat(" -> step ", step, "\n", sep="")
-         }
+         }  # found a better parameter value
        param[!fixed] <- oldparam[!fixed] - step * direction[!fixed]
-       x <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE,
-         returnHessian = FALSE, ... ) )
-            # sum of log-likelihood value but not sum of gradients
+       y <- sumKeepAttr( fn( param, fixed = fixed, sumObs = FALSE,
+                            returnHessian = FALSE, ... ) )
+                           # sum of log-likelihood value but not sum of gradients
     }
     if(step < slot(control, "steptol")) {
                            # we did not find a better place to go...
-       samm <- list(theta0=oldparam, f0=oldx, climb=direction)
+       samm <- list(theta0=oldparam, f0=oldy, climb=direction)
     }
-     gri <- attr( x, "gradient" )
+     gri <- attr( y, "gradient" )
                            # observation-wise gradient.  We only need it in order to compute the BHHH Hessian, if asked so.
      gr <- sumGradients( gri, nParam = length( param ) )
       incr <- step * direction
-      y <- gr - oldgr
-      if(all(y == 0)) {
+      deltaGrad <- gr - oldgr
+      if(all(deltaGrad == 0)) {
                            # gradient did not change -> cannot proceed
          code <- 9; break
       }
       ## Compute new approximation for the inverse hessian
       update <- outer( incr[!fixed], incr[!fixed]) *
-          (sum(y[!fixed] * incr[!fixed]) +
-           as.vector( t(y[!fixed]) %*% invHess %*% y[!fixed])) / sum(incr[!fixed] * y[!fixed])^2 +
-               (invHess %*% outer(y[!fixed], incr[!fixed])
-                + outer(incr[!fixed], y[!fixed]) %*% invHess)/
-                    sum(incr[!fixed] * y[!fixed])
+          (sum(deltaGrad[!fixed] * incr[!fixed]) +
+           as.vector( t(deltaGrad[!fixed]) %*% invHess %*% deltaGrad[!fixed])) / sum(incr[!fixed] * deltaGrad[!fixed])^2 +
+               (invHess %*% outer(deltaGrad[!fixed], incr[!fixed])
+                + outer(incr[!fixed], deltaGrad[!fixed]) %*% invHess)/
+                    sum(incr[!fixed] * deltaGrad[!fixed])
       invHess <- invHess - update
       ##
       chi2 <- -  crossprod(direction[!fixed], oldgr[!fixed])
     if (slot(control, "printLevel") > 0){
-       cat("step = ",step, ", lnL = ", x,", chi2 = ",
-           chi2, ", function increment = ", x - oldx, "\n",sep="")
+       cat("step = ",step, ", lnL = ", y,", chi2 = ",
+           chi2, ", function increment = ", y - oldy, "\n", sep="",
+           fill = TRUE)
        if (slot(control, "printLevel") > 1){
           resdet <- cbind(param = param, gradient = gr, direction=direction, active=!fixed)
           print(resdet)
@@ -266,13 +278,13 @@ maxBFGSRCompute <- function(fn,
       if( sqrt( crossprod( gr[!fixed] ) ) < slot(control, "gradtol") ) {
          code <- 1; break
       }
-      if(x - oldx < slot(control, "tol")) {
+      if(y - oldy < slot(control, "tol")) {
          code <- 2; break
       }
-      if(x - oldx < slot(control, "reltol")*(x + slot(control, "reltol"))) {
+      if(y - oldy < slot(control, "reltol")*(y + slot(control, "reltol"))) {
          code <- 8; break
       }
-      if(is.infinite(x) & x > 0) {
+      if(is.infinite(y) & y > 0) {
          code <- 5; break
       }
    }
@@ -281,7 +293,7 @@ maxBFGSRCompute <- function(fn,
       cat( maximMessage( code), "\n")
       cat( iter, " iterations\n")
       cat( "estimate:", param, "\n")
-      cat( "Function value:", x, "\n")
+      cat( "Function value:", y, "\n")
    }
    if( is.matrix( gr ) ) {
       if( dim( gr )[ 1 ] == 1 ) {
@@ -308,13 +320,13 @@ maxBFGSRCompute <- function(fn,
       rownames( hessian ) <- colnames( hessian ) <- nimed
    }
    ## remove attributes from final value of objective (likelihood) function
-   attributes( x )$gradient <- NULL
-   attributes( x )$hessian <- NULL
-   attributes( x )$gradBoth <- NULL
-   attributes( x )$hessBoth <- NULL
+   attributes( y )$gradient <- NULL
+   attributes( y )$hessian <- NULL
+   attributes( y )$gradBoth <- NULL
+   attributes( y )$hessBoth <- NULL
    ##
    result <-list(
-                  maximum = unname( drop( x ) ),
+                  maximum = unname( drop( y ) ),
                   estimate=param,
                   gradient=gr,
                  hessian=hessian,

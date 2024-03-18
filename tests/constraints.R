@@ -92,7 +92,7 @@ gradLikMixInd <- function(param) {
 library(maxLik)
 ## mixed normal
 set.seed(1)
-N <- 100
+N <- 1000
 x <- c(rnorm(N, mean=-1), rnorm(N, mean=1))
 
 ## ---------- INEQUALITY CONSTRAINTS -----------
