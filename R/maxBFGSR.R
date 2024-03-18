@@ -35,22 +35,6 @@ maxBFGSR <- function(fn, grad=NULL, hess=NULL, start,
    ##               fixed constants
    ## fixed         index vector, which parameters to keep fixed
    ##
-   ## RESULTS:
-   ## a list of class "maxim":
-   ## maximum     function value at maximum
-   ## estimate    the parameter value at maximum
-   ## gradient        gradient
-   ## hessian         Hessian
-   ## code        integer code of success:
-   ##             1 - gradient close to zero
-   ##             2 - successive values within tolerance limit
-   ##             3 - could not find a higher point (step error)
-   ##             4 - iteration limit exceeded
-   ## message     character message describing the code
-   ## activePar   logical vector, which parameters were treated as free (resp fixed)
-   ## iterations  number of iterations
-   ## type        "Newton-Raphson maximization"
-   ##
    ## ------------------------------
    ## Default options
    mControl <- maxControl(tol = 0, reltol = 0)

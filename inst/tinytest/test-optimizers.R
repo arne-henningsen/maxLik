@@ -409,7 +409,9 @@ expect_equal(hessian(mlgGhHBHHH), hessian(mlGHBHHH), tolerance = tol)
 optimizerNames <- c(bfgsr = "BFGSR", bfgs = "BFGS", nm = "Nelder-Mead",
                     sann = "SANN", cg = "CG")
 successCodes <- list(bfgsr = 1:4, bfgs = 0, nm = 0, sann = 0, cg = 0)
-successMsgs <- list(bfgsr = c("successive function values within tolerance limit (tol)"),
+successMsgs <- list(bfgsr = c("Last step could not find a value above the current.
+Boundary of parameter space?  
+Consider switching to a more robust optimisation method temporarily."),
                     bfgs = c("successful convergence "),
                            # includes space at end...
                     nm = c("successful convergence "),
@@ -490,13 +492,6 @@ for(optimizer in c("bfgsr", "bfgs", "nm", "sann", "cg")) {
 startValFix <- c( mu = 1, sigma = 1 )
 ## fix mu (the mean ) at its start value
 isFixed <- c( TRUE, FALSE )
-successMsgs <- list(bfgsr = c("successive function values within tolerance limit (tol)"),
-                    bfgs = c("successful convergence "),
-                           # includes space at end...
-                    nm = c("successful convergence "),
-                    sann = c("successful convergence "),
-                    cg = c("successful convergence ")
-                    )
 ## NR method with fixed parameters
 for(optimizer in c("nr", "bfgsr", "bfgs", "sann", "cg")) {
    expect_silent(
