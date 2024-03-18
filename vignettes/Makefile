@@ -1,5 +1,6 @@
 SOURCES = $(wildcard *.Rnw)
-FINALS = $(patsubst %.Rnw, %.pdf, $(SOURCES))
+PDFS = $(patsubst %.Rnw, %.pdf, $(SOURCES))
+FINALS = $(patsubst %.pdf, ../inst/doc/%.pdf, $(PDFS))
 SWEAVE = /usr/lib/R/bin/Sweave
 $(info Running on $(HOSTNAME))
 
@@ -12,5 +13,8 @@ intro-to-maximum-likelihood.pdf: probability-density.pdf
 
 %.pdf: %.Rnw
 	$(SWEAVE) --pdf --clean $<
+
+../inst/doc/%.pdf: %.pdf
+	mv $< ../inst/doc/
 
 .PHONY: all

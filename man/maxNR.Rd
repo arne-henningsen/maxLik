@@ -220,62 +220,50 @@ signaling it with the
 
 \value{
   object of class "maxim".  Data can be extracted through the following
-  methods: 
-  \item{\code{\link{maxValue}}}{\code{fn} value at maximum (the last calculated value
-    if not converged.)}
-  \item{\code{\link[=coef.maxim]{coef}}}{estimated parameter value.}
-  \item{gradient}{vector, last calculated gradient value.  Should be
-    close to 0 in case of normal convergence.}
-  \item{estfun}{matrix of gradients at parameter value \code{estimate}
+  methods:
+  \describe{
+    \item{\code{\link{maxValue}}}{\code{fn} value at maximum (the last calculated value
+      if not converged.)}
+    \item{\code{\link[=coef.maxim]{coef}}}{estimated parameter value.}
+    \item{gradient}{vector, last calculated gradient value.  Should be
+      close to 0 in case of normal convergence.}
+    \item{estfun}{matrix of gradients at parameter value \code{estimate}
       evaluated at each observation (only if \code{grad} returns a matrix
       or \code{grad} is not specified and \code{fn} returns a vector).}
-  \item{hessian}{Hessian at the maximum (the last calculated value if
-    not converged).}
-  \item{returnCode}{return code:
-    \itemize{
-    \item{1}{ gradient close to zero (normal convergence).}
-    \item{2}{ successive function values within tolerance limit (normal
-      convergence).}
-    \item{3}{ last step could not find higher value (probably not
-      converged).  This is related to line search step getting too
-      small, usually because hitting the boundary of the parameter
-      space.  It may also be related to attempts to move to a wrong
-      direction because of numerical errors.  In some cases it can be
-      helped by changing \code{steptol}.}
-    \item{4}{ iteration limit exceeded.}
-    \item{5}{ infinite value.}
-    \item{6}{ infinite gradient.}
-    \item{7}{ infinite Hessian.}
-    \item{8}{ successive function values within relative tolerance
-      limit (normal convergence).}
-    \item{9}{ (BFGS) Hessian approximation cannot be improved because of
-      gradient did not change.  May be related to numerical
-      approximation problems or wrong analytic gradient.}
+    \item{hessian}{
+      Hessian at the maximum (the last calculated value if
+      not converged).
     }
-  }
-  \item{returnMessage}{ a short message, describing the return code.}
-  \item{activePar}{logical vector, which parameters are optimized over.
-    Contains only \code{TRUE}-s if no parameters are fixed.}
-  \item{nIter}{number of iterations.}
-  \item{maximType}{character string, type of maximization.}
-  \item{maxControl}{the optimization control parameters in the form of a
-    \code{\linkS4class{MaxControl}} object.}
-
-  The following components can only be extracted directly (with \code{\$}):
-  \item{last.step}{a list describing the last unsuccessful step if
-    \code{code=3} with following components:
-    \itemize{
-    \item{theta0}{ previous parameter value}
-    \item{f0}{ \code{fn} value at \code{theta0}}
-    \item{climb}{ the movement vector to the maximum of the quadratic approximation}
+    \item{returnCode}{
+      return code: a single digit code that describes the
+      success of the optimization.  See \code{\link{returnCode}}.
     }
+    \item{returnMessage}{ a short message, describing the return code.}
+    \item{activePar}{logical vector, which parameters are optimized over.
+      Contains only \code{TRUE}-s if no parameters are fixed.}
+    \item{nIter}{number of iterations.}
+    \item{maximType}{character string, type of maximization.}
+    \item{maxControl}{the optimization control parameters in the form of a
+      \code{\linkS4class{MaxControl}} object.}
   }
-  \item{constraints}{A list, describing the constrained optimization
-    (\code{NULL} if unconstrained).  Includes the following components:
-    \itemize{
-      \item{type}{ type of constrained optimization}
-      \item{outer.iterations}{ number of iterations in the constraints step}
-      \item{barrier.value}{ value of the barrier function}
+  The following components can only be extracted directly (with
+  \code{\$}):
+  \describe{
+    \item{last.step}{a list describing the last unsuccessful step if
+      \code{code=3} with following components:
+      \describe{
+	\item{theta0}{ previous parameter value}
+	\item{f0}{ \code{fn} value at \code{theta0}}
+	\item{climb}{ the movement vector to the maximum of the quadratic approximation}
+      }
+    }
+    \item{constraints}{A list, describing the constrained optimization
+      (\code{NULL} if unconstrained).  Includes the following components:
+      \describe{
+	\item{type}{ type of constrained optimization}
+	\item{outer.iterations}{ number of iterations in the constraints step}
+	\item{barrier.value}{ value of the barrier function}
+      }
     }
   }
 }

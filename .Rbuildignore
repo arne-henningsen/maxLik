@@ -1,7 +1,6 @@
 ^\.Rproj\.user$
 ^.*\.Rproj$
 ^TODO\.txt$
-^vignettes/Rplots.pdf$
-^vignettes/Makefile
+^vignettes
 .*\.prv
 ^readme.md$

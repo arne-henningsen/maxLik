@@ -5,4 +5,8 @@
 .RData
 .Rhistory
 .Rprofile
+vignettes/*.pdf
+
+# generated pdf docs
+inst/doc/*.pdf
 
