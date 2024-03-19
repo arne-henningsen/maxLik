@@ -1,11 +1,13 @@
 # editor backups
 *~
+auto/
 
 # automatic and data files
 .RData
 .Rhistory
 .Rprofile
 vignettes/*.pdf
+*.aux
 
 # generated pdf docs
 inst/doc/*.pdf

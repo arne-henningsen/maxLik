@@ -6,7 +6,7 @@
 \usepackage[inline]{enumitem}
 \usepackage[lmargin=25mm, rmargin=50mm, marginparwidth=45mm]{geometry}
 \usepackage{indentfirst}
-\usepackage[utf8]{inputenc}
+% \usepackage[utf8]{inputenc}
 \usepackage{marginnote}
 \usepackage{natbib}
 \usepackage{relsize}
