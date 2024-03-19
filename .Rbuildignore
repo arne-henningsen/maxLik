@@ -1,9 +1,11 @@
+^.*/auto
 ^\.Rproj\.user$
 ^.*\.Rproj$
+.*\.asy$
 ^TODO\.txt$
 .*\.prv
 ^readme.md$
-vignettes/.*\.pdf
+^vignettes/Makefile
 vignettes/.*\.aux
 vignettes/.*\.log
 vignettes/.*\.blg
