@@ -5,7 +5,7 @@ reported here.  A full ChangeLog is available in the github log at
 https://github.com/arne-henningsen/maxLik
 
 
-     CHANGES IN VERSION 1.5-3 (2022-06-17)
+     CHANGES IN VERSION 1.6-0 (2024-03-20)
 
 * 'tidy' and 'glance' methods for 'maxim' objects
 
@@ -21,6 +21,8 @@ https://github.com/arne-henningsen/maxLik
 
 * missings in the initial value results in error, not the special return
   code.
+
+* fixed some documentation issues
 
 
      CHANGES IN VERSION 1.5-2 (2020-07-26)
