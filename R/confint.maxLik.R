@@ -11,7 +11,7 @@ confint.maxLik <- function(object, parm, level = 0.95, ...)
          parm <- pnames[parm]
   a <- (1 - level)/2
   a <- c(a, 1 - a)
-  pct <- format.perc(a, 3)
+  pct <- formatPct(a, 3)
   q <- qnorm(a)
   ci <- array(NA, dim = c(length(parm), 2L), 
               dimnames = list(parm, pct))
@@ -20,5 +20,5 @@ confint.maxLik <- function(object, parm, level = 0.95, ...)
   return(ci)
 }
 
-format.perc <- function(probs, digits) 
+formatPct <- function(probs, digits)
   paste(format(100 * probs, trim = TRUE, scientific = FALSE, digits = digits), "%")
