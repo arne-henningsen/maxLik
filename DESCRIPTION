@@ -1,5 +1,5 @@
 Package: maxLik
-Version: 1.6-2
+Version: 1.6-3
 Date: 2024-03-27
 Title: Maximum Likelihood Estimation and Related Tools
 Authors@R: c(person("Ott", "Toomet", role=c("aut", "cre"), email="otoomet@gmail.com"),
