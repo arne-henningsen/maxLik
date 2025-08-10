@@ -35,7 +35,7 @@
 \seealso{
   \code{\link[stats]{nobs}},
   \code{\link[miscTools]{nObs}}, \code{\link{maxLik}},
-  \code{\link{nParam}}.
+  \code{\link[miscTools]{nParam}}.
 }
 
 \examples{

@@ -29,7 +29,7 @@ activePar(x, \dots)
   change during optimization algorithm.
 }
 \author{Ott Toomet}
-\seealso{\code{\link{maxNR}}, \code{\link{nObs}}}
+\seealso{\code{\link{maxNR}}, \code{\link[miscTools]{nObs}}}
 \examples{
 ## a two-dimensional exponential hat
 f <- function(a) exp(-a[1]^2 - a[2]^2)

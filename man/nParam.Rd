@@ -26,7 +26,7 @@
   Number of parameters in the model
 }
 \author{Ott Toomet}
-\seealso{\code{\link{nObs}} for number of observations}
+\seealso{\code{\link[miscTools]{nObs}} for number of observations}
 \examples{
 ## fit a normal distribution by ML
 # generate a variable from normally distributed random numbers
