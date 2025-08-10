@@ -19,7 +19,6 @@
 \usepackage{natbib}
 \usepackage{xargs}  % for extended pderiv arguments
 \usepackage{xspace}
-% \SweaveUTF8
 
 \newcommand{\COii}{\ensuremath{\mathit{CO}_{2}}\xspace}
 \DeclareMathOperator*{\E}{\mathbbm{E}}% expectation
@@ -35,6 +34,7 @@
 \newcommand{\R}{\texttt{R}\xspace}
 \newcommand*{\transpose}{^{\mkern-1.5mu\mathsf{T}}}
 \renewcommand*{\vec}[1]{\boldsymbol{#1}}
+% \VignetteEngine{knitr::knitr}
 % \VignetteIndexEntry{Maximum likelihood estimation with maxLik}
 
 \title{Maximum Likelihood Estimation with \emph{maxLik}}
@@ -95,7 +95,7 @@ and estimate the best fit mean and standard deviation.
 Instead of explicitly coding the formula for log-likelihood, we rely on the
 \R function \verb|dnorm| instead (see Section~\ref{sec:different-optimizers}
 for a version that does not use \verb|dnorm|):
-<<>>=
+<<warning = FALSE>>=
 x <- rnorm(100)  # data.  true mu = 0, sigma = 1
 loglik <- function(theta) {
    mu <- theta[1]

@@ -6,13 +6,12 @@
 \usepackage[inline]{enumitem}
 \usepackage[lmargin=25mm, rmargin=50mm, marginparwidth=45mm]{geometry}
 \usepackage{indentfirst}
-% \usepackage[utf8]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage{marginnote}
 \usepackage{natbib}
 \usepackage{relsize}
 \usepackage{siunitx}
 \usepackage{xspace}
-% \SweaveUTF8
 
 \newcommand{\COii}{\ensuremath{\mathit{CO}_{2}}\xspace}
 \newcommand*{\mat}[1]{\mathsf{#1}}
@@ -25,6 +24,7 @@
 \newcommand*{\transpose}{^{\mkern-1.5mu\mathsf{T}}}
 \renewcommand*{\vec}[1]{\boldsymbol{#1}}
 
+% \VignetteEngine{knitr::knitr}
 % \VignetteIndexEntry{Introduction: what is maximum likelihood}
 
 \begin{document}
@@ -620,7 +620,7 @@ It describes \COii uptake (\si{\micro\mol\per\meter\squared\sec},
 variable \emph{uptake}) by different
 grasses in various conditions.  Let us start by plotting the histogram
 of uptake:
-<<fig=TRUE>>=
+<<>>=
 data(CO2)
 hist(CO2$uptake)
 @
@@ -852,7 +852,7 @@ different combinations of $\mu$, $\sigma$
 
 \begin{figure}[ht]
   \centering
-<<plotSurface, echo=FALSE, fig=TRUE>>=
+<<plotSurface, echo=FALSE>>=
 loglik <- function(theta) {
    mu <- theta[1]
    sigma <- theta[2]
