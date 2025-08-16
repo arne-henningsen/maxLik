@@ -25,12 +25,12 @@ https://github.com/arne-henningsen/maxLik
 * fixed some documentation issues
 
 
-     CHANGES IN VERSION 1.5-2 (2020-07-26)
+     CHANGES IN VERSION 1.5-2 (2021-07-26)
 
 * fixed superfluous export commands in Namespace
 
 
-     CHANGES IN VERSION 1.5-0 (2020-07-26)
+     CHANGES IN VERSION 1.5-0 (2021-07-26)
 
 * maxLik methods for 'tidy' and 'glance' generics (by David Hugh-Jones)
 
@@ -41,7 +41,7 @@ https://github.com/arne-henningsen/maxLik
 * fixed an issue with negative reltol values
 
 
-     CHANGES IN VERSION 1.4-8 (2020-03-22)
+     CHANGES IN VERSION 1.4-8 (2021-03-22)
 
 * added two vignettes: "Getting started with maximum likelihood and maxLik" and
    "maximum likelihood estimation with maxLik"
