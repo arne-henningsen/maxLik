@@ -70,27 +70,27 @@ the _optim_-based methods, such as _maxBFGS_ and
 _maxSGA_, the maximizer version of popular Stochastic
 Gradient Descent.
 
-Examples:
+An quick example:
 ```r
 ### estimate mean and variance of normal random vector
 
-## create random numbers where mu=1, sd=2
+## create random numbers where mu=0, sd=1
 set.seed(123)
-x <- rnorm(50, 1, 2 )
+x <- rnorm(50)
 
-## log likelihood function.
-## Note: 'param' is a 2-vector c(mu, sd)
+### log likelihood function.
 llf <- function(param) {
+   ## Note: 'param' is a 2-vector c(mu, sd)
    mu <- param[1]
    sd <- param[2]
    llValue <- dnorm(x, mean=mu, sd=sd, log=TRUE)
    sum(llValue)
 }
 
-## Estimate it with mu=0, sd=1 as start values
-ml <- maxLik(llf, start = c(mu=0, sigma=1) )
+## Estimate it with mu=1, sd=2 as start values
+ml <- maxLik(llf, start = c(mu=1, sigma=2) )
 print(summary(ml))
-## Estimates close to c(1,2) :-)
+## Estimates close to c(0, 1) :-)
 ```
 
 ## Authors
@@ -121,7 +121,7 @@ _gauss_ programming language.
 The very first code of `maxLik` originates from a PhD econometrics
 course in fall 2000.  The course was taught by Lars Muus at Aarhus
 University, and a problem set asked the students to implement
-Gauss-Newton method.  Later, OT could not understand error messages of
-`nlm` function, and amended the Gauss-Newton to Newton-Raphson.  This
+Gauss-Newton method.  Later, when OT could not understand an error message of
+`nlm` function, he converted the Gauss-Newton function to Newton-Raphson.  This
 is the Newton-Raphson method that is one of the central optimizers in
 current `maxLik`.
