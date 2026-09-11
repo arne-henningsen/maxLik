@@ -1,4 +1,4 @@
-
+options( width = 80, warning.length = 1000 )
 ### test numeric methods, in particular handling of unequal
 ### function lengths
 library(maxLik)
