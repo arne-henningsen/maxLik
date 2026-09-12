@@ -9,6 +9,10 @@ auto/
 vignettes/*.pdf
 *.aux
 
+# RStudio files and folders
+.Rproj.user
+*.Rproj
+
 # generated pdf docs
 inst/doc/*.pdf
 
