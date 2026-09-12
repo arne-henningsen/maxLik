@@ -12,3 +12,4 @@ vignettes/.*\.blg
 vignettes/.*\.bbl
 vignettes/.*\.out
 
+^.github$
