@@ -4,9 +4,11 @@ importFrom("methods", "new", "show", "slot", "slot<-", "slotNames",
 importFrom("miscTools", "nObs", "nParam", "sumKeepAttr")
 importFrom( "miscTools", "stdEr" )
 importFrom("sandwich", "bread", "estfun", "sandwich")
-importFrom("stats", "coef", "logLik", "optim", "pnorm", "printCoefmat",
+importFrom("stats",
+           "coef", "logLik", "optim", "pnorm", "printCoefmat",
            "vcov", "AIC", "qnorm")
-importFrom("stats4", "nobs")
+importFrom("stats", "nobs")
+# importFrom("stats4", "nobs")
 importFrom("utils", "head", "str", "tail")
 
 export( "activePar" )
@@ -41,7 +43,7 @@ export( "tidy" )
 exportClasses("MaxControl")
 exportMethods("maxControl")
 exportMethods("show")
-exportMethods("nobs")
+# exportMethods("nobs")
 
 S3method( "activePar", "default" )
 S3method( "AIC", "maxLik" )
@@ -64,6 +66,7 @@ S3method( "maximType", "maxim" )
 S3method( "maxValue", "maxim" )
 S3method( "nIter", "default" )
 S3method( "nObs", "maxLik" )
+S3method( "nobs", "maxLik" )
 S3method( "nParam", "maxim" )
 S3method( "print", "maxim" )
 S3method( "print", "maxLik" )
