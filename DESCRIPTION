@@ -1,6 +1,6 @@
 Package: maxLik
 Version: 1.6-9
-Date: 2026-09-22
+Date: 2026-09-23
 Title: Maximum Likelihood Estimation and Related Tools
 Authors@R: c(person("Ott", "Toomet", role=c("aut", "cre"), email="otoomet@gmail.com"),
              person("Arne", "Henningsen", role=c("aut"), email="arne.henningsen@gmail.com"),
@@ -9,7 +9,7 @@ Authors@R: c(person("Ott", "Toomet", role=c("aut", "cre"), email="otoomet@gmail.
              person("David", "Hugh-Jones", role=c("ctb")),
              person("Luca", "Scrucca", role=c("ctb"))
 	   )
-Depends: R (>= 2.4.0), miscTools (>= 0.6-8), methods, stats4
+Depends: R (>= 2.4.0), miscTools (>= 0.6-8), methods
 Imports: sandwich, generics
 URL: https://github.com/arne-henningsen/maxLik
 BugReports: https://github.com/arne-henningsen/maxLik/issues
