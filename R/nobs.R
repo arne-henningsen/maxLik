@@ -17,7 +17,7 @@ nobs.maxLik <- function(object, ...) {
    }
 }
 
-# setMethod("nobs", "maxLik", nobs.maxLik)
+setMethod("nobs", "maxLik", nobs.maxLik)
 
 
 ## Return #of observations for models using our own
