@@ -44,19 +44,19 @@ summary.maxLik <- function(object, eigentol=1e-12,... ) {
    ##
    if(!inherits(object, "maxLik"))
        stop("'summary.maxLik' called on a non-'maxLik' object")
-   ## Here we should actually coerce the object to a 'maxLik' object, dropping all the subclasses...
-   ## Instead, we force the program to use maxLik-related methods
-   result <- object$maxim
-   nParam <- length(coef.maxLik(object))
-   activePar <- activePar( object )
-   if((object$code < 100) & !is.null(coef.maxLik(object))) {
+   ## Use internal accessors, not the public generics.  This guarantees that
+   ## methods for subclasses of 'maxLik' cannot affect the summary.
+   estimate <- .estimate( object )
+   activePar <- .activePar( object )
+   if((object$code < 100) & !is.null(estimate)) {
                            # in case of infinity at initial values, the coefs are not provided
-       t <- coef( object ) / stdEr( object, eigentol = eigentol )
+       se <- .stdEr( object, eigentol = eigentol )
+       t <- estimate / se
        p <- 2*pnorm( -abs( t))
-       t[!activePar(object)] <- NA
-       p[!activePar(object)] <- NA
-       results <- cbind("Estimate" = coef( object ),
-                        "Std. error" = stdEr( object, eigentol = eigentol ),
+       t[!activePar] <- NA
+       p[!activePar] <- NA
+       results <- cbind("Estimate" = estimate,
+                        "Std. error" = se,
                         "t value" = t, "Pr(> t)" = p )
    } else {
      results <- NULL

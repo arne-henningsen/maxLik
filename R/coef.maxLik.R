@@ -1,9 +1,9 @@
 coef.maxim <- function( object, ... ) {
-   return( object$estimate )
+   return( .estimate( object ) )
 }
 
 coef.maxLik <- function( object, ... ) {
-   return( object$estimate )
+   return( .estimate( object ) )
 }
 
 coef.summary.maxLik <- function( object, ... ) {
