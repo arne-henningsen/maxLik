@@ -5,4 +5,4 @@ storedParameters <- function(x, ...)
     UseMethod("storedParameters")
 
 storedParameters.maxim <- function(x, ...)
-    x$parameterStore
+    .storedParameters(x)

@@ -4,4 +4,4 @@ gradient <- function(x, ...)
     UseMethod("gradient")
 
 gradient.maxim <- function(x, ...)
-    x$gradient
+    .gradient(x)

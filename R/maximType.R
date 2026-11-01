@@ -2,7 +2,7 @@ maximType <- function(x)
     UseMethod("maximType")
 
 maximType.default <- function(x)
-    x$maximType
+    .field(x, "maximType")
 
 maximType.maxim <- function(x)
-    x$type
+    .maximType(x)

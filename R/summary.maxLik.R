@@ -3,28 +3,34 @@ print.summary.maxLik <- function( x,
    
    cat("--------------------------------------------\n")
    cat("Maximum Likelihood estimation\n")
-   cat(maximType(x), ", ", nIter(x), " iterations\n", sep="")
-   cat("Return code ", returnCode(x), ": ", returnMessage(x), "\n", sep="")
-   if(!is.null(x$estimate)) {
-      cat("Log-Likelihood:", x$loglik, "\n")
-      cat(x$NActivePar, " free parameters\n")
+   cat(.maximType(x), ", ", .nIter(x), " iterations\n", sep="")
+   cat("Return code ", .returnCode(x), ": ", .returnMessage(x), "\n", sep="")
+   estimate <- .estimate( x )
+   if(!is.null(estimate)) {
+      cat("Log-Likelihood:", .maximum( x ), "\n")
+      nActivePar <- .field( x, "NActivePar" )
+      if( is.null( nActivePar ) ) {
+         nActivePar <- sum( .activePar( x ) )
+      }
+      cat(nActivePar, " free parameters\n")
       cat("Estimates:\n")
-      printCoefmat( x$estimate, digits = digits )
+      printCoefmat( estimate, digits = digits )
    }
-   if(!is.null(x$constraints)) {
+   constraints <- .constraints( x )
+   if(!is.null(constraints)) {
       cat("\nWarning: constrained likelihood estimation.",
           "Inference is probably wrong\n")
-      cat("Constrained optimization based on", x$constraints$type,
+      cat("Constrained optimization based on", constraints$type,
           "\n")
-      if(!is.null(x$constraints$code))
-         cat("Return code:", x$constraints$code, "\n")
+      if(!is.null(constraints$code))
+         cat("Return code:", constraints$code, "\n")
                            # note: this is missing for 'constrOptim'
-      if(!is.null(x$constraints$message))
-         cat(x$constraints$message, "\n")
+      if(!is.null(constraints$message))
+         cat(constraints$message, "\n")
                            # note: this is missing for 'constrOptim'
-      cat(x$constraints$outer.iterations,
+      cat(constraints$outer.iterations,
           " outer iterations, barrier value",
-          x$constraints$barrier.value, "\n")
+          constraints$barrier.value, "\n")
    }
    cat("--------------------------------------------\n")
 }
@@ -34,13 +40,16 @@ summary.maxLik <- function(object, eigentol=1e-12,... ) {
    ## 
    ## RESULTS:
    ## list of class "summary.maxLik" with following components:
-   ## maximum    : function value at optimum
-   ## estimate   : estimated parameter values at optimum
-   ## gradient   :           gradient at optimum
-   ## code       : code of convergence
-   ## message    : message, description of the code
+   ## maximType  : type of optimisation
    ## iterations : number of iterations
-   ## type       : type of optimisation
+   ## returnCode : code of convergence
+   ## returnMessage : message, description of the code
+   ## loglik     : log-likelihood value at optimum
+   ## estimate   : estimated parameter values, standard errors, t values
+   ##              and p values at optimum
+   ## fixed      : logical vector, which parameters are fixed
+   ## NActivePar : number of free parameters
+   ## constraints: information about constrained optimization
    ##
    if(!inherits(object, "maxLik"))
        stop("'summary.maxLik' called on a non-'maxLik' object")
@@ -48,7 +57,8 @@ summary.maxLik <- function(object, eigentol=1e-12,... ) {
    ## methods for subclasses of 'maxLik' cannot affect the summary.
    estimate <- .estimate( object )
    activePar <- .activePar( object )
-   if((object$code < 100) & !is.null(estimate)) {
+   code <- .returnCode( object )
+   if((code < 100) & !is.null(estimate)) {
                            # in case of infinity at initial values, the coefs are not provided
        se <- .stdEr( object, eigentol = eigentol )
        t <- estimate / se
@@ -61,15 +71,15 @@ summary.maxLik <- function(object, eigentol=1e-12,... ) {
    } else {
      results <- NULL
    }
-   summary <- list(maximType=object$type,
-                   iterations=object$iterations,
-                   returnCode=object$code,
-                   returnMessage=object$message,
-                   loglik=object$maximum,
+   summary <- list(maximType=.maximType( object ),
+                   iterations=.nIter( object ),
+                   returnCode=code,
+                   returnMessage=.returnMessage( object ),
+                   loglik=.maximum( object ),
                    estimate=results,
                    fixed=!activePar,
                    NActivePar=sum(activePar),
-                   constraints=object$constraints)
+                   constraints=.constraints( object ))
    class(summary) <- "summary.maxLik"
    summary
 }

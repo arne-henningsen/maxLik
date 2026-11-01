@@ -6,10 +6,10 @@ returnCode <- function(x, ...)
     UseMethod("returnCode")
 
 returnCode.default <- function(x, ...)
-    x$returnCode
+    .field(x, "returnCode")
 
 returnCode.maxim <- function(x, ...)
-    x$code
+    .returnCode(x)
 
 returnCode.maxLik <- function(x, ...)
-    x$code
+    .returnCode(x)

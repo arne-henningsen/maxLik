@@ -4,5 +4,10 @@ activePar <- function(x, ...)
     UseMethod("activePar")
 
 activePar.default <- function(x, ...) {
-   return( .activePar( x ) )
+   result <- .activePar( x )
+   if( is.null( result ) ) {
+      ## fallback for arbitrary objects
+      result <- rep( TRUE, length( coef( x ) ) )
+   }
+   return( result )
 }

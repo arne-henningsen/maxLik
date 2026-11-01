@@ -3,10 +3,10 @@ returnMessage <- function(x, ...)
     UseMethod("returnMessage")
 
 returnMessage.default <- function(x, ...)
-    x$returnMessage
+    .field(x, "returnMessage")
 
 returnMessage.maxim <- function(x, ...)
-    x$message
+    .returnMessage(x)
 
 returnMessage.maxLik <- function(x, ...)
-    x$message
+    .returnMessage(x)

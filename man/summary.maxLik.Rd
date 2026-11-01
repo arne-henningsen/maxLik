@@ -27,10 +27,10 @@
 \value{
   An object of class 'summary.maxLik' with following components:
   \describe{
-    \item{type}{type of maximization.}
+    \item{maximType}{type of maximization.}
     \item{iterations}{number of iterations.}
-    \item{code}{code of success.}
-    \item{message}{a short message describing the code.}
+    \item{returnCode}{code of success.}
+    \item{returnMessage}{a short message describing the code.}
     \item{loglik}{the loglik value in the maximum.}
     \item{estimate}{numeric matrix, the first column contains the parameter
       estimates, the second the standard errors, third t-values and fourth

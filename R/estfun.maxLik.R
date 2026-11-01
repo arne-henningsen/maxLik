@@ -1,6 +1,7 @@
 estfun.maxLik <- function( x, ... ) {
 
-   if( is.null( x$gradientObs ) ) {
+   gradientObs <- .gradientObs( x )
+   if( is.null( gradientObs ) ) {
       stop( "cannot return the gradients of the log-likelihood function",
          " evaluated at each observation: please re-run 'maxLik' and",
          " provide a gradient function using argument 'grad' or",
@@ -10,5 +11,5 @@ estfun.maxLik <- function( x, ... ) {
          " at each observation" )
    }
 
-   return( x$gradientObs )
+   return( gradientObs )
 }

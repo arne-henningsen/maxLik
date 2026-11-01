@@ -5,4 +5,4 @@ nIter <- function(x, ...)
     UseMethod("nIter")
 
 nIter.default <- function(x, ...)
-    x$iterations
+    .nIter(x)

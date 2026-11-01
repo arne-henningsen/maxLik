@@ -125,7 +125,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
                            control = mControl,
                            printLevel=max(slot(mControl, "printLevel") - 1, 0),
                            ...)
-      theta <- coef(result)
+      theta <- .estimate(result)
                            # Note: this may be a bad idea,
                            # if unconstrained function is unbounded
                            # from above.  In that case rather specify SUMTRho0.
@@ -159,7 +159,7 @@ sumt <- function(fn, grad=NULL, hess=NULL,
                            control = control,
                            printLevel=max(slot(mControl, "printLevel") - 1, 0),
                       ...)
-      theta <- coef(result)
+      theta <- .estimate(result)
       if(mControl@printLevel > 0) {
          cat("SUMT iteration ", iter,
              ": rho = ", rho, ", function = ", callWithoutMaxArgs( theta,

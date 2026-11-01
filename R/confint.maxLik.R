@@ -1,7 +1,7 @@
 ## confint method by Lucca Scrucca
 confint.maxLik <- function(object, parm, level = 0.95, ...)
 {
-  cf <- coef(object)
+  cf <- .estimate(object)
   if(missing(parm)) 
     parm <- seq_along(cf)
   pnames <- names(cf)
@@ -15,7 +15,7 @@ confint.maxLik <- function(object, parm, level = 0.95, ...)
   q <- qnorm(a)
   ci <- array(NA, dim = c(length(parm), 2L), 
               dimnames = list(parm, pct))
-  se <- sqrt(diag(vcov(object)))[parm]
+  se <- sqrt(diag(.vcov(object)))[parm]
   ci[] <- cf[parm] + se %o% q
   return(ci)
 }

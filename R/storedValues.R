@@ -5,4 +5,4 @@ storedValues <- function(x, ...)
     UseMethod("storedValues")
 
 storedValues.maxim <- function(x, ...)
-    x$valueStore
+    .storedValues(x)

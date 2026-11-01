@@ -7,6 +7,5 @@ coef.maxLik <- function( object, ... ) {
 }
 
 coef.summary.maxLik <- function( object, ... ) {
-   result <- object$estimate
-   return( result )
+   return( .estimate( object ) )
 }

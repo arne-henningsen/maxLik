@@ -9,20 +9,20 @@ require_tibble_package <- function () {
 tidy.maxLik <- function (x,  ...) {
   require_tibble_package()
   
-  s <- summary(x)
-  ret <- tibble::as_tibble(s$estimate, rownames = "term")
+  s <- summary.maxLik(x)
+  ret <- tibble::as_tibble(.estimate(s), rownames = "term")
   colnames(ret) <- c("term", "estimate", "std.error", "statistic", "p.value")
   
   ret
 }
 
 tidy.maxim <- function(x, ...) {
-   coefs <- coef(x)
+   coefs <- .estimate(x)
    term <- names(coefs)
    if(is.null(term))
       term <- seq(along=coefs)
    tibble::tibble(term,
                   estimate=coefs,
-                  gradient=gradient(x)
+                  gradient=.gradient(x)
                   )
 }

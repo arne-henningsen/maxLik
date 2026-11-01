@@ -4,4 +4,4 @@ objectiveFn <- function(x, ...)
     UseMethod("objectiveFn")
 
 objectiveFn.maxim <- function(x, ...)
-    x$objectiveFn
+    .objectiveFn(x)
