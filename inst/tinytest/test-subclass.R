@@ -477,6 +477,18 @@ expect_no_dispatch(
    "print.summary.maxLik with constraints without code/message"
 )
 
+## A summary object without 'NActivePar' must compute it from 'fixed'
+sNoNAct <- s
+sNoNAct$NActivePar <- NULL
+xsNoNAct <- as_foo(sNoNAct)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   function(object) capture.output(maxLik:::print.summary.maxLik(object)),
+   xsNoNAct, capture.output(maxLik:::print.summary.maxLik(sNoNAct)),
+   "print.summary.maxLik without NActivePar"
+)
+
 ## ---------------------------------------------- constrained maxim
 mxCon <- mx
 mxCon$constraints <- list(
@@ -584,6 +596,7 @@ if(requireNamespace("codetools", quietly = TRUE)) {
       ".field",
       ".firstField",
       ".estimate",
+      ".parameterNames",
       ".activePar",
       ".hessian",
       ".maximum",
@@ -600,6 +613,7 @@ if(requireNamespace("codetools", quietly = TRUE)) {
       ".lastStep",
       ".unsuccStep",
       ".nParam",
+      ".nActivePar",
       ".vcov",
       ".stdEr",
       ".logLik",

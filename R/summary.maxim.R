@@ -58,7 +58,7 @@ summary.maxim <- function(object, hessian=FALSE, unsucc.step=FALSE,
    if(code == 3 & unsucc.step) {
       lastStep <- .lastStep( object )
       a <- cbind(lastStep$theta0, lastStep$theta1)
-      dimnames(a) <- list(parameter=.field(object, "names"),
+      dimnames(a) <- list(parameter=.parameterNames(object),
                         c("current par", "new par"))
       unsucc.step <- list(value=lastStep$f0,
                         parameters=a)

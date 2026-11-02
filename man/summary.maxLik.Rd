@@ -8,7 +8,7 @@
 }
 \usage{
 \method{summary}{maxLik}(object, eigentol=1e-12, ... )
-\method{coef}{summary.maxLik}(object, \ldots)
+\method{coef}{summary.maxLik}(object, \dots)
 }
 
 \arguments{

@@ -5,6 +5,22 @@ reported here.  A full ChangeLog is available in the github log at
 https://github.com/arne-henningsen/maxLik
 
 
+     CHANGES IN VERSION 1.6-11 (2026-11-01)
+
+* maxLik's own methods (e.g. 'summary', 'print', 'logLik', 'AIC',
+  'confint', 'tidy', 'glance') no longer call the public extractor
+  generics such as 'coef' and 'vcov' internally.  This makes them
+  robust against user-defined methods for 'maxLik' subclasses.
+  The public generics themselves still dispatch to subclass methods
+  as before.
+
+* documentation of 'summary.maxLik' now lists the actual component
+  names ('maximType', 'returnCode', 'returnMessage', 'loglik')
+
+* removed an obsolete documentation alias and fixed other minor
+  documentation issues
+
+
      CHANGES IN VERSION 1.6-10 (2025-09-29)
 
 * 'tidy' and 'glance' methods for 'maxim' objects

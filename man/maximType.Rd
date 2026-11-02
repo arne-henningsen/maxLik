@@ -2,7 +2,6 @@
 \alias{maximType}
 \alias{maximType.default}
 \alias{maximType.maxim}
-\alias{maximType.MLEstimate}
 \title{Type of Minimization/Maximization}
 \description{
   Returns the type of optimization as supplied by the optimisation routine.

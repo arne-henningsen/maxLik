@@ -30,6 +30,11 @@
    .field( x, "estimate" )
 }
 
+## Parameter names of a fitted object
+.parameterNames <- function(x) {
+   .field( x, "names" )
+}
+
 ## Logical vector: which parameters are free (not fixed)
 .activePar <- function(x) {
    if( !is.null( fixed <- .field( x, "fixed" ) ) ) {
@@ -122,6 +127,16 @@
    } else {
       length( .estimate( x ) )
    }
+}
+
+## Number of free parameters of a summary object.  This is stored as
+## 'NActivePar' in 'summary.maxLik' objects, but computed if missing.
+.nActivePar <- function(x) {
+   nActivePar <- .field( x, "NActivePar" )
+   if( is.null( nActivePar ) ) {
+      nActivePar <- sum( .activePar( x ) )
+   }
+   nActivePar
 }
 
 ## Variance-covariance matrix of a fitted object

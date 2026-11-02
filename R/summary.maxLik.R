@@ -8,11 +8,7 @@ print.summary.maxLik <- function( x,
    estimate <- .estimate( x )
    if(!is.null(estimate)) {
       cat("Log-Likelihood:", .maximum( x ), "\n")
-      nActivePar <- .field( x, "NActivePar" )
-      if( is.null( nActivePar ) ) {
-         nActivePar <- sum( .activePar( x ) )
-      }
-      cat(nActivePar, " free parameters\n")
+      cat(.nActivePar( x ), " free parameters\n")
       cat("Estimates:\n")
       printCoefmat( estimate, digits = digits )
    }
