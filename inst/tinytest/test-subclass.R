@@ -327,3 +327,78 @@ expect_equal(
    "foo",
    info = "nParam(x) should still dispatch to nParam.foo(x)"
 )
+
+## ------------------------------------------------ static no-dispatch guard
+## The tests above check the call paths actually exercised by the test
+## objects.  This block additionally inspects the method bodies, so a
+## forbidden generic call is caught even if that branch is not executed.
+if(requireNamespace("codetools", quietly = TRUE)) {
+   forbiddenGenerics <- c(
+      "coef", "vcov", "stdEr", "hessian", "activePar", "nParam",
+      "maxValue", "maximType", "nIter", "returnCode", "returnMessage",
+      "gradient", "logLik", "AIC", "nobs", "nObs",
+      "objectiveFn", "storedParameters", "storedValues"
+   )
+   internalMethods <- c(
+      "summary.maxLik",
+      "print.maxLik",
+      "print.summary.maxLik",
+      "logLik.maxLik",
+      "logLik.summary.maxLik",
+      "AIC.maxLik",
+      "confint.maxLik",
+      "bread.maxLik",
+      "estfun.maxLik",
+      "nobs.maxLik",
+      "nObs.maxLik",
+      "condiNumber.maxLik",
+      "tidy.maxLik",
+      "tidy.maxim",
+      "glance.maxLik",
+      "glance.maxim",
+      "summary.maxim",
+      "print.maxim",
+      "print.summary.maxim",
+      "coef.maxLik",
+      "coef.maxim",
+      "coef.summary.maxLik",
+      "vcov.maxLik",
+      "stdEr.maxLik",
+      "nParam.maxim",
+      "maxValue.maxim",
+      "maximType.maxim",
+      "maximType.default",
+      "nIter.default",
+      "returnCode.maxLik",
+      "returnCode.maxim",
+      "returnCode.default",
+      "returnMessage.maxLik",
+      "returnMessage.maxim",
+      "returnMessage.default",
+      "gradient.maxim",
+      "objectiveFn.maxim",
+      "storedParameters.maxim",
+      "storedValues.maxim",
+      "hessian.default",
+      "activePar.default",
+      "sumt"
+   )
+   allowed <- list(
+      ## documented fallback for arbitrary objects
+      "activePar.default" = "coef"
+   )
+   ns <- asNamespace("maxLik")
+   for(name in internalMethods) {
+      fun <- get(name, envir = ns)
+      calls <- codetools::findGlobals(fun, merge = FALSE)$functions
+      bad <- setdiff(intersect(calls, forbiddenGenerics), allowed[[name]])
+      expect_equal(
+         bad, character(),
+         info = paste0(name, "() uses public generic(s): ",
+                       paste(bad, collapse = ", "))
+      )
+   }
+} else {
+   message("Skipping static no-dispatch checks: 'codetools' not available")
+}
+
