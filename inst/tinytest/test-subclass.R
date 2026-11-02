@@ -290,6 +290,253 @@ if(requireNamespace("tibble", quietly = TRUE)) {
    )
 }
 
+## ---------------------------------------------------- hardening fixtures
+## The generic list used by the branch-covering tests below.
+hardeningGenerics <- c(
+   "coef", "vcov", "stdEr", "hessian", "activePar", "nParam",
+   "maxValue", "maximType", "nIter", "returnCode", "returnMessage",
+   "gradient", "logLik", "AIC", "nobs", "nObs"
+)
+
+## ---------------------------------------------- fixed parameters
+mFix <- maxLik(ll, start = c(1, 2), fixed = c(FALSE, TRUE))
+xFix <- as_foo(mFix)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::summary.maxLik, xFix, maxLik:::summary.maxLik(mFix),
+   "summary.maxLik with fixed parameters"
+)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   function(object) capture.output(maxLik:::print.maxLik(object)),
+   xFix, capture.output(maxLik:::print.maxLik(mFix)),
+   "print.maxLik with fixed parameters"
+)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::vcov.maxLik, xFix, maxLik:::vcov.maxLik(mFix),
+   "vcov.maxLik with fixed parameters"
+)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::stdEr.maxLik, xFix, maxLik:::stdEr.maxLik(mFix),
+   "stdEr.maxLik with fixed parameters"
+)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::confint.maxLik, xFix, maxLik:::confint.maxLik(mFix),
+   "confint.maxLik with fixed parameters"
+)
+
+## ---------------------------------------------- missing Hessian
+mNoHess <- m
+mNoHess$hessian <- NULL
+xNoHess <- as_foo(mNoHess)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::summary.maxLik, xNoHess, maxLik:::summary.maxLik(mNoHess),
+   "summary.maxLik without Hessian"
+)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::vcov.maxLik, xNoHess, maxLik:::vcov.maxLik(mNoHess),
+   "vcov.maxLik without Hessian"
+)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::stdEr.maxLik, xNoHess, maxLik:::stdEr.maxLik(mNoHess),
+   "stdEr.maxLik without Hessian"
+)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::confint.maxLik, xNoHess, maxLik:::confint.maxLik(mNoHess),
+   "confint.maxLik without Hessian"
+)
+
+## ---------------------------------------------- singular Hessian
+## Zero one symmetric row/column pair of an existing Hessian.  This keeps
+## the matrix symmetric and produces exactly one zero eigenvalue.
+mSing <- m
+H <- mSing$hessian
+H[1, ] <- 0
+H[, 1] <- 0
+mSing$hessian <- H
+xSing <- as_foo(mSing)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::vcov.maxLik, xSing, maxLik:::vcov.maxLik(mSing),
+   "vcov.maxLik with singular Hessian"
+)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::stdEr.maxLik, xSing, maxLik:::stdEr.maxLik(mSing),
+   "stdEr.maxLik with singular Hessian"
+)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::summary.maxLik, xSing, maxLik:::summary.maxLik(mSing),
+   "summary.maxLik with singular Hessian"
+)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::confint.maxLik, xSing, maxLik:::confint.maxLik(mSing),
+   "confint.maxLik with singular Hessian"
+)
+
+## ---------------------------------------------- precomputed varcovar
+mVar <- m
+mVar$varcovar <- diag(c(0.01, 4))
+dimnames(mVar$varcovar) <- dimnames(mVar$hessian)
+xVar <- as_foo(mVar)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::vcov.maxLik, xVar, maxLik:::vcov.maxLik(mVar),
+   "vcov.maxLik with precomputed varcovar"
+)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::stdEr.maxLik, xVar, maxLik:::stdEr.maxLik(mVar),
+   "stdEr.maxLik with precomputed varcovar"
+)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::summary.maxLik, xVar, maxLik:::summary.maxLik(mVar),
+   "summary.maxLik with precomputed varcovar"
+)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::confint.maxLik, xVar, maxLik:::confint.maxLik(mVar),
+   "confint.maxLik with precomputed varcovar"
+)
+
+## ---------------------------------------------- constrained maxLik
+## Synthetic constraints, with return code and message.
+mCon <- m
+mCon$constraints <- list(
+   type = "linear equality constraints",
+   code = 1,
+   message = "convergence",
+   outer.iterations = 2,
+   barrier.value = 0.001
+)
+xCon <- as_foo(mCon)
+sCon <- maxLik:::summary.maxLik(mCon)
+xsCon <- as_foo(sCon)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::summary.maxLik, xCon, sCon,
+   "summary.maxLik with constraints"
+)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   function(object) capture.output(maxLik:::print.summary.maxLik(object)),
+   xsCon, capture.output(maxLik:::print.summary.maxLik(sCon)),
+   "print.summary.maxLik with constraints"
+)
+
+## Synthetic constraints without code/message, as for 'constrOptim'.
+mConNoMsg <- m
+mConNoMsg$constraints <- list(
+   type = "linear inequality constraints",
+   outer.iterations = 3,
+   barrier.value = 0.01
+)
+xConNoMsg <- as_foo(mConNoMsg)
+sConNoMsg <- maxLik:::summary.maxLik(mConNoMsg)
+xsConNoMsg <- as_foo(sConNoMsg)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::summary.maxLik, xConNoMsg, sConNoMsg,
+   "summary.maxLik with constraints without code/message"
+)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   function(object) capture.output(maxLik:::print.summary.maxLik(object)),
+   xsConNoMsg, capture.output(maxLik:::print.summary.maxLik(sConNoMsg)),
+   "print.summary.maxLik with constraints without code/message"
+)
+
+## ---------------------------------------------- constrained maxim
+mxCon <- mx
+mxCon$constraints <- list(
+   type = "linear equality constraints",
+   code = 1,
+   message = "convergence",
+   outer.iterations = 2,
+   barrier.value = 0.001
+)
+xmxCon <- as_foo(mxCon)
+smxCon <- maxLik:::summary.maxim(mxCon)
+xsmxCon <- as_foo(smxCon)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   maxLik:::summary.maxim, xmxCon, smxCon,
+   "summary.maxim with constraints"
+)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   function(object) capture.output(maxLik:::print.summary.maxim(object)),
+   xsmxCon, capture.output(maxLik:::print.summary.maxim(smxCon)),
+   "print.summary.maxim with constraints"
+)
+
+## ---------------------------------------------- maxim Hessian and last step
+expect_no_dispatch(
+   hardeningGenerics,
+   function(object) maxLik:::summary.maxim(object, hessian = TRUE),
+   xmx, maxLik:::summary.maxim(mx, hessian = TRUE),
+   "summary.maxim with Hessian"
+)
+
+mxLast <- mx
+mxLast$code <- 3
+mxLast$names <- c("theta1", "theta2")
+mxLast$last.step <- list(
+   theta0 = c(0, 0),
+   theta1 = c(1, 2),
+   f0 = -5
+)
+xmxLast <- as_foo(mxLast)
+smxLast <- maxLik:::summary.maxim(mxLast, unsucc.step = TRUE)
+xsmxLast <- as_foo(smxLast)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   function(object) maxLik:::summary.maxim(object, unsucc.step = TRUE),
+   xmxLast, smxLast,
+   "summary.maxim with unsuccessful last step"
+)
+
+expect_no_dispatch(
+   hardeningGenerics,
+   function(object) capture.output(maxLik:::print.summary.maxim(object)),
+   xsmxLast, capture.output(maxLik:::print.summary.maxim(smxLast)),
+   "print.summary.maxim with unsuccessful last step"
+)
+
 ## ------------------------------------------------------ public S3 dispatch
 ## The public API must still dispatch to subclass methods.
 expect_equal(
@@ -333,11 +580,31 @@ expect_equal(
 ## objects.  This block additionally inspects the method bodies, so a
 ## forbidden generic call is caught even if that branch is not executed.
 if(requireNamespace("codetools", quietly = TRUE)) {
-   forbiddenGenerics <- c(
-      "coef", "vcov", "stdEr", "hessian", "activePar", "nParam",
-      "maxValue", "maximType", "nIter", "returnCode", "returnMessage",
-      "gradient", "logLik", "AIC", "nobs", "nObs",
-      "objectiveFn", "storedParameters", "storedValues"
+   internalAccessors <- c(
+      ".field",
+      ".firstField",
+      ".estimate",
+      ".activePar",
+      ".hessian",
+      ".maximum",
+      ".gradient",
+      ".maximType",
+      ".nIter",
+      ".returnCode",
+      ".returnMessage",
+      ".constraints",
+      ".gradientObs",
+      ".objectiveFn",
+      ".storedParameters",
+      ".storedValues",
+      ".lastStep",
+      ".unsuccStep",
+      ".nParam",
+      ".vcov",
+      ".stdEr",
+      ".logLik",
+      ".AIC",
+      ".nObs"
    )
    internalMethods <- c(
       "summary.maxLik",
@@ -388,10 +655,10 @@ if(requireNamespace("codetools", quietly = TRUE)) {
       "activePar.default" = "coef"
    )
    ns <- asNamespace("maxLik")
-   for(name in internalMethods) {
+   for(name in c(internalAccessors, internalMethods)) {
       fun <- get(name, envir = ns)
       calls <- codetools::findGlobals(fun, merge = FALSE)$functions
-      bad <- setdiff(intersect(calls, forbiddenGenerics), allowed[[name]])
+      bad <- setdiff(intersect(calls, hardeningGenerics), allowed[[name]])
       expect_equal(
          bad, character(),
          info = paste0(name, "() uses public generic(s): ",
