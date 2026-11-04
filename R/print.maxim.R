@@ -6,5 +6,10 @@ print.maxim <- function(x, ...) {
    cat("Estimate(s):", .estimate(x), "\n")
 }
 
+## 'show' deliberately calls the S3 generic 'print()' rather than
+## 'print.maxim()' directly: a subclass of 'maxim' that provides its own
+## 'print' method should stay in control of how it is displayed.  The
+## no-dispatch rule that applies to the extractor generics does not apply
+## here, see the comments in 'inst/tinytest/test-subclass.R'.
 setMethod("show", "maxim",
           function(object) print(object))

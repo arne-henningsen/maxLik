@@ -10,5 +10,10 @@ print.maxLik <- function( x, ... ) {
    }
 }
 
+## 'show' deliberately calls the S3 generic 'print()' rather than
+## 'print.maxLik()' directly: a subclass of 'maxLik' that provides its own
+## 'print' method should stay in control of how it is displayed.  The
+## no-dispatch rule that applies to the extractor generics does not apply
+## here, see the comments in 'inst/tinytest/test-subclass.R'.
 setMethod("show", "maxLik",
           function(object) print(object))

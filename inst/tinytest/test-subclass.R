@@ -1,4 +1,9 @@
 ### Test that maxLik methods do not dispatch to subclass methods internally
+##
+## Unlike the optimizer tests in 'test-optimizers.R', these tests are
+## deliberately also run on CRAN: they are fast, they compare a poisoned
+## call with an unpoisoned one within the same run, and they test S3
+## dispatch and accessor behaviour rather than numerical optimization.
 
 if(!requireNamespace("tinytest", quietly = TRUE)) {
    message("These tests require 'tinytest' package\n")
@@ -591,94 +596,84 @@ expect_equal(
 ## The tests above check the call paths actually exercised by the test
 ## objects.  This block additionally inspects the method bodies, so a
 ## forbidden generic call is caught even if that branch is not executed.
+## The functions to be inspected are derived from the package namespace,
+## so newly added methods and accessors are covered automatically.  Only
+## the list of forbidden generics and the list of exceptions below need to
+## be maintained by hand.
 if(requireNamespace("codetools", quietly = TRUE)) {
-   internalAccessors <- c(
-      ".field",
-      ".firstField",
-      ".estimate",
-      ".parameterNames",
-      ".activePar",
-      ".hessian",
-      ".maximum",
-      ".gradient",
-      ".maximType",
-      ".nIter",
-      ".returnCode",
-      ".returnMessage",
-      ".constraints",
-      ".gradientObs",
-      ".objectiveFn",
-      ".storedParameters",
-      ".storedValues",
-      ".lastStep",
-      ".unsuccStep",
-      ".nParam",
-      ".nActivePar",
-      ".vcov",
-      ".stdEr",
-      ".logLik",
-      ".AIC",
-      ".nObs"
-   )
-   internalMethods <- c(
-      "summary.maxLik",
-      "print.maxLik",
-      "print.summary.maxLik",
-      "logLik.maxLik",
-      "logLik.summary.maxLik",
-      "AIC.maxLik",
-      "confint.maxLik",
-      "bread.maxLik",
-      "estfun.maxLik",
-      "nobs.maxLik",
-      "nObs.maxLik",
-      "condiNumber.maxLik",
-      "tidy.maxLik",
-      "tidy.maxim",
-      "glance.maxLik",
-      "glance.maxim",
-      "summary.maxim",
-      "print.maxim",
-      "print.summary.maxim",
-      "coef.maxLik",
-      "coef.maxim",
-      "coef.summary.maxLik",
-      "vcov.maxLik",
-      "stdEr.maxLik",
-      "nParam.maxim",
-      "maxValue.maxim",
-      "maximType.maxim",
-      "maximType.default",
-      "nIter.default",
-      "returnCode.maxLik",
-      "returnCode.maxim",
-      "returnCode.default",
-      "returnMessage.maxLik",
-      "returnMessage.maxim",
-      "returnMessage.default",
-      "gradient.maxim",
-      "objectiveFn.maxim",
-      "storedParameters.maxim",
-      "storedValues.maxim",
-      "hessian.default",
-      "activePar.default",
-      "sumt"
-   )
+   ns <- asNamespace("maxLik")
+
+   ## The public extractor generics that maxLik's own code must never call.
+   ## This list is a policy decision and cannot be derived: whenever a new
+   ## public extractor generic is added to the package, it has to be added
+   ## here.  'hardeningGenerics' above is the shorter list used by the
+   ## dynamic poison tests, where a generic is only useful if the test
+   ## object actually reaches the corresponding code path.
+   staticForbidden <- union(hardeningGenerics,
+      c("objectiveFn", "storedParameters", "storedValues"))
+
+   ## The internal accessors, derived from the namespace so that a new
+   ## accessor is covered automatically.  R's own namespace bookkeeping is
+   ## excluded: entries such as '.__C__maxLik', '.__T__show:methods',
+   ## '.__S3MethodsTable_.' and '.__global__' all start with a dot
+   ## followed by an underscore.  The remaining non-accessors are the
+   ## namespace startup functions, '.packageName' and
+   ## '.S3MethodsClasses'.
+   ## No letter class like [a-z] is used on purpose: in POSIX regexes such
+   ## a range is a range of collating elements, so its extent depends on
+   ## LC_COLLATE.
+   dotNames <- grep("^\\.[^_]", ls(ns, all.names = TRUE), value = TRUE)
+   internalAccessors <- setdiff(dotNames,
+      c(".onAttach", ".onLoad", ".onUnload", ".packageName",
+        ".S3MethodsClasses"))
+   ## Anything that is not a function (further bookkeeping) is skipped.
+   internalAccessors <- internalAccessors[
+      vapply(internalAccessors, function(name)
+         is.function(get(name, envir = ns)), logical(1))
+   ]
+
+   ## All S3 methods registered by the package, derived from the namespace
+   ## so that a new 'S3method()' entry in NAMESPACE is covered
+   ## automatically.  'sumt' is a plain function rather than an S3 method
+   ## for 'maxLik' or 'maxim' objects, and hence has to be listed.
+   internalMethods <- unique(getNamespaceInfo(ns, "S3methods")[, 3])
+   internalMethods <- union(internalMethods, "sumt")
+
+   ## Exceptions: functions that may use a public generic on purpose.
+   ## Any new exception needs a comment explaining why it is safe.
    allowed <- list(
       ## documented fallback for arbitrary objects
       "activePar.default" = "coef"
    )
-   ns <- asNamespace("maxLik")
+   allowedFor <- function(name) {
+      if(name %in% names(allowed)) allowed[[name]] else character()
+   }
+
+   ## Sanity checks: a filter that silently selects too little would let
+   ## the loop below pass without checking anything.
+   expect_true(length(internalAccessors) >= 20)
+   expect_true(length(internalMethods) >= 40)
+   expect_true(all(c(".field", ".vcov") %in% internalAccessors))
+   expect_true(all(c("summary.maxLik", "print.summary.maxLik") %in%
+                   internalMethods))
+
    for(name in c(internalAccessors, internalMethods)) {
       fun <- get(name, envir = ns)
       calls <- codetools::findGlobals(fun, merge = FALSE)$functions
-      bad <- setdiff(intersect(calls, hardeningGenerics), allowed[[name]])
+      bad <- setdiff(intersect(calls, staticForbidden), allowedFor(name))
       expect_equal(
          bad, character(),
          info = paste0(name, "() uses public generic(s): ",
                        paste(bad, collapse = ", "))
       )
    }
+
+   ## Canary: 'activePar.default()' is the one known use of a public
+   ## generic.  If this use is not found, the check itself is broken, e.g.
+   ## because the behaviour of 'findGlobals()' has changed.
+   canary <- codetools::findGlobals(get("activePar.default", envir = ns),
+      merge = FALSE)$functions
+   expect_true("coef" %in% canary)
 } else {
    message("Skipping static no-dispatch checks: 'codetools' not available")
 }
