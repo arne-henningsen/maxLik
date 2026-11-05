@@ -50,6 +50,18 @@
     vector of \code{NA}-s of correct length.
   }
 }
+\section{Note}{
+  maxLik's own methods do not call user-defined methods of the same
+  generic: \code{summary.maxLik()}, for instance, reads the fitted
+  object via internal accessors rather than through \code{coef()},
+  \code{vcov()} or \code{stdEr()}.  Defining such a method for a class
+  derived from \code{maxLik} or \code{maxim} therefore changes what the
+  generic returns for your object, but not what maxLik's own methods
+  compute.  The \code{show} methods are the deliberate exception: they
+  call \code{print()}, so a subclass keeps control of its own
+  printing.
+}
+
 \examples{
 ## estimate mean and variance of normal random vector
 set.seed(123)

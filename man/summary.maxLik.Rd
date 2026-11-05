@@ -25,23 +25,40 @@
   \item{\ldots}{currently not used.}
 }
 \value{
-  An object of class 'summary.maxLik' with following components:
+  An object of class \code{summary.maxLik} summarizing the estimation
+  results.  This information can be extracted with the following
+  methods:
   \describe{
-    \item{maximType}{type of maximization.}
-    \item{iterations}{number of iterations.}
-    \item{returnCode}{code of success.}
-    \item{returnMessage}{a short message describing the code.}
-    \item{loglik}{the loglik value in the maximum.}
-    \item{estimate}{numeric matrix, the first column contains the parameter
-      estimates, the second the standard errors, third t-values and fourth
-      corresponding probabilities.}
-    \item{fixed}{logical vector, which parameters are treated as constants.}
-    \item{NActivePar}{number of free parameters.}
-    \item{constraints}{information about the constrained optimization.
-      Passed directly further from \code{maxim}-object.  \code{NULL} if
-      unconstrained maximization.
-    }
+    \item{\code{\link[=coef.summary.maxLik]{coef}}}{numeric matrix, the
+      first column contains the parameter estimates, the second the
+      standard errors, the third the t-values and the fourth the
+      corresponding probabilities.  The standard errors are \code{Inf}
+      if the Hessian is treated as singular, and the t-values and
+      probabilities are \code{NA} for fixed parameters.}
+    \item{\code{\link[=logLik.maxLik]{logLik}}}{the log-likelihood value
+      in the maximum; its \dQuote{df} attribute gives the number of free
+      parameters.}
+    \item{\code{\link{maximType}}}{type of maximization.}
+    \item{\code{\link{nIter}}}{number of iterations.}
+    \item{\code{\link{returnCode}}}{code of success.}
+    \item{\code{\link{returnMessage}}}{a short message describing the
+      code.}
+    \item{\code{\link{activePar}}}{logical vector indicating which
+      parameters were free, i.e. not treated as constants.}
   }
+  The variance-covariance matrix, the standard errors and the number of
+  observations are extracted from the fitted \code{maxLik} object
+  itself, using \code{\link[=vcov.maxLik]{vcov}},
+  \code{\link[=stdEr.maxLik]{stdEr}} and \code{\link[=nobs.maxLik]{nobs}}.
+
+  Information about a constrained maximization, if any, can currently
+  only be extracted directly (with \code{\$}): the returned object
+  contains a \code{constraints} component in this case, otherwise
+  \code{NULL}.  It is a list passed on from the fitted object,
+  describing the type of constrained optimization, the number of outer
+  iterations and the barrier value, plus a return code and a message
+  when these are available (they are missing e.g. for
+  \code{constrOptim}).
 }
 \author{Ott Toomet, Arne Henningsen}
 \seealso{

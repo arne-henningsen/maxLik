@@ -1,5 +1,6 @@
 \name{nObs.maxLik}
 \alias{nObs.maxLik}
+\alias{nobs.maxLik}
 \alias{nobs,maxLik-method}
 \title{Number of Observations}
 \description{

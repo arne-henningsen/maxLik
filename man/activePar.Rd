@@ -23,6 +23,10 @@ activePar(x, \dots)
   values (or do it automatically in some cases).  For gradient or
   Hessian based inference one has to know which parameters carry
   optimization-related information.
+
+  For objects that are neither \code{maxLik} nor \code{maxim} objects,
+  the default method falls back to \code{rep(TRUE, length(coef(x)))},
+  i.e. all parameters are reported as free.
 }
 \value{
   A logical vector, indicating whether the parameters were free to

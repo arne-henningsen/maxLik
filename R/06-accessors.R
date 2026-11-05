@@ -142,6 +142,10 @@
 ## Variance-covariance matrix of a fitted object
 .vcov <- function(x, eigentol = 1e-12) {
    ## if exists $varcovar, take it
+   ## NB: no maxLik function ever sets this component, and it is not
+   ## documented.  It has behaved as a hook for user-supplied covariance
+   ## matrices since at least version 0.5-2 (2008).  Whether it should be
+   ## documented as such or deprecated is still undecided.
    if( !is.null( varcovar <- .field( x, "varcovar" ) ) ) {
       return( varcovar )
    }
