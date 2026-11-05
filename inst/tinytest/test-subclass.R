@@ -639,6 +639,26 @@ if(requireNamespace("codetools", quietly = TRUE)) {
    internalMethods <- unique(getNamespaceInfo(ns, "S3methods")[, 3])
    internalMethods <- union(internalMethods, "sumt")
 
+   ## The S4 methods defined by the package, derived from the method
+   ## tables of its namespace.  Entries that do not belong to the maxLik
+   ## namespace are skipped, e.g. the 'ANY' method of the 'nobs' generic
+   ## imported from 'stats'.
+   s4Methods <- list()
+   for(table in grep("^\\.__T__", ls(ns, all.names = TRUE), value = TRUE)) {
+      generic <- sub(":.*$", "", sub("^\\.__T__", "", table))
+      entries <- get(table, envir = ns)
+      for(sig in ls(entries, all.names = TRUE)) {
+         method <- get(sig, envir = entries)
+         if(is.function(method) && identical(topenv(environment(method)), ns)) {
+            s4Methods[[paste0(generic, "(", sig, ")")]] <- method
+         }
+      }
+   }
+   ## The S4 'show' methods for 'maxLik' and 'maxim' call the S3 generic
+   ## 'print()' deliberately, see the comments in 'R/print.maxLik.R' and
+   ## 'R/print.maxim.R'.  'print' is therefore not part of
+   ## 'staticForbidden'.
+
    ## Exceptions: functions that may use a public generic on purpose.
    ## Any new exception needs a comment explaining why it is safe.
    allowed <- list(
@@ -653,19 +673,28 @@ if(requireNamespace("codetools", quietly = TRUE)) {
    ## the loop below pass without checking anything.
    expect_true(length(internalAccessors) >= 20)
    expect_true(length(internalMethods) >= 40)
+   expect_true(length(s4Methods) >= 5)
    expect_true(all(c(".field", ".vcov") %in% internalAccessors))
    expect_true(all(c("summary.maxLik", "print.summary.maxLik") %in%
                    internalMethods))
+   expect_true(all(c("maxControl(maxim)", "show(maxLik)") %in%
+                   names(s4Methods)))
 
-   for(name in c(internalAccessors, internalMethods)) {
-      fun <- get(name, envir = ns)
+   expectNoGenericCall <- function(name, fun, allowedCalls) {
       calls <- codetools::findGlobals(fun, merge = FALSE)$functions
-      bad <- setdiff(intersect(calls, staticForbidden), allowedFor(name))
+      bad <- setdiff(intersect(calls, staticForbidden), allowedCalls)
       expect_equal(
          bad, character(),
          info = paste0(name, "() uses public generic(s): ",
                        paste(bad, collapse = ", "))
       )
+   }
+
+   for(name in c(internalAccessors, internalMethods)) {
+      expectNoGenericCall(name, get(name, envir = ns), allowedFor(name))
+   }
+   for(signature in names(s4Methods)) {
+      expectNoGenericCall(signature, s4Methods[[signature]], character())
    }
 
    ## Canary: 'activePar.default()' is the one known use of a public
