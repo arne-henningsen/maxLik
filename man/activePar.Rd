@@ -4,7 +4,7 @@
 \title{free parameters under maximization}
 \description{
   Return a logical vector, indicating which parameters were free under
-  maximization, as opposed to the fixed parameters that are treated as
+  maximization, in contrast to the fixed parameters that are treated as
   constants.  See argument \dQuote{fixed} for \code{\link{maxNR}}.
 }
 \usage{
@@ -36,7 +36,7 @@ activePar(x, \dots)
 \seealso{\code{\link{maxNR}}, \code{\link[miscTools]{nObs}}}
 \examples{
 ## a two-dimensional exponential hat
-f <- function(a) exp(-a[1]^2 - a[2]^2)
+f <- function(x) exp(-x %*% x)
 
 ## maximize wrt. both parameters 
 free <- maxNR(f, start=1:2) 

@@ -163,10 +163,17 @@ if(!inherits(result, "error")) {
 
 ## ------------------------------------------------------------ print methods
 expect_no_dispatch(
+   ## Test these generics
    c("coef", "activePar", "maxValue", "maximType", "nIter",
      "returnCode", "returnMessage", "vcov", "hessian", "nParam", "stdEr"),
+   ## Run this function with poison
    function(object) capture.output(maxLik:::print.maxLik(object)),
-   x, capture.output(maxLik:::print.maxLik(m)), "print.maxLik"
+   ## Use this for the function argument:
+   x,
+   ## Reference value: should get the same result
+   capture.output(maxLik:::print.maxLik(m)),
+   ## Informative label to be printed
+   "print.maxLik"
 )
 
 expect_no_dispatch(
