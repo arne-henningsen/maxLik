@@ -16,7 +16,9 @@ setGeneric("maxControl",
 ### '.field()' is used rather than '$': a user-defined '$' method for
 ### 'maxLik' or 'maxim' objects would otherwise change how maxLik reads
 ### the components of its own objects.
-setMethod("maxControl", "maxim", function(x, ...) .field(x, "control"))
+setMethod("maxControl", "maxim",
+          function(x, ...) .field(x, "control")
+          )
 
 ### Method for missing arguments: just default values
 setMethod("maxControl", "missing", maxControl.default)

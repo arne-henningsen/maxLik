@@ -14,7 +14,7 @@ condiNumber.default <- function(x, exact=FALSE, norm=FALSE,
    ## printLevel: whether to print the condition numbers while calculating.  Useful for interactive testing. 
    savedDigits <- getOption("digits")
    options( digits = digits )
-   on.exit(options(digits = saveDigits))
+   on.exit(options(digits = savedDigits))
    if(dim(x)[2] > dim(x)[1]) {
       warning(paste(dim(x)[1], "rows and", dim(x)[2],
                     "columns, using transposed matrix"))

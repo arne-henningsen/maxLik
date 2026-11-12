@@ -12,4 +12,5 @@ print.maxim <- function(x, ...) {
 ## no-dispatch rule that applies to the extractor generics does not apply
 ## here, see the comments in 'inst/tinytest/test-subclass.R'.
 setMethod("show", "maxim",
-          function(object) print(object))
+          function(object) print(object)
+          )

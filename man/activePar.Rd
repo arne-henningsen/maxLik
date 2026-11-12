@@ -36,9 +36,9 @@ activePar(x, \dots)
 \seealso{\code{\link{maxNR}}, \code{\link[miscTools]{nObs}}}
 \examples{
 ## a two-dimensional exponential hat
-f <- function(x) exp(-x %*% x)
+f <- function(x) exp(-crossprod(x))
 
-## maximize wrt. both parameters 
+## maximize over both parameters 
 free <- maxNR(f, start=1:2) 
 summary(free)  # results should be close to (0,0)
 activePar(free)
